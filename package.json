@@ -1,0 +1,20 @@
+{
+  "name": "odyssey",
+  "version": "1.0.0",
+  "description": "A hackathon management platform",
+  "main": "index.js",
+  "scripts": {
+    "dev:server:start": "yarn --cwd server dev",
+    "dev:client:start": "yarn --cwd client start"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/HackSC/odyssey.git"
+  },
+  "author": "HackSC",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/HackSC/odyssey/issues"
+  },
+  "homepage": "https://github.com/HackSC/odyssey#readme"
+}
