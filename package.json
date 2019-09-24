@@ -4,8 +4,11 @@
   "description": "A hackathon management platform",
   "main": "index.js",
   "scripts": {
-    "dev:server:start": "yarn --cwd server dev",
-    "dev:client:start": "yarn --cwd client start"
+    "server:dev": "yarn --cwd server dev",
+    "server:build": "yarn --cwd server build",
+    "server:start": "yarn --cwd server start",
+    "client:dev": "yarn --cwd client start",
+    "client:build": "yarn --cwd client build"
   },
   "repository": {
     "type": "git",
