@@ -12,12 +12,10 @@ jobs:
       - image: circleci/node
     steps:
       - checkout
-      - run: yarn run client:build
-      - run: npm install -g now 
+      - run: sudo npm install -g now
       - run: 
           name: Deploy to Now
-          working_directory: /client
-          command: now --token $ZEIT_TOKEN --local-config now.production.json
+          command: cd client && now --token $ZEIT_TOKEN --local-config now.production.json
 workflows:
   version: 2
   test_deploy:
