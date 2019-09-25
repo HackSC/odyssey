@@ -1,10 +1,11 @@
 /*
   Util files for starting the server
 */
+let port = 5000;
 
 // Normalize a port into a number, string, or false.
 const serverNormalizePort = val => {
-  const port = parseInt(val, 10);
+  port = parseInt(val, 10);
 
   if (isNaN(port)) {
     // named pipe
