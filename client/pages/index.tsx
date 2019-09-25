@@ -23,39 +23,39 @@ const Home = (initialObject) => {
   return (
     <Layout>
       <ContentBlockWide>
-        <h1>Cookie Demo < /h1>
-      < p > check the box and refresh the page:)</p>
-          < div >
-            remember me
-          < input
-              type="checkbox"
-              value={rememberMe}
-              checked={rememberMe}
-              onChange={e => setRememberMe(e.target.checked)}
-            />
-            < /div>
-  < /ContentBlockWide>
-  < ContentBlockWide >
-              <h1>Willie's API Demo</h1>
-              {message ? message : 'Loading...'}
-            </ContentBlockWide>
-            < ContentBlockWide >
-              <h1>Sponsorship < /h1>
-  < p > Companies go here...</p>
-                < /ContentBlockWide>
-    < /Layout>
-              );
-            }
-            
-Home.getInitialProps = async ({req}) => {
+        <h1>Cookie Demo </h1>
+        <p> check the box and refresh the page:)</p>
+        <div>
+          remember me
+          <input
+            type="checkbox"
+            value={rememberMe}
+            checked={rememberMe}
+            onChange={e => setRememberMe(e.target.checked)}
+          />
+        </div>
+      </ContentBlockWide>
+      <ContentBlockWide >
+        <h1>Willie's API Demo</h1>
+        {message ? message : 'Loading...'}
+      </ContentBlockWide>
+      <ContentBlockWide >
+        <h1>Sponsorship </h1>
+        <p> Companies go here...</p>
+      </ContentBlockWide>
+    </Layout>
+  );
+}
+
+Home.getInitialProps = async ({ req }) => {
   const res = await fetch(`${apiHost}/api/random`);
-                const json = await res.json();
-                const cookies = parseCookies(req);
-              
+  const json = await res.json();
+  const cookies = parseCookies(req);
+
   return {
-                  message: json.message,
-                initialRememberValue: cookies.rememberMe
-              }
-            }
-            
+    message: json.message,
+    initialRememberValue: cookies.rememberMe
+  }
+}
+
 export default Home;
