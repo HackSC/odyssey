@@ -7,8 +7,9 @@
     "server:dev": "yarn --cwd server dev",
     "server:build": "yarn --cwd server build",
     "server:start": "yarn --cwd server start",
-    "client:dev": "yarn --cwd client start",
-    "client:build": "yarn --cwd client build"
+    "client:dev": "yarn --cwd client dev",
+    "client:build": "yarn --cwd client build",
+    "client:start": "yarn --cwd client start"
   },
   "repository": {
     "type": "git",
