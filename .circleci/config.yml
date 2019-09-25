@@ -5,18 +5,17 @@ jobs:
       - image: circleci/node
     steps:
       - checkout
-      - run: cd client
-      - run: yarn install
-      - run: yarn test
+      - run: yarn client:install
+      - run: yarn client:test
   client-deploy:
     docker:
       - image: circleci/node
     steps:
       - checkout
       - run: yarn run client:build
-      - run: cd client
       - run: npm install -g now 
       - run: now --token $ZEIT_TOKEN --local-config now.production.json
+          pwd: client
 workflows:
   version: 2
   test_deploy:
