@@ -1,8 +1,8 @@
 module.exports = {
   development: {
-    username: 'database_dev',
-    password: 'database_dev',
-    database: 'database_dev',
+    username: 'root',
+    password: 'root',
+    database: 'odyssey-dev',
     host: '127.0.0.1',
     dialect: 'mysql'
   },
