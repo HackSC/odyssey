@@ -23,9 +23,9 @@ workflows:
     jobs:
       - client-test
       - client-deploy:
-        requires:
-          - client-test
-        filters:
-          branches:
-            only:
-              - master
+          requires:
+            - client-test
+          filters:
+            branches:
+              only:
+                - master
