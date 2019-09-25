@@ -4,6 +4,7 @@
   "description": "A hackathon management platform",
   "main": "index.js",
   "scripts": {
+    "server:install": "yarn --cwd server install",
     "server:dev": "yarn --cwd server dev",
     "server:build": "yarn --cwd server build",
     "server:start": "yarn --cwd server start",

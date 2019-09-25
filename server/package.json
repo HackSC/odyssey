@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "npx nodemon --exec babel-node src/server.js",
-    "build": "babel ./src -d ./dist",
+    "build": "babel ./src -d ./dist && rm -rf node_modules && zip deploy.zip -r ./",
     "start": "node dist/server.js"
   },
   "dependencies": {
@@ -12,15 +12,15 @@
     "express": "^4.17.1",
     "mysql2": "^1.7.0",
     "sequelize": "^5.19.0",
-    "sequelize-cli": "^5.5.1"
+    "sequelize-cli": "^5.5.1",
+    "@babel/plugin-transform-runtime": "^7.6.2",
+    "@babel/runtime": "^7.6.2"
   },
   "devDependencies": {
     "@babel/cli": "^7.6.2",
     "@babel/core": "^7.6.2",
     "@babel/node": "^7.6.2",
-    "@babel/plugin-transform-runtime": "^7.6.2",
     "@babel/preset-env": "^7.6.2",
-    "@babel/register": "^7.6.2",
-    "@babel/runtime": "^7.6.2"
+    "@babel/register": "^7.6.2"
   }
 }
