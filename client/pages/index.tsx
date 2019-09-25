@@ -3,6 +3,9 @@ import fetch from 'isomorphic-unfetch';
 
 import { apiHost } from '../config';
 
+// Load Index as an AMP page
+export const config = { amp: 'hybrid' };
+
 const Home = ({ message }) => {
   return (
     <div>
