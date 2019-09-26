@@ -97,9 +97,6 @@ public
 # DynamoDB Local files
 .dynamodb/
 
-# Server build
-dist/
-
 # Elastic Beanstalk Files
 .elasticbeanstalk/*
 !.elasticbeanstalk/*.cfg.yml
