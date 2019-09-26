@@ -38,6 +38,9 @@ jobs:
             sudo apt-get install python-pip python-dev build-essential
             sudo pip install awsebcli --upgrade
       - run:
+          name: Initialize EB
+          command: eb init --region us-west-1 --platform Node.js odyssey
+      - run:
           name: Deploying to EB
           command: eb deploy Odyssey-env --staged
 workflows:
