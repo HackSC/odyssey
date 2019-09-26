@@ -22,4 +22,14 @@ describe("Server", () => {
         done();
       });
   });
+
+  it("Adds properly", done => {
+    request(app)
+      .get("/api/add?a=5&b=3")
+      .expect(200)
+      .end((err, res) => {
+        expect(res.body.result).toEqual(8);
+        done();
+      });
+  });
 });
