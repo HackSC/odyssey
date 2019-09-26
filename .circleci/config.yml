@@ -39,7 +39,7 @@ jobs:
             sudo pip install awsebcli --upgrade
       - run:
           name: Deploying to EB
-          command: eb deploy Odyssey-env
+          command: eb deploy Odyssey-env --staged
 workflows:
   version: 2
   test_deploy:
