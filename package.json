@@ -8,6 +8,7 @@
     "server:dev": "yarn --cwd server dev",
     "server:build": "yarn --cwd server build",
     "server:start": "yarn --cwd server start",
+    "server:test": "yarn --cwd server test",
     "client:install": "yarn --cwd client install",
     "client:dev": "yarn --cwd client dev",
     "client:build": "yarn --cwd client build",
