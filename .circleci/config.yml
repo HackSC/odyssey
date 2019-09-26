@@ -39,10 +39,10 @@ jobs:
             sudo pip install awsebcli --upgrade
       - run:
           name: Initialize EB
-          command: eb init --region us-west-1 --platform Node.js odyssey
+          command: cd server && eb init --region us-west-1 --platform Node.js odyssey
       - run:
           name: Deploying to EB
-          command: eb deploy Odyssey-env --staged
+          command: cd server && eb deploy Odyssey-env --staged
 workflows:
   version: 2
   test_deploy:
