@@ -15,7 +15,7 @@ jobs:
       - run: sudo npm install -g now
       - run: 
           name: Deploy to Now
-          command: cd client && now --token $ZEIT_TOKEN --local-config now.production.json
+          command: cd client && now --token $ZEIT_TOKEN --local-config now.production.json --prod
   server-test:
     docker:
       - image: circleci/node
