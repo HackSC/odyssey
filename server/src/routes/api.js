@@ -7,18 +7,13 @@ import express from "express";
 const router = express.Router();
 
 router.get("/random", async (req, res) => {
-  const messages = [
-    "Cat",
-    "Dog",
-    "Bird",
-    "Fish"
-  ];
+  const messages = ["Cat", "Dog", "Bird", "Fish"];
 
   const randomMessageIndex = Math.floor(Math.random() * messages.length);
 
   return res.json({
     message: messages[randomMessageIndex]
-  })
+  });
 });
 
 router.get("/multiply", async (req, res) => {
@@ -29,7 +24,7 @@ router.get("/multiply", async (req, res) => {
 
   return res.json({
     result
-  })
+  });
 });
 
 router.get("/add", async (req, res) => {
@@ -40,7 +35,7 @@ router.get("/add", async (req, res) => {
 
   return res.json({
     result
-  })
+  });
 });
 
 export default router;
