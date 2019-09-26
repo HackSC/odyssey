@@ -21,4 +21,15 @@ router.get("/random", async (req, res) => {
   })
 });
 
+router.get("/multiply", async (req, res) => {
+  const a = parseFloat(req.query.a) || 0;
+  const b = parseFloat(req.query.b) || 0;
+
+  const result = a * b;
+
+  return res.json({
+    result
+  })
+});
+
 export default router;

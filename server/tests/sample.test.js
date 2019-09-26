@@ -12,4 +12,14 @@ describe("Server", () => {
         done();
       });
   });
+
+  it("Multiplies properly", done => {
+    request(app)
+      .get("/api/multiply?a=5&b=3")
+      .expect(200)
+      .end((err, res) => {
+        expect(res.body.result).toEqual(15);
+        done();
+      });
+  });
 });
