@@ -32,4 +32,24 @@ describe("Server", () => {
         done();
       });
   });
+
+  it("Divides properly", done => {
+    request(app)
+      .get("/api/divide?a=6&b=3")
+      .expect(200)
+      .end((err, res) => {
+        expect(res.body.result).toEqual(2);
+        done();
+      });
+  });
+
+  it("Divides by zero properly", done => {
+    request(app)
+      .get("/api/divide?a=6&b=0")
+      .expect(200)
+      .end((err, res) => {
+        expect(res.body.result).toEqual(null);
+        done();
+      });
+  });
 });
