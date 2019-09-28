@@ -1,8 +1,8 @@
-import styled from '@emotion/styled'
+import styled from "styled-components";
 
 const Button = styled.button`
   padding: 32px;
-  background-color: #E6194B;
+  background-color: #e6194b;
   font-size: 24px;
   border-radius: 4px;
   color: white;
@@ -10,6 +10,6 @@ const Button = styled.button`
   &:hover {
     background-color: #462470;
   }
-`
+`;
 
 export default Button;
