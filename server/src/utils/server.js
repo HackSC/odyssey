@@ -49,4 +49,21 @@ const serverOnListening = server => {
   console.log("Listening on " + bind);
 };
 
-export { serverNormalizePort, serverOnError, serverOnListening };
+// Generate Session Configuration that will be used on server instantiation
+const createSessionConfigForEnv = envType => {
+  const sessionSecret = envType == 'dev' ? 'Insecure Dev Secret' : process.env.SESSION_SECRET;
+
+  var session = {
+    secret: sessionSecret,
+    cookie: {},
+    resave: false,
+    saveUninitialized: true,
+  }
+
+  if (envType == 'production') {
+    session.cookie.secure = true;
+  }
+  return session;
+};
+
+export { serverNormalizePort, serverOnError, serverOnListening, createSessionConfigForEnv };

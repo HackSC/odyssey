@@ -8,19 +8,15 @@ import session from 'express-session';
 import dotenv from 'dotenv';
 import helmet from 'helmet';
 
+import { createSessionConfigForEnv } from './utils/server';
+
 import api from "./routes/api";
 
 dotenv.config();
 
 const app = express();
 
-const sessionConfig = {
-  secret: process.env.SESSION_SECRET,
-  cookie: {},
-  resave: false,
-  saveUnitialized: true,
-};
-
+const sessionConfig = createSessionConfigForEnv(app.get('env'));
 app.use(bodyParser.json());
 
 app.get("/", (req, res) => {
