@@ -6,6 +6,7 @@ import express from "express";
 import bodyParser from "body-parser";
 import session from 'express-session';
 import dotenv from 'dotenv';
+import helmet from 'helmet';
 
 import api from "./routes/api";
 
@@ -29,6 +30,7 @@ app.get("/", (req, res) => {
 });
 
 app.use(session(sessionConfig));
+app.use(helmet());
 app.use("/api", api);
 
 export default app;
