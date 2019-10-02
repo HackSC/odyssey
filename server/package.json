@@ -26,6 +26,7 @@
     "supertest": "^4.0.2"
   },
   "devDependencies": {
+    "@auth0/auth0-spa-js": "^1.2.4",
     "@babel/cli": "^7.6.2",
     "@babel/core": "^7.6.2",
     "@babel/node": "^7.6.2",
