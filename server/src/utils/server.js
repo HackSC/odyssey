@@ -51,7 +51,8 @@ const serverOnListening = server => {
 
 // Generate Session Configuration that will be used on server instantiation
 const createSessionConfigForEnv = envType => {
-  const sessionSecret = envType == 'dev' ? 'Insecure Dev Secret' : process.env.SESSION_SECRET;
+	console.log(envType);
+  const sessionSecret = envType == 'development' ? 'Insecure Dev Secret' : process.env.SESSION_SECRET;
 
   var session = {
     secret: sessionSecret,
