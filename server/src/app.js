@@ -26,6 +26,12 @@ app.get("/", (req, res) => {
   });
 });
 
+app.get("/amIAuthorized", auth0Config, (req, res) => {
+  return res.json({
+    message: "Successfully Authenticated!",
+  })
+})
+
 app.use(session(sessionConfig));
 app.use(helmet());
 app.use("/api", api);
