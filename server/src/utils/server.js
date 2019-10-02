@@ -49,9 +49,14 @@ const serverOnListening = server => {
   console.log("Listening on " + bind);
 };
 
+const isDevEnvType = envType => {
+  const devEnvTypes = ['development', 'test'];
+  return devEnvTypes.includes(envType);
+}
+
 // Generate Session Configuration that will be used on server instantiation
 const createSessionConfigForEnv = envType => {
-  const sessionSecret = envType == 'development' ? 'Insecure Dev Secret' : process.env.SESSION_SECRET;
+  const sessionSecret = isDevEnvType(envType) ? 'Insecure Dev Secret' : process.env.SESSION_SECRET;
 
   var session = {
     secret: sessionSecret,
@@ -66,4 +71,4 @@ const createSessionConfigForEnv = envType => {
   return session;
 };
 
-export { serverNormalizePort, serverOnError, serverOnListening, createSessionConfigForEnv };
+export { serverNormalizePort, serverOnError, serverOnListening, createSessionConfigForEnv, isDevEnvType };

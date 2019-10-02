@@ -27,7 +27,6 @@ app.get("/", (req, res) => {
 });
 
 app.use(session(sessionConfig));
-app.use(auth0Config);
 app.use(helmet());
 app.use("/api", api);
 

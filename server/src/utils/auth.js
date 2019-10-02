@@ -1,11 +1,11 @@
 import jwt from 'express-jwt';
 import jwksRsa from 'jwks-rsa';
 
-
+import {isDevEnvType } from './server';
 
 
 const createJwtVerifierForEnv = envType => {
-  const isDev = envType == 'development';
+  const isDev = isDevEnvType(envType);
 
   // Remote resources owned by: saresend@usc.edu
   const devParams = {
