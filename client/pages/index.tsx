@@ -1,10 +1,11 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import fetch from "isomorphic-unfetch";
 import { apiHost } from "../config";
 import Layout from "../components/Layout";
 import { ContentBlockWide } from "../styles";
 import Cookie from "js-cookie";
 import { parseCookies } from "../lib/parseCookies";
+import createAuth0Client from "@auth0/auth0-spa-js";
 
 // Load Index as an AMP page
 export const config = { amp: "hybrid" };
@@ -46,6 +47,10 @@ const Home = initialObject => {
         <h1>Sponsorship </h1>
         <p> Companies go here...</p>
       </ContentBlockWide>
+      <ContentBlockWide>
+        <h1> Auth0 stuff </h1>
+        <p> Click to do 0Auth and things </p>
+      </ContentBlockWide>
     </Layout>
   );
 };
@@ -57,7 +62,8 @@ Home.getInitialProps = async ({ req }) => {
 
   return {
     message: json.message,
-    initialRememberValue: cookies.rememberMe
+    initialRememberValue: cookies.rememberMe,
+    authToken: ""
   };
 };
 
