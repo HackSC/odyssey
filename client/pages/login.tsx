@@ -48,14 +48,6 @@ const Login = initialObject => {
     </Layout>
   );
 };
-/*
- domain: config.domain,
-    clientID: config.clientId,
-    redirectUri: config.redirect,
-    audience: config.audience,
-    responseType: "id_token token",
-    scope: "openid profile email"
-    */
 
 Login.getInitialProps = async ({ req }) => {
   const cookies = parseCookies(req);
