@@ -36,6 +36,7 @@ const Login = initialObject => {
             domain: "dev-l4sg3wav.auth0.com",
             clientID: "ICCkgINzCPDq66k7nuFmdrFwEjt2Uv8f",
             redirectUri: "http://localhost:3000/",
+            audience: "https://dev-l4sg3wav.auth0.com/api/v2/",
             responseType: "id_token token",
             scope: "openid profile email"
           });
