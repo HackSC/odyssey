@@ -50,28 +50,36 @@ const serverOnListening = server => {
 };
 
 // Generate Session Configuration that will be used on server instantiation
-const createSessionConfigForEnv = envType => {
-  const sessionSecret = envType == 'development' ? 'Insecure Dev Secret' : process.env.SESSION_SECRET;
+// const createSessionConfigForEnv = envType => {
+//   const sessionSecret = envType == 'development' ? 'Insecure Dev Secret' : process.env.SESSION_SECRET;
 const isDevEnvType = envType => {
-  const devEnvTypes = ['development', 'test'];
+  const devEnvTypes = ["development", "test"];
   return devEnvTypes.includes(envType);
-}
+};
 
 // Generate Session Configuration that will be used on server instantiation
 const createSessionConfigForEnv = envType => {
-  const sessionSecret = isDevEnvType(envType) ? 'Insecure Dev Secret' : process.env.SESSION_SECRET;
+  const sessionSecret = isDevEnvType(envType)
+    ? "Insecure Dev Secret"
+    : process.env.SESSION_SECRET;
 
   var session = {
     secret: sessionSecret,
     cookie: {},
     resave: false,
-    saveUninitialized: true,
-  }
+    saveUninitialized: true
+  };
 
-  if (envType == 'production') {
+  if (envType == "production") {
     session.cookie.secure = true;
   }
   return session;
 };
 
-export { serverNormalizePort, serverOnError, serverOnListening, createSessionConfigForEnv, isDevEnvType };
+export {
+  serverNormalizePort,
+  serverOnError,
+  serverOnListening,
+  createSessionConfigForEnv,
+  isDevEnvType
+};
