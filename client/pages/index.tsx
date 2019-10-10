@@ -15,9 +15,7 @@ const Home = initialObject => {
     initialObject && initialObject.initialRememberValue
       ? initialObject
       : { initialRememberValue: undefined };
-  const [rememberMe, setRememberMe] = useState(() =>
-    JSON.parse(initialRememberValue)
-  );
+  const [rememberMe, setRememberMe] = useState(() => JSON.parse("{}"));
 
   useEffect(() => {
     Cookie.set("rememberMe", JSON.stringify(rememberMe));
