@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import Layout from "../components/Layout";
 import Cookie from "js-cookie";
 import { parseCookies } from "../lib/parseCookies";
-import auth0 from "auth0-js";
 import createAuth0Client from "@auth0/auth0-spa-js";
 // Load AuthForm as an AMP page
 export const config = { amp: "hybrid" };
@@ -15,6 +14,13 @@ const Login = initialObject => {
   const [rememberMe, setRememberMe] = useState(() =>
     JSON.parse(initialRememberValue)
   );
+
+  const auth0Client = createAuth0Client({
+    domain: "dev-l4sg3wav.auth0.com",
+    client_id: "ICCkgINzCPDq66k7nuFmdrFwEjt2Uv8f",
+    redirect_uri: "http://localhost:3000/login",
+    audience: "https://dev-l4sg3wav.auth0.com/api/v2/"
+  });
 
   useEffect(() => {
     Cookie.set("rememberMe", JSON.stringify(rememberMe));
@@ -33,13 +39,15 @@ const Login = initialObject => {
       </div>
       <button
         onClick={() => {
-          createAuth0Client({
-            domain: "dev-l4sg3wav.auth0.com",
-            client_id: "ICCkgINzCPDq66k7nuFmdrFwEjt2Uv8f",
-            redirect_uri: "http://localhost:3000/login"
-          }).then(auth0 => {
-            return auth0.loginWithRedirect();
+          auth0Client.then(auth0 => {
+            console.log("We get here");
+            auth0.loginWithRedirect().then(token => {
+              auth0.getTokenSilently().then(token2 => {
+                console.log(token2);
+              });
+            });
           });
+
           /*
           const webAuth = new auth0.WebAuth({
             domain: "dev-l4sg3wav.auth0.com",
