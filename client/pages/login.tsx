@@ -3,6 +3,7 @@ import Layout from "../components/Layout";
 import Cookie from "js-cookie";
 import { parseCookies } from "../lib/parseCookies";
 import createAuth0Client from "@auth0/auth0-spa-js";
+import { access } from "fs";
 // Load AuthForm as an AMP page
 export const config = { amp: "hybrid" };
 
@@ -14,6 +15,8 @@ const Login = initialObject => {
   const [rememberMe, setRememberMe] = useState(() =>
     JSON.parse(initialRememberValue)
   );
+
+  const [authToken, setAuthToken] = useState(() => "bullshit token");
 
   const auth0Client = createAuth0Client({
     domain: "dev-l4sg3wav.auth0.com",
@@ -40,28 +43,38 @@ const Login = initialObject => {
       <button
         onClick={() => {
           auth0Client.then(auth0 => {
-            console.log("We get here");
-            auth0.loginWithRedirect().then(token => {
-              auth0.getTokenSilently().then(token2 => {
-                console.log(token2);
-              });
+            return auth0.loginWithRedirect().then(something => {
+              return auth0.handleRedirectCallback();
             });
           });
-
-          /*
-          const webAuth = new auth0.WebAuth({
-            domain: "dev-l4sg3wav.auth0.com",
-            clientID: "ICCkgINzCPDq66k7nuFmdrFwEjt2Uv8f",
-            redirectUri: "http://localhost:3000/login",
-            audience: "https://dev-l4sg3wav.auth0.com/api/v2/",
-            responseType: "id_token token",
-            scope: "openid profile email"
-          });
-          webAuth.popup.authorize({}, function (err, response) { });
-          */
         }}
       >
         Auth yourself
+      </button>
+      <div>{authToken}</div>
+      <button
+        onClick={() => {
+          auth0Client.then(auth0 => {
+            return auth0.logout();
+          });
+        }}
+      >
+        Log out
+      </button>
+      <button
+        onClick={async () => {
+          const auth0 = await auth0Client;
+          const accessToken = auth0.getTokenSilently();
+          const result = await fetch("http://localhost:8000/amIAuthorized", {
+            method: "GET",
+            headers: {
+              Authorization: `Bearer ${accessToken}`
+            }
+          });
+          console.log(result);
+        }}
+      >
+        Send request to authenticated endpoint
       </button>
     </Layout>
   );
