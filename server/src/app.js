@@ -4,11 +4,12 @@
 
 import express from "express";
 import bodyParser from "body-parser";
-import session from 'express-session';
-import dotenv from 'dotenv';
-import helmet from 'helmet';
-import { createJwtVerifierForEnv } from './utils/auth';
-import { createSessionConfigForEnv } from './utils/server';
+import session from "express-session";
+import dotenv from "dotenv";
+import helmet from "helmet";
+import { createJwtVerifierForEnv } from "./utils/auth";
+import { createSessionConfigForEnv } from "./utils/server";
+import cors from "cors";
 
 import api from "./routes/api";
 
@@ -16,9 +17,10 @@ dotenv.config();
 
 const app = express();
 
-const sessionConfig = createSessionConfigForEnv(app.get('env'));
-const auth0Config = createJwtVerifierForEnv(app.get('env'));
+const sessionConfig = createSessionConfigForEnv(app.get("env"));
+const auth0Config = createJwtVerifierForEnv(app.get("env"));
 app.use(bodyParser.json());
+app.use(cors());
 
 app.get("/", (req, res) => {
   return res.json({
@@ -28,9 +30,9 @@ app.get("/", (req, res) => {
 
 app.get("/amIAuthorized", auth0Config, (req, res) => {
   return res.json({
-    message: "Successfully Authenticated!",
-  })
-})
+    message: "Successfully Authenticated!"
+  });
+});
 
 app.use(session(sessionConfig));
 app.use(helmet());
