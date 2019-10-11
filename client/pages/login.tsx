@@ -15,7 +15,8 @@ export const getAuth0Provider = async () => {
   auth0 = await createAuth0Client({
     domain: "dev-l4sg3wav.auth0.com",
     client_id: "ICCkgINzCPDq66k7nuFmdrFwEjt2Uv8f",
-    redirect_uri: "http://localhost:3000/login"
+    redirect_uri: "http://localhost:3000/login",
+    audience: "https://dev-l4sg3wav.auth0.com/api/v2/"
   });
   return auth0;
 };
