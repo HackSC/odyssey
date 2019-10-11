@@ -23,7 +23,6 @@ export const getAuth0Provider = async () => {
 export const handleAuth0Redirect = async () => {
   const auth0 = await getAuth0Provider();
   await auth0.handleRedirectCallback();
-  console.log("We get here!");
   window.history.replaceState({}, document.title, "/");
 };
 
@@ -71,15 +70,32 @@ const Login = initialObject => {
         </button>
       )}
       {isAuthenticated && (
-        <button
-          onClick={async () => {
-            const auth0 = await getAuth0Provider();
-            auth0.logout();
-            setIsAuthenticated(false);
-          }}
-        >
-          Log out
-        </button>
+        <div>
+          <button
+            onClick={async () => {
+              const url = "http://localhost:8000/amIAuthorized";
+              const auth0 = await getAuth0Provider();
+              const accessToken = await auth0.getTokenSilently();
+              const response = await fetch(url, {
+                headers: {
+                  Authorization: `Bearer ${accessToken}`
+                }
+              });
+              console.log(response);
+            }}
+          >
+            Make Request to authed endpoint
+          </button>
+          <button
+            onClick={async () => {
+              const auth0 = await getAuth0Provider();
+              auth0.logout();
+              setIsAuthenticated(false);
+            }}
+          >
+            Log out
+          </button>
+        </div>
       )}
     </Layout>
   );
