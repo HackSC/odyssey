@@ -23,7 +23,11 @@ export const getAuth0Provider = async () => {
 
 export const handleAuth0Redirect = async () => {
   const auth0 = await getAuth0Provider();
-  await auth0.handleRedirectCallback();
+  try {
+    await auth0.handleRedirectCallback();
+  } catch (e) {
+    console.log(e);
+  }
   window.history.replaceState({}, document.title, "/");
 };
 
@@ -61,10 +65,13 @@ const Login = initialObject => {
         <button
           onClick={async () => {
             const auth0 = await getAuth0Provider();
-            console.log(auth0);
-            await auth0.loginWithRedirect({
-              redirect_uri: "http://localhost:3000/login"
-            });
+            await auth0
+              .loginWithRedirect({
+                redirect_uri: "http://localhost:3000/login"
+              })
+              .catch(e => {
+                console.log(e);
+              });
           }}
         >
           Log In
