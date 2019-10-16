@@ -3,9 +3,9 @@
 */
 
 import {
-  serverNormalizePort,
-  serverOnError,
-  serverOnListening
+	serverNormalizePort,
+	serverOnError,
+	serverOnListening
 } from "./utils/server";
 
 import app from "./app";
@@ -20,8 +20,8 @@ const server = http.createServer(app);
 
 // Listen on provided port, on all network interfaces.
 server.listen(port, function() {
-  console.log("[🚀] Server launched and listening on " + server.address().port);
+	console.log("[🚀] Server launched and listening on " + server.address().port);
 });
 
-server.on("error", serverOnError);
+server.on("error", err => serverOnError(err, port));
 server.on("listening", () => serverOnListening(server));

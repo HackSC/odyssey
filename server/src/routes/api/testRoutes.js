@@ -1,10 +1,12 @@
-/*
-  Route handler for API
-*/
-
 import express from "express";
 
 const router = express.Router();
+
+router.get("/", async (req, res) => {
+  return res.json({
+    message: "Hello world"
+  });
+});
 
 router.get("/random", async (req, res) => {
   const messages = ["Cat", "Dog", "Bird", "Fish"];
