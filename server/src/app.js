@@ -7,9 +7,10 @@ import bodyParser from "body-parser";
 import session from "express-session";
 import dotenv from "dotenv";
 import helmet from "helmet";
-import { createSessionConfigForEnv } from "./utils/server";
-import { createJwtVerifierForEnv } from "./utils/auth";
 
+import { createJwtVerifierForEnv } from "./utils/auth";
+import { createSessionConfigForEnv } from "./utils/server";
+import cors from "cors";
 
 import routes from "./routes";
 
