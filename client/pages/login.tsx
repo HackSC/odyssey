@@ -36,6 +36,8 @@ const Login = initialObject => {
     initialObject && initialObject.initialRememberValue
       ? initialObject
       : { initialRememberValue: undefined };
+
+  const { user } = initialObject;
   const [rememberMe, setRememberMe] = useState(() => JSON.parse("{}"));
 
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -61,16 +63,18 @@ const Login = initialObject => {
           onChange={e => setRememberMe(e.target.checked)}
         />
       </div>
-      {!isAuthenticated && <a href="auth/login"> Log In </a>}
+      {!user && <a href="auth/login"> Log In </a>}
+      {user && <a href="auth/logout"> Log out </a>}
     </Layout>
   );
 };
 
 Login.getInitialProps = async ({ req }) => {
   const cookies = parseCookies(req);
-
+  const user = await req.user;
   return {
-    initialRememberValue: cookies.rememberMe
+    initialRememberValue: cookies.rememberMe,
+    user: user
   };
 };
 

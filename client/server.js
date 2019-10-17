@@ -39,6 +39,12 @@ const sessionConfig = {
 };
 
 passport.use(strategy);
+passport.serializeUser(function(user, done) {
+  done(null, user);
+});
+passport.deserializeUser(function(user, done) {
+  done(null, user);
+});
 
 app.prepare().then(() => {
   const server = express();
