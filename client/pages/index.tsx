@@ -12,6 +12,9 @@ export const config = { amp: "hybrid" };
 
 const Home = initialObject => {
   const { message, user } = initialObject;
+  if (user) {
+    console.log(user._json.email_verified);
+  }
   const { initialRememberValue } =
     initialObject && initialObject.initialRememberValue
       ? initialObject
