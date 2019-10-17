@@ -6,6 +6,8 @@ const dotenv = require("dotenv");
 const passport = require("passport");
 const Auth0Strategy = require("passport-auth0");
 
+const authRouter = require("./pages/api/login.js");
+
 const dev = process.env.NODE_ENV !== "production";
 const app = next({
   dev,
@@ -41,6 +43,7 @@ passport.use(strategy);
 app.prepare().then(() => {
   const server = express();
   // handling everything else with Next.js
+  server.use("/auth", authRouter);
   server.get("*", handle);
 
   // Authentication config
