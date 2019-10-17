@@ -41,14 +41,6 @@ const Login = initialObject => {
   const { user } = initialObject;
   const [rememberMe, setRememberMe] = useState(() => JSON.parse("{}"));
 
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
-  useEffect(() => {
-    const query = window.location.search;
-    if (query.includes("code=") && query.includes("state=")) {
-      handleAuth0Redirect();
-      setIsAuthenticated(true);
-    }
-  });
   useEffect(() => {
     Cookie.set("rememberMe", JSON.stringify(rememberMe));
   }, [rememberMe]);

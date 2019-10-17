@@ -27,7 +27,6 @@ const strategy = new Auth0Strategy(
   },
   function(accessToken, refreshToken, extraParams, profile, done) {
     // extraParams.id_token should contain the JWT
-    console.log(extraParams.id_token);
     return done(null, profile);
   }
 );
