@@ -32,12 +32,8 @@ const Login = initialObject => {
           onChange={e => setRememberMe(e.target.checked)}
         />
       </div>
-<<<<<<< HEAD
       {!user && <a href="auth/login"> Log In </a>}
       {user && <a href="auth/logout"> Log out </a>}
-=======
-      {!isAuthenticated && <a href="auth/login"> Log In </a>}
->>>>>>> now implements login auth route on nextjs api
     </Layout>
   );
 };
