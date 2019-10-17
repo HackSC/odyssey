@@ -35,7 +35,7 @@ router.get("/callback", function(req, res, next) {
       if (err) {
         return next(err);
       }
-      res.redirect("/dashboard");
+    	res.redirect("/dashboard");
     });
   })(req, res, next);
 });
