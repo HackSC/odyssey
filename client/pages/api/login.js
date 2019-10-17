@@ -65,4 +65,11 @@ router.get("/needAuth", secured, function(req, res, next) {
   res.send("Hey, you're authenticated!");
 });
 
+router.get("/me", secured, function(req, res, next) {
+  if (!req.user) {
+    res.redirect("/login");
+  }
+  res.json(req.user);
+});
+
 module.exports = router;
