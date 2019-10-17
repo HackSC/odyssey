@@ -7,6 +7,7 @@ const passport = require("passport");
 const Auth0Strategy = require("passport-auth0");
 
 const authRouter = require("./pages/api/login.js");
+
 const dev = process.env.NODE_ENV !== "production";
 const app = next({
   dev,
@@ -47,14 +48,14 @@ passport.deserializeUser(function(user, done) {
 
 app.prepare().then(() => {
   const server = express();
+  // handling everything else with Next.js
+  server.use("/auth", authRouter);
+  server.get("*", handle);
 
   // Authentication config
   server.use(session(sessionConfig));
   server.use(passport.initialize());
   server.use(passport.session());
-
-  server.use("/auth", authRouter);
-  server.get("*", handle);
 
   const port_num = 3000;
   http.createServer(server).listen(port_num, () => {
