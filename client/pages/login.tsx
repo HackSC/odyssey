@@ -61,50 +61,7 @@ const Login = initialObject => {
           onChange={e => setRememberMe(e.target.checked)}
         />
       </div>
-      {!isAuthenticated && (
-        <button
-          onClick={async () => {
-            const auth0 = await getAuth0Provider();
-            await auth0
-              .loginWithRedirect({
-                redirect_uri: "http://localhost:3000/login"
-              })
-              .catch(e => {
-                console.log(e);
-              });
-          }}
-        >
-          Log In
-        </button>
-      )}
-      {isAuthenticated && (
-        <div>
-          <button
-            onClick={async () => {
-              const url = "http://localhost:8000/amIAuthorized";
-              const auth0 = await getAuth0Provider();
-              const accessToken = await auth0.getTokenSilently();
-              const response = await fetch(url, {
-                headers: {
-                  Authorization: `Bearer ${accessToken}`
-                }
-              });
-              console.log(response);
-            }}
-          >
-            Make Request to authed endpoint
-          </button>
-          <button
-            onClick={async () => {
-              const auth0 = await getAuth0Provider();
-              auth0.logout();
-              setIsAuthenticated(false);
-            }}
-          >
-            Log out
-          </button>
-        </div>
-      )}
+      {!isAuthenticated && <a href="auth/login"> Log In </a>}
     </Layout>
   );
 };
