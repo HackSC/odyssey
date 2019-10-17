@@ -40,7 +40,7 @@ const Login = initialObject => {
 
 Login.getInitialProps = async ({ req }) => {
   const cookies = parseCookies(req);
-  const user = getUser(req);
+  const user = await getUser(req);
   return {
     initialRememberValue: cookies.rememberMe,
     user: user

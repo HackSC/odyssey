@@ -22,6 +22,13 @@ const Home = initialObject => {
     Cookie.set("rememberMe", JSON.stringify(rememberMe));
   }, [rememberMe]);
 
+  var authMessage = "You're not logged in";
+  if (user) {
+    authMessage = user._json.email_verified
+      ? user.nickname
+      : "You haven't verified email";
+  }
+
   return (
     <Layout>
       <ContentBlockWide>
@@ -42,8 +49,8 @@ const Home = initialObject => {
         {message ? message : "Loading..."}
       </ContentBlockWide>
       <ContentBlockWide>
-        <h1> Sam's Authentication Status </h1>
-        {user ? user.nickname : "You're not logged in"}
+        <h1> Authentication Status </h1>
+        {authMessage}
       </ContentBlockWide>
       <ContentBlockWide>
         <h1>Sponsorship </h1>
@@ -56,7 +63,7 @@ const Home = initialObject => {
 Home.getInitialProps = async ({ req }) => {
   const res = await fetch(`${apiHost}/api/random`);
   const json = await res.json();
-  const user = getUser(req);
+  const user = await getUser(req);
   const cookies = parseCookies(req);
 
   return {
