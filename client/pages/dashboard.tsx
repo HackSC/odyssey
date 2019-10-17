@@ -14,7 +14,7 @@ const Dashboard = initialObject => {
   return (
     <Layout>
       <div>
-        <div>Email: {user.email} </div>
+        <div>Email: {user._json.email} </div>
         <div>Username: {user.nickname} </div>
         <div> Email Status: {user._json.email_verified + ""} </div>
         <div>
