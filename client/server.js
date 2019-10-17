@@ -7,7 +7,6 @@ const passport = require("passport");
 const Auth0Strategy = require("passport-auth0");
 
 const authRouter = require("./pages/api/login.js");
-
 const dev = process.env.NODE_ENV !== "production";
 const app = next({
   dev,
