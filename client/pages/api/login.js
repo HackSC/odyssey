@@ -35,9 +35,7 @@ router.get("/callback", function(req, res, next) {
       if (err) {
         return next(err);
       }
-      const returnTo = req.session.returnTo;
-      delete req.session.returnTo;
-      res.redirect(returnTo || "/");
+      res.redirect("/dashboard");
     });
   })(req, res, next);
 });
@@ -65,11 +63,12 @@ router.get("/needAuth", secured, function(req, res, next) {
   res.send("Hey, you're authenticated!");
 });
 
-router.get("/me", secured, function(req, res, next) {
+router.get("/profile", secured, function(req, res, next) {
   if (!req.user) {
-    res.redirect("/login");
+    res.json(403, { message: "No User is logged in" });
+  } else {
+    res.json(req.user);
   }
-  res.json(req.user);
 });
 
 module.exports = router;

@@ -1,13 +1,13 @@
 export async function getUser(req) {
   if (!req) {
     // we're on the client
-    const res = await fetch("auth/me");
-    if (res.status != 200) {
+    const res = await fetch("auth/profile");
+    try {
+      const user = await res.json();
+      return user;
+    } catch (e) {
       return null;
     }
-    const user = await res.json();
-    console.log(user);
-    return user;
   } else {
     return req.user;
   }
