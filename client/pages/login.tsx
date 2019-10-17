@@ -3,7 +3,6 @@ import Layout from "../components/Layout";
 import Cookie from "js-cookie";
 import { parseCookies } from "../lib/parseCookies";
 import { getUser } from "../lib/authenticate";
-import createAuth0Client from "@auth0/auth0-spa-js";
 
 // Load AuthForm as an AMP page
 export const config = { amp: "hybrid" };
