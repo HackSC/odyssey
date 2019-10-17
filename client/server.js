@@ -32,7 +32,7 @@ const strategy = new Auth0Strategy(
 );
 
 const sessionConfig = {
-  secret: "CHANGE THIS TO RANDOM",
+  secret: process.env.COOKIE_SECRET || "We haven't secured the cookies chief",
   cookie: {},
   resave: false,
   saveUninitialized: true

@@ -8,30 +8,6 @@ import createAuth0Client from "@auth0/auth0-spa-js";
 // Load AuthForm as an AMP page
 export const config = { amp: "hybrid" };
 
-export var auth0 = null;
-export const getAuth0Provider = async () => {
-  if (auth0 != null) {
-    return auth0;
-  }
-  auth0 = await createAuth0Client({
-    domain: "dev-l4sg3wav.auth0.com",
-    client_id: "ICCkgINzCPDq66k7nuFmdrFwEjt2Uv8f",
-    redirect_uri: "http://localhost:3000/login",
-    audience: "https://dev-l4sg3wav.auth0.com/api/v2/"
-  });
-  return auth0;
-};
-
-export const handleAuth0Redirect = async () => {
-  const auth0 = await getAuth0Provider();
-  try {
-    await auth0.handleRedirectCallback();
-  } catch (e) {
-    console.log(e);
-  }
-  window.history.replaceState({}, document.title, "/");
-};
-
 const Login = initialObject => {
   const { initialRememberValue } =
     initialObject && initialObject.initialRememberValue
