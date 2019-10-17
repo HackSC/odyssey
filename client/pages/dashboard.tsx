@@ -2,7 +2,7 @@ import React, { useEffect, useState, useContext } from "react";
 import Layout from "../components/Layout";
 import Cookie from "js-cookie";
 import { parseCookies } from "../lib/parseCookies";
-import { getUser } from "../lib/authenticate";
+import { getUser, handleLoginRedirect } from "../lib/authenticate";
 import createAuth0Client from "@auth0/auth0-spa-js";
 
 // Load AuthForm as an AMP page
@@ -16,7 +16,7 @@ const Dashboard = initialObject => {
       <div>
         <div>Email: {user._json.email} </div>
         <div>Username: {user.nickname} </div>
-        <div> Email Status: {user._json.email_verified + ""} </div>
+        <div> Email Verified: {user._json.email_verified + ""} </div>
         <div>
           {" "}
           <a href={user.picture}> Picture </a>{" "}
@@ -28,6 +28,10 @@ const Dashboard = initialObject => {
 
 Dashboard.getInitialProps = async ({ req }) => {
   const user = await getUser(req);
+  if (!user) {
+    // The user isn't signed in
+    handleLoginRedirect(req);
+  }
   return {
     user: user
   };

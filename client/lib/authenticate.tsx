@@ -1,3 +1,5 @@
+import Router from "next/router";
+
 export async function getUser(req) {
   if (!req) {
     // we're on the client
@@ -20,4 +22,15 @@ export function secured(req, res, next) {
   }
   req.session.returnTo = req.originalUrl;
   res.redirect("/login");
+}
+
+export function handleLoginRedirect(req) {
+  if (req) {
+    req.res.writeHead(302, {
+      Location: "/login"
+    });
+  } else {
+    // We're loading on the client
+    Router.push("/login");
+  }
 }
