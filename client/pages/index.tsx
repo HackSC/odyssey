@@ -5,12 +5,13 @@ import Layout from "../components/Layout";
 import { ContentBlockWide } from "../styles";
 import Cookie from "js-cookie";
 import { parseCookies } from "../lib/parseCookies";
+import { getUser } from "../lib/authenticate";
 
 // Load Index as an AMP page
 export const config = { amp: "hybrid" };
 
 const Home = initialObject => {
-  const { message } = initialObject;
+  const { message, user } = initialObject;
   const { initialRememberValue } =
     initialObject && initialObject.initialRememberValue
       ? initialObject
@@ -20,6 +21,13 @@ const Home = initialObject => {
   useEffect(() => {
     Cookie.set("rememberMe", JSON.stringify(rememberMe));
   }, [rememberMe]);
+
+  var authMessage = "You're not logged in";
+  if (user) {
+    authMessage = user._json.email_verified
+      ? user.nickname
+      : "You haven't verified email";
+  }
 
   return (
     <Layout>
@@ -41,6 +49,10 @@ const Home = initialObject => {
         {message ? message : "Loading..."}
       </ContentBlockWide>
       <ContentBlockWide>
+        <h1> Authentication Status </h1>
+        {authMessage}
+      </ContentBlockWide>
+      <ContentBlockWide>
         <h1>Sponsorship </h1>
         <p> Companies go here...</p>
       </ContentBlockWide>
@@ -51,11 +63,13 @@ const Home = initialObject => {
 Home.getInitialProps = async ({ req }) => {
   const res = await fetch(`${apiHost}/api/random`);
   const json = await res.json();
+  const user = await getUser(req);
   const cookies = parseCookies(req);
 
   return {
     message: json.message,
-    initialRememberValue: cookies.rememberMe
+    initialRememberValue: cookies.rememberMe,
+    user: user
   };
 };
 
