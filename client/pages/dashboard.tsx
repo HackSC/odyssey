@@ -14,52 +14,52 @@ import ResultStep from "../components/applicationSteps/ResultStep";
 export const config = { amp: "hybrid" };
 
 const formSteps: FormStep[] = [
-	{
-		title: "Home",
-		component: HomeStep
-	},
-	{
-		title: "Application",
-		component: ApplicationStep
-	},
-	{
-		title: "Profile",
-		component: ProfileStep
-	},
-	{
-		title: "Results",
-		component: ResultStep
-	}
+  {
+    title: "Home",
+    component: HomeStep
+  },
+  {
+    title: "Application",
+    component: ApplicationStep
+  },
+  {
+    title: "Profile",
+    component: ProfileStep
+  },
+  {
+    title: "Results",
+    component: ResultStep
+  }
 ];
 
 const Dashboard = initialObject => {
-	const { user } = initialObject;
+  const { user } = initialObject;
 
-	return (
-		<Layout>
-			<div>
-				<div>Email: {user._json.email} </div>
-				<div>Username: {user.nickname} </div>
-				<div> Email Verified: {user._json.email_verified + ""} </div>
-				<div>
-					{" "}
-					<a href={user.picture}> Picture </a>{" "}
-				</div>
-				<FormStepper serverStep={1} steps={formSteps}></FormStepper>
-			</div>
-		</Layout>
-	);
+  return (
+    <Layout>
+      <div>
+        <div>Email: {user._json.email} </div>
+        <div>Username: {user.nickname} </div>
+        <div> Email Verified: {user._json.email_verified + ""} </div>
+        <div>
+          {" "}
+          <a href={user.picture}> Picture </a>{" "}
+        </div>
+        <FormStepper serverStep={1} steps={formSteps}></FormStepper>
+      </div>
+    </Layout>
+  );
 };
 
 Dashboard.getInitialProps = async ({ req }) => {
-	const user = await getUser(req);
-	if (!user) {
-		// The user isn't signed in
-		handleLoginRedirect(req);
-	}
-	return {
-		user: user
-	};
+  const user = await getUser(req);
+  if (!user) {
+    // The user isn't signed in
+    handleLoginRedirect(req);
+  }
+  return {
+    user: user
+  };
 };
 
 export default Dashboard;
