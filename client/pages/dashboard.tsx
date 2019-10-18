@@ -9,7 +9,6 @@ import HomeStep from "../components/applicationSteps/HomeStep";
 import ApplicationStep from "../components/applicationSteps/ApplicationStep";
 import ProfileStep from "../components/applicationSteps/ProfileStep";
 import ResultStep from "../components/applicationSteps/ResultStep";
-
 // Load AuthForm as an AMP page
 export const config = { amp: "hybrid" };
 
