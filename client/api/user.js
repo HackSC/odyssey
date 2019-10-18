@@ -1,6 +1,5 @@
-import express from "express";
-import models from "models";
-
+const express = require("express");
+const models = require("./models");
 const router = express.Router();
 
 router.get("/", async (req, res) => {
@@ -23,4 +22,4 @@ router.put("/:id", async (req, res) => {
   return res.json({ user: newUser });
 });
 
-export default router;
+module.exports = router;
