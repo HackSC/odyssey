@@ -34,12 +34,33 @@ const formSteps: FormStep[] = [
 const Dashboard = initialObject => {
   const { user } = initialObject;
 
+  useEffect(() => {
+    fetch("http://localhost:3000/api/user", { method: "POST" }).then(res => {
+      console.log(res);
+    });
+  });
+
   return (
     <Layout>
       <div>
+        <div> ID: {user.id} </div>
         <div>Email: {user._json.email} </div>
         <div>Username: {user.nickname} </div>
         <div> Email Verified: {user._json.email_verified + ""} </div>
+        <div>
+          <div> Create a user profile with the button below! </div>
+          <button
+            onClick={async () => {
+              const res = await fetch("api/profile", {
+                method: "POST"
+              });
+              console.log(res);
+            }}
+          >
+            {" "}
+            Click this shit to spam the database{" "}
+          </button>
+        </div>
         <div>
           {" "}
           <a href={user.picture}> Picture </a>{" "}

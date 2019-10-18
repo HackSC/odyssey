@@ -1,9 +1,9 @@
 module.exports = {
   development: {
-    username: "root",
-    password: "root",
-    database: "odyssey-dev",
-    host: "127.0.0.1",
+    username: process.env.DEV_DB_USERNAME,
+    password: process.env.DEV_DB_PASSWORD,
+    database: process.env.DEV_DB_NAME,
+    host: process.env.DEV_DB_HOSTNAME,
     dialect: "mysql"
   },
   test: {
