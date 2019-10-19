@@ -10,9 +10,8 @@ router.get("/", authMiddleware, async (req, res) => {
 
 router.post("/", authMiddleware, async (req, res) => {
   let sessionUser = req.user;
-  console.log("we get here!");
   let user = await models.User.create({
-    id: sessionUser.id,
+    userId: sessionUser.id,
     email: sessionUser._json.email,
     status: "created",
     role: "hacker"

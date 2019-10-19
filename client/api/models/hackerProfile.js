@@ -7,6 +7,7 @@ module.exports = (sequelize, DataTypes) => {
         values: ["male", "female", "other"]
       },
       ethnicity: DataTypes.STRING,
+      email: DataTypes.STRING,
       major: DataTypes.STRING,
       minor: DataTypes.STRING,
       resume: DataTypes.STRING,
@@ -16,8 +17,6 @@ module.exports = (sequelize, DataTypes) => {
     {}
   );
   HackerProfile.associate = function(models) {
-    HackerProfile.belongsTo(models.User);
-
     // associations can be defined here
   };
   return HackerProfile;

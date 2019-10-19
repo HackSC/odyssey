@@ -34,12 +34,6 @@ const formSteps: FormStep[] = [
 const Dashboard = initialObject => {
   const { user } = initialObject;
 
-  useEffect(() => {
-    fetch("http://localhost:3000/api/user", { method: "POST" }).then(res => {
-      console.log(res);
-    });
-  });
-
   return (
     <Layout>
       <div>

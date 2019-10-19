@@ -12,6 +12,7 @@ router.post("/", authMiddleware, async (req, res) => {
   console.log(req.user.id);
   const hackerProfile = await models.HackerProfile.create({
     userId: req.user.id,
+    email: req.user._json.email,
     gender: "male",
     major: "computer science",
     resume: "bro file uploads?",
