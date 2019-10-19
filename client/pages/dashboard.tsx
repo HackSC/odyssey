@@ -33,7 +33,12 @@ const formSteps: FormStep[] = [
 
 const Dashboard = initialObject => {
   const { user } = initialObject;
-
+	const [ newProfile, setNewProfile ] = useState({
+		gender: 'other',
+		major: 'computer science',
+		skills: 'none really',
+		interests: 'snowboarding',
+	});
   return (
     <Layout>
       <div>
@@ -42,17 +47,30 @@ const Dashboard = initialObject => {
         <div>Username: {user.nickname} </div>
         <div> Email Verified: {user._json.email_verified + ""} </div>
         <div>
-          <div> Create a user profile with the button below! </div>
+					<div> Create a user profile with the button below! </div>
+		<div>
+			<textarea value={JSON.stringify(newProfile)} onChange={(e) => {
+				setNewProfile(JSON.parse(e.target.value));	
+			}}>
+			{	JSON.stringify(newProfile) }
+		</textarea>
+	</div>
           <button
-            onClick={async () => {
+						onClick={async () => {
+							const profileData = JSON.stringify(newProfile);
+							console.log(profileData);
               const res = await fetch("api/profile", {
-                method: "POST"
+								method: "POST",
+								headers : {
+										'Content-Type': 'application/json'
+								},
+								body: profileData 
               });
               console.log(res);
             }}
           >
             {" "}
-            Click this shit to spam the database{" "}
+            Click this to add a profile to the database{" "}
           </button>
         </div>
         <div>

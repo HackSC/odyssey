@@ -9,22 +9,18 @@ router.get("/", authMiddleware, async (req, res) => {
 });
 
 router.post("/", authMiddleware, async (req, res) => {
-  console.log(req.user.id);
+  console.log(req.body);
   const hackerProfile = await models.HackerProfile.create({
     userId: req.user.id,
     email: req.user._json.email,
-    gender: "male",
-    major: "computer science",
-    resume: "bro file uploads?",
-    skills: "none",
-    interests: "snowboarding"
+    ...req.body
   });
   return res.json({ hackerProfile });
 });
 
 router.put("/", authMiddleware, async (req, res) => {
   const newHackerProfile = await models.HackerProfile.update(req.body, {
-    where: req.params.id
+    where: req.user.id
   });
   return res.json({ hackerProfile: newHackerProfile });
 });
