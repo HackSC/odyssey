@@ -32,7 +32,7 @@ router.put("/:id", authMiddleware, async (req, res) => {
   return res.json({ user: newUser });
 });
 
-router.post("/:resume", authMiddleware, async (req, res) => {
+router.post("/resume", authMiddleware, async (req, res) => {
   const user = req.user;
   var busboy = new Busboy({ headers: req.headers });
   busboy.on("file", function(fieldname, file, filename, encoding, mimetype) {
