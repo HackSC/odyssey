@@ -3,11 +3,10 @@ export default {
     return queryInterface.createTable("HackerProfiles", {
       id: {
         allowNull: false,
-        autoIncrement: true,
-        primaryKey: true,
         type: Sequelize.INTEGER
       },
       userId: {
+        primaryKey: true,
         type: Sequelize.STRING,
         allowNull: false
       },
