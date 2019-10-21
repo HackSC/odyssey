@@ -1,10 +1,13 @@
 export default {
   up: (queryInterface, Sequelize) => {
     return queryInterface.createTable("Users", {
-      id: {
+      userId: {
         allowNull: false,
-        autoIncrement: true,
         primaryKey: true,
+        type: Sequelize.STRING
+      },
+      id: {
+        autoincrement: true,
         type: Sequelize.INTEGER
       },
       email: {

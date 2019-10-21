@@ -6,7 +6,11 @@ const dotenv = require("dotenv");
 const passport = require("passport");
 const Auth0Strategy = require("passport-auth0");
 
-const authRouter = require("./pages/api/login.js");
+const bodyParser = require("body-parser");
+
+const authRouter = require("./api/login");
+const userRouter = require("./api/user");
+const profileRouter = require("./api/hackerProfile");
 
 const dev = process.env.NODE_ENV !== "production";
 const app = next({
@@ -54,7 +58,11 @@ app.prepare().then(() => {
   server.use(passport.initialize());
   server.use(passport.session());
 
+	server.use(bodyParser.json());
+
   server.use("/auth", authRouter);
+  server.use("/api/user", userRouter);
+  server.use("/api/profile", profileRouter);
   server.get("*", handle);
 
   const port_num = 3000;
