@@ -87,23 +87,32 @@ const Dashboard = initialObject => {
               {" "}
               Click this to add a profile to the database{" "}
             </button>
-            <button
-              onClick={async () => {
-                const profileData = JSON.stringify(newProfile);
-                console.log(profileData);
-                const res = await fetch("api/profile", {
-                  method: "PUT",
-                  headers: {
-                    "Content-Type": "application/json"
-                  },
-                  body: profileData
-                });
-                console.log(res);
-              }}
-            >
-              {" "}
-              Click this to update the profile profile in the database{" "}
-            </button>
+            <div>
+              <button
+                onClick={async () => {
+                  const profileData = JSON.stringify(newProfile);
+                  console.log(profileData);
+                  const res = await fetch("api/profile", {
+                    method: "PUT",
+                    headers: {
+                      "Content-Type": "application/json"
+                    },
+                    body: profileData
+                  });
+                  console.log(res);
+                }}
+              >
+                {" "}
+                Click this to update the profile profile in the database{" "}
+              </button>
+            </div>
+            <div>
+							<form method="POST" encType='multipart/form-data' action="api/user/resume">
+                <input type="file" name="filefield" />
+                <br />
+                <input type="submit" />
+              </form>
+            </div>
           </div>
           <div>
             {" "}
