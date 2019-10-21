@@ -39,51 +39,81 @@ const Dashboard = initialObject => {
     skills: "none really",
     interests: "snowboarding"
   });
-  return (
-    <Layout>
-      <div>
-        <div> ID: {user.id} </div>
-        <div>Email: {user._json.email} </div>
-        <div>Username: {user.nickname} </div>
-        <div> Email Verified: {user._json.email_verified + ""} </div>
+  if (!user._json.email_verified) {
+    return (
+      <Layout>
+        <div>Please verify your email :)</div>
+      </Layout>
+    );
+  } else {
+    return (
+      <Layout>
         <div>
-          <div> Create a user profile with the button below! </div>
+          <div> ID: {user.id} </div>
+          <div>Email: {user._json.email} </div>
+          <div>Username: {user.nickname} </div>
+          <div> Email Verified: {user._json.email_verified + ""} </div>
           <div>
-            <textarea
-              value={JSON.stringify(newProfile)}
-              onChange={e => {
-                setNewProfile(JSON.parse(e.target.value));
+            <div> Create a user profile with the button below! </div>
+            <div>
+              <textarea
+                onChange={e => {
+                  try {
+                    const jsonifiedProfile = JSON.parse(e.target.value);
+                    setNewProfile(jsonifiedProfile);
+                  } catch (e) {
+                    console.log(e);
+                    // This is gonna get hit a lot, since it happens on every keystroke
+                  }
+                }}
+              >
+                {JSON.stringify(newProfile)}
+              </textarea>
+            </div>
+            <button
+              onClick={async () => {
+                const profileData = JSON.stringify(newProfile);
+                console.log(profileData);
+                const res = await fetch("api/profile", {
+                  method: "POST",
+                  headers: {
+                    "Content-Type": "application/json"
+                  },
+                  body: profileData
+                });
+                console.log(res);
               }}
             >
-              {JSON.stringify(newProfile)}
-            </textarea>
+              {" "}
+              Click this to add a profile to the database{" "}
+            </button>
+            <button
+              onClick={async () => {
+                const profileData = JSON.stringify(newProfile);
+                console.log(profileData);
+                const res = await fetch("api/profile", {
+                  method: "PUT",
+                  headers: {
+                    "Content-Type": "application/json"
+                  },
+                  body: profileData
+                });
+                console.log(res);
+              }}
+            >
+              {" "}
+              Click this to update the profile profile in the database{" "}
+            </button>
           </div>
-          <button
-            onClick={async () => {
-              const profileData = JSON.stringify(newProfile);
-              console.log(profileData);
-              const res = await fetch("api/profile", {
-                method: "POST",
-                headers: {
-                  "Content-Type": "application/json"
-                },
-                body: profileData
-              });
-              console.log(res);
-            }}
-          >
+          <div>
             {" "}
-            Click this to add a profile to the database{" "}
-          </button>
+            <a href={user.picture}> Picture </a>{" "}
+          </div>
+          <FormStepper serverStep={1} steps={formSteps}></FormStepper>
         </div>
-        <div>
-          {" "}
-          <a href={user.picture}> Picture </a>{" "}
-        </div>
-        <FormStepper serverStep={1} steps={formSteps}></FormStepper>
-      </div>
-    </Layout>
-  );
+      </Layout>
+    );
+  }
 };
 
 Dashboard.getInitialProps = async ({ req }) => {
