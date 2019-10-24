@@ -4,8 +4,8 @@
   "private": true,
   "scripts": {
     "dev": "node << babel server.js",
-    "build": "NODE_ENV=production server.js",
-    "start": "node server.js",
+    "build": "next build",
+    "start": "NODE_ENV=production node server.js -p $PORT",
     "test": "jest"
   },
   "dependencies": {
