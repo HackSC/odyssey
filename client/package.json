@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "node << babel server.js",
-    "build": "next build",
+    "build": "NODE_ENV=production server.js",
     "start": "node server.js",
     "test": "jest"
   },
