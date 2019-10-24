@@ -65,8 +65,8 @@ app.prepare().then(() => {
   server.use("/api/profile", profileRouter);
   server.get("*", handle);
 
-  const port_num = process.env.PORT || 80;
-  http.createServer(server).listen(port_num, () => {
+  const port_num = process.env.PORT || 3000;
+  http.createServer(server).listen(port_num, "0.0.0.0", () => {
     console.log(`listening on port ${port_num}`);
   });
 });
