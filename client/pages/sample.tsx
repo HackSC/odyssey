@@ -74,8 +74,22 @@ const Sample = () => {
       </Flex>
 
       <form>
-        <input type="text" />
-        <button>Submit</button>
+        <FormGroup>
+          <label>Name</label>
+          <input type="text" />
+        </FormGroup>
+
+        <FormGroup>
+          <label>Title</label>
+          <input type="text" />
+        </FormGroup>
+
+        <FormGroup>
+          <label>Why HackSC?</label>
+          <textarea />
+        </FormGroup>
+
+        <Button>Submit</Button>
       </form>
     </>
   );
@@ -87,6 +101,30 @@ const Flex = styled.div`
 
 const Column = styled.div`
   flex: 1;
+`;
+
+const FormGroup = styled(Flex)`
+  flex-direction: column;
+  padding: 16px 0;
+
+  label {
+    font-weight: 600;
+    font-size: 14px;
+    margin-bottom: 16px;
+  }
+`;
+
+const Button = styled.button`
+  padding: 10px;
+  border: none;
+  border-radius: 8px;
+  background: #ff8379;
+  flex-grow: 1;
+  font-size: 14px;
+  color: #ffffff;
+  font-weight: 600;
+  text-transform: uppercase;
+  text-align: center;
 `;
 
 export default Sample;
