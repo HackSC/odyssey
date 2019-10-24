@@ -1,1 +1,1 @@
-web: cd client && yarn install && next build && yarn run dev
+web: cd client && yarn run dev
