@@ -61,13 +61,11 @@ const Home = initialObject => {
 };
 
 Home.getInitialProps = async ({ req }) => {
-  const res = await fetch(`${apiHost}/api/random`);
-  const json = await res.json();
   const user = await getUser(req);
   const cookies = parseCookies(req);
 
   return {
-    message: json.message,
+    message: "",
     initialRememberValue: cookies.rememberMe,
     user: user
   };
