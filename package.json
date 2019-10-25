@@ -44,6 +44,7 @@
     "react": "^16.11.0",
     "react-dom": "^16.11.0",
     "sequelize": "^5.19.8",
-    "ts-loader": "^6.2.1"
+    "ts-loader": "^6.2.1",
+    "typescript": "^3.6.4"
   }
 }
