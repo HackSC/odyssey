@@ -29,7 +29,7 @@ const strategy = new Auth0Strategy(
     callbackURL:
       process.env.AUTH0_CALLBACK_URL || "http://localhost:3000/callback"
   },
-  function(accessToken, refreshToken, extraParams, profile, done) {
+  function (accessToken, refreshToken, extraParams, profile, done) {
     // extraParams.id_token should contain the JWT
     return done(null, profile);
   }
@@ -43,10 +43,10 @@ const sessionConfig = {
 };
 
 passport.use(strategy);
-passport.serializeUser(function(user, done) {
+passport.serializeUser(function (user, done) {
   done(null, user);
 });
-passport.deserializeUser(function(user, done) {
+passport.deserializeUser(function (user, done) {
   done(null, user);
 });
 
@@ -66,7 +66,8 @@ app.prepare().then(() => {
   server.get("*", handle);
 
   const port_num = process.env.PORT || 3000;
-  http.createServer(server).listen(port_num, () => {
+
+  http.createServer(server).listen(port_num, "0.0.0.0", () => {
     console.log(`listening on port ${port_num}`);
   });
 });
