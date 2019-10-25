@@ -58,14 +58,14 @@ app.prepare().then(() => {
   server.use(passport.initialize());
   server.use(passport.session());
 
-	server.use(bodyParser.json());
+  server.use(bodyParser.json());
 
   server.use("/auth", authRouter);
   server.use("/api/user", userRouter);
   server.use("/api/profile", profileRouter);
   server.get("*", handle);
 
-  const port_num = 3000;
+  const port_num = process.env.PORT || 3000;
   http.createServer(server).listen(port_num, () => {
     console.log(`listening on port ${port_num}`);
   });
