@@ -85,7 +85,7 @@ const Sample = () => {
           </Flex>
         </Section>
 
-        <form>
+        <Form>
           <FormGroup>
             <label>Name</label>
             <input type="text" />
@@ -97,12 +97,40 @@ const Sample = () => {
           </FormGroup>
 
           <FormGroup>
+            <label>School</label>
+            <select>
+              <option>University of Southern California</option>
+              <option>University of California, Los Angeles</option>
+              <option>University of California, Berkeley</option>
+            </select>
+          </FormGroup>
+
+          <FormGroup>
+            <label>Gender</label>
+
+            <RadioChoice>
+              <input type="radio" name="gender" value="male" />
+              <RadioChoiceLabel>Male</RadioChoiceLabel>
+            </RadioChoice>
+
+            <RadioChoice>
+              <input type="radio" name="gender" value="female" />
+              <RadioChoiceLabel>Female</RadioChoiceLabel>
+            </RadioChoice>
+
+            <RadioChoice>
+              <input type="radio" name="gender" value="other" />
+              <RadioChoiceLabel>Other</RadioChoiceLabel>
+            </RadioChoice>
+          </FormGroup>
+
+          <FormGroup>
             <label>Why HackSC?</label>
             <textarea />
           </FormGroup>
 
           <Button>Submit</Button>
-        </form>
+        </Form>
       </Container>
     </>
   );
@@ -136,24 +164,39 @@ const Panel = styled.div`
   padding: 36px;
 `;
 
+const Form = styled.form`
+  padding: 16px 0;
+`;
+
 const FormGroup = styled(Flex)`
   flex-direction: column;
   padding: 16px 0;
 
   label {
     font-weight: 600;
-    font-size: 14px;
+    font-size: 16px;
     margin-bottom: 16px;
   }
 `;
 
+const RadioChoice = styled.div`
+  width: 100%;
+  display: flex;
+  align-items: center;
+  padding: 4px 0;
+`;
+
+const RadioChoiceLabel = styled.span`
+  padding-left: 8px;
+`;
+
 const Button = styled.button`
-  padding: 10px;
+  padding: 12px 16px;
   border: none;
   border-radius: 8px;
   background: #ff8379;
   flex-grow: 1;
-  font-size: 14px;
+  font-size: 16px;
   color: #ffffff;
   font-weight: 600;
   text-transform: uppercase;

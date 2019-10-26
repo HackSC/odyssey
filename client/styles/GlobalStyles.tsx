@@ -39,6 +39,19 @@ const GlobalStyles = createGlobalStyle`
     color: #b2b2b2;
     font-size: 16px;
   }
+
+  select {
+    font-family: 'AktivGrotesk', sans-serif;
+    font-size: 16px;
+    border-radius: 8px;
+    border: 1px solid #b2b2b2;
+    background: #FFFFFF;
+    padding: 12px 16px;
+    font-weight: 400;
+    color: #5D5D5D;
+    -webkit-appearance: none;
+    border-image: initial;
+  }
 `;
 
 export default GlobalStyles;
