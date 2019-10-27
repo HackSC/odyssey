@@ -20,18 +20,10 @@ workflows:
   version: 2
   test_deploy:
     jobs:
-      - client-test
-      - server-test
-      - client-deploy:
+      - test
+      - deploy:
           requires:
-            - client-test
-          filters:
-            branches:
-              only:
-                - master
-      - server-deploy:
-          requires:
-            - server-test
+            - test
           filters:
             branches:
               only:
