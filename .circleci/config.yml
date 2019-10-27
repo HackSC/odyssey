@@ -1,13 +1,13 @@
 version: 2
 jobs:
-  client-test:
+  test:
     docker:
       - image: circleci/node
     steps:
       - checkout
-      - run: yarn client:install
-      - run: yarn client:test
-  client-deploy:
+      - run: yarn install
+      - run: yarn run test
+  deploy:
     docker:
       - image: circleci/node
     steps:
@@ -16,49 +16,14 @@ jobs:
       - run: 
           name: Deploy to Now
           command: cd client && now --token $ZEIT_TOKEN --local-config now.production.json --prod
-  server-test:
-    docker:
-      - image: circleci/node
-    steps:
-      - checkout
-      - run: yarn server:install
-      - run: yarn server:test
-  server-deploy:
-    docker:
-      - image: circleci/node
-    steps:
-      - checkout
-      - run: yarn server:install
-      - run: yarn server:build
-      - run:
-          name: Installing deployment dependencies
-          working_directory: /
-          command: |
-            sudo apt-get -y -qq update
-            sudo apt-get install python-pip python-dev build-essential
-            sudo pip install awsebcli --upgrade
-      - run:
-          name: Initialize EB
-          command: cd server && eb init --region us-west-1 --platform Node.js odyssey
-      - run:
-          name: Deploying to EB
-          command: cd server && eb deploy Odyssey-env --staged
 workflows:
   version: 2
   test_deploy:
     jobs:
-      - client-test
-      - server-test
-      - client-deploy:
+      - test
+      - deploy:
           requires:
-            - client-test
-          filters:
-            branches:
-              only:
-                - master
-      - server-deploy:
-          requires:
-            - server-test
+            - test
           filters:
             branches:
               only:
