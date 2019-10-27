@@ -8,29 +8,30 @@ const GlobalStyles = createGlobalStyle`
   ${Fonts}
 
   body {
-    font-family: AktivGrotesk, sans-serif;
+    font-family: ${({ theme }) => theme.fontFamily};
+    color: ${({ theme }) => theme.colors.black};
   }
 
   h1 {
     font-weight: 700;
-    font-size: 32px;
+    font-size: ${({ theme }) => theme.fontSizes.title};
     padding-bottom: 12px;
   }
 
   h2 {
     font-weight: 700;
-    font-size: 28px;
+    font-size: ${({ theme }) => theme.fontSizes.header};
     padding-bottom: 12px;
   }
 
   h3 {
     font-weight: 600;
-    font-size: 24px;
+    font-size: ${({ theme }) => theme.fontSizes.subheader};
     padding-bottom: 12px;
   }
 
   p {
-    font-size: 16px;
+    font-size: ${({ theme }) => theme.fontSizes.regular};
     line-height: 20px;
   }
 `;

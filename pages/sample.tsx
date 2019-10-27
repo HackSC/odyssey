@@ -1,5 +1,7 @@
 import React from "react";
 
+import styled from "styled-components";
+
 import Navbar from "../components/Navbar";
 
 import {
@@ -65,8 +67,9 @@ const Sample = () => {
             <Column>
               <h2>Equal width columns</h2>
               <p>
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis et
-                justo eleifend, hendrerit quam eget, condimentum dui.
+                <Blue>Lorem ipsum dolor sit amet</Blue>, consectetur adipiscing
+                elit. Duis et justo eleifend, hendrerit quam eget, condimentum
+                dui.
               </p>
             </Column>
           </Flex>
@@ -78,23 +81,25 @@ const Sample = () => {
               <h3>Equal width columns</h3>
               <p>
                 Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis et
-                justo eleifend, hendrerit quam eget, condimentum dui.
+                justo eleifend, hendrerit quam eget, <Red>condimentum dui.</Red>
               </p>
             </Column>
 
             <Column>
               <h3>Equal width columns</h3>
               <p>
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis et
-                justo eleifend, hendrerit quam eget, condimentum dui.
+                Lorem ipsum dolor sit amet,{" "}
+                <Peach>consectetur adipiscing elit.</Peach> Duis et justo
+                eleifend, hendrerit <Yellow>quam eget, condimentum dui.</Yellow>
               </p>
             </Column>
 
             <Column>
               <h3>Equal width columns</h3>
               <p>
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis et
-                justo eleifend, hendrerit quam eget, condimentum dui.
+                <Magenta>Lorem ipsum dolor sit amet</Magenta>, consectetur
+                adipiscing elit. Duis et justo eleifend, hendrerit quam eget,
+                condimentum dui.
               </p>
             </Column>
           </Flex>
@@ -150,5 +155,25 @@ const Sample = () => {
     </>
   );
 };
+
+const Magenta = styled.span`
+  color: ${({ theme }) => theme.colors.magenta};
+`;
+
+const Red = styled.span`
+  color: ${({ theme }) => theme.colors.red};
+`;
+
+const Peach = styled.span`
+  color: ${({ theme }) => theme.colors.peach};
+`;
+
+const Yellow = styled.span`
+  color: ${({ theme }) => theme.colors.yellow};
+`;
+
+const Blue = styled.span`
+  color: ${({ theme }) => theme.colors.blue};
+`;
 
 export default Sample;
