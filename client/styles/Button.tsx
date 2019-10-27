@@ -1,15 +1,16 @@
 import styled from "styled-components";
 
 const Button = styled.button`
-  padding: 32px;
-  background-color: #e6194b;
-  font-size: 24px;
-  border-radius: 4px;
-  color: white;
-  font-weight: bold;
-  &:hover {
-    background-color: #462470;
-  }
+  padding: 12px 16px;
+  border: none;
+  border-radius: 8px;
+  background: #ff8379;
+  flex-grow: 1;
+  font-size: 16px;
+  color: #ffffff;
+  font-weight: 600;
+  text-transform: uppercase;
+  text-align: center;
 `;
 
 export default Button;

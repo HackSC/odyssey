@@ -2,9 +2,26 @@ import React from "react";
 
 import styled from "styled-components";
 
+import Navbar from "../components/Navbar";
+
+import {
+  Button,
+  Container,
+  Column,
+  Flex,
+  Form,
+  FormGroup,
+  RadioChoice,
+  RadioChoiceLabel,
+  Panel,
+  Section
+} from "../styles";
+
 const Sample = () => {
   return (
     <>
+      <Navbar />
+
       <Container>
         <Section>
           <h1>Heading 1</h1>
@@ -135,72 +152,5 @@ const Sample = () => {
     </>
   );
 };
-
-const Container = styled.div`
-  width: 93.75%;
-  max-width: 960px;
-  margin-left: auto;
-  margin-right: auto;
-`;
-
-const Flex = styled.div`
-  display: flex;
-`;
-
-const Column = styled.div`
-  flex: 1;
-`;
-
-const Section = styled.div`
-  padding: 32px 0;
-`;
-
-const Panel = styled.div`
-  box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.2);
-  border-radius: 8px;
-  margin-top: 16px;
-  margin-bottom: 16px;
-  box-sizing: border-box;
-  padding: 36px;
-`;
-
-const Form = styled.form`
-  padding: 16px 0;
-`;
-
-const FormGroup = styled(Flex)`
-  flex-direction: column;
-  padding: 16px 0;
-
-  label {
-    font-weight: 600;
-    font-size: 16px;
-    margin-bottom: 16px;
-  }
-`;
-
-const RadioChoice = styled.div`
-  width: 100%;
-  display: flex;
-  align-items: center;
-  padding: 4px 0;
-`;
-
-const RadioChoiceLabel = styled.span`
-  padding-left: 8px;
-`;
-
-const Button = styled.button`
-  padding: 12px 16px;
-  border: none;
-  border-radius: 8px;
-  background: #ff8379;
-  flex-grow: 1;
-  font-size: 16px;
-  color: #ffffff;
-  font-weight: 600;
-  text-transform: uppercase;
-  text-align: center;
-`;
 
 export default Sample;

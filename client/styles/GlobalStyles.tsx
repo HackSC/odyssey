@@ -14,43 +14,24 @@ const GlobalStyles = createGlobalStyle`
   h1 {
     font-weight: 700;
     font-size: 32px;
+    padding-bottom: 12px;
   }
 
   h2 {
     font-weight: 700;
     font-size: 28px;
+    padding-bottom: 12px;
   }
 
   h3 {
     font-weight: 600;
     font-size: 24px;
+    padding-bottom: 12px;
   }
 
   p {
     font-size: 16px;
     line-height: 20px;
-  }
-
-  input[type=text], textarea {
-    border-radius: 8px;
-    border: 1px solid #b2b2b2;
-    padding: 12px 16px;
-    font-weight: 600;
-    color: #b2b2b2;
-    font-size: 16px;
-  }
-
-  select {
-    font-family: 'AktivGrotesk', sans-serif;
-    font-size: 16px;
-    border-radius: 8px;
-    border: 1px solid #b2b2b2;
-    background: #FFFFFF;
-    padding: 12px 16px;
-    font-weight: 400;
-    color: #5D5D5D;
-    -webkit-appearance: none;
-    border-image: initial;
   }
 `;
 
