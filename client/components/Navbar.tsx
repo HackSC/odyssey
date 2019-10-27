@@ -4,10 +4,12 @@ import styled from "styled-components";
 
 import HeaderLogo from "../assets/header_logo.png";
 
+import { Container } from "../styles";
+
 const Navbar: React.FunctionComponent = props => {
   return (
     <Wrapper>
-      <Container>
+      <NavbarContainer>
         <a href="/">
           <HeaderLogoImg src={HeaderLogo} />
         </a>
@@ -16,7 +18,7 @@ const Navbar: React.FunctionComponent = props => {
           <Link href="/">Home</Link>
           <Link href="/">Login</Link>
         </Links>
-      </Container>
+      </NavbarContainer>
     </Wrapper>
   );
 };
@@ -25,11 +27,7 @@ const Wrapper = styled.div`
   padding: 32px 0;
 `;
 
-const Container = styled.div`
-  width: 93.75%;
-  max-width: 960px;
-  margin-left: auto;
-  margin-right: auto;
+const NavbarContainer = styled(Container)`
   display: flex;
   align-items: center;
   justify-content: space-between;
