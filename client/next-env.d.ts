@@ -3,6 +3,8 @@
 
 // Not really sure what to do with types
 declare type FormStep = {
-	title: string;
-	component: React.FunctionComponent;
+  title: string;
+  component: React.FunctionComponent;
 };
+
+declare module "*.png";
