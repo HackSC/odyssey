@@ -42,6 +42,7 @@ const GlobalStyles = createGlobalStyle`
   a {
     color: ${({ theme }) => theme.colors.peach};
     text-decoration: none;
+    line-height: 20px;
   }
 `;
 
