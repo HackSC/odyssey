@@ -17,7 +17,24 @@ const Theme = {
     subheader: "24px",
     regular: "16px"
   },
-  fontFamily: "AktivGrotesk, sans-serif"
+  fontFamily: "AktivGrotesk, sans-serif",
+  media: {
+    desktop: style => `
+      @media screen and (max-width: 960px) {
+        ${style}
+      }
+    `,
+    tablet: style => `
+      @media screen and (max-width: 768px) {
+        ${style}
+      }
+    `,
+    mobile: style => `
+      @media screen and (max-width: 425px) {
+        ${style}
+      }
+    `
+  }
 };
 
 export default Theme;
