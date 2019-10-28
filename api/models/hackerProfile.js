@@ -13,7 +13,15 @@ module.exports = (sequelize, DataTypes) => {
       minor: DataTypes.STRING,
       resume: DataTypes.STRING,
       skills: DataTypes.STRING,
-      interests: DataTypes.STRING
+      interests: DataTypes.STRING,
+      firstName: DataTypes.STRING,
+      lastName: DataTypes.STRING,
+      phoneNumber: DataTypes.STRING,
+      year: DataTypes.STRING,
+      skillLevel: {
+        type: DataTypes.ENUM,
+        values: ["beginner", "intermediate", "advanced", "expert"]
+      },
     },
     {}
   );
