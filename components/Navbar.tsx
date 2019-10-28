@@ -16,20 +16,20 @@ const Navbar: React.FunctionComponent<NavbarProps> = ({
   return (
     <Wrapper>
       <NavbarContainer>
-        <a href="/">
+        <a href={loggedIn ? "/dashboard" : "/"}>
           <HeaderLogoImg src={HeaderLogo} />
         </a>
 
         <Links>
           {loggedIn ? (
             <>
-              <Link href="/">Dashboard</Link>
+              <Link href="/dashboard">Dashboard</Link>
               <Link href="/auth/logout">Logout</Link>
             </>
           ) : (
             <>
               <Link href="/">Home</Link>
-              <Link href="/login">Login</Link>
+              <Link href="/auth/login">Login</Link>
             </>
           )}
         </Links>

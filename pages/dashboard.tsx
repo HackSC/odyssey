@@ -1,29 +1,31 @@
-import React, { useEffect, useState, useContext } from "react";
-import Layout from "../components/Layout";
-import Cookie from "js-cookie";
-import { parseCookies } from "../lib/parseCookies";
+import React from "react";
+
 import { getUser, handleLoginRedirect } from "../lib/authenticate";
-import createAuth0Client from "@auth0/auth0-spa-js";
+
 import FormStepper from "../components/FormStepper";
-import HomeStep from "../components/applicationSteps/HomeStep";
+import StatusStep from "../components/applicationSteps/StatusStep";
 import ApplicationStep from "../components/applicationSteps/ApplicationStep";
 import ProfileStep from "../components/applicationSteps/ProfileStep";
 import ResultStep from "../components/applicationSteps/ResultStep";
+
 // Load AuthForm as an AMP page
 export const config = { amp: "hybrid" };
 
+import Navbar from "../components/Navbar";
+import Footer from "../components/Footer";
+
 const formSteps: FormStep[] = [
   {
-    title: "Home",
-    component: HomeStep
-  },
-  {
-    title: "Application",
-    component: ApplicationStep
+    title: "Status",
+    component: StatusStep
   },
   {
     title: "Profile",
     component: ProfileStep
+  },
+  {
+    title: "Application",
+    component: ApplicationStep
   },
   {
     title: "Results",
@@ -31,98 +33,14 @@ const formSteps: FormStep[] = [
   }
 ];
 
-const Dashboard = initialObject => {
-  const { user } = initialObject;
-  const [newProfile, setNewProfile] = useState({
-    gender: "other",
-    major: "computer science",
-    skills: "none really",
-    interests: "snowboarding"
-  });
-  if (!user._json.email_verified) {
-    return (
-      <Layout>
-        <div>Please verify your email :)</div>
-      </Layout>
-    );
-  } else {
-    return (
-      <Layout>
-        <div>
-          <div> ID: {user.id} </div>
-          <div>Email: {user._json.email} </div>
-          <div>Username: {user.nickname} </div>
-          <div> Email Verified: {user._json.email_verified + ""} </div>
-          <div>
-            <div> Create a user profile with the button below! </div>
-            <div>
-              <textarea
-                onChange={e => {
-                  try {
-                    const jsonifiedProfile = JSON.parse(e.target.value);
-                    setNewProfile(jsonifiedProfile);
-                  } catch (e) {
-                    console.log(e);
-                    // This is gonna get hit a lot, since it happens on every keystroke
-                  }
-                }}
-              >
-                {JSON.stringify(newProfile)}
-              </textarea>
-            </div>
-            <button
-              onClick={async () => {
-                const profileData = JSON.stringify(newProfile);
-                console.log(profileData);
-                const res = await fetch("api/profile", {
-                  method: "POST",
-                  headers: {
-                    "Content-Type": "application/json"
-                  },
-                  body: profileData
-                });
-                console.log(res);
-              }}
-            >
-              {" "}
-              Click this to add a profile to the database{" "}
-            </button>
-            <div>
-              <button
-                onClick={async () => {
-                  const profileData = JSON.stringify(newProfile);
-                  console.log(profileData);
-                  const res = await fetch("api/profile", {
-                    method: "PUT",
-                    headers: {
-                      "Content-Type": "application/json"
-                    },
-                    body: profileData
-                  });
-                  console.log(res);
-                }}
-              >
-                {" "}
-                Click this to update the profile profile in the database{" "}
-              </button>
-            </div>
-            <div>
-							<form method="POST" encType='multipart/form-data' action="api/user/resume">
-                <input type="file" name="filefield" />
-                <br />
-                <input type="submit" />
-              </form>
-            </div>
-          </div>
-          <div>
-            {" "}
-            <a href={user.picture}> Picture </a>{" "}
-          </div>
-          <FormStepper serverStep={1} steps={formSteps}></FormStepper>
-        </div>
-      </Layout>
-    );
-  }
+const Dashboard = ({ user }) => {
+  return (
+    <>
+      <Navbar loggedIn />
+      <FormStepper serverStep={0} steps={formSteps} user={user} />
+      <Footer />
+    </>
+  );
 };
 
 Dashboard.getInitialProps = async ({ req }) => {

@@ -38,7 +38,7 @@ function redirectToPath(req, path: string) {
 }
 
 export function handleLoginRedirect(req) {
-  redirectToPath(req, "/login");
+  redirectToPath(req, "/auth/login");
 }
 
 export function handleDashboardRedirect(req) {
