@@ -32,7 +32,16 @@ const GlobalStyles = createGlobalStyle`
 
   p {
     font-size: ${({ theme }) => theme.fontSizes.regular};
-    line-height: 20px;
+    line-height: 22px;
+  }
+
+  b {
+    font-weight: 600;
+  }
+
+  a {
+    color: ${({ theme }) => theme.colors.peach};
+    text-decoration: none;
   }
 `;
 

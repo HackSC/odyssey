@@ -8,3 +8,4 @@ declare type FormStep = {
 };
 
 declare module "*.png";
+declare module "*.svg";

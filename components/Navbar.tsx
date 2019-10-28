@@ -4,9 +4,15 @@ import styled from "styled-components";
 
 import HeaderLogo from "../assets/header_logo.png";
 
-import { Container } from "../styles";
+import { Container, Link } from "../styles";
 
-const Navbar: React.FunctionComponent = props => {
+type NavbarProps = {
+  loggedIn?: boolean;
+};
+
+const Navbar: React.FunctionComponent<NavbarProps> = ({
+  loggedIn
+}: NavbarProps) => {
   return (
     <Wrapper>
       <NavbarContainer>
@@ -15,8 +21,17 @@ const Navbar: React.FunctionComponent = props => {
         </a>
 
         <Links>
-          <Link href="/">Home</Link>
-          <Link href="/">Login</Link>
+          {loggedIn ? (
+            <>
+              <Link href="/">Dashboard</Link>
+              <Link href="/auth/logout">Logout</Link>
+            </>
+          ) : (
+            <>
+              <Link href="/">Home</Link>
+              <Link href="/login">Login</Link>
+            </>
+          )}
         </Links>
       </NavbarContainer>
     </Wrapper>
@@ -24,7 +39,7 @@ const Navbar: React.FunctionComponent = props => {
 };
 
 const Wrapper = styled.div`
-  padding: 32px 0;
+  padding: 30px 0;
 `;
 
 const NavbarContainer = styled(Container)`
@@ -40,12 +55,13 @@ const HeaderLogoImg = styled.img`
 const Links = styled.div`
   display: flex;
   justify-content: space-between;
-`;
 
-const Link = styled.a`
-  text-decoration: none;
-  color: #ff8379;
-  padding: 0 16px;
+  a {
+    font-weight: 600;
+    color: ${({ theme }) => theme.colors.black};
+    text-transform: uppercase;
+    padding: 0 12px;
+  }
 `;
 
 export default Navbar;

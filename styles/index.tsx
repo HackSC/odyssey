@@ -16,6 +16,7 @@ export {
 } from "./Form";
 export { default as Panel } from "./Panel";
 export { default as Section } from "./Section";
+export { default as Link } from "./Link";
 
 export { default as GlobalStyles } from "./GlobalStyles";
 export { default as Theme } from "./Theme";
