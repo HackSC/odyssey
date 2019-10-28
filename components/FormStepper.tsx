@@ -5,7 +5,7 @@ import styled, { DefaultTheme } from "styled-components";
 type Props = {
   serverStep: number;
   steps: FormStep[];
-  user?: Object;
+  user?: User;
 };
 
 const FormStepper: React.FunctionComponent<Props> = props => {
