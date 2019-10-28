@@ -1,8 +1,8 @@
 import React from "react";
 import App from "next/app";
-// import { ThemeProvider } from "styled-components";
+import { ThemeProvider } from "styled-components";
 
-import GlobalStyles from "../styles/GlobalStyles";
+import { Theme, GlobalStyles } from "../styles";
 
 class OdysseyApp extends App {
   static async getInitialProps({ Component, ctx }) {
@@ -19,10 +19,12 @@ class OdysseyApp extends App {
     const { Component, pageProps } = this.props;
 
     return (
-      <>
-        <GlobalStyles />
-        <Component {...pageProps} />
-      </>
+      <ThemeProvider theme={Theme}>
+        <>
+          <GlobalStyles />
+          <Component {...pageProps} />
+        </>
+      </ThemeProvider>
     );
   }
 }
