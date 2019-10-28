@@ -24,13 +24,23 @@ export function secured(req, res, next) {
   res.redirect("/login");
 }
 
-export function handleLoginRedirect(req) {
+function redirectToPath(req, path: string) {
   if (req) {
+    // Server side 302
     req.res.writeHead(302, {
-      Location: "/login"
+      Location: path
     });
+    req.res.end();
   } else {
-    // We're loading on the client
-    Router.push("/login");
+    // Client side redirect
+    Router.push(path);
   }
+}
+
+export function handleLoginRedirect(req) {
+  redirectToPath(req, "/auth/login");
+}
+
+export function handleDashboardRedirect(req) {
+  redirectToPath(req, "/dashboard");
 }

@@ -21,5 +21,5 @@
     "**/*.test.ts",
     "**/*.test.tsx"
   ],
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "**/*.png"]
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "**/*.png", "**/*.svg"]
 }
