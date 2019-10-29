@@ -9,7 +9,7 @@ module.exports = {
       queryInterface.addColumn("HackerProfiles", "profileSubmittedAt", {
         type: Sequelize.DATE
       }),
-      queryInterace.addColumn("HackerProfiles", "status", {
+      queryInterface.addColumn("HackerProfiles", "status", {
         type: Sequelize.ENUM,
         values: [
           "unverified",
@@ -51,7 +51,7 @@ module.exports = {
       queryInterface.addColumn("HackerProfiles", "questionTwo", {
         type: Sequelize.STRING(1000)
       }),
-      queryInterace.addColumn("HackerProfiles", "questionThree", {
+      queryInterface.addColumn("HackerProfiles", "questionThree", {
         type: Sequelize.STRING(1000)
       })
     ]);
