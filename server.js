@@ -12,6 +12,8 @@ const authRouter = require("./api/login");
 const userRouter = require("./api/user");
 const profileRouter = require("./api/hackerProfile");
 
+const Sentry = require("@sentry/node");
+
 const dev = process.env.NODE_ENV !== "production";
 const app = next({
   dev,
@@ -21,10 +23,10 @@ const handle = app.getRequestHandler();
 
 dotenv.config();
 
-const logHandler = function(err, req, res, next) {
-  //debug(err.stack);
-  res.send(500);
-};
+Sentry.init({
+  dsn: "https://1a18ac7b9aa94cb5b2a8c9fc2f7e4fc8@sentry.io/1801129"
+});
+
 
 const strategy = new Auth0Strategy(
   {
