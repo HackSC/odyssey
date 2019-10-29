@@ -44,7 +44,11 @@ module.exports = (sequelize, DataTypes) => {
       },
       questionOne: DataTypes.STRING(1000),
       questionTwo: DataTypes.STRING(1000),
-      questionThree: DataTypes.STRING(1000)
+      questionThree: DataTypes.STRING(1000),
+      role: {
+        type: DataTypes.ENUM,
+        values: ["hacker", "admin", "sponsor", "superadmin"]
+      }
     },
     {}
   );
