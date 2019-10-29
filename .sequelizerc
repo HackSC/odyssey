@@ -8,6 +8,6 @@ const path = require('path');
 module.exports = {
   'config': path.resolve('api/database', 'database.js'),
   'models-path': path.resolve('api/models'),
-  'seeders-path': path.resolve('./seeders'),
-  'migrations-path': path.resolve('./migrations')
+  'seeders-path': path.resolve('./api/database/seeders'),
+  'migrations-path': path.resolve('./api/database/migrations')
 }
