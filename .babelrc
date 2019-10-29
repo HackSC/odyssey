@@ -1,5 +1,5 @@
 {
-  "presets": ["next/babel", "@babel/preset-env"],
+  "presets": ["next/babel"],
   "plugins": [
     [
       "styled-components",
@@ -10,6 +10,5 @@
       }
     ],
     "add-module-exports",
-    "@babel/plugin-transform-runtime"
   ]
 }

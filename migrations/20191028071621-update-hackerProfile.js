@@ -1,15 +1,15 @@
 "use strict";
 
-export default {
+module.exports = {
   up: (queryInterface, Sequelize) => {
     return Promise.all([
       queryInterface.addColumn("HackerProfiles", "applicationSubmittedAt", {
         type: Sequelize.DATE
       }),
-      queryInterface.addColumn("HackerProfiles", "profiledSubmittedAt", {
+      queryInterface.addColumn("HackerProfiles", "profileSubmittedAt", {
         type: Sequelize.DATE
       }),
-      queryInterface.addColumn("HackerProfiles", "status", {
+      queryInterace.addColumn("HackerProfiles", "status", {
         type: Sequelize.ENUM,
         values: [
           "unverified",
@@ -51,7 +51,7 @@ export default {
       queryInterface.addColumn("HackerProfiles", "questionTwo", {
         type: Sequelize.STRING(1000)
       }),
-      queryInterface.addColumn("HackerProfiles", "questionThree", {
+      queryInterace.addColumn("HackerProfiles", "questionThree", {
         type: Sequelize.STRING(1000)
       })
     ]);
