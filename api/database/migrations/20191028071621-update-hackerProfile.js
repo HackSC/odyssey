@@ -39,7 +39,7 @@ module.exports = {
       }),
       queryInterface.addColumn("HackerProfiles", "year", {
         type: Sequelize.ENUM,
-        values: ["Freshman", "Sophomore", "Junior", "Senior"]
+        values: ["Freshman", "Sophomore", "Junior", "Senior", "Graduate"]
       }),
       queryInterface.addColumn("HackerProfiles", "skillLevel", {
         type: Sequelize.ENUM,
