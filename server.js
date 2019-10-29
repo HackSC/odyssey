@@ -27,7 +27,6 @@ Sentry.init({
   dsn: "https://1a18ac7b9aa94cb5b2a8c9fc2f7e4fc8@sentry.io/1801129"
 });
 
-
 const strategy = new Auth0Strategy(
   {
     domain: process.env.AUTH0_DOMAIN,
@@ -71,7 +70,6 @@ app.prepare().then(() => {
   server.use("/api/user", userRouter);
   server.use("/api/profile", profileRouter);
   server.get("*", handle);
-  server.use(logHandler);
 
   const port_num = process.env.PORT || 3000;
   http.createServer(server).listen(port_num, () => {
