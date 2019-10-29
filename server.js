@@ -21,6 +21,11 @@ const handle = app.getRequestHandler();
 
 dotenv.config();
 
+const logHandler = function(err, req, res, next) {
+  //debug(err.stack);
+  res.send(500);
+};
+
 const strategy = new Auth0Strategy(
   {
     domain: process.env.AUTH0_DOMAIN,
@@ -29,7 +34,7 @@ const strategy = new Auth0Strategy(
     callbackURL:
       process.env.AUTH0_CALLBACK_URL || "http://localhost:3000/callback"
   },
-  function (accessToken, refreshToken, extraParams, profile, done) {
+  function(accessToken, refreshToken, extraParams, profile, done) {
     // extraParams.id_token should contain the JWT
     return done(null, profile);
   }
@@ -43,10 +48,10 @@ const sessionConfig = {
 };
 
 passport.use(strategy);
-passport.serializeUser(function (user, done) {
+passport.serializeUser(function(user, done) {
   done(null, user);
 });
-passport.deserializeUser(function (user, done) {
+passport.deserializeUser(function(user, done) {
   done(null, user);
 });
 
@@ -64,6 +69,7 @@ app.prepare().then(() => {
   server.use("/api/user", userRouter);
   server.use("/api/profile", profileRouter);
   server.get("*", handle);
+  server.use(logHandler);
 
   const port_num = process.env.PORT || 3000;
   http.createServer(server).listen(port_num, () => {

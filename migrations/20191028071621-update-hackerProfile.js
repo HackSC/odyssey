@@ -1,12 +1,12 @@
 "use strict";
 
-export default {
+module.exports = {
   up: (queryInterface, Sequelize) => {
     return Promise.all([
       queryInterface.addColumn("HackerProfiles", "applicationSubmittedAt", {
         type: Sequelize.DATE
       }),
-      queryInterface.addColumn("HackerProfiles", "profiledSubmittedAt", {
+      queryInterface.addColumn("HackerProfiles", "profileSubmittedAt", {
         type: Sequelize.DATE
       }),
       queryInterface.addColumn("HackerProfiles", "status", {
