@@ -12,6 +12,8 @@ const authRouter = require("./api/login");
 const userRouter = require("./api/user");
 const profileRouter = require("./api/hackerProfile");
 
+const Sentry = require("@sentry/node");
+
 const dev = process.env.NODE_ENV !== "production";
 const app = next({
   dev,
@@ -21,6 +23,10 @@ const handle = app.getRequestHandler();
 
 dotenv.config();
 
+Sentry.init({
+  dsn: "https://b8325acff40e4d548871a23835ce9163@sentry.io/1800052"
+});
+
 const strategy = new Auth0Strategy(
   {
     domain: process.env.AUTH0_DOMAIN,
@@ -29,7 +35,7 @@ const strategy = new Auth0Strategy(
     callbackURL:
       process.env.AUTH0_CALLBACK_URL || "http://localhost:3000/callback"
   },
-  function (accessToken, refreshToken, extraParams, profile, done) {
+  function(accessToken, refreshToken, extraParams, profile, done) {
     // extraParams.id_token should contain the JWT
     return done(null, profile);
   }
@@ -43,10 +49,10 @@ const sessionConfig = {
 };
 
 passport.use(strategy);
-passport.serializeUser(function (user, done) {
+passport.serializeUser(function(user, done) {
   done(null, user);
 });
-passport.deserializeUser(function (user, done) {
+passport.deserializeUser(function(user, done) {
   done(null, user);
 });
 

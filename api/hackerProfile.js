@@ -2,6 +2,7 @@ const express = require("express");
 const models = require("./models");
 const authMiddleware = require("./utils");
 const router = express.Router();
+const Sentry = require("@sentry/node");
 
 router.get("/", authMiddleware, async (req, res) => {
   const hackerProfile = await models.HackerProfile.findAll({
