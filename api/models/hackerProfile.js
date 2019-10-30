@@ -1,3 +1,6 @@
+// If you make any changes to HackerProfile, make sure you do the following:
+// 1) Generate a Sequelize migration that adds/removes columns as needed
+// 2) Update the Profile type definition in odyssey.d.ts
 module.exports = (sequelize, DataTypes) => {
   const HackerProfile = sequelize.define(
     "HackerProfile",

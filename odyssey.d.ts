@@ -2,6 +2,7 @@
 
 declare type FormStepProps = {
   user?: User;
+  profile?: any;
   children?: React.ReactNode;
 };
 
@@ -10,33 +11,36 @@ declare type FormStep = {
   component: React.FunctionComponent<FormStepProps>;
 };
 
-declare type User = {
-  displayName: string;
-  id: string;
-  user_id: string;
-  name: {
-    familyName: string;
-    givenName: string;
-  };
-  emails: [
-    {
-      value: string;
-    }
-  ];
-  picture: string;
-  locale: string;
-  nickname: string;
-  _json: {
-    sub: string;
-    given_name: string;
-    family_name: string;
-    nickname: string;
-    name: string;
-    picture: string;
-    locale: string;
-    updated_at: string;
-    email: string;
-    email_verified: boolean;
-  };
-  _raw: string;
+declare type Profile = {
+  gender: "male" | "female" | "other";
+  userId: string;
+  ethnicity: string;
+  email: string;
+  major: string;
+  minor: string;
+  resume: string;
+  skills: string;
+  interests: string;
+  applicationSubmittedAt: Date;
+  profileSubmittedAt: Date;
+  status:
+    | "unverified"
+    | "verified"
+    | "profileSubmitted"
+    | "applicationSubmitted"
+    | "accepted"
+    | "waitlisted"
+    | "rejected"
+    | "confirmed"
+    | "checkedIn";
+  firstName: string;
+  lastName: string;
+  phoneNumber: string;
+  school: string;
+  year: "Freshman" | "Sophomore" | "Junior" | "Senior" | "Graduate";
+  skillLevel: "Beginner" | "Intermediate" | "Advanced";
+  questionOne: string;
+  questionTwo: string;
+  questionThree: string;
+  role: "hacker" | "admin" | "sponsor" | "superadmin";
 };

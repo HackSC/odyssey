@@ -8,11 +8,15 @@ router.use(utils.authMiddleware);
 router.use(utils.preprocessRequest);
 
 router.get("/", async (req, res) => {
-  const hackerProfile = await models.HackerProfile.findAll({
+  const [hackerProfile] = await models.HackerProfile.findOrCreate({
     where: {
       userId: req.user.id
+    },
+    defaults: {
+      email: req.user._json.email
     }
   });
+
   return res.json({ hackerProfile });
 });
 

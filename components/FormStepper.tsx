@@ -5,11 +5,11 @@ import styled, { DefaultTheme } from "styled-components";
 type Props = {
   serverStep: number;
   steps: FormStep[];
-  user?: User;
+  profile?: Profile;
 };
 
 const FormStepper: React.FunctionComponent<Props> = props => {
-  const { steps, serverStep, user } = props;
+  const { steps, serverStep, profile } = props;
 
   const [currentStep, setCurrentStep] = React.useState(serverStep);
 
@@ -32,7 +32,7 @@ const FormStepper: React.FunctionComponent<Props> = props => {
       </FormHeader>
       <StepBackground>
         <Container>
-          <CurrentStep user={user} />
+          <CurrentStep profile={profile} />
         </Container>
       </StepBackground>
     </Wrapper>

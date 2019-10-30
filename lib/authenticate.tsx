@@ -1,4 +1,5 @@
 import Router from "next/router";
+import fetch from "isomorphic-unfetch";
 
 export async function getUser(req) {
   if (!req) {
@@ -14,6 +15,21 @@ export async function getUser(req) {
     return req.user;
   }
   return req ? req.user : null;
+}
+
+export async function getProfile(req) {
+  const rawProfileData = await fetch("http://localhost:3000/api/profile", {
+    headers: {
+      Cookie: req.headers.cookie
+    }
+  });
+
+  try {
+    const data = await rawProfileData.json();
+    return data.hackerProfile;
+  } catch (e) {
+    return null;
+  }
 }
 
 export function secured(req, res, next) {

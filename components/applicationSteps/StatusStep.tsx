@@ -7,11 +7,31 @@ import { Flex, Column, Button } from "../../styles";
 import Check from "../../assets/check.svg";
 
 type Props = {
-  user: User;
+  profile: Profile;
+};
+
+const getStatusLabel = (status: string) => {
+  if (status === "profileSubmitted") return "Profile Submitted";
+  if (status === "applicationSubmitted") return "Application Submitted";
+  if (status === "checkedIn") return "Checked In";
+
+  return status[0].toUpperCase() + status.substring(1, status.length);
+};
+
+const getStage = (status: string): number => {
+  if (status === "unverified" || status === "verified") {
+    return 1;
+  } else if (status === "profileSubmitted") {
+    return 2;
+  }
+  return 3;
 };
 
 const StatusStep: React.FunctionComponent<Props> = props => {
-  const { user } = props;
+  const { profile } = props;
+  const { status } = profile;
+
+  const statusLabel = getStatusLabel(status);
 
   return (
     <Flex direction="column">
@@ -23,7 +43,7 @@ const StatusStep: React.FunctionComponent<Props> = props => {
           <h2>Status</h2>
         </Flex>
 
-        <Label>Verified</Label>
+        <Label>{statusLabel}</Label>
       </Status>
 
       <Flex justify="space-between">
@@ -34,7 +54,9 @@ const StatusStep: React.FunctionComponent<Props> = props => {
               <h3>1. Set up your profile</h3>
               <p>Set up your hacker profile so we can learn more about you.</p>
 
-              <StepButton>Set Up Profile</StepButton>
+              {getStage(status) === 1 && (
+                <StepButton>Set Up Profile</StepButton>
+              )}
             </Step>
             <Step>
               <h3>2. Fill out an application</h3>
@@ -43,12 +65,14 @@ const StatusStep: React.FunctionComponent<Props> = props => {
                 2020!
               </p>
 
-              <StepButton>Fill out application</StepButton>
+              {getStage(status) === 2 && (
+                <StepButton>Fill out application</StepButton>
+              )}
             </Step>
             <Step>
               <h3>3. View Results</h3>
               <p>Come back on December 1st, 2019 to see your results.</p>
-              <StepButton>View Results</StepButton>
+              {getStage(status) === 3 && <StepButton>View Results</StepButton>}
             </Step>
           </Steps>
         </Column>
