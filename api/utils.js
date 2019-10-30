@@ -23,11 +23,16 @@ module.exports = {
         where: {
           userId: req.user.id
         }
-      }).then(hackerProfile => {
-        if (hackerProfile.role == "admin") {
-          return next();
+      }).then(hackerProfiles => {
+        console.log(hackerProfiles);
+        if (hackerProfiles.length >= 1) {
+          if (hackerProfiles[0].get("role") == "admin") {
+            return next();
+          } else {
+            res.status(403).send("Unauthorized: Incorrect role");
+          }
         } else {
-          res.status(403).send("Unauthorized");
+          res.status(403).send("Unauthorized; profile not found");
         }
       });
     } catch (e) {
