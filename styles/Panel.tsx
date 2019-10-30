@@ -7,6 +7,7 @@ const Panel = styled.div`
   margin-bottom: 16px;
   box-sizing: border-box;
   padding: 36px;
+  background: #ffffff;
 `;
 
 export default Panel;

@@ -13,8 +13,8 @@ const Theme = {
   fontSizes: {
     large: "48px",
     title: "32px",
-    header: "28px",
-    subheader: "24px",
+    header: "20px",
+    subheader: "18px",
     regular: "16px"
   },
   fontFamily: "AktivGrotesk, sans-serif",

@@ -4,6 +4,8 @@ import styled from "styled-components";
 
 import { Flex, Column } from "../../styles";
 
+import Check from "../../assets/check.svg";
+
 type Props = {
   user: User;
 };
@@ -12,72 +14,117 @@ const StatusStep: React.FunctionComponent<Props> = props => {
   const { user } = props;
 
   return (
-    <Flex>
-      <StatusColumn>
-        <h1>Hello there!</h1>
+    <Flex direction="column">
+      <h1>Hey there!</h1>
 
-        <Status>
-          <StatusHeader>Current Status</StatusHeader>
+      <Status align="center" justify="space-between">
+        <Flex direction="row" align="center">
+          <img src={Check} alt="Check" />
+          <h2>Status</h2>
+        </Flex>
 
-          <StatusLabel>Verified</StatusLabel>
-        </Status>
+        <Label>Verified</Label>
+      </Status>
 
-        <h3>Next Steps</h3>
+      <Flex justify="space-between">
+        <Column flexBasis={63}>
+          <h2>Next Steps</h2>
+          <Steps>
+            <Step>
+              <h3>1. Set up your profile</h3>
+              <p>Set up your hacker profile so we can learn more about you.</p>
+            </Step>
+            <Step>
+              <h3>2. Fill out an application</h3>
+              <p>
+                Answer a few questions to show why you want to be at HackSC
+                2020!
+              </p>
+            </Step>
+            <Step>
+              <h3>3. View Results</h3>
+              <p>Come back on December 1st, 2019 to see your results.</p>
+            </Step>
+          </Steps>
+        </Column>
 
-        <p>
-          1. Set up your profile - Set up your hacker profile so we can learn
-          more about you.
-        </p>
+        <Column flexBasis={35}>
+          <h2>Major Dates</h2>
 
-        <p>
-          2. Fill out an application - Answer a few questions to show why you
-          want to be at HackSC 2020!
-        </p>
+          <Dates>
+            <Date>
+              <h3>Applications Open</h3>
+              <p>November 1st, 2019</p>
+            </Date>
 
-        <p>
-          3. View results - Come back on December 1st, 2019 to see your results.
-        </p>
-      </StatusColumn>
+            <Date>
+              <h3>Applications Close</h3>
+              <p>December 1st, 2019</p>
+            </Date>
 
-      <DatesColumn>
-        <h2>Major Dates</h2>
-
-        <h3>Applications Open</h3>
-        <p>November 1st, 2019</p>
-
-        <h3>Applications Close</h3>
-        <p>December 1st, 2019</p>
-
-        <h3>HackSC 2020</h3>
-        <p>January 31, 2019</p>
-      </DatesColumn>
+            <Date>
+              <h3>HackSC 2020</h3>
+              <p>January 31, 2020</p>
+            </Date>
+          </Dates>
+        </Column>
+      </Flex>
     </Flex>
   );
 };
 
-const Status = styled.div`
-  margin: 12px 0;
-  border-radius: 8px;
+const Status = styled(Flex)`
+  padding: 48px;
+  margin: 16px 0 32px;
+  background: #ffffff;
+  border-radius: 4px;
+
+  h2 {
+    padding: 0;
+    margin-left: 16px;
+  }
 `;
 
-const StatusHeader = styled.h2`
+const Label = styled.p`
+  margin: 0;
   padding: 0;
-  font-size: 18px;
-  font-weight: 300;
+  font-weight: 600;
 `;
 
-const StatusLabel = styled.h3`
-  padding: 12px 0 0;
-  text-transform: uppercase;
+const Steps = styled.div`
+  margin-top: 12px;
 `;
 
-const StatusColumn = styled(Column)`
-  flex: 1;
+const Step = styled.div`
+  padding: 24px 36px;
+  margin-bottom: 24px;
+  background: #ffffff;
+  border-radius: 4px;
+
+  &:last-child {
+    margin-bottom: 0;
+  }
 `;
 
-const DatesColumn = styled(Column)`
-  flex-basis: 40%;
-  padding-left: 32px;
+const Dates = styled.div`
+  padding: 24px 36px;
+  margin: 16px 0 32px;
+  background: #ffffff;
+  border-radius: 4px;
+`;
+
+const Date = styled.div`
+  margin-top: 36px;
+
+  :first-child {
+    margin-top: 0;
+  }
+
+  h3 {
+    font-weight: 600;
+    color: ${({ theme }) => theme.colors.peach};
+    padding-bottom: 4px;
+  }
 `;
 
 export default StatusStep;
