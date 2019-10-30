@@ -14,7 +14,6 @@ export async function getUser(req) {
   } else {
     return req.user;
   }
-  return req ? req.user : null;
 }
 
 export async function getProfile(req) {
@@ -24,9 +23,7 @@ export async function getProfile(req) {
     "http://localhost:3000/api/profile",
     req
       ? {
-          headers: {
-            Cookie: req.headers.cookie
-          }
+          headers: req.headers
         }
       : null
   );
