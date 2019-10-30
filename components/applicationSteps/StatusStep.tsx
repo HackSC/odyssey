@@ -2,7 +2,7 @@ import * as React from "react";
 
 import styled from "styled-components";
 
-import { Flex, Column } from "../../styles";
+import { Flex, Column, Button } from "../../styles";
 
 import Check from "../../assets/check.svg";
 
@@ -33,6 +33,8 @@ const StatusStep: React.FunctionComponent<Props> = props => {
             <Step>
               <h3>1. Set up your profile</h3>
               <p>Set up your hacker profile so we can learn more about you.</p>
+
+              <StepButton>Set Up Profile</StepButton>
             </Step>
             <Step>
               <h3>2. Fill out an application</h3>
@@ -40,10 +42,13 @@ const StatusStep: React.FunctionComponent<Props> = props => {
                 Answer a few questions to show why you want to be at HackSC
                 2020!
               </p>
+
+              <StepButton>Fill out application</StepButton>
             </Step>
             <Step>
               <h3>3. View Results</h3>
               <p>Come back on December 1st, 2019 to see your results.</p>
+              <StepButton>View Results</StepButton>
             </Step>
           </Steps>
         </Column>
@@ -104,6 +109,10 @@ const Step = styled.div`
   &:last-child {
     margin-bottom: 0;
   }
+`;
+
+const StepButton = styled(Button)`
+  margin-top: 24px;
 `;
 
 const Dates = styled.div`
