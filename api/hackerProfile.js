@@ -20,7 +20,7 @@ router.get("/", async (req, res) => {
   return res.json({ hackerProfile });
 });
 
-router.put("/", authMiddleware, async (req, res) => {
+router.put("/", async (req, res) => {
   // TODO: Do input validation
   const newHackerProfile = await models.HackerProfile.update(req.body, {
     where: {
