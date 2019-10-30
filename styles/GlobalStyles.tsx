@@ -21,6 +21,7 @@ const GlobalStyles = createGlobalStyle`
   h2 {
     font-weight: 700;
     font-size: ${({ theme }) => theme.fontSizes.header};
+    text-transform: uppercase;
     padding-bottom: 12px;
   }
 
@@ -42,6 +43,7 @@ const GlobalStyles = createGlobalStyle`
   a {
     color: ${({ theme }) => theme.colors.peach};
     text-decoration: none;
+    line-height: 20px;
   }
 `;
 

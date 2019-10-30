@@ -1,6 +1,6 @@
 import React from "react";
 
-import { getUser, handleLoginRedirect } from "../lib/authenticate";
+import { handleLoginRedirect, getProfile } from "../lib/authenticate";
 
 import FormStepper from "../components/FormStepper";
 import StatusStep from "../components/applicationSteps/StatusStep";
@@ -33,24 +33,26 @@ const formSteps: FormStep[] = [
   }
 ];
 
-const Dashboard = ({ user }) => {
+const Dashboard = ({ profile }) => {
   return (
     <>
       <Navbar loggedIn />
-      <FormStepper serverStep={0} steps={formSteps} user={user} />
+      <FormStepper serverStep={0} steps={formSteps} profile={profile} />
       <Footer />
     </>
   );
 };
 
 Dashboard.getInitialProps = async ({ req }) => {
-  const user = await getUser(req);
-  if (!user) {
-    // The user isn't signed in
+  const profile = await getProfile(req);
+
+  // Null profile means user is not logged in
+  if (!profile) {
     handleLoginRedirect(req);
   }
+
   return {
-    user: user
+    profile
   };
 };
 

@@ -5,11 +5,11 @@ import styled, { DefaultTheme } from "styled-components";
 type Props = {
   serverStep: number;
   steps: FormStep[];
-  user?: Object;
+  profile?: Profile;
 };
 
 const FormStepper: React.FunctionComponent<Props> = props => {
-  const { steps, serverStep, user } = props;
+  const { steps, serverStep, profile } = props;
 
   const [currentStep, setCurrentStep] = React.useState(serverStep);
 
@@ -17,8 +17,8 @@ const FormStepper: React.FunctionComponent<Props> = props => {
 
   return (
     <Wrapper>
-      <Container>
-        <FormHeader>
+      <FormHeader>
+        <FormHeaderContainer>
           {steps.map((step, i) => (
             <FormHeaderStep
               key={i}
@@ -28,22 +28,28 @@ const FormStepper: React.FunctionComponent<Props> = props => {
               {step.title}
             </FormHeaderStep>
           ))}
-        </FormHeader>
-        <Panel>
-          <CurrentStep user={user} />
-        </Panel>
-      </Container>
+        </FormHeaderContainer>
+      </FormHeader>
+      <StepBackground>
+        <Container>
+          <CurrentStep profile={profile} />
+        </Container>
+      </StepBackground>
     </Wrapper>
   );
 };
 
 const Wrapper = styled.div`
-  padding: 32px 0 64px;
+  padding: 0;
+`;
+
+const FormHeaderContainer = styled(Container)`
+  display: flex;
+  flex-direction: row;
 `;
 
 const FormHeader = styled.div`
   display: flex;
-  margin-bottom: 24px;
 `;
 
 type FormHeaderStepProps = {
@@ -64,6 +70,11 @@ const FormHeaderStep = styled.div`
   cursor: pointer;
   color: ${(props: FormHeaderStepProps) =>
     props.active ? props.theme.colors.black : props.theme.colors.gray25};
+`;
+
+const StepBackground = styled.div`
+  background-color: #f6f6f6;
+  padding: 60px 0;
 `;
 
 export default FormStepper;

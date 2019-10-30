@@ -70,7 +70,7 @@ const Footer = () => {
 };
 
 const Wrapper = styled.div`
-  background: #f6f6f6;
+  background: #ffffff;
   padding-top: 64px;
   padding-bottom: 64px;
 `;

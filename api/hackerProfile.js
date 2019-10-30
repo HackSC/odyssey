@@ -8,24 +8,20 @@ router.use(utils.authMiddleware);
 router.use(utils.preprocessRequest);
 
 router.get("/", async (req, res) => {
-  const hackerProfile = await models.HackerProfile.findAll({
+  const [hackerProfile] = await models.HackerProfile.findOrCreate({
     where: {
       userId: req.user.id
+    },
+    defaults: {
+      email: req.user._json.email
     }
   });
-  return res.json({ hackerProfile });
-});
 
-router.post("/", async (req, res) => {
-  const hackerProfile = await models.HackerProfile.create({
-    userId: req.user.id,
-    email: req.user._json.email,
-    ...req.body
-  });
   return res.json({ hackerProfile });
 });
 
 router.put("/", async (req, res) => {
+  // TODO: Do input validation
   const newHackerProfile = await models.HackerProfile.update(req.body, {
     where: {
       userId: req.user.id
