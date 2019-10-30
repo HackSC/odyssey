@@ -18,11 +18,18 @@ export async function getUser(req) {
 }
 
 export async function getProfile(req) {
-  const rawProfileData = await fetch("http://localhost:3000/api/profile", {
-    headers: {
-      Cookie: req.headers.cookie
-    }
-  });
+  // If we have a req object, that means we're on the server and need to pass in cookies
+  // Otherwise, fetch as normal
+  const rawProfileData = await fetch(
+    "http://localhost:3000/api/profile",
+    req
+      ? {
+          headers: {
+            Cookie: req.headers.cookie
+          }
+        }
+      : null
+  );
 
   try {
     const data = await rawProfileData.json();
