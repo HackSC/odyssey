@@ -11,6 +11,7 @@ const bodyParser = require("body-parser");
 const authRouter = require("./api/login");
 const userRouter = require("./api/user");
 const profileRouter = require("./api/hackerProfile");
+const adminRouter = require("./api/admin");
 
 const Sentry = require("@sentry/node");
 
@@ -69,6 +70,7 @@ app.prepare().then(() => {
   server.use("/auth", authRouter);
   server.use("/api/user", userRouter);
   server.use("/api/profile", profileRouter);
+  server.use("/api/admin", adminRouter);
   server.get("*", handle);
 
   const port_num = process.env.PORT || 3000;
