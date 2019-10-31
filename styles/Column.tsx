@@ -7,8 +7,6 @@ type ColumnProps = {
 
 const Column = styled.div<ColumnProps>`
   box-sizing: border-box;
-  padding-left: 8px;
-  padding-right: 8px;
   ${({ flexBasis }) => flexBasis && `flex-basis: ${flexBasis}%`};
   ${({ flexGrow }) => flexGrow && `flex-grow: ${flexGrow}`};
 `;

@@ -1,6 +1,10 @@
 import styled from "styled-components";
 
-const Button = styled.button`
+type ButtonProps = {
+  outline?: boolean;
+};
+
+const Button = styled.button<ButtonProps>`
   padding: 12px 16px;
   border: none;
   border-radius: 8px;
@@ -11,6 +15,15 @@ const Button = styled.button`
   font-weight: 600;
   text-transform: uppercase;
   text-align: center;
+  cursor: pointer;
+
+  ${({ outline, theme }) =>
+    outline &&
+    `
+      background: transparent;
+      border: 1px solid ${theme.colors.peach};
+      color: ${theme.colors.peach};
+    `}
 `;
 
 export default Button;

@@ -3,15 +3,14 @@ import styled from "styled-components";
 import Flex from "./Flex";
 
 const Form = styled.form`
-  padding: 16px 0;
-
   input[type="text"],
+  input[type="email"],
   textarea {
     border-radius: 8px;
     border: 1px solid #b2b2b2;
     padding: 12px 16px;
-    font-weight: 600;
-    color: #b2b2b2;
+    font-weight: 300;
+    color: #5d5d5d;
     font-size: 16px;
   }
 
@@ -26,6 +25,7 @@ const Form = styled.form`
     color: #5d5d5d;
     -webkit-appearance: none;
     border-image: initial;
+    position: relative;
   }
 `;
 
