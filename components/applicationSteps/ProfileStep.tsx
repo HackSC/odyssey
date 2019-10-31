@@ -303,11 +303,15 @@ const ProfileStep: React.FunctionComponent<Props> = props => {
           <FormGroup>
             <label>Resume - Must be a PDF, 10MB Maximum</label>
 
-            <ResumeUploadButton
+            <ResumeUploadInput
               type="file"
               name="resume"
+              id="resume"
               accept="application/pdf"
             />
+            <ResumeUploadButton htmlFor="resume">
+              Upload Your Resume
+            </ResumeUploadButton>
           </FormGroup>
 
           <FormGroup>
@@ -394,7 +398,16 @@ const FormSection = styled.div`
   }
 `;
 
-const ResumeUploadButton = styled.input`
+const ResumeUploadInput = styled.input`
+  width: 0.1px;
+  height: 0.1px;
+  opacity: 0;
+  overflow: hidden;
+  position: absolute;
+  z-index: -1;
+`;
+
+const ResumeUploadButton = styled.label`
   padding: 12px 16px;
   border: none;
   border-radius: 8px;
