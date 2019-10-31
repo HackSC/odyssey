@@ -3,6 +3,8 @@ const models = require("./models");
 const utils = require("./utils");
 const router = express.Router();
 const Sentry = require("@sentry/node");
+const Busboy = require("busboy");
+const AWS = require("aws-sdk");
 
 router.use(utils.authMiddleware);
 router.use(utils.preprocessRequest);
@@ -28,6 +30,31 @@ router.put("/", async (req, res) => {
     }
   });
   return res.json({ hackerProfile: newHackerProfile });
+});
+
+router.post("/resume", utils.authMiddleware, async (req, res) => {
+  const user = req.user;
+  var busboy = new Busboy({ headers: req.headers });
+  busboy.on("file", function(fieldname, file, filename, encoding, mimetype) {
+    // Do the S3 upload stuff
+    const s3 = new AWS.S3({
+      accessKeyId: process.env.S3_ACCESS_KEY,
+      secretAccessKey: process.env.S3_SECRET
+    });
+
+    const params = {
+      Bucket: "hacksc-odyssey",
+      Key: filename,
+      Body: file
+    };
+    s3.upload(params, function(err, data) {
+      if (!err) {
+        res.json({ data });
+      }
+    });
+  });
+  busboy.on("finish", function() {});
+  return req.pipe(busboy);
 });
 
 module.exports = router;
