@@ -18,22 +18,8 @@ export type ProfileFormData = {
   links: React.MutableRefObject<any>;
 };
 
-export async function submitProfile(
-  e: React.FormEvent<HTMLFormElement>,
-  formData: ProfileFormData
-) {
-  e.preventDefault();
-  console.log(formData);
-}
-
-export async function saveProfile(
-  e: React.MouseEvent<HTMLButtonElement, MouseEvent>,
-  formData: ProfileFormData,
-  setSaved: Function
-) {
-  e.preventDefault();
-
-  const profile = {
+function getProfileFromFormData(formData: ProfileFormData, isSubmit?: boolean) {
+  return {
     firstName: formData.firstName.current.value,
     lastName: formData.lastName.current.value,
     phoneNumber: formData.phoneNumber.current.value,
@@ -48,8 +34,20 @@ export async function saveProfile(
     skillLevel: formData.skillLevel.current.value,
     skills: formData.skills.current.value,
     interests: formData.interests.current.value,
-    links: formData.links.current.value
+    links: formData.links.current.value,
+    submit: isSubmit
   };
+}
+
+export async function submitProfile(
+  e: React.FormEvent<HTMLFormElement>,
+  formData: ProfileFormData,
+  setSubmitted: Function,
+  setError: Function
+) {
+  e.preventDefault();
+
+  const profile = getProfileFromFormData(formData, true);
 
   const response = await fetch("/api/profile", {
     method: "PUT",
@@ -59,6 +57,36 @@ export async function saveProfile(
     }
   });
 
-  const data = await response.json();
-  setSaved(true);
+  if (response.status === 200) {
+    setSubmitted(true);
+  } else {
+    const data = await response.json();
+    setError(data.error);
+  }
+}
+
+export async function saveProfile(
+  e: React.MouseEvent<HTMLButtonElement, MouseEvent>,
+  formData: ProfileFormData,
+  setSaved: Function,
+  setError: Function
+) {
+  e.preventDefault();
+
+  const profile = getProfileFromFormData(formData);
+
+  const response = await fetch("/api/profile", {
+    method: "PUT",
+    body: JSON.stringify(profile),
+    headers: {
+      "Content-Type": "application/json"
+    }
+  });
+
+  if (response.status === 200) {
+    setSaved(true);
+  } else {
+    const data = await response.json();
+    setError(data.error);
+  }
 }

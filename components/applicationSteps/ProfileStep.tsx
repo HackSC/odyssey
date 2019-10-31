@@ -87,12 +87,16 @@ const ProfileStep: React.FunctionComponent<Props> = props => {
   };
 
   const [saved, setSaved] = useState(false);
+  const [submitted, setSubmitted] = useState(
+    profile && profile.profileSubmittedAt
+  );
+  const [error, setError] = useState(null);
 
   return profile ? (
     <Flex direction="column">
       <Form
         onSubmit={e => {
-          submitProfile(e, formData);
+          submitProfile(e, formData, setSubmitted, setError);
         }}
       >
         <FormSection>
@@ -101,6 +105,13 @@ const ProfileStep: React.FunctionComponent<Props> = props => {
             We're excited for HackSC 2020 and can't wait to get to know you
             better. Please fill out your hacker profile{" "}
           </p>
+
+          {submitted && (
+            <AlreadySubmitted>
+              You have already submitted your hacker profile. Next step: fill
+              out your HackSC application.
+            </AlreadySubmitted>
+          )}
         </FormSection>
 
         <FormSection>
@@ -117,6 +128,7 @@ const ProfileStep: React.FunctionComponent<Props> = props => {
                   name="first-name"
                   defaultValue={profile.firstName}
                   ref={formData.firstName}
+                  required
                 />
               </FormGroup>
             </Column>
@@ -131,6 +143,7 @@ const ProfileStep: React.FunctionComponent<Props> = props => {
                   name="last-name"
                   defaultValue={profile.lastName}
                   ref={formData.lastName}
+                  required
                 />
               </FormGroup>
             </Column>
@@ -157,6 +170,7 @@ const ProfileStep: React.FunctionComponent<Props> = props => {
               name="phone-number"
               defaultValue={profile.phoneNumber}
               ref={formData.phoneNumber}
+              required
             />
           </FormGroup>
         </FormSection>
@@ -176,6 +190,7 @@ const ProfileStep: React.FunctionComponent<Props> = props => {
               name="school"
               defaultValue={profile.school}
               ref={formData.school}
+              required
             />
           </FormGroup>
 
@@ -188,6 +203,7 @@ const ProfileStep: React.FunctionComponent<Props> = props => {
               name="major"
               defaultValue={profile.major}
               ref={formData.major}
+              required
             />
           </FormGroup>
 
@@ -211,6 +227,7 @@ const ProfileStep: React.FunctionComponent<Props> = props => {
               options={yearOptions}
               ref={formData.year}
               defaultValue={profile.year}
+              required
             />
           </FormGroup>
 
@@ -222,6 +239,7 @@ const ProfileStep: React.FunctionComponent<Props> = props => {
               options={gradDateOptions}
               ref={formData.graduationDate}
               defaultValue={profile.graduationDate}
+              required
             />
           </FormGroup>
         </FormSection>
@@ -237,6 +255,7 @@ const ProfileStep: React.FunctionComponent<Props> = props => {
               options={genderOptions}
               ref={formData.gender}
               defaultValue={profile.gender}
+              required
             />
           </FormGroup>
 
@@ -302,6 +321,7 @@ const ProfileStep: React.FunctionComponent<Props> = props => {
                 name="is-over-18"
                 ref={formData.over18}
                 defaultChecked={profile.over18}
+                required
               />
               <RadioChoiceLabel>
                 Yes, I will be 18+ by January 31, 2020
@@ -408,8 +428,9 @@ const ProfileStep: React.FunctionComponent<Props> = props => {
                 <Button
                   outline
                   onClick={e => {
-                    saveProfile(e, formData, setSaved);
+                    saveProfile(e, formData, setSaved, setError);
                   }}
+                  disabled={submitted !== null}
                 >
                   Save
                 </Button>
@@ -417,14 +438,23 @@ const ProfileStep: React.FunctionComponent<Props> = props => {
             </Column>
             <Column flexBasis={49}>
               <Flex>
-                <Button type="submit">Submit</Button>
+                <Button type="submit" disabled={submitted !== null}>
+                  Submit
+                </Button>
               </Flex>
             </Column>
           </Flex>
 
-          <Message>
-            {saved && <SavedMessage>Profile saved successfully!</SavedMessage>}
-          </Message>
+          <SubmitWarningMessage>
+            You can only submit your profile once! Be sure everything is good to
+            go before you submit.
+          </SubmitWarningMessage>
+          {saved && <SavedMessage>Profile saved successfully.</SavedMessage>}
+          {submitted && (
+            <SubmittedMessage>
+              Your profile has been submitted successfully
+            </SubmittedMessage>
+          )}
         </FormSection>
       </Form>
     </Flex>
@@ -467,13 +497,42 @@ const ResumeUploadButton = styled.label`
   cursor: pointer;
 `;
 
-const Message = styled.div``;
+const AlreadySubmitted = styled.p`
+  padding: 16px;
+  border: 2px solid ${({ theme }) => theme.colors.peach};
+  font-weight: 600;
+  border-radius: 8px;
+  margin-top: 24px;
+  color: ${({ theme }) => theme.colors.peach};
+`;
+
+const SubmitWarningMessage = styled.p`
+  text-align: center;
+  font-weight: 600;
+  padding: 32px 0 0;
+  color: ${({ theme }) => theme.colors.black};
+`;
 
 const SavedMessage = styled.p`
   text-align: center;
   font-weight: 600;
   padding: 32px 0 0;
-  color: ${({ theme }) => theme.colors.magenta};
+  margin-top: 16px;
+  padding: 16px;
+  border: 2px solid ${({ theme }) => theme.colors.blue};
+  color: ${({ theme }) => theme.colors.gray50};
+  border-radius: 8px;
+`;
+
+const SubmittedMessage = styled.p`
+  text-align: center;
+  font-weight: 600;
+  padding: 32px 0 0;
+  margin-top: 16px;
+  padding: 16px;
+  border: 2px solid ${({ theme }) => theme.colors.blue};
+  color: ${({ theme }) => theme.colors.gray50};
+  border-radius: 8px;
 `;
 
 export default ProfileStep;

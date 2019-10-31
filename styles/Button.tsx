@@ -17,6 +17,8 @@ const Button = styled.button<ButtonProps>`
   text-align: center;
   cursor: pointer;
 
+  ${({ disabled }) => disabled && `cursor: not-allowed`};
+
   ${({ outline, theme }) =>
     outline &&
     `
