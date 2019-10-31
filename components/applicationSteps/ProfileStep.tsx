@@ -1,15 +1,15 @@
 import * as React from "react";
 
 type Props = {
-  profile: any;
+  user: any;
 };
 
 const ProfileStep: React.FunctionComponent<Props> = props => {
-  const { profile } = props;
+  const { user } = props;
 
   return (
     <div>
-      <h1>Hello {profile.displayName}</h1>
+      <h1>Hello {user.displayName}</h1>
       <p>
         This is a component that will let the user fill out their hacker
         profile. This will include a form where they can indicate their
