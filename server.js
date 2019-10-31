@@ -9,7 +9,6 @@ const Auth0Strategy = require("passport-auth0");
 const bodyParser = require("body-parser");
 
 const authRouter = require("./api/login");
-const userRouter = require("./api/user");
 const profileRouter = require("./api/hackerProfile");
 const adminRouter = require("./api/admin");
 
@@ -68,7 +67,6 @@ app.prepare().then(() => {
   server.use(bodyParser.json());
 
   server.use("/auth", authRouter);
-  server.use("/api/user", userRouter);
   server.use("/api/profile", profileRouter);
   server.use("/api/admin", adminRouter);
   server.get("*", handle);
