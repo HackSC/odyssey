@@ -88,7 +88,7 @@ const ProfileStep: React.FunctionComponent<Props> = props => {
 
   const [saved, setSaved] = useState(false);
   const [submitted, setSubmitted] = useState(
-    profile && profile.profileSubmittedAt
+    !!profile && !!profile.profileSubmittedAt
   );
   const [error, setError] = useState(null);
 
@@ -430,7 +430,7 @@ const ProfileStep: React.FunctionComponent<Props> = props => {
                   onClick={e => {
                     saveProfile(e, formData, setSaved, setError);
                   }}
-                  disabled={submitted !== null}
+                  disabled={submitted}
                 >
                   Save
                 </Button>
@@ -438,7 +438,7 @@ const ProfileStep: React.FunctionComponent<Props> = props => {
             </Column>
             <Column flexBasis={49}>
               <Flex>
-                <Button type="submit" disabled={submitted !== null}>
+                <Button type="submit" disabled={submitted}>
                   Submit
                 </Button>
               </Flex>
