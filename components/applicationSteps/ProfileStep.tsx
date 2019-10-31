@@ -1,4 +1,4 @@
-import * as React from "react";
+import React, { useRef } from "react";
 
 import styled from "styled-components";
 
@@ -12,16 +12,81 @@ import {
   Button
 } from "../../styles";
 
+import Select from "../Select";
+
 type Props = {
   profile: Profile;
 };
 
+// Used for select inputs
+const yearOptions = [
+  { label: "Freshman", value: "freshman" },
+  { label: "Sophomore", value: "sophomore" },
+  { label: "Junior", value: "junior" },
+  { label: "Senior", value: "senior" },
+  { label: "Graduate", value: "graduate" }
+];
+
+const gradDateOptions = [
+  { label: "Spring 2020", value: "spring-2020" },
+  { label: "Fall 2020", value: "fall-2020" },
+  { label: "Spring 2021", value: "spring-2021" },
+  { label: "Fall 2021", value: "fall-2021" },
+  { label: "Spring 2022", value: "spring-2022" },
+  { label: "Fall 2022", value: "fall-2022" },
+  { label: "Spring 2023", value: "spring-2023" },
+  { label: "Fall 2023", value: "fall-2023" },
+  { label: "Other", value: "other" }
+];
+
+const genderOptions = [
+  { label: "Female", value: "female" },
+  { label: "Male", value: "male" },
+  { label: "Non-Binary", value: "non-binary" },
+  { label: "Other", value: "other" },
+  { label: "Prefer not to say", value: "no-say" }
+];
+
+const skillLevelOptions = [
+  {
+    label: "Beginner - First time hacker or still learning",
+    value: "beginner"
+  },
+  {
+    label: "Intermediate - Not your first rodeo but still lots to learn",
+    value: "intermediate"
+  },
+  { label: "Advanced - Hacker who knows the game", value: "advanced" }
+];
+
 const ProfileStep: React.FunctionComponent<Props> = props => {
   const { profile } = props;
 
+  const formData = {
+    firstName: useRef(null),
+    lastName: useRef(null),
+    phoneNumber: useRef(null),
+    school: useRef(null),
+    major: useRef(null),
+    minor: useRef(null),
+    year: useRef(null),
+    graduationDate: useRef(null),
+    gender: useRef(null),
+    over18: useRef(null),
+    needBus: useRef(null),
+    skillLevel: useRef(null),
+    skills: useRef(null),
+    interests: useRef(null),
+    links: useRef(null)
+  };
+
   return profile ? (
     <Flex direction="column">
-      <Form>
+      <Form
+        onSubmit={e => {
+          e.preventDefault();
+        }}
+      >
         <FormSection>
           <h1>Your Hacker Profile</h1>
           <p>
@@ -38,7 +103,12 @@ const ProfileStep: React.FunctionComponent<Props> = props => {
               <FormGroup>
                 <label>First Name</label>
 
-                <input type="text" placeholder="First Name" />
+                <input
+                  type="text"
+                  placeholder="First Name"
+                  name="first-name"
+                  ref={formData.firstName}
+                />
               </FormGroup>
             </Column>
 
@@ -46,7 +116,12 @@ const ProfileStep: React.FunctionComponent<Props> = props => {
               <FormGroup>
                 <label>Last Name</label>
 
-                <input type="text" placeholder="Last Name" />
+                <input
+                  type="text"
+                  placeholder="Last Name"
+                  name="last-name"
+                  ref={formData.lastName}
+                />
               </FormGroup>
             </Column>
           </Flex>
@@ -54,13 +129,24 @@ const ProfileStep: React.FunctionComponent<Props> = props => {
           <FormGroup>
             <label>E-Mail</label>
 
-            <input type="email" placeholder="your@email.edu" />
+            <input
+              type="email"
+              placeholder="your@email.edu"
+              value={profile.email}
+              name="email"
+              disabled
+            />
           </FormGroup>
 
           <FormGroup>
             <label>Phone Number</label>
 
-            <input type="text" placeholder="(678)-999-8210" />
+            <input
+              type="text"
+              placeholder="(678)-999-8210"
+              name="phone-number"
+              ref={formData.phoneNumber}
+            />
           </FormGroup>
         </FormSection>
 
@@ -73,47 +159,50 @@ const ProfileStep: React.FunctionComponent<Props> = props => {
           <FormGroup>
             <label>School</label>
 
-            <input type="text" placeholder="Your School" />
+            <input
+              type="text"
+              placeholder="Your School"
+              name="school"
+              ref={formData.school}
+            />
           </FormGroup>
 
           <FormGroup>
             <label>Major</label>
 
-            <input type="text" placeholder="Your Major" />
+            <input
+              type="text"
+              placeholder="Your Major"
+              name="major"
+              ref={formData.major}
+            />
           </FormGroup>
 
           <FormGroup>
             <label>Minor (optional)</label>
 
-            <input type="text" placeholder="Your Minor" />
+            <input
+              type="text"
+              placeholder="Your Minor"
+              name="minor"
+              ref={formData.minor}
+            />
           </FormGroup>
 
           <FormGroup>
             <label>Year</label>
 
-            <select>
-              <option>Freshman</option>
-              <option>Sophomore</option>
-              <option>Junior</option>
-              <option>Senior</option>
-              <option>Graduate</option>
-            </select>
+            <Select name="year" options={yearOptions} ref={formData.year} />
           </FormGroup>
 
           <FormGroup>
             <label>Graduation Date</label>
 
-            <select>
-              <option>Spring 2020</option>
-              <option>Fall 2020</option>
-              <option>Spring 2021</option>
-              <option>Fall 2021</option>
-              <option>Spring 2022</option>
-              <option>Fall 2022</option>
-              <option>Spring 2023</option>
-              <option>Fall 2023</option>
-              <option>Other</option>
-            </select>
+            <Select
+              name="graduation-date"
+              options={gradDateOptions}
+              ref={formData.graduationDate}
+            />
           </FormGroup>
         </FormSection>
 
@@ -123,12 +212,11 @@ const ProfileStep: React.FunctionComponent<Props> = props => {
           <FormGroup>
             <label>Gender</label>
 
-            <select>
-              <option>Male</option>
-              <option>Female</option>
-              <option>Other</option>
-              <option>Prefer not to answer</option>
-            </select>
+            <Select
+              name="gender"
+              options={genderOptions}
+              ref={formData.gender}
+            />
           </FormGroup>
 
           <FormGroup>
@@ -137,41 +225,45 @@ const ProfileStep: React.FunctionComponent<Props> = props => {
             <Flex justify="space-between">
               <Column flexBasis={49}>
                 <RadioChoice>
-                  <input type="radio" name="ethnicity" />
+                  <input
+                    type="radio"
+                    name="ethnicity"
+                    value="american-indian"
+                  />
                   <RadioChoiceLabel>
-                    American Indian or Alaskan Native
+                    Native American or Alaskan Native
                   </RadioChoiceLabel>
                 </RadioChoice>
 
                 <RadioChoice>
-                  <input type="radio" name="ethnicity" />
+                  <input type="radio" name="ethnicity" value="asian" />
                   <RadioChoiceLabel>Asian / Pacific Islander</RadioChoiceLabel>
                 </RadioChoice>
 
                 <RadioChoice>
-                  <input type="radio" name="ethnicity" />
+                  <input type="radio" name="ethnicity" value="black" />
                   <RadioChoiceLabel>Black or African American</RadioChoiceLabel>
                 </RadioChoice>
 
                 <RadioChoice>
-                  <input type="radio" name="ethnicity" />
+                  <input type="radio" name="ethnicity" value="hispanic" />
                   <RadioChoiceLabel>Hispanic</RadioChoiceLabel>
                 </RadioChoice>
               </Column>
 
               <Column flexBasis={49}>
                 <RadioChoice>
-                  <input type="radio" name="ethnicity" />
+                  <input type="radio" name="ethnicity" value="caucasian" />
                   <RadioChoiceLabel>White / Caucasian</RadioChoiceLabel>
                 </RadioChoice>
 
                 <RadioChoice>
-                  <input type="radio" name="ethnicity" />
+                  <input type="radio" name="ethnicity" value="mixed-other" />
                   <RadioChoiceLabel>Mixed / Other</RadioChoiceLabel>
                 </RadioChoice>
 
                 <RadioChoice>
-                  <input type="radio" name="ethnicity" />
+                  <input type="radio" name="ethnicity" value="no-say" />
                   <RadioChoiceLabel>Prefer not to answer</RadioChoiceLabel>
                 </RadioChoice>
               </Column>
@@ -184,7 +276,7 @@ const ProfileStep: React.FunctionComponent<Props> = props => {
             </label>
 
             <RadioChoice>
-              <input type="checkbox" name="is-over-18" />
+              <input type="checkbox" name="is-over-18" ref={formData.over18} />
               <RadioChoiceLabel>
                 Yes, I will be 18+ by January 31, 2020
               </RadioChoiceLabel>
@@ -201,7 +293,7 @@ const ProfileStep: React.FunctionComponent<Props> = props => {
             </label>
 
             <RadioChoice>
-              <input type="checkbox" name="is-over-18" />
+              <input type="checkbox" name="need-bus" ref={formData.needBus} />
               <RadioChoiceLabel>
                 Yes, I need bus transportation
               </RadioChoiceLabel>
@@ -211,29 +303,21 @@ const ProfileStep: React.FunctionComponent<Props> = props => {
           <FormGroup>
             <label>Resume - Must be a PDF, 10MB Maximum</label>
 
-            <Flex align="center" justify="flex-start">
-              <Column flexBasis={35}>
-                <Flex>
-                  <Button>Upload Your Resume</Button>
-                </Flex>
-              </Column>
-
-              <Column flexGrow={1}>
-                <FileNameLabel>File_Name.pdf</FileNameLabel>
-              </Column>
-            </Flex>
+            <ResumeUploadButton
+              type="file"
+              name="resume"
+              accept="application/pdf"
+            />
           </FormGroup>
 
           <FormGroup>
             <label>Skill Level - How experienced are you as a hacker?</label>
 
-            <select>
-              <option>Beginner - First time hacker or still learning</option>
-              <option>
-                Intermediate - Not your first rodeo but still lots to learn
-              </option>
-              <option>Advanced - Veteran hacker who knows the game</option>
-            </select>
+            <Select
+              name="skill-level"
+              options={skillLevelOptions}
+              ref={formData.skillLevel}
+            />
           </FormGroup>
 
           <FormGroup>
@@ -244,6 +328,8 @@ const ProfileStep: React.FunctionComponent<Props> = props => {
             <textarea
               rows={3}
               placeholder="javascript, python, c++, node.js, express, react, mysql"
+              name="skills"
+              ref={formData.skills}
             />
           </FormGroup>
 
@@ -256,6 +342,8 @@ const ProfileStep: React.FunctionComponent<Props> = props => {
             <textarea
               rows={3}
               placeholder="blockchain, machine learning, security"
+              name="interests"
+              ref={formData.interests}
             />
           </FormGroup>
 
@@ -268,6 +356,8 @@ const ProfileStep: React.FunctionComponent<Props> = props => {
             <textarea
               rows={3}
               placeholder="https://yourportfolio.com, https://linkedin.com/in/yourlinkedin"
+              name="links"
+              ref={formData.links}
             />
           </FormGroup>
         </FormSection>
@@ -281,7 +371,7 @@ const ProfileStep: React.FunctionComponent<Props> = props => {
             </Column>
             <Column flexBasis={49}>
               <Flex>
-                <Button>Submit</Button>
+                <Button type="submit">Submit</Button>
               </Flex>
             </Column>
           </Flex>
@@ -289,7 +379,7 @@ const ProfileStep: React.FunctionComponent<Props> = props => {
       </Form>
     </Flex>
   ) : (
-    <div>loading</div>
+    <div>Loading...</div>
   );
 };
 
@@ -302,6 +392,20 @@ const FormSection = styled.div`
   &:last-child {
     margin-bottom: 0;
   }
+`;
+
+const ResumeUploadButton = styled.input`
+  padding: 12px 16px;
+  border: none;
+  border-radius: 8px;
+  background: ${({ theme }) => theme.colors.peach};
+  flex-grow: 1;
+  font-size: ${({ theme }) => theme.fontSizes.regular};
+  color: #ffffff;
+  font-weight: 600;
+  text-transform: uppercase;
+  text-align: center;
+  cursor: pointer;
 `;
 
 const FileNameLabel = styled.p`

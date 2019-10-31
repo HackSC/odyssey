@@ -10,7 +10,7 @@ const Form = styled.form`
     border: 1px solid #b2b2b2;
     padding: 12px 16px;
     font-weight: 300;
-    color: #5d5d5d;
+    color: ${({ theme }) => theme.colors.black};
     font-size: 16px;
   }
 
