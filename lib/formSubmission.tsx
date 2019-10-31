@@ -28,7 +28,8 @@ export async function submitProfile(
 
 export async function saveProfile(
   e: React.MouseEvent<HTMLButtonElement, MouseEvent>,
-  formData: ProfileFormData
+  formData: ProfileFormData,
+  setSaved: Function
 ) {
   e.preventDefault();
 
@@ -40,10 +41,14 @@ export async function saveProfile(
     major: formData.major.current.value,
     minor: formData.minor.current.value,
     year: formData.school.current.value,
+    graduationDate: formData.graduationDate.current.value,
     gender: formData.gender.current.value,
+    over18: formData.over18.current.value,
+    needBus: formData.needBus.current.value,
     skillLevel: formData.skillLevel.current.value,
     skills: formData.skills.current.value,
-    interests: formData.interests.current.value
+    interests: formData.interests.current.value,
+    links: formData.links.current.value
   };
 
   const response = await fetch("/api/profile", {
@@ -55,5 +60,5 @@ export async function saveProfile(
   });
 
   const data = await response.json();
-  console.log(data);
+  setSaved(true);
 }

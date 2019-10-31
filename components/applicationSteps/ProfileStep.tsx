@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React, { useRef, useState } from "react";
 
 import styled from "styled-components";
 
@@ -85,6 +85,8 @@ const ProfileStep: React.FunctionComponent<Props> = props => {
     interests: useRef(null),
     links: useRef(null)
   };
+
+  const [saved, setSaved] = useState(false);
 
   return profile ? (
     <Flex direction="column">
@@ -394,7 +396,7 @@ const ProfileStep: React.FunctionComponent<Props> = props => {
                 <Button
                   outline
                   onClick={e => {
-                    saveProfile(e, formData);
+                    saveProfile(e, formData, setSaved);
                   }}
                 >
                   Save
@@ -407,6 +409,10 @@ const ProfileStep: React.FunctionComponent<Props> = props => {
               </Flex>
             </Column>
           </Flex>
+
+          <Message>
+            {saved && <SavedMessage>Profile saved successfully!</SavedMessage>}
+          </Message>
         </FormSection>
       </Form>
     </Flex>
@@ -449,8 +455,13 @@ const ResumeUploadButton = styled.label`
   cursor: pointer;
 `;
 
-const FileNameLabel = styled.p`
-  padding-left: 32px;
+const Message = styled.div``;
+
+const SavedMessage = styled.p`
+  text-align: center;
+  font-weight: 600;
+  padding: 32px 0 0;
+  color: ${({ theme }) => theme.colors.magenta};
 `;
 
 export default ProfileStep;
