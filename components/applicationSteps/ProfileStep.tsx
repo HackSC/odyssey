@@ -221,6 +221,7 @@ const ProfileStep: React.FunctionComponent<Props> = props => {
               name="graduation-date"
               options={gradDateOptions}
               ref={formData.graduationDate}
+              defaultValue={profile.graduationDate}
             />
           </FormGroup>
         </FormSection>
@@ -296,7 +297,12 @@ const ProfileStep: React.FunctionComponent<Props> = props => {
             </label>
 
             <RadioChoice>
-              <input type="checkbox" name="is-over-18" ref={formData.over18} />
+              <input
+                type="checkbox"
+                name="is-over-18"
+                ref={formData.over18}
+                defaultChecked={profile.over18}
+              />
               <RadioChoiceLabel>
                 Yes, I will be 18+ by January 31, 2020
               </RadioChoiceLabel>
@@ -313,7 +319,12 @@ const ProfileStep: React.FunctionComponent<Props> = props => {
             </label>
 
             <RadioChoice>
-              <input type="checkbox" name="need-bus" ref={formData.needBus} />
+              <input
+                type="checkbox"
+                name="need-bus"
+                ref={formData.needBus}
+                defaultChecked={profile.needBus}
+              />
               <RadioChoiceLabel>
                 Yes, I need bus transportation
               </RadioChoiceLabel>
@@ -385,6 +396,7 @@ const ProfileStep: React.FunctionComponent<Props> = props => {
               placeholder="https://yourportfolio.com, https://linkedin.com/in/yourlinkedin"
               name="links"
               ref={formData.links}
+              defaultValue={profile.links}
             />
           </FormGroup>
         </FormSection>
