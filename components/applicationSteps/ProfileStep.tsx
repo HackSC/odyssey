@@ -14,6 +14,12 @@ import {
 
 import Select from "../Select";
 
+import {
+  ProfileFormData,
+  saveProfile,
+  submitProfile
+} from "../../lib/formSubmission";
+
 type Props = {
   profile: Profile;
 };
@@ -62,7 +68,7 @@ const skillLevelOptions = [
 const ProfileStep: React.FunctionComponent<Props> = props => {
   const { profile } = props;
 
-  const formData = {
+  const formData: ProfileFormData = {
     firstName: useRef(null),
     lastName: useRef(null),
     phoneNumber: useRef(null),
@@ -84,7 +90,7 @@ const ProfileStep: React.FunctionComponent<Props> = props => {
     <Flex direction="column">
       <Form
         onSubmit={e => {
-          e.preventDefault();
+          submitProfile(e, formData);
         }}
       >
         <FormSection>
@@ -107,6 +113,7 @@ const ProfileStep: React.FunctionComponent<Props> = props => {
                   type="text"
                   placeholder="First Name"
                   name="first-name"
+                  defaultValue={profile.firstName}
                   ref={formData.firstName}
                 />
               </FormGroup>
@@ -120,6 +127,7 @@ const ProfileStep: React.FunctionComponent<Props> = props => {
                   type="text"
                   placeholder="Last Name"
                   name="last-name"
+                  defaultValue={profile.lastName}
                   ref={formData.lastName}
                 />
               </FormGroup>
@@ -145,6 +153,7 @@ const ProfileStep: React.FunctionComponent<Props> = props => {
               type="text"
               placeholder="(678)-999-8210"
               name="phone-number"
+              defaultValue={profile.phoneNumber}
               ref={formData.phoneNumber}
             />
           </FormGroup>
@@ -163,6 +172,7 @@ const ProfileStep: React.FunctionComponent<Props> = props => {
               type="text"
               placeholder="Your School"
               name="school"
+              defaultValue={profile.school}
               ref={formData.school}
             />
           </FormGroup>
@@ -174,6 +184,7 @@ const ProfileStep: React.FunctionComponent<Props> = props => {
               type="text"
               placeholder="Your Major"
               name="major"
+              defaultValue={profile.major}
               ref={formData.major}
             />
           </FormGroup>
@@ -185,6 +196,7 @@ const ProfileStep: React.FunctionComponent<Props> = props => {
               type="text"
               placeholder="Your Minor"
               name="minor"
+              defaultValue={profile.minor}
               ref={formData.minor}
             />
           </FormGroup>
@@ -192,7 +204,12 @@ const ProfileStep: React.FunctionComponent<Props> = props => {
           <FormGroup>
             <label>Year</label>
 
-            <Select name="year" options={yearOptions} ref={formData.year} />
+            <Select
+              name="year"
+              options={yearOptions}
+              ref={formData.year}
+              defaultValue={profile.year}
+            />
           </FormGroup>
 
           <FormGroup>
@@ -216,6 +233,7 @@ const ProfileStep: React.FunctionComponent<Props> = props => {
               name="gender"
               options={genderOptions}
               ref={formData.gender}
+              defaultValue={profile.gender}
             />
           </FormGroup>
 
@@ -321,6 +339,7 @@ const ProfileStep: React.FunctionComponent<Props> = props => {
               name="skill-level"
               options={skillLevelOptions}
               ref={formData.skillLevel}
+              defaultValue={profile.skillLevel}
             />
           </FormGroup>
 
@@ -334,6 +353,7 @@ const ProfileStep: React.FunctionComponent<Props> = props => {
               placeholder="javascript, python, c++, node.js, express, react, mysql"
               name="skills"
               ref={formData.skills}
+              defaultValue={profile.skills}
             />
           </FormGroup>
 
@@ -348,6 +368,7 @@ const ProfileStep: React.FunctionComponent<Props> = props => {
               placeholder="blockchain, machine learning, security"
               name="interests"
               ref={formData.interests}
+              defaultValue={profile.interests}
             />
           </FormGroup>
 
@@ -370,7 +391,14 @@ const ProfileStep: React.FunctionComponent<Props> = props => {
           <Flex justify="space-between">
             <Column flexBasis={49}>
               <Flex>
-                <Button outline>Save</Button>
+                <Button
+                  outline
+                  onClick={e => {
+                    saveProfile(e, formData);
+                  }}
+                >
+                  Save
+                </Button>
               </Flex>
             </Column>
             <Column flexBasis={49}>
