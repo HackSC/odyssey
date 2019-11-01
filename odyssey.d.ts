@@ -56,4 +56,6 @@ declare type Profile = {
   over18: boolean;
   needBus: boolean;
   links: string;
+  codeOfConduct: boolean;
+  authorize: boolean;
 };
