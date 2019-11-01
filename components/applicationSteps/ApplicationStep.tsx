@@ -1,4 +1,4 @@
-import * as React from "react";
+import React, { useRef, useState } from "react";
 
 import styled from "styled-components";
 
@@ -12,6 +12,8 @@ import {
   Column
 } from "../../styles";
 
+import { saveApplication, submitApplication } from "../../lib/formSubmission";
+
 type Props = {
   profile: Profile;
 };
@@ -19,9 +21,20 @@ type Props = {
 const ApplicationStep: React.FunctionComponent<Props> = props => {
   const { profile } = props;
 
+  const formRef = useRef(null);
+
+  const [saved, setSaved] = useState(false);
+  const [submitted, setSubmitted] = useState(
+    !!profile && !!profile.applicationSubmittedAt
+  );
+  const [error, setError] = useState(null);
+
   return (
     <Flex direction="column">
-      <Form>
+      <Form
+        ref={formRef}
+        onSubmit={e => submitApplication(e, formRef, setSubmitted, setError)}
+      >
         <FormSection>
           <h1>Your HackSC Application</h1>
           <p>
@@ -29,6 +42,13 @@ const ApplicationStep: React.FunctionComponent<Props> = props => {
             more about you, we'd love to hear more about what you want to build
             at HackSC and what projects you've done in the past.
           </p>
+
+          {submitted && (
+            <AlreadySubmitted>
+              You have already submitted your application. Next step: wait for
+              results to come out!
+            </AlreadySubmitted>
+          )}
         </FormSection>
 
         <FormSection>
@@ -40,7 +60,14 @@ const ApplicationStep: React.FunctionComponent<Props> = props => {
               would you build? (1000 characters)
             </label>
 
-            <textarea rows={3} name="question-one" />
+            <textarea
+              rows={5}
+              name="question-one"
+              maxLength={1000}
+              defaultValue={profile.questionOne}
+              required
+              disabled={submitted}
+            />
           </FormGroup>
 
           <FormGroup>
@@ -49,18 +76,38 @@ const ApplicationStep: React.FunctionComponent<Props> = props => {
               characters)
             </label>
 
-            <textarea rows={3} name="question-two" />
+            <textarea
+              rows={5}
+              name="question-two"
+              maxLength={1000}
+              defaultValue={profile.questionTwo}
+              required
+              disabled={submitted}
+            />
           </FormGroup>
 
           <FormGroup>
             <label>What is your favorite drink? (100 characters)</label>
 
-            <input type="text" name="question-three" />
+            <input
+              type="text"
+              name="question-three"
+              maxLength={100}
+              defaultValue={profile.questionThree}
+              required
+              disabled={submitted}
+            />
           </FormGroup>
 
           <FormGroup>
             <RadioChoice>
-              <input type="checkbox" name="code-of-conduct" />
+              <input
+                type="checkbox"
+                name="code-of-conduct"
+                defaultChecked={profile.codeOfConduct}
+                required
+                disabled={submitted}
+              />
               <RadioChoiceLabel>
                 I have read and agree to the{" "}
                 <a
@@ -76,7 +123,13 @@ const ApplicationStep: React.FunctionComponent<Props> = props => {
 
           <FormGroup>
             <RadioChoice>
-              <input type="checkbox" name="authorize" />
+              <input
+                type="checkbox"
+                name="authorize"
+                defaultChecked={profile.authorize}
+                required
+                disabled={submitted}
+              />
               <RadioChoiceLabel>
                 I authorize you to share my application/registration information
                 for event administration, ranking, MLH administration, pre- and
@@ -106,15 +159,36 @@ const ApplicationStep: React.FunctionComponent<Props> = props => {
           <Flex justify="space-between">
             <Column flexBasis={49}>
               <Flex>
-                <Button outline>Save</Button>
+                <Button
+                  outline
+                  onClick={e => saveApplication(e, formRef, setSaved, setError)}
+                  disabled={submitted}
+                >
+                  Save
+                </Button>
               </Flex>
             </Column>
             <Column flexBasis={49}>
               <Flex>
-                <Button>Submit</Button>
+                <Button type="submit" disabled={submitted}>
+                  Submit
+                </Button>
               </Flex>
             </Column>
           </Flex>
+
+          <SubmitWarningMessage>
+            You can only submit your application once! Be sure everything is
+            good to go before you submit.
+          </SubmitWarningMessage>
+          {saved && (
+            <SavedMessage>Application saved successfully.</SavedMessage>
+          )}
+          {submitted && (
+            <SubmittedMessage>
+              Your application has been submitted successfully
+            </SubmittedMessage>
+          )}
         </FormSection>
       </Form>
     </Flex>
@@ -130,6 +204,44 @@ const FormSection = styled.div`
   &:last-child {
     margin-bottom: 0;
   }
+`;
+
+const AlreadySubmitted = styled.p`
+  padding: 16px;
+  border: 2px solid ${({ theme }) => theme.colors.peach};
+  font-weight: 600;
+  border-radius: 8px;
+  margin-top: 24px;
+  color: ${({ theme }) => theme.colors.peach};
+`;
+
+const SubmitWarningMessage = styled.p`
+  text-align: center;
+  font-weight: 600;
+  padding: 32px 0 0;
+  color: ${({ theme }) => theme.colors.black};
+`;
+
+const SavedMessage = styled.p`
+  text-align: center;
+  font-weight: 600;
+  padding: 32px 0 0;
+  margin-top: 16px;
+  padding: 16px;
+  border: 2px solid ${({ theme }) => theme.colors.blue};
+  color: ${({ theme }) => theme.colors.gray50};
+  border-radius: 8px;
+`;
+
+const SubmittedMessage = styled.p`
+  text-align: center;
+  font-weight: 600;
+  padding: 32px 0 0;
+  margin-top: 16px;
+  padding: 16px;
+  border: 2px solid ${({ theme }) => theme.colors.blue};
+  color: ${({ theme }) => theme.colors.gray50};
+  border-radius: 8px;
 `;
 
 export default ApplicationStep;

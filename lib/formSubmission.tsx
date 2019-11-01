@@ -92,3 +92,68 @@ export async function saveProfile(
     setError(data.error);
   }
 }
+
+export async function submitApplication(
+  e: React.FormEvent<HTMLFormElement>,
+  formRef: React.MutableRefObject<any>,
+  setSubmitted: Function,
+  setError: Function
+) {
+  e.preventDefault();
+
+  const formData = {
+    questionOne: formRef.current["question-one"].value,
+    questionTwo: formRef.current["question-two"].value,
+    questionThree: formRef.current["question-three"].value,
+    codeOfConduct: formRef.current["code-of-conduct"].checked,
+    authorize: formRef.current["authorize"].checked,
+    submit: true
+  };
+
+  const response = await fetch("/api/profile/application", {
+    method: "PUT",
+    body: JSON.stringify(formData),
+    headers: {
+      "Content-Type": "application/json"
+    }
+  });
+
+  if (response.status === 200) {
+    setSubmitted(true);
+  } else {
+    const data = await response.json();
+    setError(data.error);
+  }
+}
+
+export async function saveApplication(
+  e: React.MouseEvent<HTMLButtonElement, MouseEvent>,
+  formRef: React.MutableRefObject<any>,
+  setSaved: Function,
+  setError: Function
+) {
+  e.preventDefault();
+
+  const formData = {
+    questionOne: formRef.current["question-one"].value,
+    questionTwo: formRef.current["question-two"].value,
+    questionThree: formRef.current["question-three"].value,
+    codeOfConduct: formRef.current["code-of-conduct"].checked,
+    authorize: formRef.current["authorize"].checked
+  };
+
+  const response = await fetch("/api/profile/application", {
+    method: "PUT",
+    body: JSON.stringify(formData),
+    headers: {
+      "Content-Type": "application/json"
+    }
+  });
+
+  if (response.status === 200) {
+    setSaved(true);
+  } else {
+    const data = await response.json();
+    setError(data.error);
+  }
+}
