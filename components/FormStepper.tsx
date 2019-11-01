@@ -2,6 +2,8 @@ import * as React from "react";
 import { Container, Panel } from "../styles";
 import styled, { DefaultTheme } from "styled-components";
 
+import Router from "next/router";
+
 type Props = {
   serverStep: number;
   steps: FormStep[];
@@ -11,9 +13,7 @@ type Props = {
 const FormStepper: React.FunctionComponent<Props> = props => {
   const { steps, serverStep, profile } = props;
 
-  const [currentStep, setCurrentStep] = React.useState(serverStep);
-
-  const CurrentStep = steps[currentStep].component;
+  const CurrentStep = steps[serverStep].component;
 
   return (
     <Wrapper>
@@ -22,8 +22,8 @@ const FormStepper: React.FunctionComponent<Props> = props => {
           {steps.map((step, i) => (
             <FormHeaderStep
               key={i}
-              onClick={() => setCurrentStep(i)}
-              active={i == currentStep}
+              onClick={() => Router.push(`/dashboard/${step.slug}`)}
+              active={i == serverStep}
             >
               {step.title}
             </FormHeaderStep>

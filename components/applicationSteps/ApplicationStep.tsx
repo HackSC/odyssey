@@ -55,9 +55,13 @@ const ApplicationStep: React.FunctionComponent<Props> = props => {
           <FormGroup>
             <label>
               HackSC has four verticals centered around social justice: civil
-              liberties, sustainability, equity, and mental health. If you were
-              admitted to HackSC 2020, which vertical would you tackle and what
-              would you build? (1000 characters)
+              liberties, sustainability, equity, and mental health. Read more
+              about them at{" "}
+              <a href="https://hacksc.com" target="_blank">
+                hacksc.com
+              </a>
+              . If you were admitted to HackSC 2020, which vertical would you
+              tackle and what would you build? (1000 characters)
             </label>
 
             <textarea
@@ -156,31 +160,38 @@ const ApplicationStep: React.FunctionComponent<Props> = props => {
         </FormSection>
 
         <FormSection>
-          <Flex justify="space-between">
-            <Column flexBasis={49}>
-              <Flex>
-                <Button
-                  outline
-                  onClick={e => saveApplication(e, formRef, setSaved, setError)}
-                  disabled={submitted}
-                >
-                  Save
-                </Button>
+          {!submitted && (
+            <>
+              <Flex justify="space-between">
+                <Column flexBasis={49}>
+                  <Flex>
+                    <Button
+                      outline
+                      onClick={e =>
+                        saveApplication(e, formRef, setSaved, setError)
+                      }
+                      disabled={submitted}
+                    >
+                      Save for later
+                    </Button>
+                  </Flex>
+                </Column>
+                <Column flexBasis={49}>
+                  <Flex>
+                    <Button type="submit" disabled={submitted}>
+                      Submit
+                    </Button>
+                  </Flex>
+                </Column>
               </Flex>
-            </Column>
-            <Column flexBasis={49}>
-              <Flex>
-                <Button type="submit" disabled={submitted}>
-                  Submit
-                </Button>
-              </Flex>
-            </Column>
-          </Flex>
 
-          <SubmitWarningMessage>
-            You can only submit your application once! Be sure everything is
-            good to go before you submit.
-          </SubmitWarningMessage>
+              <SubmitWarningMessage>
+                You can only submit your application once! Be sure everything is
+                good to go before you submit.
+              </SubmitWarningMessage>
+            </>
+          )}
+
           {saved && (
             <SavedMessage>Application saved successfully.</SavedMessage>
           )}
@@ -219,6 +230,7 @@ const SubmitWarningMessage = styled.p`
   text-align: center;
   font-weight: 600;
   padding: 32px 0 0;
+  margin-bottom: 16px;
   color: ${({ theme }) => theme.colors.black};
 `;
 
@@ -237,7 +249,6 @@ const SubmittedMessage = styled.p`
   text-align: center;
   font-weight: 600;
   padding: 32px 0 0;
-  margin-top: 16px;
   padding: 16px;
   border: 2px solid ${({ theme }) => theme.colors.blue};
   color: ${({ theme }) => theme.colors.gray50};
