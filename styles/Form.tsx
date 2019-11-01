@@ -37,6 +37,7 @@ const FormGroup = styled(Flex)`
     font-weight: 600;
     font-size: 16px;
     margin-bottom: 16px;
+    line-height: 22px;
   }
 `;
 
@@ -49,6 +50,7 @@ const RadioChoice = styled.div`
 
 const RadioChoiceLabel = styled.span`
   padding-left: 8px;
+  line-height: 22px;
 `;
 
 export default Form;
