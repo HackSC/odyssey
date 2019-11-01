@@ -5,7 +5,7 @@ import styled from "styled-components";
 import * as THREE from "three";
 import SimplexNoise from "simplex-noise";
 
-import { Flex, Column } from "../styles";
+import { Flex, Column, Button } from "../styles";
 
 const Hero = () => {
   useEffect(() => {
@@ -86,13 +86,13 @@ const Hero = () => {
   return (
     <Wrapper>
       <Flex align="center">
-        <Column flexBasis={49}>
+        <Column flexBasis={60}>
           <Blob id="blob">
             <canvas></canvas>
           </Blob>
         </Column>
 
-        <Column flexBasis={49}>
+        <Column flexBasis={38}>
           <h1>Apply to HackSC</h1>
 
           <p>
@@ -101,6 +101,8 @@ const Hero = () => {
             by pushing the boundaries of technology, innovation, and
             collaboration.
           </p>
+
+          <GetStartedLink href="/auth/login">Get Started</GetStartedLink>
         </Column>
       </Flex>
     </Wrapper>
@@ -129,6 +131,22 @@ const Blob = styled.div`
     width: 500px;
     height: 500px;
   }
+`;
+
+const GetStartedLink = styled.a`
+  padding: 12px 16px;
+  border: none;
+  border-radius: 8px;
+  background: ${({ theme }) => theme.colors.peach};
+  flex-grow: 1;
+  font-size: ${({ theme }) => theme.fontSizes.regular};
+  color: #ffffff;
+  font-weight: 600;
+  text-transform: uppercase;
+  text-align: center;
+  cursor: pointer;
+  margin-top: 16px;
+  display: inline-block;
 `;
 
 export default Hero;
