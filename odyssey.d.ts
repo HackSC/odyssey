@@ -8,6 +8,7 @@ declare type FormStepProps = {
 
 declare type FormStep = {
   title: string;
+  slug: string;
   component: React.FunctionComponent<FormStepProps>;
 };
 

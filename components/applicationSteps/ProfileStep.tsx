@@ -477,33 +477,38 @@ const ProfileStep: React.FunctionComponent<Props> = props => {
         </FormSection>
 
         <FormSection>
-          <Flex justify="space-between">
-            <Column flexBasis={49}>
-              <Flex>
-                <Button
-                  outline
-                  onClick={e => {
-                    saveProfile(e, formData, setSaved, setError);
-                  }}
-                  disabled={submitted}
-                >
-                  Save
-                </Button>
+          {!submitted && (
+            <>
+              <Flex justify="space-between">
+                <Column flexBasis={49}>
+                  <Flex>
+                    <Button
+                      outline
+                      onClick={e => {
+                        saveProfile(e, formData, setSaved, setError);
+                      }}
+                      disabled={submitted}
+                    >
+                      Save for later
+                    </Button>
+                  </Flex>
+                </Column>
+                <Column flexBasis={49}>
+                  <Flex>
+                    <Button type="submit" disabled={submitted}>
+                      Submit
+                    </Button>
+                  </Flex>
+                </Column>
               </Flex>
-            </Column>
-            <Column flexBasis={49}>
-              <Flex>
-                <Button type="submit" disabled={submitted}>
-                  Submit
-                </Button>
-              </Flex>
-            </Column>
-          </Flex>
 
-          <SubmitWarningMessage>
-            You can only submit your profile once! Be sure everything is good to
-            go before you submit.
-          </SubmitWarningMessage>
+              <SubmitWarningMessage>
+                You can only submit your profile once! Be sure everything is
+                good to go before you submit.
+              </SubmitWarningMessage>
+            </>
+          )}
+
           {saved && <SavedMessage>Profile saved successfully.</SavedMessage>}
           {submitted && (
             <SubmittedMessage>
@@ -565,6 +570,7 @@ const SubmitWarningMessage = styled.p`
   text-align: center;
   font-weight: 600;
   padding: 32px 0 0;
+  margin-bottom: 16px;
   color: ${({ theme }) => theme.colors.black};
 `;
 

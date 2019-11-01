@@ -69,6 +69,10 @@ app.prepare().then(() => {
   server.use("/auth", authRouter);
   server.use("/api/profile", profileRouter);
   server.use("/api/admin", adminRouter);
+
+  server.get("/dashboard/:step", (req, res) =>
+    app.render(req, res, "/dashboard")
+  );
   server.get("*", handle);
 
   const port_num = process.env.PORT || 3000;

@@ -2,6 +2,8 @@ import * as React from "react";
 
 import styled from "styled-components";
 
+import Router from "next/router";
+
 import { Flex, Column, Button } from "../../styles";
 
 import Check from "../../assets/check.svg";
@@ -25,6 +27,10 @@ const getStage = (status: string): number => {
     return 2;
   }
   return 3;
+};
+
+const navigateTo = (step: string): void => {
+  Router.push(`/dashboard/${step}`);
 };
 
 const StatusStep: React.FunctionComponent<Props> = props => {
@@ -55,7 +61,9 @@ const StatusStep: React.FunctionComponent<Props> = props => {
               <p>Set up your hacker profile so we can learn more about you.</p>
 
               {getStage(status) === 1 && (
-                <StepButton>Set Up Profile</StepButton>
+                <StepButton onClick={() => navigateTo("profile")}>
+                  Set Up Profile
+                </StepButton>
               )}
             </Step>
             <Step>
@@ -66,13 +74,19 @@ const StatusStep: React.FunctionComponent<Props> = props => {
               </p>
 
               {getStage(status) === 2 && (
-                <StepButton>Fill out application</StepButton>
+                <StepButton onClick={() => navigateTo("application")}>
+                  Fill out application
+                </StepButton>
               )}
             </Step>
             <Step>
               <h3>3. View Results</h3>
               <p>Come back on December 1st, 2019 to see your results.</p>
-              {getStage(status) === 3 && <StepButton>View Results</StepButton>}
+              {getStage(status) === 3 && (
+                <StepButton onClick={() => navigateTo("results")}>
+                  View Results
+                </StepButton>
+              )}
             </Step>
           </Steps>
         </Column>
