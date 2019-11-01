@@ -16,6 +16,7 @@ import {
 import Select from "../Select";
 
 import {
+  addResumeUrl,
   ProfileFormData,
   saveProfile,
   submitProfile
@@ -76,8 +77,8 @@ const uploadResume = async resumeFile => {
     method: "POST",
     body: resumeForm
   });
-
-  console.log(response);
+  const s3Info = await response.json();
+  addResumeUrl(s3Info.data.Location);
 };
 
 const ProfileStep: React.FunctionComponent<Props> = props => {

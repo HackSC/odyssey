@@ -49,7 +49,10 @@ router.post("/resume", utils.authMiddleware, async (req, res) => {
       if (!err) {
         res.json({ data });
       } else {
-        console.log(err);
+        return res.json(400, {
+          error: 1,
+          msg: "S3 Upload Failure"
+        });
       }
     });
   }
