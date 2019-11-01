@@ -23,127 +23,36 @@ router.get("/", async (req, res) => {
 });
 
 router.put("/", async (req, res) => {
-  // Get the users current hacker profile
-  const currentHackerProfile = await models.HackerProfile.findOne({
-    where: { userId: req.user.id }
-  });
-
-  const formInput = req.body;
-
-  // If the user is saving a profile, make sure that they have not already submitted one before
-  if (currentHackerProfile.profileSubmittedAt !== null) {
-    return res.status(400).json({
-      error: "You have already submitted a profile"
-    });
-  }
-
-  // Only allow certain fields for form input
-  const allowedFields = new Set([
-    "gender",
-    "ethnicity",
-    "email",
-    "major",
-    "minor",
-    "skills",
-    "interests",
-    "firstName",
-    "lastName",
-    "phoneNumber",
-    "school",
-    "year",
-    "skillLevel",
-    "graduationDate",
-    "over18",
-    "needBus",
-    "links",
-    "submit"
-  ]);
-
-  for (let key of Object.keys(formInput)) {
-    if (!allowedFields.has(key)) {
-      return res.status(400).json({
-        error: `${key} is not a supported field`
-      });
-    }
-  }
-
-  // TODO: Validate inputs
-
-  const updatedProfileFields = {
-    ...formInput
-  };
-
-  /*
-    Advance the user in the application process if they meet the following conditions
-    - Have previously not submitted a profile
-    - Have filled out all of the required fields 
-  */
-
-  if (formInput.submit) {
-    if (currentHackerProfile.profileSubmittedAt === null) {
-      if (
-        formInput.gender &&
-        formInput.ethnicity &&
-        formInput.major &&
-        formInput.firstName &&
-        formInput.lastName &&
-        formInput.phoneNumber &&
-        formInput.school &&
-        formInput.skillLevel &&
-        formInput.graduationDate &&
-        formInput.over18
-      ) {
-        updatedProfileFields.profileSubmittedAt = new Date();
-        updatedProfileFields.status = "profileSubmitted";
-      } else {
-        return res.status(400).json({
-          error: "Not all required fields are filled out"
-        });
-      }
-    } else {
-      return res.status(400).json({
-        error: "You have already submitted a profile"
-      });
-    }
-  }
-
-  // Update, then re-retrieve the updated hacker profile
-  await models.HackerProfile.update(updatedProfileFields, {
+  // TODO: Do input validation
+  const newHackerProfile = await models.HackerProfile.update(req.body, {
     where: {
       userId: req.user.id
     }
   });
-
-  const updatedHackerProfile = await models.HackerProfile.findOne({
-    where: { userId: req.user.id }
-  });
-
-  return res.json({ hackerProfile: updatedHackerProfile });
+  return res.json({ hackerProfile: newHackerProfile });
 });
 
 router.post("/resume", utils.authMiddleware, async (req, res) => {
   const user = req.user;
-  var busboy = new Busboy({ headers: req.headers });
-  busboy.on("file", function(fieldname, file, filename, encoding, mimetype) {
-    // Do the S3 upload stuff
+  if (req.files) {
+    const file = req.files.file;
     const s3 = new AWS.S3({
       accessKeyId: process.env.S3_ACCESS_KEY,
       secretAccessKey: process.env.S3_SECRET
     });
-
     const params = {
       Bucket: "hacksc-odyssey",
-      Key: filename,
-      Body: file
+      Key: file.name,
+      Body: file.data
     };
     s3.upload(params, function(err, data) {
       if (!err) {
         res.json({ data });
+      } else {
+        console.log(err);
       }
     });
-  });
-  busboy.on("finish", function() {});
-  return req.pipe(busboy);
+  }
 });
 
 module.exports = router;

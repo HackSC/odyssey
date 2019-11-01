@@ -5,7 +5,7 @@ const session = require("express-session");
 const dotenv = require("dotenv");
 const passport = require("passport");
 const Auth0Strategy = require("passport-auth0");
-
+const fileUpload = require("express-fileupload");
 const bodyParser = require("body-parser");
 
 const authRouter = require("./api/login");
@@ -65,7 +65,7 @@ app.prepare().then(() => {
   server.use(passport.session());
 
   server.use(bodyParser.json());
-
+  server.use(fileUpload());
   server.use("/auth", authRouter);
   server.use("/api/profile", profileRouter);
   server.use("/api/admin", adminRouter);
