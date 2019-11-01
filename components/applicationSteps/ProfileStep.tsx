@@ -125,7 +125,8 @@ const ProfileStep: React.FunctionComponent<Props> = props => {
           <h1>Your Hacker Profile</h1>
           <p>
             We're excited for HackSC 2020 and can't wait to get to know you
-            better. Please fill out your hacker profile{" "}
+            better. Please fill out your hacker profile to move on in the
+            application process.
           </p>
 
           {submitted && (
