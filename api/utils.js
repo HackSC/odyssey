@@ -15,7 +15,6 @@ module.exports = {
     delete req.body.role;
     return next();
   },
-
   requireAdmin: function(req, res, next) {
     /* Read user from database, and make sure it is in fact an admin */
     try {

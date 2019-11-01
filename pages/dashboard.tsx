@@ -37,7 +37,7 @@ const Dashboard = ({ profile }) => {
   return (
     <>
       <Navbar loggedIn />
-      <FormStepper serverStep={0} steps={formSteps} profile={profile} />
+      <FormStepper serverStep={1} steps={formSteps} profile={profile} />
       <Footer />
     </>
   );

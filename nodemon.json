@@ -1,8 +1,6 @@
 {
-    "watch": [
-        "server/**/*.ts"
-    ],
-    "execMap": {
-        "ts": "ts-node --typeCheck --compilerOptions '{\"module\":\"commonjs\"}'"
-    }
+  "watch": ["api/**/*.js"],
+  "execMap": {
+    "ts": "ts-node --typeCheck --compilerOptions '{\"module\":\"commonjs\"}'"
+  }
 }
