@@ -1,6 +1,7 @@
 import React, { useRef, useState } from "react";
 
 import styled from "styled-components";
+import AWS from "aws-sdk";
 
 import {
   Form,
@@ -19,6 +20,7 @@ import {
   saveProfile,
   submitProfile
 } from "../../lib/formSubmission";
+import { file } from "@babel/types";
 
 type Props = {
   profile: Profile;
@@ -65,6 +67,19 @@ const skillLevelOptions = [
   { label: "Advanced - Hacker who knows the game", value: "advanced" }
 ];
 
+const uploadResume = async resumeFile => {
+  console.log("we are uploading the following", resumeFile);
+
+  var resumeForm = new FormData();
+  resumeForm.append("file", resumeFile);
+  const response = await fetch("http://localhost:3000/api/profile/resume", {
+    method: "POST",
+    body: resumeForm
+  });
+
+  console.log(response);
+};
+
 const ProfileStep: React.FunctionComponent<Props> = props => {
   const { profile } = props;
 
@@ -86,7 +101,7 @@ const ProfileStep: React.FunctionComponent<Props> = props => {
     interests: useRef(null),
     links: useRef(null)
   };
-
+  const [userResume, setUserResume] = useState(null);
   const [saved, setSaved] = useState(false);
   const [submitted, setSubmitted] = useState(
     !!profile && !!profile.profileSubmittedAt
@@ -382,7 +397,6 @@ const ProfileStep: React.FunctionComponent<Props> = props => {
 
         <FormSection>
           <h2>Additional Information</h2>
-
           <FormGroup>
             <label>
               Will you need bus transportation to/from your school to USC?
@@ -401,19 +415,25 @@ const ProfileStep: React.FunctionComponent<Props> = props => {
               </RadioChoiceLabel>
             </RadioChoice>
           </FormGroup>
-
           <FormGroup>
-            <label>Resume - Must be a PDF, 10MB Maximum</label>
-
-            <ResumeUploadInput
-              type="file"
-              name="resume"
-              id="resume"
-              accept="application/pdf"
-            />
-            <ResumeUploadButton htmlFor="resume">
-              Upload Your Resume
-            </ResumeUploadButton>
+            <Form
+              onSubmit={e => {
+                //@ts-ignore
+                console.log(e.target.files);
+              }}
+            >
+              <label>Resume - Must be a PDF, 10MB Maximum</label>
+              <ResumeUploadInput
+                type="file"
+                name="resume"
+                id="resume"
+                accept="application/pdf"
+                ref={ref => setUserResume(ref)}
+              />
+              <ResumeUploadButton htmlFor="resume">
+                Upload Your Resume
+              </ResumeUploadButton>
+            </Form>
           </FormGroup>
 
           <FormGroup>
@@ -427,7 +447,6 @@ const ProfileStep: React.FunctionComponent<Props> = props => {
               disabled={submitted}
             />
           </FormGroup>
-
           <FormGroup>
             <label>
               Skills (Optional) - List out your skills (comma separated)
@@ -442,7 +461,6 @@ const ProfileStep: React.FunctionComponent<Props> = props => {
               disabled={submitted}
             />
           </FormGroup>
-
           <FormGroup>
             <label>
               Interests (Optional) - List out technology related topics that
@@ -458,7 +476,6 @@ const ProfileStep: React.FunctionComponent<Props> = props => {
               disabled={submitted}
             />
           </FormGroup>
-
           <FormGroup>
             <label>
               Links (Optional) - Feel free to share your portfolio, GitHub,
@@ -485,6 +502,7 @@ const ProfileStep: React.FunctionComponent<Props> = props => {
                     <Button
                       outline
                       onClick={e => {
+                        uploadResume(userResume.files[0]);
                         saveProfile(e, formData, setSaved, setError);
                       }}
                       disabled={submitted}
