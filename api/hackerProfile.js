@@ -132,12 +132,7 @@ router.put("/application", async (req, res) => {
       userId: req.user.id
     }
   });
-
-  const updatedHackerProfile = await models.HackerProfile.findOne({
-    where: { userId: req.user.id }
-  });
-
-  return res.json({ hackerProfile: updatedHackerProfile });
+  return res.json({ hackerProfile: newHackerProfile });
 });
 
 module.exports = router;
