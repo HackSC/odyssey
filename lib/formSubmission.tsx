@@ -1,6 +1,7 @@
 import React from "react";
 
 export type ProfileFormData = {
+  form: React.MutableRefObject<any>;
   firstName: React.MutableRefObject<any>;
   lastName: React.MutableRefObject<any>;
   phoneNumber: React.MutableRefObject<any>;
@@ -29,6 +30,7 @@ function getProfileFromFormData(formData: ProfileFormData, isSubmit?: boolean) {
     year: formData.year.current.value,
     graduationDate: formData.graduationDate.current.value,
     gender: formData.gender.current.value,
+    ethnicity: formData.form.current.ethnicity.value,
     over18: formData.over18.current.checked,
     needBus: formData.needBus.current.checked,
     skillLevel: formData.skillLevel.current.value,

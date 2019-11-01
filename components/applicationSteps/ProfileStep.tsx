@@ -69,6 +69,7 @@ const ProfileStep: React.FunctionComponent<Props> = props => {
   const { profile } = props;
 
   const formData: ProfileFormData = {
+    form: useRef(null),
     firstName: useRef(null),
     lastName: useRef(null),
     phoneNumber: useRef(null),
@@ -98,6 +99,7 @@ const ProfileStep: React.FunctionComponent<Props> = props => {
         onSubmit={e => {
           submitProfile(e, formData, setSubmitted, setError);
         }}
+        ref={formData.form}
       >
         <FormSection>
           <h1>Your Hacker Profile</h1>
@@ -276,34 +278,64 @@ const ProfileStep: React.FunctionComponent<Props> = props => {
                 </RadioChoice>
 
                 <RadioChoice>
-                  <input type="radio" name="ethnicity" value="asian" />
+                  <input
+                    type="radio"
+                    name="ethnicity"
+                    value="asian"
+                    defaultChecked={profile.ethnicity === "asian"}
+                  />
                   <RadioChoiceLabel>Asian / Pacific Islander</RadioChoiceLabel>
                 </RadioChoice>
 
                 <RadioChoice>
-                  <input type="radio" name="ethnicity" value="black" />
+                  <input
+                    type="radio"
+                    name="ethnicity"
+                    value="black"
+                    defaultChecked={profile.ethnicity === "black"}
+                  />
                   <RadioChoiceLabel>Black or African American</RadioChoiceLabel>
                 </RadioChoice>
 
                 <RadioChoice>
-                  <input type="radio" name="ethnicity" value="hispanic" />
+                  <input
+                    type="radio"
+                    name="ethnicity"
+                    value="hispanic"
+                    defaultChecked={profile.ethnicity === "hispanic"}
+                  />
                   <RadioChoiceLabel>Hispanic</RadioChoiceLabel>
                 </RadioChoice>
               </Column>
 
               <Column flexBasis={49}>
                 <RadioChoice>
-                  <input type="radio" name="ethnicity" value="caucasian" />
+                  <input
+                    type="radio"
+                    name="ethnicity"
+                    value="caucasian"
+                    defaultChecked={profile.ethnicity === "caucasian"}
+                  />
                   <RadioChoiceLabel>White / Caucasian</RadioChoiceLabel>
                 </RadioChoice>
 
                 <RadioChoice>
-                  <input type="radio" name="ethnicity" value="mixed-other" />
+                  <input
+                    type="radio"
+                    name="ethnicity"
+                    value="mixed-other"
+                    defaultChecked={profile.ethnicity === "mixed-other"}
+                  />
                   <RadioChoiceLabel>Mixed / Other</RadioChoiceLabel>
                 </RadioChoice>
 
                 <RadioChoice>
-                  <input type="radio" name="ethnicity" value="no-say" />
+                  <input
+                    type="radio"
+                    name="ethnicity"
+                    value="no-say"
+                    defaultChecked={profile.ethnicity === "no-say"}
+                  />
                   <RadioChoiceLabel>Prefer not to answer</RadioChoiceLabel>
                 </RadioChoice>
               </Column>

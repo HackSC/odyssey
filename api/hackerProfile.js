@@ -83,6 +83,7 @@ router.put("/", async (req, res) => {
     if (currentHackerProfile.profileSubmittedAt === null) {
       if (
         formInput.gender &&
+        formInput.ethnicity &&
         formInput.major &&
         formInput.firstName &&
         formInput.lastName &&
