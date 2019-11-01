@@ -19,6 +19,12 @@ router.get("/", async (req, res) => {
     }
   });
 
+  if (hackerProfile.status === "unverified" && req.user._json.email_verified) {
+    // Update hacker profile
+    hackerProfile.status = "verified";
+    await hackerProfile.save();
+    return res.json({ hackerProfile });
+  }
   return res.json({ hackerProfile });
 });
 
@@ -153,6 +159,12 @@ router.put("/application", async (req, res) => {
   });
 
   const formInput = req.body;
+
+  if (currentHackerProfile.profileSubmittedAt === null) {
+    return res.status(400).json({
+      error: "You must submit a profile first, before submitting an application"
+    });
+  }
 
   // If the user is saving an application, make sure that they have not already submitted one before
   if (currentHackerProfile.applicationSubmittedAt !== null) {

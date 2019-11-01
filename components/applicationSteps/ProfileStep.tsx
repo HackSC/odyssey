@@ -19,6 +19,7 @@ import {
   saveProfile,
   submitProfile
 } from "../../lib/formSubmission";
+import getProfileStage from "../../lib/getProfileStage";
 
 type Props = {
   profile: Profile;
@@ -92,6 +93,25 @@ const ProfileStep: React.FunctionComponent<Props> = props => {
     !!profile && !!profile.profileSubmittedAt
   );
   const [error, setError] = useState(null);
+
+  const stage = getProfileStage(profile);
+
+  if (stage === 0) {
+    return (
+      <Flex direction="column">
+        <FormSection>
+          <h1>Please Verify Your E-Mail</h1>
+
+          <p>
+            In order to continue through the application process, we need to
+            verify your e-mail. Double check your e-mail and make sure you got
+            an email verification link. If your profile is still not flagged as
+            verified, log out and log back in.
+          </p>
+        </FormSection>
+      </Flex>
+    );
+  }
 
   return profile ? (
     <Flex direction="column">

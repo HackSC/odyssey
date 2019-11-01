@@ -43,7 +43,11 @@ const Dashboard = ({ profile, step }) => {
     <>
       <Head title="HackSC Odyssey - Dashboard" />
       <Navbar loggedIn />
-      <FormStepper serverStep={step} steps={formSteps} profile={profile} />
+      {profile ? (
+        <FormStepper serverStep={step} steps={formSteps} profile={profile} />
+      ) : (
+        <div>loading...</div>
+      )}
       <Footer />
     </>
   );
