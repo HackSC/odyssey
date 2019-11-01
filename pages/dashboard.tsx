@@ -2,6 +2,7 @@ import React from "react";
 
 import { handleLoginRedirect, getProfile } from "../lib/authenticate";
 
+import Head from "../components/Head";
 import FormStepper from "../components/FormStepper";
 import StatusStep from "../components/applicationSteps/StatusStep";
 import ApplicationStep from "../components/applicationSteps/ApplicationStep";
@@ -36,6 +37,7 @@ const formSteps: FormStep[] = [
 const Dashboard = ({ profile }) => {
   return (
     <>
+      <Head title="HackSC Odyssey - Dashboard" />
       <Navbar loggedIn />
       <FormStepper serverStep={0} steps={formSteps} profile={profile} />
       <Footer />
