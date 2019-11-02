@@ -1,6 +1,7 @@
 import React from "react";
 import App from "next/app";
 import { ThemeProvider } from "styled-components";
+import { hotjar } from "react-hotjar";
 
 import { Theme, GlobalStyles } from "../styles";
 
@@ -13,6 +14,11 @@ class OdysseyApp extends App {
     }
 
     return { pageProps };
+  }
+
+  componentDidMount() {
+    // Let's just hardcode the hotjar
+    hotjar.initialize("1547187");
   }
 
   render() {
