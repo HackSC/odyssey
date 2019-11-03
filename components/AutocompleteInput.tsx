@@ -45,38 +45,36 @@ const AutocompleteInput = React.forwardRef<Ref, Props>((props, ref: any) => {
   }, []);
 
   return (
-    <>
-      <Wrapper onBlur={() => setShowSuggestions(false)}>
-        <input
-          type="text"
-          placeholder={props.placeholder}
-          name={props.name}
-          defaultValue={props.defaultValue}
-          required={props.required}
-          disabled={props.disabled}
-          ref={ref}
-          autoComplete="off"
-          onChange={e => setInput(e.target.value)}
-        />
+    <Wrapper onBlur={() => setShowSuggestions(false)}>
+      <input
+        type="text"
+        placeholder={props.placeholder}
+        name={props.name}
+        defaultValue={props.defaultValue}
+        required={props.required}
+        disabled={props.disabled}
+        ref={ref}
+        autoComplete="off"
+        onChange={e => setInput(e.target.value)}
+      />
 
-        {suggestions.length > 0 && showSuggestions && (
-          <Suggestions>
-            {suggestions.map((suggestion, index) => {
-              return (
-                <Suggestion
-                  onMouseDown={e => {
-                    e.preventDefault();
-                    selectSuggestion(suggestion);
-                  }}
-                >
-                  {suggestion}
-                </Suggestion>
-              );
-            })}
-          </Suggestions>
-        )}
-      </Wrapper>
-    </>
+      {suggestions.length > 0 && showSuggestions && (
+        <Suggestions>
+          {suggestions.map((suggestion, index) => {
+            return (
+              <Suggestion
+                onMouseDown={e => {
+                  e.preventDefault();
+                  selectSuggestion(suggestion);
+                }}
+              >
+                {suggestion}
+              </Suggestion>
+            );
+          })}
+        </Suggestions>
+      )}
+    </Wrapper>
   );
 });
 
