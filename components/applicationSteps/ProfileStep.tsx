@@ -13,12 +13,17 @@ import {
 } from "../../styles";
 
 import Select from "../Select";
+import AutocompleteInput from "../AutocompleteInput";
 
 import {
   ProfileFormData,
   saveProfile,
   submitProfile
 } from "../../lib/formSubmission";
+import getSchoolFromEmail from "../../lib/getSchoolFromEmail";
+
+import Schools from "../../assets/data/schools.json";
+import Majors from "../../assets/data/majors.json";
 
 type Props = {
   profile: Profile;
@@ -189,28 +194,28 @@ const ProfileStep: React.FunctionComponent<Props> = props => {
           <FormGroup>
             <label>School</label>
 
-            <input
-              type="text"
+            <AutocompleteInput
               placeholder="Your School"
               name="school"
-              defaultValue={profile.school}
+              defaultValue={profile.school || getSchoolFromEmail(profile.email)}
               ref={formData.school}
               required
               disabled={submitted}
+              suggestions={Schools}
             />
           </FormGroup>
 
           <FormGroup>
             <label>Major</label>
 
-            <input
-              type="text"
+            <AutocompleteInput
               placeholder="Your Major"
               name="major"
               defaultValue={profile.major}
               ref={formData.major}
               required
               disabled={submitted}
+              suggestions={Majors}
             />
           </FormGroup>
 
