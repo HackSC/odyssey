@@ -46,7 +46,7 @@ const AutocompleteInput = React.forwardRef<Ref, Props>((props, ref: any) => {
 
   return (
     <>
-      <Wrapper>
+      <Wrapper onBlur={() => setShowSuggestions(false)}>
         <input
           type="text"
           placeholder={props.placeholder}
@@ -63,7 +63,12 @@ const AutocompleteInput = React.forwardRef<Ref, Props>((props, ref: any) => {
           <Suggestions>
             {suggestions.map((suggestion, index) => {
               return (
-                <Suggestion onClick={() => selectSuggestion(suggestion)}>
+                <Suggestion
+                  onMouseDown={e => {
+                    e.preventDefault();
+                    selectSuggestion(suggestion);
+                  }}
+                >
                   {suggestion}
                 </Suggestion>
               );
