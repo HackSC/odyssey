@@ -73,8 +73,6 @@ const uploadResume = async resumeFile => {
     body: resumeForm
   });
 
-  console.log(response);
-
   const s3Info = await response.json();
   addResumeUrl(s3Info.data.location);
 };
