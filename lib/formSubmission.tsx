@@ -1,5 +1,7 @@
 import React from "react";
 
+import Router from "next/router";
+
 function getProfileFromFormData(
   formRef: React.MutableRefObject<any>,
   isSubmit?: boolean
@@ -15,8 +17,8 @@ function getProfileFromFormData(
     graduationDate: formRef.current["graduation-date"].value,
     gender: formRef.current["gender"].value,
     ethnicity: formRef.current["ethnicity"].value,
-    over18: formRef.current["is-over-18"].value,
-    needBus: formRef.current["need-bus"].value,
+    over18: formRef.current["is-over-18"].checked,
+    needBus: formRef.current["need-bus"].checked,
     skillLevel: formRef.current["skill-level"].value,
     skills: formRef.current["skills"].value,
     interests: formRef.current["interests"].value,
@@ -51,6 +53,7 @@ export async function syncProfile(
 
   if (response.status === 200) {
     setSuccess(true);
+    Router.push("/results");
   } else {
     const data = await response.json();
     setError(data.error);

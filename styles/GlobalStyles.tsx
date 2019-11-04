@@ -45,6 +45,11 @@ const GlobalStyles = createGlobalStyle`
     text-decoration: none;
     line-height: 20px;
   }
+
+  ::placeholder {
+    color: #D3D3D4;
+    opacity: 1; /* Firefox */
+  }  
 `;
 
 export default GlobalStyles;

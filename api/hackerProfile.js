@@ -62,6 +62,7 @@ router.put("/", async (req, res) => {
     "questionThree",
     "codeOfConduct",
     "authorize",
+    "marketing",
     "submit"
   ]);
 

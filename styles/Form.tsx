@@ -22,7 +22,7 @@ const Form = styled.form`
     background: #ffffff;
     padding: 12px 16px;
     font-weight: 400;
-    color: #5d5d5d;
+    color: ${({ theme }) => theme.colors.black};
     -webkit-appearance: none;
     border-image: initial;
     position: relative;

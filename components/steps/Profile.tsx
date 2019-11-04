@@ -71,7 +71,7 @@ const ProfileStep: React.FunctionComponent<Props> = props => {
 
   const [saved, setSaved] = useState(false);
   const [submitted, setSubmitted] = useState(
-    !!profile && !!profile.profileSubmittedAt
+    !!profile && !!profile.submittedAt
   );
   const [error, setError] = useState(null);
 
@@ -98,8 +98,8 @@ const ProfileStep: React.FunctionComponent<Props> = props => {
 
           {submitted && (
             <AlreadySubmitted>
-              You have already submitted your hacker profile. Next step: fill
-              out your HackSC application.
+              You have already submitted your application! Be on the look out
+              for updates on when results come out.
             </AlreadySubmitted>
           )}
         </FormSection>
@@ -506,6 +506,21 @@ const ProfileStep: React.FunctionComponent<Props> = props => {
               maxLength={100}
               defaultValue={profile.questionThree}
               required
+              disabled={submitted}
+            />
+          </FormGroup>
+
+          <FormGroup>
+            <label>
+              How did you hear about HackSC? (100 characters, optional)
+            </label>
+
+            <input
+              type="text"
+              name="marketing"
+              maxLength={100}
+              placeholder="Social Media"
+              defaultValue={profile.marketing}
               disabled={submitted}
             />
           </FormGroup>
