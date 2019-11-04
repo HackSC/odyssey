@@ -22,7 +22,6 @@ export async function getProfile(req) {
   const url_route = req
     ? /* Serverside */ process.env.URL_BASE + "api/profile"
     : /* Client */ "/api/profile";
-  console.log(url_route);
   const rawProfileData = await fetch(
     url_route,
     req

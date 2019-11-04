@@ -13,6 +13,9 @@ type Props = {
 };
 
 const getStatusLabel = (status: string) => {
+  if (!status) {
+    return "Unverified";
+  }
   if (status === "profileSubmitted") return "Profile Submitted";
   if (status === "applicationSubmitted") return "Application Submitted";
   if (status === "checkedIn") return "Checked In";
