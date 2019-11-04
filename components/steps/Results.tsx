@@ -2,6 +2,7 @@ import * as React from "react";
 
 import styled from "styled-components";
 
+import Blob from "../Blob";
 import { Flex } from "../../styles";
 
 type Props = {
@@ -33,6 +34,8 @@ const ResultStep: React.FunctionComponent<Props> = props => {
             Facebook
           </a>
         </p>
+
+        <Blob />
       </FormSection>
     </Flex>
   );
@@ -43,6 +46,11 @@ const FormSection = styled.div`
   background-color: ${({ theme }) => theme.colors.white};
   padding: 48px;
   margin-bottom: 64px;
+
+  #blob {
+    text-align: center;
+    margin-top: 16px;
+  }
 
   &:last-child {
     margin-bottom: 0;
