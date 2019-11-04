@@ -18,7 +18,9 @@ class OdysseyApp extends App {
 
   componentDidMount() {
     // Let's just hardcode the hotjar
-    hotjar.initialize("1547187");
+    if (process.env.NODE_ENV === "production") {
+      hotjar.initialize("1547187");
+    }
   }
 
   render() {
