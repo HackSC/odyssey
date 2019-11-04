@@ -52,7 +52,7 @@ const StatusStep: React.FunctionComponent<Props> = props => {
         <Label>{statusLabel}</Label>
       </Status>
 
-      <Flex justify="space-between">
+      <Flex justify="space-between" tabletVertical>
         <Column flexBasis={63}>
           <h2>Next Steps</h2>
           <Steps>
@@ -91,7 +91,7 @@ const StatusStep: React.FunctionComponent<Props> = props => {
           </Steps>
         </Column>
 
-        <Column flexBasis={35}>
+        <DatesColumn flexBasis={35}>
           <h2>Major Dates</h2>
 
           <Dates>
@@ -110,7 +110,7 @@ const StatusStep: React.FunctionComponent<Props> = props => {
               <p>January 31, 2020</p>
             </Date>
           </Dates>
-        </Column>
+        </DatesColumn>
       </Flex>
     </Flex>
   );
@@ -126,6 +126,18 @@ const Status = styled(Flex)`
     padding: 0;
     margin-left: 16px;
   }
+
+  ${({ theme }) =>
+    theme.media.tablet`
+      padding: 32px;
+    `}
+`;
+
+const DatesColumn = styled(Column)`
+  ${({ theme }) =>
+    theme.media.tablet`
+      margin-top: 32px;
+    `}
 `;
 
 const Label = styled.p`

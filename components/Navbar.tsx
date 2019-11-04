@@ -50,6 +50,11 @@ const NavbarContainer = styled(Container)`
 
 const HeaderLogoImg = styled.img`
   width: 169px;
+
+  ${({ theme }) =>
+    theme.media.mobile`
+      width: 120px;
+    `}
 `;
 
 const Links = styled.div`
