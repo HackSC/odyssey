@@ -31,7 +31,7 @@ router.put("/", async (req, res) => {
   const formInput = req.body;
 
   // If the user is saving a profile, make sure that they have not already submitted one before
-  if (currentHackerProfile.profileSubmittedAt !== null) {
+  if (currentHackerProfile.submittedAt !== null) {
     return res.status(400).json({
       error: "You have already submitted an application"
     });
@@ -87,7 +87,7 @@ router.put("/", async (req, res) => {
   */
 
   if (formInput.submit) {
-    if (currentHackerProfile.profileSubmittedAt === null) {
+    if (currentHackerProfile.submittedAt === null) {
       if (
         formInput.gender &&
         formInput.ethnicity &&
@@ -105,8 +105,8 @@ router.put("/", async (req, res) => {
         formInput.codeOfConduct &&
         formInput.authorize
       ) {
-        updatedProfileFields.profileSubmittedAt = new Date();
-        updatedProfileFields.status = "profileSubmitted";
+        updatedProfileFields.submittedAt = new Date();
+        updatedProfileFields.status = "submitted";
       } else {
         return res.status(400).json({
           error: "Not all required fields are filled out"

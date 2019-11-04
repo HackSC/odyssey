@@ -10,6 +10,26 @@ type Props = {
 };
 
 const ResultStep: React.FunctionComponent<Props> = props => {
+  const { profile } = props;
+
+  if (profile && !profile.submittedAt) {
+    return (
+      <Flex direction="column">
+        <FormSection>
+          <h1>You haven't filled out an application yet!</h1>
+
+          <p>
+            You have not submitted an application for HackSC 2020. Please do so
+            before the deadline to make sure you have a shot at attending HackSC
+            2020!
+          </p>
+
+          <Blob />
+        </FormSection>
+      </Flex>
+    );
+  }
+
   return (
     <Flex direction="column">
       <FormSection>

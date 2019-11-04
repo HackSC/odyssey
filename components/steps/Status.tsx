@@ -13,27 +13,21 @@ type Props = {
 };
 
 const getStatusLabel = (status: string) => {
-  if (!status) {
+  if (!status || status === "unverified") {
     return "Unverified";
   }
-  if (status === "profileSubmitted") return "Profile Submitted";
-  if (status === "applicationSubmitted") return "Application Submitted";
   if (status === "checkedIn") return "Checked In";
 
   return status[0].toUpperCase() + status.substring(1, status.length);
 };
 
 const getStage = (status: string): number => {
-  if (status === "unverified" || status === "verified") {
+  if (status === "unverified") {
     return 1;
-  } else if (status === "profileSubmitted") {
+  } else if (status === "verified") {
     return 2;
   }
   return 3;
-};
-
-const navigateTo = (step: string): void => {
-  Router.push(`/dashboard/${step}`);
 };
 
 const StatusStep: React.FunctionComponent<Props> = props => {
@@ -60,14 +54,11 @@ const StatusStep: React.FunctionComponent<Props> = props => {
           <h2>Next Steps</h2>
           <Steps>
             <Step>
-              <h3>1. Set up your profile</h3>
-              <p>Set up your hacker profile so we can learn more about you.</p>
-
-              {getStage(status) === 1 && (
-                <StepButton onClick={() => navigateTo("profile")}>
-                  Set Up Profile
-                </StepButton>
-              )}
+              <h3>1. Verify your e-mail</h3>
+              <p>
+                Make sure to check your e-mail and verify your account. If you
+                run into issues, log-out and log back in.
+              </p>
             </Step>
             <Step>
               <h3>2. Fill out an application</h3>
@@ -77,19 +68,13 @@ const StatusStep: React.FunctionComponent<Props> = props => {
               </p>
 
               {getStage(status) === 2 && (
-                <StepButton onClick={() => navigateTo("application")}>
-                  Fill out application
-                </StepButton>
+                <StepButton>Fill out application</StepButton>
               )}
             </Step>
             <Step>
               <h3>3. View Results</h3>
-              <p>Come back on December 1st, 2019 to see your results.</p>
-              {getStage(status) === 3 && (
-                <StepButton onClick={() => navigateTo("results")}>
-                  View Results
-                </StepButton>
-              )}
+              <p>Come back soon and see your results.</p>
+              {getStage(status) === 3 && <StepButton>View Results</StepButton>}
             </Step>
           </Steps>
         </Column>
