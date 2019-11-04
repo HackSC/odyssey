@@ -8,24 +8,22 @@ import Footer from "../components/Footer";
 
 import { Background, Container } from "../styles";
 
-import StatusStep from "../components/applicationSteps/StatusStep";
+import Step from "../components/steps/Status";
 
-const Dashboard2 = ({ profile }) => {
-  console.log(profile);
-
+const Dashboard = ({ profile }) => {
   return (
     <>
       <Head title="HackSC Odyssey - Dashboard" />
       <Navbar loggedIn />
       <Background>
-        <Container>{profile && <StatusStep profile={profile} />}</Container>
+        <Container>{profile && <Step profile={profile} />}</Container>
       </Background>
       <Footer />
     </>
   );
 };
 
-Dashboard2.getInitialProps = async ({ req }) => {
+Dashboard.getInitialProps = async ({ req }) => {
   const profile = await getProfile(req);
 
   // Null profile means user is not logged in
@@ -38,4 +36,4 @@ Dashboard2.getInitialProps = async ({ req }) => {
   };
 };
 
-export default Dashboard2;
+export default Dashboard;

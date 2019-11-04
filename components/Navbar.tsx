@@ -24,6 +24,8 @@ const Navbar: React.FunctionComponent<NavbarProps> = ({
           {loggedIn ? (
             <>
               <Link href="/dashboard">Dashboard</Link>
+              <Link href="/application">Application</Link>
+              <Link href="/results">Results</Link>
               <Link href="/auth/logout">Logout</Link>
             </>
           ) : (
@@ -46,6 +48,11 @@ const NavbarContainer = styled(Container)`
   display: flex;
   align-items: center;
   justify-content: space-between;
+
+  ${({ theme }) =>
+    theme.media.tablet`
+      flex-direction: column;
+    `}
 `;
 
 const HeaderLogoImg = styled.img`
@@ -65,7 +72,8 @@ const Links = styled.div`
     font-weight: 600;
     color: ${({ theme }) => theme.colors.black};
     text-transform: uppercase;
-    padding: 0 12px;
+    padding: 0 8px;
+    font-size: 14px;
   }
 `;
 

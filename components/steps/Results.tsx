@@ -5,7 +5,7 @@ import styled from "styled-components";
 import { Flex } from "../../styles";
 
 type Props = {
-  user: any;
+  profile: Profile;
 };
 
 const ResultStep: React.FunctionComponent<Props> = props => {
