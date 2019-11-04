@@ -502,7 +502,6 @@ const ProfileStep: React.FunctionComponent<Props> = props => {
                       outline
                       onClick={e => {
                         if (userResume) {
-                          console.log(userResume);
                           uploadResume(userResume.files[0]);
                         }
                         saveProfile(e, formData, setSaved, setError);
