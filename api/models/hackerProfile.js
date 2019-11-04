@@ -70,7 +70,7 @@ module.exports = (sequelize, DataTypes) => {
       links: DataTypes.STRING(1000),
       codeOfConduct: DataTypes.BOOLEAN,
       authorize: DataTypes.BOOLEAN,
-      marketing: DataTypes.STRING(500)
+      marketing: DataTypes.STRING(100)
     },
     {}
   );

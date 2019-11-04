@@ -20,7 +20,7 @@ module.exports = {
         allowNull: false
       }),
       queryInterface.addColumn("HackerProfiles", "marketing", {
-        type: Sequelize.STRING(500)
+        type: Sequelize.STRING(100)
       }),
       queryInterface.renameColumn(
         "HackerProfiles",
