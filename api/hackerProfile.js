@@ -123,9 +123,8 @@ router.put("/", async (req, res) => {
 
 router.post("/resume", utils.authMiddleware, async (req, res) => {
   const user = req.user;
-  var busboy = new Busboy({ headers: req.headers });
-  busboy.on("file", function(fieldname, file, filename, encoding, mimetype) {
-    // Do the S3 upload stuff
+  if (req.files) {
+    const file = req.files.file;
     const s3 = new AWS.S3({
       accessKeyId: process.env.S3_ACCESS_KEY,
       secretAccessKey: process.env.S3_SECRET
@@ -133,17 +132,18 @@ router.post("/resume", utils.authMiddleware, async (req, res) => {
 
     const params = {
       Bucket: "hacksc-odyssey",
-      Key: filename,
-      Body: file
+      Key: user.id,
+      Body: file.data
     };
+
     s3.upload(params, function(err, data) {
       if (!err) {
         res.json({ data });
+      } else {
+        res.json(500, { message: "Failed to upload Resume" });
       }
     });
-  });
-  busboy.on("finish", function() {});
-  return req.pipe(busboy);
+  }
 });
 
 router.put("/application", async (req, res) => {
