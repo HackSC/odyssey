@@ -65,7 +65,10 @@ export async function syncProfile(
 
   if (response.status === 200) {
     setSuccess(true);
-    Router.push("/results");
+
+    if (isSubmit) {
+      Router.push("/results");
+    }
   } else {
     const data = await response.json();
     setError(data.error);

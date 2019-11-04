@@ -120,11 +120,11 @@ const ProfileStep: React.FunctionComponent<Props> = props => {
         ref={formRef}
       >
         <FormSection>
-          <h1>Your Hacker Profile</h1>
+          <h1>Your HackSC Application</h1>
           <p>
             We're excited for HackSC 2020 and can't wait to get to know you
-            better. Please fill out your hacker profile to move on in the
-            application process.
+            better! Please fill out this HackSC application so we can know more
+            about you, where you come from, and what you've done.
           </p>
 
           {submitted && (
@@ -198,10 +198,7 @@ const ProfileStep: React.FunctionComponent<Props> = props => {
 
         <FormSection>
           <h2>Education</h2>
-          <p>
-            Now that we know your name and how to contact you, tell us about
-            your education.
-          </p>
+
           <FormGroup>
             <label>School</label>
 
@@ -486,9 +483,9 @@ const ProfileStep: React.FunctionComponent<Props> = props => {
         <FormSection>
           <h1>Your HackSC Application</h1>
           <p>
-            Thanks for filling out your hacker profile! Now that we know a bit
-            more about you, we'd love to hear more about what you want to build
-            at HackSC and what projects you've done in the past.
+            Now that we know a bit more about you, we'd love to hear more about
+            what you want to build at HackSC and what projects you've done in
+            the past.
           </p>
 
           <FormGroup>

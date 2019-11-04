@@ -33,7 +33,7 @@ const getStage = (status: string): number => {
 };
 
 const navigateTo = (step: string): void => {
-  Router.push(`/dashboard/${step}`);
+  Router.push(`/${step}`);
 };
 
 const StatusStep: React.FunctionComponent<Props> = props => {
@@ -59,14 +59,14 @@ const StatusStep: React.FunctionComponent<Props> = props => {
         <Column flexBasis={63}>
           <h2>Next Steps</h2>
           <Steps>
-            <Step>
+            <Step disabled={getStage(status) > 1}>
               <h3>1. Verify your e-mail</h3>
               <p>
                 Make sure to check your e-mail and verify your account. If you
                 run into issues, log-out and log back in.
               </p>
             </Step>
-            <Step>
+            <Step disabled={getStage(status) > 2}>
               <h3>2. Fill out an application</h3>
               <p>
                 Answer a few questions to show why you want to be at HackSC
@@ -74,13 +74,19 @@ const StatusStep: React.FunctionComponent<Props> = props => {
               </p>
 
               {getStage(status) === 2 && (
-                <StepButton>Fill out application</StepButton>
+                <StepButton onClick={() => navigateTo("application")}>
+                  Fill out application
+                </StepButton>
               )}
             </Step>
             <Step>
               <h3>3. View Results</h3>
               <p>Come back soon and see your results.</p>
-              {getStage(status) === 3 && <StepButton>View Results</StepButton>}
+              {getStage(status) === 3 && (
+                <StepButton onClick={() => navigateTo("results")}>
+                  View Results
+                </StepButton>
+              )}
             </Step>
           </Steps>
         </Column>
@@ -144,7 +150,11 @@ const Steps = styled.div`
   margin-top: 12px;
 `;
 
-const Step = styled.div`
+type StepProps = {
+  disabled?: boolean;
+};
+
+const Step = styled.div<StepProps>`
   padding: 24px 36px;
   margin-bottom: 24px;
   background: #ffffff;
@@ -153,6 +163,8 @@ const Step = styled.div`
   &:last-child {
     margin-bottom: 0;
   }
+
+  ${({ disabled }) => disabled && `opacity: 0.25;`}
 `;
 
 const StepButton = styled(Button)`
