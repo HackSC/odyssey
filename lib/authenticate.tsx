@@ -19,8 +19,11 @@ export async function getUser(req) {
 export async function getProfile(req) {
   // If we have a req object, that means we're on the server and need to pass in cookies
   // Otherwise, fetch as normal
+  const url_route = req
+    ? /* Serverside */ process.env.URL_BASE + "api/profile"
+    : /* Client */ "/api/profile";
   const rawProfileData = await fetch(
-    "http://localhost:3000/api/profile",
+    url_route,
     req
       ? {
           headers: req.headers
