@@ -67,6 +67,17 @@ export async function submitProfile(
   }
 }
 
+export async function addResumeUrl(resumeUrl: string) {
+  const resumeBody = { resume: resumeUrl };
+  await fetch("/api/profile", {
+    method: "PUT",
+    body: JSON.stringify(resumeBody),
+    headers: {
+      "Content-Type": "application/json"
+    }
+  });
+}
+
 export async function saveProfile(
   e: React.MouseEvent<HTMLButtonElement, MouseEvent>,
   formData: ProfileFormData,

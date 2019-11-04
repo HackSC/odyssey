@@ -12,6 +12,8 @@ const authRouter = require("./api/login");
 const profileRouter = require("./api/hackerProfile");
 const adminRouter = require("./api/admin");
 
+const fileUpload = require("express-fileupload");
+
 const Sentry = require("@sentry/node");
 
 const dev = process.env.NODE_ENV !== "production";
@@ -65,6 +67,7 @@ app.prepare().then(() => {
   server.use(passport.session());
 
   server.use(bodyParser.json());
+  server.use(fileUpload());
 
   server.use("/auth", authRouter);
   server.use("/api/profile", profileRouter);

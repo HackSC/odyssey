@@ -1,7 +1,6 @@
 import React, { useRef, useState } from "react";
 
 import styled from "styled-components";
-
 import {
   Form,
   FormGroup,
@@ -16,6 +15,7 @@ import Select from "../Select";
 import AutocompleteInput from "../AutocompleteInput";
 
 import {
+  addResumeUrl,
   ProfileFormData,
   saveProfile,
   submitProfile
@@ -71,6 +71,18 @@ const skillLevelOptions = [
   { label: "Advanced - Hacker who knows the game", value: "advanced" }
 ];
 
+const uploadResume = async resumeFile => {
+  var resumeForm = new FormData();
+  resumeForm.append("file", resumeFile);
+  const response = await fetch("/api/profile/resume", {
+    method: "POST",
+    body: resumeForm
+  });
+
+  const s3Info = await response.json();
+  addResumeUrl(s3Info.data.location);
+};
+
 const ProfileStep: React.FunctionComponent<Props> = props => {
   const { profile } = props;
 
@@ -94,6 +106,7 @@ const ProfileStep: React.FunctionComponent<Props> = props => {
   };
 
   const [saved, setSaved] = useState(false);
+  const [userResume, setUserResume] = useState(null);
   const [submitted, setSubmitted] = useState(
     !!profile && !!profile.profileSubmittedAt
   );
@@ -436,6 +449,7 @@ const ProfileStep: React.FunctionComponent<Props> = props => {
               name="resume"
               id="resume"
               accept="application/pdf"
+              ref={ref => setUserResume(ref)}
             />
             <ResumeUploadButton htmlFor="resume">
               Upload Your Resume
@@ -511,6 +525,9 @@ const ProfileStep: React.FunctionComponent<Props> = props => {
                     <Button
                       outline
                       onClick={e => {
+                        if (userResume) {
+                          uploadResume(userResume.files[0]);
+                        }
                         saveProfile(e, formData, setSaved, setError);
                       }}
                       disabled={submitted}
