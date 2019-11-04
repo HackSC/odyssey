@@ -22,13 +22,11 @@ declare type Profile = {
   resume: string;
   skills: string;
   interests: string;
-  applicationSubmittedAt: Date;
-  profileSubmittedAt: Date;
+  submittedAt: Date;
   status:
     | "unverified"
     | "verified"
-    | "profileSubmitted"
-    | "applicationSubmitted"
+    | "submitted"
     | "accepted"
     | "waitlisted"
     | "rejected"
@@ -59,4 +57,5 @@ declare type Profile = {
   links: string;
   codeOfConduct: boolean;
   authorize: boolean;
+  marketing: string;
 };
