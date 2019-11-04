@@ -1,7 +1,6 @@
 import React, { useRef, useState } from "react";
 
 import styled from "styled-components";
-
 import {
   Form,
   FormGroup,
@@ -15,7 +14,8 @@ import {
 import Select from "../Select";
 import AutocompleteInput from "../AutocompleteInput";
 
-import { syncProfile } from "../../lib/formSubmission";
+import { addResumeUrl, syncProfile } from "../../lib/formSubmission";
+
 import getSchoolFromEmail from "../../lib/getSchoolFromEmail";
 
 import Schools from "../../assets/data/schools.json";
@@ -66,10 +66,23 @@ const skillLevelOptions = [
   { label: "Advanced - Hacker who knows the game", value: "advanced" }
 ];
 
+const uploadResume = async resumeFile => {
+  var resumeForm = new FormData();
+  resumeForm.append("file", resumeFile);
+  const response = await fetch("/api/profile/resume", {
+    method: "POST",
+    body: resumeForm
+  });
+
+  const s3Info = await response.json();
+  addResumeUrl(s3Info.data.location);
+};
+
 const ProfileStep: React.FunctionComponent<Props> = props => {
   const { profile } = props;
 
   const [saved, setSaved] = useState(false);
+  const [userResume, setUserResume] = useState(null);
   const [submitted, setSubmitted] = useState(
     !!profile && !!profile.submittedAt
   );
@@ -80,6 +93,23 @@ const ProfileStep: React.FunctionComponent<Props> = props => {
   // Necessary for autocomplete
   const majorRef = useRef(null);
   const schoolRef = useRef(null);
+
+  if (profile && profile.status === "unverified") {
+    return (
+      <Flex direction="column">
+        <FormSection>
+          <h1>Please Verify Your E-Mail</h1>
+
+          <p>
+            In order to continue through the application process, we need to
+            verify your e-mail. Double check your e-mail and make sure you got
+            an email verification link. If your profile is still not flagged as
+            verified, log out and log back in.
+          </p>
+        </FormSection>
+      </Flex>
+    );
+  }
 
   return profile ? (
     <Flex direction="column">
@@ -93,7 +123,8 @@ const ProfileStep: React.FunctionComponent<Props> = props => {
           <h1>Your Hacker Profile</h1>
           <p>
             We're excited for HackSC 2020 and can't wait to get to know you
-            better. Please fill out your hacker profile{" "}
+            better. Please fill out your hacker profile to move on in the
+            application process.
           </p>
 
           {submitted && (
@@ -389,6 +420,7 @@ const ProfileStep: React.FunctionComponent<Props> = props => {
               name="resume"
               id="resume"
               accept="application/pdf"
+              ref={ref => setUserResume(ref)}
             />
             <ResumeUploadButton htmlFor="resume">
               Upload Your Resume
@@ -591,6 +623,9 @@ const ProfileStep: React.FunctionComponent<Props> = props => {
                       outline
                       onClick={e => {
                         syncProfile(e, formRef, setSaved, setError, false);
+                        if (userResume) {
+                          uploadResume(userResume.files[0]);
+                        }
                       }}
                       disabled={submitted}
                     >

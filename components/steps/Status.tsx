@@ -4,6 +4,8 @@ import styled from "styled-components";
 
 import Router from "next/router";
 
+import getProfileStage from "../../lib/getProfileStage";
+
 import { Flex, Column, Button } from "../../styles";
 
 import Check from "../../assets/check.svg";
@@ -28,6 +30,10 @@ const getStage = (status: string): number => {
     return 2;
   }
   return 3;
+};
+
+const navigateTo = (step: string): void => {
+  Router.push(`/dashboard/${step}`);
 };
 
 const StatusStep: React.FunctionComponent<Props> = props => {
@@ -90,7 +96,7 @@ const StatusStep: React.FunctionComponent<Props> = props => {
 
             <Date>
               <h3>Applications Close</h3>
-              <p>December 1st, 2019</p>
+              <p>November 22nd, 2019</p>
             </Date>
 
             <Date>

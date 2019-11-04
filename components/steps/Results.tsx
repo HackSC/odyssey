@@ -19,9 +19,10 @@ const ResultStep: React.FunctionComponent<Props> = props => {
           <h1>You haven't filled out an application yet!</h1>
 
           <p>
-            You have not submitted an application for HackSC 2020. Please do so
-            before the deadline to make sure you have a shot at attending HackSC
-            2020!
+            Looks like you haven't finished the application process... please
+            make sure you have set-up a hacker profile and filled out our
+            application. You must submit an application by November 22, 2019, to
+            be considered for HackSC 2020.
           </p>
 
           <Blob />
