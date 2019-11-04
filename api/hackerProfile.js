@@ -20,6 +20,13 @@ router.get("/", async (req, res) => {
     }
   });
 
+  if (hackerProfile.status === "unverified" && req.user._json.email_verified) {
+    // Update hacker profile
+    hackerProfile.status = "verified";
+    await hackerProfile.save();
+    return res.json({ hackerProfile });
+  }
+
   return res.json({ hackerProfile });
 });
 
