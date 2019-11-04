@@ -192,7 +192,7 @@ const ApplicationStep: React.FunctionComponent<Props> = props => {
         <FormSection>
           {!submitted && (
             <>
-              <Flex justify="space-between">
+              <Flex justify="space-between" tabletVertical>
                 <Column flexBasis={49}>
                   <Flex>
                     <Button
@@ -208,9 +208,9 @@ const ApplicationStep: React.FunctionComponent<Props> = props => {
                 </Column>
                 <Column flexBasis={49}>
                   <Flex>
-                    <Button type="submit" disabled={submitted}>
+                    <SubmitButton type="submit" disabled={submitted}>
                       Submit
-                    </Button>
+                    </SubmitButton>
                   </Flex>
                 </Column>
               </Flex>
@@ -283,6 +283,13 @@ const SubmittedMessage = styled.p`
   border: 2px solid ${({ theme }) => theme.colors.blue};
   color: ${({ theme }) => theme.colors.gray50};
   border-radius: 8px;
+`;
+
+const SubmitButton = styled(Button)`
+  ${({ theme }) =>
+    theme.media.tablet`
+      margin-top: 24px;
+    `}
 `;
 
 export default ApplicationStep;

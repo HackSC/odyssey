@@ -13,6 +13,7 @@ import {
 } from "../../styles";
 
 import Select from "../Select";
+import AutocompleteInput from "../AutocompleteInput";
 
 import {
   ProfileFormData,
@@ -20,6 +21,10 @@ import {
   submitProfile
 } from "../../lib/formSubmission";
 import getProfileStage from "../../lib/getProfileStage";
+import getSchoolFromEmail from "../../lib/getSchoolFromEmail";
+
+import Schools from "../../assets/data/schools.json";
+import Majors from "../../assets/data/majors.json";
 
 type Props = {
   profile: Profile;
@@ -140,7 +145,7 @@ const ProfileStep: React.FunctionComponent<Props> = props => {
         <FormSection>
           <h2>Contact Info</h2>
 
-          <Flex justify="space-between">
+          <Flex justify="space-between" tabletVertical>
             <Column flexBasis={49}>
               <FormGroup>
                 <label>First Name</label>
@@ -210,28 +215,28 @@ const ProfileStep: React.FunctionComponent<Props> = props => {
           <FormGroup>
             <label>School</label>
 
-            <input
-              type="text"
+            <AutocompleteInput
               placeholder="Your School"
               name="school"
-              defaultValue={profile.school}
+              defaultValue={profile.school || getSchoolFromEmail(profile.email)}
               ref={formData.school}
               required
               disabled={submitted}
+              suggestions={Schools}
             />
           </FormGroup>
 
           <FormGroup>
             <label>Major</label>
 
-            <input
-              type="text"
+            <AutocompleteInput
               placeholder="Your Major"
               name="major"
               defaultValue={profile.major}
               ref={formData.major}
               required
               disabled={submitted}
+              suggestions={Majors}
             />
           </FormGroup>
 
@@ -294,7 +299,7 @@ const ProfileStep: React.FunctionComponent<Props> = props => {
           <FormGroup>
             <label>Ethnicity</label>
 
-            <Flex justify="space-between">
+            <Flex justify="space-between" tabletVertical>
               <Column flexBasis={49}>
                 <RadioChoice>
                   <input
@@ -500,7 +505,7 @@ const ProfileStep: React.FunctionComponent<Props> = props => {
         <FormSection>
           {!submitted && (
             <>
-              <Flex justify="space-between">
+              <Flex justify="space-between" tabletVertical>
                 <Column flexBasis={49}>
                   <Flex>
                     <Button
@@ -516,9 +521,9 @@ const ProfileStep: React.FunctionComponent<Props> = props => {
                 </Column>
                 <Column flexBasis={49}>
                   <Flex>
-                    <Button type="submit" disabled={submitted}>
+                    <SubmitButton type="submit" disabled={submitted}>
                       Submit
-                    </Button>
+                    </SubmitButton>
                   </Flex>
                 </Column>
               </Flex>
@@ -615,6 +620,13 @@ const SubmittedMessage = styled.p`
   border: 2px solid ${({ theme }) => theme.colors.blue};
   color: ${({ theme }) => theme.colors.gray50};
   border-radius: 8px;
+`;
+
+const SubmitButton = styled(Button)`
+  ${({ theme }) =>
+    theme.media.tablet`
+      margin-top: 24px;
+    `}
 `;
 
 export default ProfileStep;
