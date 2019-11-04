@@ -15,16 +15,11 @@ router.get("/", async (req, res) => {
       userId: req.user.id
     },
     defaults: {
-      email: req.user._json.email
+      email: req.user._json.email,
+      verified: req.user._json.email_verified ? "verified" : "unverified"
     }
   });
 
-  if (hackerProfile.status === "unverified" && req.user._json.email_verified) {
-    // Update hacker profile
-    hackerProfile.status = "verified";
-    await hackerProfile.save();
-    return res.json({ hackerProfile });
-  }
   return res.json({ hackerProfile });
 });
 
