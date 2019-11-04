@@ -2,9 +2,8 @@ import * as React from "react";
 
 import styled from "styled-components";
 
+import Blob from "../Blob";
 import { Flex } from "../../styles";
-
-import getProfileStage from "../../lib/getProfileStage";
 
 type Props = {
   profile: Profile;
@@ -12,13 +11,12 @@ type Props = {
 
 const ResultStep: React.FunctionComponent<Props> = props => {
   const { profile } = props;
-  const stage = getProfileStage(profile);
 
-  if (stage < 3) {
+  if (profile && !profile.submittedAt) {
     return (
       <Flex direction="column">
         <FormSection>
-          <h1>Uh oh!</h1>
+          <h1>You haven't filled out an application yet!</h1>
 
           <p>
             Looks like you haven't finished the application process... please
@@ -26,6 +24,8 @@ const ResultStep: React.FunctionComponent<Props> = props => {
             application. You must submit an application by November 22, 2019, to
             be considered for HackSC 2020.
           </p>
+
+          <Blob />
         </FormSection>
       </Flex>
     );
@@ -55,6 +55,8 @@ const ResultStep: React.FunctionComponent<Props> = props => {
             Facebook
           </a>
         </p>
+
+        <Blob />
       </FormSection>
     </Flex>
   );
@@ -65,6 +67,11 @@ const FormSection = styled.div`
   background-color: ${({ theme }) => theme.colors.white};
   padding: 48px;
   margin-bottom: 64px;
+
+  #blob {
+    text-align: center;
+    margin-top: 16px;
+  }
 
   &:last-child {
     margin-bottom: 0;

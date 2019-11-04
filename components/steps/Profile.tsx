@@ -14,13 +14,8 @@ import {
 import Select from "../Select";
 import AutocompleteInput from "../AutocompleteInput";
 
-import {
-  addResumeUrl,
-  ProfileFormData,
-  saveProfile,
-  submitProfile
-} from "../../lib/formSubmission";
-import getProfileStage from "../../lib/getProfileStage";
+import { addResumeUrl, syncProfile } from "../../lib/formSubmission";
+
 import getSchoolFromEmail from "../../lib/getSchoolFromEmail";
 
 import Schools from "../../assets/data/schools.json";
@@ -86,35 +81,20 @@ const uploadResume = async resumeFile => {
 const ProfileStep: React.FunctionComponent<Props> = props => {
   const { profile } = props;
 
-  const formData: ProfileFormData = {
-    form: useRef(null),
-    firstName: useRef(null),
-    lastName: useRef(null),
-    phoneNumber: useRef(null),
-    school: useRef(null),
-    major: useRef(null),
-    minor: useRef(null),
-    year: useRef(null),
-    graduationDate: useRef(null),
-    gender: useRef(null),
-    over18: useRef(null),
-    needBus: useRef(null),
-    skillLevel: useRef(null),
-    skills: useRef(null),
-    interests: useRef(null),
-    links: useRef(null)
-  };
-
   const [saved, setSaved] = useState(false);
   const [userResume, setUserResume] = useState(null);
   const [submitted, setSubmitted] = useState(
-    !!profile && !!profile.profileSubmittedAt
+    !!profile && !!profile.submittedAt
   );
   const [error, setError] = useState(null);
 
-  const stage = getProfileStage(profile);
+  const formRef = useRef(null);
 
-  if (stage === 0) {
+  // Necessary for autocomplete
+  const majorRef = useRef(null);
+  const schoolRef = useRef(null);
+
+  if (profile && profile.status === "unverified") {
     return (
       <Flex direction="column">
         <FormSection>
@@ -135,22 +115,22 @@ const ProfileStep: React.FunctionComponent<Props> = props => {
     <Flex direction="column">
       <Form
         onSubmit={e => {
-          submitProfile(e, formData, setSubmitted, setError);
+          syncProfile(e, formRef, setSubmitted, setError, true);
         }}
-        ref={formData.form}
+        ref={formRef}
       >
         <FormSection>
-          <h1>Your Hacker Profile</h1>
+          <h1>Your HackSC Application</h1>
           <p>
             We're excited for HackSC 2020 and can't wait to get to know you
-            better. Please fill out your hacker profile to move on in the
-            application process.
+            better! Please fill out this HackSC application so we can know more
+            about you, where you come from, and what you've done.
           </p>
 
           {submitted && (
             <AlreadySubmitted>
-              You have already submitted your hacker profile. Next step: fill
-              out your HackSC application.
+              You have already submitted your application! Be on the look out
+              for updates on when results come out.
             </AlreadySubmitted>
           )}
         </FormSection>
@@ -168,7 +148,6 @@ const ProfileStep: React.FunctionComponent<Props> = props => {
                   placeholder="First Name"
                   name="first-name"
                   defaultValue={profile.firstName}
-                  ref={formData.firstName}
                   required
                   disabled={submitted}
                 />
@@ -184,7 +163,6 @@ const ProfileStep: React.FunctionComponent<Props> = props => {
                   placeholder="Last Name"
                   name="last-name"
                   defaultValue={profile.lastName}
-                  ref={formData.lastName}
                   required
                   disabled={submitted}
                 />
@@ -212,7 +190,6 @@ const ProfileStep: React.FunctionComponent<Props> = props => {
               placeholder="(678)-999-8210"
               name="phone-number"
               defaultValue={profile.phoneNumber}
-              ref={formData.phoneNumber}
               required
               disabled={submitted}
             />
@@ -221,10 +198,7 @@ const ProfileStep: React.FunctionComponent<Props> = props => {
 
         <FormSection>
           <h2>Education</h2>
-          <p>
-            Now that we know your name and how to contact you, tell us about
-            your education.
-          </p>
+
           <FormGroup>
             <label>School</label>
 
@@ -232,8 +206,8 @@ const ProfileStep: React.FunctionComponent<Props> = props => {
               placeholder="Your School"
               name="school"
               defaultValue={profile.school || getSchoolFromEmail(profile.email)}
-              ref={formData.school}
               required
+              ref={schoolRef}
               disabled={submitted}
               suggestions={Schools}
             />
@@ -246,8 +220,8 @@ const ProfileStep: React.FunctionComponent<Props> = props => {
               placeholder="Your Major"
               name="major"
               defaultValue={profile.major}
-              ref={formData.major}
               required
+              ref={majorRef}
               disabled={submitted}
               suggestions={Majors}
             />
@@ -261,7 +235,6 @@ const ProfileStep: React.FunctionComponent<Props> = props => {
               placeholder="Your Minor"
               name="minor"
               defaultValue={profile.minor}
-              ref={formData.minor}
               disabled={submitted}
             />
           </FormGroup>
@@ -272,7 +245,6 @@ const ProfileStep: React.FunctionComponent<Props> = props => {
             <Select
               name="year"
               options={yearOptions}
-              ref={formData.year}
               defaultValue={profile.year}
               required
               disabled={submitted}
@@ -285,7 +257,6 @@ const ProfileStep: React.FunctionComponent<Props> = props => {
             <Select
               name="graduation-date"
               options={gradDateOptions}
-              ref={formData.graduationDate}
               defaultValue={profile.graduationDate}
               required
               disabled={submitted}
@@ -302,7 +273,6 @@ const ProfileStep: React.FunctionComponent<Props> = props => {
             <Select
               name="gender"
               options={genderOptions}
-              ref={formData.gender}
               defaultValue={profile.gender}
               required
               disabled={submitted}
@@ -407,7 +377,6 @@ const ProfileStep: React.FunctionComponent<Props> = props => {
               <input
                 type="checkbox"
                 name="is-over-18"
-                ref={formData.over18}
                 defaultChecked={profile.over18}
                 required
                 disabled={submitted}
@@ -431,7 +400,6 @@ const ProfileStep: React.FunctionComponent<Props> = props => {
               <input
                 type="checkbox"
                 name="need-bus"
-                ref={formData.needBus}
                 defaultChecked={profile.needBus}
                 disabled={submitted}
               />
@@ -462,7 +430,6 @@ const ProfileStep: React.FunctionComponent<Props> = props => {
             <Select
               name="skill-level"
               options={skillLevelOptions}
-              ref={formData.skillLevel}
               defaultValue={profile.skillLevel}
               disabled={submitted}
             />
@@ -477,7 +444,6 @@ const ProfileStep: React.FunctionComponent<Props> = props => {
               rows={3}
               placeholder="javascript, python, c++, node.js, express, react, mysql"
               name="skills"
-              ref={formData.skills}
               defaultValue={profile.skills}
               disabled={submitted}
             />
@@ -493,7 +459,6 @@ const ProfileStep: React.FunctionComponent<Props> = props => {
               rows={3}
               placeholder="blockchain, machine learning, security"
               name="interests"
-              ref={formData.interests}
               defaultValue={profile.interests}
               disabled={submitted}
             />
@@ -509,10 +474,139 @@ const ProfileStep: React.FunctionComponent<Props> = props => {
               rows={3}
               placeholder="https://yourportfolio.com, https://linkedin.com/in/yourlinkedin"
               name="links"
-              ref={formData.links}
               defaultValue={profile.links}
               disabled={submitted}
             />
+          </FormGroup>
+        </FormSection>
+
+        <FormSection>
+          <h1>Your HackSC Application</h1>
+          <p>
+            Now that we know a bit more about you, we'd love to hear more about
+            what you want to build at HackSC and what projects you've done in
+            the past.
+          </p>
+
+          <FormGroup>
+            <label>
+              HackSC has four verticals centered around social justice: civil
+              liberties, sustainability, equity, and mental health. Read more
+              about them at{" "}
+              <a href="https://hacksc.com" target="_blank">
+                hacksc.com
+              </a>
+              . If you were admitted to HackSC 2020, which vertical would you
+              tackle and what would you build? (1000 characters)
+            </label>
+
+            <textarea
+              rows={5}
+              name="question-one"
+              maxLength={1000}
+              defaultValue={profile.questionOne}
+              required
+              disabled={submitted}
+            />
+          </FormGroup>
+
+          <FormGroup>
+            <label>
+              Tell us about a project you have finished in the past? (1000
+              characters)
+            </label>
+
+            <textarea
+              rows={5}
+              name="question-two"
+              maxLength={1000}
+              defaultValue={profile.questionTwo}
+              required
+              disabled={submitted}
+            />
+          </FormGroup>
+
+          <FormGroup>
+            <label>What is your favorite drink? (100 characters)</label>
+
+            <input
+              type="text"
+              name="question-three"
+              maxLength={100}
+              defaultValue={profile.questionThree}
+              required
+              disabled={submitted}
+            />
+          </FormGroup>
+
+          <FormGroup>
+            <label>
+              How did you hear about HackSC? (100 characters, optional)
+            </label>
+
+            <input
+              type="text"
+              name="marketing"
+              maxLength={100}
+              placeholder="Social Media"
+              defaultValue={profile.marketing}
+              disabled={submitted}
+            />
+          </FormGroup>
+
+          <FormGroup>
+            <RadioChoice>
+              <input
+                type="checkbox"
+                name="code-of-conduct"
+                defaultChecked={profile.codeOfConduct}
+                required
+                disabled={submitted}
+              />
+              <RadioChoiceLabel>
+                I have read and agree to the{" "}
+                <a
+                  href="https://static.mlh.io/docs/mlh-code-of-conduct.pdf"
+                  target="_blank"
+                >
+                  MLH Code of Conduct
+                </a>
+                .
+              </RadioChoiceLabel>
+            </RadioChoice>
+          </FormGroup>
+
+          <FormGroup>
+            <RadioChoice>
+              <input
+                type="checkbox"
+                name="authorize"
+                defaultChecked={profile.authorize}
+                required
+                disabled={submitted}
+              />
+              <RadioChoiceLabel>
+                I authorize you to share my application/registration information
+                for event administration, ranking, MLH administration, pre- and
+                post-event informational e-mails, and occasional messages about
+                hackathons in-line with the{" "}
+                <a href="https://mlh.io/privacy" target="_blank">
+                  MLH Privacy Policy
+                </a>
+                . I further agree to the terms of both the{" "}
+                <a
+                  href="https://github.com/MLH/mlh-policies/tree/master/prize-terms-and-conditions"
+                  target="_blank"
+                >
+                  MLH Contest Terms and Conditions
+                </a>{" "}
+                and the{" "}
+                <a href="https://mlh.io/privacy" target="_blank">
+                  MLH Privacy Policy
+                </a>
+                .
+              </RadioChoiceLabel>
+            </RadioChoice>
           </FormGroup>
         </FormSection>
 
@@ -525,10 +619,10 @@ const ProfileStep: React.FunctionComponent<Props> = props => {
                     <Button
                       outline
                       onClick={e => {
+                        syncProfile(e, formRef, setSaved, setError, false);
                         if (userResume) {
                           uploadResume(userResume.files[0]);
                         }
-                        saveProfile(e, formData, setSaved, setError);
                       }}
                       disabled={submitted}
                     >

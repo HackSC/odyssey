@@ -15,18 +15,25 @@ type Props = {
 };
 
 const getStatusLabel = (status: string) => {
-  if (!status) {
+  if (!status || status === "unverified") {
     return "Unverified";
   }
-  if (status === "profileSubmitted") return "Profile Submitted";
-  if (status === "applicationSubmitted") return "Application Submitted";
   if (status === "checkedIn") return "Checked In";
 
   return status[0].toUpperCase() + status.substring(1, status.length);
 };
 
+const getStage = (status: string): number => {
+  if (status === "unverified") {
+    return 1;
+  } else if (status === "verified") {
+    return 2;
+  }
+  return 3;
+};
+
 const navigateTo = (step: string): void => {
-  Router.push(`/dashboard/${step}`);
+  Router.push(`/${step}`);
 };
 
 const StatusStep: React.FunctionComponent<Props> = props => {
@@ -52,24 +59,21 @@ const StatusStep: React.FunctionComponent<Props> = props => {
         <Column flexBasis={63}>
           <h2>Next Steps</h2>
           <Steps>
-            <Step>
-              <h3>1. Set up your profile</h3>
-              <p>Set up your hacker profile so we can learn more about you.</p>
-
-              {getProfileStage(profile) <= 1 && (
-                <StepButton onClick={() => navigateTo("profile")}>
-                  Set Up Profile
-                </StepButton>
-              )}
+            <Step disabled={getStage(status) > 1}>
+              <h3>1. Verify your e-mail</h3>
+              <p>
+                Make sure to check your e-mail and verify your account. If you
+                run into issues, log-out and log back in.
+              </p>
             </Step>
-            <Step>
+            <Step disabled={getStage(status) > 2}>
               <h3>2. Fill out an application</h3>
               <p>
                 Answer a few questions to show why you want to be at HackSC
                 2020!
               </p>
 
-              {getProfileStage(profile) === 2 && (
+              {getStage(status) === 2 && (
                 <StepButton onClick={() => navigateTo("application")}>
                   Fill out application
                 </StepButton>
@@ -77,8 +81,8 @@ const StatusStep: React.FunctionComponent<Props> = props => {
             </Step>
             <Step>
               <h3>3. View Results</h3>
-              <p>Come back on December 1st, 2019 to see your results.</p>
-              {getProfileStage(profile) === 3 && (
+              <p>Come back soon and see your results.</p>
+              {getStage(status) === 3 && (
                 <StepButton onClick={() => navigateTo("results")}>
                   View Results
                 </StepButton>
@@ -146,7 +150,11 @@ const Steps = styled.div`
   margin-top: 12px;
 `;
 
-const Step = styled.div`
+type StepProps = {
+  disabled?: boolean;
+};
+
+const Step = styled.div<StepProps>`
   padding: 24px 36px;
   margin-bottom: 24px;
   background: #ffffff;
@@ -155,6 +163,8 @@ const Step = styled.div`
   &:last-child {
     margin-bottom: 0;
   }
+
+  ${({ disabled }) => disabled && `opacity: 0.25;`}
 `;
 
 const StepButton = styled(Button)`

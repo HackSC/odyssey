@@ -1,71 +1,6 @@
 import React from "react";
 
-export type ProfileFormData = {
-  form: React.MutableRefObject<any>;
-  firstName: React.MutableRefObject<any>;
-  lastName: React.MutableRefObject<any>;
-  phoneNumber: React.MutableRefObject<any>;
-  school: React.MutableRefObject<any>;
-  major: React.MutableRefObject<any>;
-  minor: React.MutableRefObject<any>;
-  year: React.MutableRefObject<any>;
-  graduationDate: React.MutableRefObject<any>;
-  gender: React.MutableRefObject<any>;
-  over18: React.MutableRefObject<any>;
-  needBus: React.MutableRefObject<any>;
-  skillLevel: React.MutableRefObject<any>;
-  skills: React.MutableRefObject<any>;
-  interests: React.MutableRefObject<any>;
-  links: React.MutableRefObject<any>;
-};
-
-function getProfileFromFormData(formData: ProfileFormData, isSubmit?: boolean) {
-  return {
-    firstName: formData.firstName.current.value,
-    lastName: formData.lastName.current.value,
-    phoneNumber: formData.phoneNumber.current.value,
-    school: formData.school.current.value,
-    major: formData.major.current.value,
-    minor: formData.minor.current.value,
-    year: formData.year.current.value,
-    graduationDate: formData.graduationDate.current.value,
-    gender: formData.gender.current.value,
-    ethnicity: formData.form.current.ethnicity.value,
-    over18: formData.over18.current.checked,
-    needBus: formData.needBus.current.checked,
-    skillLevel: formData.skillLevel.current.value,
-    skills: formData.skills.current.value,
-    interests: formData.interests.current.value,
-    links: formData.links.current.value,
-    submit: isSubmit
-  };
-}
-
-export async function submitProfile(
-  e: React.FormEvent<HTMLFormElement>,
-  formData: ProfileFormData,
-  setSubmitted: Function,
-  setError: Function
-) {
-  e.preventDefault();
-
-  const profile = getProfileFromFormData(formData, true);
-
-  const response = await fetch("/api/profile", {
-    method: "PUT",
-    body: JSON.stringify(profile),
-    headers: {
-      "Content-Type": "application/json"
-    }
-  });
-
-  if (response.status === 200) {
-    setSubmitted(true);
-  } else {
-    const data = await response.json();
-    setError(data.error);
-  }
-}
+import Router from "next/router";
 
 export async function addResumeUrl(resumeUrl: string) {
   const resumeBody = { resume: resumeUrl };
@@ -78,15 +13,47 @@ export async function addResumeUrl(resumeUrl: string) {
   });
 }
 
-export async function saveProfile(
-  e: React.MouseEvent<HTMLButtonElement, MouseEvent>,
-  formData: ProfileFormData,
-  setSaved: Function,
-  setError: Function
+function getProfileFromFormData(
+  formRef: React.MutableRefObject<any>,
+  isSubmit?: boolean
+) {
+  return {
+    firstName: formRef.current["first-name"].value,
+    lastName: formRef.current["last-name"].value,
+    phoneNumber: formRef.current["phone-number"].value,
+    school: formRef.current["school"].value,
+    major: formRef.current["major"].value,
+    minor: formRef.current["minor"].value,
+    year: formRef.current["year"].value,
+    graduationDate: formRef.current["graduation-date"].value,
+    gender: formRef.current["gender"].value,
+    ethnicity: formRef.current["ethnicity"].value,
+    over18: formRef.current["is-over-18"].checked,
+    needBus: formRef.current["need-bus"].checked,
+    skillLevel: formRef.current["skill-level"].value,
+    skills: formRef.current["skills"].value,
+    interests: formRef.current["interests"].value,
+    links: formRef.current["links"].value,
+    questionOne: formRef.current["question-one"].value,
+    questionTwo: formRef.current["question-two"].value,
+    questionThree: formRef.current["question-three"].value,
+    codeOfConduct: formRef.current["code-of-conduct"].checked,
+    authorize: formRef.current["authorize"].checked,
+    marketing: formRef.current["marketing"].value,
+    submit: isSubmit
+  };
+}
+
+export async function syncProfile(
+  e: any,
+  formRef: React.MutableRefObject<any>,
+  setSuccess: Function,
+  setError: Function,
+  isSubmit: boolean
 ) {
   e.preventDefault();
 
-  const profile = getProfileFromFormData(formData);
+  const profile = getProfileFromFormData(formRef, isSubmit);
 
   const response = await fetch("/api/profile", {
     method: "PUT",
@@ -97,72 +64,11 @@ export async function saveProfile(
   });
 
   if (response.status === 200) {
-    setSaved(true);
-  } else {
-    const data = await response.json();
-    setError(data.error);
-  }
-}
+    setSuccess(true);
 
-export async function submitApplication(
-  e: React.FormEvent<HTMLFormElement>,
-  formRef: React.MutableRefObject<any>,
-  setSubmitted: Function,
-  setError: Function
-) {
-  e.preventDefault();
-
-  const formData = {
-    questionOne: formRef.current["question-one"].value,
-    questionTwo: formRef.current["question-two"].value,
-    questionThree: formRef.current["question-three"].value,
-    codeOfConduct: formRef.current["code-of-conduct"].checked,
-    authorize: formRef.current["authorize"].checked,
-    submit: true
-  };
-
-  const response = await fetch("/api/profile/application", {
-    method: "PUT",
-    body: JSON.stringify(formData),
-    headers: {
-      "Content-Type": "application/json"
+    if (isSubmit) {
+      Router.push("/results");
     }
-  });
-
-  if (response.status === 200) {
-    setSubmitted(true);
-  } else {
-    const data = await response.json();
-    setError(data.error);
-  }
-}
-
-export async function saveApplication(
-  e: React.MouseEvent<HTMLButtonElement, MouseEvent>,
-  formRef: React.MutableRefObject<any>,
-  setSaved: Function,
-  setError: Function
-) {
-  e.preventDefault();
-
-  const formData = {
-    questionOne: formRef.current["question-one"].value,
-    questionTwo: formRef.current["question-two"].value,
-    questionThree: formRef.current["question-three"].value,
-    codeOfConduct: formRef.current["code-of-conduct"].checked,
-    authorize: formRef.current["authorize"].checked
-  };
-
-  const response = await fetch("/api/profile/application", {
-    method: "PUT",
-    body: JSON.stringify(formData),
-    headers: {
-      "Content-Type": "application/json"
-    }
-  });
-
-  if (response.status === 200) {
-    setSaved(true);
   } else {
     const data = await response.json();
     setError(data.error);

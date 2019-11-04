@@ -16,27 +16,21 @@ const Footer = () => {
         <SocialColumn>
           <LogoGraphic src={Logo} />
           <SocialLinks>
-            <Link href="mailto:hackers@hacksc.com">
+            <a href="mailto:hackers@hacksc.com">
               <img src={Email} />
-            </Link>
-            <Link
-              href="https://www.facebook.com/hackscofficial/"
-              target="_blank"
-            >
+            </a>
+            <a href="https://www.facebook.com/hackscofficial/" target="_blank">
               <img src={Facebook} />
-            </Link>
-            <Link
-              href="https://www.instagram.com/hackscofficial/"
-              target="_blank"
-            >
+            </a>
+            <a href="https://www.instagram.com/hackscofficial/" target="_blank">
               <img src={Instagram} />
-            </Link>
-            <Link href="https://medium.com/@hacksc" target="_blank">
+            </a>
+            <a href="https://medium.com/@hacksc" target="_blank">
               <img src={Medium} />
-            </Link>
-            <Link href="https://twitter.com/hackscofficial" target="_blank">
+            </a>
+            <a href="https://twitter.com/hackscofficial" target="_blank">
               <img src={Twitter} />
-            </Link>
+            </a>
           </SocialLinks>
           <Copyright>HackSC 2019 &copy;</Copyright>
         </SocialColumn>
@@ -45,13 +39,13 @@ const Footer = () => {
           <b>HackSC</b>
 
           <Links>
-            <Link href="https://hacksc.com">Overview</Link>
-            <Link
+            <a href="https://hacksc.com">Overview</a>
+            <a
               href="https://static.mlh.io/docs/mlh-code-of-conduct.pdf"
               target="_blank"
             >
               MLH Code of Conduct
-            </Link>
+            </a>
           </Links>
         </LinksColumn>
 

@@ -17,15 +17,13 @@ module.exports = (sequelize, DataTypes) => {
       resume: DataTypes.STRING,
       skills: DataTypes.STRING,
       interests: DataTypes.STRING,
-      applicationSubmittedAt: DataTypes.DATE,
-      profileSubmittedAt: DataTypes.DATE,
+      submittedAt: DataTypes.DATE,
       status: {
         type: DataTypes.ENUM,
         values: [
           "unverified",
           "verified",
-          "profileSubmitted",
-          "applicationSubmitted",
+          "submitted",
           "accepted",
           "waitlisted",
           "rejected",
@@ -71,7 +69,8 @@ module.exports = (sequelize, DataTypes) => {
       needBus: DataTypes.BOOLEAN,
       links: DataTypes.STRING(1000),
       codeOfConduct: DataTypes.BOOLEAN,
-      authorize: DataTypes.BOOLEAN
+      authorize: DataTypes.BOOLEAN,
+      marketing: DataTypes.STRING(100)
     },
     {}
   );
