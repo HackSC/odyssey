@@ -4,6 +4,7 @@ export { default as ContentBlockWide } from "./ContentBlockWide";
 export { default as Footer } from "./Footer";
 
 // HackSC Design System
+export { default as Background } from "./Background";
 export { default as Button } from "./Button";
 export { default as Container } from "./Container";
 export { default as Column } from "./Column";
