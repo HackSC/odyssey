@@ -20,6 +20,7 @@ import {
   saveProfile,
   submitProfile
 } from "../../lib/formSubmission";
+import getProfileStage from "../../lib/getProfileStage";
 import getSchoolFromEmail from "../../lib/getSchoolFromEmail";
 
 import Schools from "../../assets/data/schools.json";
@@ -98,6 +99,25 @@ const ProfileStep: React.FunctionComponent<Props> = props => {
   );
   const [error, setError] = useState(null);
 
+  const stage = getProfileStage(profile);
+
+  if (stage === 0) {
+    return (
+      <Flex direction="column">
+        <FormSection>
+          <h1>Please Verify Your E-Mail</h1>
+
+          <p>
+            In order to continue through the application process, we need to
+            verify your e-mail. Double check your e-mail and make sure you got
+            an email verification link. If your profile is still not flagged as
+            verified, log out and log back in.
+          </p>
+        </FormSection>
+      </Flex>
+    );
+  }
+
   return profile ? (
     <Flex direction="column">
       <Form
@@ -110,7 +130,8 @@ const ProfileStep: React.FunctionComponent<Props> = props => {
           <h1>Your Hacker Profile</h1>
           <p>
             We're excited for HackSC 2020 and can't wait to get to know you
-            better. Please fill out your hacker profile{" "}
+            better. Please fill out your hacker profile to move on in the
+            application process.
           </p>
 
           {submitted && (

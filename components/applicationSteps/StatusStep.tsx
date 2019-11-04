@@ -4,6 +4,8 @@ import styled from "styled-components";
 
 import Router from "next/router";
 
+import getProfileStage from "../../lib/getProfileStage";
+
 import { Flex, Column, Button } from "../../styles";
 
 import Check from "../../assets/check.svg";
@@ -21,15 +23,6 @@ const getStatusLabel = (status: string) => {
   if (status === "checkedIn") return "Checked In";
 
   return status[0].toUpperCase() + status.substring(1, status.length);
-};
-
-const getStage = (status: string): number => {
-  if (status === "unverified" || status === "verified") {
-    return 1;
-  } else if (status === "profileSubmitted") {
-    return 2;
-  }
-  return 3;
 };
 
 const navigateTo = (step: string): void => {
@@ -63,7 +56,7 @@ const StatusStep: React.FunctionComponent<Props> = props => {
               <h3>1. Set up your profile</h3>
               <p>Set up your hacker profile so we can learn more about you.</p>
 
-              {getStage(status) === 1 && (
+              {getProfileStage(profile) <= 1 && (
                 <StepButton onClick={() => navigateTo("profile")}>
                   Set Up Profile
                 </StepButton>
@@ -76,7 +69,7 @@ const StatusStep: React.FunctionComponent<Props> = props => {
                 2020!
               </p>
 
-              {getStage(status) === 2 && (
+              {getProfileStage(profile) === 2 && (
                 <StepButton onClick={() => navigateTo("application")}>
                   Fill out application
                 </StepButton>
@@ -85,7 +78,7 @@ const StatusStep: React.FunctionComponent<Props> = props => {
             <Step>
               <h3>3. View Results</h3>
               <p>Come back on December 1st, 2019 to see your results.</p>
-              {getStage(status) === 3 && (
+              {getProfileStage(profile) === 3 && (
                 <StepButton onClick={() => navigateTo("results")}>
                   View Results
                 </StepButton>
@@ -105,7 +98,7 @@ const StatusStep: React.FunctionComponent<Props> = props => {
 
             <Date>
               <h3>Applications Close</h3>
-              <p>December 1st, 2019</p>
+              <p>November 22nd, 2019</p>
             </Date>
 
             <Date>

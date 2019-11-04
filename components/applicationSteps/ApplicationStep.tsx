@@ -2,6 +2,8 @@ import React, { useRef, useState } from "react";
 
 import styled from "styled-components";
 
+import Router from "next/router";
+
 import {
   Form,
   FormGroup,
@@ -13,9 +15,14 @@ import {
 } from "../../styles";
 
 import { saveApplication, submitApplication } from "../../lib/formSubmission";
+import getProfileStage from "../../lib/getProfileStage";
 
 type Props = {
   profile: Profile;
+};
+
+const navigateTo = (step: string): void => {
+  Router.push(`/dashboard/${step}`);
 };
 
 const ApplicationStep: React.FunctionComponent<Props> = props => {
@@ -28,6 +35,29 @@ const ApplicationStep: React.FunctionComponent<Props> = props => {
     !!profile && !!profile.applicationSubmittedAt
   );
   const [error, setError] = useState(null);
+
+  const stage = getProfileStage(profile);
+
+  if (stage < 2) {
+    return (
+      <Flex direction="column">
+        <FormSection>
+          <h1>Please Submit a Profile</h1>
+
+          <p>
+            Before you can finish your application, please finish setting up
+            your hacker profile.
+          </p>
+
+          <br />
+
+          <Button onClick={() => navigateTo("profile")}>
+            Finish Setting up Profile
+          </Button>
+        </FormSection>
+      </Flex>
+    );
+  }
 
   return (
     <Flex direction="column">

@@ -4,11 +4,33 @@ import styled from "styled-components";
 
 import { Flex } from "../../styles";
 
+import getProfileStage from "../../lib/getProfileStage";
+
 type Props = {
-  user: any;
+  profile: Profile;
 };
 
 const ResultStep: React.FunctionComponent<Props> = props => {
+  const { profile } = props;
+  const stage = getProfileStage(profile);
+
+  if (stage < 3) {
+    return (
+      <Flex direction="column">
+        <FormSection>
+          <h1>Uh oh!</h1>
+
+          <p>
+            Looks like you haven't finished the application process... please
+            make sure you have set-up a hacker profile and filled out our
+            application. You must submit an application by November 22, 2019, to
+            be considered for HackSC 2020.
+          </p>
+        </FormSection>
+      </Flex>
+    );
+  }
+
   return (
     <Flex direction="column">
       <FormSection>
