@@ -22,9 +22,16 @@ router.get("/", async (req, res) => {
 
   if (hackerProfile.status === "unverified" && req.user._json.email_verified) {
     // Update hacker profile
-    hackerProfile.status = "verified";
-    await hackerProfile.save();
-    return res.json({ hackerProfile });
+    try {
+      hackerProfile.status = "verified";
+      await hackerProfile.save();
+      return res.json({ hackerProfile });
+    } catch (exception) {
+      return res.status(500).json({
+        message: "Error trying to save profile",
+        exception
+      });
+    }
   }
 
   return res.json({ hackerProfile });
