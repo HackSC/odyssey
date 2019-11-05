@@ -16,7 +16,7 @@ router.get("/", async (req, res) => {
     },
     defaults: {
       email: req.user._json.email,
-      verified: req.user._json.email_verified ? "verified" : "unverified"
+      status: req.user._json.email_verified ? "verified" : "unverified"
     }
   });
 
