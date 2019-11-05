@@ -1,8 +1,7 @@
 import * as React from "react";
-
 import styled from "styled-components";
-
 import Router from "next/router";
+import * as Sentry from "@sentry/browser";
 
 import getProfileStage from "../../lib/getProfileStage";
 
@@ -26,10 +25,16 @@ const getStatusLabel = (status: string) => {
 const getStage = (profile: Profile): number => {
   if (profile.status === "unverified") {
     return 1;
-  } else if (profile.status === "verified" && !profile.submittedAt) {
+  } else if (profile.status === "verified") {
+    if (profile.submittedAt !== null) {
+      Sentry.captureMessage(
+        "Status = verified but should actually be submitted!!!"
+      );
+      return 3;
+    }
+
     return 2;
   }
-
   return 3;
 };
 
