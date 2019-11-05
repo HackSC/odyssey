@@ -5,9 +5,10 @@ function getProfileStage(profile: Profile): number {
     return 0;
   } else if (status === "verified") {
     return 1;
-  } else if (status === "profileSubmitted") {
+  } else if (status === "submitted") {
     return 2;
   }
+
   return 3;
 }
 
