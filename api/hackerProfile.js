@@ -15,7 +15,8 @@ router.get("/", async (req, res) => {
       userId: req.user.id
     },
     defaults: {
-      email: req.user._json.email
+      email: req.user._json.email,
+      verified: req.user._json.email_verified ? "verified" : "unverified"
     }
   });
 
@@ -25,6 +26,7 @@ router.get("/", async (req, res) => {
     await hackerProfile.save();
     return res.json({ hackerProfile });
   }
+
   return res.json({ hackerProfile });
 });
 

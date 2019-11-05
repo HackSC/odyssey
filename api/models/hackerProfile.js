@@ -29,7 +29,8 @@ module.exports = (sequelize, DataTypes) => {
           "rejected",
           "confirmed",
           "checkedIn"
-        ]
+        ],
+        defaultValue: "unverified"
       },
       firstName: DataTypes.STRING,
       lastName: DataTypes.STRING,
