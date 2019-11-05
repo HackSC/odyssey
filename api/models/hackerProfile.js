@@ -9,7 +9,11 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.ENUM,
         values: ["male", "female", "non-binary", "other", "no-say"]
       },
-      userId: DataTypes.STRING,
+      userId: {
+        type: DataTypes.STRING,
+        primaryKey: true,
+        allowNull: false
+      },
       ethnicity: DataTypes.STRING,
       email: DataTypes.STRING,
       major: DataTypes.STRING,
