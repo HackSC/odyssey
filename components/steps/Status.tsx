@@ -1,8 +1,7 @@
 import * as React from "react";
-
 import styled from "styled-components";
-
 import Router from "next/router";
+import * as Sentry from "@sentry/browser";
 
 import getProfileStage from "../../lib/getProfileStage";
 
@@ -14,19 +13,32 @@ type Props = {
   profile: Profile;
 };
 
-const getStatusLabel = (status: string) => {
+const getStatusLabel = (profile: Profile): string => {
+  const { status, submittedAt } = profile;
   if (!status || status === "unverified") {
     return "Unverified";
   }
   if (status === "checkedIn") return "Checked In";
+  if (status === "verified" && submittedAt !== null) {
+    return "Submitted";
+  }
 
   return status[0].toUpperCase() + status.substring(1, status.length);
 };
 
-const getStage = (status: string): number => {
+const getStage = (profile: Profile): number => {
+  const { status, submittedAt } = profile;
+
   if (status === "unverified") {
     return 1;
   } else if (status === "verified") {
+    if (submittedAt !== null) {
+      Sentry.captureMessage(
+        "Status = verified but should actually be submitted!!!"
+      );
+      return 3;
+    }
+
     return 2;
   }
   return 3;
@@ -38,9 +50,8 @@ const navigateTo = (step: string): void => {
 
 const StatusStep: React.FunctionComponent<Props> = props => {
   const { profile } = props;
-  const { status } = profile;
 
-  const statusLabel = getStatusLabel(status);
+  const statusLabel = getStatusLabel(profile);
 
   return (
     <Flex direction="column">
@@ -59,21 +70,21 @@ const StatusStep: React.FunctionComponent<Props> = props => {
         <Column flexBasis={63}>
           <h2>Next Steps</h2>
           <Steps>
-            <Step disabled={getStage(status) > 1}>
+            <Step disabled={getStage(profile) > 1}>
               <h3>1. Verify your e-mail</h3>
               <p>
                 Make sure to check your e-mail and verify your account. If you
                 run into issues, log-out and log back in.
               </p>
             </Step>
-            <Step disabled={getStage(status) > 2}>
+            <Step disabled={getStage(profile) > 2}>
               <h3>2. Fill out an application</h3>
               <p>
                 Answer a few questions to show why you want to be at HackSC
                 2020!
               </p>
 
-              {getStage(status) === 2 && (
+              {getStage(profile) === 2 && (
                 <StepButton onClick={() => navigateTo("application")}>
                   Fill out application
                 </StepButton>
@@ -82,7 +93,7 @@ const StatusStep: React.FunctionComponent<Props> = props => {
             <Step>
               <h3>3. View Results</h3>
               <p>Come back soon and see your results.</p>
-              {getStage(status) === 3 && (
+              {getStage(profile) === 3 && (
                 <StepButton onClick={() => navigateTo("results")}>
                   View Results
                 </StepButton>

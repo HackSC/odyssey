@@ -1,4 +1,5 @@
 import React from "react";
+import * as Sentry from "@sentry/browser";
 
 import { handleLoginRedirect, getProfile } from "../lib/authenticate";
 
@@ -31,6 +32,12 @@ Dashboard.getInitialProps = async ({ req }) => {
   // Null profile means user is not logged in
   if (!profile) {
     handleLoginRedirect(req);
+  }
+
+  if (typeof window !== "undefined") {
+    Sentry.configureScope(function(scope) {
+      scope.setExtra("profile", profile);
+    });
   }
 
   return {
