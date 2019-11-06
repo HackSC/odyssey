@@ -4,8 +4,6 @@ import styled from "styled-components";
 
 import Router from "next/router";
 
-import getProfileStage from "../../lib/getProfileStage";
-
 import { Flex, Column, Button } from "../../styles";
 
 import Check from "../../assets/check.svg";
