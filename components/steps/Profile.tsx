@@ -14,7 +14,7 @@ import {
 import Select from "../Select";
 import AutocompleteInput from "../AutocompleteInput";
 
-import { addResumeUrl, syncProfile } from "../../lib/formSubmission";
+import { syncProfile } from "../../lib/formSubmission";
 
 import getSchoolFromEmail from "../../lib/getSchoolFromEmail";
 
