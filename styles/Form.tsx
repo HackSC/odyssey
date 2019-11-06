@@ -48,9 +48,12 @@ const RadioChoice = styled.div`
   padding: 4px 0;
 `;
 
-const RadioChoiceLabel = styled.span`
+const RadioChoiceLabel = styled.label`
   padding-left: 8px;
   line-height: 22px;
+  margin-bottom: 0 !important;
+  font-weight: 400 !important;
+  font-size: 16px !important;
 `;
 
 export default Form;

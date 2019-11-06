@@ -289,11 +289,12 @@ const ProfileStep: React.FunctionComponent<Props> = props => {
                     type="radio"
                     name="ethnicity"
                     value="american-indian"
+                    id="ethnicity-american-indian"
                     defaultChecked={profile.ethnicity === "american-indian"}
                     disabled={submitted}
                     required
                   />
-                  <RadioChoiceLabel>
+                  <RadioChoiceLabel htmlFor="ethnicity-american-indian">
                     Native American or Alaskan Native
                   </RadioChoiceLabel>
                 </RadioChoice>
@@ -303,10 +304,13 @@ const ProfileStep: React.FunctionComponent<Props> = props => {
                     type="radio"
                     name="ethnicity"
                     value="asian"
+                    id="ethnicity-asian"
                     defaultChecked={profile.ethnicity === "asian"}
                     disabled={submitted}
                   />
-                  <RadioChoiceLabel>Asian / Pacific Islander</RadioChoiceLabel>
+                  <RadioChoiceLabel htmlFor="ethnicity-asian">
+                    Asian / Pacific Islander
+                  </RadioChoiceLabel>
                 </RadioChoice>
 
                 <RadioChoice>
@@ -314,10 +318,13 @@ const ProfileStep: React.FunctionComponent<Props> = props => {
                     type="radio"
                     name="ethnicity"
                     value="black"
+                    id="ethnicity-black"
                     defaultChecked={profile.ethnicity === "black"}
                     disabled={submitted}
                   />
-                  <RadioChoiceLabel>Black or African American</RadioChoiceLabel>
+                  <RadioChoiceLabel htmlFor="ethnicity-black">
+                    Black or African American
+                  </RadioChoiceLabel>
                 </RadioChoice>
 
                 <RadioChoice>
@@ -325,10 +332,13 @@ const ProfileStep: React.FunctionComponent<Props> = props => {
                     type="radio"
                     name="ethnicity"
                     value="hispanic"
+                    id="ethnicity-hispanic"
                     defaultChecked={profile.ethnicity === "hispanic"}
                     disabled={submitted}
                   />
-                  <RadioChoiceLabel>Hispanic</RadioChoiceLabel>
+                  <RadioChoiceLabel htmlFor="ethnicity-hispanic">
+                    Hispanic
+                  </RadioChoiceLabel>
                 </RadioChoice>
               </Column>
 
@@ -338,10 +348,13 @@ const ProfileStep: React.FunctionComponent<Props> = props => {
                     type="radio"
                     name="ethnicity"
                     value="caucasian"
+                    id="ethnicity-caucasian"
                     defaultChecked={profile.ethnicity === "caucasian"}
                     disabled={submitted}
                   />
-                  <RadioChoiceLabel>White / Caucasian</RadioChoiceLabel>
+                  <RadioChoiceLabel htmlFor="ethnicity-caucasian">
+                    White / Caucasian
+                  </RadioChoiceLabel>
                 </RadioChoice>
 
                 <RadioChoice>
@@ -349,10 +362,13 @@ const ProfileStep: React.FunctionComponent<Props> = props => {
                     type="radio"
                     name="ethnicity"
                     value="mixed-other"
+                    id="ethnicity-mixed-other"
                     defaultChecked={profile.ethnicity === "mixed-other"}
                     disabled={submitted}
                   />
-                  <RadioChoiceLabel>Mixed / Other</RadioChoiceLabel>
+                  <RadioChoiceLabel htmlFor="ethnicity-mixed-other">
+                    Mixed / Other
+                  </RadioChoiceLabel>
                 </RadioChoice>
 
                 <RadioChoice>
@@ -360,10 +376,13 @@ const ProfileStep: React.FunctionComponent<Props> = props => {
                     type="radio"
                     name="ethnicity"
                     value="no-say"
+                    id="ethnicity-no-say"
                     defaultChecked={profile.ethnicity === "no-say"}
                     disabled={submitted}
                   />
-                  <RadioChoiceLabel>Prefer not to answer</RadioChoiceLabel>
+                  <RadioChoiceLabel htmlFor="ethnicity-no-say">
+                    Prefer not to answer
+                  </RadioChoiceLabel>
                 </RadioChoice>
               </Column>
             </Flex>
@@ -380,9 +399,10 @@ const ProfileStep: React.FunctionComponent<Props> = props => {
                 name="is-over-18"
                 defaultChecked={profile.over18}
                 required
+                id="is-over-18"
                 disabled={submitted}
               />
-              <RadioChoiceLabel>
+              <RadioChoiceLabel htmlFor="is-over-18">
                 Yes, I will be 18+ by January 31, 2020
               </RadioChoiceLabel>
             </RadioChoice>
@@ -401,10 +421,11 @@ const ProfileStep: React.FunctionComponent<Props> = props => {
               <input
                 type="checkbox"
                 name="need-bus"
+                id="need-bus"
                 defaultChecked={profile.needBus}
                 disabled={submitted}
               />
-              <RadioChoiceLabel>
+              <RadioChoiceLabel htmlFor="need-bus">
                 Yes, I need bus transportation
               </RadioChoiceLabel>
             </RadioChoice>
@@ -565,9 +586,10 @@ const ProfileStep: React.FunctionComponent<Props> = props => {
                 name="code-of-conduct"
                 defaultChecked={profile.codeOfConduct}
                 required
+                id="code-of-conduct"
                 disabled={submitted}
               />
-              <RadioChoiceLabel>
+              <RadioChoiceLabel htmlFor="code-of-conduct">
                 I have read and agree to the{" "}
                 <a
                   href="https://static.mlh.io/docs/mlh-code-of-conduct.pdf"
@@ -587,9 +609,10 @@ const ProfileStep: React.FunctionComponent<Props> = props => {
                 name="authorize"
                 defaultChecked={profile.authorize}
                 required
+                id="authorize"
                 disabled={submitted}
               />
-              <RadioChoiceLabel>
+              <RadioChoiceLabel htmlFor="authorize">
                 I authorize you to share my application/registration information
                 for event administration, ranking, MLH administration, pre- and
                 post-event informational e-mails, and occasional messages about
