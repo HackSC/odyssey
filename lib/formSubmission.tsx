@@ -4,13 +4,15 @@ import Router from "next/router";
 
 export async function addResumeUrl(resumeUrl: string) {
   const resumeBody = { resume: resumeUrl };
-  await fetch("/api/profile", {
+  const response = await fetch("/api/profile", {
     method: "PUT",
     body: JSON.stringify(resumeBody),
     headers: {
       "Content-Type": "application/json"
     }
   });
+  console.log("WE ARE HERE");
+  console.log(response);
 }
 
 function getProfileFromFormData(

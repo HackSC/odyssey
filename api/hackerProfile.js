@@ -161,7 +161,20 @@ router.post("/resume", utils.authMiddleware, async (req, res) => {
 
     s3.upload(params, function(err, data) {
       if (!err) {
-        res.json({ data });
+        models.HackerProfile.update(
+          { resume: data.Location },
+          {
+            where: {
+              userId: req.user.id
+            }
+          }
+        )
+          .then(updatedProfile => {
+            res.json({ hackerProfileUpdate: updatedProfile });
+          })
+          .catch(e => {
+            res.status(500).json({ error: e });
+          });
       } else {
         res.json(500, { message: "Failed to upload Resume" });
       }
