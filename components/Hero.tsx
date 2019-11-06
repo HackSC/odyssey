@@ -12,9 +12,9 @@ const Hero = () => {
   return (
     <Wrapper>
       <Flex align="center" tabletVertical>
-        <Column flexBasis={60}>
+        <BlobColumn flexBasis={60}>
           <Blob />
-        </Column>
+        </BlobColumn>
 
         <Column flexBasis={38}>
           <h1>Apply to HackSC</h1>
@@ -51,6 +51,11 @@ const Wrapper = styled.div`
   p {
     line-height: 28px;
   }
+
+  ${({ theme }) =>
+    theme.media.mobile`
+    height: auto;
+  `}
 `;
 
 const GetStartedLink = styled.a`
@@ -67,6 +72,13 @@ const GetStartedLink = styled.a`
   cursor: pointer;
   margin-top: 16px;
   display: inline-block;
+`;
+
+const BlobColumn = styled(Column)`
+  ${({ theme }) =>
+    theme.media.mobile`
+    display: none;
+  `}
 `;
 
 export default Hero;
