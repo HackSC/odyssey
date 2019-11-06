@@ -208,7 +208,7 @@ const ProfileStep: React.FunctionComponent<Props> = props => {
               defaultValue={profile.school || getSchoolFromEmail(profile.email)}
               required
               ref={schoolRef}
-              disabled={submitted}
+              disabled={submitted || !!getSchoolFromEmail(profile.email)}
               suggestions={Schools}
             />
           </FormGroup>
@@ -291,6 +291,7 @@ const ProfileStep: React.FunctionComponent<Props> = props => {
                     value="american-indian"
                     defaultChecked={profile.ethnicity === "american-indian"}
                     disabled={submitted}
+                    required
                   />
                   <RadioChoiceLabel>
                     Native American or Alaskan Native
@@ -417,6 +418,7 @@ const ProfileStep: React.FunctionComponent<Props> = props => {
               name="resume"
               id="resume"
               accept="application/pdf"
+              required
               ref={ref => setUserResume(ref)}
             />
             <ResumeUploadButton htmlFor="resume">
@@ -432,6 +434,7 @@ const ProfileStep: React.FunctionComponent<Props> = props => {
               options={skillLevelOptions}
               defaultValue={profile.skillLevel}
               disabled={submitted}
+              required
             />
           </FormGroup>
 
