@@ -562,7 +562,7 @@ const ProfileStep: React.FunctionComponent<Props> = props => {
           </FormGroup>
 
           <FormGroup>
-            <label>What is your favorite drink? (100 characters)</label>
+            <label>What is your favorite beverage? (100 characters)</label>
 
             <input
               type="text"
