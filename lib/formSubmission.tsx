@@ -2,17 +2,6 @@ import React from "react";
 
 import Router from "next/router";
 
-export async function addResumeUrl(resumeUrl: string) {
-  const resumeBody = { resume: resumeUrl };
-  await fetch("/api/profile", {
-    method: "PUT",
-    body: JSON.stringify(resumeBody),
-    headers: {
-      "Content-Type": "application/json"
-    }
-  });
-}
-
 function getProfileFromFormData(
   formRef: React.MutableRefObject<any>,
   isSubmit?: boolean

@@ -14,7 +14,7 @@ import {
 import Select from "../Select";
 import AutocompleteInput from "../AutocompleteInput";
 
-import { addResumeUrl, syncProfile } from "../../lib/formSubmission";
+import { syncProfile } from "../../lib/formSubmission";
 
 import getSchoolFromEmail from "../../lib/getSchoolFromEmail";
 
@@ -69,13 +69,10 @@ const skillLevelOptions = [
 const uploadResume = async resumeFile => {
   var resumeForm = new FormData();
   resumeForm.append("file", resumeFile);
-  const response = await fetch("/api/profile/resume", {
+  await fetch("/api/profile/resume", {
     method: "POST",
     body: resumeForm
   });
-
-  const s3Info = await response.json();
-  addResumeUrl(s3Info.data.location);
 };
 
 const ProfileStep: React.FunctionComponent<Props> = props => {
@@ -115,6 +112,9 @@ const ProfileStep: React.FunctionComponent<Props> = props => {
     <Flex direction="column">
       <Form
         onSubmit={e => {
+          if (userResume) {
+            uploadResume(userResume.files[0]);
+          }
           syncProfile(e, formRef, setSubmitted, setError, true);
         }}
         ref={formRef}
