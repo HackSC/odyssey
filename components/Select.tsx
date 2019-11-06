@@ -24,6 +24,7 @@ const Select = React.forwardRef<Ref, SelectProps>((props, ref) => {
   return (
     <Wrapper>
       <select ref={ref} name={name} required={required} disabled={disabled}>
+        {required && <option></option>}
         {options.map(option => (
           <option
             value={option.value}

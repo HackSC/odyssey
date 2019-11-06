@@ -10,6 +10,7 @@ type Props = {
   suggestions?: Array<String>;
   required?: boolean;
   disabled?: boolean;
+  maxLength?: number;
 };
 
 type Ref = HTMLInputElement;
@@ -56,6 +57,7 @@ const AutocompleteInput = React.forwardRef<Ref, Props>((props, ref: any) => {
         ref={ref}
         autoComplete="off"
         onChange={e => setInput(e.target.value)}
+        maxLength={props.maxLength}
       />
 
       {suggestions.length > 0 && showSuggestions && (

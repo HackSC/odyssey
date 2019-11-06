@@ -148,6 +148,7 @@ const ProfileStep: React.FunctionComponent<Props> = props => {
                   placeholder="First Name"
                   name="first-name"
                   defaultValue={profile.firstName}
+                  maxLength={120}
                   required
                   disabled={submitted}
                 />
@@ -163,6 +164,7 @@ const ProfileStep: React.FunctionComponent<Props> = props => {
                   placeholder="Last Name"
                   name="last-name"
                   defaultValue={profile.lastName}
+                  maxLength={120}
                   required
                   disabled={submitted}
                 />
@@ -190,6 +192,7 @@ const ProfileStep: React.FunctionComponent<Props> = props => {
               placeholder="(678)-999-8210"
               name="phone-number"
               defaultValue={profile.phoneNumber}
+              maxLength={25}
               required
               disabled={submitted}
             />
@@ -208,6 +211,7 @@ const ProfileStep: React.FunctionComponent<Props> = props => {
               defaultValue={profile.school || getSchoolFromEmail(profile.email)}
               required
               ref={schoolRef}
+              maxLength={255}
               disabled={submitted || !!getSchoolFromEmail(profile.email)}
               suggestions={Schools}
             />
@@ -222,6 +226,7 @@ const ProfileStep: React.FunctionComponent<Props> = props => {
               defaultValue={profile.major}
               required
               ref={majorRef}
+              maxLength={120}
               disabled={submitted}
               suggestions={Majors}
             />
@@ -234,6 +239,7 @@ const ProfileStep: React.FunctionComponent<Props> = props => {
               type="text"
               placeholder="Your Minor"
               name="minor"
+              maxLength={120}
               defaultValue={profile.minor}
               disabled={submitted}
             />
@@ -446,6 +452,10 @@ const ProfileStep: React.FunctionComponent<Props> = props => {
             <ResumeUploadButton htmlFor="resume" disabled={submitted}>
               Upload Your Resume
             </ResumeUploadButton>
+
+            {profile.resume && (
+              <ResumeLabel>You have uploaded a resume</ResumeLabel>
+            )}
           </FormGroup>
 
           <FormGroup>
@@ -726,6 +736,10 @@ const ResumeUploadButton = styled.label<any>`
       opacity: 0.5;
       cursor: not-allowed;
     `}
+`;
+
+const ResumeLabel = styled.p`
+  color: ${({ theme }) => theme.colors.gray50};
 `;
 
 const AlreadySubmitted = styled.p`
