@@ -75,6 +75,12 @@ const Links = styled.div`
     padding: 0 8px;
     font-size: 14px;
   }
+
+  ${({ theme }) =>
+    theme.media.tablet`
+      flex-wrap: wrap;
+      justify-content: center;
+    `}
 `;
 
 export default Navbar;
