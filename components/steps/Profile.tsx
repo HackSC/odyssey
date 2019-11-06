@@ -420,8 +420,9 @@ const ProfileStep: React.FunctionComponent<Props> = props => {
               accept="application/pdf"
               required
               ref={ref => setUserResume(ref)}
+              disabled={submitted}
             />
-            <ResumeUploadButton htmlFor="resume">
+            <ResumeUploadButton htmlFor="resume" disabled={submitted}>
               Upload Your Resume
             </ResumeUploadButton>
           </FormGroup>
@@ -683,7 +684,7 @@ const ResumeUploadInput = styled.input`
   z-index: -1;
 `;
 
-const ResumeUploadButton = styled.label`
+const ResumeUploadButton = styled.label<any>`
   padding: 12px 16px;
   border: none;
   border-radius: 8px;
@@ -695,6 +696,13 @@ const ResumeUploadButton = styled.label`
   text-transform: uppercase;
   text-align: center;
   cursor: pointer;
+
+  ${({ disabled }) =>
+    disabled &&
+    `
+      opacity: 0.5;
+      cursor: not-allowed;
+    `}
 `;
 
 const AlreadySubmitted = styled.p`
