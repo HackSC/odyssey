@@ -23,9 +23,11 @@ class OdysseyApp extends App {
       hotjar.initialize("1547187");
     }
 
-    Sentry.init({
-      dsn: "https://1a18ac7b9aa94cb5b2a8c9fc2f7e4fc8@sentry.io/1801129"
-    });
+    if (typeof window !== "undefined") {
+      Sentry.init({
+        dsn: "https://1a18ac7b9aa94cb5b2a8c9fc2f7e4fc8@sentry.io/1801129"
+      });
+    }
   }
 
   render() {
