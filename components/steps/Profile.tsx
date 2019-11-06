@@ -208,7 +208,7 @@ const ProfileStep: React.FunctionComponent<Props> = props => {
               defaultValue={profile.school || getSchoolFromEmail(profile.email)}
               required
               ref={schoolRef}
-              disabled={submitted}
+              disabled={submitted || !!getSchoolFromEmail(profile.email)}
               suggestions={Schools}
             />
           </FormGroup>
@@ -291,6 +291,7 @@ const ProfileStep: React.FunctionComponent<Props> = props => {
                     value="american-indian"
                     defaultChecked={profile.ethnicity === "american-indian"}
                     disabled={submitted}
+                    required
                   />
                   <RadioChoiceLabel>
                     Native American or Alaskan Native
@@ -417,9 +418,11 @@ const ProfileStep: React.FunctionComponent<Props> = props => {
               name="resume"
               id="resume"
               accept="application/pdf"
+              required
               ref={ref => setUserResume(ref)}
+              disabled={submitted}
             />
-            <ResumeUploadButton htmlFor="resume">
+            <ResumeUploadButton htmlFor="resume" disabled={submitted}>
               Upload Your Resume
             </ResumeUploadButton>
           </FormGroup>
@@ -432,6 +435,7 @@ const ProfileStep: React.FunctionComponent<Props> = props => {
               options={skillLevelOptions}
               defaultValue={profile.skillLevel}
               disabled={submitted}
+              required
             />
           </FormGroup>
 
@@ -680,7 +684,7 @@ const ResumeUploadInput = styled.input`
   z-index: -1;
 `;
 
-const ResumeUploadButton = styled.label`
+const ResumeUploadButton = styled.label<any>`
   padding: 12px 16px;
   border: none;
   border-radius: 8px;
@@ -692,6 +696,13 @@ const ResumeUploadButton = styled.label`
   text-transform: uppercase;
   text-align: center;
   cursor: pointer;
+
+  ${({ disabled }) =>
+    disabled &&
+    `
+      opacity: 0.5;
+      cursor: not-allowed;
+    `}
 `;
 
 const AlreadySubmitted = styled.p`
