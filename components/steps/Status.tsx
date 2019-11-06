@@ -13,20 +13,26 @@ type Props = {
   profile: Profile;
 };
 
-const getStatusLabel = (status: string) => {
+const getStatusLabel = (profile: Profile): string => {
+  const { status, submittedAt } = profile;
   if (!status || status === "unverified") {
     return "Unverified";
   }
   if (status === "checkedIn") return "Checked In";
+  if (status === "verified" && submittedAt !== null) {
+    return "Submitted";
+  }
 
   return status[0].toUpperCase() + status.substring(1, status.length);
 };
 
 const getStage = (profile: Profile): number => {
-  if (profile.status === "unverified") {
+  const { status, submittedAt } = profile;
+
+  if (status === "unverified") {
     return 1;
-  } else if (profile.status === "verified") {
-    if (profile.submittedAt !== null) {
+  } else if (status === "verified") {
+    if (submittedAt !== null) {
       Sentry.captureMessage(
         "Status = verified but should actually be submitted!!!"
       );
@@ -44,9 +50,8 @@ const navigateTo = (step: string): void => {
 
 const StatusStep: React.FunctionComponent<Props> = props => {
   const { profile } = props;
-  const { status } = profile;
 
-  const statusLabel = getStatusLabel(status);
+  const statusLabel = getStatusLabel(profile);
 
   return (
     <Flex direction="column">
