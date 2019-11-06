@@ -17,7 +17,7 @@ const getStatusLabel = (profile: Profile): string => {
     return "Unverified";
   }
   if (status === "checkedIn") return "Checked In";
-  if (status === "verified" && !submittedAt) {
+  if (status === "verified" && !!submittedAt) {
     return "Submitted";
   }
 
@@ -30,7 +30,7 @@ const getStage = (profile: Profile): number => {
   if (status === "unverified") {
     return 1;
   } else if (status === "verified") {
-    if (!submittedAt) {
+    if (!!submittedAt) {
       Sentry.captureMessage(
         "Status = verified but should actually be submitted!!!"
       );
