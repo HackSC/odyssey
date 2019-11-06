@@ -42,8 +42,9 @@ const getStage = (profile: Profile): number => {
   return 3;
 };
 
-const navigateTo = (step: string): void => {
-  Router.push(`/${step}`);
+const navigateTo = async (step: string) => {
+  await Router.push(`/${step}`);
+  window.scrollTo(0, 0);
 };
 
 const StatusStep: React.FunctionComponent<Props> = props => {
