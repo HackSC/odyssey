@@ -71,6 +71,11 @@ const FormSection = styled.div`
   #blob {
     text-align: center;
     margin-top: 16px;
+
+    ${({ theme }) =>
+      theme.media.mobile`
+      display: none;
+    `}
   }
 
   &:last-child {
