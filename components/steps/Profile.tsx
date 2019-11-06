@@ -112,7 +112,7 @@ const ProfileStep: React.FunctionComponent<Props> = props => {
     <Flex direction="column">
       <Form
         onSubmit={e => {
-          if (userResume) {
+          if (userResume && userResume.files[0]) {
             uploadResume(userResume.files[0]);
           }
           syncProfile(e, formRef, setSubmitted, setError, true);
@@ -445,7 +445,7 @@ const ProfileStep: React.FunctionComponent<Props> = props => {
               name="resume"
               id="resume"
               accept="application/pdf"
-              required
+              required={!!!profile.resume}
               ref={ref => setUserResume(ref)}
               disabled={submitted}
             />
@@ -657,7 +657,7 @@ const ProfileStep: React.FunctionComponent<Props> = props => {
                       outline
                       onClick={e => {
                         syncProfile(e, formRef, setSaved, setError, false);
-                        if (userResume) {
+                        if (userResume && userResume.files[0]) {
                           uploadResume(userResume.files[0]);
                         }
                       }}
