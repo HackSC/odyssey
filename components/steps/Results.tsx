@@ -38,7 +38,7 @@ const ResultStep: React.FunctionComponent<Props> = props => {
 
         <p>
           Thank you for filling out an application for HackSC 2020! Be on the
-          look out for updates on when applications come out.
+          look out for updates on when application decisions come out.
         </p>
 
         <p>

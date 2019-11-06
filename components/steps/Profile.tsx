@@ -99,9 +99,9 @@ const ProfileStep: React.FunctionComponent<Props> = props => {
 
           <p>
             In order to continue through the application process, we need to
-            verify your e-mail. Double check your e-mail and make sure you got
-            an email verification link. If your profile is still not flagged as
-            verified, log out and log back in.
+            verify your e-mail. Double check your e-mail and make sure you
+            received an email verification link. If your profile is still not
+            flagged as verified, log out and log back in.
           </p>
         </FormSection>
       </Flex>
@@ -122,9 +122,9 @@ const ProfileStep: React.FunctionComponent<Props> = props => {
         <FormSection>
           <h1>Your HackSC Application</h1>
           <p>
-            We're excited for HackSC 2020 and can't wait to get to know you
-            better! Please fill out this HackSC application so we can know more
-            about you, where you come from, and what you've done.
+            We're excited for HackSC 2020 and can't wait to meet you! Please
+            fill out our HackSC application so we can know more about you, where
+            you come from, and what you've been up to.
           </p>
 
           {submitted && (
@@ -494,9 +494,9 @@ const ProfileStep: React.FunctionComponent<Props> = props => {
 
           <FormGroup>
             <label>
-              HackSC has four verticals centered around social justice: civil
-              liberties, sustainability, equity, and mental health. Read more
-              about them at{" "}
+              HackSC has four verticals, all of which center around social
+              justice: civil liberties, sustainability, equity, and mental
+              health. If you'd like, you can read more about them at{" "}
               <a href="https://hacksc.com" target="_blank">
                 hacksc.com
               </a>
