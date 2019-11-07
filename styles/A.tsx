@@ -1,16 +1,26 @@
 import styled from "styled-components";
 
-const A = styled.a`
+type AProps = {
+  style?: Object;
+};
+
+const A = styled.a<AProps>`
+  &:hover {
+    color: ${({ style }) =>
+      style["&:hover"]["color"] ? style["&:hover"]["color"] : "#462470"};
+    background-color: ${({ style }) =>
+      style["&:hover"]["backgroundColor"]
+        ? style["&:hover"]["backgroundColor"]
+        : "#FF8379"};
+  }
   padding: 15px;
   margin: 10px;
-  background-color: #e6194b;
+  background-color: ${({ style }) =>
+    style["backgroundColor"] ? style["backgroundColor"] : "#e6194b"};
   font-size: 24px;
   border-radius: 4px;
   color: white;
   font-weight: bold;
-  &:hover {
-    background-color: #462470;
-  }
 `;
 
 export default A;

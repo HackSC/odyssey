@@ -11,7 +11,7 @@ const Home = () => {
   return (
     <>
       <Head title="HackSC Odyssey - Apply to HackSC 2020" />
-      <Navbar />
+      <Navbar activePage="/" />
       <Container>
         <Hero />
       </Container>

@@ -14,7 +14,7 @@ const Results = ({ profile }) => {
   return (
     <>
       <Head title="HackSC Odyssey - Results" />
-      <Navbar loggedIn />
+      <Navbar loggedIn activePage="results" />
       <Background>
         <Container>{profile && <Step profile={profile} />}</Container>
       </Background>
