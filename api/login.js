@@ -10,7 +10,7 @@ var secured = function(req, res, next) {
     return next();
   }
   req.session.returnTo = req.originalUrl;
-  res.redirect("/login");
+  res.redirect("/");
 };
 
 router.get(
@@ -29,7 +29,7 @@ router.get("/callback", function(req, res, next) {
       return next(err);
     }
     if (!user) {
-      return res.redirect("/login");
+      return res.redirect("/");
     }
     req.logIn(user, function(err) {
       if (err) {
