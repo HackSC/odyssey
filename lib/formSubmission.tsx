@@ -56,7 +56,8 @@ export async function syncProfile(
     setSuccess(true);
 
     if (isSubmit) {
-      Router.push("/results");
+      await Router.push("/results");
+      window.scrollTo(0, 0);
     }
   } else {
     const data = await response.json();

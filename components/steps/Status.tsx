@@ -17,7 +17,7 @@ const getStatusLabel = (profile: Profile): string => {
     return "Unverified";
   }
   if (status === "checkedIn") return "Checked In";
-  if (status === "verified" && submittedAt !== null) {
+  if (status === "verified" && !!submittedAt) {
     return "Submitted";
   }
 
@@ -30,7 +30,7 @@ const getStage = (profile: Profile): number => {
   if (status === "unverified") {
     return 1;
   } else if (status === "verified") {
-    if (submittedAt !== null) {
+    if (!!submittedAt) {
       Sentry.captureMessage(
         "Status = verified but should actually be submitted!!!"
       );
@@ -42,8 +42,9 @@ const getStage = (profile: Profile): number => {
   return 3;
 };
 
-const navigateTo = (step: string): void => {
-  Router.push(`/${step}`);
+const navigateTo = async (step: string) => {
+  await Router.push(`/${step}`);
+  window.scrollTo(0, 0);
 };
 
 const StatusStep: React.FunctionComponent<Props> = props => {
