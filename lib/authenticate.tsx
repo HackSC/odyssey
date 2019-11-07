@@ -44,7 +44,7 @@ export function secured(req, res, next) {
     return next();
   }
   req.session.returnTo = req.originalUrl;
-  res.redirect("/login");
+  res.redirect("/");
 }
 
 function redirectToPath(req, path: string) {
