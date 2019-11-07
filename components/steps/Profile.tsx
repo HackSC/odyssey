@@ -547,7 +547,7 @@ const ProfileStep: React.FunctionComponent<Props> = props => {
 
           <FormGroup>
             <label>
-              Tell us about a project you have finished in the past? (1000
+              Tell us about a project you have finished in the past. (1000
               characters)
             </label>
 
