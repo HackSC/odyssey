@@ -78,6 +78,7 @@ const uploadResume = async resumeFile => {
 const ProfileStep: React.FunctionComponent<Props> = props => {
   const { profile } = props;
 
+  const [resumeUploaded, setResumeUploaded] = useState(null);
   const [saved, setSaved] = useState(false);
   const [userResume, setUserResume] = useState(null);
   const [submitted, setSubmitted] = useState(
@@ -447,14 +448,31 @@ const ProfileStep: React.FunctionComponent<Props> = props => {
               accept="application/pdf"
               required={!!!profile.resume}
               ref={ref => setUserResume(ref)}
+              onChange={e => {
+                setResumeUploaded(e.target.files[0]);
+                console.log(e.target.files);
+              }}
               disabled={submitted}
             />
             <ResumeUploadButton htmlFor="resume" disabled={submitted}>
               Upload Your Resume
             </ResumeUploadButton>
 
-            {profile.resume && (
-              <ResumeLabel>You have uploaded a resume</ResumeLabel>
+            {resumeUploaded && (
+              <ResumeLabel>
+                {resumeUploaded
+                  ? "Selected resume: " + resumeUploaded.name
+                  : ""}
+              </ResumeLabel>
+            )}
+            {profile.resume && !resumeUploaded && (
+              <ResumeLabel>
+                {profile.resume ? (
+                  <a href={profile.resume}>link to your resume</a>
+                ) : (
+                  ""
+                )}
+              </ResumeLabel>
             )}
           </FormGroup>
 
