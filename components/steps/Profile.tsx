@@ -448,10 +448,7 @@ const ProfileStep: React.FunctionComponent<Props> = props => {
               accept="application/pdf"
               required={!!!profile.resume}
               ref={ref => setUserResume(ref)}
-              onChange={e => {
-                setResumeUploaded(e.target.files[0]);
-                console.log(e.target.files);
-              }}
+              onChange={e => setResumeUploaded(e.target.files[0])}
               disabled={submitted}
             />
             <ResumeUploadButton htmlFor="resume" disabled={submitted}>
