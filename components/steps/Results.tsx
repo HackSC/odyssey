@@ -34,7 +34,7 @@ const ResultStep: React.FunctionComponent<Props> = props => {
   return (
     <Flex direction="column">
       <FormSection>
-        <h1>HackSC Application Results</h1>
+        <h1>HackSC Application Complete</h1>
 
         <p>
           Thank you for filling out an application for HackSC 2020! Be on the
