@@ -25,7 +25,9 @@ class OdysseyApp extends App {
 
     if (typeof window !== "undefined") {
       Sentry.init({
-        dsn: "https://1a18ac7b9aa94cb5b2a8c9fc2f7e4fc8@sentry.io/1801129"
+        dsn: "https://1a18ac7b9aa94cb5b2a8c9fc2f7e4fc8@sentry.io/1801129",
+        environment:
+          process.env.NODE_ENV !== "production" ? "dev" : "production"
       });
     }
   }
