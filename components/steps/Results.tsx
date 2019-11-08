@@ -41,6 +41,8 @@ const ResultStep: React.FunctionComponent<Props> = props => {
           look out for updates on when application decisions come out.
         </p>
 
+        <br />
+
         <p>
           In the meantime, follow HackSC on social media. Follow us on{" "}
           <a href="https://twitter.com/hackscofficial" target="_blank">

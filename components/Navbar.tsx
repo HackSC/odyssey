@@ -20,7 +20,8 @@ const style = background => {
     padding: "10px",
     margin: "10px",
     color: background !== "white" ? "white" : "black",
-    backgroundColor: background
+    backgroundColor: background,
+    cursor: "pointer"
   };
 };
 
