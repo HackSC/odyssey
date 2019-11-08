@@ -8,10 +8,25 @@ import { Container, Link } from "../styles";
 
 type NavbarProps = {
   loggedIn?: boolean;
+  activePage?: string;
+};
+
+const style = background => {
+  return {
+    "&:hover": {
+      backgroundColor: "#FF8379 !important",
+      color: "white !important"
+    },
+    padding: "10px",
+    margin: "10px",
+    color: background !== "white" ? "white" : "black",
+    backgroundColor: background
+  };
 };
 
 const Navbar: React.FunctionComponent<NavbarProps> = ({
-  loggedIn
+  loggedIn,
+  activePage
 }: NavbarProps) => {
   return (
     <Wrapper>
@@ -23,15 +38,47 @@ const Navbar: React.FunctionComponent<NavbarProps> = ({
         <Links>
           {loggedIn ? (
             <>
-              <Link href="/dashboard">Dashboard</Link>
-              <Link href="/application">Application</Link>
-              <Link href="/results">Results</Link>
-              <Link href="/auth/logout">Logout</Link>
+              <Link
+                href="/dashboard"
+                style={style(activePage === "dashboard" ? "#FF8379" : "white")}
+              >
+                Dashboard
+              </Link>
+              <Link
+                href="/application"
+                style={style(
+                  activePage === "application" ? "#FF8379" : "white"
+                )}
+              >
+                Application
+              </Link>
+              <Link
+                href="/results"
+                style={style(activePage === "results" ? "#FF8379" : "white")}
+              >
+                Results
+              </Link>
+              <Link
+                href="/auth/logout"
+                style={style(activePage === "logout" ? "#FF8379" : "white")}
+              >
+                Logout
+              </Link>
             </>
           ) : (
             <>
-              <Link href="/">Home</Link>
-              <Link href="/auth/login">Login</Link>
+              <Link
+                href="/"
+                style={style(activePage === "/" ? "#FF8379" : "white")}
+              >
+                Home
+              </Link>
+              <Link
+                href="/auth/login"
+                style={style(activePage === "login" ? "#FF8379" : "white")}
+              >
+                Login
+              </Link>
             </>
           )}
         </Links>
