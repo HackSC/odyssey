@@ -32,3 +32,34 @@ Odyssey is a hackathon management platform that handles hacker applications, adm
 ## Odyssey Tech Stack
 
 Odyssey is built using Next.js and Node.js/Express. Odyssey is served by a Node.js server that uses Next.js to render React apps on the server. On the back-end, Odyssey uses Sequelize as an ORM for a MySQL database. Currently, the entire app is hosted on Heroku.
+
+## How To: Add/update database model
+
+Adding a new model or updating a current one requires a migration file.
+
+To create one, run `npx sequelize-cli migration:generate --name <MIGRATION_NAME>`. This will autogenerate a file that will let you define what is being changed. See https://sequelize.org/master/manual/migrations.html for more information.
+
+After setting up your migration, make sure you update the following files:
+
+- `api/models/` -- Update models to properly reflect the new DB schema
+- `odyssey.d.ts` -- Update the Profile type object to reflect new fields
+
+Once this is done, run `npx sequelize-cli db:migrate` to get your changes reflected in the database
+
+## How To: Deploy application to production or staging
+
+To deploy the application to production or staging, make sure you are logged in to the right Heroku account. Make sure you have installed the Heroku CLI.
+
+Once you're logged into the right account, add the production and staging app to your remote. I have run the following:
+
+- `heroku git:remote -a <production_app>`
+- `git remote rename heroku heroku-prod`
+- `heroku git:remote -a <staging_app>`
+- `git remote rename heroku heroku-staging`
+
+Before you deploy, make sure you have ran migrations on the right database.
+
+Then to deploy to either production or staging, run:
+
+- `git push heroku-prod develop:master` (Production)
+- `git push heroku-staging develop:master` (Staging)
