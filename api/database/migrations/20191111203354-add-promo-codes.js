@@ -5,7 +5,8 @@ module.exports = {
     return Promise.all([
       queryInterface
         .addColumn("HackerProfiles", "promoCode", {
-          type: Sequelize.STRING(100)
+          type: Sequelize.STRING(100),
+          unique: true
         })
         .then(function() {
           return queryInterface.sequelize.query(`
