@@ -547,7 +547,8 @@ const ProfileStep: React.FunctionComponent<Props> = props => {
                 hacksc.com
               </a>
               . If you were admitted to HackSC 2020, which vertical would you
-              tackle and what would you build? (1000 characters)
+              tackle and what would you build? (This does not bind your project
+              to this vertical. 1000 characters)
             </label>
 
             <textarea
@@ -562,7 +563,7 @@ const ProfileStep: React.FunctionComponent<Props> = props => {
 
           <FormGroup>
             <label>
-              Tell us about a project you have finished in the past? (1000
+              Tell us about a project you have finished in the past. (1000
               characters)
             </label>
 

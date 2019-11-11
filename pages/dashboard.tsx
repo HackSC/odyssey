@@ -15,7 +15,7 @@ const Dashboard = ({ profile }) => {
   return (
     <>
       <Head title="HackSC Odyssey - Dashboard" />
-      <Navbar loggedIn />
+      <Navbar loggedIn activePage="dashboard" />
       <Background>
         {profile && (
           <Container>{profile && <Step profile={profile} />}</Container>

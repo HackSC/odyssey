@@ -14,7 +14,7 @@ const Application = ({ profile }) => {
   return (
     <>
       <Head title="HackSC Odyssey - Application" />
-      <Navbar loggedIn />
+      <Navbar loggedIn activePage="application" />
       <Background>
         <Container>{profile && <Step profile={profile} />}</Container>
       </Background>
