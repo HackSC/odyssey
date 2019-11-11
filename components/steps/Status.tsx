@@ -113,6 +113,15 @@ const StatusStep: React.FunctionComponent<Props> = props => {
         </Column>
 
         <DatesColumn flexBasis={35}>
+          <h2>Referral Code</h2>
+          <ReferralCode>
+            <h3>{profile.promoCode}</h3>
+            <p>
+              This is your code, share it around. The more people who use it the
+              more likely you are to get it in.
+            </p>
+          </ReferralCode>
+
           <Countdown>
             <Count>{getDaysTillClose()}</Count>
             days to apply to HackSC 2020
@@ -195,6 +204,14 @@ const Step = styled.div<StepProps>`
 
 const StepButton = styled(Button)`
   margin-top: 24px;
+`;
+
+const ReferralCode = styled.div`
+  padding: 24px 24px;
+  margin: 0 0 16px;
+  background: #ffffff;
+  border-radius: 4px;
+  text-align: center;
 `;
 
 const Countdown = styled.div`

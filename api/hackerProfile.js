@@ -78,7 +78,8 @@ router.put("/", async (req, res) => {
     "codeOfConduct",
     "authorize",
     "marketing",
-    "submit"
+    "submit",
+    "referrerCode"
   ]);
 
   for (let key of Object.keys(formInput)) {
