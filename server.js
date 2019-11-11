@@ -26,7 +26,8 @@ const handle = app.getRequestHandler();
 dotenv.config();
 
 Sentry.init({
-  dsn: "https://1a18ac7b9aa94cb5b2a8c9fc2f7e4fc8@sentry.io/1801129"
+  dsn: "https://1a18ac7b9aa94cb5b2a8c9fc2f7e4fc8@sentry.io/1801129",
+  environment: dev ? "dev" : process.env.NODE_ENV
 });
 
 const strategy = new Auth0Strategy(
