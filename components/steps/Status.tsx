@@ -47,6 +47,13 @@ const navigateTo = async (step: string) => {
   window.scrollTo(0, 0);
 };
 
+const getDaysTillClose = (): number => {
+  const endDate = new Date("Nov 29, 2019, 11:59 PM").getTime();
+  const nowDate = new Date().getTime();
+  const diff = endDate - nowDate;
+  return Math.floor(diff / 1000 / 60 / 60 / 24);
+};
+
 const StatusStep: React.FunctionComponent<Props> = props => {
   const { profile } = props;
 
@@ -54,7 +61,11 @@ const StatusStep: React.FunctionComponent<Props> = props => {
 
   return (
     <Flex direction="column">
-      <h1>Hey there!</h1>
+      <h1>
+        {profile && profile.firstName
+          ? `Hey there, ${profile.firstName}!`
+          : "Hey there!"}
+      </h1>
 
       <Status align="center" justify="space-between">
         <Flex direction="row" align="center">
@@ -102,23 +113,28 @@ const StatusStep: React.FunctionComponent<Props> = props => {
         </Column>
 
         <DatesColumn flexBasis={35}>
+          <Countdown>
+            <Count>{getDaysTillClose()}</Count>
+            days to apply to HackSC 2020
+          </Countdown>
+
           <h2>Major Dates</h2>
 
           <Dates>
-            <Date>
+            <DateText>
               <h3>Applications Open</h3>
               <p>November 7th, 2019</p>
-            </Date>
+            </DateText>
 
-            <Date>
+            <DateText>
               <h3>Applications Close</h3>
-              <p>November 22nd, 2019</p>
-            </Date>
+              <p>November 29th, 2019</p>
+            </DateText>
 
-            <Date>
+            <DateText>
               <h3>HackSC 2020</h3>
               <p>January 31, 2020</p>
-            </Date>
+            </DateText>
           </Dates>
         </DatesColumn>
       </Flex>
@@ -181,6 +197,19 @@ const StepButton = styled(Button)`
   margin-top: 24px;
 `;
 
+const Countdown = styled.div`
+  padding: 24px 36px;
+  margin: 0 0 32px;
+  background: #ffffff;
+  border-radius: 4px;
+  text-align: center;
+`;
+
+const Count = styled.h2`
+  font-size: 72px;
+  color: ${({ theme }) => theme.colors.peach};
+`;
+
 const Dates = styled.div`
   padding: 24px 36px;
   margin: 16px 0 32px;
@@ -188,7 +217,7 @@ const Dates = styled.div`
   border-radius: 4px;
 `;
 
-const Date = styled.div`
+const DateText = styled.div`
   margin-top: 36px;
 
   :first-child {
