@@ -44,12 +44,20 @@ const strategy = new Auth0Strategy(
   }
 );
 
+const SequelizeStore = require("connect-session-sequelize")(session.Store);
+const db = require("./api/models");
+
+const store = new SequelizeStore({
+  db: db.sequelize
+});
+
 const sessionConfig = {
   secret: process.env.COOKIE_SECRET || "We haven't secured the cookies chief",
-  cookie: {},
+  store: store,
   resave: false,
   saveUninitialized: true
 };
+store.sync();
 
 passport.use(strategy);
 passport.serializeUser(function(user, done) {
