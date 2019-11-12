@@ -123,8 +123,16 @@ const StatusStep: React.FunctionComponent<Props> = props => {
           </ReferralCode>
 
           <Countdown>
-            <Count>{getDaysTillClose()}</Count>
-            days to apply to HackSC 2020
+            <CountdownHeader>
+              <Count>{getDaysTillClose()}</Count>
+              <h2>Days to apply!</h2>
+            </CountdownHeader>
+            <Button
+              as="a"
+              target="_blank"
+              href="http://www.google.com/calendar/event?action=TEMPLATE&dates=20191129T200000Z%2F20191129T210000Z&text=Finish%20HackSC%20Application&location=&details=Reminder%20to%20finish%20HackSC%20Application%20before%20deadline">
+              Add to Calendar
+            </Button>
           </Countdown>
 
           <h2>Major Dates</h2>
@@ -220,6 +228,8 @@ const Countdown = styled.div`
   background: #ffffff;
   border-radius: 4px;
   text-align: center;
+  display: flex;
+  flex-direction: column;
 `;
 
 const Count = styled.h2`
@@ -227,8 +237,18 @@ const Count = styled.h2`
   color: ${({ theme }) => theme.colors.peach};
 `;
 
+const CountdownHeader = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  h2 {
+    padding-left: 12px;
+    margin-bottom: 0px;
+  }
+`;
+
 const Dates = styled.div`
-  padding: 24px 36px;
+  padding: 24px 24px;
   margin: 16px 0 32px;
   background: #ffffff;
   border-radius: 4px;
