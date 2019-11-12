@@ -58,4 +58,6 @@ declare type Profile = {
   codeOfConduct: boolean;
   authorize: boolean;
   marketing: string;
+  promoCode: string;
+  referrerCode: string;
 };
