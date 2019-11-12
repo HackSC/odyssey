@@ -2,6 +2,8 @@ import styled from "styled-components";
 
 type ButtonProps = {
   outline?: boolean;
+  href?: string;
+  target?: string;
 };
 
 const Button = styled.button<ButtonProps>`
