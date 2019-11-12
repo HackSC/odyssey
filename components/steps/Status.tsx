@@ -118,7 +118,7 @@ const StatusStep: React.FunctionComponent<Props> = props => {
             <h3>{profile.promoCode}</h3>
             <p>
               This is your code, share it around. The more people who use it the
-              more likely you are to get it in.
+              more likely you are to get in.
             </p>
           </ReferralCode>
 
