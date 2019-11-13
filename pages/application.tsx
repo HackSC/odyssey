@@ -1,6 +1,7 @@
 import React from "react";
 
 import { handleLoginRedirect, getProfile } from "../lib/authenticate";
+import { getReferrerCode } from "../lib/referrerCode";
 
 import Head from "../components/Head";
 import Navbar from "../components/Navbar";
@@ -23,13 +24,18 @@ const Application = ({ profile }) => {
   );
 };
 
-Application.getInitialProps = async ({ req }) => {
+Application.getInitialProps = async ctx => {
+  const { req } = ctx;
+
   const profile = await getProfile(req);
 
   // Null profile means user is not logged in
   if (!profile) {
     handleLoginRedirect(req);
   }
+
+  //Referrer Code Special Case Handling
+  profile.referrerCode = getReferrerCode(ctx, profile);
 
   return {
     profile
