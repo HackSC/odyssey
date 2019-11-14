@@ -34,7 +34,8 @@ function persistLinkReferrerCode(ctx, paramValues: QueryParamValues) {
 }
 
 export async function submitReferrerCode(referrerCode: string) {
-  await fetch("/api/profile/referrerCode", {
+  const fetch_url = process.env.URL_BASE + "/api/profile/referrerCode";
+  await fetch(fetch_url, {
     method: "PUT",
     body: JSON.stringify({ referrerCode }),
     headers: {
