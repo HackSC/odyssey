@@ -109,6 +109,24 @@ const ProfileStep: React.FunctionComponent<Props> = props => {
     );
   }
 
+  if (process.browser) {
+    if (!saved && !submitted) {
+      window.onbeforeunload = function(event) {
+        var message =
+          "Important: Please click on 'Save' button to leave this page.";
+        if (typeof event == "undefined") {
+          event = window.event;
+        }
+        if (event) {
+          event.returnValue = message;
+        }
+        return message;
+      };
+    } else {
+      window.onbeforeunload = null;
+    }
+  }
+
   return profile ? (
     <Flex direction="column">
       <Form
@@ -118,7 +136,8 @@ const ProfileStep: React.FunctionComponent<Props> = props => {
           }
           syncProfile(e, formRef, setSubmitted, setError, true);
         }}
-        ref={formRef}>
+        ref={formRef}
+      >
         <FormSection>
           <h1>Your HackSC Application</h1>
           <p>
@@ -614,8 +633,6 @@ const ProfileStep: React.FunctionComponent<Props> = props => {
             />
           </FormGroup>
 
-
-
           <FormGroup>
             <RadioChoice>
               <input
@@ -630,7 +647,8 @@ const ProfileStep: React.FunctionComponent<Props> = props => {
                 I have read and agree to the{" "}
                 <a
                   href="https://static.mlh.io/docs/mlh-code-of-conduct.pdf"
-                  target="_blank">
+                  target="_blank"
+                >
                   MLH Code of Conduct
                 </a>
                 .
@@ -659,7 +677,8 @@ const ProfileStep: React.FunctionComponent<Props> = props => {
                 . I further agree to the terms of both the{" "}
                 <a
                   href="https://github.com/MLH/mlh-policies/tree/master/prize-terms-and-conditions"
-                  target="_blank">
+                  target="_blank"
+                >
                   MLH Contest Terms and Conditions
                 </a>{" "}
                 and the{" "}
@@ -686,7 +705,8 @@ const ProfileStep: React.FunctionComponent<Props> = props => {
                           uploadResume(userResume.files[0]);
                         }
                       }}
-                      disabled={submitted}>
+                      disabled={submitted}
+                    >
                       Save for later
                     </Button>
                   </Flex>
