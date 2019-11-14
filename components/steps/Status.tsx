@@ -2,6 +2,14 @@ import * as React from "react";
 import styled from "styled-components";
 import Router from "next/router";
 import * as Sentry from "@sentry/browser";
+import {
+  FacebookShareButton,
+  TwitterShareButton,
+  EmailShareButton,
+  FacebookIcon,
+  TwitterIcon,
+  EmailIcon
+} from "react-share";
 
 import { Flex, Column, Button } from "../../styles";
 
@@ -9,6 +17,7 @@ import Check from "../../assets/check.svg";
 
 type Props = {
   profile: Profile;
+  socialPosts: any;
 };
 
 const getStatusLabel = (profile: Profile): string => {
@@ -55,7 +64,7 @@ const getDaysTillClose = (): number => {
 };
 
 const StatusStep: React.FunctionComponent<Props> = props => {
-  const { profile } = props;
+  const { profile, socialPosts } = props;
 
   const statusLabel = getStatusLabel(profile);
 
@@ -120,6 +129,17 @@ const StatusStep: React.FunctionComponent<Props> = props => {
               This is your code, share it around. The more people who use it the
               more likely you are to get in.
             </p>
+            <ReferralButtons>
+              <FacebookShareButton {...socialPosts.facebook}>
+                <FacebookIcon round size={40} />
+              </FacebookShareButton>
+              <TwitterShareButton {...socialPosts.twitter} size={40}>
+                <TwitterIcon round size={40} />
+              </TwitterShareButton>
+              <EmailShareButton {...socialPosts.email}>
+                <EmailIcon round size={40} />
+              </EmailShareButton>
+            </ReferralButtons>
           </ReferralCode>
 
           <Countdown>
@@ -220,6 +240,17 @@ const ReferralCode = styled.div`
   background: #ffffff;
   border-radius: 4px;
   text-align: center;
+`;
+
+const ReferralButtons = styled.div`
+  margin: 0 0 8px;
+  border-radius: 4px;
+  display: flex;
+  flex-grow: 1;
+  justify-content: center;
+  * {
+    margin: 2px;
+  }
 `;
 
 const Countdown = styled.div`

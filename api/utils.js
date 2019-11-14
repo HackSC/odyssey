@@ -23,7 +23,6 @@ module.exports = {
           userId: req.user.id
         }
       }).then(hackerProfiles => {
-        console.log(hackerProfiles);
         if (hackerProfiles.length >= 1) {
           if (hackerProfiles[0].get("role") == "admin") {
             return next();

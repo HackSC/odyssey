@@ -16,7 +16,7 @@ export async function getUser(req) {
   }
 }
 
-export async function getProfile(req) {
+export async function getProfile(req): Promise<Profile> {
   // If we have a req object, that means we're on the server and need to pass in cookies
   // Otherwise, fetch as normal
   const url_route = req

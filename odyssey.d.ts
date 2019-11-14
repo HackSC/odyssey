@@ -61,3 +61,11 @@ declare type Profile = {
   promoCode: string;
   referrerCode: string;
 };
+
+declare type QueryParamValues = {
+  referrerCode?: string;
+};
+
+declare type CookieValues = {
+  referrerCode?: string;
+};
