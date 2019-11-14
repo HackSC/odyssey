@@ -669,7 +669,7 @@ const ProfileStep: React.FunctionComponent<Props> = props => {
               <Flex justify="space-between" tabletVertical>
                 <Column flexBasis={49}>
                   <Flex>
-                    <Button
+                    <SaveButton
                       outline
                       onClick={e => {
                         syncProfile(e, formRef, setSaved, setError, false);
@@ -680,7 +680,7 @@ const ProfileStep: React.FunctionComponent<Props> = props => {
                       disabled={submitted}
                     >
                       Save for later
-                    </Button>
+                    </SaveButton>
                   </Flex>
                 </Column>
                 <Column flexBasis={49}>
@@ -746,12 +746,25 @@ const ResumeUploadButton = styled.label<any>`
   text-align: center;
   cursor: pointer;
 
+  &:hover {
+    opacity: 0.8;
+  }
+
   ${({ disabled }) =>
     disabled &&
     `
       opacity: 0.5;
       cursor: not-allowed;
     `}
+`;
+
+const SaveButton = styled(Button)`
+  &:hover {
+    color: #ffffff;
+    border-color: #ffffff;
+    background: ${({ theme }) => theme.colors.peach};
+    opacity: 0.8;
+  }
 `;
 
 const ResumeLabel = styled.p`
@@ -802,6 +815,10 @@ const SubmitButton = styled(Button)`
     theme.media.tablet`
       margin-top: 24px;
     `}
+
+  &:hover {
+    opacity: 0.8;
+  }
 `;
 
 export default ProfileStep;
