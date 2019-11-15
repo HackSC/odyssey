@@ -2,7 +2,6 @@ module.exports = (sequelize, DataTypes) => {
   const HackerReview = sequelize.define(
     "HackerReview",
     {
-      id: DataTypes.INTEGER,
       hackerId: DataTypes.STRING(100),
       createdBy: DataTypes.STRING(100),
       scoreOne: DataTypes.INTEGER,
