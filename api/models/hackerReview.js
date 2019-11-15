@@ -13,7 +13,10 @@ module.exports = (sequelize, DataTypes) => {
   );
   HackerReview.associate = function(models) {
     // associations can be defined here
-    models.HackerProfile.hasMany(HackerReview);
+    models.HackerProfile.hasMany(HackerReview, { foreignKey: "hackerId" });
+    models.HackerReview.belongsTo(models.HackerProfile, {
+      foreignKey: "createdBy"
+    });
   };
   return HackerReview;
 };
