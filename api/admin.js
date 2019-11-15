@@ -7,7 +7,7 @@ const Sentry = require("@sentry/node");
 /* This router supports superuser routes, such as updating the status of users */
 
 router.use(utils.authMiddleware);
-router.use(utils.requireAdmin);
+// router.use(utils.requireAdmin);
 
 // Full write access to a user's hackerProfile
 router.put("/:email", async (req, res) => {
