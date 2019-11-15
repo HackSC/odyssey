@@ -20,14 +20,11 @@ router.put("/:email", async (req, res) => {
 });
 
 router.get("/reviews", async (req, res) => {
-  console.log("we get here");
   try {
     const reviews = await models.HackerReview.findAll();
-    console.log(reviews);
     return res.json({ reviews: reviews });
   } catch (e) {
-    console.log("WE FUCKED UP BOYS");
-    console.log(e);
+    return res.status(500).json({ err: e });
   }
 });
 
