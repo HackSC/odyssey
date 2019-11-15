@@ -24,7 +24,7 @@ router.get("/reviews", async (req, res) => {
     const reviews = await models.HackerReview.findAll();
     return res.json({ reviews: reviews });
   } catch (e) {
-    console.log(e);
+    return res.status(500).json({ err: e });
   }
 });
 
