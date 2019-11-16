@@ -5,6 +5,7 @@ import { hotjar } from "react-hotjar";
 import * as Sentry from "@sentry/browser";
 
 import { persistLinkReferrerCode } from "../lib/referrerCode";
+import "react-tippy/dist/tippy.css";
 
 import { Theme, GlobalStyles } from "../styles";
 

@@ -2,13 +2,14 @@ import * as React from "react";
 import styled from "styled-components";
 import Router from "next/router";
 import * as Sentry from "@sentry/browser";
+import copy from "copy-to-clipboard";
+import { FaLink, FaFacebookF, FaTwitter, FaEnvelope } from "react-icons/fa";
+import { Tooltip } from "react-tippy";
+
 import {
   FacebookShareButton,
   TwitterShareButton,
-  EmailShareButton,
-  FacebookIcon,
-  TwitterIcon,
-  EmailIcon
+  EmailShareButton
 } from "react-share";
 
 import { Flex, Column, Button } from "../../styles";
@@ -131,14 +132,34 @@ const StatusStep: React.FunctionComponent<Props> = props => {
             </p>
             <ReferralButtons>
               <FacebookShareButton {...socialPosts.facebook}>
-                <FacebookIcon round size={40} />
+                <CircleIcon size={20} bgColor="#3b5998">
+                  <FaFacebookF color="white" />
+                </CircleIcon>
               </FacebookShareButton>
               <TwitterShareButton {...socialPosts.twitter} size={40}>
-                <TwitterIcon round size={40} />
+                <CircleIcon size={20} bgColor="#1dcaff">
+                  <FaTwitter color="white" />
+                </CircleIcon>
               </TwitterShareButton>
               <EmailShareButton {...socialPosts.email}>
-                <EmailIcon round size={40} />
+                <CircleIcon size={20} bgColor="#a9a9a9">
+                  <FaEnvelope color="white" />
+                </CircleIcon>
               </EmailShareButton>
+              <Tooltip
+                title="Copied link to clipboard!"
+                position="bottom"
+                duration={3}
+                trigger="click"
+                inertia
+                arrow>
+                <CircleIcon
+                  size={20}
+                  bgColor="#ffce00"
+                  onClick={() => copy(socialPosts.link)}>
+                  <FaLink color="white" />
+                </CircleIcon>
+              </Tooltip>
             </ReferralButtons>
           </ReferralCode>
 
@@ -178,6 +199,27 @@ const StatusStep: React.FunctionComponent<Props> = props => {
     </Flex>
   );
 };
+
+type CircleIconProps = {
+  size: number;
+  bgColor: string;
+};
+
+const CircleIcon = styled.div<CircleIconProps>`
+  background: ${props => props.bgColor};
+  width: ${props => props.size}px;
+  height: ${props => props.size}px;
+  border-radius: 50%;
+  text-align: center;
+  line-height: ${props => props.size}px;
+  vertical-align: middle;
+  padding: ${props => props.size - 10}px;
+
+  :hover {
+    transform: scale(1.05);
+    cursor: pointer;
+  }
+`;
 
 const Status = styled(Flex)`
   padding: 48px;
