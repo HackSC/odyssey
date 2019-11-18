@@ -80,7 +80,8 @@ function generatePosts(hackerProfile: Profile) {
   return {
     twitter: generateTwitterPost(hackerProfile),
     facebook: generateFacebookPost(hackerProfile),
-    email: generateEmailPost(hackerProfile)
+    email: generateEmailPost(hackerProfile),
+    link: generateReferralLink(hackerProfile)
   };
 }
 
