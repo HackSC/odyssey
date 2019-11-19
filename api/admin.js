@@ -31,11 +31,6 @@ router.get("/reviews", async (req, res) => {
 
 router.get("/review", async (req, res) => {
   try {
-    // find a review w < 3 reviews
-    // Create a new review, with the req.user email on it
-    // Send that review down, along with the ID so it can be
-    // 		Added to later
-    // Return
     const profilesWCount = await models.HackerProfile.findAll({
       attributes: {
         include: [
@@ -58,8 +53,6 @@ router.get("/review", async (req, res) => {
       return profile.dataValues.reviewCount < 3;
     });
     if (acceptableProfile) {
-      // Create a new review, and update
-
       const newProfile = await models.HackerReview.create({
         hackerId: acceptableProfile.dataValues.userId,
         createdBy: req.user.id
