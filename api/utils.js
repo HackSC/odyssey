@@ -24,7 +24,7 @@ module.exports = {
         }
       }).then(hackerProfiles => {
         if (hackerProfiles.length >= 1) {
-          if (hackerProfiles[0].get("role") == "admin") {
+          if (hackerProfiles[0].get("role") === "admin") {
             return next();
           } else {
             res.status(403).send("Unauthorized: Incorrect role");

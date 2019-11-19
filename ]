@@ -2,7 +2,7 @@ const express = require("express");
 const models = require("./models");
 const utils = require("./utils");
 const router = express.Router();
-const sequelize = require("sequelize");
+const sequelize = require('sequelize');
 const Sentry = require("@sentry/node");
 
 /* This router supports superuser routes, such as updating the status of users */
@@ -30,25 +30,25 @@ router.get("/reviews", async (req, res) => {
 });
 
 router.get("/review", async (req, res) => {
-  try {
-    // find a review w < 3 reviews
-    console.log("WE GET HERE");
-    const allProfiles = await models.HackerProfile.findAll();
+	try {
+			// find a review w < 3 reviews 
+			console.log("WE GET HERE");
+			const allProfiles = await models.HackerProfile.findAll();
 
-    allProfiles.forEach(async profile => {
-      console.log(profile);
-      const reviews = await profile.getHackerReviews();
-      console.log(reviews.length);
-    });
-    return res.json({ ids: validProfiles });
-    // Create a new review, with the req.user email on it
-    // Send that review down, along with the ID so it can be
-    // 		Added to later
-    // Return
-  } catch (e) {
-    console.log(e);
-    return res.status(500).json({ err: e });
-  }
+			for (profile in allProfiles) {
+					
+					console.log(numReviews);
+			}
+			return res.json({ ids: validProfiles });	
+			// Create a new review, with the req.user email on it
+			// Send that review down, along with the ID so it can be
+			// 		Added to later
+			// Return 		
+	} catch (e) {
+		console.log(e);
+		return res.status(500).json({ err: e });
+	}
+
 });
 
 module.exports = router;
