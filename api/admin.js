@@ -32,19 +32,31 @@ router.get("/reviews", async (req, res) => {
 router.get("/review", async (req, res) => {
   try {
     // find a review w < 3 reviews
-    console.log("WE GET HERE");
-    const allProfiles = await models.HackerProfile.findAll();
-
-    allProfiles.forEach(async profile => {
-      console.log(profile);
-      const reviews = await profile.getHackerReviews();
-      console.log(reviews.length);
-    });
-    return res.json({ ids: validProfiles });
     // Create a new review, with the req.user email on it
     // Send that review down, along with the ID so it can be
     // 		Added to later
     // Return
+
+    console.log("WE GET HERE");
+
+    const profilesWCount = await models.HackerProfile.findAll({
+      attributes: {
+        include: [
+          [
+            sequelize.fn("COUNT", sequelize.col("HackerReviews.id")),
+            "reviewCount"
+          ]
+        ]
+      },
+      include: [
+        {
+          model: models.HackerReview,
+          attributes: []
+        }
+      ]
+    });
+    console.log(profilesWCount);
+    return res.json({ ids: profilesWCount });
   } catch (e) {
     console.log(e);
     return res.status(500).json({ err: e });
