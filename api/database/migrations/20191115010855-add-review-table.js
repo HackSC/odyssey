@@ -6,6 +6,7 @@ module.exports = {
       id: {
         allowNull: false,
         primaryKey: true,
+        autoIncrement: true,
         type: Sequelize.INTEGER
       },
       hackerId: {

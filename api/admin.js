@@ -36,9 +36,6 @@ router.get("/review", async (req, res) => {
     // Send that review down, along with the ID so it can be
     // 		Added to later
     // Return
-
-    console.log("WE GET HERE");
-
     const profilesWCount = await models.HackerProfile.findAll({
       attributes: {
         include: [
@@ -53,10 +50,28 @@ router.get("/review", async (req, res) => {
           model: models.HackerReview,
           attributes: []
         }
-      ]
+      ],
+      group: ["HackerProfile.userId"]
     });
-    console.log(profilesWCount);
-    return res.json({ ids: profilesWCount });
+
+    const acceptableProfile = profilesWCount.find(profile => {
+      return profile.dataValues.reviewCount < 3;
+    });
+    if (acceptableProfile) {
+      // Create a new review, and update
+
+      const newProfile = await models.HackerReview.create({
+        hackerId: acceptableProfile.dataValues.userId,
+        createdBy: req.user.id
+      });
+
+      return res.json({
+        review: newProfile,
+        profile: acceptableProfile
+      });
+    } else {
+      return res.json({ review: null, profile: null }); // Returns empty when there are no more profiles
+    }
   } catch (e) {
     console.log(e);
     return res.status(500).json({ err: e });
