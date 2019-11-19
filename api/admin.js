@@ -31,7 +31,12 @@ router.get("/reviews", async (req, res) => {
 
 router.put("/review/:id", async (req, res) => {
   const requestId = req.params.id;
-  const allowedFields = new Set(["scoreOne", "scoreTwo", "comments"]);
+  const allowedFields = new Set([
+    "scoreOne",
+    "scoreTwo",
+    "scoreThree",
+    "comments"
+  ]);
   const formInput = req.body;
 
   for (let key of Object.keys(formInput)) {
@@ -81,13 +86,13 @@ router.get("/review", async (req, res) => {
       return profile.dataValues.reviewCount < 3;
     });
     if (acceptableProfile) {
-      const newProfile = await models.HackerReview.create({
+      const newReview = await models.HackerReview.create({
         hackerId: acceptableProfile.dataValues.userId,
         createdBy: req.user.id
       });
 
       return res.json({
-        review: newProfile,
+        review: newReview,
         profile: acceptableProfile
       });
     } else {
