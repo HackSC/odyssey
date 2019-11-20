@@ -29,6 +29,40 @@ router.get("/reviews", async (req, res) => {
   }
 });
 
+
+router.put("/review/:id", async (req, res) => {
+  const requestId = req.params.id;
+  const allowedFields = new Set([
+    "scoreOne",
+    "scoreTwo",
+    "scoreThree",
+    "comments"
+  ]);
+  const formInput = req.body;
+
+  for (let key of Object.keys(formInput)) {
+    if (!allowedFields.has(key)) {
+      return res.status(400).json({
+        error: `${key} is not a supported field`
+      });
+    }
+  }
+
+  try {
+    const result = await models.HackerReview.update(req.body, {
+      where: {
+        id: requestId
+      }
+    });
+
+    return res.json({ update: result });
+  } catch (e) {
+    return res.status(500).json({
+      error: e
+    });
+  }
+});
+
 router.get("/review", async (req, res) => {
   try {
     const profilesWCount = await models.HackerProfile.findAll({
@@ -53,13 +87,13 @@ router.get("/review", async (req, res) => {
       return profile.dataValues.reviewCount < 3;
     });
     if (acceptableProfile) {
-      const newProfile = await models.HackerReview.create({
+      const newReview = await models.HackerReview.create({
         hackerId: acceptableProfile.dataValues.userId,
         createdBy: req.user.id
       });
 
       return res.json({
-        review: newProfile,
+        review: newReview,
         profile: acceptableProfile
       });
     } else {
