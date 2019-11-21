@@ -2,6 +2,15 @@ import * as React from "react";
 import styled from "styled-components";
 import Router from "next/router";
 import * as Sentry from "@sentry/browser";
+import copy from "copy-to-clipboard";
+import { FaLink, FaFacebookF, FaTwitter, FaEnvelope } from "react-icons/fa";
+import { Tooltip } from "react-tippy";
+
+import {
+  FacebookShareButton,
+  TwitterShareButton,
+  EmailShareButton
+} from "react-share";
 
 import { Flex, Column, Button } from "../../styles";
 
@@ -9,6 +18,7 @@ import Check from "../../assets/check.svg";
 
 type Props = {
   profile: Profile;
+  socialPosts: any;
 };
 
 const getStatusLabel = (profile: Profile): string => {
@@ -55,7 +65,7 @@ const getDaysTillClose = (): number => {
 };
 
 const StatusStep: React.FunctionComponent<Props> = props => {
-  const { profile } = props;
+  const { profile, socialPosts } = props;
 
   const statusLabel = getStatusLabel(profile);
 
@@ -120,6 +130,39 @@ const StatusStep: React.FunctionComponent<Props> = props => {
               This is your code, share it around. The more people who use it the
               more likely you are to get in.
             </p>
+            <ReferralButtons>
+              <FacebookShareButton {...socialPosts.facebook}>
+                <CircleIcon size={20} bgColor="#3b5998">
+                  <FaFacebookF color="white" />
+                </CircleIcon>
+              </FacebookShareButton>
+              <TwitterShareButton {...socialPosts.twitter} size={40}>
+                <CircleIcon size={20} bgColor="#1dcaff">
+                  <FaTwitter color="white" />
+                </CircleIcon>
+              </TwitterShareButton>
+              <EmailShareButton {...socialPosts.email}>
+                <CircleIcon size={20} bgColor="#a9a9a9">
+                  <FaEnvelope color="white" />
+                </CircleIcon>
+              </EmailShareButton>
+              <Tooltip
+                title="Copied link to clipboard!"
+                position="bottom"
+                duration={3}
+                trigger="click"
+                inertia
+                arrow
+              >
+                <CircleIcon
+                  size={20}
+                  bgColor="#ffce00"
+                  onClick={() => copy(socialPosts.link)}
+                >
+                  <FaLink color="white" />
+                </CircleIcon>
+              </Tooltip>
+            </ReferralButtons>
           </ReferralCode>
 
           <Countdown>
@@ -130,7 +173,8 @@ const StatusStep: React.FunctionComponent<Props> = props => {
             <Button
               as="a"
               target="_blank"
-              href="http://www.google.com/calendar/event?action=TEMPLATE&dates=20191129T200000Z%2F20191129T210000Z&text=Finish%20HackSC%20Application&location=&details=Reminder%20to%20finish%20HackSC%20Application%20before%20deadline">
+              href="http://www.google.com/calendar/event?action=TEMPLATE&dates=20191129T200000Z%2F20191129T210000Z&text=Finish%20HackSC%20Application&location=&details=Reminder%20to%20finish%20HackSC%20Application%20before%20deadline"
+            >
               Add to Calendar
             </Button>
           </Countdown>
@@ -158,6 +202,27 @@ const StatusStep: React.FunctionComponent<Props> = props => {
     </Flex>
   );
 };
+
+type CircleIconProps = {
+  size: number;
+  bgColor: string;
+};
+
+const CircleIcon = styled.div<CircleIconProps>`
+  background: ${props => props.bgColor};
+  width: ${props => props.size}px;
+  height: ${props => props.size}px;
+  border-radius: 50%;
+  text-align: center;
+  line-height: ${props => props.size}px;
+  vertical-align: middle;
+  padding: ${props => props.size - 10}px;
+
+  :hover {
+    transform: scale(1.05);
+    cursor: pointer;
+  }
+`;
 
 const Status = styled(Flex)`
   padding: 48px;
@@ -220,6 +285,17 @@ const ReferralCode = styled.div`
   background: #ffffff;
   border-radius: 4px;
   text-align: center;
+`;
+
+const ReferralButtons = styled.div`
+  margin: 0 0 8px;
+  border-radius: 4px;
+  display: flex;
+  flex-grow: 1;
+  justify-content: center;
+  * {
+    margin: 2px;
+  }
 `;
 
 const Countdown = styled.div`

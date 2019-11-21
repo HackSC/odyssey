@@ -11,14 +11,18 @@ import { Background, Container } from "../styles";
 
 import Step from "../components/steps/Status";
 
-const Dashboard = ({ profile }) => {
+import { generatePosts } from "../lib/referrerCode";
+
+const Dashboard = ({ profile, socialPosts }) => {
   return (
     <>
       <Head title="HackSC Odyssey - Dashboard" />
       <Navbar loggedIn activePage="dashboard" />
       <Background>
         {profile && (
-          <Container>{profile && <Step profile={profile} />}</Container>
+          <Container>
+            {profile && <Step profile={profile} socialPosts={socialPosts} />}
+          </Container>
         )}
       </Background>
       <Footer />
@@ -40,8 +44,11 @@ Dashboard.getInitialProps = async ({ req }) => {
     });
   }
 
+  const socialPosts = generatePosts(profile);
+
   return {
-    profile
+    profile,
+    socialPosts
   };
 };
 

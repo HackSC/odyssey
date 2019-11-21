@@ -4,6 +4,9 @@ import { ThemeProvider } from "styled-components";
 import { hotjar } from "react-hotjar";
 import * as Sentry from "@sentry/browser";
 
+import { persistLinkReferrerCode } from "../lib/referrerCode";
+import "react-tippy/dist/tippy.css";
+
 import { Theme, GlobalStyles } from "../styles";
 
 class OdysseyApp extends App {
@@ -13,6 +16,8 @@ class OdysseyApp extends App {
     if (Component.getInitialProps) {
       pageProps = await Component.getInitialProps(ctx);
     }
+
+    persistLinkReferrerCode(ctx, ctx.query);
 
     return { pageProps };
   }
