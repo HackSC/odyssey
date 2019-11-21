@@ -525,7 +525,7 @@ const ProfileStep: React.FunctionComponent<Props> = props => {
             </label>
 
             <Select
-              name="hackathonCount"
+              name="hackathon-count"
               options={hackathonCounts}
               defaultValue={profile.hackathonCount}
               disabled={submitted}

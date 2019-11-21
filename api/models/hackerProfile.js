@@ -22,8 +22,8 @@ module.exports = (sequelize, DataTypes) => {
       skills: DataTypes.STRING,
       hackathonCount: {
         type: DataTypes.ENUM,
-        values: ["0", "1", "2", "3", "4", "5+"],
-        defaultValue: "0"
+        values: ["NULL", "0", "1", "2", "3", "4", "5+"],
+        defaultValue: "NULL"
       },
       interests: DataTypes.STRING,
       submittedAt: DataTypes.DATE,

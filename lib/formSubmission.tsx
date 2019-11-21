@@ -23,7 +23,7 @@ function getProfileFromFormData(
     skills: formRef.current["skills"].value,
     interests: formRef.current["interests"].value,
     links: formRef.current["links"].value,
-    hackathonCount: formRef.current["hackathonCount"].value,
+    hackathonCount: formRef.current["hackathon-count"].value,
     questionOne: formRef.current["question-one"].value,
     questionTwo: formRef.current["question-two"].value,
     questionThree: formRef.current["question-three"].value,
