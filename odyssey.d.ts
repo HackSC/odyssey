@@ -21,6 +21,7 @@ declare type Profile = {
   minor: string;
   resume: string;
   skills: string;
+  hackathonCount: "0" | "1" | "2" | "3" | "4" | "5+";
   interests: string;
   submittedAt: Date;
   status:

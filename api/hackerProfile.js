@@ -78,6 +78,7 @@ router.put("/", async (req, res) => {
     "codeOfConduct",
     "authorize",
     "marketing",
+    "hackathonCount",
     "submit",
     "referrerCode"
   ]);
@@ -119,6 +120,7 @@ router.put("/", async (req, res) => {
         formInput.questionTwo &&
         formInput.questionThree &&
         formInput.codeOfConduct &&
+        formInput.hackathonCount &&
         formInput.authorize
       ) {
         updatedProfileFields.submittedAt = new Date();

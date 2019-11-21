@@ -20,6 +20,11 @@ module.exports = (sequelize, DataTypes) => {
       minor: DataTypes.STRING,
       resume: DataTypes.STRING,
       skills: DataTypes.STRING,
+      hackathonCount: {
+        type: DataTypes.ENUM,
+        values: ["0", "1", "2", "3", "4", "5+"],
+        defaultValue: "0"
+      },
       interests: DataTypes.STRING,
       submittedAt: DataTypes.DATE,
       status: {
