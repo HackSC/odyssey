@@ -152,11 +152,13 @@ const StatusStep: React.FunctionComponent<Props> = props => {
                 duration={3}
                 trigger="click"
                 inertia
-                arrow>
+                arrow
+              >
                 <CircleIcon
                   size={20}
                   bgColor="#ffce00"
-                  onClick={() => copy(socialPosts.link)}>
+                  onClick={() => copy(socialPosts.link)}
+                >
                   <FaLink color="white" />
                 </CircleIcon>
               </Tooltip>
@@ -171,7 +173,8 @@ const StatusStep: React.FunctionComponent<Props> = props => {
             <Button
               as="a"
               target="_blank"
-              href="http://www.google.com/calendar/event?action=TEMPLATE&dates=20191129T200000Z%2F20191129T210000Z&text=Finish%20HackSC%20Application&location=&details=Reminder%20to%20finish%20HackSC%20Application%20before%20deadline">
+              href="http://www.google.com/calendar/event?action=TEMPLATE&dates=20191129T200000Z%2F20191129T210000Z&text=Finish%20HackSC%20Application&location=&details=Reminder%20to%20finish%20HackSC%20Application%20before%20deadline"
+            >
               Add to Calendar
             </Button>
           </Countdown>
