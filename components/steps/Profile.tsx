@@ -763,7 +763,7 @@ const SaveButton = styled(Button)`
     color: #ffffff;
     border-color: #ffffff;
     background: ${({ theme }) => theme.colors.peach};
-    opacity: 0.8;
+    opacity: 0.6;
   }
 `;
 
@@ -817,7 +817,7 @@ const SubmitButton = styled(Button)`
     `}
 
   &:hover {
-    opacity: 0.8;
+    opacity: 0.6;
   }
 `;
 
