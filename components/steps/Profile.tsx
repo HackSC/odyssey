@@ -77,7 +77,9 @@ const uploadResume = async resumeFile => {
 
 const ProfileStep: React.FunctionComponent<Props> = props => {
   const { profile } = props;
-
+  const [hasChanged, setHasChanged] = useState(
+    !!profile && !!profile.submittedAt
+  );
   const [resumeUploaded, setResumeUploaded] = useState(null);
   const [saved, setSaved] = useState(false);
   const [userResume, setUserResume] = useState(null);
@@ -110,7 +112,7 @@ const ProfileStep: React.FunctionComponent<Props> = props => {
   }
 
   if (process.browser) {
-    if (!saved && !submitted) {
+    if (hasChanged && !submitted && !saved) {
       window.onbeforeunload = function(event) {
         var message =
           "Important: Please click on 'Save' button to leave this page.";
@@ -136,6 +138,7 @@ const ProfileStep: React.FunctionComponent<Props> = props => {
           }
           syncProfile(e, formRef, setSubmitted, setError, true);
         }}
+        onChange={() => setHasChanged(true)}
         ref={formRef}
       >
         <FormSection>
