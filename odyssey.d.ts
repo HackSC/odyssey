@@ -58,4 +58,14 @@ declare type Profile = {
   codeOfConduct: boolean;
   authorize: boolean;
   marketing: string;
+  promoCode: string;
+  referrerCode: string;
+};
+
+declare type QueryParamValues = {
+  referrerCode?: string;
+};
+
+declare type CookieValues = {
+  referrerCode?: string;
 };

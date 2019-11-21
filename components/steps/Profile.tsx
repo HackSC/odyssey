@@ -118,8 +118,7 @@ const ProfileStep: React.FunctionComponent<Props> = props => {
           }
           syncProfile(e, formRef, setSubmitted, setError, true);
         }}
-        ref={formRef}
-      >
+        ref={formRef}>
         <FormSection>
           <h1>Your HackSC Application</h1>
           <p>
@@ -199,7 +198,32 @@ const ProfileStep: React.FunctionComponent<Props> = props => {
             />
           </FormGroup>
         </FormSection>
+        <FormSection>
+          <h2>Marketing</h2>
+          <FormGroup>
+            <label>Referral Code (optional)</label>
+            <input
+              type="text"
+              placeholder="code.."
+              value={profile.referrerCode}
+              name="referrerCode"
+            />
+          </FormGroup>
+          <FormGroup>
+            <label>
+              How did you hear about HackSC? (100 characters, optional)
+            </label>
 
+            <input
+              type="text"
+              name="marketing"
+              maxLength={100}
+              placeholder="Social Media"
+              defaultValue={profile.marketing}
+              disabled={submitted}
+            />
+          </FormGroup>
+        </FormSection>
         <FormSection>
           <h2>Education</h2>
 
@@ -590,20 +614,7 @@ const ProfileStep: React.FunctionComponent<Props> = props => {
             />
           </FormGroup>
 
-          <FormGroup>
-            <label>
-              How did you hear about HackSC? (100 characters, optional)
-            </label>
 
-            <input
-              type="text"
-              name="marketing"
-              maxLength={100}
-              placeholder="Social Media"
-              defaultValue={profile.marketing}
-              disabled={submitted}
-            />
-          </FormGroup>
 
           <FormGroup>
             <RadioChoice>
@@ -619,8 +630,7 @@ const ProfileStep: React.FunctionComponent<Props> = props => {
                 I have read and agree to the{" "}
                 <a
                   href="https://static.mlh.io/docs/mlh-code-of-conduct.pdf"
-                  target="_blank"
-                >
+                  target="_blank">
                   MLH Code of Conduct
                 </a>
                 .
@@ -649,8 +659,7 @@ const ProfileStep: React.FunctionComponent<Props> = props => {
                 . I further agree to the terms of both the{" "}
                 <a
                   href="https://github.com/MLH/mlh-policies/tree/master/prize-terms-and-conditions"
-                  target="_blank"
-                >
+                  target="_blank">
                   MLH Contest Terms and Conditions
                 </a>{" "}
                 and the{" "}
@@ -677,8 +686,7 @@ const ProfileStep: React.FunctionComponent<Props> = props => {
                           uploadResume(userResume.files[0]);
                         }
                       }}
-                      disabled={submitted}
-                    >
+                      disabled={submitted}>
                       Save for later
                     </SaveButton>
                   </Flex>

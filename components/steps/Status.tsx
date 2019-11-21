@@ -2,6 +2,15 @@ import * as React from "react";
 import styled from "styled-components";
 import Router from "next/router";
 import * as Sentry from "@sentry/browser";
+import copy from "copy-to-clipboard";
+import { FaLink, FaFacebookF, FaTwitter, FaEnvelope } from "react-icons/fa";
+import { Tooltip } from "react-tippy";
+
+import {
+  FacebookShareButton,
+  TwitterShareButton,
+  EmailShareButton
+} from "react-share";
 
 import { Flex, Column, Button } from "../../styles";
 
@@ -9,6 +18,7 @@ import Check from "../../assets/check.svg";
 
 type Props = {
   profile: Profile;
+  socialPosts: any;
 };
 
 const getStatusLabel = (profile: Profile): string => {
@@ -47,14 +57,25 @@ const navigateTo = async (step: string) => {
   window.scrollTo(0, 0);
 };
 
+const getDaysTillClose = (): number => {
+  const endDate = new Date("Nov 29, 2019, 11:59 PM").getTime();
+  const nowDate = new Date().getTime();
+  const diff = endDate - nowDate;
+  return Math.floor(diff / 1000 / 60 / 60 / 24);
+};
+
 const StatusStep: React.FunctionComponent<Props> = props => {
-  const { profile } = props;
+  const { profile, socialPosts } = props;
 
   const statusLabel = getStatusLabel(profile);
 
   return (
     <Flex direction="column">
-      <h1>Hey there!</h1>
+      <h1>
+        {profile && profile.firstName
+          ? `Hey there, ${profile.firstName}!`
+          : "Hey there!"}
+      </h1>
 
       <Status align="center" justify="space-between">
         <Flex direction="row" align="center">
@@ -102,29 +123,103 @@ const StatusStep: React.FunctionComponent<Props> = props => {
         </Column>
 
         <DatesColumn flexBasis={35}>
+          <h2>Referral Code</h2>
+          <ReferralCode>
+            <h3>{profile.promoCode}</h3>
+            <p>
+              This is your code, share it around. The more people who use it the
+              more likely you are to get in.
+            </p>
+            <ReferralButtons>
+              <FacebookShareButton {...socialPosts.facebook}>
+                <CircleIcon size={20} bgColor="#3b5998">
+                  <FaFacebookF color="white" />
+                </CircleIcon>
+              </FacebookShareButton>
+              <TwitterShareButton {...socialPosts.twitter} size={40}>
+                <CircleIcon size={20} bgColor="#1dcaff">
+                  <FaTwitter color="white" />
+                </CircleIcon>
+              </TwitterShareButton>
+              <EmailShareButton {...socialPosts.email}>
+                <CircleIcon size={20} bgColor="#a9a9a9">
+                  <FaEnvelope color="white" />
+                </CircleIcon>
+              </EmailShareButton>
+              <Tooltip
+                title="Copied link to clipboard!"
+                position="bottom"
+                duration={3}
+                trigger="click"
+                inertia
+                arrow>
+                <CircleIcon
+                  size={20}
+                  bgColor="#ffce00"
+                  onClick={() => copy(socialPosts.link)}>
+                  <FaLink color="white" />
+                </CircleIcon>
+              </Tooltip>
+            </ReferralButtons>
+          </ReferralCode>
+
+          <Countdown>
+            <CountdownHeader>
+              <Count>{getDaysTillClose()}</Count>
+              <h2>Days to apply!</h2>
+            </CountdownHeader>
+            <Button
+              as="a"
+              target="_blank"
+              href="http://www.google.com/calendar/event?action=TEMPLATE&dates=20191129T200000Z%2F20191129T210000Z&text=Finish%20HackSC%20Application&location=&details=Reminder%20to%20finish%20HackSC%20Application%20before%20deadline">
+              Add to Calendar
+            </Button>
+          </Countdown>
+
           <h2>Major Dates</h2>
 
           <Dates>
-            <Date>
+            <DateText>
               <h3>Applications Open</h3>
               <p>November 7th, 2019</p>
-            </Date>
+            </DateText>
 
-            <Date>
+            <DateText>
               <h3>Applications Close</h3>
               <p>November 29th, 2019</p>
-            </Date>
+            </DateText>
 
-            <Date>
+            <DateText>
               <h3>HackSC 2020</h3>
               <p>January 31, 2020</p>
-            </Date>
+            </DateText>
           </Dates>
         </DatesColumn>
       </Flex>
     </Flex>
   );
 };
+
+type CircleIconProps = {
+  size: number;
+  bgColor: string;
+};
+
+const CircleIcon = styled.div<CircleIconProps>`
+  background: ${props => props.bgColor};
+  width: ${props => props.size}px;
+  height: ${props => props.size}px;
+  border-radius: 50%;
+  text-align: center;
+  line-height: ${props => props.size}px;
+  vertical-align: middle;
+  padding: ${props => props.size - 10}px;
+
+  :hover {
+    transform: scale(1.05);
+    cursor: pointer;
+  }
+`;
 
 const Status = styled(Flex)`
   padding: 48px;
@@ -181,14 +276,58 @@ const StepButton = styled(Button)`
   margin-top: 24px;
 `;
 
-const Dates = styled.div`
+const ReferralCode = styled.div`
+  padding: 24px 24px;
+  margin: 0 0 16px;
+  background: #ffffff;
+  border-radius: 4px;
+  text-align: center;
+`;
+
+const ReferralButtons = styled.div`
+  margin: 0 0 8px;
+  border-radius: 4px;
+  display: flex;
+  flex-grow: 1;
+  justify-content: center;
+  * {
+    margin: 2px;
+  }
+`;
+
+const Countdown = styled.div`
   padding: 24px 36px;
+  margin: 0 0 32px;
+  background: #ffffff;
+  border-radius: 4px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+`;
+
+const Count = styled.h2`
+  font-size: 72px;
+  color: ${({ theme }) => theme.colors.peach};
+`;
+
+const CountdownHeader = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  h2 {
+    padding-left: 12px;
+    margin-bottom: 0px;
+  }
+`;
+
+const Dates = styled.div`
+  padding: 24px 24px;
   margin: 16px 0 32px;
   background: #ffffff;
   border-radius: 4px;
 `;
 
-const Date = styled.div`
+const DateText = styled.div`
   margin-top: 36px;
 
   :first-child {

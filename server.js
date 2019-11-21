@@ -1,10 +1,10 @@
 const express = require("express");
 const http = require("http");
 const next = require("next");
-const session = require("express-session");
 const dotenv = require("dotenv");
 const passport = require("passport");
 const Auth0Strategy = require("passport-auth0");
+const cookieSession = require("cookie-session");
 
 const bodyParser = require("body-parser");
 
@@ -26,7 +26,8 @@ const handle = app.getRequestHandler();
 dotenv.config();
 
 Sentry.init({
-  dsn: "https://1a18ac7b9aa94cb5b2a8c9fc2f7e4fc8@sentry.io/1801129"
+  dsn: "https://1a18ac7b9aa94cb5b2a8c9fc2f7e4fc8@sentry.io/1801129",
+  environment: dev ? "dev" : process.env.NODE_ENV
 });
 
 const strategy = new Auth0Strategy(
@@ -44,10 +45,13 @@ const strategy = new Auth0Strategy(
 );
 
 const sessionConfig = {
-  secret: process.env.COOKIE_SECRET || "We haven't secured the cookies chief",
-  cookie: {},
-  resave: false,
-  saveUninitialized: true
+  name: "session",
+  keys: [process.env.COOKIE_SECRET || "We haven't secured the cookies chief"],
+  maxAge: 24 * 60 * 60 * 1000,
+  cookie: {
+    secure: true,
+    httpOnly: true
+  }
 };
 
 passport.use(strategy);
@@ -62,7 +66,7 @@ app.prepare().then(() => {
   const server = express();
 
   // Authentication config
-  server.use(session(sessionConfig));
+  server.use(cookieSession(sessionConfig));
   server.use(passport.initialize());
   server.use(passport.session());
 

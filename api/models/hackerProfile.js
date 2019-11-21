@@ -75,7 +75,18 @@ module.exports = (sequelize, DataTypes) => {
       links: DataTypes.STRING(1000),
       codeOfConduct: DataTypes.BOOLEAN,
       authorize: DataTypes.BOOLEAN,
-      marketing: DataTypes.STRING(100)
+      marketing: DataTypes.STRING(100),
+      promoCode: {
+        type: DataTypes.STRING(100),
+        defaultValue: function() {
+          //Random string of length 8
+          return (Math.random().toString(36) + "00000000000000000").slice(
+            2,
+            10
+          );
+        }
+      },
+      referrerCode: DataTypes.STRING(100)
     },
     {}
   );

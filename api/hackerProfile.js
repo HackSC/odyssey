@@ -78,7 +78,8 @@ router.put("/", async (req, res) => {
     "codeOfConduct",
     "authorize",
     "marketing",
-    "submit"
+    "submit",
+    "referrerCode"
   ]);
 
   for (let key of Object.keys(formInput)) {
@@ -142,6 +143,29 @@ router.put("/", async (req, res) => {
   });
 
   return res.json({ hackerProfile: updatedHackerProfile });
+});
+
+// Direct patch the referrerCode if there isn't one
+router.put("/referrerCode", async (req, res) => {
+  const referrerCode = req.body.referrerCode;
+
+  const currentHackerProfile = await models.HackerProfile.findOne({
+    where: { userId: req.user.id }
+  });
+
+  const currentReferrerCode = currentHackerProfile.referrerCode;
+
+  if (!currentReferrerCode || currentReferrerCode == "") {
+    const updatedFields = { referrerCode };
+
+    await models.HackerProfile.update(updatedFields, {
+      where: {
+        userId: req.user.id
+      }
+    });
+  }
+
+  return res.send();
 });
 
 router.post("/resume", utils.authMiddleware, async (req, res) => {
