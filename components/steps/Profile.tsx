@@ -112,7 +112,7 @@ const ProfileStep: React.FunctionComponent<Props> = props => {
   }
 
   if (process.browser) {
-    if (hasChanged && !submitted && !saved) {
+    if (hasChanged) {
       window.onbeforeunload = function(event) {
         var message =
           "Important: Please click on 'Save' button to leave this page.";
@@ -137,6 +137,9 @@ const ProfileStep: React.FunctionComponent<Props> = props => {
             uploadResume(userResume.files[0]);
           }
           syncProfile(e, formRef, setSubmitted, setError, true);
+
+          // Reset the change flag
+          setHasChanged(false);
         }}
         onChange={() => setHasChanged(true)}
         ref={formRef}
@@ -707,6 +710,8 @@ const ProfileStep: React.FunctionComponent<Props> = props => {
                         if (userResume && userResume.files[0]) {
                           uploadResume(userResume.files[0]);
                         }
+                        // Reset the change flag
+                        setHasChanged(false);
                       }}
                       disabled={submitted}
                     >
