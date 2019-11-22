@@ -60,6 +60,7 @@ declare type Profile = {
   marketing: string;
   promoCode: string;
   referrerCode: string;
+  referred: Profile[];
 };
 
 declare type QueryParamValues = {

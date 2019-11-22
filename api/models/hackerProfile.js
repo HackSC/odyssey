@@ -86,10 +86,19 @@ module.exports = (sequelize, DataTypes) => {
           );
         }
       },
-      referrerCode: DataTypes.STRING(100)
+      referrerCode: DataTypes.STRING(100),
+      referred: DataTypes.VIRTUAL
     },
     {}
   );
+
+  HackerProfile.prototype.getReferred = function() {
+    return sequelize.models.HackerProfile.findAll({
+      where: {
+        referrerCode: this.promoCode
+      }
+    });
+  };
   HackerProfile.associate = function(models) {
     // associations can be defined here
   };

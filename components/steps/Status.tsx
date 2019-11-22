@@ -5,6 +5,7 @@ import * as Sentry from "@sentry/browser";
 import copy from "copy-to-clipboard";
 import { FaLink, FaFacebookF, FaTwitter, FaEnvelope } from "react-icons/fa";
 import { Tooltip } from "react-tippy";
+import { useIsMobile } from "../../lib/layouts";
 
 import {
   FacebookShareButton,
@@ -68,6 +69,7 @@ const StatusStep: React.FunctionComponent<Props> = props => {
   const { profile, socialPosts } = props;
 
   const statusLabel = getStatusLabel(profile);
+  const isMobile = useIsMobile();
 
   return (
     <Flex direction="column">
@@ -123,7 +125,7 @@ const StatusStep: React.FunctionComponent<Props> = props => {
         </Column>
 
         <DatesColumn flexBasis={35}>
-          <h2>Referral Code</h2>
+          <h2>Your Referral Code</h2>
           <ReferralCode>
             <h3>{profile.promoCode}</h3>
             <p>
@@ -164,6 +166,22 @@ const StatusStep: React.FunctionComponent<Props> = props => {
               </Tooltip>
             </ReferralButtons>
           </ReferralCode>
+          <ReferredBoard>
+            {isMobile ? (
+              <div>
+                <h3>Number referred: {profile.referred.length}</h3>
+              </div>
+            ) : (
+              <div>
+                <h3> People Referred</h3>
+                {profile.referred.length == 0 ? (
+                  <p> You haven't referred anyone yet!</p>
+                ) : (
+                  profile.referred.map(p => <p>{p.email}</p>)
+                )}
+              </div>
+            )}
+          </ReferredBoard>
 
           <Countdown>
             <CountdownHeader>
@@ -285,6 +303,14 @@ const ReferralCode = styled.div`
   background: #ffffff;
   border-radius: 4px;
   text-align: center;
+`;
+
+const ReferredBoard = styled.div`
+  padding: 18px 24px;
+  background: #ffffff;
+  border-radius: 4px;
+  text-align: left;
+  margin: 0 0 16px;
 `;
 
 const ReferralButtons = styled.div`

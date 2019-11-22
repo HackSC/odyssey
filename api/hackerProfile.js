@@ -20,6 +20,8 @@ router.get("/", async (req, res) => {
     }
   });
 
+  hackerProfile.referred = await hackerProfile.getReferred();
+
   if (hackerProfile.status === "unverified" && req.user._json.email_verified) {
     // Update hacker profile
     try {
