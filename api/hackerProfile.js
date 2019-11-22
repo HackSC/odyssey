@@ -52,6 +52,13 @@ router.put("/", async (req, res) => {
     });
   }
 
+  // * Make sure the application close date is not passed
+  if (new Date() > new Date("November 29 2019 23:59 GMT-0800")) {
+    return res.status(400).json({
+      error: "Applications closed. Please do not try this again!"
+    });
+  }
+
   // Only allow certain fields for form input
   const allowedFields = new Set([
     "gender",

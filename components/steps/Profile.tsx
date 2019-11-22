@@ -80,6 +80,8 @@ const ProfileStep: React.FunctionComponent<Props> = props => {
   const [hasChanged, setHasChanged] = useState(
     !!profile && !!profile.submittedAt
   );
+  // * Set application close date here
+  const disabled = new Date() > new Date("November 29 2019 23:59 GMT-0800");
   const [resumeUploaded, setResumeUploaded] = useState(null);
   const [saved, setSaved] = useState(false);
   const [userResume, setUserResume] = useState(null);
@@ -133,10 +135,12 @@ const ProfileStep: React.FunctionComponent<Props> = props => {
     <Flex direction="column">
       <Form
         onSubmit={e => {
-          if (userResume && userResume.files[0]) {
-            uploadResume(userResume.files[0]);
+          if (!disabled) {
+            if (userResume && userResume.files[0]) {
+              uploadResume(userResume.files[0]);
+            }
+            syncProfile(e, formRef, setSubmitted, setError, true);
           }
-          syncProfile(e, formRef, setSubmitted, setError, true);
 
           // Reset the change flag
           setHasChanged(false);
@@ -158,6 +162,12 @@ const ProfileStep: React.FunctionComponent<Props> = props => {
               for updates on when results come out.
             </AlreadySubmitted>
           )}
+          {disabled && (
+            <AlreadySubmitted>
+              Application submissions are now closed! Be on the look out for
+              updates on when results come out.
+            </AlreadySubmitted>
+          )}
         </FormSection>
 
         <FormSection>
@@ -175,7 +185,7 @@ const ProfileStep: React.FunctionComponent<Props> = props => {
                   defaultValue={profile.firstName}
                   maxLength={120}
                   required
-                  disabled={submitted}
+                  disabled={submitted || disabled}
                 />
               </FormGroup>
             </Column>
@@ -191,7 +201,7 @@ const ProfileStep: React.FunctionComponent<Props> = props => {
                   defaultValue={profile.lastName}
                   maxLength={120}
                   required
-                  disabled={submitted}
+                  disabled={submitted || disabled}
                 />
               </FormGroup>
             </Column>
@@ -219,7 +229,7 @@ const ProfileStep: React.FunctionComponent<Props> = props => {
               defaultValue={profile.phoneNumber}
               maxLength={25}
               required
-              disabled={submitted}
+              disabled={submitted || disabled}
             />
           </FormGroup>
         </FormSection>
@@ -245,7 +255,7 @@ const ProfileStep: React.FunctionComponent<Props> = props => {
               maxLength={100}
               placeholder="Social Media"
               defaultValue={profile.marketing}
-              disabled={submitted}
+              disabled={submitted || disabled}
             />
           </FormGroup>
         </FormSection>
@@ -262,7 +272,9 @@ const ProfileStep: React.FunctionComponent<Props> = props => {
               required
               ref={schoolRef}
               maxLength={255}
-              disabled={submitted || !!getSchoolFromEmail(profile.email)}
+              disabled={
+                submitted || !!getSchoolFromEmail(profile.email) || disabled
+              }
               suggestions={Schools}
             />
           </FormGroup>
@@ -277,7 +289,7 @@ const ProfileStep: React.FunctionComponent<Props> = props => {
               required
               ref={majorRef}
               maxLength={120}
-              disabled={submitted}
+              disabled={submitted || disabled}
               suggestions={Majors}
             />
           </FormGroup>
@@ -291,7 +303,7 @@ const ProfileStep: React.FunctionComponent<Props> = props => {
               name="minor"
               maxLength={120}
               defaultValue={profile.minor}
-              disabled={submitted}
+              disabled={submitted || disabled}
             />
           </FormGroup>
 
@@ -303,7 +315,7 @@ const ProfileStep: React.FunctionComponent<Props> = props => {
               options={yearOptions}
               defaultValue={profile.year}
               required
-              disabled={submitted}
+              disabled={submitted || disabled}
             />
           </FormGroup>
 
@@ -315,7 +327,7 @@ const ProfileStep: React.FunctionComponent<Props> = props => {
               options={gradDateOptions}
               defaultValue={profile.graduationDate}
               required
-              disabled={submitted}
+              disabled={submitted || disabled}
             />
           </FormGroup>
         </FormSection>
@@ -331,7 +343,7 @@ const ProfileStep: React.FunctionComponent<Props> = props => {
               options={genderOptions}
               defaultValue={profile.gender}
               required
-              disabled={submitted}
+              disabled={submitted || disabled}
             />
           </FormGroup>
 
@@ -347,7 +359,7 @@ const ProfileStep: React.FunctionComponent<Props> = props => {
                     value="american-indian"
                     id="ethnicity-american-indian"
                     defaultChecked={profile.ethnicity === "american-indian"}
-                    disabled={submitted}
+                    disabled={submitted || disabled}
                     required
                   />
                   <RadioChoiceLabel htmlFor="ethnicity-american-indian">
@@ -362,7 +374,7 @@ const ProfileStep: React.FunctionComponent<Props> = props => {
                     value="asian"
                     id="ethnicity-asian"
                     defaultChecked={profile.ethnicity === "asian"}
-                    disabled={submitted}
+                    disabled={submitted || disabled}
                   />
                   <RadioChoiceLabel htmlFor="ethnicity-asian">
                     Asian / Pacific Islander
@@ -376,7 +388,7 @@ const ProfileStep: React.FunctionComponent<Props> = props => {
                     value="black"
                     id="ethnicity-black"
                     defaultChecked={profile.ethnicity === "black"}
-                    disabled={submitted}
+                    disabled={submitted || disabled}
                   />
                   <RadioChoiceLabel htmlFor="ethnicity-black">
                     Black or African American
@@ -390,7 +402,7 @@ const ProfileStep: React.FunctionComponent<Props> = props => {
                     value="hispanic"
                     id="ethnicity-hispanic"
                     defaultChecked={profile.ethnicity === "hispanic"}
-                    disabled={submitted}
+                    disabled={submitted || disabled}
                   />
                   <RadioChoiceLabel htmlFor="ethnicity-hispanic">
                     Hispanic
@@ -406,7 +418,7 @@ const ProfileStep: React.FunctionComponent<Props> = props => {
                     value="caucasian"
                     id="ethnicity-caucasian"
                     defaultChecked={profile.ethnicity === "caucasian"}
-                    disabled={submitted}
+                    disabled={submitted || disabled}
                   />
                   <RadioChoiceLabel htmlFor="ethnicity-caucasian">
                     White / Caucasian
@@ -420,7 +432,7 @@ const ProfileStep: React.FunctionComponent<Props> = props => {
                     value="mixed-other"
                     id="ethnicity-mixed-other"
                     defaultChecked={profile.ethnicity === "mixed-other"}
-                    disabled={submitted}
+                    disabled={submitted || disabled}
                   />
                   <RadioChoiceLabel htmlFor="ethnicity-mixed-other">
                     Mixed / Other
@@ -434,7 +446,7 @@ const ProfileStep: React.FunctionComponent<Props> = props => {
                     value="no-say"
                     id="ethnicity-no-say"
                     defaultChecked={profile.ethnicity === "no-say"}
-                    disabled={submitted}
+                    disabled={submitted || disabled}
                   />
                   <RadioChoiceLabel htmlFor="ethnicity-no-say">
                     Prefer not to answer
@@ -456,7 +468,7 @@ const ProfileStep: React.FunctionComponent<Props> = props => {
                 defaultChecked={profile.over18}
                 required
                 id="is-over-18"
-                disabled={submitted}
+                disabled={submitted || disabled}
               />
               <RadioChoiceLabel htmlFor="is-over-18">
                 Yes, I will be 18+ by January 31, 2020
@@ -479,7 +491,7 @@ const ProfileStep: React.FunctionComponent<Props> = props => {
                 name="need-bus"
                 id="need-bus"
                 defaultChecked={profile.needBus}
-                disabled={submitted}
+                disabled={submitted || disabled}
               />
               <RadioChoiceLabel htmlFor="need-bus">
                 Yes, I need bus transportation
@@ -498,9 +510,12 @@ const ProfileStep: React.FunctionComponent<Props> = props => {
               required={!!!profile.resume}
               ref={ref => setUserResume(ref)}
               onChange={e => setResumeUploaded(e.target.files[0])}
-              disabled={submitted}
+              disabled={submitted || disabled}
             />
-            <ResumeUploadButton htmlFor="resume" disabled={submitted}>
+            <ResumeUploadButton
+              htmlFor="resume"
+              disabled={submitted || disabled}
+            >
               Upload Your Resume
             </ResumeUploadButton>
 
@@ -529,7 +544,7 @@ const ProfileStep: React.FunctionComponent<Props> = props => {
               name="skill-level"
               options={skillLevelOptions}
               defaultValue={profile.skillLevel}
-              disabled={submitted}
+              disabled={submitted || disabled}
               required
             />
           </FormGroup>
@@ -544,7 +559,7 @@ const ProfileStep: React.FunctionComponent<Props> = props => {
               placeholder="javascript, python, c++, node.js, express, react, mysql"
               name="skills"
               defaultValue={profile.skills}
-              disabled={submitted}
+              disabled={submitted || disabled}
             />
           </FormGroup>
 
@@ -559,7 +574,7 @@ const ProfileStep: React.FunctionComponent<Props> = props => {
               placeholder="blockchain, machine learning, security"
               name="interests"
               defaultValue={profile.interests}
-              disabled={submitted}
+              disabled={submitted || disabled}
             />
           </FormGroup>
 
@@ -574,7 +589,7 @@ const ProfileStep: React.FunctionComponent<Props> = props => {
               placeholder="https://yourportfolio.com, https://linkedin.com/in/yourlinkedin"
               name="links"
               defaultValue={profile.links}
-              disabled={submitted}
+              disabled={submitted || disabled}
             />
           </FormGroup>
         </FormSection>
@@ -606,7 +621,7 @@ const ProfileStep: React.FunctionComponent<Props> = props => {
               maxLength={1000}
               defaultValue={profile.questionOne}
               required
-              disabled={submitted}
+              disabled={submitted || disabled}
             />
           </FormGroup>
 
@@ -622,7 +637,7 @@ const ProfileStep: React.FunctionComponent<Props> = props => {
               maxLength={1000}
               defaultValue={profile.questionTwo}
               required
-              disabled={submitted}
+              disabled={submitted || disabled}
             />
           </FormGroup>
 
@@ -635,7 +650,7 @@ const ProfileStep: React.FunctionComponent<Props> = props => {
               maxLength={100}
               defaultValue={profile.questionThree}
               required
-              disabled={submitted}
+              disabled={submitted || disabled}
             />
           </FormGroup>
 
@@ -647,7 +662,7 @@ const ProfileStep: React.FunctionComponent<Props> = props => {
                 defaultChecked={profile.codeOfConduct}
                 required
                 id="code-of-conduct"
-                disabled={submitted}
+                disabled={submitted || disabled}
               />
               <RadioChoiceLabel htmlFor="code-of-conduct">
                 I have read and agree to the{" "}
@@ -670,7 +685,7 @@ const ProfileStep: React.FunctionComponent<Props> = props => {
                 defaultChecked={profile.authorize}
                 required
                 id="authorize"
-                disabled={submitted}
+                disabled={submitted || disabled}
               />
               <RadioChoiceLabel htmlFor="authorize">
                 I authorize you to share my application/registration information
@@ -713,7 +728,7 @@ const ProfileStep: React.FunctionComponent<Props> = props => {
                         // Reset the change flag
                         setHasChanged(false);
                       }}
-                      disabled={submitted}
+                      disabled={submitted || disabled}
                     >
                       Save for later
                     </SaveButton>
@@ -721,7 +736,10 @@ const ProfileStep: React.FunctionComponent<Props> = props => {
                 </Column>
                 <Column flexBasis={49}>
                   <Flex>
-                    <SubmitButton type="submit" disabled={submitted}>
+                    <SubmitButton
+                      type="submit"
+                      disabled={submitted || disabled}
+                    >
                       Submit
                     </SubmitButton>
                   </Flex>
