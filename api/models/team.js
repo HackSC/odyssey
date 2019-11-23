@@ -18,7 +18,7 @@ module.exports = (sequelize, DataTypes) => {
     {}
   );
   Team.associate = function(models) {
-    // associations can be defined here
+    Team.hasMany(models.HackerProfile);
   };
   return Team;
 };
