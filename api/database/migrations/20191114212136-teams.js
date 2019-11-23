@@ -2,8 +2,8 @@
 
 module.exports = {
   up: (queryInterface, Sequelize) => {
-    return Promise.all([
-      queryInterface.createTable("Teams", {
+    return queryInterface
+      .createTable("Teams", {
         id: {
           allowNull: false,
           type: Sequelize.INTEGER,
@@ -26,15 +26,16 @@ module.exports = {
             key: "userId"
           }
         }
-      }),
-      queryInterface.addColumn("HackerProfiles", "teamId", {
-        type: Sequelize.INTEGER,
-        references: {
-          model: "Teams",
-          key: "id"
-        }
       })
-    ]);
+      .then(() => {
+        return queryInterface.addColumn("HackerProfiles", "teamId", {
+          type: Sequelize.INTEGER,
+          references: {
+            model: "Teams",
+            key: "id"
+          }
+        });
+      });
   },
 
   down: (queryInterface, Sequelize) => {
