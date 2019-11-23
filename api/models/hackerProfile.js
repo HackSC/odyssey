@@ -87,7 +87,14 @@ module.exports = (sequelize, DataTypes) => {
         }
       },
       referrerCode: DataTypes.STRING(100),
-      referred: DataTypes.VIRTUAL
+      referred: DataTypes.VIRTUAL,
+      teamId: {
+        type: DataTypes.INTEGER,
+        references: {
+          model: "Teams",
+          key: "id"
+        }
+      }
     },
     {}
   );

@@ -2,39 +2,45 @@
 
 module.exports = {
   up: (queryInterface, Sequelize) => {
-    /*
-      Add altering commands here.
-      Return a promise to correctly handle asynchronicity.
-
-      Example:
-      return queryInterface.createTable('users', { id: Sequelize.INTEGER });
-
-      addColumn
-        'HackerProfiles',
-        'teamId', {
+    return Promise.all([
+      queryInterface.createTable("Teams", {
+        id: {
+          allowNull: false,
+          type: Sequelize.INTEGER,
+          autoIncrement: true,
+          primaryKey: true
+        },
+        name: {
+          type: Sequelize.STRING(150),
+          allowNull: false
+        },
+        teamCode: {
+          type: Sequelize.STRING(4),
+          allowNull: false,
+          unique: true
+        },
+        ownerId: {
           type: Sequelize.STRING,
           references: {
-            model: 'Team',
-            key: 'id',
-          },
-          onUpdate: 'CASCADE',
-          onDelete: 'SET NULL',
+            model: "HackerProfiles",
+            key: "userId"
+          }
         }
-    */
+      }),
+      queryInterface.addColumn("HackerProfiles", "teamId", {
+        type: Sequelize.INTEGER,
+        references: {
+          model: "Teams",
+          key: "id"
+        }
+      })
+    ]);
   },
 
   down: (queryInterface, Sequelize) => {
-    /*
-      Add reverting commands here.
-      Return a promise to correctly handle asynchronicity.
-
-      Example:
-      return queryInterface.dropTable('users');
-
-      removeColumn(
-        'HackerProfiles',
-        'teamId'
-      )
-    */
+    return Promise.all([
+      queryInterface.removeColumn("HackerProfiles", "teamId"),
+      queryInterface.dropTable("Teams")
+    ]);
   }
 };

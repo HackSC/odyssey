@@ -2,13 +2,17 @@ module.exports = (sequelize, DataTypes) => {
   const Team = sequelize.define(
     "Team",
     {
-      name: DataTypes.STRING,
-      teamId: {
-        type: DataTypes.STRING(10),
+      name: DataTypes.STRING(150),
+      teamCode: {
+        type: DataTypes.STRING(4),
         unique: true
       },
       ownerId: {
-        type: DataTypes.STRING
+        type: DataTypes.STRING,
+        references: {
+          model: "HackerProfiles",
+          key: "userId"
+        }
       }
     },
     {}
