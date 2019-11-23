@@ -2,8 +2,13 @@
 
 module.exports = {
   up: (queryInterface, Sequelize) => {
+<<<<<<< HEAD
     return queryInterface
       .createTable("Teams", {
+=======
+    return Promise.all([
+      queryInterface.createTable("Teams", {
+>>>>>>> Set up migrations and model for teams
         id: {
           allowNull: false,
           type: Sequelize.INTEGER,
