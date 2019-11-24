@@ -44,26 +44,4 @@ Admin.getInitialProps = async ctx => {
   };
 };
 
-const Label = styled.label`
-  padding: 48px;
-  font-size: 25px;
-`;
-
-const Status = styled(Flex)`
-  padding: 48px;
-  margin: 16px 0 32px;
-  background: #ffffff;
-  border-radius: 4px;
-
-  h2 {
-    padding: 0;
-    margin-left: 16px;
-  }
-
-  ${({ theme }) =>
-    theme.media.tablet`
-      padding: 32px;
-    `}
-`;
-
 export default Admin;
