@@ -1,7 +1,11 @@
 import React from "react";
 import * as Sentry from "@sentry/browser";
 
-import { handleLoginRedirect, getProfile } from "../lib/authenticate";
+import {
+  handleLoginRedirect,
+  getProfile,
+  handleAdminRedirect
+} from "../lib/authenticate";
 
 import Head from "../components/Head";
 import Navbar from "../components/Navbar";
@@ -36,6 +40,8 @@ Dashboard.getInitialProps = async ({ req }) => {
   // Null profile means user is not logged in
   if (!profile) {
     handleLoginRedirect(req);
+  } else if (profile.role == "admin") {
+    handleAdminRedirect(req);
   }
 
   if (typeof window !== "undefined") {

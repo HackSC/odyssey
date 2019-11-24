@@ -9,6 +9,7 @@ import { Container, Link } from "../styles";
 type NavbarProps = {
   loggedIn?: boolean;
   activePage?: string;
+  admin?: boolean;
 };
 
 const style = background => {
@@ -27,7 +28,8 @@ const style = background => {
 
 const Navbar: React.FunctionComponent<NavbarProps> = ({
   loggedIn,
-  activePage
+  activePage,
+  admin
 }: NavbarProps) => {
   return (
     <Wrapper>
@@ -35,30 +37,37 @@ const Navbar: React.FunctionComponent<NavbarProps> = ({
         <a href={loggedIn ? "/dashboard" : "/"}>
           <HeaderLogoImg src={HeaderLogo} />
         </a>
-
         <Links>
           {loggedIn ? (
             <>
-              <Link
-                href="/dashboard"
-                style={style(activePage === "dashboard" ? "#FF8379" : "white")}
-              >
-                Dashboard
-              </Link>
-              <Link
-                href="/application"
-                style={style(
-                  activePage === "application" ? "#FF8379" : "white"
-                )}
-              >
-                Application
-              </Link>
-              <Link
-                href="/results"
-                style={style(activePage === "results" ? "#FF8379" : "white")}
-              >
-                Results
-              </Link>
+              {!admin && (
+                <Link
+                  href="/dashboard"
+                  style={style(
+                    activePage === "dashboard" ? "#FF8379" : "white"
+                  )}
+                >
+                  Dashboard
+                </Link>
+              )}
+              {!admin && (
+                <Link
+                  href="/application"
+                  style={style(
+                    activePage === "application" ? "#FF8379" : "white"
+                  )}
+                >
+                  Application
+                </Link>
+              )}
+              {!admin && (
+                <Link
+                  href="/results"
+                  style={style(activePage === "results" ? "#FF8379" : "white")}
+                >
+                  Results
+                </Link>
+              )}
               <Link
                 href="/auth/logout"
                 style={style(activePage === "logout" ? "#FF8379" : "white")}
