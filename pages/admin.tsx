@@ -44,8 +44,6 @@ Admin.getInitialProps = async ctx => {
   };
 };
 
-<<<<<<< HEAD
-=======
 const Label = styled.label`
   padding: 48px;
   font-size: 25px;
@@ -68,5 +66,4 @@ const Status = styled(Flex)`
     `}
 `;
 
->>>>>>> init
 export default Admin;
