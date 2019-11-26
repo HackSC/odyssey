@@ -10,13 +10,11 @@ const Sentry = require("@sentry/node");
 router.use(utils.authMiddleware);
 router.use(utils.requireAdmin);
 
-// Direct patch the referrerCode if there isn't one
 router.get("/tasks", async (req, res) => {
   try {
     const tasks = await models.Task.findAll();
     return res.json({ tasks: tasks });
   } catch (e) {
-    console.log(e);
     return res.json({ err: e });
   }
 });
