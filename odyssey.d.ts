@@ -61,7 +61,6 @@ declare type Profile = {
   promoCode: string;
   referrerCode: string;
   referred: Profile[];
-  teamId: string;
 };
 
 declare type QueryParamValues = {
