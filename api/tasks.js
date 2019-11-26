@@ -19,4 +19,28 @@ router.get("/tasks", async (req, res) => {
   }
 });
 
+router.post("/tasks", async (req, res) => {
+  const allowedFields = new Set(["blocking", "description", "points", "name"]);
+  const formInput = req.body;
+
+  for (let key of Object.keys(formInput)) {
+    if (!allowedFields.has(key)) {
+      return res.status(400).json({
+        error: `${key} is not a supported field`
+      });
+    }
+  }
+  try {
+    await models.Task.create({
+      blocking: formInput.blocking,
+      description: formInput.description,
+      points: formInput.points,
+      name: formInput.name
+    });
+    return res.status(200);
+  } catch (e) {
+    return res.status(500).json({ error: e });
+  }
+});
+
 module.exports = router;
