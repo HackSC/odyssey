@@ -62,6 +62,13 @@ declare type Profile = {
   referrerCode: string;
   referred: Profile[];
   teamId: string;
+  team: Team;
+};
+
+declare type Team = {
+  name: string;
+  teamCode: string;
+  ownerId: string;
 };
 
 declare type QueryParamValues = {

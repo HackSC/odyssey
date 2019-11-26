@@ -87,14 +87,7 @@ module.exports = (sequelize, DataTypes) => {
         }
       },
       referrerCode: DataTypes.STRING(100),
-      referred: DataTypes.VIRTUAL,
-      teamId: {
-        type: DataTypes.INTEGER,
-        references: {
-          model: "Teams",
-          key: "id"
-        }
-      }
+      referred: DataTypes.VIRTUAL
     },
     {}
   );
@@ -107,7 +100,7 @@ module.exports = (sequelize, DataTypes) => {
     });
   };
   HackerProfile.associate = function(models) {
-    HackerProfile.belongsTo(models.Team);
+    HackerProfile.belongsTo(models.Team, { as: "team" });
   };
   return HackerProfile;
 };
