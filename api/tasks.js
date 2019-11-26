@@ -31,12 +31,7 @@ router.post("/tasks", async (req, res) => {
     }
   }
   try {
-    await models.Task.create({
-      blocking: formInput.blocking,
-      description: formInput.description,
-      points: formInput.points,
-      name: formInput.name
-    });
+    await models.Task.create(req.body);
     return res.status(200);
   } catch (e) {
     return res.status(500).json({ error: e });
