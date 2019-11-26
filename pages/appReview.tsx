@@ -1,6 +1,10 @@
 import React, { useState } from "react";
 
-import { handleLoginRedirect, getProfile } from "../lib/authenticate";
+import {
+  handleLoginRedirect,
+  getProfile,
+  handleAdminRedirect
+} from "../lib/authenticate";
 
 import { getHackerProfileForReview, submitReview } from "../lib/admin";
 import Head from "../components/Head";
@@ -57,11 +61,13 @@ const AppReview = ({ hackerProfile, review }) => {
           <div>
             <button
               onClick={async () => {
-                const result = submitReview(review, {
+                const result = await submitReview(review, {
                   scoreOne: s1,
                   scoreTwo: s2,
                   scoreThree: s3
                 });
+                // Redirect back to admin from the server
+                handleAdminRedirect(null);
               }}
             >
               {" "}
