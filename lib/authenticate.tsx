@@ -67,3 +67,7 @@ export function handleLoginRedirect(req) {
 export function handleDashboardRedirect(req) {
   redirectToPath(req, "/dashboard");
 }
+
+export function handleAdminRedirect(req) {
+  redirectToPath(req, "/admin");
+}
