@@ -38,4 +38,17 @@ router.post("/tasks", async (req, res) => {
   }
 });
 
+router.delete("/tasks/:id", async (req, res) => {
+  try {
+    const id = req.params.id;
+    await models.Task.destroy({
+      where: {
+        id: id
+      }
+    });
+  } catch (e) {
+    return res.status(500).json({ err: e });
+  }
+});
+
 module.exports = router;
