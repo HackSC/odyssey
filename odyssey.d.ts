@@ -69,6 +69,7 @@ declare type Team = {
   name: string;
   teamCode: string;
   ownerId: string;
+  HackerProfiles: Array<Object>;
 };
 
 declare type QueryParamValues = {

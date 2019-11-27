@@ -13,7 +13,14 @@ router.get("/", async (req, res) => {
     where: { userId: req.user.id }
   });
 
-  const team = await hackerProfile.getTeam();
+  const team = await hackerProfile.getTeam({
+    include: [
+      {
+        model: models.HackerProfile,
+        attributes: ["firstName", "lastName", "status", "email"]
+      }
+    ]
+  });
 
   if (team) {
     return res.json({ team });
@@ -21,6 +28,22 @@ router.get("/", async (req, res) => {
     return res.json({
       message: "User does not currently belong to a team"
     });
+  }
+});
+
+// GET /api/team/:code
+// - If provided a team code, retrieve it
+router.get("/:code", async (req, res) => {
+  // Try to find a team with the provided code
+  const team = await models.Team.findOne({
+    where: { teamCode: req.params.code || "" }
+  });
+  if (!team) {
+    return res
+      .status(400)
+      .json({ message: "Could not find a team with that code" });
+  } else {
+    return res.json({ team });
   }
 });
 
@@ -92,16 +115,14 @@ router.post("/join/:code", async (req, res) => {
   }
 
   // See if there is still space in the team
-  const teamMembers = team.getHackerProfiles();
+  const teamMembers = await team.getHackerProfiles();
 
-  if (teamMembers.length() + 1 > 4) {
+  if (teamMembers.length + 1 > 4) {
     return res.status(400).json({ message: "This team is full!" });
   }
 
   // If we're still here, we can join the team :)
-  await hackerProfile.update({
-    teamId: req.params.code
-  });
+  await hackerProfile.setTeam(team);
 
   return res.status(200).json({
     message: "Successfully joined team"

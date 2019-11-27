@@ -18,7 +18,7 @@ module.exports = (sequelize, DataTypes) => {
     {}
   );
   Team.associate = function(models) {
-    Team.hasMany(models.HackerProfile);
+    Team.hasMany(models.HackerProfile, { foreignKey: "teamId" });
   };
   return Team;
 };
