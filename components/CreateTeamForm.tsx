@@ -33,7 +33,7 @@ const CreateTeamForm = () => {
 
           if (res.status === 200) {
             setError(null);
-            await Router.push("/team?joined");
+            await Router.push("/team?created");
             window.scrollTo(0, 0);
           } else {
             setError(data.message);

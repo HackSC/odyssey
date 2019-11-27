@@ -45,7 +45,7 @@ const Team = ({ team, profile }: Props) => {
 
     if (res.status === 200) {
       setError(null);
-      await Router.push("/team?left");
+      await Router.push("/team?deleted");
       window.scrollTo(0, 0);
     } else {
       setError(data.message);

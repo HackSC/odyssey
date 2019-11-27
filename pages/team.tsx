@@ -1,4 +1,5 @@
 import React from "react";
+import styled from "styled-components";
 
 import { handleLoginRedirect, getProfile } from "../lib/authenticate";
 
@@ -39,7 +40,7 @@ async function getTeam(req): Promise<Team> {
   }
 }
 
-const Teams = ({ profile, team, joined }) => {
+const Teams = ({ profile, team, status }) => {
   return (
     <>
       <Head title="HackSC Odyssey - Team Setup" />
@@ -63,10 +64,20 @@ const Teams = ({ profile, team, joined }) => {
 
           <br />
 
+          {status === "created" ? (
+            <Message>You have successfully created a team</Message>
+          ) : status === "joined" ? (
+            <Message>You have successfully joined a team</Message>
+          ) : status === "left" ? (
+            <Message>You have succesfully left a team</Message>
+          ) : status === "deleted" ? (
+            <Message>You have successfully deleted a team</Message>
+          ) : null}
+
           {team ? (
             <Team team={team} profile={profile} />
           ) : (
-            <Flex direction="row" tabletVertical justify="space-between">
+            <NoTeamFlex direction="row" tabletVertical justify="space-between">
               <Column flexBasis={48}>
                 <JoinTeamForm />
               </Column>
@@ -74,7 +85,7 @@ const Teams = ({ profile, team, joined }) => {
               <Column flexBasis={48}>
                 <CreateTeamForm />
               </Column>
-            </Flex>
+            </NoTeamFlex>
           )}
         </Container>
       </Background>
@@ -83,7 +94,7 @@ const Teams = ({ profile, team, joined }) => {
   );
 };
 
-Teams.getInitialProps = async ({ req }) => {
+Teams.getInitialProps = async ({ req, query }) => {
   const profile = await getProfile(req);
   const team = await getTeam(req);
 
@@ -92,10 +103,43 @@ Teams.getInitialProps = async ({ req }) => {
     handleLoginRedirect(req);
   }
 
+  let status = null;
+  if ("joined" in query) {
+    status = "joined";
+  }
+
+  if ("left" in query) {
+    status = "left";
+  }
+
+  if ("deleted" in query) {
+    status = "deleted";
+  }
+
+  if ("created" in query) {
+    status = "created";
+  }
+
   return {
     profile,
-    team
+    team,
+    status
   };
 };
+
+const Message = styled.p`
+  font-weight: 600;
+  font-size: 18px;
+  text-align: center;
+  padding: 24px 0;
+  border: 2px solid ${({ theme }) => theme.colors.blue};
+  color: ${({ theme }) => theme.colors.gray50};
+  border-radius: 16px;
+  margin-bottom: 16px;
+`;
+
+const NoTeamFlex = styled(Flex)`
+  margin-top: 48px;
+`;
 
 export default Teams;
