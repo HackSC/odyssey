@@ -74,13 +74,17 @@ const Team = ({ team, profile }: Props) => {
           <Members>
             {team.HackerProfiles.map((member: any) => (
               <Member key={member.email}>
-                <b>
-                  {member.firstName && member.lastName
-                    ? member.firstName + " " + member.lastName
-                    : "No Name"}{" "}
-                </b>
-                ({member.email}
-                {member.userId === team.ownerId && ", Team Owner"})
+                <p>
+                  <b>
+                    {member.firstName && member.lastName
+                      ? member.firstName + " " + member.lastName
+                      : "No Name"}{" "}
+                  </b>
+                  ({member.email}
+                  {member.userId === team.ownerId && ", Team Owner"})
+                  <br />
+                  <MemberStatus>{member.status}</MemberStatus>
+                </p>
               </Member>
             ))}
           </Members>
@@ -145,8 +149,16 @@ const Member = styled.li`
   border-bottom: 1px solid ${({ theme }) => theme.colors.gray5};
 `;
 
+const MemberStatus = styled.span`
+  display: inline-block;
+  font-size: 12px;
+  text-transform: uppercase;
+  font-weight: 600;
+`;
+
 const LeaveOrDeleteButton = styled(Button)`
   margin-top: 16px;
+  align-self: end;
 `;
 
 const ErrorMessage = styled.p`
