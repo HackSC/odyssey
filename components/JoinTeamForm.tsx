@@ -45,7 +45,7 @@ const JoinTeamForm = () => {
 
         if (res.status === 200) {
           setError(null);
-          await Router.push("/teams?joined");
+          await Router.push("/team?joined");
           window.scrollTo(0, 0);
         } else {
           setError(data.message);

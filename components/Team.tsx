@@ -23,7 +23,7 @@ const Team = ({ team }: Props) => {
 
     if (res.status === 200) {
       setError(null);
-      await Router.push("/teams?left");
+      await Router.push("/team?left");
       window.scrollTo(0, 0);
     } else {
       setError(data.message);

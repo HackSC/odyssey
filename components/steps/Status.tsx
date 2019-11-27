@@ -77,7 +77,7 @@ const StatusStep: React.FunctionComponent<Props> = props => {
     <Flex direction="column">
       <Banner>
         <b>NEW: </b> Apply with your friends!{" "}
-        <Link href="/teams">Click here to join or create a team</Link> to
+        <Link href="/team">Click here to join or create a team</Link> to
         indicate that you're applying to HackSC as a team. You'll be able to
         set-up teams until results come out.
       </Banner>
