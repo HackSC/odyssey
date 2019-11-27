@@ -6,9 +6,10 @@ import { Flex, Column, Button } from "../styles";
 
 type Props = {
   team: Team;
+  profile: Profile;
 };
 
-const Team = ({ team }: Props) => {
+const Team = ({ team, profile }: Props) => {
   const [error, setError] = useState(null);
 
   const handleLeaveTeam = useCallback(async () => {
@@ -19,6 +20,27 @@ const Team = ({ team }: Props) => {
     }
 
     const res = await fetch("/api/team/leave", { method: "POST" });
+    const data = await res.json();
+
+    if (res.status === 200) {
+      setError(null);
+      await Router.push("/team?left");
+      window.scrollTo(0, 0);
+    } else {
+      setError(data.message);
+    }
+  }, []);
+
+  const handleDeleteTeam = useCallback(async () => {
+    const confirm = window.confirm(
+      "Are you sure you want to delete this team?"
+    );
+
+    if (!confirm) {
+      return;
+    }
+
+    const res = await fetch("/api/team", { method: "DELETE" });
     const data = await res.json();
 
     if (res.status === 200) {
@@ -50,20 +72,28 @@ const Team = ({ team }: Props) => {
         <Column flexBasis={48}>
           <MembersHeader>Team Members</MembersHeader>
           <Members>
-            {team.HackerProfiles.map((profile: any) => (
-              <Member key={profile.email}>
+            {team.HackerProfiles.map((member: any) => (
+              <Member key={member.email}>
                 <b>
-                  {profile.firstName && profile.lastName
-                    ? profile.firstName + " " + profile.lastName
+                  {member.firstName && member.lastName
+                    ? member.firstName + " " + member.lastName
                     : "No Name"}{" "}
                 </b>
-                ({profile.email}
-                {profile.userId === team.ownerId && ", Team Owner"})
+                ({member.email}
+                {member.userId === team.ownerId && ", Team Owner"})
               </Member>
             ))}
           </Members>
 
-          <LeaveButton onClick={handleLeaveTeam}>Leave Team</LeaveButton>
+          {profile.userId === team.ownerId ? (
+            <LeaveOrDeleteButton onClick={handleDeleteTeam}>
+              Delete Team
+            </LeaveOrDeleteButton>
+          ) : (
+            <LeaveOrDeleteButton onClick={handleLeaveTeam}>
+              Leave Team
+            </LeaveOrDeleteButton>
+          )}
 
           {!!error && <ErrorMessage>{error}</ErrorMessage>}
         </Column>
@@ -115,7 +145,7 @@ const Member = styled.li`
   border-bottom: 1px solid ${({ theme }) => theme.colors.gray5};
 `;
 
-const LeaveButton = styled(Button)`
+const LeaveOrDeleteButton = styled(Button)`
   margin-top: 16px;
 `;
 
