@@ -17,7 +17,7 @@ router.get("/", async (req, res) => {
     include: [
       {
         model: models.HackerProfile,
-        attributes: ["firstName", "lastName", "status", "email"]
+        attributes: ["firstName", "lastName", "status", "email", "userId"]
       }
     ]
   });

@@ -39,14 +39,14 @@ async function getTeam(req): Promise<Team> {
   }
 }
 
-const Teams = ({ profile, team }) => {
+const Teams = ({ profile, team, joined }) => {
   return (
     <>
-      <Head title="HackSC Odyssey - Teams" />
-      <Navbar loggedIn activePage="Teams" />
+      <Head title="HackSC Odyssey - Team Setup" />
+      <Navbar loggedIn activePage="team" />
       <Background>
         <Container>
-          <h1>Teams</h1>
+          <h1>HackSC Team Setup</h1>
 
           <p>
             On this tab, you can join, create, and view your HackSC team. To

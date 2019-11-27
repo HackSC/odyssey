@@ -1,6 +1,7 @@
 import React, { useState, useCallback, useRef } from "react";
 
 import styled from "styled-components";
+import Router from "next/router";
 
 import { Form, FormGroup, Flex, Button } from "../styles";
 
@@ -43,8 +44,9 @@ const JoinTeamForm = () => {
         const data = await res.json();
 
         if (res.status === 200) {
-          alert("You have successfully joined this team");
           setError(null);
+          await Router.push("/teams?joined");
+          window.scrollTo(0, 0);
         } else {
           setError(data.message);
         }

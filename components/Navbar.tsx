@@ -68,6 +68,14 @@ const Navbar: React.FunctionComponent<NavbarProps> = ({
                   Results
                 </Link>
               )}
+              {!admin && (
+                <Link
+                  href="/teams"
+                  style={style(activePage === "team" ? "#FF8379" : "white")}
+                >
+                  Teams
+                </Link>
+              )}
               <Link
                 href="/auth/logout"
                 style={style(activePage === "logout" ? "#FF8379" : "white")}
