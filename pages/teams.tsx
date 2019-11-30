@@ -64,7 +64,7 @@ const Teams = ({ profile, team }) => {
           <br />
 
           {team ? (
-            <Team team={team} />
+            <Team team={team} profile={profile} />
           ) : (
             <Flex direction="row" tabletVertical justify="space-between">
               <Column flexBasis={48}>
