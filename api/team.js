@@ -17,7 +17,7 @@ router.get("/", async (req, res) => {
     include: [
       {
         model: models.HackerProfile,
-        attributes: ["firstName", "lastName", "status", "email"]
+        attributes: ["firstName", "lastName", "status", "email", "userId"]
       }
     ]
   });
@@ -89,6 +89,34 @@ router.post("/", async (req, res) => {
   return res.json({
     team
   });
+});
+
+// DELETE /api/team
+// - Attempts to delete a user's current team
+router.delete("/", async (req, res) => {
+  const hackerProfile = await models.HackerProfile.findOne({
+    where: { userId: req.user.id }
+  });
+
+  // Can't join a team if you're already on one!
+  let team = await hackerProfile.getTeam();
+  if (!team) {
+    return res.status(400).json({ message: "User does not belong on a team" });
+  }
+
+  if (team.ownerId === req.user.id) {
+    // Allow deletion
+    await models.HackerProfile.update(
+      { teamId: null },
+      { where: { teamId: team.id } }
+    );
+    await team.destroy();
+    return res.status(200).json({ message: "Team successfully deleted" });
+  } else {
+    return res
+      .status(400)
+      .json({ message: "You cannot delete a team you don't own" });
+  }
 });
 
 // POST /api/team/join/:code

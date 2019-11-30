@@ -1,6 +1,8 @@
 import React, { useState, useCallback, useRef } from "react";
 import styled from "styled-components";
 
+import Router from "next/router";
+
 import { Form, FormGroup, Flex, Button } from "../styles";
 
 const CreateTeamForm = () => {
@@ -30,8 +32,9 @@ const CreateTeamForm = () => {
           const data = await res.json();
 
           if (res.status === 200) {
-            alert("You have successfully created a team");
             setError(null);
+            await Router.push("/team?created");
+            window.scrollTo(0, 0);
           } else {
             setError(data.message);
           }
