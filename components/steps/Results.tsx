@@ -21,8 +21,8 @@ const ResultStep: React.FunctionComponent<Props> = props => {
           <p>
             Looks like you haven't finished the application process... please
             make sure you have set-up a hacker profile and filled out our
-            application. You must submit an application by 11:59pm on November
-            29, 2019, to be considered for HackSC 2020.
+            application. You must submit an application by 11:59pm on December
+            8, 2019, to be considered for HackSC 2020.
           </p>
 
           <Blob />

@@ -100,7 +100,7 @@ module.exports = (sequelize, DataTypes) => {
     });
   };
   HackerProfile.associate = function(models) {
-    // associations can be defined here
+    HackerProfile.belongsTo(models.Team, { as: "team", foreignKey: "teamId" });
   };
   return HackerProfile;
 };
