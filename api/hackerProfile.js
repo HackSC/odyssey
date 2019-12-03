@@ -17,7 +17,13 @@ router.get("/", async (req, res) => {
     defaults: {
       email: req.user._json.email,
       status: req.user._json.email_verified ? "verified" : "unverified"
-    }
+    },
+    include: [
+      {
+        model: models.Team,
+        as: "team"
+      }
+    ]
   });
 
   hackerProfile.referred = await hackerProfile.getReferred();

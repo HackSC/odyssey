@@ -8,6 +8,7 @@ const Theme = {
     black: "#1C1C1C",
     gray50: "#757575",
     gray25: "#B2B2B2",
+    gray5: "#e5e5e5",
     white: "#FFFFFF"
   },
   fontSizes: {

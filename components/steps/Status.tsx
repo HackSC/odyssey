@@ -5,6 +5,8 @@ import * as Sentry from "@sentry/browser";
 import copy from "copy-to-clipboard";
 import { FaLink, FaFacebookF, FaTwitter, FaEnvelope } from "react-icons/fa";
 import { Tooltip } from "react-tippy";
+import Link from "next/link";
+
 import { useIsMobile } from "../../lib/layouts";
 
 import {
@@ -59,7 +61,7 @@ const navigateTo = async (step: string) => {
 };
 
 const getDaysTillClose = (): number => {
-  const endDate = new Date("Nov 29, 2019, 11:59 PM").getTime();
+  const endDate = new Date("Dec 8, 2019, 11:59 PM").getTime();
   const nowDate = new Date().getTime();
   const diff = endDate - nowDate;
   return Math.floor(diff / 1000 / 60 / 60 / 24);
@@ -73,6 +75,13 @@ const StatusStep: React.FunctionComponent<Props> = props => {
 
   return (
     <Flex direction="column">
+      <Banner>
+        <b>NEW: </b> Apply with your friends!{" "}
+        <Link href="/team">Click here to join or create a team</Link> to
+        indicate that you're applying to HackSC as a team. You'll be able to
+        set-up teams until results come out.
+      </Banner>
+
       <h1>
         {profile && profile.firstName
           ? `Hey there, ${profile.firstName}!`
@@ -207,7 +216,7 @@ const StatusStep: React.FunctionComponent<Props> = props => {
 
             <DateText>
               <h3>Applications Close</h3>
-              <p>November 29th, 2019</p>
+              <p>December 8th, 2019</p>
             </DateText>
 
             <DateText>
@@ -367,6 +376,20 @@ const DateText = styled.div`
     font-weight: 600;
     color: ${({ theme }) => theme.colors.peach};
     padding-bottom: 4px;
+  }
+`;
+
+const Banner = styled.div`
+  padding: 24px;
+  border-radius: 8px;
+  background-color: ${({ theme }) => theme.colors.magenta};
+  color: ${({ theme }) => theme.colors.white};
+  margin-bottom: 24px;
+  line-height: 22px;
+
+  a {
+    color: ${({ theme }) => theme.colors.white};
+    text-decoration: underline;
   }
 `;
 
