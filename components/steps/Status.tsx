@@ -216,7 +216,7 @@ const StatusStep: React.FunctionComponent<Props> = props => {
 
             <DateText>
               <h3>Applications Close</h3>
-              <p>Dec 8th, 2019</p>
+              <p>December 8th, 2019</p>
             </DateText>
 
             <DateText>
