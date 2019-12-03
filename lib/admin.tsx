@@ -1,5 +1,3 @@
-import { RecyclerViewBackedScrollView } from "react-native";
-
 export async function getHackerProfileForReview(req) {
   const fetchUrl = process.env.URL_BASE + "api/admin/review";
 
