@@ -61,7 +61,7 @@ const navigateTo = async (step: string) => {
 };
 
 const getDaysTillClose = (): number => {
-  const endDate = new Date("Nov 29, 2019, 11:59 PM").getTime();
+  const endDate = new Date("Dec 8, 2019, 11:59 PM").getTime();
   const nowDate = new Date().getTime();
   const diff = endDate - nowDate;
   return Math.floor(diff / 1000 / 60 / 60 / 24);
@@ -216,7 +216,7 @@ const StatusStep: React.FunctionComponent<Props> = props => {
 
             <DateText>
               <h3>Applications Close</h3>
-              <p>November 29th, 2019</p>
+              <p>Dec 8th, 2019</p>
             </DateText>
 
             <DateText>
