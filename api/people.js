@@ -5,8 +5,6 @@ const router = express.Router();
 const sequelize = require("sequelize");
 const Sentry = require("@sentry/node");
 
-/* This router supports superuser routes, such as updating the status of users */
-
 router.use(utils.authMiddleware);
 
 router.get("/self", async (req, res) => {
@@ -20,7 +18,10 @@ router.get("/self", async (req, res) => {
 
     return res.json({ person: pointsProfile });
   } catch (e) {
+<<<<<<< HEAD
 
+=======
+>>>>>>> cleanup
     return res.status(500).json({ err: e.message });
   }
 });
