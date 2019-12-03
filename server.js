@@ -11,7 +11,9 @@ const bodyParser = require("body-parser");
 const authRouter = require("./api/login");
 const profileRouter = require("./api/hackerProfile");
 const adminRouter = require("./api/admin");
+const pointRouter = require("./api/tasks");
 const teamRouter = require("./api/team");
+
 
 const fileUpload = require("express-fileupload");
 
@@ -77,6 +79,7 @@ app.prepare().then(() => {
   server.use("/auth", authRouter);
   server.use("/api/profile", profileRouter);
   server.use("/api/admin", adminRouter);
+  server.use("/api/points", pointRouter);
   server.use("/api/team", teamRouter);
 
   server.get("*", handle);
