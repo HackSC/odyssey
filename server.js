@@ -14,7 +14,6 @@ const adminRouter = require("./api/admin");
 const pointRouter = require("./api/tasks");
 const teamRouter = require("./api/team");
 
-
 const fileUpload = require("express-fileupload");
 
 const Sentry = require("@sentry/node");
