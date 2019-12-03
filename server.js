@@ -14,6 +14,7 @@ const adminRouter = require("./api/admin");
 const taskRouter = require("./api/tasks");
 const teamRouter = require("./api/team");
 const personRouter = require("./api/people");
+const contributionRouter = require("./api/contribution");
 
 const fileUpload = require("express-fileupload");
 
@@ -82,6 +83,7 @@ app.prepare().then(() => {
   server.use("/api/points", taskRouter);
   server.use("/api/team", teamRouter);
   server.use("/api/person", personRouter);
+  server.use("/api/contribution", contributionRouter);
 
   server.get("*", handle);
 
