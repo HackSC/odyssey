@@ -134,64 +134,6 @@ const StatusStep: React.FunctionComponent<Props> = props => {
         </Column>
 
         <DatesColumn flexBasis={35}>
-          <h2>Your Referral Code</h2>
-          <ReferralCode>
-            <h3>{profile.promoCode}</h3>
-            <p>
-              This is your code, share it around. The more people who use it the
-              more likely you are to get in.
-            </p>
-            <ReferralButtons>
-              <FacebookShareButton {...socialPosts.facebook}>
-                <CircleIcon size={20} bgColor="#3b5998">
-                  <FaFacebookF color="white" />
-                </CircleIcon>
-              </FacebookShareButton>
-              <TwitterShareButton {...socialPosts.twitter} size={40}>
-                <CircleIcon size={20} bgColor="#1dcaff">
-                  <FaTwitter color="white" />
-                </CircleIcon>
-              </TwitterShareButton>
-              <EmailShareButton {...socialPosts.email}>
-                <CircleIcon size={20} bgColor="#a9a9a9">
-                  <FaEnvelope color="white" />
-                </CircleIcon>
-              </EmailShareButton>
-              <Tooltip
-                title="Copied link to clipboard!"
-                position="bottom"
-                duration={3}
-                trigger="click"
-                inertia
-                arrow
-              >
-                <CircleIcon
-                  size={20}
-                  bgColor="#ffce00"
-                  onClick={() => copy(socialPosts.link)}
-                >
-                  <FaLink color="white" />
-                </CircleIcon>
-              </Tooltip>
-            </ReferralButtons>
-          </ReferralCode>
-          <ReferredBoard>
-            {isMobile ? (
-              <div>
-                <h3>Number referred: {profile.referred.length}</h3>
-              </div>
-            ) : (
-              <div>
-                <h3> People Referred</h3>
-                {profile.referred.length == 0 ? (
-                  <p> You haven't referred anyone yet!</p>
-                ) : (
-                  profile.referred.map(p => <p>{p.email}</p>)
-                )}
-              </div>
-            )}
-          </ReferredBoard>
-
           <Countdown>
             <CountdownHeader>
               <Count>{getDaysTillClose()}</Count>
@@ -304,33 +246,6 @@ const Step = styled.div<StepProps>`
 
 const StepButton = styled(Button)`
   margin-top: 24px;
-`;
-
-const ReferralCode = styled.div`
-  padding: 24px 24px;
-  margin: 0 0 16px;
-  background: #ffffff;
-  border-radius: 4px;
-  text-align: center;
-`;
-
-const ReferredBoard = styled.div`
-  padding: 18px 24px;
-  background: #ffffff;
-  border-radius: 4px;
-  text-align: left;
-  margin: 0 0 16px;
-`;
-
-const ReferralButtons = styled.div`
-  margin: 0 0 8px;
-  border-radius: 4px;
-  display: flex;
-  flex-grow: 1;
-  justify-content: center;
-  * {
-    margin: 2px;
-  }
 `;
 
 const Countdown = styled.div`

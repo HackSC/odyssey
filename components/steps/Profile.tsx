@@ -226,15 +226,6 @@ const ProfileStep: React.FunctionComponent<Props> = props => {
         <FormSection>
           <h2>Marketing</h2>
           <FormGroup>
-            <label>Referral Code (optional)</label>
-            <input
-              type="text"
-              placeholder="code.."
-              value={profile.referrerCode}
-              name="referrerCode"
-            />
-          </FormGroup>
-          <FormGroup>
             <label>
               How did you hear about HackSC? (100 characters, optional)
             </label>
