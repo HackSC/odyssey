@@ -20,7 +20,7 @@ const Admin = ({ profile }) => {
           <h1>Admin Stuff</h1>
         </Flex>
         <h2> Actions</h2>
-        <Button>Start App Review</Button>
+        <a href="/appReview">Start App Review</a>
       </Container>
       <Footer />
     </>
