@@ -22,4 +22,25 @@ router.get("/self", async (req, res) => {
   }
 });
 
+router.get("/houses", async (req, res) => {
+  try {
+    const houses = await models.House.findAll();
+    return res.json({ houses: houses });
+  } catch (e) {
+    return res.status(400).json({ err: e.message });
+  }
+});
+
+router.post("/create", async (req, res) => {
+  try {
+    const postValues = req.body;
+    const { name, color } = { ...postValues };
+    const house = models.House.build({ name: name, color: color });
+    await house.save();
+    return res.json({ newHouse: house });
+  } catch (e) {
+    return res.status(400).json({ err: e.message });
+  }
+});
+
 module.exports = router;
