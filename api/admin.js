@@ -62,6 +62,19 @@ router.put("/review/:id", async (req, res) => {
   }
 });
 
+router.get("/reviews", async (req, res) => {
+  try {
+    const allReviews = await models.HackerReview.findAll({
+      where: {
+        createdBy: req.user.id
+      }
+    });
+    return res.json({ reviews: allReviews });
+  } catch (e) {
+    return res.status(500).json({ error: e.message });
+  }
+});
+
 router.get("/review", async (req, res) => {
   try {
     const profilesWCount = await models.HackerProfile.findAll({
