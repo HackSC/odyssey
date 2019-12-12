@@ -62,9 +62,36 @@ router.put("/review/:id", async (req, res) => {
   }
 });
 
+router.get("/submittedProfiles", async (req, res) => {
+  const profilesWCount = await models.HackerProfile.findAll({
+    where: {
+      status: "submitted"
+    },
+    attributes: {
+      include: [
+        [
+          sequelize.fn("COUNT", sequelize.col("HackerReviews.id")),
+          "reviewCount"
+        ]
+      ]
+    },
+    include: [
+      {
+        model: models.HackerReview,
+        attributes: []
+      }
+    ],
+    group: ["HackerProfile.userId"]
+  });
+  return res.json({ profiles: profilesWCount });
+});
+
 router.get("/review", async (req, res) => {
   try {
     const profilesWCount = await models.HackerProfile.findAll({
+      where: {
+        status: "submitted"
+      },
       attributes: {
         include: [
           [
