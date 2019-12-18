@@ -12,9 +12,8 @@ import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import { Button, Container, Background } from "../styles";
 
-const AppReview = ({ hackerProfile, review }) => {
+const AppReview = ({ hackerProfile }) => {
   console.log(hackerProfile);
-  console.log(review);
 
   const [s1, setS1] = useState(null);
   const [s2, setS2] = useState(null);
@@ -61,11 +60,16 @@ const AppReview = ({ hackerProfile, review }) => {
           <div>
             <button
               onClick={async () => {
-                const result = await submitReview(review, {
+                const review = {
+                  userId: hackerProfile.userId,
                   scoreOne: s1,
                   scoreTwo: s2,
-                  scoreThree: s3
-                });
+                  scoreThree: s3,
+                  comments: comments
+                };
+                const result = await submitReview(review);
+
+                console.log(result);
                 // Redirect back to admin from the server
                 handleAdminRedirect(null);
               }}
@@ -93,8 +97,7 @@ AppReview.getInitialProps = async ctx => {
   }
   const profileReview = await getHackerProfileForReview(req);
   return {
-    hackerProfile: profileReview.profile,
-    review: profileReview.review
+    hackerProfile: profileReview
   };
 };
 
