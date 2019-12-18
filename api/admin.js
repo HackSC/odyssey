@@ -75,6 +75,34 @@ router.get("/reviews", async (req, res) => {
   }
 });
 
+router.get("/eligibleProfiles", async (req, res) => {
+  try {
+    const allProfiles = await models.HackerProfile.findAll({
+      where: {
+        submittedAt: {
+          [sequelize.Op.not]: null
+        }
+      },
+      include: [
+        {
+          model: models.HackerReview
+        }
+      ]
+    });
+    filteredProfiles = allProfiles.filter(profile => {
+      const reviewsByCurrUser = profile.HackerReviews.filter(review => {
+        return review.dataValues.createdBy === req.user.id;
+      });
+      return reviewsByCurrUser.length === 0 && profile.HackerReviews.length < 3;
+    });
+    return res.json({
+      eligibleReviews: filteredProfiles
+    });
+  } catch (e) {
+    return res.status(500).json({ error: e.message });
+  }
+});
+
 router.get("/review", async (req, res) => {
   try {
     const profilesWCount = await models.HackerProfile.findAll({
