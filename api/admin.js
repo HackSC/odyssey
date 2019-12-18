@@ -103,14 +103,6 @@ router.get("/eligibleProfiles", async (req, res) => {
   }
 });
 
-/*
-  createdBy: DataTypes.STRING(100),
-      scoreOne: DataTypes.INTEGER,
-      scoreTwo: DataTypes.INTEGER,
-      scoreThree: DataTypes.INTEGER,
-      comments: DataTypes.STRING
-*/
-
 router.post("/review", async (req, res) => {
   try {
     const formBody = req.body;
