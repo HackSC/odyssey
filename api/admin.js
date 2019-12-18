@@ -103,6 +103,32 @@ router.get("/eligibleProfiles", async (req, res) => {
   }
 });
 
+/*
+  createdBy: DataTypes.STRING(100),
+      scoreOne: DataTypes.INTEGER,
+      scoreTwo: DataTypes.INTEGER,
+      scoreThree: DataTypes.INTEGER,
+      comments: DataTypes.STRING
+*/
+
+router.post("/review", async (req, res) => {
+  try {
+    const formBody = req.body;
+    const newReview = await models.HackerReview.create({
+      hackerId: formBody.userId,
+      createdBy: req.user.id,
+      scoreOne: formBody.scoreOne,
+      scoreTwo: formBody.scoreTwo,
+      scoreThree: formBody.scoreThree,
+      comments: formBody.comments
+    });
+
+    return res.json({ newReview: newReview });
+  } catch (e) {
+    return res.status(500).json({ error: e.message });
+  }
+});
+
 router.get("/review", async (req, res) => {
   try {
     const profilesWCount = await models.HackerProfile.findAll({
