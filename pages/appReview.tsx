@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import styled from "styled-components";
 
 import {
@@ -21,6 +21,45 @@ const AppReview = ({ hackerProfile, review }) => {
   const [s2, setS2] = useState(null);
   const [s3, setS3] = useState(null);
   const [comments, setComments] = useState("");
+
+  const scoreInputs = [useRef(null), useRef(null), useRef(null)];
+
+  const switchInputsOnKeyDown = e => {
+    const { key } = e;
+
+    let i =
+      key.toLowerCase() === "q"
+        ? 0
+        : key.toLowerCase() === "w"
+        ? 1
+        : key.toLowerCase() === "e"
+        ? 2
+        : -1;
+
+    if (i < 0) return;
+
+    scoreInputs[i].current.focus();
+    window.scrollTo({
+      left: 0,
+      top: scoreInputs[i].current.offsetTop - 50,
+      behavior: "smooth"
+    });
+
+    e.preventDefault();
+  };
+
+  useEffect(() => {
+    // Default to highlighting the first score input
+    if (scoreInputs[0] && scoreInputs[0].current) {
+      scoreInputs[0].current.focus();
+    }
+
+    // Highlight the right score input based on window keys
+    window.addEventListener("keydown", switchInputsOnKeyDown);
+    return () => {
+      window.removeEventListener("keydown", switchInputsOnKeyDown);
+    };
+  }, []);
 
   return (
     <>
@@ -51,9 +90,11 @@ const AppReview = ({ hackerProfile, review }) => {
             <Column flexBasis={48}>
               <h1>Review</h1>
               <Panel>
+                <ScoreInputLabel>Score 1</ScoreInputLabel>
+
                 <Flex direction="row" justify="space-between" align="center">
                   <Column>
-                    <ScoreInputLabel>Score 1</ScoreInputLabel>
+                    <ScoreKeyLabel>Q</ScoreKeyLabel>
                   </Column>
 
                   <Column flexGrow={1}>
@@ -62,15 +103,18 @@ const AppReview = ({ hackerProfile, review }) => {
                       onChange={e => {
                         setS1(e.target.value);
                       }}
+                      ref={scoreInputs[0]}
                     />
                   </Column>
                 </Flex>
               </Panel>
 
               <Panel>
+                <ScoreInputLabel>Score 2</ScoreInputLabel>
+
                 <Flex direction="row" justify="space-between" align="center">
                   <Column>
-                    <ScoreInputLabel>Score 2</ScoreInputLabel>
+                    <ScoreKeyLabel>W</ScoreKeyLabel>
                   </Column>
 
                   <Column flexGrow={1}>
@@ -79,15 +123,18 @@ const AppReview = ({ hackerProfile, review }) => {
                       onChange={e => {
                         setS2(e.target.value);
                       }}
+                      ref={scoreInputs[1]}
                     />
                   </Column>
                 </Flex>
               </Panel>
 
               <Panel>
+                <ScoreInputLabel>Score 3</ScoreInputLabel>
+
                 <Flex direction="row" justify="space-between" align="center">
                   <Column>
-                    <ScoreInputLabel>Score 3</ScoreInputLabel>
+                    <ScoreKeyLabel>E</ScoreKeyLabel>
                   </Column>
 
                   <Column flexGrow={1}>
@@ -96,6 +143,12 @@ const AppReview = ({ hackerProfile, review }) => {
                       onChange={e => {
                         setS3(e.target.value);
                       }}
+                      onKeyUp={e => {
+                        if (e.key === "e") {
+                          e.preventDefault();
+                        }
+                      }}
+                      ref={scoreInputs[2]}
                     />
                   </Column>
                 </Flex>
@@ -104,6 +157,29 @@ const AppReview = ({ hackerProfile, review }) => {
                 <Button
                   onClick={async e => {
                     e.preventDefault();
+
+                    let invalid = false;
+                    if (s1 === null || s2 === null || s3 === null) {
+                      invalid = true;
+                    }
+
+                    if (parseInt(s1) < 0 || parseInt(s1) > 3) {
+                      invalid = true;
+                    }
+
+                    if (parseInt(s2) < 0 || parseInt(s2) > 3) {
+                      invalid = true;
+                    }
+
+                    if (parseInt(s3) < 0 || parseInt(s3) > 3) {
+                      invalid = true;
+                    }
+
+                    if (invalid) {
+                      alert("Invalid review data - please try again");
+                      return;
+                    }
+
                     const result = await submitReview(review, {
                       scoreOne: s1,
                       scoreTwo: s2,
@@ -162,7 +238,16 @@ const Input = styled.input`
 
 const ScoreInputLabel = styled.h3`
   padding: 0;
-  margin-right: 32px;
+  margin-bottom: 8px;
+`;
+
+const ScoreKeyLabel = styled.p`
+  display: inline-block;
+  padding: 10px 16px;
+  margin-right: 16px;
+  border-radius: 8px;
+  border: 1px solid ${({ theme }) => theme.colors.gray5};
+  color: ${({ theme }) => theme.colors.gray50};
 `;
 
 export default AppReview;
