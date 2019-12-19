@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect, useCallback } from "react";
 import styled from "styled-components";
 
 import {
@@ -24,42 +24,94 @@ const AppReview = ({ hackerProfile, review }) => {
 
   const scoreInputs = [useRef(null), useRef(null), useRef(null)];
 
-  const switchInputsOnKeyDown = e => {
-    const { key } = e;
+  const switchInputsOnKeyDown = useCallback(
+    e => {
+      const { key } = e;
 
-    let i =
-      key.toLowerCase() === "q"
-        ? 0
-        : key.toLowerCase() === "w"
-        ? 1
-        : key.toLowerCase() === "e"
-        ? 2
-        : -1;
+      if (key === "Enter") {
+        handleSubmit();
+        e.preventDefault();
+        return;
+      }
 
-    if (i < 0) return;
+      let i =
+        key.toLowerCase() === "q"
+          ? 0
+          : key.toLowerCase() === "w"
+          ? 1
+          : key.toLowerCase() === "e"
+          ? 2
+          : -1;
 
-    scoreInputs[i].current.focus();
-    window.scrollTo({
-      left: 0,
-      top: scoreInputs[i].current.offsetTop - 50,
-      behavior: "smooth"
-    });
+      if (i < 0) return;
 
-    e.preventDefault();
-  };
+      scoreInputs[i].current.focus();
+      window.scrollTo({
+        left: 0,
+        top: scoreInputs[i].current.offsetTop - 50,
+        behavior: "smooth"
+      });
+
+      e.preventDefault();
+    },
+    [s1, s2, s3]
+  );
+
+  const handleSubmit = useCallback(
+    async (e?) => {
+      if (e) {
+        e.preventDefault();
+      }
+
+      console.log({ s1, s2, s3 });
+
+      let invalid = false;
+      if (s1 === null || s2 === null || s3 === null) {
+        invalid = true;
+      }
+
+      if (parseInt(s1) < 0 || parseInt(s1) > 3) {
+        invalid = true;
+      }
+
+      if (parseInt(s2) < 0 || parseInt(s2) > 3) {
+        invalid = true;
+      }
+
+      if (parseInt(s3) < 0 || parseInt(s3) > 3) {
+        invalid = true;
+      }
+
+      if (invalid) {
+        alert("Invalid review data - please try again");
+        return;
+      }
+
+      const result = await submitReview(review, {
+        scoreOne: s1,
+        scoreTwo: s2,
+        scoreThree: s3
+      });
+      // Redirect back to admin from the server
+      handleAdminRedirect(null);
+    },
+    [s1, s2, s3]
+  );
 
   useEffect(() => {
     // Default to highlighting the first score input
     if (scoreInputs[0] && scoreInputs[0].current) {
       scoreInputs[0].current.focus();
     }
+  }, []);
 
+  useEffect(() => {
     // Highlight the right score input based on window keys
     window.addEventListener("keydown", switchInputsOnKeyDown);
     return () => {
       window.removeEventListener("keydown", switchInputsOnKeyDown);
     };
-  }, []);
+  }, [s1, s2, s3]);
 
   return (
     <>
@@ -154,44 +206,7 @@ const AppReview = ({ hackerProfile, review }) => {
                 </Flex>
               </Panel>
               <div>
-                <Button
-                  onClick={async e => {
-                    e.preventDefault();
-
-                    let invalid = false;
-                    if (s1 === null || s2 === null || s3 === null) {
-                      invalid = true;
-                    }
-
-                    if (parseInt(s1) < 0 || parseInt(s1) > 3) {
-                      invalid = true;
-                    }
-
-                    if (parseInt(s2) < 0 || parseInt(s2) > 3) {
-                      invalid = true;
-                    }
-
-                    if (parseInt(s3) < 0 || parseInt(s3) > 3) {
-                      invalid = true;
-                    }
-
-                    if (invalid) {
-                      alert("Invalid review data - please try again");
-                      return;
-                    }
-
-                    const result = await submitReview(review, {
-                      scoreOne: s1,
-                      scoreTwo: s2,
-                      scoreThree: s3
-                    });
-                    // Redirect back to admin from the server
-                    handleAdminRedirect(null);
-                  }}
-                >
-                  {" "}
-                  Submit Review{" "}
-                </Button>
+                <Button onClick={handleSubmit}> Submit Review (↵) </Button>
               </div>
             </Column>
           </Flex>
