@@ -13,9 +13,8 @@ import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import { Button, Container, Background, Flex, Column } from "../styles";
 
-const AppReview = ({ hackerProfile, review }) => {
+const AppReview = ({ hackerProfile }) => {
   console.log(hackerProfile);
-  console.log(review);
 
   const [s1, setS1] = useState(null);
   const [s2, setS2] = useState(null);
@@ -38,10 +37,10 @@ const AppReview = ({ hackerProfile, review }) => {
         key.toLowerCase() === "q"
           ? 0
           : key.toLowerCase() === "w"
-          ? 1
-          : key.toLowerCase() === "e"
-          ? 2
-          : -1;
+            ? 1
+            : key.toLowerCase() === "e"
+              ? 2
+              : -1;
 
       if (i < 0) return;
 
@@ -70,15 +69,17 @@ const AppReview = ({ hackerProfile, review }) => {
         invalid = true;
       }
 
-      if (parseInt(s1) < 0 || parseInt(s1) > 3) {
+      const MIN_SCORE = 1, MAX_SCORE = 5
+
+      if (parseInt(s1) < MIN_SCORE || parseInt(s1) > MAX_SCORE) {
         invalid = true;
       }
 
-      if (parseInt(s2) < 0 || parseInt(s2) > 3) {
+      if (parseInt(s2) < MIN_SCORE || parseInt(s2) > MAX_SCORE) {
         invalid = true;
       }
 
-      if (parseInt(s3) < 0 || parseInt(s3) > 3) {
+      if (parseInt(s3) < MIN_SCORE || parseInt(s3) > MAX_SCORE) {
         invalid = true;
       }
 
@@ -87,11 +88,16 @@ const AppReview = ({ hackerProfile, review }) => {
         return;
       }
 
-      const result = await submitReview(review, {
+      const review = {
+        userId: hackerProfile.userId,
         scoreOne: s1,
         scoreTwo: s2,
-        scoreThree: s3
-      });
+        scoreThree: s3,
+        comments: comments
+      };
+      const result = await submitReview(review);
+
+      console.log(result);
       // Redirect back to admin from the server
       handleAdminRedirect(null);
     },
@@ -179,7 +185,7 @@ const AppReview = ({ hackerProfile, review }) => {
                     />
                   </Column>
                 </Flex>
-              </Panel>
+              </Panel >
 
               <Panel>
                 <ScoreInputLabel>Score 3</ScoreInputLabel>
@@ -208,10 +214,10 @@ const AppReview = ({ hackerProfile, review }) => {
               <div>
                 <Button onClick={handleSubmit}> Submit Review (↵) </Button>
               </div>
-            </Column>
-          </Flex>
-        </Container>
-      </Background>
+            </Column >
+          </Flex >
+        </Container >
+      </Background >
       <Footer />
     </>
   );
@@ -228,8 +234,7 @@ AppReview.getInitialProps = async ctx => {
   }
   const profileReview = await getHackerProfileForReview(req);
   return {
-    hackerProfile: profileReview.profile,
-    review: profileReview.review
+    hackerProfile: profileReview
   };
 };
 

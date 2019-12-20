@@ -1,5 +1,7 @@
 export async function getHackerProfileForReview(req) {
-  const fetchUrl = process.env.URL_BASE + "api/admin/review";
+  const fetchUrl = process.env.URL_BASE
+    ? process.env.URL_BASE + "api/admin/eligibleProfiles"
+    : "api/admin/eligibleProfiles";
 
   const response = await fetch(
     fetchUrl,
@@ -9,16 +11,22 @@ export async function getHackerProfileForReview(req) {
         }
       : null
   );
-  console.log(response);
+  // console.log(response);
   const profilePayload = await response.json();
-  return profilePayload;
+  console.log(profilePayload);
+  return profilePayload.eligibleReviews[0];
 }
 
-export async function submitReview(review, scores) {
-  const fetchUrl = process.env.URL_base + "api/admin/review/" + review.id;
+export async function submitReview(review) {
+  const fetchUrl = process.env.URL_BASE
+    ? process.env.URL_BASE + "api/admin/review"
+    : "api/admin/review";
   const response = await fetch(fetchUrl, {
-    method: "PUT",
-    body: JSON.stringify(scores)
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify(review)
   });
   return response;
 }
