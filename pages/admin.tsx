@@ -15,13 +15,37 @@ const Admin = ({ profile }) => {
     <>
       <Head title="HackSC Odyssey - Application" />
       <Navbar loggedIn admin activePage="/" />
-      <Container>
-        <Flex direction="column">
-          <h1>Admin Stuff</h1>
-        </Flex>
-        <h2> Actions</h2>
-        <a href="/appReview">Start App Review</a>
-      </Container>
+      <Background>
+        <Container>
+          <Flex direction="column">
+            <h1>Admin Dashboard</h1>
+            <p>
+              Hello there -- welcome to the admin dashboard. Here you can access
+              actions to help organize and run HackSC. If you have any questions
+              or find any errors, hit up the engineers in{" "}
+              <b>#2020-engineering</b>
+            </p>
+          </Flex>
+
+          <ActionsHeader>Actions</ActionsHeader>
+          <Actions>
+            <Action href="/appReview">
+              <ActionTitle>Start App Review</ActionTitle>
+            </Action>
+
+            <Action
+              href="https://metabase-odyssey.herokuapp.com/"
+              target="_blank"
+            >
+              <ActionTitle>Access Metabase</ActionTitle>
+            </Action>
+
+            <Action href="javascript:alert('Coming soon')">
+              <ActionTitle>Check In Hackers</ActionTitle>
+            </Action>
+          </Actions>
+        </Container>
+      </Background>
       <Footer />
     </>
   );
@@ -43,5 +67,39 @@ Admin.getInitialProps = async ctx => {
     profile
   };
 };
+
+const ActionsHeader = styled.h2`
+  margin: 48px 0 16px;
+`;
+
+const Actions = styled.div`
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+`;
+
+const Action = styled.a`
+  box-sizing: border-box;
+  padding: 24px 36px;
+  margin: 0 0 16px;
+  background: #ffffff;
+  border-radius: 4px;
+  text-align: center;
+  flex-basis: 49%;
+  border: 1px solid ${({ theme }) => theme.colors.gray5};
+  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.05);
+  transition: 0.25s all;
+
+  &:hover {
+    transform: scale(1.025);
+  }
+`;
+
+const ActionTitle = styled.h3`
+  padding-bottom: 0;
+  color: ${({ theme }) => theme.colors.gray50};
+`;
 
 export default Admin;

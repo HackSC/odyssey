@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useState, useRef, useEffect, useCallback } from "react";
+import styled from "styled-components";
 
 import {
   handleLoginRedirect,
@@ -10,7 +11,7 @@ import { getHackerProfileForReview, submitReview } from "../lib/admin";
 import Head from "../components/Head";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
-import { Button, Container, Background } from "../styles";
+import { Button, Container, Background, Flex, Column } from "../styles";
 
 const AppReview = ({ hackerProfile, review }) => {
   console.log(hackerProfile);
@@ -21,62 +22,196 @@ const AppReview = ({ hackerProfile, review }) => {
   const [s3, setS3] = useState(null);
   const [comments, setComments] = useState("");
 
+  const scoreInputs = [useRef(null), useRef(null), useRef(null)];
+
+  const switchInputsOnKeyDown = useCallback(
+    e => {
+      const { key } = e;
+
+      if (key === "Enter") {
+        handleSubmit();
+        e.preventDefault();
+        return;
+      }
+
+      let i =
+        key.toLowerCase() === "q"
+          ? 0
+          : key.toLowerCase() === "w"
+          ? 1
+          : key.toLowerCase() === "e"
+          ? 2
+          : -1;
+
+      if (i < 0) return;
+
+      scoreInputs[i].current.focus();
+      window.scrollTo({
+        left: 0,
+        top: scoreInputs[i].current.offsetTop - 50,
+        behavior: "smooth"
+      });
+
+      e.preventDefault();
+    },
+    [s1, s2, s3]
+  );
+
+  const handleSubmit = useCallback(
+    async (e?) => {
+      if (e) {
+        e.preventDefault();
+      }
+
+      console.log({ s1, s2, s3 });
+
+      let invalid = false;
+      if (s1 === null || s2 === null || s3 === null) {
+        invalid = true;
+      }
+
+      if (parseInt(s1) < 0 || parseInt(s1) > 3) {
+        invalid = true;
+      }
+
+      if (parseInt(s2) < 0 || parseInt(s2) > 3) {
+        invalid = true;
+      }
+
+      if (parseInt(s3) < 0 || parseInt(s3) > 3) {
+        invalid = true;
+      }
+
+      if (invalid) {
+        alert("Invalid review data - please try again");
+        return;
+      }
+
+      const result = await submitReview(review, {
+        scoreOne: s1,
+        scoreTwo: s2,
+        scoreThree: s3
+      });
+      // Redirect back to admin from the server
+      handleAdminRedirect(null);
+    },
+    [s1, s2, s3]
+  );
+
+  useEffect(() => {
+    // Default to highlighting the first score input
+    if (scoreInputs[0] && scoreInputs[0].current) {
+      scoreInputs[0].current.focus();
+    }
+  }, []);
+
+  useEffect(() => {
+    // Highlight the right score input based on window keys
+    window.addEventListener("keydown", switchInputsOnKeyDown);
+    return () => {
+      window.removeEventListener("keydown", switchInputsOnKeyDown);
+    };
+  }, [s1, s2, s3]);
+
   return (
     <>
       <Head title="HackSC Odyssey - Application" />
       <Navbar loggedIn admin activePage="/" />
-      <Container>
-        <Background>
-          <h1> Applicant Info </h1>
-          <h2> Question 1 </h2>
-          <p> {hackerProfile.questionOne} </p>
-          <h2> Question 2 </h2>
-          <p> {hackerProfile.questionTwo} </p>
-          <h2> Question 3 </h2>
-          <p> {hackerProfile.questionThree} </p>
-        </Background>
-        <Background>
-          <h1> Review </h1>
-          <h3> Score 1 </h3>
-          <input
-            type="number"
-            onChange={e => {
-              setS1(e.target.value);
-            }}
-          />
-          <h3> Score 2 </h3>
-          <input
-            type="number"
-            onChange={e => {
-              setS2(e.target.value);
-            }}
-          />
-          <h3> Score 3 </h3>
-          <input
-            type="number"
-            onChange={e => {
-              setS3(e.target.value);
-            }}
-          />
-          <div>
-            <button
-              onClick={async () => {
-                const result = await submitReview(review, {
-                  scoreOne: s1,
-                  scoreTwo: s2,
-                  scoreThree: s3
-                });
-                // Redirect back to admin from the server
-                handleAdminRedirect(null);
-              }}
-            >
-              {" "}
-              Submit Review{" "}
-            </button>
-          </div>
-        </Background>
-      </Container>
+      <Background>
+        <Container>
+          <Flex direction="row" justify="space-between">
+            <Column flexBasis={48}>
+              <h1> Applicant Info </h1>
 
+              <Panel>
+                <h2>Question 1 - Project</h2>
+                <p> {hackerProfile.questionOne || "(No response)"} </p>
+              </Panel>
+
+              <Panel>
+                <h2>Question 2 - Vertical</h2>
+                <p> {hackerProfile.questionTwo || "(No response)"} </p>
+              </Panel>
+
+              <Panel>
+                <h2>Question 3 - Beverage</h2>
+                <p> {hackerProfile.questionThree || "(No response)"} </p>
+              </Panel>
+            </Column>
+
+            <Column flexBasis={48}>
+              <h1>Review</h1>
+              <Panel>
+                <ScoreInputLabel>Score 1</ScoreInputLabel>
+
+                <Flex direction="row" justify="space-between" align="center">
+                  <Column>
+                    <ScoreKeyLabel>Q</ScoreKeyLabel>
+                  </Column>
+
+                  <Column flexGrow={1}>
+                    <Input
+                      type="number"
+                      onChange={e => {
+                        setS1(e.target.value);
+                      }}
+                      ref={scoreInputs[0]}
+                    />
+                  </Column>
+                </Flex>
+              </Panel>
+
+              <Panel>
+                <ScoreInputLabel>Score 2</ScoreInputLabel>
+
+                <Flex direction="row" justify="space-between" align="center">
+                  <Column>
+                    <ScoreKeyLabel>W</ScoreKeyLabel>
+                  </Column>
+
+                  <Column flexGrow={1}>
+                    <Input
+                      type="number"
+                      onChange={e => {
+                        setS2(e.target.value);
+                      }}
+                      ref={scoreInputs[1]}
+                    />
+                  </Column>
+                </Flex>
+              </Panel>
+
+              <Panel>
+                <ScoreInputLabel>Score 3</ScoreInputLabel>
+
+                <Flex direction="row" justify="space-between" align="center">
+                  <Column>
+                    <ScoreKeyLabel>E</ScoreKeyLabel>
+                  </Column>
+
+                  <Column flexGrow={1}>
+                    <Input
+                      type="number"
+                      onChange={e => {
+                        setS3(e.target.value);
+                      }}
+                      onKeyUp={e => {
+                        if (e.key === "e") {
+                          e.preventDefault();
+                        }
+                      }}
+                      ref={scoreInputs[2]}
+                    />
+                  </Column>
+                </Flex>
+              </Panel>
+              <div>
+                <Button onClick={handleSubmit}> Submit Review (↵) </Button>
+              </div>
+            </Column>
+          </Flex>
+        </Container>
+      </Background>
       <Footer />
     </>
   );
@@ -97,5 +232,37 @@ AppReview.getInitialProps = async ctx => {
     review: profileReview.review
   };
 };
+
+const Panel = styled.div`
+  padding: 24px 36px;
+  margin: 0 0 16px;
+  background: #ffffff;
+  border-radius: 4px;
+`;
+
+const Input = styled.input`
+  border-radius: 8px;
+  border: 1px solid #b2b2b2;
+  padding: 12px 16px;
+  font-weight: 300;
+  color: ${({ theme }) => theme.colors.black};
+  font-size: 16px;
+  width: 100%;
+  box-sizing: border-box;
+`;
+
+const ScoreInputLabel = styled.h3`
+  padding: 0;
+  margin-bottom: 8px;
+`;
+
+const ScoreKeyLabel = styled.p`
+  display: inline-block;
+  padding: 10px 16px;
+  margin-right: 16px;
+  border-radius: 8px;
+  border: 1px solid ${({ theme }) => theme.colors.gray5};
+  color: ${({ theme }) => theme.colors.gray50};
+`;
 
 export default AppReview;
