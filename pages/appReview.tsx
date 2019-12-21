@@ -14,10 +14,15 @@ import Footer from "../components/Footer";
 import { Button, Container, Background, Flex, Column } from "../styles";
 
 const AppReview = ({ hackerProfile, reviewHistory }) => {
-  const [s1, setS1] = useState(null);
-  const [s2, setS2] = useState(null);
-  const [s3, setS3] = useState(null);
-  const [comments, setComments] = useState("");
+  const [currentProfile, setCurrentProfile] = useState(hackerProfile);
+  const [reviewCount, setReviewCount] = useState(
+    reviewHistory ? reviewHistory.length : 0
+  );
+  const [submitting, setSubmitting] = useState(false);
+
+  const [s1, setS1] = useState("");
+  const [s2, setS2] = useState("");
+  const [s3, setS3] = useState("");
 
   const scoreInputs = [useRef(null), useRef(null), useRef(null)];
 
@@ -56,12 +61,17 @@ const AppReview = ({ hackerProfile, reviewHistory }) => {
 
   const handleSubmit = useCallback(
     async (e?) => {
+      if (submitting) {
+        // Prevent accidental double submission... we shouldn't submit anything until we get server confirmation
+        return;
+      }
+
       if (e) {
         e.preventDefault();
       }
 
       let invalid = false;
-      if (s1 === null || s2 === null || s3 === null) {
+      if (s1.trim() === "" || s2.trim() === "" || s3.trim() === "") {
         invalid = true;
       }
 
@@ -86,17 +96,28 @@ const AppReview = ({ hackerProfile, reviewHistory }) => {
       }
 
       const review = {
-        userId: hackerProfile.userId,
+        userId: currentProfile.userId,
         scoreOne: s1,
         scoreTwo: s2,
-        scoreThree: s3,
-        comments: comments
+        scoreThree: s3
       };
+
+      setSubmitting(true);
       const result = await submitReview(review);
 
-      // Refresh page lol
-      window.scrollTo({ top: 0, left: 0 });
-      location.reload();
+      if (result) {
+        setSubmitting(false);
+
+        // Scroll to top and get new profile
+        window.scrollTo({ top: 0, left: 0 });
+        const newProfile = await getHackerProfileForReview(null);
+        setCurrentProfile(newProfile);
+        setS1("");
+        setS2("");
+        setS3("");
+        setReviewCount(reviewCount + 1);
+        scoreInputs[0].current.focus();
+      }
     },
     [s1, s2, s3]
   );
@@ -137,9 +158,7 @@ const AppReview = ({ hackerProfile, reviewHistory }) => {
             <br />
 
             <p>
-              You have reviewed{" "}
-              <b>{reviewHistory ? reviewHistory.length : 0}/200</b>{" "}
-              applications.
+              You have reviewed <b>{reviewCount}/200</b> applications.
             </p>
           </InfoPanel>
 
@@ -148,17 +167,17 @@ const AppReview = ({ hackerProfile, reviewHistory }) => {
               <h1> Applicant Info </h1>
               <Panel>
                 <h2>Question 1 - Vertical</h2>
-                <p> {hackerProfile.questionOne || "(No response)"} </p>
+                <p> {currentProfile.questionOne || "(No response)"} </p>
               </Panel>
 
               <Panel>
                 <h2>Question 2 - Project</h2>
-                <p> {hackerProfile.questionTwo || "(No response)"} </p>
+                <p> {currentProfile.questionTwo || "(No response)"} </p>
               </Panel>
 
               <Panel>
                 <h2>Question 3 - Beverage</h2>
-                <p> {hackerProfile.questionThree || "(No response)"} </p>
+                <p> {currentProfile.questionThree || "(No response)"} </p>
               </Panel>
             </Column>
 
@@ -178,6 +197,7 @@ const AppReview = ({ hackerProfile, reviewHistory }) => {
                       onChange={e => {
                         setS1(e.target.value);
                       }}
+                      value={s1}
                       ref={scoreInputs[0]}
                     />
                   </Column>
@@ -198,6 +218,7 @@ const AppReview = ({ hackerProfile, reviewHistory }) => {
                       onChange={e => {
                         setS2(e.target.value);
                       }}
+                      value={s2}
                       ref={scoreInputs[1]}
                     />
                   </Column>
@@ -223,13 +244,19 @@ const AppReview = ({ hackerProfile, reviewHistory }) => {
                           e.preventDefault();
                         }
                       }}
+                      value={s3}
                       ref={scoreInputs[2]}
                     />
                   </Column>
                 </Flex>
               </Panel>
               <div>
-                <Button onClick={handleSubmit}> Submit Review (↵) </Button>
+                <StyledButton onClick={handleSubmit} disabled={submitting}>
+                  {" "}
+                  Submit Review (↵){" "}
+                </StyledButton>
+
+                {submitting && <SubmittingText>Submitting...</SubmittingText>}
               </div>
             </Column>
           </Flex>
@@ -291,6 +318,14 @@ const ScoreKeyLabel = styled.p`
   border-radius: 8px;
   border: 1px solid ${({ theme }) => theme.colors.gray5};
   color: ${({ theme }) => theme.colors.gray50};
+`;
+
+const StyledButton = styled(Button)`
+  ${({ disabled }) => disabled && `opacity: 0.5`};
+`;
+
+const SubmittingText = styled.p`
+  margin-top: 8px;
 `;
 
 export default AppReview;
