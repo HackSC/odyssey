@@ -29,10 +29,13 @@ export async function getHackerProfileForReview(req) {
         }
       : null
   );
-  // console.log(response);
+
   const profilePayload = await response.json();
-  console.log(profilePayload);
-  return profilePayload.eligibleReviews[0];
+
+  // Randomly select an eligible review
+  const { eligibleReviews } = profilePayload;
+
+  return eligibleReviews[Math.floor(Math.random() * eligibleReviews.length)];
 }
 
 export async function submitReview(review) {
