@@ -1,11 +1,7 @@
 import React, { useState, useRef, useEffect, useCallback } from "react";
 import styled from "styled-components";
 
-import {
-  handleLoginRedirect,
-  getProfile,
-  handleAdminRedirect
-} from "../lib/authenticate";
+import { handleLoginRedirect, getProfile } from "../lib/authenticate";
 
 import {
   getHackerProfileForReview,
@@ -64,8 +60,6 @@ const AppReview = ({ hackerProfile, reviews }) => {
         e.preventDefault();
       }
 
-      console.log({ s1, s2, s3 });
-
       let invalid = false;
       if (s1 === null || s2 === null || s3 === null) {
         invalid = true;
@@ -100,9 +94,9 @@ const AppReview = ({ hackerProfile, reviews }) => {
       };
       const result = await submitReview(review);
 
-      console.log(result);
-      // Redirect back to admin from the server
-      handleAdminRedirect(null);
+      // Refresh page lol
+      window.scrollTo({ top: 0, left: 0 });
+      location.reload();
     },
     [s1, s2, s3]
   );
@@ -152,12 +146,12 @@ const AppReview = ({ hackerProfile, reviews }) => {
             <Column flexBasis={48}>
               <h1> Applicant Info </h1>
               <Panel>
-                <h2>Question 1 - Project</h2>
+                <h2>Question 1 - Vertical</h2>
                 <p> {hackerProfile.questionOne || "(No response)"} </p>
               </Panel>
 
               <Panel>
-                <h2>Question 2 - Vertical</h2>
+                <h2>Question 2 - Project</h2>
                 <p> {hackerProfile.questionTwo || "(No response)"} </p>
               </Panel>
 
@@ -170,7 +164,7 @@ const AppReview = ({ hackerProfile, reviews }) => {
             <Column flexBasis={48}>
               <h1>Review</h1>
               <Panel>
-                <ScoreInputLabel>Score 1</ScoreInputLabel>
+                <ScoreInputLabel>Score 1 (1-5)</ScoreInputLabel>
 
                 <Flex direction="row" justify="space-between" align="center">
                   <Column>
@@ -190,7 +184,7 @@ const AppReview = ({ hackerProfile, reviews }) => {
               </Panel>
 
               <Panel>
-                <ScoreInputLabel>Score 2</ScoreInputLabel>
+                <ScoreInputLabel>Score 2 (1-5)</ScoreInputLabel>
 
                 <Flex direction="row" justify="space-between" align="center">
                   <Column>
@@ -210,7 +204,7 @@ const AppReview = ({ hackerProfile, reviews }) => {
               </Panel>
 
               <Panel>
-                <ScoreInputLabel>Score 3</ScoreInputLabel>
+                <ScoreInputLabel>Score 3 (1-5)</ScoreInputLabel>
 
                 <Flex direction="row" justify="space-between" align="center">
                   <Column>
