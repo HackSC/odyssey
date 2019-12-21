@@ -6,14 +6,14 @@ import { handleLoginRedirect, getProfile } from "../lib/authenticate";
 import {
   getHackerProfileForReview,
   submitReview,
-  getReviews
+  getReviewHistory
 } from "../lib/admin";
 import Head from "../components/Head";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import { Button, Container, Background, Flex, Column } from "../styles";
 
-const AppReview = ({ hackerProfile, reviews }) => {
+const AppReview = ({ hackerProfile, reviewHistory }) => {
   const [s1, setS1] = useState(null);
   const [s2, setS2] = useState(null);
   const [s3, setS3] = useState(null);
@@ -137,7 +137,8 @@ const AppReview = ({ hackerProfile, reviews }) => {
             <br />
 
             <p>
-              You have reviewed <b>{reviews ? reviews.length : 0}/200</b>{" "}
+              You have reviewed{" "}
+              <b>{reviewHistory ? reviewHistory.length : 0}/200</b>{" "}
               applications.
             </p>
           </InfoPanel>
@@ -249,10 +250,10 @@ AppReview.getInitialProps = async ctx => {
     handleLoginRedirect(req);
   }
   const profileReview = await getHackerProfileForReview(req);
-  const reviews = await getReviews(req);
+  const reviewHistory = await getReviewHistory(req);
   return {
     hackerProfile: profileReview,
-    reviews
+    reviewHistory
   };
 };
 

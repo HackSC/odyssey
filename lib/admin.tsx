@@ -1,7 +1,7 @@
-export async function getReviews(req) {
+export async function getReviewHistory(req) {
   const fetchUrl = process.env.URL_BASE
-    ? process.env.URL_BASE + "api/admin/reviews"
-    : "api/admin/reviews";
+    ? process.env.URL_BASE + "api/admin/reviewHistory"
+    : "api/admin/reviewHistory";
 
   const response = await fetch(
     fetchUrl,
