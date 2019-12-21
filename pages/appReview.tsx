@@ -19,6 +19,7 @@ const AppReview = ({ hackerProfile, reviewHistory }) => {
     reviewHistory ? reviewHistory.length : 0
   );
   const [submitting, setSubmitting] = useState(false);
+  const [loadingNewProfile, setLoadingNewProfile] = useState(false);
 
   const [s1, setS1] = useState("");
   const [s2, setS2] = useState("");
@@ -61,7 +62,7 @@ const AppReview = ({ hackerProfile, reviewHistory }) => {
 
   const handleSubmit = useCallback(
     async (e?) => {
-      if (submitting) {
+      if (submitting || loadingNewProfile) {
         // Prevent accidental double submission... we shouldn't submit anything until we get server confirmation
         return;
       }
@@ -110,7 +111,9 @@ const AppReview = ({ hackerProfile, reviewHistory }) => {
 
         // Scroll to top and get new profile
         window.scrollTo({ top: 0, left: 0 });
+        setLoadingNewProfile(true);
         const newProfile = await getHackerProfileForReview(null);
+        setLoadingNewProfile(false);
         setCurrentProfile(newProfile);
         setS1("");
         setS2("");
@@ -167,17 +170,32 @@ const AppReview = ({ hackerProfile, reviewHistory }) => {
               <h1> Applicant Info </h1>
               <Panel>
                 <h2>Question 1 - Vertical</h2>
-                <p> {currentProfile.questionOne || "(No response)"} </p>
+                <p>
+                  {" "}
+                  {loadingNewProfile
+                    ? "Loading..."
+                    : currentProfile.questionOne || "(No response)"}{" "}
+                </p>
               </Panel>
 
               <Panel>
                 <h2>Question 2 - Project</h2>
-                <p> {currentProfile.questionTwo || "(No response)"} </p>
+                <p>
+                  {" "}
+                  {loadingNewProfile
+                    ? "Loading..."
+                    : currentProfile.questionTwo || "(No response)"}{" "}
+                </p>
               </Panel>
 
               <Panel>
                 <h2>Question 3 - Beverage</h2>
-                <p> {currentProfile.questionThree || "(No response)"} </p>
+                <p>
+                  {" "}
+                  {loadingNewProfile
+                    ? "Loading..."
+                    : currentProfile.questionThree || "(No response)"}{" "}
+                </p>
               </Panel>
             </Column>
 
