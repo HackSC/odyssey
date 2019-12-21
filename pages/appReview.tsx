@@ -7,15 +7,17 @@ import {
   handleAdminRedirect
 } from "../lib/authenticate";
 
-import { getHackerProfileForReview, submitReview } from "../lib/admin";
+import {
+  getHackerProfileForReview,
+  submitReview,
+  getReviews
+} from "../lib/admin";
 import Head from "../components/Head";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import { Button, Container, Background, Flex, Column } from "../styles";
 
-const AppReview = ({ hackerProfile }) => {
-  console.log(hackerProfile);
-
+const AppReview = ({ hackerProfile, reviews }) => {
   const [s1, setS1] = useState(null);
   const [s2, setS2] = useState(null);
   const [s3, setS3] = useState(null);
@@ -37,10 +39,10 @@ const AppReview = ({ hackerProfile }) => {
         key.toLowerCase() === "q"
           ? 0
           : key.toLowerCase() === "w"
-            ? 1
-            : key.toLowerCase() === "e"
-              ? 2
-              : -1;
+          ? 1
+          : key.toLowerCase() === "e"
+          ? 2
+          : -1;
 
       if (i < 0) return;
 
@@ -69,7 +71,8 @@ const AppReview = ({ hackerProfile }) => {
         invalid = true;
       }
 
-      const MIN_SCORE = 1, MAX_SCORE = 5
+      const MIN_SCORE = 1,
+        MAX_SCORE = 5;
 
       if (parseInt(s1) < MIN_SCORE || parseInt(s1) > MAX_SCORE) {
         invalid = true;
@@ -125,10 +128,29 @@ const AppReview = ({ hackerProfile }) => {
       <Navbar loggedIn admin activePage="/" />
       <Background>
         <Container>
+          <InfoPanel>
+            <p>
+              Before you review, please look at this Quip document which
+              outlines the application review rubric:{" "}
+              <a
+                href="https://quip.com/szj7AiMJRTad/Application-Review-Rubric-Instructions"
+                target="_blank"
+              >
+                READ_ME
+              </a>
+            </p>
+
+            <br />
+
+            <p>
+              You have reviewed <b>{reviews ? reviews.length : 0}/200</b>{" "}
+              applications.
+            </p>
+          </InfoPanel>
+
           <Flex direction="row" justify="space-between">
             <Column flexBasis={48}>
               <h1> Applicant Info </h1>
-
               <Panel>
                 <h2>Question 1 - Project</h2>
                 <p> {hackerProfile.questionOne || "(No response)"} </p>
@@ -185,7 +207,7 @@ const AppReview = ({ hackerProfile }) => {
                     />
                   </Column>
                 </Flex>
-              </Panel >
+              </Panel>
 
               <Panel>
                 <ScoreInputLabel>Score 3</ScoreInputLabel>
@@ -214,10 +236,10 @@ const AppReview = ({ hackerProfile }) => {
               <div>
                 <Button onClick={handleSubmit}> Submit Review (↵) </Button>
               </div>
-            </Column >
-          </Flex >
-        </Container >
-      </Background >
+            </Column>
+          </Flex>
+        </Container>
+      </Background>
       <Footer />
     </>
   );
@@ -233,8 +255,10 @@ AppReview.getInitialProps = async ctx => {
     handleLoginRedirect(req);
   }
   const profileReview = await getHackerProfileForReview(req);
+  const reviews = await getReviews(req);
   return {
-    hackerProfile: profileReview
+    hackerProfile: profileReview,
+    reviews
   };
 };
 
@@ -243,6 +267,10 @@ const Panel = styled.div`
   margin: 0 0 16px;
   background: #ffffff;
   border-radius: 4px;
+`;
+
+const InfoPanel = styled(Panel)`
+  margin-bottom: 32px;
 `;
 
 const Input = styled.input`

@@ -1,3 +1,21 @@
+export async function getReviews(req) {
+  const fetchUrl = process.env.URL_BASE
+    ? process.env.URL_BASE + "api/admin/reviews"
+    : "api/admin/reviews";
+
+  const response = await fetch(
+    fetchUrl,
+    req
+      ? {
+          headers: req.headers
+        }
+      : null
+  );
+
+  const payload = await response.json();
+  return payload.reviews;
+}
+
 export async function getHackerProfileForReview(req) {
   const fetchUrl = process.env.URL_BASE
     ? process.env.URL_BASE + "api/admin/eligibleProfiles"
