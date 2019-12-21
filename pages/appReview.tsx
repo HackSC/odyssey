@@ -57,7 +57,7 @@ const AppReview = ({ hackerProfile, reviewHistory }) => {
 
       e.preventDefault();
     },
-    [s1, s2, s3]
+    [s1, s2, s3, submitting, loadingNewProfile]
   );
 
   const handleSubmit = useCallback(
@@ -122,7 +122,7 @@ const AppReview = ({ hackerProfile, reviewHistory }) => {
         scoreInputs[0].current.focus();
       }
     },
-    [s1, s2, s3]
+    [s1, s2, s3, submitting, loadingNewProfile]
   );
 
   useEffect(() => {
@@ -138,7 +138,7 @@ const AppReview = ({ hackerProfile, reviewHistory }) => {
     return () => {
       window.removeEventListener("keydown", switchInputsOnKeyDown);
     };
-  }, [s1, s2, s3]);
+  }, [s1, s2, s3, submitting, loadingNewProfile]);
 
   return (
     <>
