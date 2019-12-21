@@ -29,6 +29,19 @@ router.get("/reviews", async (req, res) => {
   }
 });
 
+router.get("/reviewHistory", async (req, res) => {
+  try {
+    const reviews = await models.HackerReview.findAll({
+      where: {
+        createdBy: req.user.id
+      }
+    });
+    return res.json({ reviews: reviews });
+  } catch (e) {
+    return res.status(500).json({ err: e });
+  }
+});
+
 router.put("/review/:id", async (req, res) => {
   const requestId = req.params.id;
   const allowedFields = new Set([
