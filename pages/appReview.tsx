@@ -62,7 +62,6 @@ const AppReview = ({ hackerProfile, reviewHistory }) => {
 
   const handleSubmit = useCallback(
     async (e?) => {
-      console.log({ submitting, loadingNewProfile });
       if (submitting || loadingNewProfile) {
         // Prevent accidental double submission... we shouldn't submit anything until we get server confirmation
         return;
