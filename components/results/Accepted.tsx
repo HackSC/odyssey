@@ -3,6 +3,7 @@ import styled from "styled-components";
 
 import {
   Flex,
+  Column,
   Button,
   Form,
   FormGroup,
@@ -16,50 +17,172 @@ type Props = {
   profile: Profile;
 };
 
+// Used for select inputs
+const travelOptions = [
+  { label: "Driving", value: "driving" },
+  { label: "HackSC Bus", value: "bus" },
+  { label: "Flying", value: "flying" },
+  { label: "USC Student (N/A)", value: "usc" },
+  { label: "Other", value: "other" }
+];
+
+const shirtSizeOptions = [
+  { label: "X-Small", value: "xs" },
+  { label: "Small", value: "s" },
+  { label: "Medium", value: "m" },
+  { label: "Large", value: "l" },
+  { label: "X-Large", value: "xl" }
+];
+
 const Accepted: React.FunctionComponent<Props> = props => {
-  const [accepted, setAccepted] = useState(false);
+  const [travelMethod, setTravelMethod] = useState(null);
 
   return (
     <Flex direction="column">
-      {accepted ? (
-        <FormSection>
-          <h1>Confirmation Form</h1>
+      <FormSection>
+        <h1>HackSC 2020 Status</h1>
 
-          <p>
-            We're excited that you want to attend HackSC! To confirm that you
-            will be attending, please fill out the following by{" "}
-            <b>January 1st, 2020</b>.
-          </p>
+        <p>
+          Congratulations, we are excited to inform you that we have opened up a
+          spot for you to attend HackSC 2020. We are excited to bring back
+          HackSC to USC's campus and hope you can attend.
+        </p>
 
-          <br />
+        <br />
 
-          <p>
-            <b>
-              If you do not submit this form by January 1st, 2020, we can not
-              hold your spot for HackSC 2020
-            </b>
-          </p>
+        <p>
+          If you plan on attending, please fill out the following form by{" "}
+          <b>January 1st, 2020</b> to confirm your attendance.
+        </p>
 
-          <Form>
-            <FormGroup>
-              <label>Where are you traveling from?</label>
+        <DeclineBanner>
+          <Flex direction="row" align="center">
+            <span>
+              If you cannot make it to HackSC 2020, let us know by declining
+              your acceptance
+            </span>
+            <DecideButton>Decline</DecideButton>
+          </Flex>
+        </DeclineBanner>
 
-              <input type="text" placeholder="Mars" name="travel-origin" />
-            </FormGroup>
+        <Form>
+          <FormGroup>
+            <label>How do you plan on getting to USC?</label>
 
-            <FormGroup>
-              <label>What is your t-shirt size?</label>
+            <Select
+              name="travel-method"
+              options={travelOptions}
+              onChange={e => setTravelMethod(e.target.value)}
+              required
+            />
+          </FormGroup>
 
-              <Select
-                name="shirt-size"
-                options={[
-                  { label: "Small", value: "s" },
-                  { label: "Large", value: "l" }
-                ]}
-                required
-              />
-            </FormGroup>
-          </Form>
+          {// Require users upload a document to show how they will get to USC
+          travelMethod !== null && travelMethod !== "usc" && (
+            <>
+              <FormGroup>
+                <label>Where are you traveling from?</label>
+
+                <input
+                  type="text"
+                  placeholder="Mars"
+                  name="travel-origin"
+                  required
+                />
+              </FormGroup>
+
+              <FormGroup>
+                <p>
+                  If you are traveling from outside LA, please upload your
+                  itinerary (plane, train, etc.) or a document/screenshot with
+                  the route you intend to take (bus route, driving route)
+                </p>
+
+                <TravelPlanUploadInput
+                  type="file"
+                  name="travel-plan"
+                  id="travel-plan"
+                  ref={ref => null}
+                  onChange={e => null}
+                />
+                <TravelPlanUploadButton htmlFor="travel-plan">
+                  Upload Your Travel Plans
+                </TravelPlanUploadButton>
+              </FormGroup>
+            </>
+          )}
+
+          <FormGroup>
+            <label>T-shirt Size (Unisex)</label>
+
+            <Select name="shirt-size" options={shirtSizeOptions} required />
+          </FormGroup>
+
+          <FormGroup>
+            <label>Dietary Restrictions (select all that apply)</label>
+
+            <Flex justify="space-between" tabletVertical>
+              <Column flexBasis={49}>
+                <RadioChoice>
+                  <input
+                    type="checkbox"
+                    name="diet-vegetarian"
+                    value="vegetarian"
+                  />
+                  <RadioChoiceLabel>Vegetarian</RadioChoiceLabel>
+                </RadioChoice>
+
+                <RadioChoice>
+                  <input type="checkbox" name="diet-vegan" value="vegan" />
+                  <RadioChoiceLabel>Vegan</RadioChoiceLabel>
+                </RadioChoice>
+
+                <RadioChoice>
+                  <input type="checkbox" name="diet-halal" value="halal" />
+                  <RadioChoiceLabel>Halal</RadioChoiceLabel>
+                </RadioChoice>
+
+                <RadioChoice>
+                  <input type="checkbox" name="diet-kosher" value="kosher" />
+                  <RadioChoiceLabel>Kosher</RadioChoiceLabel>
+                </RadioChoice>
+              </Column>
+
+              <Column flexBasis={49}>
+                <RadioChoice>
+                  <input
+                    type="checkbox"
+                    name="diet-nut-allergy"
+                    value="nut-allergy"
+                  />
+                  <RadioChoiceLabel>Nut Allergy</RadioChoiceLabel>
+                </RadioChoice>
+
+                <RadioChoice>
+                  <input
+                    type="checkbox"
+                    name="diet-lactose-intolerant"
+                    value="lactose-intolerant"
+                  />
+                  <RadioChoiceLabel>Lactose Intolerant</RadioChoiceLabel>
+                </RadioChoice>
+
+                <RadioChoice>
+                  <input
+                    type="checkbox"
+                    name="diet-gluten-free"
+                    value="gluten-free"
+                  />
+                  <RadioChoiceLabel>Gluten Free</RadioChoiceLabel>
+                </RadioChoice>
+
+                <RadioChoice>
+                  <input type="checkbox" name="diet-other" value="other" />
+                  <RadioChoiceLabel>Other</RadioChoiceLabel>
+                </RadioChoice>
+              </Column>
+            </Flex>
+          </FormGroup>
 
           <FormGroup>
             <label>Code of Conduct</label>
@@ -72,28 +195,18 @@ const Accepted: React.FunctionComponent<Props> = props => {
                 id="code-of-conduct"
               />
               <RadioChoiceLabel htmlFor="code-of-conduct">
-                I agree to the Code of Conduct
+                I agree to the{" "}
+                <a
+                  href="https://static.mlh.io/docs/mlh-code-of-conduct.pdf"
+                  target="_blank"
+                >
+                  MLH Code of Conduct
+                </a>
               </RadioChoiceLabel>
             </RadioChoice>
           </FormGroup>
-        </FormSection>
-      ) : (
-        <FormSection>
-          <h1>Congrats, you have been accepted to HackSC 2020!</h1>
-
-          <p>
-            Congratulations you have been accepted to HackSC! Please fill this
-            out by <b>January 1st, 2020</b> to confirm your attendance.
-          </p>
-
-          <Flex direction="row">
-            <DecideButton onClick={() => setAccepted(true)}>
-              Accept
-            </DecideButton>
-            <DecideButton outline>Decline</DecideButton>
-          </Flex>
-        </FormSection>
-      )}
+        </Form>
+      </FormSection>
     </Flex>
   );
 };
@@ -119,8 +232,60 @@ const FormSection = styled.div`
   }
 `;
 
+const DeclineBanner = styled.div`
+  padding: 12px 16px;
+  border-radius: 8px;
+  border: 2px solid ${({ theme }) => theme.colors.peach};
+  margin: 16px 0;
+
+  span {
+    flex-grow: 1;
+    color: ${({ theme }) => theme.colors.gray50};
+  }
+`;
+
+const TravelPlanUploadInput = styled.input`
+  width: 0.1px;
+  height: 0.1px;
+  opacity: 0;
+  overflow: hidden;
+  position: absolute;
+  z-index: -1;
+`;
+
+const TravelPlanUploadButton = styled.label<any>`
+  padding: 12px 16px;
+  border: none;
+  border-radius: 8px;
+  background: ${({ theme }) => theme.colors.peach};
+  flex-grow: 1;
+  font-size: ${({ theme }) => theme.fontSizes.regular};
+  color: #ffffff;
+  font-weight: 600;
+  text-transform: uppercase;
+  text-align: center;
+  cursor: pointer;
+  margin-top: 12px;
+
+  &:hover {
+    opacity: 0.8;
+  }
+
+  ${({ disabled }) =>
+    disabled &&
+    `
+      opacity: 0.5;
+      cursor: not-allowed;
+    `}
+`;
+
+const TravelPlanLabel = styled.p`
+  color: ${({ theme }) => theme.colors.gray50};
+`;
+
 const DecideButton = styled(Button)`
-  margin: 16px 16px 0;
+  max-width: 300px;
+  flex-shrink: 1;
 `;
 
 export default Accepted;
