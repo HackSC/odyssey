@@ -2,18 +2,9 @@ import * as React from "react";
 import styled from "styled-components";
 import Router from "next/router";
 import * as Sentry from "@sentry/browser";
-import copy from "copy-to-clipboard";
-import { FaLink, FaFacebookF, FaTwitter, FaEnvelope } from "react-icons/fa";
-import { Tooltip } from "react-tippy";
 import Link from "next/link";
 
 import { useIsMobile } from "../../lib/layouts";
-
-import {
-  FacebookShareButton,
-  TwitterShareButton,
-  EmailShareButton
-} from "react-share";
 
 import { Flex, Column, Button } from "../../styles";
 
@@ -60,13 +51,6 @@ const navigateTo = async (step: string) => {
   window.scrollTo(0, 0);
 };
 
-const getDaysTillClose = (): number => {
-  const endDate = new Date("Dec 8, 2019, 11:59 PM").getTime();
-  const nowDate = new Date().getTime();
-  const diff = endDate - nowDate;
-  return Math.floor(diff / 1000 / 60 / 60 / 24);
-};
-
 const StatusStep: React.FunctionComponent<Props> = props => {
   const { profile, socialPosts } = props;
 
@@ -75,13 +59,6 @@ const StatusStep: React.FunctionComponent<Props> = props => {
 
   return (
     <Flex direction="column">
-      <Banner>
-        <b>NEW: </b> Apply with your friends!{" "}
-        <Link href="/team">Click here to join or create a team</Link> to
-        indicate that you're applying to HackSC as a team. You'll be able to
-        set-up teams until results come out.
-      </Banner>
-
       <h1>
         {profile && profile.firstName
           ? `Hey there, ${profile.firstName}!`
@@ -134,20 +111,6 @@ const StatusStep: React.FunctionComponent<Props> = props => {
         </Column>
 
         <DatesColumn flexBasis={35}>
-          <Countdown>
-            <CountdownHeader>
-              <Count>{getDaysTillClose()}</Count>
-              <h2>Days to apply!</h2>
-            </CountdownHeader>
-            <Button
-              as="a"
-              target="_blank"
-              href="http://www.google.com/calendar/event?action=TEMPLATE&dates=20191129T200000Z%2F20191129T210000Z&text=Finish%20HackSC%20Application&location=&details=Reminder%20to%20finish%20HackSC%20Application%20before%20deadline"
-            >
-              Add to Calendar
-            </Button>
-          </Countdown>
-
           <h2>Major Dates</h2>
 
           <Dates>
@@ -176,22 +139,6 @@ type CircleIconProps = {
   size: number;
   bgColor: string;
 };
-
-const CircleIcon = styled.div<CircleIconProps>`
-  background: ${props => props.bgColor};
-  width: ${props => props.size}px;
-  height: ${props => props.size}px;
-  border-radius: 50%;
-  text-align: center;
-  line-height: ${props => props.size}px;
-  vertical-align: middle;
-  padding: ${props => props.size - 10}px;
-
-  :hover {
-    transform: scale(1.05);
-    cursor: pointer;
-  }
-`;
 
 const Status = styled(Flex)`
   padding: 48px;
@@ -248,31 +195,6 @@ const StepButton = styled(Button)`
   margin-top: 24px;
 `;
 
-const Countdown = styled.div`
-  padding: 24px 36px;
-  margin: 0 0 32px;
-  background: #ffffff;
-  border-radius: 4px;
-  text-align: center;
-  display: flex;
-  flex-direction: column;
-`;
-
-const Count = styled.h2`
-  font-size: 72px;
-  color: ${({ theme }) => theme.colors.peach};
-`;
-
-const CountdownHeader = styled.div`
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  h2 {
-    padding-left: 12px;
-    margin-bottom: 0px;
-  }
-`;
-
 const Dates = styled.div`
   padding: 24px 24px;
   margin: 16px 0 32px;
@@ -291,20 +213,6 @@ const DateText = styled.div`
     font-weight: 600;
     color: ${({ theme }) => theme.colors.peach};
     padding-bottom: 4px;
-  }
-`;
-
-const Banner = styled.div`
-  padding: 24px;
-  border-radius: 8px;
-  background-color: ${({ theme }) => theme.colors.magenta};
-  color: ${({ theme }) => theme.colors.white};
-  margin-bottom: 24px;
-  line-height: 22px;
-
-  a {
-    color: ${({ theme }) => theme.colors.white};
-    text-decoration: underline;
   }
 `;
 

@@ -3,6 +3,7 @@ import * as React from "react";
 import styled from "styled-components";
 
 import Blob from "../Blob";
+import Accepted from "../results/Accepted";
 import { Flex } from "../../styles";
 
 type Props = {
@@ -11,6 +12,10 @@ type Props = {
 
 const ResultStep: React.FunctionComponent<Props> = props => {
   const { profile } = props;
+
+  if (profile && profile.status === "accepted") {
+    return <Accepted profile={profile} />;
+  }
 
   if (profile && !profile.submittedAt) {
     return (
