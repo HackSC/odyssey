@@ -36,6 +36,7 @@ const shirtSizeOptions = [
 
 const Accepted: React.FunctionComponent<Props> = props => {
   const [travelMethod, setTravelMethod] = useState(null);
+  const [travelFile, setTravelFile] = useState(null);
 
   const formRefs = {
     travelMethod: useRef(null),
@@ -161,7 +162,8 @@ const Accepted: React.FunctionComponent<Props> = props => {
                 <p>
                   If you are traveling from outside LA, please upload your
                   itinerary (plane, train, etc.) or a document/screenshot with
-                  the route you intend to take (bus route, driving route)
+                  the route you intend to take (bus route, driving route).{" "}
+                  <b>This is required.</b>
                 </p>
 
                 <TravelPlanUploadInput
@@ -169,10 +171,20 @@ const Accepted: React.FunctionComponent<Props> = props => {
                   name="travel-plan"
                   id="travel-plan"
                   ref={formRefs.travelPlan}
+                  onChange={e => setTravelFile(e.target.files[0])}
                 />
-                <TravelPlanUploadButton htmlFor="travel-plan">
-                  Upload Your Travel Plans
+                <TravelPlanUploadButton
+                  htmlFor="travel-plan"
+                  outline={travelFile !== null}
+                >
+                  {travelFile
+                    ? "Select Another File"
+                    : "Upload Your Travel Plans"}
                 </TravelPlanUploadButton>
+
+                <TravelPlanLabel>
+                  {travelFile && "Selected '" + travelFile.name + "'"}
+                </TravelPlanLabel>
               </FormGroup>
             </>
           )}
@@ -365,6 +377,14 @@ const TravelPlanUploadButton = styled.label<any>`
     `
       opacity: 0.5;
       cursor: not-allowed;
+    `}
+
+  ${({ outline, theme }) =>
+    outline &&
+    `
+      background: transparent;
+      border: 2px solid ${theme.colors.peach};
+      color: ${theme.colors.peach};
     `}
 `;
 
