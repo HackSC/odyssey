@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import styled from "styled-components";
 
 import {
@@ -37,6 +37,70 @@ const shirtSizeOptions = [
 const Accepted: React.FunctionComponent<Props> = props => {
   const [travelMethod, setTravelMethod] = useState(null);
 
+  const formRefs = {
+    travelMethod: useRef(null),
+    travelOrigin: useRef(null),
+    travelPlan: useRef(null),
+    dietaryRestrictions: {
+      vegetarian: useRef(null),
+      vegan: useRef(null),
+      halal: useRef(null),
+      kosher: useRef(null),
+      nutAllergy: useRef(null),
+      lactoseIntolerant: useRef(null),
+      glutenFree: useRef(null),
+      other: useRef(null)
+    },
+    codeOfConduct: useRef(null)
+  };
+
+  const handleSubmit = e => {
+    e.preventDefault();
+
+    const {
+      travelMethod,
+      travelOrigin,
+      travelPlan,
+      dietaryRestrictions,
+      codeOfConduct
+    } = formRefs;
+
+    const reqBody = {
+      travelMethod: travelMethod.current && travelMethod.current.value,
+      travelOrigin: travelOrigin.current && travelOrigin.current.value,
+      travelPlan: travelPlan.current && travelPlan.current.files[0],
+      codeOfConduct: codeOfConduct.current && codeOfConduct.current.value,
+      dietaryRestrictions: {
+        vegetarian:
+          dietaryRestrictions.vegetarian.current &&
+          dietaryRestrictions.vegetarian.current.checked,
+        vegan:
+          dietaryRestrictions.vegan.current &&
+          dietaryRestrictions.vegan.current.checked,
+        halal:
+          dietaryRestrictions.halal.current &&
+          dietaryRestrictions.halal.current.checked,
+        kosher:
+          dietaryRestrictions.kosher.current &&
+          dietaryRestrictions.kosher.current.checked,
+        nutAllergy:
+          dietaryRestrictions.nutAllergy.current &&
+          dietaryRestrictions.nutAllergy.current.checked,
+        lactoseIntolerant:
+          dietaryRestrictions.lactoseIntolerant.current &&
+          dietaryRestrictions.lactoseIntolerant.current.checked,
+        glutenFree:
+          dietaryRestrictions.glutenFree.current &&
+          dietaryRestrictions.glutenFree.current.checked,
+        other:
+          dietaryRestrictions.other.current &&
+          dietaryRestrictions.other.current.checked
+      }
+    };
+
+    console.log(reqBody);
+  };
+
   return (
     <Flex direction="column">
       <FormSection>
@@ -65,7 +129,7 @@ const Accepted: React.FunctionComponent<Props> = props => {
           </Flex>
         </DeclineBanner>
 
-        <Form>
+        <Form onSubmit={handleSubmit}>
           <FormGroup>
             <label>How do you plan on getting to USC?</label>
 
@@ -73,6 +137,7 @@ const Accepted: React.FunctionComponent<Props> = props => {
               name="travel-method"
               options={travelOptions}
               onChange={e => setTravelMethod(e.target.value)}
+              ref={formRefs.travelMethod}
               required
             />
           </FormGroup>
@@ -87,6 +152,7 @@ const Accepted: React.FunctionComponent<Props> = props => {
                   type="text"
                   placeholder="Mars"
                   name="travel-origin"
+                  ref={formRefs.travelOrigin}
                   required
                 />
               </FormGroup>
@@ -102,8 +168,7 @@ const Accepted: React.FunctionComponent<Props> = props => {
                   type="file"
                   name="travel-plan"
                   id="travel-plan"
-                  ref={ref => null}
-                  onChange={e => null}
+                  ref={formRefs.travelPlan}
                 />
                 <TravelPlanUploadButton htmlFor="travel-plan">
                   Upload Your Travel Plans
@@ -128,22 +193,38 @@ const Accepted: React.FunctionComponent<Props> = props => {
                     type="checkbox"
                     name="diet-vegetarian"
                     value="vegetarian"
+                    ref={formRefs.dietaryRestrictions.vegetarian}
                   />
                   <RadioChoiceLabel>Vegetarian</RadioChoiceLabel>
                 </RadioChoice>
 
                 <RadioChoice>
-                  <input type="checkbox" name="diet-vegan" value="vegan" />
+                  <input
+                    type="checkbox"
+                    name="diet-vegan"
+                    value="vegan"
+                    ref={formRefs.dietaryRestrictions.vegan}
+                  />
                   <RadioChoiceLabel>Vegan</RadioChoiceLabel>
                 </RadioChoice>
 
                 <RadioChoice>
-                  <input type="checkbox" name="diet-halal" value="halal" />
+                  <input
+                    type="checkbox"
+                    name="diet-halal"
+                    value="halal"
+                    ref={formRefs.dietaryRestrictions.halal}
+                  />
                   <RadioChoiceLabel>Halal</RadioChoiceLabel>
                 </RadioChoice>
 
                 <RadioChoice>
-                  <input type="checkbox" name="diet-kosher" value="kosher" />
+                  <input
+                    type="checkbox"
+                    name="diet-kosher"
+                    value="kosher"
+                    ref={formRefs.dietaryRestrictions.kosher}
+                  />
                   <RadioChoiceLabel>Kosher</RadioChoiceLabel>
                 </RadioChoice>
               </Column>
@@ -154,6 +235,7 @@ const Accepted: React.FunctionComponent<Props> = props => {
                     type="checkbox"
                     name="diet-nut-allergy"
                     value="nut-allergy"
+                    ref={formRefs.dietaryRestrictions.nutAllergy}
                   />
                   <RadioChoiceLabel>Nut Allergy</RadioChoiceLabel>
                 </RadioChoice>
@@ -163,6 +245,7 @@ const Accepted: React.FunctionComponent<Props> = props => {
                     type="checkbox"
                     name="diet-lactose-intolerant"
                     value="lactose-intolerant"
+                    ref={formRefs.dietaryRestrictions.lactoseIntolerant}
                   />
                   <RadioChoiceLabel>Lactose Intolerant</RadioChoiceLabel>
                 </RadioChoice>
@@ -172,6 +255,7 @@ const Accepted: React.FunctionComponent<Props> = props => {
                     type="checkbox"
                     name="diet-gluten-free"
                     value="gluten-free"
+                    ref={formRefs.dietaryRestrictions.glutenFree}
                   />
                   <RadioChoiceLabel>Gluten Free</RadioChoiceLabel>
                 </RadioChoice>
@@ -193,6 +277,7 @@ const Accepted: React.FunctionComponent<Props> = props => {
                 name="code-of-conduct"
                 required
                 id="code-of-conduct"
+                ref={formRefs.codeOfConduct}
               />
               <RadioChoiceLabel htmlFor="code-of-conduct">
                 I agree to the{" "}
@@ -204,6 +289,10 @@ const Accepted: React.FunctionComponent<Props> = props => {
                 </a>
               </RadioChoiceLabel>
             </RadioChoice>
+          </FormGroup>
+
+          <FormGroup>
+            <Button type="submit">Submit</Button>
           </FormGroup>
         </Form>
       </FormSection>
