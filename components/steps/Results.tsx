@@ -4,6 +4,8 @@ import styled from "styled-components";
 
 import Blob from "../Blob";
 import Accepted from "../results/Accepted";
+import Confirmed from "../results/Confirmed";
+import Declined from "../results/Declined";
 import { Flex } from "../../styles";
 
 type Props = {
@@ -15,6 +17,14 @@ const ResultStep: React.FunctionComponent<Props> = props => {
 
   if (profile && profile.status === "accepted") {
     return <Accepted profile={profile} />;
+  }
+
+  if (profile && profile.status === "declined") {
+    return <Declined profile={profile} />;
+  }
+
+  if (profile && profile.status === "confirmed") {
+    return <Confirmed profile={profile} />;
   }
 
   if (profile && !profile.submittedAt) {
