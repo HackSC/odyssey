@@ -44,6 +44,7 @@ const Accepted: React.FunctionComponent<Props> = props => {
     travelMethod: useRef(null),
     travelOrigin: useRef(null),
     travelPlan: useRef(null),
+    shirtSize: useRef(null),
     dietaryRestrictions: {
       vegetarian: useRef(null),
       vegan: useRef(null),
@@ -57,13 +58,14 @@ const Accepted: React.FunctionComponent<Props> = props => {
     codeOfConduct: useRef(null)
   };
 
-  const handleSubmit = e => {
+  const handleSubmit = async e => {
     e.preventDefault();
 
     const {
       travelMethod,
       travelOrigin,
       travelPlan,
+      shirtSize,
       dietaryRestrictions,
       codeOfConduct
     } = formRefs;
@@ -73,6 +75,7 @@ const Accepted: React.FunctionComponent<Props> = props => {
       travelOrigin: travelOrigin.current && travelOrigin.current.value,
       travelPlan: travelPlan.current && travelPlan.current.files[0],
       codeOfConduct: codeOfConduct.current && codeOfConduct.current.value,
+      shirtSize: shirtSize.current && shirtSize.current.value,
       dietaryRestrictions: {
         vegetarian:
           dietaryRestrictions.vegetarian.current &&
@@ -102,10 +105,11 @@ const Accepted: React.FunctionComponent<Props> = props => {
     };
 
     const formData = jsonToFormData(reqBody);
-    // await fetch("/api/profile/confirm", {
-    //   method: "POST",
-    //   body: formData
-    // });
+    await fetch("/api/profile/confirm", {
+      method: "POST",
+      body: formData
+    });
+    alert("Submitted");
   };
 
   return (
@@ -151,54 +155,57 @@ const Accepted: React.FunctionComponent<Props> = props => {
 
           {// Require users upload a document to show how they will get to USC
           travelMethod !== null && travelMethod !== "usc" && (
-            <>
-              <FormGroup>
-                <label>Where are you traveling from?</label>
+            <FormGroup>
+              <label>Where are you traveling from?</label>
 
-                <input
-                  type="text"
-                  placeholder="Mars"
-                  name="travel-origin"
-                  ref={formRefs.travelOrigin}
-                  required
-                />
-              </FormGroup>
-
-              <FormGroup>
-                <p>
-                  If you are traveling from outside LA, please upload your
-                  itinerary (plane, train, etc.) or a document/screenshot with
-                  the route you intend to take (bus route, driving route).{" "}
-                  <b>This is required.</b>
-                </p>
-
-                <TravelPlanUploadInput
-                  type="file"
-                  name="travel-plan"
-                  id="travel-plan"
-                  ref={formRefs.travelPlan}
-                  onChange={e => setTravelFile(e.target.files[0])}
-                />
-                <TravelPlanUploadButton
-                  htmlFor="travel-plan"
-                  outline={travelFile !== null}
-                >
-                  {travelFile
-                    ? "Select Another File"
-                    : "Upload Your Travel Plans"}
-                </TravelPlanUploadButton>
-
-                <TravelPlanLabel>
-                  {travelFile && "Selected '" + travelFile.name + "'"}
-                </TravelPlanLabel>
-              </FormGroup>
-            </>
+              <input
+                type="text"
+                placeholder="Mars"
+                name="travel-origin"
+                ref={formRefs.travelOrigin}
+                required
+              />
+            </FormGroup>
           )}
+
+          <FormGroup>
+            <p>
+              If you are traveling from outside LA, please upload your itinerary
+              (plane, train, etc.) or a document/screenshot with the route you
+              intend to take (bus route, driving route).{" "}
+              <b>This is required.</b>
+            </p>
+
+            <TravelPlanUploadInput
+              type="file"
+              name="travel-plan"
+              id="travel-plan"
+              ref={formRefs.travelPlan}
+              onChange={e => setTravelFile(e.target.files[0])}
+            />
+            <TravelPlanUploadButton
+              htmlFor="travel-plan"
+              outline={travelFile !== null}
+            >
+              {travelFile
+                ? "Select Another File"
+                : "Upload Your Proof of Travel Plans"}
+            </TravelPlanUploadButton>
+
+            <TravelPlanLabel>
+              {travelFile && "Selected '" + travelFile.name + "'"}
+            </TravelPlanLabel>
+          </FormGroup>
 
           <FormGroup>
             <label>T-shirt Size (Unisex)</label>
 
-            <Select name="shirt-size" options={shirtSizeOptions} required />
+            <Select
+              name="shirt-size"
+              options={shirtSizeOptions}
+              required
+              ref={formRefs.shirtSize}
+            />
           </FormGroup>
 
           <FormGroup>
