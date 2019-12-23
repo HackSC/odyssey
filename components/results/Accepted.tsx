@@ -13,6 +13,8 @@ import {
 
 import Select from "../Select";
 
+import jsonToFormData from "../../lib/jsonToFormData";
+
 type Props = {
   profile: Profile;
 };
@@ -99,7 +101,11 @@ const Accepted: React.FunctionComponent<Props> = props => {
       }
     };
 
-    console.log(reqBody);
+    const formData = jsonToFormData(reqBody);
+    // await fetch("/api/profile/confirm", {
+    //   method: "POST",
+    //   body: formData
+    // });
   };
 
   return (
