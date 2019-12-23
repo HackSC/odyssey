@@ -93,7 +93,7 @@ router.get("/eligibleProfiles", async (req, res) => {
       const reviewsByCurrUser = profile.HackerReviews.filter(review => {
         return review.dataValues.createdBy === req.user.id;
       });
-      return reviewsByCurrUser.length === 0 && profile.HackerReviews.length < 3;
+      return reviewsByCurrUser.length === 0 && profile.HackerReviews.length < 2;
     });
     return res.json({
       eligibleReviews: filteredProfiles
