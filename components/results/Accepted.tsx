@@ -40,6 +40,9 @@ const Accepted: React.FunctionComponent<Props> = props => {
   const [travelMethod, setTravelMethod] = useState(null);
   const [travelFile, setTravelFile] = useState(null);
 
+  const [error, setError] = useState(null);
+  const [submitting, setSubmitting] = useState(false);
+
   const formRefs = {
     travelMethod: useRef(null),
     travelOrigin: useRef(null),
@@ -60,6 +63,10 @@ const Accepted: React.FunctionComponent<Props> = props => {
 
   const handleSubmit = async e => {
     e.preventDefault();
+
+    if (submitting) {
+      return;
+    }
 
     const {
       travelMethod,
@@ -105,11 +112,26 @@ const Accepted: React.FunctionComponent<Props> = props => {
     };
 
     const formData = jsonToFormData(reqBody);
-    await fetch("/api/profile/confirm", {
+    setSubmitting(true);
+    const response = await fetch("/api/profile/confirm", {
       method: "POST",
       body: formData
     });
-    alert("Submitted");
+    setSubmitting(false);
+
+    if (response.status === 200) {
+      // Successful confirmation
+    } else {
+      const data = await response.json();
+      setError(data.message);
+    }
+  };
+
+  const handleDecline = async () => {
+    await fetch("/api/profile/decline", {
+      method: "POST"
+    });
+    alert("Declined");
   };
 
   return (
@@ -136,7 +158,7 @@ const Accepted: React.FunctionComponent<Props> = props => {
               If you cannot make it to HackSC 2020, let us know by declining
               your acceptance
             </span>
-            <DecideButton>Decline</DecideButton>
+            <DecideButton onClick={handleDecline}>Decline</DecideButton>
           </Flex>
         </DeclineBanner>
 
@@ -317,7 +339,17 @@ const Accepted: React.FunctionComponent<Props> = props => {
           </FormGroup>
 
           <FormGroup>
-            <Button type="submit">Submit</Button>
+            <Button type="submit" disabled={submitting} outline={submitting}>
+              Submit
+            </Button>
+
+            {submitting && (
+              <StatusText>
+                Submitting your confirmation... please wait...
+              </StatusText>
+            )}
+
+            {error && <StatusText>{error}</StatusText>}
           </FormGroup>
         </Form>
       </FormSection>
@@ -408,6 +440,13 @@ const TravelPlanLabel = styled.p`
 const DecideButton = styled(Button)`
   max-width: 300px;
   flex-shrink: 1;
+`;
+
+const StatusText = styled.p`
+  text-align: center;
+  margin-top: 16px;
+  font-weight: 500;
+  color: ${({ theme }) => theme.colors.gray50};
 `;
 
 export default Accepted;
