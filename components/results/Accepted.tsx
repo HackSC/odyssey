@@ -200,7 +200,6 @@ const Accepted: React.FunctionComponent<Props> = props => {
                 <input
                   type="checkbox"
                   name="no-bus-check"
-                  required
                   id="no-bus-check"
                   ref={formRefs.noBusCheck}
                 />
@@ -219,7 +218,8 @@ const Accepted: React.FunctionComponent<Props> = props => {
               placeholder="90007"
               name="travel-origin"
               ref={formRefs.travelOrigin}
-              maxLength={10}
+              maxLength={5}
+              minLength={5}
               required
             />
           </FormGroup>
