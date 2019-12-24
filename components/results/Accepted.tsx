@@ -175,8 +175,9 @@ const Accepted: React.FunctionComponent<Props> = props => {
             <label>How do you plan on getting to USC?</label>
 
             <p>
-              Note: we are working on <b>potentially</b> sending busses to/from
-              Berkeley, Stanford, Irvine, UCLA, and UCSD. This list is TBD.
+              Note: we are working on finalizing our bus schedule to California
+              schools in SoCal and Bay Area. The final bus schedule is{" "}
+              <eb>TBA</eb>.
             </p>
             <br />
             <Select
