@@ -101,7 +101,8 @@ module.exports = (sequelize, DataTypes) => {
       },
       travelPlan: DataTypes.STRING(500),
       dietaryRestrictions: DataTypes.STRING(1000),
-      confirmCodeOfConduct: DataTypes.BOOLEAN
+      confirmCodeOfConduct: DataTypes.BOOLEAN,
+      noBusCheck: DataTypes.BOOLEAN
     },
     {}
   );

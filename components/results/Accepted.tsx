@@ -59,7 +59,8 @@ const Accepted: React.FunctionComponent<Props> = props => {
       glutenFree: useRef(null),
       other: useRef(null)
     },
-    codeOfConduct: useRef(null)
+    codeOfConduct: useRef(null),
+    noBusCheck: useRef(null)
   };
 
   const handleSubmit = async e => {
@@ -75,7 +76,8 @@ const Accepted: React.FunctionComponent<Props> = props => {
       travelPlan,
       shirtSize,
       dietaryRestrictions,
-      codeOfConduct
+      codeOfConduct,
+      noBusCheck
     } = formRefs;
 
     const reqBody = {
@@ -108,8 +110,9 @@ const Accepted: React.FunctionComponent<Props> = props => {
           dietaryRestrictions.glutenFree.current.checked,
         other:
           dietaryRestrictions.other.current &&
-          dietaryRestrictions.other.current.checked
-      }
+          dietaryRestrictions.other.current.value
+      },
+      noBusCheck: noBusCheck.current && noBusCheck.current.value
     };
 
     const formData = jsonToFormData(reqBody);
@@ -171,6 +174,11 @@ const Accepted: React.FunctionComponent<Props> = props => {
           <FormGroup>
             <label>How do you plan on getting to USC?</label>
 
+            <p>
+              Note: we are working on <b>potentially</b> sending busses to/from
+              Berkeley, Stanford, Irvine, UCLA, and UCSD. This list is TBD.
+            </p>
+            <br />
             <Select
               name="travel-method"
               options={travelOptions}
@@ -180,27 +188,54 @@ const Accepted: React.FunctionComponent<Props> = props => {
             />
           </FormGroup>
 
-          {// Require users upload a document to show how they will get to USC
-          travelMethod !== null && travelMethod !== "usc" && (
+          {// Quick question
+          travelMethod !== null && travelMethod === "bus" && (
             <FormGroup>
-              <label>Where are you traveling from?</label>
+              <label>
+                If a bus is not made available to your school, would you still
+                attend HackSC?
+              </label>
 
-              <input
-                type="text"
-                placeholder="Mars"
-                name="travel-origin"
-                ref={formRefs.travelOrigin}
-                required
-              />
+              <RadioChoice>
+                <input
+                  type="checkbox"
+                  name="no-bus-check"
+                  required
+                  id="no-bus-check"
+                  ref={formRefs.noBusCheck}
+                />
+                <RadioChoiceLabel htmlFor="no-bus-check">
+                  Yes, I would still attend HackSC if a bus was not provided
+                </RadioChoiceLabel>
+              </RadioChoice>
             </FormGroup>
           )}
 
           <FormGroup>
+            <label>What zip code are you traveling from?</label>
+
+            <input
+              type="text"
+              placeholder="90007"
+              name="travel-origin"
+              ref={formRefs.travelOrigin}
+              maxLength={10}
+              required
+            />
+          </FormGroup>
+
+          <FormGroup>
             <p>
-              If you are traveling from outside LA, please upload your itinerary
-              (plane, train, etc.) or a document/screenshot with the route you
-              intend to take (bus route, driving route).{" "}
-              <b>This is required.</b>
+              If you are not a USC student and/or are traveling to get to
+              HackSC, please upload a document/screenshot showing how you plan
+              on getting to USC (ex: train ticket, Google Maps route if you're
+              driving, route from location to USC in case a bus isn't provided).
+              If you are a USC student, please upload some proof that you attend
+              USC or live near campus.{" "}
+              <b>
+                This is required to verify that you have planned for travel to
+                HackSC.
+              </b>
             </p>
 
             <TravelPlanUploadInput
@@ -209,6 +244,7 @@ const Accepted: React.FunctionComponent<Props> = props => {
               id="travel-plan"
               ref={formRefs.travelPlan}
               onChange={e => setTravelFile(e.target.files[0])}
+              required
             />
             <TravelPlanUploadButton
               htmlFor="travel-plan"
@@ -312,10 +348,13 @@ const Accepted: React.FunctionComponent<Props> = props => {
                   <RadioChoiceLabel>Gluten Free</RadioChoiceLabel>
                 </RadioChoice>
 
-                <RadioChoice>
-                  <input type="checkbox" name="diet-other" value="other" />
-                  <RadioChoiceLabel>Other</RadioChoiceLabel>
-                </RadioChoice>
+                <OtherDietRestrictions
+                  type="text"
+                  placeholder="Other"
+                  name="diet-other"
+                  ref={formRefs.dietaryRestrictions.other}
+                  maxLength={150}
+                />
               </Column>
             </Flex>
           </FormGroup>
@@ -452,6 +491,10 @@ const StatusText = styled.p`
   margin-top: 16px;
   font-weight: 500;
   color: ${({ theme }) => theme.colors.gray50};
+`;
+
+const OtherDietRestrictions = styled.input`
+  margin-top: 8px;
 `;
 
 export default Accepted;

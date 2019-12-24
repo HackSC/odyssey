@@ -59,7 +59,7 @@ const navigateTo = async (step: string) => {
 const getCheck = (profile: Profile) => {
   const { status } = profile;
 
-  if (status === "accepted") {
+  if (status === "accepted" || status === "confirmed") {
     return <img src={GreenCheck} alt="Green Check" />;
   } else if (status === "rejected" || status === "declined") {
     return <img src={RedCheck} alt="Red Check" />;
@@ -107,6 +107,14 @@ const StatusStep: React.FunctionComponent<Props> = props => {
             future updates and communications from us. If you have any updates
             or questions, please let us know at{" "}
             <a href="mailto:hackers@hacksc.com">hackers@hacksc.com</a>
+          </StatusMessage>
+        )}
+
+        {profile && profile.status === "accepted" && (
+          <StatusMessage>
+            You have been accepted to HackSC! Just one more step: please confirm
+            or decline your attendance by filling out{" "}
+            <a href="/results">this short form.</a>
           </StatusMessage>
         )}
       </Status>

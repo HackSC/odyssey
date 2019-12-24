@@ -258,8 +258,11 @@ router.post("/confirm", (req, res) => {
           dietaryRestrictions.push("lactoseIntolerant");
         if (body["dietaryRestrictions.glutenFree"] === "true")
           dietaryRestrictions.push("glutenFree");
-        if (body["dietaryRestrictions.other"] === "true")
-          dietaryRestrictions.push("other");
+        if (
+          body["dietaryRestrictions.other"] &&
+          body["dietaryRestrictions.other"].trim() !== ""
+        )
+          dietaryRestrictions.push(body["dietaryRestrictions.other"]);
 
         models.HackerProfile.update(
           {
@@ -269,7 +272,8 @@ router.post("/confirm", (req, res) => {
             travelPlan: data.Location,
             dietaryRestrictions: dietaryRestrictions.join(" "),
             confirmCodeOfConduct: body["codeOfConduct"] === "on" ? true : false,
-            status: "confirmed"
+            status: "confirmed",
+            noBusCheck: body["noBusCheck"] === "on" ? true : false
           },
           {
             where: {
