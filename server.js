@@ -21,10 +21,6 @@ const Sentry = require("@sentry/node");
 
 const scheduleSendGridSync = require("./cronjobs/sendgridsync");
 
-// Cron Jobs
-if (!dev) {
-	scheduleSendGridSync();
-}
 
 const dev = process.env.NODE_ENV !== "production";
 const app = next({
@@ -34,6 +30,12 @@ const app = next({
 const handle = app.getRequestHandler();
 
 dotenv.config();
+
+// Cron Jobs
+if (!dev) {
+	scheduleSendGridSync();
+}
+
 
 Sentry.init({
 	dsn: "https://1a18ac7b9aa94cb5b2a8c9fc2f7e4fc8@sentry.io/1801129",
