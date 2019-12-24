@@ -86,7 +86,7 @@ app.prepare().then(() => {
 	server.use("/auth", authRouter);
 	server.use("/api/profile", profileRouter);
 	server.use("/api/admin", adminRouter);
-	server.use("/api/points", pointRouter);
+	server.use("/api/points", taskRouter);
 	server.use("/api/team", teamRouter);
 
 	server.get("*", handle);
