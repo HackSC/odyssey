@@ -12,17 +12,19 @@ const Declined: React.FunctionComponent<Props> = props => {
   return (
     <Flex direction="column">
       <FormSection>
-        <h1>You have declined a spot for HackSC 2020</h1>
+        <h1>You have declined your spot for HackSC 2020</h1>
 
         <p>
-          We're sad we won't be seeing you at HackSC 2020 :( If you decide to
-          change your mind, please let us know at hackers@hacksc.com
+          We're sad we won't be seeing you at HackSC 2020! If you decide to
+          change your mind, please let us know at{" "}
+          <a href="mailto:hackers@hacksc.com">hackers@hacksc.com</a>
         </p>
 
         <br />
 
         <p>
-          In the meantime, follow HackSC on social media. Follow us on{" "}
+          If you want to stay up to date with HackSC for the future, follow us
+          on social media. Follow us on{" "}
           <a href="https://twitter.com/hackscofficial" target="_blank">
             Twitter
           </a>

@@ -1,5 +1,6 @@
 import React, { useState, useRef } from "react";
 import styled from "styled-components";
+import Router from "next/router";
 
 import {
   Flex,
@@ -121,6 +122,8 @@ const Accepted: React.FunctionComponent<Props> = props => {
 
     if (response.status === 200) {
       // Successful confirmation
+      await Router.push("/dashboard");
+      window.scrollTo(0, 0);
     } else {
       const data = await response.json();
       setError(data.message);
@@ -131,17 +134,19 @@ const Accepted: React.FunctionComponent<Props> = props => {
     await fetch("/api/profile/decline", {
       method: "POST"
     });
-    alert("Declined");
+
+    await Router.push("/dashboard");
+    window.scrollTo(0, 0);
   };
 
   return (
     <Flex direction="column">
       <FormSection>
-        <h1>HackSC 2020 Status</h1>
+        <h1>Confirm Your Attendance</h1>
 
         <p>
           Congratulations, we are excited to inform you that we have opened up a
-          spot for you to attend HackSC 2020. We are excited to bring back
+          spot for you to attend HackSC 2020! We are excited to bring back
           HackSC to USC's campus and hope you can attend.
         </p>
 
@@ -340,7 +345,7 @@ const Accepted: React.FunctionComponent<Props> = props => {
 
           <FormGroup>
             <Button type="submit" disabled={submitting} outline={submitting}>
-              Submit
+              Accept and Confirm Attendance
             </Button>
 
             {submitting && (

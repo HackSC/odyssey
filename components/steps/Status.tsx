@@ -9,6 +9,8 @@ import { useIsMobile } from "../../lib/layouts";
 import { Flex, Column, Button } from "../../styles";
 
 import Check from "../../assets/check.svg";
+import GreenCheck from "../../assets/green_check.svg";
+import RedCheck from "../../assets/red_check.svg";
 
 type Props = {
   profile: Profile;
@@ -42,13 +44,28 @@ const getStage = (profile: Profile): number => {
     }
 
     return 2;
+  } else if (status === "confirmed" || status === "declined") {
+    return 4;
   }
+
   return 3;
 };
 
 const navigateTo = async (step: string) => {
   await Router.push(`/${step}`);
   window.scrollTo(0, 0);
+};
+
+const getCheck = (profile: Profile) => {
+  const { status } = profile;
+
+  if (status === "accepted") {
+    return <img src={GreenCheck} alt="Green Check" />;
+  } else if (status === "rejected" || status === "declined") {
+    return <img src={RedCheck} alt="Red Check" />;
+  } else {
+    return <img src={Check} alt="Check" />;
+  }
 };
 
 const StatusStep: React.FunctionComponent<Props> = props => {
@@ -65,13 +82,33 @@ const StatusStep: React.FunctionComponent<Props> = props => {
           : "Hey there!"}
       </h1>
 
-      <Status align="center" justify="space-between">
-        <Flex direction="row" align="center">
-          <img src={Check} alt="Check" />
-          <h2>Status</h2>
+      <Status>
+        <Flex align="center" justify="space-between">
+          <Flex direction="row" align="center">
+            {getCheck(profile)}
+
+            <h2>Status</h2>
+          </Flex>
+
+          <Label>{statusLabel}</Label>
         </Flex>
 
-        <Label>{statusLabel}</Label>
+        {profile && profile.status === "declined" && (
+          <StatusMessage>
+            We're sad to hear that you will not be attending HackSC 2020. If any
+            plans change, please let us know at{" "}
+            <a href="mailto:hackers@hacksc.com">hackers@hacksc.com</a>
+          </StatusMessage>
+        )}
+
+        {profile && profile.status === "confirmed" && (
+          <StatusMessage>
+            We're excited to have you at HackSC 2020! Be on the lookout for
+            future updates and communications from us. If you have any updates
+            or questions, please let us know at{" "}
+            <a href="mailto:hackers@hacksc.com">hackers@hacksc.com</a>
+          </StatusMessage>
+        )}
       </Status>
 
       <Flex justify="space-between" tabletVertical>
@@ -98,12 +135,22 @@ const StatusStep: React.FunctionComponent<Props> = props => {
                 </StepButton>
               )}
             </Step>
-            <Step>
-              <h3>3. View Results</h3>
-              <p>Come back soon and see your results.</p>
+            <Step disabled={getStage(profile) === 4}>
+              <h3>
+                {profile.status === "accepted"
+                  ? "3) Confirm Attendance"
+                  : "3) View Results"}
+              </h3>
+              <p>
+                {profile.status === "accepted"
+                  ? "Congrats, you have been accepted to HackSC 2020. Please confirm/decline your attendance by January 1st"
+                  : "Come back soon and see your results."}
+              </p>
               {getStage(profile) === 3 && (
                 <StepButton onClick={() => navigateTo("results")}>
-                  View Results
+                  {profile.status === "accepted"
+                    ? "Confirm Attendance"
+                    : "View Results"}
                 </StepButton>
               )}
             </Step>
@@ -140,7 +187,7 @@ type CircleIconProps = {
   bgColor: string;
 };
 
-const Status = styled(Flex)`
+const Status = styled.div`
   padding: 48px;
   margin: 16px 0 32px;
   background: #ffffff;
@@ -155,6 +202,10 @@ const Status = styled(Flex)`
     theme.media.tablet`
       padding: 32px;
     `}
+`;
+
+const StatusMessage = styled.p`
+  margin-top: 24px;
 `;
 
 const DatesColumn = styled(Column)`

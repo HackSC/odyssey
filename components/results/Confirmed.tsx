@@ -12,11 +12,15 @@ const Confirmed: React.FunctionComponent<Props> = props => {
   return (
     <Flex direction="column">
       <FormSection>
-        <h1>You're Confirmed for HackSC 2020!</h1>
+        <h1>You're confirmed for HackSC 2020!</h1>
 
         <p>
-          Woohoo! {props.profile.firstName}, we're excited to have you. Be on
-          the look out for updates from us closer to the event date :)
+          Woohoo! {props.profile.firstName}, we're excited to have you at HackSC
+          2020. We have a lot of exciting things planned and we can't wait for
+          you to be a part of it. Be on the lookout for future updates and
+          communications from us. If you have any updates or questions, please
+          contact us at{" "}
+          <a href="mailto:hackers@hacksc.com">hackers@hacksc.com</a>
         </p>
 
         <br />
