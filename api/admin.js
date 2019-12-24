@@ -93,7 +93,7 @@ router.get("/eligibleProfiles", async (req, res) => {
       const reviewsByCurrUser = profile.HackerReviews.filter(review => {
         return review.dataValues.createdBy === req.user.id;
       });
-      return reviewsByCurrUser.length === 0 && profile.HackerReviews.length < 2;
+      return reviewsByCurrUser.length === 0 && profile.HackerReviews.length < 1;
     });
     return res.json({
       eligibleReviews: filteredProfiles
@@ -142,7 +142,7 @@ router.get("/review", async (req, res) => {
     });
 
     const acceptableProfile = profilesWCount.find(profile => {
-      return profile.dataValues.reviewCount < 3;
+      return profile.dataValues.reviewCount < 1;
     });
     if (acceptableProfile) {
       const newReview = await models.HackerReview.create({
