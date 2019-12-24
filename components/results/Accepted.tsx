@@ -177,7 +177,7 @@ const Accepted: React.FunctionComponent<Props> = props => {
             <p>
               Note: we are working on finalizing our bus schedule to California
               schools in SoCal and Bay Area. The final bus schedule is{" "}
-              <eb>TBA</eb>.
+              <b>TBA</b>.
             </p>
             <br />
             <Select
