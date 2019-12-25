@@ -277,7 +277,8 @@ router.post("/confirm", (req, res) => {
           },
           {
             where: {
-              userId: req.user.id
+              userId: req.user.id,
+              status: "accepted"
             }
           }
         )
@@ -305,7 +306,8 @@ router.post("/decline", async (req, res) => {
     },
     {
       where: {
-        userId: req.user.id
+        userId: req.user.id,
+        status: "accepted"
       }
     }
   );
