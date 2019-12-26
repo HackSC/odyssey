@@ -14,16 +14,23 @@ type SelectProps = {
   defaultValue?: string;
   required?: boolean;
   disabled?: boolean;
+  onChange?: (e: any) => void;
 };
 
 type Ref = HTMLSelectElement;
 
 const Select = React.forwardRef<Ref, SelectProps>((props, ref) => {
-  const { options, name, defaultValue, required, disabled } = props;
+  const { options, name, defaultValue, required, disabled, onChange } = props;
 
   return (
     <Wrapper>
-      <select ref={ref} name={name} required={required} disabled={disabled}>
+      <select
+        ref={ref}
+        name={name}
+        required={required}
+        disabled={disabled}
+        onChange={onChange}
+      >
         {required && <option></option>}
         {options.map(option => (
           <option

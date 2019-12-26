@@ -2,22 +2,15 @@ import * as React from "react";
 import styled from "styled-components";
 import Router from "next/router";
 import * as Sentry from "@sentry/browser";
-import copy from "copy-to-clipboard";
-import { FaLink, FaFacebookF, FaTwitter, FaEnvelope } from "react-icons/fa";
-import { Tooltip } from "react-tippy";
 import Link from "next/link";
 
 import { useIsMobile } from "../../lib/layouts";
 
-import {
-  FacebookShareButton,
-  TwitterShareButton,
-  EmailShareButton
-} from "react-share";
-
 import { Flex, Column, Button } from "../../styles";
 
 import Check from "../../assets/check.svg";
+import GreenCheck from "../../assets/green_check.svg";
+import RedCheck from "../../assets/red_check.svg";
 
 type Props = {
   profile: Profile;
@@ -51,7 +44,10 @@ const getStage = (profile: Profile): number => {
     }
 
     return 2;
+  } else if (status === "confirmed" || status === "declined") {
+    return 4;
   }
+
   return 3;
 };
 
@@ -60,11 +56,16 @@ const navigateTo = async (step: string) => {
   window.scrollTo(0, 0);
 };
 
-const getDaysTillClose = (): number => {
-  const endDate = new Date("Dec 8, 2019, 11:59 PM").getTime();
-  const nowDate = new Date().getTime();
-  const diff = endDate - nowDate;
-  return Math.floor(diff / 1000 / 60 / 60 / 24);
+const getCheck = (profile: Profile) => {
+  const { status } = profile;
+
+  if (status === "accepted" || status === "confirmed") {
+    return <img src={GreenCheck} alt="Green Check" />;
+  } else if (status === "rejected" || status === "declined") {
+    return <img src={RedCheck} alt="Red Check" />;
+  } else {
+    return <img src={Check} alt="Check" />;
+  }
 };
 
 const StatusStep: React.FunctionComponent<Props> = props => {
@@ -75,26 +76,47 @@ const StatusStep: React.FunctionComponent<Props> = props => {
 
   return (
     <Flex direction="column">
-      <Banner>
-        <b>NEW: </b> Apply with your friends!{" "}
-        <Link href="/team">Click here to join or create a team</Link> to
-        indicate that you're applying to HackSC as a team. You'll be able to
-        set-up teams until results come out.
-      </Banner>
-
       <h1>
         {profile && profile.firstName
           ? `Hey there, ${profile.firstName}!`
           : "Hey there!"}
       </h1>
 
-      <Status align="center" justify="space-between">
-        <Flex direction="row" align="center">
-          <img src={Check} alt="Check" />
-          <h2>Status</h2>
+      <Status>
+        <Flex align="center" justify="space-between">
+          <Flex direction="row" align="center">
+            {getCheck(profile)}
+
+            <h2>Status</h2>
+          </Flex>
+
+          <Label>{statusLabel}</Label>
         </Flex>
 
-        <Label>{statusLabel}</Label>
+        {profile && profile.status === "declined" && (
+          <StatusMessage>
+            We're sad to hear that you will not be attending HackSC 2020. If any
+            plans change, please let us know at{" "}
+            <a href="mailto:hackers@hacksc.com">hackers@hacksc.com</a>
+          </StatusMessage>
+        )}
+
+        {profile && profile.status === "confirmed" && (
+          <StatusMessage>
+            We're excited to have you at HackSC 2020! Be on the lookout for
+            future updates and communications from us. If you have any updates
+            or questions, please let us know at{" "}
+            <a href="mailto:hackers@hacksc.com">hackers@hacksc.com</a>
+          </StatusMessage>
+        )}
+
+        {profile && profile.status === "accepted" && (
+          <StatusMessage>
+            You have been accepted to HackSC! Just one more step: please confirm
+            or decline your attendance by filling out{" "}
+            <a href="/results">this short form.</a>
+          </StatusMessage>
+        )}
       </Status>
 
       <Flex justify="space-between" tabletVertical>
@@ -121,12 +143,22 @@ const StatusStep: React.FunctionComponent<Props> = props => {
                 </StepButton>
               )}
             </Step>
-            <Step>
-              <h3>3. View Results</h3>
-              <p>Come back soon and see your results.</p>
+            <Step disabled={getStage(profile) === 4}>
+              <h3>
+                {profile.status === "accepted"
+                  ? "3) Confirm Attendance"
+                  : "3) View Results"}
+              </h3>
+              <p>
+                {profile.status === "accepted"
+                  ? "Congrats, you have been accepted to HackSC 2020. Please confirm/decline your attendance by January 1st"
+                  : "Come back soon and see your results."}
+              </p>
               {getStage(profile) === 3 && (
                 <StepButton onClick={() => navigateTo("results")}>
-                  View Results
+                  {profile.status === "accepted"
+                    ? "Confirm Attendance"
+                    : "View Results"}
                 </StepButton>
               )}
             </Step>
@@ -134,20 +166,6 @@ const StatusStep: React.FunctionComponent<Props> = props => {
         </Column>
 
         <DatesColumn flexBasis={35}>
-          <Countdown>
-            <CountdownHeader>
-              <Count>{getDaysTillClose()}</Count>
-              <h2>Days to apply!</h2>
-            </CountdownHeader>
-            <Button
-              as="a"
-              target="_blank"
-              href="http://www.google.com/calendar/event?action=TEMPLATE&dates=20191129T200000Z%2F20191129T210000Z&text=Finish%20HackSC%20Application&location=&details=Reminder%20to%20finish%20HackSC%20Application%20before%20deadline"
-            >
-              Add to Calendar
-            </Button>
-          </Countdown>
-
           <h2>Major Dates</h2>
 
           <Dates>
@@ -177,23 +195,7 @@ type CircleIconProps = {
   bgColor: string;
 };
 
-const CircleIcon = styled.div<CircleIconProps>`
-  background: ${props => props.bgColor};
-  width: ${props => props.size}px;
-  height: ${props => props.size}px;
-  border-radius: 50%;
-  text-align: center;
-  line-height: ${props => props.size}px;
-  vertical-align: middle;
-  padding: ${props => props.size - 10}px;
-
-  :hover {
-    transform: scale(1.05);
-    cursor: pointer;
-  }
-`;
-
-const Status = styled(Flex)`
+const Status = styled.div`
   padding: 48px;
   margin: 16px 0 32px;
   background: #ffffff;
@@ -208,6 +210,10 @@ const Status = styled(Flex)`
     theme.media.tablet`
       padding: 32px;
     `}
+`;
+
+const StatusMessage = styled.p`
+  margin-top: 24px;
 `;
 
 const DatesColumn = styled(Column)`
@@ -248,31 +254,6 @@ const StepButton = styled(Button)`
   margin-top: 24px;
 `;
 
-const Countdown = styled.div`
-  padding: 24px 36px;
-  margin: 0 0 32px;
-  background: #ffffff;
-  border-radius: 4px;
-  text-align: center;
-  display: flex;
-  flex-direction: column;
-`;
-
-const Count = styled.h2`
-  font-size: 72px;
-  color: ${({ theme }) => theme.colors.peach};
-`;
-
-const CountdownHeader = styled.div`
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  h2 {
-    padding-left: 12px;
-    margin-bottom: 0px;
-  }
-`;
-
 const Dates = styled.div`
   padding: 24px 24px;
   margin: 16px 0 32px;
@@ -291,20 +272,6 @@ const DateText = styled.div`
     font-weight: 600;
     color: ${({ theme }) => theme.colors.peach};
     padding-bottom: 4px;
-  }
-`;
-
-const Banner = styled.div`
-  padding: 24px;
-  border-radius: 8px;
-  background-color: ${({ theme }) => theme.colors.magenta};
-  color: ${({ theme }) => theme.colors.white};
-  margin-bottom: 24px;
-  line-height: 22px;
-
-  a {
-    color: ${({ theme }) => theme.colors.white};
-    text-decoration: underline;
   }
 `;
 
