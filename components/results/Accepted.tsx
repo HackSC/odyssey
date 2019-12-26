@@ -84,7 +84,7 @@ const Accepted: React.FunctionComponent<Props> = props => {
       travelMethod: travelMethod.current && travelMethod.current.value,
       travelOrigin: travelOrigin.current && travelOrigin.current.value,
       travelPlan: travelPlan.current && travelPlan.current.files[0],
-      codeOfConduct: codeOfConduct.current && codeOfConduct.current.value,
+      codeOfConduct: codeOfConduct.current && codeOfConduct.current.checked,
       shirtSize: shirtSize.current && shirtSize.current.value,
       dietaryRestrictions: {
         vegetarian:
@@ -112,7 +112,7 @@ const Accepted: React.FunctionComponent<Props> = props => {
           dietaryRestrictions.other.current &&
           dietaryRestrictions.other.current.value
       },
-      noBusCheck: noBusCheck.current && noBusCheck.current.value
+      noBusCheck: noBusCheck.current && noBusCheck.current.checked
     };
 
     const formData = jsonToFormData(reqBody);
