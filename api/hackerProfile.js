@@ -271,9 +271,10 @@ router.post("/confirm", (req, res) => {
             shirtSize: body["shirtSize"],
             travelPlan: data.Location,
             dietaryRestrictions: dietaryRestrictions.join(" "),
-            confirmCodeOfConduct: body["codeOfConduct"] === "on" ? true : false,
+            confirmCodeOfConduct:
+              body["codeOfConduct"] === "true" ? true : false,
             status: "confirmed",
-            noBusCheck: body["noBusCheck"] === "on" ? true : false,
+            noBusCheck: body["noBusCheck"] === "true" ? true : false,
             confirmedAt: new Date()
           },
           {
