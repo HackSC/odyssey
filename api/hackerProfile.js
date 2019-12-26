@@ -273,7 +273,8 @@ router.post("/confirm", (req, res) => {
             dietaryRestrictions: dietaryRestrictions.join(" "),
             confirmCodeOfConduct: body["codeOfConduct"] === "on" ? true : false,
             status: "confirmed",
-            noBusCheck: body["noBusCheck"] === "on" ? true : false
+            noBusCheck: body["noBusCheck"] === "on" ? true : false,
+            confirmedAt: new Date()
           },
           {
             where: {
@@ -302,7 +303,8 @@ router.post("/confirm", (req, res) => {
 router.post("/decline", async (req, res) => {
   await models.HackerProfile.update(
     {
-      status: "declined"
+      status: "declined",
+      declinedAt: new Date()
     },
     {
       where: {
