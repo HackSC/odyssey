@@ -63,6 +63,20 @@ const Accepted: React.FunctionComponent<Props> = props => {
     noBusCheck: useRef(null)
   };
 
+  const checkFile = e => {
+    const { travelPlan } = formRefs;
+
+    if (travelPlan.current && !travelPlan.current.files[0]) {
+      setError(
+        "Missing your proof of travel plans, please select a file to upload"
+      );
+      e.preventDefault();
+      return;
+    }
+
+    setError(null);
+  };
+
   const handleSubmit = async e => {
     e.preventDefault();
 
@@ -384,7 +398,12 @@ const Accepted: React.FunctionComponent<Props> = props => {
           </FormGroup>
 
           <FormGroup>
-            <Button type="submit" disabled={submitting} outline={submitting}>
+            <Button
+              type="submit"
+              disabled={submitting}
+              outline={submitting}
+              onClick={checkFile}
+            >
               Accept and Confirm Attendance
             </Button>
 
