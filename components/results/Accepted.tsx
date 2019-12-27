@@ -189,9 +189,16 @@ const Accepted: React.FunctionComponent<Props> = props => {
             <label>How do you plan on getting to USC?</label>
 
             <p>
-              Note: we are working on finalizing our bus schedule to California
-              schools in SoCal and Bay Area. The final bus schedule is{" "}
-              <b>TBA</b>.
+              <b>On reimbursement:</b> Unfortunately, we cannot reimburse for
+              flight or train tickets
+            </p>
+
+            <br />
+
+            <p>
+              <b>On busses</b>: we are working on finalizing our bus schedule to
+              California schools in SoCal and Bay Area. The final bus schedule
+              is <b>TBA</b>.
             </p>
             <br />
             <Select
