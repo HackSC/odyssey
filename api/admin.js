@@ -29,6 +29,19 @@ router.get("/reviews", async (req, res) => {
   }
 });
 
+router.get("/reviewHistory", async (req, res) => {
+  try {
+    const reviews = await models.HackerReview.findAll({
+      where: {
+        createdBy: req.user.id
+      }
+    });
+    return res.json({ reviews: reviews });
+  } catch (e) {
+    return res.status(500).json({ err: e });
+  }
+});
+
 router.put("/review/:id", async (req, res) => {
   const requestId = req.params.id;
   const allowedFields = new Set([
@@ -62,6 +75,52 @@ router.put("/review/:id", async (req, res) => {
   }
 });
 
+router.get("/eligibleProfiles", async (req, res) => {
+  try {
+    const allProfiles = await models.HackerProfile.findAll({
+      where: {
+        submittedAt: {
+          [sequelize.Op.not]: null
+        }
+      },
+      include: [
+        {
+          model: models.HackerReview
+        }
+      ]
+    });
+    filteredProfiles = allProfiles.filter(profile => {
+      const reviewsByCurrUser = profile.HackerReviews.filter(review => {
+        return review.dataValues.createdBy === req.user.id;
+      });
+      return reviewsByCurrUser.length === 0 && profile.HackerReviews.length < 1;
+    });
+    return res.json({
+      eligibleReviews: filteredProfiles
+    });
+  } catch (e) {
+    return res.status(500).json({ error: e.message });
+  }
+});
+
+router.post("/review", async (req, res) => {
+  try {
+    const formBody = req.body;
+    const newReview = await models.HackerReview.create({
+      hackerId: formBody.userId,
+      createdBy: req.user.id,
+      scoreOne: formBody.scoreOne,
+      scoreTwo: formBody.scoreTwo,
+      scoreThree: formBody.scoreThree,
+      comments: formBody.comments
+    });
+
+    return res.json({ newReview: newReview });
+  } catch (e) {
+    return res.status(500).json({ error: e.message });
+  }
+});
+
 router.get("/review", async (req, res) => {
   try {
     const profilesWCount = await models.HackerProfile.findAll({
@@ -83,7 +142,7 @@ router.get("/review", async (req, res) => {
     });
 
     const acceptableProfile = profilesWCount.find(profile => {
-      return profile.dataValues.reviewCount < 3;
+      return profile.dataValues.reviewCount < 1;
     });
     if (acceptableProfile) {
       const newReview = await models.HackerReview.create({

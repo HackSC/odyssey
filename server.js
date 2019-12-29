@@ -16,9 +16,12 @@ const teamRouter = require("./api/team");
 const personRouter = require("./api/people");
 const contributionRouter = require("./api/contribution");
 
+
 const fileUpload = require("express-fileupload");
 
 const Sentry = require("@sentry/node");
+
+const scheduleSendGridSync = require("./cronjobs/sendgridsync");
 
 const dev = process.env.NODE_ENV !== "production";
 const app = next({
@@ -28,6 +31,11 @@ const app = next({
 const handle = app.getRequestHandler();
 
 dotenv.config();
+
+// Cron Jobs
+if (!dev) {
+  scheduleSendGridSync();
+}
 
 Sentry.init({
   dsn: "https://1a18ac7b9aa94cb5b2a8c9fc2f7e4fc8@sentry.io/1801129",
@@ -84,6 +92,7 @@ app.prepare().then(() => {
   server.use("/api/team", teamRouter);
   server.use("/api/person", personRouter);
   server.use("/api/contribution", contributionRouter);
+
 
   server.get("*", handle);
 

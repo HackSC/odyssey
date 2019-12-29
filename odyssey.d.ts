@@ -31,6 +31,7 @@ declare type Profile = {
     | "waitlisted"
     | "rejected"
     | "confirmed"
+    | "declined"
     | "checkedIn";
   firstName: string;
   lastName: string;
