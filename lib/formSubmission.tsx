@@ -29,8 +29,7 @@ function getProfileFromFormData(
     codeOfConduct: formRef.current["code-of-conduct"].checked,
     authorize: formRef.current["authorize"].checked,
     marketing: formRef.current["marketing"].value,
-    submit: isSubmit,
-    referrerCode: formRef.current["referrerCode"].value
+    submit: isSubmit
   };
 }
 

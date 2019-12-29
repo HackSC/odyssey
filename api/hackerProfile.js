@@ -214,4 +214,110 @@ router.post("/resume", utils.authMiddleware, async (req, res) => {
   }
 });
 
+// Confirmation and declination routes
+router.post("/confirm", (req, res) => {
+  const { body, files, user } = req;
+
+  if (
+    body["travelMethod"] &&
+    files &&
+    files["travelPlan"] &&
+    body["shirtSize"] &&
+    body["codeOfConduct"]
+  ) {
+    // All required fields are in the request body
+    const s3 = new AWS.S3({
+      accessKeyId: process.env.S3_ACCESS_KEY,
+      secretAccessKey: process.env.S3_SECRET
+    });
+
+    const file = files.travelPlan;
+    const fileExtension = file.name.split(".").slice(-1)[0];
+
+    const params = {
+      Bucket: "hacksc-odyssey",
+      Key: "confirmation-proof/" + user.id + "." + fileExtension,
+      Body: file.data
+    };
+
+    s3.upload(params, function(err, data) {
+      if (!err) {
+        // Create dietary restrictions string
+        const dietaryRestrictions = [];
+        if (body["dietaryRestrictions.vegetarian"] === "true")
+          dietaryRestrictions.push("vegetarian");
+        if (body["dietaryRestrictions.vegan"] === "true")
+          dietaryRestrictions.push("vegan");
+        if (body["dietaryRestrictions.halal"] === "true")
+          dietaryRestrictions.push("halal");
+        if (body["dietaryRestrictions.kosher"] === "true")
+          dietaryRestrictions.push("kosher");
+        if (body["dietaryRestrictions.nutAllergy"] === "true")
+          dietaryRestrictions.push("nutAllergy");
+        if (body["dietaryRestrictions.lactoseIntolerant"] === "true")
+          dietaryRestrictions.push("lactoseIntolerant");
+        if (body["dietaryRestrictions.glutenFree"] === "true")
+          dietaryRestrictions.push("glutenFree");
+        if (
+          body["dietaryRestrictions.other"] &&
+          body["dietaryRestrictions.other"].trim() !== ""
+        )
+          dietaryRestrictions.push(body["dietaryRestrictions.other"]);
+
+        models.HackerProfile.update(
+          {
+            travelOrigin: body["travelOrigin"] || null,
+            travelMethod: body["travelMethod"],
+            shirtSize: body["shirtSize"],
+            travelPlan: data.Location,
+            dietaryRestrictions: dietaryRestrictions.join(" "),
+            confirmCodeOfConduct:
+              body["codeOfConduct"] === "true" ? true : false,
+            status: "confirmed",
+            noBusCheck: body["noBusCheck"] === "true" ? true : false,
+            confirmedAt: new Date()
+          },
+          {
+            where: {
+              userId: req.user.id,
+              status: "accepted"
+            }
+          }
+        )
+          .then(updatedProfile => {
+            res.json({ hackerProfileUpdate: updatedProfile });
+          })
+          .catch(e => {
+            res.status(500).json({ error: e });
+          });
+      } else {
+        res.json(500, { message: "Failed to upload confirmation proof" });
+      }
+    });
+  } else {
+    return res.json(500, {
+      message: "Failed to confirm attendance, missing fields"
+    });
+  }
+});
+
+router.post("/decline", async (req, res) => {
+  await models.HackerProfile.update(
+    {
+      status: "declined",
+      declinedAt: new Date()
+    },
+    {
+      where: {
+        userId: req.user.id,
+        status: "accepted"
+      }
+    }
+  );
+
+  return res.json({
+    message: "Successfully processed request to decline HackSC 2020 acceptance"
+  });
+});
+
 module.exports = router;

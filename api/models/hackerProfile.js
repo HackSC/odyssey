@@ -32,9 +32,11 @@ module.exports = (sequelize, DataTypes) => {
           "waitlisted",
           "rejected",
           "confirmed",
+          "declined",
           "checkedIn"
         ],
-        defaultValue: "unverified"
+        defaultValue: "unverified",
+        allowNull: false
       },
       firstName: DataTypes.STRING,
       lastName: DataTypes.STRING,
@@ -87,7 +89,22 @@ module.exports = (sequelize, DataTypes) => {
         }
       },
       referrerCode: DataTypes.STRING(100),
-      referred: DataTypes.VIRTUAL
+      referred: DataTypes.VIRTUAL,
+      travelOrigin: DataTypes.STRING(500),
+      travelMethod: {
+        type: DataTypes.ENUM,
+        values: ["driving", "bus", "flying", "usc", "other"]
+      },
+      shirtSize: {
+        type: DataTypes.ENUM,
+        values: ["xs", "s", "m", "l", "xl"]
+      },
+      travelPlan: DataTypes.STRING(500),
+      dietaryRestrictions: DataTypes.STRING(1000),
+      confirmCodeOfConduct: DataTypes.BOOLEAN,
+      noBusCheck: DataTypes.BOOLEAN,
+      confirmedAt: DataTypes.DATE,
+      declinedAt: DataTypes.DATE
     },
     {}
   );
