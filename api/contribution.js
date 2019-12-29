@@ -16,6 +16,19 @@ router.get("/all", async (req, res) => {
   }
 });
 
+router.get("/owned", async (req, res) => {
+  try {
+    const contributions = await models.Contribution.findAll({
+      where: {
+        personId: req.user.id
+      }
+    });
+    return res.json({ contributions: contributions });
+  } catch (e) {
+    return res.status(500).json({ err: e.message });
+  }
+});
+
 router.post("/create", async (req, res) => {
   const input = req.body;
 
