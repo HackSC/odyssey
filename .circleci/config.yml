@@ -38,10 +38,10 @@ workflows:
       - E2ETest
   test_deploy:
     jobs:
-      - test
+      - E2ETest
       - deploy:
           requires:
-            - test
+            - E2ETest
           filters:
             branches:
               only:
