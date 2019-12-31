@@ -13,8 +13,8 @@ jobs:
       # installs cypress deps onto container ( I think )
       - run: yarn ci
       - run:
-        name: "Runs end to end tests"
-        command: "yarn run E2ETest"
+          name: "Runs end to end tests"
+          command: "yarn run E2ETest"
   test:
     docker:
       - image: circleci/node
