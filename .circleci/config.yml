@@ -1,5 +1,20 @@
 version: 2
 jobs:
+  E2ETest:
+    docker:
+      # Image with required cypres deps
+      - image: cypress/base:8
+        environment:
+          # Enables colored output
+          TERM: xterm
+    parallelism: 1
+    steps:
+      - checkout
+      # installs cypress deps onto container ( I think )
+      - run: yarn ci
+      - run:
+        name: "Runs end to end tests"
+        command: "yarn run E2ETest"
   test:
     docker:
       - image: circleci/node
@@ -20,7 +35,7 @@ workflows:
   version: 2
   e2e_tests:
     jobs:
-      - test
+      - E2ETest
   test_deploy:
     jobs:
       - test
