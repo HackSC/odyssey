@@ -1,3 +1,23 @@
+Cypress.Commands.add("login", (overrides = {}) => {
+  Cypress.log({
+    name: "loginViaAuth0"
+  });
+
+  const options = {
+    method: "POST",
+    url: Cypress.env("auth0_url"),
+    body: {
+      grant_type: "password",
+      username: Cypress.env("test_username"),
+      password: Cypress.env("test_password"),
+      scope: "openid profile email",
+
+      client_id: Cypress.env("auth0_client_id"),
+      client_secret: Cypress.env("auth0_client_secret")
+    }
+  };
+  cy.request(options);
+});
 describe("login", () => {
   it("should successfully log into our app", () => {
     cy.login()
