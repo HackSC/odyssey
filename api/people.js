@@ -18,10 +18,6 @@ router.get("/self", async (req, res) => {
 
     return res.json({ person: pointsProfile });
   } catch (e) {
-<<<<<<< HEAD
-
-=======
->>>>>>> cleanup
     return res.status(500).json({ err: e.message });
   }
 });

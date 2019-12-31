@@ -7,13 +7,9 @@ module.exports = (sequelize, DataTypes) => {
     },
     { tableName: "persons" }
   );
-<<<<<<< HEAD
-  Person.associate = function (models) {
-    // TODO: Add Contribution assocs here
-  };
-=======
+
   Person.associate = function(models) {};
->>>>>>> init
+
   Person.removeAttribute("id");
   return Person;
 };
