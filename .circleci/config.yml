@@ -3,7 +3,7 @@ jobs:
   E2ETest:
     docker:
       # Image with required cypres deps
-      - image: cypress/base:8
+      - image: cypress/included:3.2.0
         environment:
           # Enables colored output
           TERM: xterm
