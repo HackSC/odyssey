@@ -5,7 +5,7 @@ Cypress.Commands.add("login", (overrides = {}) => {
 
   const options = {
     method: "POST",
-    url: Cypress.env("auth0_url"),
+    url: "https://odyssey-hacksc.auth0.com/oauth/token",
     body: {
       grant_type: "password",
       username: Cypress.env("test_username"),
