@@ -48,23 +48,4 @@ router.post("/create", async (req, res) => {
   }
 });
 
-router.post("/create", async (req, res) => {
-  const input = req.body;
-
-  if (!input.taskId) {
-    return res.status(400).json({ message: "Invalid request" });
-  } else {
-    try {
-      const result = await models.Contribution.build({
-        personId: req.user.id,
-        taskId: input.taskId
-      }).save();
-      return res.json({ contribution: result });
-    } catch (e) {
-      console.log(e);
-      return res.status(500).json({ error: e.message });
-    }
-  }
-});
-
 module.exports = router;
