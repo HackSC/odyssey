@@ -11,7 +11,7 @@ jobs:
     steps:
       - checkout
       # installs cypress deps onto container ( I think )
-      - run: yarn install
+      - run: npm ci
       - run:
           name: "Runs end to end tests"
           command: "yarn run E2ETest"
