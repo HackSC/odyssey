@@ -13,11 +13,14 @@ jobs:
     steps:
       - checkout
       - run: sudo npm install -g now
-      - run: 
+      - run:
           name: Deploy to Now
           command: cd client && now --token $ZEIT_TOKEN --local-config now.production.json --prod
 workflows:
   version: 2
+  e2e_tests:
+    jobs:
+      - test
   test_deploy:
     jobs:
       - test
