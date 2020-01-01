@@ -50,7 +50,7 @@ const strategy = new Auth0Strategy(
     callbackURL:
       process.env.AUTH0_CALLBACK_URL || "http://localhost:3000/callback"
   },
-  function(accessToken, refreshToken, extraParams, profile, done) {
+  function (accessToken, refreshToken, extraParams, profile, done) {
     // extraParams.id_token should contain the JWT
     return done(null, profile);
   }
@@ -67,10 +67,10 @@ const sessionConfig = {
 };
 
 passport.use(strategy);
-passport.serializeUser(function(user, done) {
+passport.serializeUser(function (user, done) {
   done(null, user);
 });
-passport.deserializeUser(function(user, done) {
+passport.deserializeUser(function (user, done) {
   done(null, user);
 });
 
@@ -92,7 +92,6 @@ app.prepare().then(() => {
   server.use("/api/team", teamRouter);
   server.use("/api/person", personRouter);
   server.use("/api/contribution", contributionRouter);
-
 
   server.get("*", handle);
 

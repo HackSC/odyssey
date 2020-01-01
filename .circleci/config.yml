@@ -1,5 +1,20 @@
 version: 2
 jobs:
+  E2ETest:
+    docker:
+      # Image with required cypres deps
+      - image: cypress/included:3.2.0
+        environment:
+          # Enables colored output
+          TERM: xterm
+    parallelism: 1
+    steps:
+      - checkout
+      # installs cypress deps onto container ( I think )
+      - run: yarn install --frozen-lockfile
+      - run:
+          name: "Runs end to end tests"
+          command: "yarn run E2ETest"
   test:
     docker:
       - image: circleci/node
@@ -13,17 +28,20 @@ jobs:
     steps:
       - checkout
       - run: sudo npm install -g now
-      - run: 
+      - run:
           name: Deploy to Now
           command: cd client && now --token $ZEIT_TOKEN --local-config now.production.json --prod
 workflows:
   version: 2
+  e2e_tests:
+    jobs:
+      - E2ETest
   test_deploy:
     jobs:
-      - test
+      - E2ETest
       - deploy:
           requires:
-            - test
+            - E2ETest
           filters:
             branches:
               only:

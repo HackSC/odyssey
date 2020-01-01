@@ -22,7 +22,6 @@ router.get("/self", async (req, res) => {
   }
 });
 
-
 router.get("/houses", async (req, res) => {
   try {
     const houses = await models.House.findAll();
