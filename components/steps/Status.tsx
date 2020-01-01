@@ -95,8 +95,10 @@ const StatusStep: React.FunctionComponent<Props> = props => {
 
         {profile && profile.status === "declined" && (
           <StatusMessage>
-            We're sad to hear that you will not be attending HackSC 2020. If any
-            plans change, please let us know at{" "}
+            We're sad to hear that you will not be attending HackSC 2020.{" "}
+            <b>If you would like to un-decline</b>, please do so on{" "}
+            <a href="/results">the results page.</a> If you have any additional
+            questions or comments, please let us know at{" "}
             <a href="mailto:hackers@hacksc.com">hackers@hacksc.com</a>
           </StatusMessage>
         )}
