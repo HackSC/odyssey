@@ -320,4 +320,24 @@ router.post("/decline", async (req, res) => {
   });
 });
 
+router.post("/undecline", async (req, res) => {
+  await models.HackerProfile.update(
+    {
+      status: "accepted",
+      declinedAt: null
+    },
+    {
+      where: {
+        userId: req.user.id,
+        status: "declined"
+      }
+    }
+  );
+
+  return res.json({
+    message:
+      "Successfully processed request to un-decline HackSC 2020 acceptance"
+  });
+});
+
 module.exports = router;

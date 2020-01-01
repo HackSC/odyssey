@@ -1,23 +1,43 @@
 import React from "react";
 import styled from "styled-components";
+import Router from "next/router";
 
 import Blob from "../Blob";
-import { Flex } from "../../styles";
+import { Flex, Button } from "../../styles";
 
 type Props = {
   profile: Profile;
 };
 
 const Declined: React.FunctionComponent<Props> = props => {
+  const handleUndecline = async () => {
+    await fetch("/api/profile/undecline", {
+      method: "POST"
+    });
+
+    await Router.push("/dashboard");
+    window.scrollTo(0, 0);
+  };
+
   return (
     <Flex direction="column">
       <FormSection>
         <h1>You have declined your spot for HackSC 2020</h1>
 
+        <Flex align="center">
+          <p>
+            We're sad we won't be seeing you at HackSC 2020! If you decide to
+            change your mind, click the following to un-decline.
+          </p>
+
+          <UndeclineButton onClick={handleUndecline}>Undecline</UndeclineButton>
+        </Flex>
+
+        <LineBreak />
+
         <p>
-          We're sad we won't be seeing you at HackSC 2020! If you decide to
-          change your mind, please let us know at{" "}
-          <a href="mailto:hackers@hacksc.com">hackers@hacksc.com</a>
+          If you have any additional comments or questions, please let us know
+          at <a href="mailto:hackers@hacksc.com">hackers@hacksc.com</a>
         </p>
 
         <br />
@@ -63,6 +83,20 @@ const FormSection = styled.div`
   &:last-child {
     margin-bottom: 0;
   }
+`;
+
+const UndeclineButton = styled(Button)`
+  margin-left: 8px;
+`;
+
+const LineBreak = styled.hr`
+  color: ${({ theme }) => theme.colors.gray25};
+  background-color: ${({ theme }) => theme.colors.gray25};
+  border: 0;
+  height: 1px;
+  content: "";
+  display: block;
+  margin: 24px 0;
 `;
 
 export default Declined;
