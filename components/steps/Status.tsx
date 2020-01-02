@@ -153,7 +153,7 @@ const StatusStep: React.FunctionComponent<Props> = props => {
               </h3>
               <p>
                 {profile.status === "accepted"
-                  ? "Congrats, you have been accepted to HackSC 2020. Please confirm/decline your attendance by January 1st"
+                  ? "Congrats, you have been accepted to HackSC 2020. Please confirm/decline your attendance by January 10th"
                   : "Come back soon and see your results."}
               </p>
               {getStage(profile) === 3 && (
