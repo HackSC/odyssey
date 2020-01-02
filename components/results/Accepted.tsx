@@ -171,7 +171,7 @@ const Accepted: React.FunctionComponent<Props> = props => {
 
         <p>
           If you plan on attending, please fill out the following form by{" "}
-          <b>January 1st, 2020</b> to confirm your attendance.
+          <b>January 10th, 2020</b> to confirm your attendance.
         </p>
 
         <DeclineBanner>
