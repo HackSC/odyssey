@@ -16,7 +16,7 @@ jobs:
           name: "Runs end to end tests"
           command: "yarn run E2ETest"
       - store_artifacts:
-          path: /bin/visuals
+          path: cypress/videos/odysseyTests
   test:
     docker:
       - image: circleci/node
