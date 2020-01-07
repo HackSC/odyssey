@@ -1,24 +1,10 @@
 import React from "react";
 import styled from "styled-components";
-import Router from "next/router";
 
 import Blob from "../Blob";
-import { Flex, Button } from "../../styles";
+import { Flex } from "../../styles";
 
-type Props = {
-  profile: Profile;
-};
-
-const Rejected: React.FunctionComponent<Props> = props => {
-  const handleUndecline = async () => {
-    await fetch("/api/profile/undecline", {
-      method: "POST"
-    });
-
-    await Router.push("/dashboard");
-    window.scrollTo(0, 0);
-  };
-
+const Rejected = () => {
   return (
     <Flex direction="column">
       <FormSection>

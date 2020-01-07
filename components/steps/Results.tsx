@@ -29,7 +29,7 @@ const ResultStep: React.FunctionComponent<Props> = props => {
   }
 
   if (profile && profile.status === "rejected") {
-    return <Rejected profile={profile} />;
+    return <Rejected />;
   }
 
   if (profile && !profile.submittedAt) {
