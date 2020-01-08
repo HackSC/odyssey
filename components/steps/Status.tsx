@@ -119,6 +119,15 @@ const StatusStep: React.FunctionComponent<Props> = props => {
             <a href="/results">this short form.</a>
           </StatusMessage>
         )}
+
+        {profile && profile.status === "rejected" && (
+          <StatusMessage>
+            Thank you for applying to HackSC. Unfortunately, we regret to inform
+            you that you have not been accepted to HackSC 2020. While we know
+            this isn't the news you'd like to hear, we wish you the best going
+            forward.
+          </StatusMessage>
+        )}
       </Status>
 
       <Flex justify="space-between" tabletVertical>
