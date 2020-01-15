@@ -24,15 +24,10 @@ const actions = {
 };
 
 router.post("/dispatch", async (req, res) => {
-  try {
-    const { userId, actionId } = { ...req.body };
-
-    switch (actionId) {
-      case actions.CHECKIN:
-        return handleCheckin(userId, req, res);
-    }
-  } catch (e) {
-    return res.json({ err: e });
+  const { userId, actionId } = { ...req.body };
+  switch (actionId) {
+    case actions.CHECKIN:
+      return handleCheckin(userId, req, res);
   }
 });
 
@@ -41,6 +36,7 @@ router.post("/dispatch", async (req, res) => {
 */
 
 function handleCheckin(userId, req, res) {
+  //TODO: Implement this function
   // Create person row to instantiate user in points system
   // Set their status to "checkedIn"
   // Assign a house
