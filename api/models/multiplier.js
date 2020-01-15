@@ -1,5 +1,5 @@
 module.exports = (sequelize, DataTypes) => {
-  const Contribution = sequelize.define(
+  const Multiplier = sequelize.define(
     "Multiplier",
     {
       personId: DataTypes.STRING(100),
@@ -7,12 +7,8 @@ module.exports = (sequelize, DataTypes) => {
     },
     { tableName: "Contributions" }
   );
-  Contribution.associate = function(models) {
-    Contribution.belongsTo(models.Person, {
-      foreignKey: "personId",
-      targetKey: "identityId"
-    });
-    Contribution.belongsTo(models.Task);
+  Multiplier.associate = function(models) {
+    Multiplier.belongsTo(models.Grouping);
   };
-  return Contribution;
+  return Multiplier;
 };
