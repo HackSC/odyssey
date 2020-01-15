@@ -7,7 +7,7 @@ module.exports = (sequelize, DataTypes) => {
     { tableName: "Groupings" }
   );
   Contribution.associate = function(models) {
-    models.Tasks.belongsTo(models.Grouping);
+    models.Task.belongsTo(models.Grouping);
   };
   return Contribution;
 };
