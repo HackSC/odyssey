@@ -15,7 +15,7 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false
       },
       travelStatus: {
-        type: sequelize.ENUM,
+        type: DataTypes.ENUM,
         values: [
           "ineligible",
           "needed",
