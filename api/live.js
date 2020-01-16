@@ -27,7 +27,7 @@ router.post("/dispatch", async (req, res) => {
   const { userId, actionId } = { ...req.body };
   switch (actionId) {
     case actions.CHECKIN:
-      return handleCheckin(userId, req, res);
+      return await handleCheckin(userId, req, res);
   }
 });
 
@@ -35,12 +35,41 @@ router.post("/dispatch", async (req, res) => {
 ----- Action Dispatchers below, register your action above and implement the appropriate handler below -----
 */
 
-function handleCheckin(userId, req, res) {
-  //TODO: Implement this function
-  // Create person row to instantiate user in points system
-  // Set their status to "checkedIn"
-  // Assign a house
-  return res.json({ checkIn: "success" });
+async function handleCheckin(userId, req, res) {
+  try {
+    const pointsProfile = await models.Person.findOrCreate({
+      where: {
+        identityId: userId
+      },
+      defaults: { isBattlepassComplete: false }
+    });
+
+    const profile = await models.HackerProfile.findOne({
+      where: { userId: userId }
+    });
+    const profileStatus = profile.get("status");
+    const invalidStatuses = [
+      "unverified",
+      "verified",
+      "rejected",
+      "submitted",
+      "checkedIn"
+    ];
+    if (invalidStatuses.includes(profileStatus)) {
+      return res
+        .status(400)
+        .json({ invalid: `User has status ${profileStatus}` });
+    }
+
+    await models.HackerProfile.update(
+      { status: "checkedIn" },
+      { where: { userId: userId } }
+    );
+
+    return res.json({ person: profile });
+  } catch (e) {
+    return res.status(500).json({ err: e.message });
+  }
 }
 
 module.exports = router;
