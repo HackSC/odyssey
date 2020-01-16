@@ -37,11 +37,33 @@ router.post("/dispatch", async (req, res) => {
 
 async function handleCheckin(userId, req, res) {
   try {
-    const pointsProfile = await models.Person.findOrCreate({
-      where: {
-        identityId: userId
+    const result = await models.House.findAll({
+      raw: true,
+      attributes: {
+        include: [
+          [
+            sequelize.fn("COUNT", sequelize.col("People.identityId")),
+            "personCount"
+          ]
+        ]
       },
-      defaults: { isBattlepassComplete: false }
+      include: [
+        {
+          model: models.Person,
+          attributes: []
+        }
+      ]
+    });
+
+    // Should sort result in ascending order (lowest personCount first)
+    result.sort(function(a, b) {
+      return a.personCount - b.personCount;
+    });
+
+    const pointsProfile = await models.Person.create({
+      userId: userId,
+      houseId: result[0].id,
+      isBattlepassComplete: false
     });
 
     const profile = await models.HackerProfile.findOne({
@@ -66,7 +88,7 @@ async function handleCheckin(userId, req, res) {
       { where: { userId: userId } }
     );
 
-    return res.json({ person: profile });
+    return res.json({ pointsProfile: pointsProfile });
   } catch (e) {
     return res.status(500).json({ err: e.message });
   }
