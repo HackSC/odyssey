@@ -14,6 +14,18 @@ module.exports = (sequelize, DataTypes) => {
         primaryKey: true,
         allowNull: false
       },
+      travelStatus: {
+        type: DataTypes.ENUM,
+        values: [
+          "ineligible",
+          "needed",
+          "unneeded",
+          "declined",
+          "unknown",
+          "submitted",
+          "reimbursed"
+        ]
+      },
       ethnicity: DataTypes.STRING,
       email: DataTypes.STRING,
       major: DataTypes.STRING,
