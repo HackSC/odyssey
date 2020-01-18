@@ -9,6 +9,7 @@ module.exports = (sequelize, DataTypes) => {
   );
   House.associate = function(models) {
     models.Person.belongsTo(House);
+    House.hasMany(models.Person, { foreignKey: "houseId" });
   };
 
   return House;
