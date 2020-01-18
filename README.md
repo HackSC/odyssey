@@ -63,3 +63,12 @@ Then to deploy to either production or staging, run:
 
 - `git push heroku-prod develop:master` (Production)
 - `git push heroku-staging develop:master` (Staging)
+
+
+## How To: Task Running
+
+For buissness tasks that are infrequent we have Tasks. These are containted in the tasks folder. When adding a task make sure to add it to CLI.js. 
+
+Invoke this command to see available tasks
+
+- `npm run cli` 
