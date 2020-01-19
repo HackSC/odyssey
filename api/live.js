@@ -20,20 +20,43 @@ router.get("/tasks", async (req, res) => {
 });
 
 const actions = {
-  CHECKIN: "checkin"
+  CHECKIN: "checkin",
+  CONTRIB: "contrib"
 };
 
 router.post("/dispatch", async (req, res) => {
+  console.log("WEEEEE ARE HEREEEE");
   const { userId, actionId } = { ...req.body };
+  //TODO: Add sentry logging at the dispatch level
   switch (actionId) {
     case actions.CHECKIN:
       return await handleCheckin(userId, req, res);
+    case actions.CONTRIB:
+      return await handleContrib(userId, req, res);
   }
 });
 
 /* 
 ----- Action Dispatchers below, register your action above and implement the appropriate handler below -----
 */
+
+async function handleContrib(userId, req, res) {
+  const input = req.body;
+
+  if (!input.taskId) {
+    return res.status(400).json({ message: "Invalid request" });
+  } else {
+    try {
+      const result = await models.Contribution.build({
+        personId: userId,
+        taskId: input.taskId
+      }).save();
+      return res.json({ contribution: result });
+    } catch (e) {
+      return res.status(500).json({ error: e.message });
+    }
+  }
+}
 
 async function handleCheckin(userId, req, res) {
   try {

@@ -32,12 +32,12 @@ router.get("/owned", async (req, res) => {
 router.post("/create", async (req, res) => {
   const input = req.body;
 
-  if (!input.taskId) {
+  if (!input.taskId || !input.userId) {
     return res.status(400).json({ message: "Invalid request" });
   } else {
     try {
       const result = await models.Contribution.build({
-        personId: req.user.id,
+        personId: input.userId,
         taskId: input.taskId
       }).save();
       return res.json({ contribution: result });
