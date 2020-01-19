@@ -31,4 +31,17 @@ async function saveTask(newTask) {
   return result.status === 200;
 }
 
-export { getCurrentTasks, saveTask };
+//TODO: More complex since we actually then have to delete recursively, since it could potentially
+// Break FK constraints
+async function deleteTask(taskId) {
+  const urlRoute = "/api/points/tasks/" + taskId;
+  console.log(urlRoute);
+  const result = await fetch(urlRoute, {
+    method: "DELETE"
+  });
+  const jsonresult = await result.json();
+  console.log(jsonresult);
+  return result.status === 200;
+}
+
+export { getCurrentTasks, saveTask, deleteTask };

@@ -52,6 +52,7 @@ router.delete("/tasks/:id", async (req, res) => {
         id: id
       }
     });
+    return res.status(200);
   } catch (e) {
     return res.status(500).json({ err: e });
   }

@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 
 import { handleLoginRedirect, getProfile } from "../lib/authenticate";
-import { getCurrentTasks, saveTask } from "../lib/live";
+import { getCurrentTasks, saveTask, deleteTask } from "../lib/live";
 import Head from "../components/Head";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
@@ -17,20 +17,10 @@ function renderTask(task) {
     <Task>
       <TaskInfo>
         <TaskText>{task.id}</TaskText>
-        <TaskName>Go to Dinner</TaskName>
-        <TaskText>Volunteer</TaskText>
+        <TaskName>{task.name}</TaskName>
+        <TaskText>{task.type}</TaskText>
+        <TaskText>Points: {task.points}</TaskText>
       </TaskInfo>
-      <DelButton
-        id={task.id}
-        onClick={e => {
-          // This is kinda a hack, but this is internal so I don't think it matters
-          //@ts-ignore
-          console.log(e.target.id);
-        }}
-      >
-        {" "}
-        Delete{" "}
-      </DelButton>
     </Task>
   );
 }
@@ -84,7 +74,7 @@ const TaskManager = ({ profile, currentTasks }) => {
             value="Create new Task"
             onClick={async () => {
               const result = await saveTask(newTask);
-              if (result === true) {
+              if (result) {
                 // In theory we do optimistic local state updating, in practice, fuck it it'll do
                 window.location.reload();
               } else {
@@ -136,7 +126,7 @@ const TaskName = styled.div`
 const Task = styled.div`
   box-sizing: border-box;
   padding: 24px 36px;
-  margin: 0 0 16px;
+  margin: 10 10 16px;
   background: #ffffff;
   display: flex;
   flex-direction: row;
@@ -145,7 +135,7 @@ const Task = styled.div`
   border: 1px solid ${({ theme }) => theme.colors.gray5};
   box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.05);
   transition: 0.25s all;
-  justify-content: space-around;
+  justify-content: left;
   &:hover {
     transform: scale(1.025);
   }
