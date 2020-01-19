@@ -4,7 +4,9 @@ module.exports = (sequelize, DataTypes) => {
     {
       points: DataTypes.INTEGER,
       description: DataTypes.STRING(100),
-      blocking: DataTypes.BOOLEAN
+      blocking: DataTypes.BOOLEAN,
+      type: DataTypes.STRING(100),
+      name: DataTypes.STRING(100)
     },
     {}
   );
