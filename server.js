@@ -21,7 +21,7 @@ const fileUpload = require("express-fileupload");
 
 const Sentry = require("@sentry/node");
 
-const scheduleSendGridSync = require("./cronjobs/sendgridsync");
+const scheduleCronJobs = require("./cronjobs/cronjobs");
 
 const dev = process.env.NODE_ENV !== "production";
 const app = next({
@@ -34,7 +34,7 @@ dotenv.config();
 
 // Cron Jobs
 if (!dev) {
-  scheduleSendGridSync();
+  scheduleCronJobs();
 }
 
 Sentry.init({
