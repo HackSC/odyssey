@@ -44,6 +44,18 @@ router.post("/tasks", async (req, res) => {
   }
 });
 
+router.put("/tasks", async (req, res) => {
+  try {
+    const updatedObj = req.body;
+    const taskId = updatedObj.id;
+    delete updatedObj.id;
+    await models.Task.update({ ...updatedObj }, { where: { id: taskId } });
+    return res.status(200);
+  } catch (e) {
+    return res.status(500).json({ err: e.message });
+  }
+});
+
 router.delete("/tasks/:id", async (req, res) => {
   try {
     const id = req.params.id;

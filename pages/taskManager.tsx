@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 
 import { handleLoginRedirect, getProfile } from "../lib/authenticate";
-import { getCurrentTasks, saveTask, deleteTask } from "../lib/live";
+import { getCurrentTasks, saveTask, updateTask } from "../lib/live";
 import Head from "../components/Head";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
@@ -12,24 +12,61 @@ import { Button } from "../styles";
 
 import Step from "../components/steps/Results";
 
-function renderTask(task) {
+function renderTask(task, updateTaskSet, setUpdateTaskSet) {}
+
+const EditableCell = ({ task }) => {
+  const [currTaskValue, setCurrTaskValue] = useState(task);
   return (
     <Task>
       <TaskInfo>
-        <TaskText>{task.id}</TaskText>
-        <TaskName>{task.name}</TaskName>
-        <TaskText>{task.type}</TaskText>
-        <TaskText>Points: {task.points}</TaskText>
+        <input
+          type="text"
+          placeholder="name"
+          value={currTaskValue.name}
+          onChange={e => {
+            setCurrTaskValue({ ...currTaskValue, name: e.target.value });
+          }}
+        />
+        <input
+          type="text"
+          placeholder="type"
+          value={currTaskValue.type}
+          onChange={e => {
+            setCurrTaskValue({ ...currTaskValue, type: e.target.value });
+          }}
+        />
+        <input
+          type="number"
+          placeholder="points"
+          value={currTaskValue.points}
+          onChange={e => {
+            setCurrTaskValue({ ...currTaskValue, points: e.target.value });
+          }}
+        />
+        <EditButton
+          onClick={async () => {
+            const result = await updateTask(currTaskValue);
+            if (result) {
+              window.location.reload();
+            } else {
+              alert("failed to update task");
+            }
+          }}
+        >
+          {" "}
+          Update Task{" "}
+        </EditButton>
       </TaskInfo>
     </Task>
   );
-}
-const TaskManager = ({ profile, currentTasks }) => {
-  const taskBlocks = currentTasks.tasks.map(task => {
-    return renderTask(task);
-  });
+};
 
+const TaskManager = ({ profile, currentTasks }) => {
   const [newTask, setNewTask] = useState({});
+
+  const taskBlocks = currentTasks.tasks.map(task => {
+    return <EditableCell task={task} />;
+  });
   return (
     <>
       <Head title="HackSC Odyssey - Results" />
@@ -116,11 +153,13 @@ const TaskInfo = styled.div`
   flex-direction: column;
 `;
 
-const DelButton = styled.button``;
-
 const TaskName = styled.div`
   margin: 0 0 16px;
   color: ${({ theme }) => theme.colors.black};
+`;
+
+const EditButton = styled.button`
+  margin: 10 10 10px;
 `;
 
 const Task = styled.div`
