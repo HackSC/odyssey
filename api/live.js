@@ -25,7 +25,6 @@ const actions = {
 };
 
 router.post("/dispatch", async (req, res) => {
-  console.log("WEEEEE ARE HEREEEE");
   const { userId, actionId } = { ...req.body };
   //TODO: Add sentry logging at the dispatch level
   switch (actionId) {
