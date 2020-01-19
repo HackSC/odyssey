@@ -20,7 +20,13 @@ router.get("/tasks", async (req, res) => {
 });
 
 router.post("/tasks", async (req, res) => {
-  const allowedFields = new Set(["blocking", "description", "points", "name"]);
+  const allowedFields = new Set([
+    "blocking",
+    "description",
+    "points",
+    "name",
+    "type"
+  ]);
   const formInput = req.body;
 
   for (let key of Object.keys(formInput)) {
@@ -31,10 +37,22 @@ router.post("/tasks", async (req, res) => {
     }
   }
   try {
-    await models.Task.create(req.body);
-    return res.status(200);
+    const result = await models.Task.create(req.body);
+    return res.status(200).json({ result: result });
   } catch (e) {
     return res.status(500).json({ error: e });
+  }
+});
+
+router.put("/tasks", async (req, res) => {
+  try {
+    const updatedObj = req.body;
+    const taskId = updatedObj.id;
+    delete updatedObj.id;
+    await models.Task.update({ ...updatedObj }, { where: { id: taskId } });
+    return res.status(200);
+  } catch (e) {
+    return res.status(500).json({ err: e.message });
   }
 });
 
@@ -46,6 +64,7 @@ router.delete("/tasks/:id", async (req, res) => {
         id: id
       }
     });
+    return res.status(200);
   } catch (e) {
     return res.status(500).json({ err: e });
   }

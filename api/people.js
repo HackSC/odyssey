@@ -35,8 +35,7 @@ router.post("/create", async (req, res) => {
   try {
     const postValues = req.body;
     const { name, color } = { ...postValues };
-    const house = models.House.build({ name: name, color: color });
-    await house.save();
+    const house = await models.House.create({ name: name, color: color });
     return res.json({ newHouse: house });
   } catch (e) {
     return res.status(400).json({ err: e.message });

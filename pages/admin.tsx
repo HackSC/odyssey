@@ -43,6 +43,9 @@ const Admin = ({ profile }) => {
             <Action href="javascript:alert('Coming soon')">
               <ActionTitle>Check In Hackers</ActionTitle>
             </Action>
+            <Action href="/taskManager">
+              <ActionTitle> Manage Available Tasks </ActionTitle>
+            </Action>
           </Actions>
         </Container>
       </Background>
