@@ -3,10 +3,27 @@ import styled from "styled-components";
 
 import jsQR from "jsQR";
 
+type Coordinates = {
+  x: number;
+  y: number;
+};
+
 const Scanner = (props: any) => {
   const canvasRef = useRef(null);
   const videoRef = useRef(null);
   const animationFrame = useRef(null);
+
+  const drawLine = (begin: Coordinates, end: Coordinates, color: string) => {
+    const canvasElement = canvasRef.current;
+    const canvas = canvasElement.getContext("2d");
+
+    canvas.beginPath();
+    canvas.moveTo(begin.x, begin.y);
+    canvas.lineTo(end.x, end.y);
+    canvas.lineWidth = 4;
+    canvas.strokeStyle = color;
+    canvas.stroke();
+  };
 
   var animate = () => {
     const video = videoRef.current;
@@ -33,13 +50,34 @@ const Scanner = (props: any) => {
 
       if (code) {
         props.handleScannedCode(code.data);
+
+        drawLine(
+          code.location.topLeftCorner,
+          code.location.topRightCorner,
+          "#3DDE1F"
+        );
+        drawLine(
+          code.location.topRightCorner,
+          code.location.bottomRightCorner,
+          "#3DDE1F"
+        );
+        drawLine(
+          code.location.bottomRightCorner,
+          code.location.bottomLeftCorner,
+          "#3DDE1F"
+        );
+        drawLine(
+          code.location.bottomLeftCorner,
+          code.location.topLeftCorner,
+          "#3DDE1F"
+        );
       }
     }
 
     requestAnimationFrame(animate);
   };
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     if (canvasRef.current !== null) {
       videoRef.current = document.createElement("video");
       const video = videoRef.current;
@@ -61,7 +99,7 @@ const Scanner = (props: any) => {
 
       return () => cancelAnimationFrame(animationFrame.current);
     }
-  }, [canvasRef.current]);
+  }, []);
 
   return <ScannerCanvas ref={canvasRef} />;
 };

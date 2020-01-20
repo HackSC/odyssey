@@ -19,10 +19,25 @@ const Scan = ({ profile }) => {
     setAction(e.target.value);
   };
 
+  const sendScanRequest = async (code: string) => {
+    const response = await fetch("/api/scan", {
+      method: "POST",
+      body: JSON.stringify({
+        code
+      }),
+      headers: {
+        "Content-Type": "application/json"
+      }
+    });
+
+    const data = response.json();
+  };
+
   const handleScannedCode = useCallback(
     (code: string) => {
       setScannedCodes(prev => {
         if (!prev.includes(code)) {
+          sendScanRequest(code);
           return [...prev, code];
         } else {
           return [...prev];

@@ -15,7 +15,10 @@ const taskRouter = require("./api/tasks");
 const teamRouter = require("./api/team");
 const personRouter = require("./api/people");
 const contributionRouter = require("./api/contribution");
+<<<<<<< HEAD
 const liveRouter = require("./api/live");
+=======
+>>>>>>> temp mock API request
 
 const fileUpload = require("express-fileupload");
 
@@ -93,6 +96,10 @@ app.prepare().then(() => {
   server.use("/api/person", personRouter);
   server.use("/api/contribution", contributionRouter);
   server.use("/api/live", liveRouter);
+  server.post("/api/scan", (req, res) => {
+    console.log(req.body.code);
+    return res.json({ message: "Received" });
+  });
 
   server.get("*", handle);
 
