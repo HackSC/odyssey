@@ -9,7 +9,7 @@ module.exports = (sequelize, DataTypes) => {
     {}
   );
   Prize.associate = function(models) {
-    Prize.belongsToMany(models.ProjectTeams, { through: "ProjectTeamPrizes" });
+    Prize.belongsToMany(models.ProjectTeam, { through: "ProjectTeamPrizes" });
   };
   return Prize;
 };
