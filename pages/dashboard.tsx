@@ -13,7 +13,7 @@ import Footer from "../components/Footer";
 
 import { Background, Container } from "../styles";
 
-import Step from "../components/steps/Status";
+import Step from "../components/steps/LiveDashboard";
 
 import { generatePosts } from "../lib/referrerCode";
 
