@@ -97,7 +97,7 @@ app.prepare().then(() => {
   server.use("/api/contribution", contributionRouter);
   server.use("/api/live", liveRouter);
   server.post("/api/scan", (req, res) => {
-    console.log(req.body.code);
+    console.log("Scanned: ", req.body.code);
     return res.json({ message: "Received" });
   });
 

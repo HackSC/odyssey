@@ -50,7 +50,7 @@ const Scan = ({ profile }) => {
   return (
     <>
       <Head title="HackSC Odyssey - Scan" />
-      <Navbar loggedIn activePage="results" />
+      <Navbar loggedIn activePage="scan" />
       <Background>
         <Container>
           <h1>Scan Codes</h1>
