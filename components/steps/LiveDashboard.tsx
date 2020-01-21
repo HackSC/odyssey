@@ -96,11 +96,15 @@ const StatusStep: React.FunctionComponent<Props> = props => {
           </QRCodeWrapper>
         </Column>
 
-        <Column flexBasis={50}>
-          <h2>Check In Required</h2>
+        <InstructionsColumn flexBasis={50}>
+          <CheckInTitle>Check-In Instructions</CheckInTitle>
 
-          <p></p>
-        </Column>
+          <CheckInInstructions>
+            Please show your QR Code to a HackSC volunteer or organizer. This
+            will check you into the event and assign you to a house. You cannot
+            begin hacking before being checked-in.
+          </CheckInInstructions>
+        </InstructionsColumn>
       </Flex>
     );
   }
@@ -130,15 +134,6 @@ const StatusStep: React.FunctionComponent<Props> = props => {
             <b>If you would like to un-decline</b>, please do so on{" "}
             <a href="/results">the results page.</a> If you have any additional
             questions or comments, please let us know at{" "}
-            <a href="mailto:hackers@hacksc.com">hackers@hacksc.com</a>
-          </StatusMessage>
-        )}
-
-        {profile && profile.status === "confirmed" && (
-          <StatusMessage>
-            We're excited to have you at HackSC 2020! Be on the lookout for
-            future updates and communications from us. If you have any updates
-            or questions, please let us know at{" "}
             <a href="mailto:hackers@hacksc.com">hackers@hacksc.com</a>
           </StatusMessage>
         )}
@@ -268,6 +263,24 @@ const DatesColumn = styled(Column)`
     theme.media.tablet`
       margin-top: 32px;
     `}
+`;
+
+const InstructionsColumn = styled(Column)`
+  ${({ theme }) =>
+    theme.media.tablet`
+    margin-top: 32px;
+    text-align: center;
+  `}
+`;
+
+const CheckInTitle = styled.h2`
+  text-align: center;
+`;
+
+const CheckInInstructions = styled.p`
+  margin: 0;
+  padding: 0;
+  font-weight: 300;
 `;
 
 const Label = styled.p`
