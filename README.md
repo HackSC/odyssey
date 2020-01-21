@@ -11,6 +11,7 @@ Odyssey is a hackathon management platform that handles hacker applications, adm
 - Run `npx sequelize-cli db:migrate` to migrate your DB
 - Run `yarn dev` to start HackSC Odyssey -- this will start the combined client-server app on `localhost:3000`
   - Caveat: if you make any changes to the backend API, you need to restart the server. An alternative start command is `npx nodemon yarn dev` which will restart the server anytime `api/*.js` is updated
+- Run `yarn run watch` to reload server automatically
 
 ## Project Structure
 
@@ -26,8 +27,10 @@ Odyssey is a hackathon management platform that handles hacker applications, adm
 - `/public` - Files here are accessible as static files
 - `/styles` - Styled components for our design system -- typically design primitives that can be extended
 - `/tests` - Tests for our application, run using `yarn test`
+  - `/factories/` - Generators for sample data
+- `/tasks` - Home for engineering scripts
 - `odyssey.d.ts` - Application specific type definitions
-- `server.js` - Main file that starts the entire applicat ion
+- `server.js` - Main file that starts the entire application
 
 ## Odyssey Tech Stack
 
@@ -45,6 +48,8 @@ After setting up your migration, make sure you update the following files:
 - `odyssey.d.ts` -- Update the Profile type object to reflect new fields
 
 Once this is done, run `npx sequelize-cli db:migrate` to get your changes reflected in the database
+
+Additionally, create a sample data generator in `/tests/factories`
 
 ## How To: Deploy application to production or staging
 
@@ -64,11 +69,10 @@ Then to deploy to either production or staging, run:
 - `git push heroku-prod develop:master` (Production)
 - `git push heroku-staging develop:master` (Staging)
 
-
 ## How To: Task Running
 
-For buissness tasks that are infrequent we have Tasks. These are containted in the tasks folder. When adding a task make sure to add it to CLI.js. 
+For business / engineering tasks that are infrequent we have Tasks. These are contained in the tasks folder. When adding a task make sure to add it to CLI.js.
 
 Invoke this command to see available tasks
 
-- `npm run cli` 
+- `npm run cli`
