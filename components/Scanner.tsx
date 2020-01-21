@@ -1,4 +1,4 @@
-import React, { useLayoutEffect, useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef } from "react";
 import styled from "styled-components";
 
 import jsQR from "jsqr";
@@ -25,7 +25,7 @@ const Scanner = (props: any) => {
     canvas.stroke();
   };
 
-  var animate = () => {
+  const animate = () => {
     const video = videoRef.current;
 
     if (video.readyState === video.HAVE_ENOUGH_DATA && canvasRef.current) {
@@ -82,10 +82,6 @@ const Scanner = (props: any) => {
       videoRef.current = document.createElement("video");
       const video = videoRef.current;
 
-      function errorCallback(error) {
-        alert(error);
-      }
-
       // Use facingMode: environment to attemt to get the front camera on phones
       window.navigator.mediaDevices
         .getUserMedia({ video: { facingMode: "environment" } })
@@ -94,8 +90,7 @@ const Scanner = (props: any) => {
           video.setAttribute("playsinline", "true"); // required to tell iOS safari we don't want fullscreen
           video.play();
           animationFrame.current = requestAnimationFrame(animate);
-        })
-        .catch(errorCallback);
+        });
 
       return () => cancelAnimationFrame(animationFrame.current);
     }
