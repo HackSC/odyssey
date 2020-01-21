@@ -1,11 +1,10 @@
-import React, { useEffect, useState, useCallback } from "react";
+import React, { useState, useCallback } from "react";
 import styled from "styled-components";
 
 import { handleLoginRedirect, getProfile } from "../lib/authenticate";
 
 import Head from "../components/Head";
 import Navbar from "../components/Navbar";
-import Footer from "../components/Footer";
 import Scanner from "../components/Scanner";
 
 import { Background, Container, Form, Flex } from "../styles";
@@ -20,7 +19,7 @@ const Scan = ({ profile }) => {
   };
 
   const sendScanRequest = async (code: string) => {
-    const response = await fetch("/api/scan", {
+    await fetch("/api/scan", {
       method: "POST",
       body: JSON.stringify({
         code
@@ -29,8 +28,6 @@ const Scan = ({ profile }) => {
         "Content-Type": "application/json"
       }
     });
-
-    const data = response.json();
   };
 
   const handleScannedCode = useCallback(
@@ -50,7 +47,7 @@ const Scan = ({ profile }) => {
   return (
     <>
       <Head title="HackSC Odyssey - Scan" />
-      <Navbar loggedIn activePage="scan" />
+      <Navbar loggedIn activePage="scan" admin />
       <Background>
         <Container>
           <h1>Scan Codes</h1>
@@ -89,9 +86,23 @@ const Scan = ({ profile }) => {
           </Form>
         </Container>
       </Background>
-      <Footer />
     </>
   );
+};
+
+Scan.getInitialProps = async ctx => {
+  const { req } = ctx;
+
+  const profile = await getProfile(req);
+
+  // Null profile means user is not logged in, and this is only relevant for admins
+  if (!profile || profile.role !== "admin") {
+    handleLoginRedirect(req);
+  }
+
+  return {
+    profile
+  };
 };
 
 const ScanColumn = styled.div`
