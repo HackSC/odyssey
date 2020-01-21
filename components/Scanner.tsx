@@ -1,7 +1,7 @@
 import React, { useLayoutEffect, useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 
-import jsQR from "jsQR";
+import jsQR from "jsqr";
 
 type Coordinates = {
   x: number;
