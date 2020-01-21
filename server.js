@@ -15,10 +15,7 @@ const taskRouter = require("./api/tasks");
 const teamRouter = require("./api/team");
 const personRouter = require("./api/people");
 const contributionRouter = require("./api/contribution");
-<<<<<<< HEAD
 const liveRouter = require("./api/live");
-=======
->>>>>>> temp mock API request
 
 const fileUpload = require("express-fileupload");
 
