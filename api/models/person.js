@@ -8,7 +8,9 @@ module.exports = (sequelize, DataTypes) => {
     { tableName: "persons" }
   );
 
-  Person.associate = function(models) {};
+  Person.associate = function(models) {
+    Person.belongsTo(models.ProjectTeam);
+  };
 
   Person.removeAttribute("id");
   return Person;
