@@ -2,7 +2,7 @@ module.exports = (sequelize, DataTypes) => {
   const Person = sequelize.define(
     "Person",
     {
-      identityId: DataTypes.STRING(100),
+      identityId: { type: DataTypes.STRING(100), primaryKey: true },
       isBattlepassComplete: DataTypes.BOOLEAN
     },
     { tableName: "persons" }
@@ -13,6 +13,5 @@ module.exports = (sequelize, DataTypes) => {
     Person.belongsTo(models.ProjectTeam);
   };
 
-  Person.removeAttribute("id");
   return Person;
 };
