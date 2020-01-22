@@ -13,6 +13,28 @@ var secured = function(req, res, next) {
   res.redirect("/");
 };
 
+router.get("/devlogin", function(req, res) {
+  //Block non-devs
+  if (req.hostname != "localhost") {
+    res.redirect("/");
+  }
+
+  req.logout();
+  const { id, role } = req.query;
+  const user = {
+    id,
+    role,
+    _json: { email: "", email_verified: true }
+  };
+
+  req.logIn(user, function(err) {
+    if (err) {
+      res.status(400).send(err);
+    }
+    res.send("Logged in as dev, id:" + id + " role: " + role);
+  });
+});
+
 router.get(
   "/login",
   passport.authenticate("auth0", {
