@@ -52,7 +52,6 @@ async function getHouses(req) {
         }
       : null
   );
-  console.log(result);
   return await result.json();
 }
 // Should be of the form
