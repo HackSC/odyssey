@@ -9,14 +9,14 @@ router.use(utils.authMiddleware);
 
 router.get("/self", async (req, res) => {
   try {
-    const pointsProfile = await models.Person.findOrCreate({
+    const [person, isCreated] = await models.Person.findOrCreate({
       where: {
         identityId: req.user.id
       },
       defaults: { isBattlepassComplete: false }
     });
 
-    return res.json({ person: pointsProfile });
+    return res.json({ person });
   } catch (e) {
     return res.status(500).json({ err: e.message });
   }

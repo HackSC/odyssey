@@ -12,11 +12,18 @@ const seedDatabase = async () => {
     throw Error("DON'T WIPE PROD YOU ABSOLUTE FOOL");
   }
 
-  await db.sequelize.sync({ force: true });
+  // Quick truncate everything | much faster than sequelize.sync()
+  await Promise.all[
+    Object.values(db).map(function(model) {
+      if (model.destroy) {
+        return model.destroy({ truncate: { cascade: true } });
+      }
+    })
+  ];
 
   // Generate 5 Test Persons & Hacker Profiles
   for (let i = 0; i < 5; i++) {
-    const hp = await hpFactory();
+    const hp = await hpFactory({ userId: i.toString() });
     personFactory({ identityId: hp.userId });
   }
 

@@ -55,15 +55,16 @@ router.post("/self", async (req, res) => {
     if (person.teamId) {
       return res.status(400).json({ err: "Already has a team" });
     }
+    let projectTeam;
 
     const result = await models.sequelize.transaction(async t => {
-      const projectTeam = await models.ProjectTeam.create(body, {
+      projectTeam = await models.ProjectTeam.create(body, {
         transaction: t
       });
 
       await person.setProjectTeam(projectTeam, { transaction: t });
     });
-    return res.json({ projectTeam: result });
+    return res.json({ projectTeam });
   } catch (e) {
     return res.status(400).json({ err: e.message });
   }
