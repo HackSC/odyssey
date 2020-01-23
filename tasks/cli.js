@@ -1,8 +1,13 @@
 const inquirer = require("inquirer");
 const sendgridSync = require("./sendgridsync");
+const dbSeeder = require("./dbSeeder");
 
 // Add tasks here to populate in the CLI
 const tasks = [
+  {
+    name: "DB Seeder",
+    value: dbSeeder
+  },
   {
     name: "Sendgrid Sync",
     value: sendgridSync

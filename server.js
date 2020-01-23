@@ -16,6 +16,7 @@ const teamRouter = require("./api/team");
 const personRouter = require("./api/people");
 const contributionRouter = require("./api/contribution");
 const liveRouter = require("./api/live");
+const projectTeamRouter = require("./api/projectTeam");
 
 const fileUpload = require("express-fileupload");
 
@@ -93,6 +94,8 @@ app.prepare().then(() => {
   server.use("/api/person", personRouter);
   server.use("/api/contribution", contributionRouter);
   server.use("/api/live", liveRouter);
+  server.use("/api/projectTeam", projectTeamRouter);
+
   server.post("/api/scan", (req, res) => {
     console.log("Scanned: ", req.body.code);
     return res.json({ message: "Received" });
