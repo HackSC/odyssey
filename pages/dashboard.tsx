@@ -13,7 +13,7 @@ import Footer from "../components/Footer";
 
 import { Background, Container } from "../styles";
 
-import Step from "../components/steps/Status";
+import Steps from "../components/LiveDashboard";
 
 import { generatePosts } from "../lib/referrerCode";
 
@@ -25,7 +25,7 @@ const Dashboard = ({ profile, socialPosts }) => {
       <Background>
         {profile && (
           <Container>
-            {profile && <Step profile={profile} socialPosts={socialPosts} />}
+            {profile && <Steps profile={profile} socialPosts={socialPosts} />}
           </Container>
         )}
       </Background>
