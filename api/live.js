@@ -26,11 +26,6 @@ router.get("/personInfo", async (req, res) => {
   });
 
   return res.json({ contribs, person });
-
-  /*
-   * house:....
-   * completedTasks: [...],
-   */
 });
 
 router.get("/tasks", async (req, res) => {
@@ -56,16 +51,6 @@ router.post("/dispatch", async (req, res) => {
     case actions.CONTRIB:
       return await handleContrib(userId, req, res);
   }
-});
-
-router.get("/house", async (req, res) => {
-  const houses = await models.House.findAll();
-  console.log(houses);
-  for (var house in houses) {
-    const users = await house.getPersons();
-    return res.json({ users: users });
-  }
-  return res.status(200);
 });
 
 /* 
