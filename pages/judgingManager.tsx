@@ -19,15 +19,39 @@ import { configureScope } from "@sentry/browser";
 const judgingManager = ({ profile }) => {
   const [uploaded, setUploaded] = useState(false)
   const [message, setMessage] = useState("")
-  const [verticals, setVerticals] = useState([])
-  const [sponsors, setSponsors] = useState([])
 
   // private variables
   const [projects, setProjects] = useState([])
-  const [sponsorsList, setSponsorsList] = useState([])
+  const [sponsors, setSponsors] = useState([])
   const [verticalJudges, setVerticalJudges] = useState({})
 
-  // read logic
+  const verticalsBlocks = Object.keys(verticalJudges).map(vertical => {
+    return (
+      <Flex direction="row" justify="space-between" align="center">
+        <Column flexBasis={50}>
+          <p>{vertical}</p>
+        </Column>
+
+        <Column flexBasis={50}>
+          <Input
+            type="number"
+            onChange={e => {
+              let temp_verticalJudges = verticalJudges
+              temp_verticalJudges[vertical] = Number(e.target.value)
+              setVerticalJudges(temp_verticalJudges)
+            }}
+          />
+        </Column>
+      </Flex>
+    )
+  });
+
+  const sponsorsBlocks = sponsors.map(sponsor => {
+    return (
+      <p>{sponsor}</p>
+    )
+  }); 
+  
   const handleUpload = function(event){
     // Check null
     if (event.target.files.length < 1) {
@@ -50,6 +74,7 @@ const judgingManager = ({ profile }) => {
     reader.onloadend = async function () {
       // upload
       try {
+        setMessage("")
         working_projects = await readCSV(reader.result)
         setMessage("Successfully uploaded and parsed file!")
       } catch (err) {
@@ -69,12 +94,9 @@ const judgingManager = ({ profile }) => {
           }
         }
       }
+      setProjects(working_projects)
+      setSponsors(Array.from(sponsors_list))
       setVerticalJudges(verticals_obj)
-      populateVerticals(verticals_obj)
-
-      setSponsorsList(Array.from(sponsors_list))
-      populateSponsors(sponsors_list)
-      
 
       setUploaded(true)
     };
@@ -143,12 +165,6 @@ const judgingManager = ({ profile }) => {
   }
 
   const readCSV = async function(data): Promise<Array<Project>> {
-    // Clear all judging and projects
-    setProjects([])
-    setMessage("")
-    setVerticals([])
-    setSponsors([])
-
     let working_projects = []
     let output: Array<String>
     
@@ -203,46 +219,7 @@ const judgingManager = ({ profile }) => {
       working_projects.push(p)
     }
 
-    setProjects(working_projects)
     return working_projects
-  }
-
-  const populateVerticals = function(verticals_obj) {
-    let verticals_display = []
-    Object.entries(verticals_obj).forEach(([vertical, judges]) => {
-      verticals_display.push(
-        <Flex direction="row" justify="space-between" align="center">
-          <Column flexBasis={50}>
-            <p>{vertical}</p>
-          </Column>
-
-          <Column flexBasis={50}>
-            <Input
-              type="number"
-              onChange={e => {
-                let temp_verticalJudges = verticalJudges
-                temp_verticalJudges[vertical] = Number(e.target.value)
-                setVerticalJudges(temp_verticalJudges)
-              }}
-              value={verticalJudges[vertical]}
-            />
-          </Column>
-        </Flex>
-      )
-      verticals_display.push(<br/>)
-    });
-    if (verticals_display.length > 1) {
-      verticals_display.pop()
-    }
-    setVerticals(verticals_display)
-  }
-
-  const populateSponsors = function(sponsors_list) {
-    let sponsors_display = []
-    sponsors_list.forEach(sponsor => {
-      sponsors_display.push(<p>{sponsor}</p>)
-    });
-    setSponsors(sponsors_display)
   }
 
   const genProjectsCSV = async function (header, values, filters={}, split=1): Promise<Array<Array<String>>> {
@@ -397,8 +374,8 @@ const judgingManager = ({ profile }) => {
         "submitter.email",
         "table"
       ]
-      for (let i = 0; i < sponsorsList.length; i++) {
-        let sponsor = sponsorsList[i]
+      for (let i = 0; i < sponsors.length; i++) {
+        let sponsor = sponsors[i]
         let filters = {
           desiredPrizes: sponsor
         }
@@ -445,7 +422,14 @@ const judgingManager = ({ profile }) => {
             </Column>
           </Flex>
           <br/>
-          <p>{message}</p>
+          <Flex direction="row" justify="space-between">
+            <Column flexBasis={48}>
+              <p>{message ? message : "Looking good!"}</p>
+            </Column>
+            <Column flexBasis={48}>
+              set tables will go here lol
+            </Column>
+          </Flex>
           <br/>
           <Flex direction="row" justify="space-between">
             <Column flexBasis={48}>
@@ -461,7 +445,7 @@ const judgingManager = ({ profile }) => {
                 <h2>Number of Judges</h2>
 
                 <div id="judges-gen">
-                  {verticals}
+                  {verticalsBlocks}
                 </div>
               </Panel>
             </Column>
@@ -479,7 +463,7 @@ const judgingManager = ({ profile }) => {
                 <h2> Sponsors </h2>
 
                 <div id="sponsors-gen">
-                  {sponsors}
+                  {sponsorsBlocks}
                 </div>
               </Panel>
             </Column>
