@@ -19,6 +19,35 @@ router.get("/tasks", async (req, res) => {
   }
 });
 
+router.get("/houseInfo", async (req, res) => {
+  try {
+    const houses = await models.House.findAll({
+      include: [
+        {
+          model: models.Person,
+          include: [
+            {
+              model: models.Contribution,
+              include: [
+                {
+                  model: models.Task,
+                  attributes: ["points"],
+                  required: false
+                }
+              ],
+              required: false
+            }
+          ],
+          required: false
+        }
+      ]
+    });
+    return res.json({ houses });
+  } catch (e) {
+    return res.json({ err: e.message });
+  }
+});
+
 const actions = {
   CHECKIN: "checkin",
   CONTRIB: "contrib"
