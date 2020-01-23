@@ -10,6 +10,29 @@ const Sentry = require("@sentry/node");
 router.use(utils.authMiddleware);
 router.use(utils.requireNonHacker);
 
+router.get("/personInfo", async (req, res) => {
+  const contribs = await models.Contribution.findAll({
+    where: {
+      personId: req.user.id
+    },
+    include: [{ model: models.Task, required: true }],
+    attributes: ["id", "createdAt"]
+  });
+
+  const person = await models.Person.findOne({
+    where: {
+      identityId: req.user.id
+    }
+  });
+
+  return res.json({ contribs, person });
+
+  /*
+   * house:....
+   * completedTasks: [...],
+   */
+});
+
 router.get("/tasks", async (req, res) => {
   try {
     const tasks = await models.Task.findAll();
@@ -33,6 +56,16 @@ router.post("/dispatch", async (req, res) => {
     case actions.CONTRIB:
       return await handleContrib(userId, req, res);
   }
+});
+
+router.get("/house", async (req, res) => {
+  const houses = await models.House.findAll();
+  console.log(houses);
+  for (var house in houses) {
+    const users = await house.getPersons();
+    return res.json({ users: users });
+  }
+  return res.status(200);
 });
 
 /* 
