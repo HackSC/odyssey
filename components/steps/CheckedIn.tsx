@@ -5,6 +5,7 @@ import QRCode from "../QRCode";
 import LinkScroll from "../LinkScroll";
 import { Flex, Column } from "../../styles";
 import HouseLogo from "../../assets/hackscFox.png";
+import Announcements from "../announcements/Announcements";
 
 type Props = {
   profile: Profile;
@@ -53,6 +54,14 @@ const CheckedIn: React.FunctionComponent<Props> = props => {
             </Column>
           </Flex>
         </InstructionsColumn>
+      </Flex>
+      <Flex justify="space-between" tabletVertical>
+        <MarginedColumn flexBasis={65}>
+          <p>Battlepass goes here.</p>
+        </MarginedColumn>
+        <MarginedColumn flexBasis={35}>
+          <Announcements />
+        </MarginedColumn>
       </Flex>
       <Flex justify="space-between" tabletVertical>
         <MarginedColumn flexBasis={35}>
