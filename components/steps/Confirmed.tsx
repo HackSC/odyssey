@@ -23,6 +23,11 @@ const ConfirmedStep: React.FunctionComponent<Props> = props => {
     <Flex justify="space-between" tabletVertical>
       <Column flexBasis={50}>
         <QRCode profile={profile} />
+
+        <QRCodeCaption>
+          Curious what this is for? Stay tuned for future updates from the
+          HackSC team!
+        </QRCodeCaption>
       </Column>
 
       <InstructionsColumn flexBasis={50}>
@@ -40,6 +45,14 @@ const InstructionsColumn = styled(Column)`
     margin-top: 32px;
     text-align: center;
   `}
+`;
+
+const QRCodeCaption = styled.p`
+  margin-top: 16px;
+  text-align: center;
+  max-width: 300px;
+  margin-left: auto;
+  margin-right: auto;
 `;
 
 const CheckInTitle = styled.h2`
