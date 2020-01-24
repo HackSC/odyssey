@@ -17,14 +17,15 @@ const seedDatabase = async () => {
   await Promise.all[
     Object.values(db).map(function(model) {
       if (model.destroy) {
+        console.log("Destroying", model);
         return model.destroy({ truncate: { cascade: true } });
       }
     })
   ];
 
   // Generate 5 Test Persons & Hacker Profiles
-  await IteratePromises(5, async i => {
-    const hp = await hpFactory({ userId: i.toString() });
+  const persons = await IteratePromises(5, async i => {
+    const hp = await hpFactory({ userId: i.toString() }).catch(console.log);
     return personFactory({ identityId: hp.userId });
   });
 
@@ -32,6 +33,8 @@ const seedDatabase = async () => {
 
   await projectTeamFactory({ name: "TestProjectTeam" });
 
+  const fullTeam = await projectTeamFactory({ name: "FullTeam" });
+  fullTeam.addPerson(persons.slice(1));
   return;
 };
 
