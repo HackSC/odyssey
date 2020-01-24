@@ -99,7 +99,7 @@ const TaskManager = ({ profile, currentEvents }) => {
           </TaskInfo>
           <input
             type="submit"
-            value="Create new Task"
+            value="Create new Event"
             onClick={async () => {
               const result = await saveEvent(newEvent);
               if (result) {
