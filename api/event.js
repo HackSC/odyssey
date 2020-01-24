@@ -10,17 +10,42 @@ const Sentry = require("@sentry/node");
 router.use(utils.authMiddleware);
 router.use(utils.requireAdmin);
 
-router.get("/tasks", async (req, res) => {
+router.get("/", async (req, res) => {
   try {
-    const tasks = await models.Task.findAll();
-    return res.json({ tasks: tasks });
+    const events = await models.Event.findAll();
+    return res.json({ events });
   } catch (e) {
     return res.json({ err: e });
   }
 });
 
-router.get("/events", async (req, res) => {
-  // TODO: Make this work
+router.post("/", async (req, res) => {
+  try {
+    const { startsAt, endsAt, name, description } = { ...req.body };
+    const newEvent = await models.Event.create({
+      name: name,
+      description: description,
+      startsAt: startsAt,
+      endsAt: endsAt
+    });
+    return res.json({ newEvent });
+  } catch (e) {
+    return res.json({ err: e });
+  }
+});
+
+router.delete("/:id", async (req, res) => {
+  try {
+    const id = req.params.id;
+    await models.Event.destroy({
+      where: {
+        id: id
+      }
+    });
+    return res.status(200).json({ result: "success" });
+  } catch (e) {
+    return res.status(400).json({ err: e.message });
+  }
 });
 
 module.exports = router;
