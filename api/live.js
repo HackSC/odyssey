@@ -10,6 +10,28 @@ const Sentry = require("@sentry/node");
 router.use(utils.authMiddleware);
 router.use(utils.requireNonHacker);
 
+router.get("/personInfo", async (req, res) => {
+  try {
+    const contribs = await models.Contribution.findAll({
+      where: {
+        personId: req.user.id
+      },
+      include: [{ model: models.Task, required: true }],
+      attributes: ["id", "createdAt"]
+    });
+
+    const person = await models.Person.findOne({
+      where: {
+        identityId: req.user.id
+      }
+    });
+
+    return res.json({ contribs, person });
+  } catch (e) {
+    return res.status(400).json({ err: e.message });
+  }
+});
+
 router.get("/tasks", async (req, res) => {
   try {
     const tasks = await models.Task.findAll();
