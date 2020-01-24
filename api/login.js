@@ -14,9 +14,9 @@ var secured = function(req, res, next) {
 };
 
 router.get("/devlogin", function(req, res) {
-  //Block non-devs
-  if (req.hostname != "localhost" || process.env.NODE_ENV == "production") {
-    res.redirect("/");
+  //Block in prod
+  if (process.env.NODE_ENV == "production") {
+    return res.redirect("/");
   }
 
   req.logout();
@@ -31,7 +31,7 @@ router.get("/devlogin", function(req, res) {
     if (err) {
       res.status(400).send(err);
     }
-    res.send("Logged in as dev, id:" + id + " role: " + role);
+    res.json(user);
   });
 });
 
