@@ -1,6 +1,7 @@
 const hpFactory = require("../tests/factories/hackerProfile");
 const personFactory = require("../tests/factories/person");
 const prizeFactory = require("../tests/factories/prize");
+const projectTeamFactory = require("../tests/factories/projectTeam");
 
 const db = require("../api/models");
 
@@ -12,18 +13,34 @@ const seedDatabase = async () => {
     throw Error("DON'T WIPE PROD YOU ABSOLUTE FOOL");
   }
 
-  await db.sequelize.sync({ force: true });
+  // Quick truncate everything | much faster than sequelize.sync()
+  await Promise.all[
+    Object.values(db).map(function(model) {
+      if (model.destroy) {
+        return model.destroy({ truncate: { cascade: true } });
+      }
+    })
+  ];
 
   // Generate 5 Test Persons & Hacker Profiles
-  for (let i = 0; i < 5; i++) {
-    const hp = await hpFactory();
-    personFactory({ identityId: hp.userId });
-  }
+  await IteratePromises(5, async i => {
+    const hp = await hpFactory({ userId: i.toString() });
+    return personFactory({ identityId: hp.userId });
+  });
 
-  // Generate 5 Test Prizes
-  for (let i = 0; i < 5; i++) {
-    const hp = await prizeFactory();
+  await IteratePromises(5, i => prizeFactory());
+
+  await projectTeamFactory({ name: "TestProjectTeam" });
+
+  return;
+};
+
+const IteratePromises = (count, func) => {
+  const promises = [];
+  for (let i = 0; i < count; i++) {
+    promises.push(func(i));
   }
+  return Promise.all(promises);
 };
 
 module.exports = seedDatabase;
