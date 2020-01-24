@@ -72,7 +72,8 @@ router.get("/houseInfo", async (req, res) => {
 
 const actions = {
   CHECKIN: "checkin",
-  CONTRIB: "contrib"
+  CONTRIB: "contrib",
+  GROUP_CONTRIB: "groupContrib"
 };
 
 router.post("/dispatch", async (req, res) => {
@@ -84,12 +85,39 @@ router.post("/dispatch", async (req, res) => {
       return await handleCheckin(userId, req, res);
     case actions.CONTRIB:
       return await handleContrib(userId, req, res);
+    case actions.GROUP_CONTRIB:
+      return await handleGroupContrib(userId, req, res);
   }
 });
 
 /* 
 ----- Action Dispatchers below, register your action above and implement the appropriate handler below -----
 */
+
+async function handleGroupContrib(userId, req, res) {
+  try {
+    const result = await models.Person.findOne({
+      where: {
+        identityId: userId
+      },
+      include: [
+        {
+          model: models.ProjectTeam,
+          required: false,
+          include: [
+            {
+              model: models.Person,
+              required: false
+            }
+          ]
+        }
+      ]
+    });
+    return res.json({ result });
+  } catch (e) {
+    return res.status(400).json({ err: e.message });
+  }
+}
 
 async function handleContrib(userId, req, res) {
   const input = req.body;
