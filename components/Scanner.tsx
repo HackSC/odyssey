@@ -96,12 +96,43 @@ const Scanner = (props: any) => {
     }
   }, []);
 
-  return <ScannerCanvas ref={canvasRef} />;
+  return (
+    <ScannerContainer>
+      <ScannerCanvas ref={canvasRef} />
+      {props.successfulScan && (
+        <ScannerMessage>
+          <p>
+            Last scanned: {props.successfulScan.firstName}{" "}
+            {props.successfulScan.lastName}
+          </p>
+        </ScannerMessage>
+      )}
+    </ScannerContainer>
+  );
 };
+
+const ScannerContainer = styled.div`
+  position: relative;
+`;
 
 const ScannerCanvas = styled.canvas`
   width: 100%;
   border-radius: 4px;
+  display: block;
+`;
+
+const ScannerMessage = styled.div`
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  padding: 12px;
+  background: rgba(6, 100, 6, 0.85);
+
+  p {
+    color: #ffffff;
+    font-weight: bold;
+  }
 `;
 
 export default Scanner;
