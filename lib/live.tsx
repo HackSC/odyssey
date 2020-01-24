@@ -80,11 +80,49 @@ async function updateHouse(houseObj) {
   return result.status === 200;
 }
 
+async function getCurrentEvents(req) {
+  const urlRoute = req
+    ? /* Serverside */ process.env.URL_BASE + "api/events/"
+    : /* Client */ "/api/events/";
+
+  const result = await fetch(
+    urlRoute,
+    req
+      ? {
+          headers: req.headers
+        }
+      : null
+  );
+  return await result.json();
+}
+async function saveEvent(newEvent) {
+  const urlRoute = "/api/events";
+  const result = await fetch(urlRoute, {
+    method: "POST",
+    headers: {
+      "content-type": "application/json"
+    },
+    body: JSON.stringify(newEvent)
+  });
+  return result.status === 200;
+}
+async function deleteEvent(event) {
+  const urlRoute = "/api/events/" + event.id;
+  const result = await fetch(urlRoute, {
+    method: "DELETE"
+  });
+  return result.status === 200;
+  return false;
+}
+
 export {
   getCurrentTasks,
   saveTask,
   updateTask,
   getHouses,
   createHouse,
-  updateHouse
+  updateHouse,
+  getCurrentEvents,
+  saveEvent,
+  deleteEvent
 };

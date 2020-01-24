@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 
 import { handleLoginRedirect, getProfile } from "../lib/authenticate";
-import { getCurrentTasks, saveTask, updateTask } from "../lib/live";
+import { getCurrentEvents, saveEvent, deleteEvent } from "../lib/live";
 import Head from "../components/Head";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
@@ -14,58 +14,39 @@ import Step from "../components/steps/Results";
 
 function renderTask(task, updateTaskSet, setUpdateTaskSet) {}
 
-const EditableCell = ({ task }) => {
-  const [currTaskValue, setCurrTaskValue] = useState(task);
+const EditableCell = ({ event }) => {
+  const [currEvent, setCurrEvent] = useState(event);
+  console.log(event);
   return (
     <Task>
       <TaskInfo>
-        <input
-          type="text"
-          placeholder="name"
-          value={currTaskValue.name}
-          onChange={e => {
-            setCurrTaskValue({ ...currTaskValue, name: e.target.value });
-          }}
-        />
-        <input
-          type="text"
-          placeholder="type"
-          value={currTaskValue.type}
-          onChange={e => {
-            setCurrTaskValue({ ...currTaskValue, type: e.target.value });
-          }}
-        />
-        <input
-          type="number"
-          placeholder="points"
-          value={currTaskValue.points}
-          onChange={e => {
-            setCurrTaskValue({ ...currTaskValue, points: e.target.value });
-          }}
-        />
+        <p>{currEvent.name}</p>
+        <p>{currEvent.description}</p>
+        <p>{currEvent.startsAt}</p>
+        <p>{currEvent.endsAt}</p>
         <EditButton
           onClick={async () => {
-            const result = await updateTask(currTaskValue);
+            const result = await deleteEvent(currEvent);
             if (result) {
               window.location.reload();
             } else {
-              alert("failed to update task");
+              alert("failed to delete event");
             }
           }}
         >
           {" "}
-          Update Task{" "}
+          Delete Event{" "}
         </EditButton>
       </TaskInfo>
     </Task>
   );
 };
 
-const TaskManager = ({ profile, currentTasks }) => {
-  const [newTask, setNewTask] = useState({});
+const TaskManager = ({ profile, currentEvents }) => {
+  const [newEvent, setNewEvent] = useState({});
 
-  const taskBlocks = currentTasks.tasks.map(task => {
-    return <EditableCell task={task} />;
+  const taskBlocks = currentEvents.events.map(event => {
+    return <EditableCell event={event} />;
   });
   return (
     <>
@@ -79,29 +60,39 @@ const TaskManager = ({ profile, currentTasks }) => {
               type="text"
               placeholder="name"
               onChange={e => {
-                setNewTask({
-                  ...newTask,
+                setNewEvent({
+                  ...newEvent,
                   name: e.target.value
                 });
               }}
             />
             <input
               type="text"
-              placeholder="type"
+              placeholder="description"
               onChange={e => {
-                setNewTask({
-                  ...newTask,
-                  type: e.target.value
+                setNewEvent({
+                  ...newEvent,
+                  description: e.target.value
                 });
               }}
             />
             <input
-              type="number"
-              placeholder="points"
+              type="datetime-local"
+              placeholder="startsAt"
               onChange={e => {
-                setNewTask({
-                  ...newTask,
-                  points: e.target.value
+                setNewEvent({
+                  ...newEvent,
+                  startsAt: e.target.value
+                });
+              }}
+            />
+            <input
+              type="datetime-local"
+              placeholder="endsAt"
+              onChange={e => {
+                setNewEvent({
+                  ...newEvent,
+                  endsAt: e.target.value
                 });
               }}
             />
@@ -110,7 +101,7 @@ const TaskManager = ({ profile, currentTasks }) => {
             type="submit"
             value="Create new Task"
             onClick={async () => {
-              const result = await saveTask(newTask);
+              const result = await saveEvent(newEvent);
               if (result) {
                 // In theory we do optimistic local state updating, in practice, fuck it it'll do
                 window.location.reload();
@@ -130,7 +121,7 @@ const TaskManager = ({ profile, currentTasks }) => {
 
 TaskManager.getInitialProps = async ({ req }) => {
   const profile = await getProfile(req);
-  const currentTasks = await getCurrentTasks(req);
+  const currentEvents = await getCurrentEvents(req);
 
   // Null profile means user is not logged in
   if (!profile) {
@@ -139,7 +130,7 @@ TaskManager.getInitialProps = async ({ req }) => {
 
   return {
     profile,
-    currentTasks
+    currentEvents
   };
 };
 
