@@ -14,16 +14,43 @@ import Footer from "../components/Footer";
 import styled from "styled-components";
 
 import { Background, Container, Button, Flex, Column } from "../styles";
-import { configureScope } from "@sentry/browser";
 
-const judgingManager = ({ profile }) => {
+const judgingManager = ({}) => {
   const [uploaded, setUploaded] = useState(false)
   const [message, setMessage] = useState("")
 
-  // private variables
+  // control vars
+  const [currTable, setCurrTable] = useState(["", 0])
+  const [tables, setTables] = useState({})
   const [projects, setProjects] = useState([])
   const [sponsors, setSponsors] = useState([])
   const [verticalJudges, setVerticalJudges] = useState({})
+
+  const tablesBlocks = Object.keys(tables).map(table => {
+    return (  
+      <Cell>
+        <Column>
+        <SmallCell>
+            {table}
+          </SmallCell>
+          <SmallCell>
+            {tables[table]}
+          </SmallCell>
+          <Button
+            onClick={e => {
+              delete tables[table]
+              setTables(tables)
+              // hacky but it refreshes
+              setCurrTable([currTable[0], currTable[1]])
+              assignTables()
+            }}
+          >
+            X
+          </Button>
+        </Column>
+      </Cell>
+    )
+  })
 
   const verticalsBlocks = Object.keys(verticalJudges).map(vertical => {
     return (
@@ -177,9 +204,8 @@ const judgingManager = ({ profile }) => {
     // remove first item the header
     output.shift();
     // Add into projects
-    let tableCounter = 0;
-    while(tableCounter < output.length){
-      let val = output[tableCounter];
+    for (let i = 0; i < output.length; i++) {
+      let val = output[i];
       let p = new Project();
       p.submissionTitle = val[0];
       p.submissionUrl = val[1];
@@ -213,8 +239,7 @@ const judgingManager = ({ profile }) => {
           email: val[20 + index + 4],
         });
       }
-      p.table = String(tableCounter);
-      tableCounter++;
+      p.table = ""
 
       working_projects.push(p)
     }
@@ -288,8 +313,33 @@ const judgingManager = ({ profile }) => {
     });
   };
 
+  const assignTables = function() {
+    let working_tables = Object.assign({}, tables)
+    let working_projects = [...projects]
+    let count = 0;
+    for (let i = 0; i < working_projects.length; i++) {
+      let assigned = false
+      for (let table in working_tables) {
+        if (working_tables[table] > 0) {
+          working_tables[table]--
+          working_projects[i].table = String(table) + String(tables[table]-working_tables[table])
+          assigned = true
+          break
+        }
+      }
+      if (!assigned) {
+        count++
+        working_projects[i].table = count
+      }
+    }
+    setProjects(working_projects)
+  }
+
   const exportTableAssignments = async function() {
     setMessage("Generating Table Assignments CSV")
+
+    // run table assignments
+    assignTables()
 
     let data: String
 
@@ -318,6 +368,7 @@ const judgingManager = ({ profile }) => {
 
   const exportVerticalsCSV = async function() {
     setMessage("Generating Vertical CSV")
+    assignTables()
 
     let zip = new JSZip()
 
@@ -325,12 +376,17 @@ const judgingManager = ({ profile }) => {
     try {
       let headers = [
         "Project Name",
-        "Vertical",
-        "Table Number"
+        "Table",
+        "Tech Complexity",
+        "Functionality",
+        "Feasibility",
+        "Passion",
+        "Wow Factor",
+        "Total",
+        "Comments",
       ]
       let values = [
         "submissionTitle",
-        "vertical",
         "table",
       ]
       for (let vertical in verticalJudges) {
@@ -352,7 +408,6 @@ const judgingManager = ({ profile }) => {
 
     zip.generateAsync({type:"blob"})
     .then(function(content) {
-      console.log('saving')
       saveAs(content, "verticals_data.zip")
       setMessage("")
     });  
@@ -360,19 +415,20 @@ const judgingManager = ({ profile }) => {
 
   const exportSponsorsCSV = async function() {
     setMessage("Generating Sponsor CSVs")
+    assignTables()
 
     let zip = new JSZip()
 
     try {
       let headers = [
         "Project Name",
-        "Submission Email",
-        "Table Number"
+        "Table",
+        "Points",
+        "Comments"
       ]
       let values = [
         "submissionTitle",
-        "submitter.email",
-        "table"
+        "table",
       ]
       for (let i = 0; i < sponsors.length; i++) {
         let sponsor = sponsors[i]
@@ -427,7 +483,37 @@ const judgingManager = ({ profile }) => {
               <p>{message ? message : "Looking good!"}</p>
             </Column>
             <Column flexBasis={48}>
-              set tables will go here lol
+              <Cell>
+                <Column>
+                  <TableInput
+                    type="text"
+                    onChange={e => {
+                      setCurrTable([e.target.value, currTable[1]])
+                    }}
+                    value={currTable[0]}
+                  />
+                  <TableInput
+                    type="number"
+                    onChange={e => {
+                      setCurrTable([currTable[0], e.target.value])
+                    }}
+                    value={currTable[1]}
+                  />
+                  <Button
+                    onClick={e => {
+                      let temp_tables = tables
+                      temp_tables[currTable[0]] = Math.round(Number(currTable[1]))
+                      setTables(temp_tables)
+                      // hacky but it refreshes
+                      setCurrTable([currTable[0], currTable[1]])
+                      assignTables()
+                    }}
+                  >
+                    +
+                  </Button>
+                </Column>
+              </Cell>
+              {tablesBlocks}
             </Column>
           </Flex>
           <br/>
@@ -485,10 +571,27 @@ judgingManager.getInitialProps = async ctx => {
     handleLoginRedirect(req);
   }
 
-  return {
-    profile
-  };
+  return {};
 };
+
+const Cell = styled.div`
+  display: inline-block;
+  padding: 10px 20px;
+  background: #ffffff;
+  border-radius: 8px;
+  font-size: 16px;
+`;
+
+const SmallCell = styled.div`
+  padding: 12px 1px;
+  background: #ffffff;
+  border-radius: 8px;
+  border: 1px solid #b2b2b2;
+  min-width: 39px;
+  display: inline-block;
+  text-align: center;
+  font-size: 16px
+`
 
 const Panel = styled.div`
   padding: 24px 36px;
@@ -508,26 +611,18 @@ const Input = styled.input`
   box-sizing: border-box;
 `;
 
-const ScoreInputLabel = styled.h3`
-  padding: 0;
-  margin-bottom: 8px;
+const InvisInput = styled.input`
+  display: none;
 `;
 
-const ScoreKeyLabel = styled.p`
+const TableInput = styled.input`
   display: inline-block;
-  padding: 10px 16px;
-  margin-right: 16px;
+  width: 25px;
+  padding: 12px 8px;
+  margin-right: 1px;
   border-radius: 8px;
   border: 1px solid ${({ theme }) => theme.colors.gray5};
   color: ${({ theme }) => theme.colors.gray50};
-`;
-
-const SubmittingText = styled.p`
-  margin-top: 8px;
-`;
-
-const InvisInput = styled.input`
-  display: none;
 `;
 
 const FullButton = styled(Button)`
