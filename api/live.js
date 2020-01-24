@@ -26,7 +26,7 @@ const actions = {
 
 router.post("/dispatch", async (req, res) => {
   const { userId, actionId } = { ...req.body };
-  console.log({ userId, actionId });
+
   //TODO: Add sentry logging at the dispatch level
   switch (actionId) {
     case actions.CHECKIN:
@@ -132,11 +132,9 @@ router.get("/identity-check/:userId", async (req, res) => {
             lastName: profile.lastName
           });
         } else {
-          return res
-            .status(400)
-            .json({
-              err: "user cannot be scanned! neither confirmed nor checkedIn"
-            });
+          return res.status(400).json({
+            err: "user cannot be scanned! neither confirmed nor checkedIn"
+          });
         }
       } else {
         return res
