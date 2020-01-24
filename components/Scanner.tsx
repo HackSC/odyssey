@@ -99,11 +99,12 @@ const Scanner = (props: any) => {
   return (
     <ScannerContainer>
       <ScannerCanvas ref={canvasRef} />
-      {props.successfulScan && (
-        <ScannerMessage>
+      {props.lastScan && (
+        <ScannerMessage success={props.lastScan.isSuccess}>
           <p>
-            Last scanned: {props.successfulScan.firstName}{" "}
-            {props.successfulScan.lastName}
+            {props.lastScan.isSuccess
+              ? props.lastScan.message
+              : props.lastScan.invalid}
           </p>
         </ScannerMessage>
       )}
@@ -121,13 +122,25 @@ const ScannerCanvas = styled.canvas`
   display: block;
 `;
 
-const ScannerMessage = styled.div`
+type ScannerMessageProps = {
+  success: boolean;
+};
+
+const ScannerMessage = styled.div<ScannerMessageProps>`
   position: absolute;
   left: 0;
   right: 0;
   bottom: 0;
   padding: 12px;
-  background: rgba(6, 100, 6, 0.85);
+
+  ${({ success }) =>
+    success
+      ? `
+      background: rgba(6, 100, 6, 0.85);
+    `
+      : `
+      background: rgba(100, 6, 6, 0.85);
+    `}
 
   p {
     color: #ffffff;
