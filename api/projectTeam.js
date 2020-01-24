@@ -10,11 +10,11 @@ router.get("/self", async (req, res) => {
   try {
     const { id } = req.user;
 
-    const person = await models.Person.findByPk(id);
+    const person = await models.Person.findByPk(id, {
+      include: [{ model: models.ProjectTeam, required: true }]
+    });
 
-    const projectTeam = await models.ProjectTeam.findByPk(person.ProjectTeamId);
-
-    return res.json({ projectTeam });
+    return res.json({ projectTeam: person.ProjectTeam });
   } catch (e) {
     return res.status(400).json({ err: e.message });
   }
