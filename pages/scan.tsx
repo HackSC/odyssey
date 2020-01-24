@@ -15,6 +15,8 @@ const Scan = ({ profile }) => {
   const [scannedCodes, setScannedCodes] = useState([]);
   const [successfulScan, setSuccessfulScan] = useState(null);
 
+  const [lastScan, setLastScan] = useState(null);
+
   const handleActionChange = e => {
     setAction(e.target.value);
   };
@@ -31,31 +33,32 @@ const Scan = ({ profile }) => {
       return;
     }
 
-    const idRequest = await fetch(`/api/live/identity-check/${code}`);
-
-    if (idRequest.status === 200) {
-      // We successfully ID'd a user, show the first and last name to the scanner
-      const idData = await idRequest.json();
-
-      // Send a request to the server to scan hacker for task
-      const scanRequest = await fetch("/api/live/dispatch", {
-        method: "POST",
-        body: JSON.stringify({
-          userId: code,
-          actionId: "checkin"
-        }),
-        headers: {
-          "Content-Type": "application/json"
-        }
-      });
-
-      if (scanRequest.status === 200) {
-        // Successful scan, let's display that to the user
-        setSuccessfulScan({
-          firstName: idData.firstName,
-          lastName: idData.lastName
-        });
+    // Send a request to the server to scan hacker for task
+    const scanRequest = await fetch("/api/live/dispatch", {
+      method: "POST",
+      body: JSON.stringify({
+        userId: code,
+        actionId: "checkin"
+      }),
+      headers: {
+        "Content-Type": "application/json"
       }
+    });
+
+    if (scanRequest.status === 200) {
+      const scanData = await scanRequest.json();
+      // Successful scan, let's display that to the user
+      setLastScan({
+        message: scanData.profile.firstName + " " + scanData.profile.lastName,
+        isSuccess: true
+      });
+    } else {
+      const scanData = await scanRequest.json();
+      // Invalid/unsuccessful scan, let's display that to the user
+      setLastScan({
+        message: scanData.invalid,
+        isSuccess: false
+      });
     }
   };
 
@@ -104,7 +107,7 @@ const Scan = ({ profile }) => {
               {!!action && (
                 <Scanner
                   handleScannedCode={handleScannedCode}
-                  successfulScan={successfulScan}
+                  lastScan={lastScan}
                 />
               )}
             </ScanContainer>
