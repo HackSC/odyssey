@@ -24,6 +24,14 @@ jobs:
       - checkout
       - run: yarn install
       - run: yarn run test
+  APITest:
+    docker:
+      - image: circleci/node
+    steps:
+      - checkout
+      - run: yarn install
+      - run: yarn run jest
+
   deploy:
     docker:
       - image: circleci/node
@@ -33,6 +41,7 @@ jobs:
       - run:
           name: Deploy to Now
           command: cd client && now --token $ZEIT_TOKEN --local-config now.production.json --prod
+
 workflows:
   version: 2
   e2e_tests:
