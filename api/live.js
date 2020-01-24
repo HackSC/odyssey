@@ -72,7 +72,8 @@ router.get("/houseInfo", async (req, res) => {
 
 const actions = {
   CHECKIN: "checkin",
-  CONTRIB: "contrib"
+  CONTRIB: "contrib",
+  EMAIL_CONTRIB: "emailContrib"
 };
 
 router.post("/dispatch", async (req, res) => {
@@ -84,6 +85,8 @@ router.post("/dispatch", async (req, res) => {
       return await handleCheckin(userId, req, res);
     case actions.CONTRIB:
       return await handleContrib(userId, req, res);
+    case actions.EMAIL_CONTRIB:
+      return await handleEmailContrib(userId, req, res);
   }
 });
 
@@ -98,6 +101,30 @@ async function handleContrib(userId, req, res) {
     return res.status(400).json({ message: "Invalid request" });
   } else {
     try {
+      const result = await models.Contribution.build({
+        personId: userId,
+        taskId: input.taskId
+      }).save();
+      return res.json({ contribution: result });
+    } catch (e) {
+      return res.status(500).json({ error: e.message });
+    }
+  }
+}
+
+async function handleEmailContrib(userEmail, req, res) {
+  const input = req.body;
+  if (!input.taskId) {
+    return res.status(400).json({ message: "Invalid request" });
+  } else {
+    try {
+      // Try to find a model by email
+      const profile = await models.HackerProfile.findOne({
+        where: {
+          email: userEmail
+        }
+      });
+      const userId = profile.get("userId");
       const result = await models.Contribution.build({
         personId: userId,
         taskId: input.taskId
