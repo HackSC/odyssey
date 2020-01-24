@@ -8,11 +8,11 @@ router.use(utils.preprocessRequest);
 
 router.get("/self", async (req, res) => {
   try {
-    const { id } = req.user.id;
+    const { id } = req.user;
 
-    const person = await models.Person.findById(id);
+    const person = await models.Person.findByPk(id);
 
-    const projectTeam = await models.ProjectTeam.findById(person.teamId);
+    const projectTeam = await models.ProjectTeam.findByPk(person.ProjectTeamId);
 
     return res.json({ projectTeam });
   } catch (e) {
@@ -20,9 +20,24 @@ router.get("/self", async (req, res) => {
   }
 });
 
-router.put("/self", async (req, res) => {});
+router.put("/join/:name", async (req, res) => {
+  try {
+    const projectTeam = await models.ProjectTeam.findOne({
+      where: { name: req.params.name },
+      include: [models.Person]
+    });
+    if (projectTeam.People.length >= 4) {
+      throw new Error("Team is full");
+    }
+    projectTeam.addPerson(req.user.id);
 
-router.get("/", async (req, res) => {
+    return res.json({ projectTeam });
+  } catch (e) {
+    return res.status(400).json({ err: e.message });
+  }
+});
+
+router.get("/list", async (req, res) => {
   try {
     const projectTeams = await models.ProjectTeam.findAll();
     return res.json({ projectTeams });
@@ -34,16 +49,12 @@ router.get("/", async (req, res) => {
 router.get("/:id", async (req, res) => {
   try {
     const { id } = req.params.id;
-
-    const projectTeam = await models.ProjectTeam.findById(id);
-
+    const projectTeam = await models.ProjectTeam.findByPk(id);
     return res.json({ projectTeam });
   } catch (e) {
     return res.status(400).json({ err: e.message });
   }
 });
-
-router.put("/:id", async (req, res) => {});
 
 router.post("/self", async (req, res) => {
   try {

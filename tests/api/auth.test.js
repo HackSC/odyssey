@@ -1,6 +1,7 @@
 const supertest = require("supertest");
+const server = require("../../express");
 
-request = supertest("http://localhost:3000");
+request = supertest(server);
 
 describe("Auth Tests", () => {
   const devLoginUrl = "/auth/devlogin";
@@ -16,12 +17,5 @@ describe("Auth Tests", () => {
       .get(devLoginUrl)
       .query({ id: "a", role: "admin" })
       .expect(200, { ...user, ...addedVals });
-  });
-
-  test("devlogin from not localhost:3000 fails", () => {
-    return request
-      .get(devLoginUrl)
-      .set("Host", "http://localhost:3001")
-      .expect(302);
   });
 });

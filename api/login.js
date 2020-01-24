@@ -14,8 +14,8 @@ var secured = function(req, res, next) {
 };
 
 router.get("/devlogin", function(req, res) {
-  //Block non-devs
-  if (req.hostname != "localhost" || process.env.NODE_ENV == "production") {
+  //Block in prod
+  if (process.env.NODE_ENV == "production") {
     return res.redirect("/");
   }
 
