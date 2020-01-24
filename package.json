@@ -11,11 +11,12 @@
     "cypress:open": "cypress open",
     "cypress:run": "cypress run",
     "E2ETest": "start-server-and-test start http://localhost:3000 cypress:run",
-    "test": "start-server-and-test start http://localhost:3000 cypress:run"
+    "test": "start-server-and-test start http://localhost:3000 cypress:run",
+    "jest": "jest"
   },
   "jest": {
-    "testPathIgnorePatterns": [
-      "integration/*"
+    "roots": [
+      "./tests/"
     ]
   },
   "dependencies": {
@@ -83,12 +84,13 @@
     "enzyme": "^3.10.0",
     "enzyme-adapter-react-16": "^1.14.0",
     "husky": "^3.0.9",
-    "jest": "^24.9.0",
+    "jest": "^25.1.0",
     "prettier": "^1.18.2",
     "pretty-quick": "^2.0.0",
     "react-addons-test-utils": "^15.6.2",
     "react-test-renderer": "^16.9.0",
     "sequelize-cli": "^5.5.1",
+    "supertest": "^4.0.2",
     "ts-loader": "^6.1.2",
     "typescript": "^3.6.3"
   },
