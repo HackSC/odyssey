@@ -57,12 +57,95 @@ router.get("/battlepass", async (req, res) => {
   ]);
 });
 
+router.get("/personInfo", async (req, res) => {
+  try {
+    const contribs = await models.Contribution.findAll({
+      where: {
+        personId: req.user.id
+      },
+      include: [{ model: models.Task, required: true }],
+      attributes: ["id", "createdAt"]
+    });
+
+    const person = await models.Person.findOne({
+      where: {
+        identityId: req.user.id
+      }
+    });
+
+    return res.json({ contribs, person });
+  } catch (e) {
+    return res.status(400).json({ err: e.message });
+  }
+});
+
 router.get("/tasks", async (req, res) => {
   try {
     const tasks = await models.Task.findAll();
     return res.json({ tasks: tasks });
   } catch (e) {
     return res.json({ err: e });
+  }
+});
+
+router.get("/houseInfo/:id", async (req, res) => {
+  const houseId = req.params.id;
+  try {
+    const house = await models.House.findOne({
+      where: {
+        id: houseId
+      },
+      include: [
+        {
+          model: models.Person,
+          include: [
+            {
+              model: models.Contribution,
+              include: [
+                {
+                  model: models.Task,
+                  attributes: ["points"],
+                  required: false
+                }
+              ],
+              required: false
+            }
+          ],
+          required: false
+        }
+      ]
+    });
+    return res.json({ house });
+  } catch (e) {
+    return res.json({ err: e.message });
+  }
+});
+router.get("/houseInfo", async (req, res) => {
+  try {
+    const houses = await models.House.findAll({
+      include: [
+        {
+          model: models.Person,
+          include: [
+            {
+              model: models.Contribution,
+              include: [
+                {
+                  model: models.Task,
+                  attributes: ["points"],
+                  required: false
+                }
+              ],
+              required: false
+            }
+          ],
+          required: false
+        }
+      ]
+    });
+    return res.json({ houses });
+  } catch (e) {
+    return res.json({ err: e.message });
   }
 });
 
@@ -73,6 +156,7 @@ const actions = {
 
 router.post("/dispatch", async (req, res) => {
   const { userId, actionId } = { ...req.body };
+
   //TODO: Add sentry logging at the dispatch level
   switch (actionId) {
     case actions.CHECKIN:
@@ -130,7 +214,7 @@ async function handleCheckin(userId, req, res) {
     });
 
     const pointsProfile = await models.Person.create({
-      userId: userId,
+      identityId: userId,
       houseId: result[0].id,
       isBattlepassComplete: false
     });
@@ -162,5 +246,37 @@ async function handleCheckin(userId, req, res) {
     return res.status(500).json({ err: e.message });
   }
 }
+
+router.get("/identity-check/:userId", async (req, res) => {
+  if (req.params.userId) {
+    try {
+      const userId = req.params.userId;
+      const profile = await models.HackerProfile.findOne({
+        where: { userId: userId }
+      });
+
+      if (profile) {
+        if (["checkedIn", "confirmed"].includes(profile.status)) {
+          return res.json({
+            firstName: profile.firstName,
+            lastName: profile.lastName
+          });
+        } else {
+          return res.status(400).json({
+            err: "user cannot be scanned! neither confirmed nor checkedIn"
+          });
+        }
+      } else {
+        return res
+          .status(404)
+          .json({ err: "could not find a profile with that userId" });
+      }
+    } catch (e) {
+      return res.status(500).json({ err: e.message });
+    }
+  } else {
+    return res.status(400).json({ err: "missing user ID" });
+  }
+});
 
 module.exports = router;

@@ -9,14 +9,14 @@ router.use(utils.authMiddleware);
 
 router.get("/self", async (req, res) => {
   try {
-    const pointsProfile = await models.Person.findOrCreate({
+    const [person, isCreated] = await models.Person.findOrCreate({
       where: {
         identityId: req.user.id
       },
       defaults: { isBattlepassComplete: false }
     });
 
-    return res.json({ person: pointsProfile });
+    return res.json({ person });
   } catch (e) {
     return res.status(500).json({ err: e.message });
   }
@@ -31,12 +31,26 @@ router.get("/houses", async (req, res) => {
   }
 });
 
-router.post("/create", async (req, res) => {
+router.post("/houses", async (req, res) => {
   try {
     const postValues = req.body;
     const { name, color } = { ...postValues };
     const house = await models.House.create({ name: name, color: color });
     return res.json({ newHouse: house });
+  } catch (e) {
+    return res.status(400).json({ err: e.message });
+  }
+});
+
+router.put("/houses", async (req, res) => {
+  try {
+    const values = req.body;
+    const houseId = values.id;
+    const result = await models.House.update(
+      { ...values },
+      { where: { id: houseId } }
+    );
+    return res.json({ result: result });
   } catch (e) {
     return res.status(400).json({ err: e.message });
   }
