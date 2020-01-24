@@ -13,21 +13,39 @@ import Select from "../components/Select";
 const Scan = ({ profile }) => {
   const [action, setAction] = useState(null);
   const [scannedCodes, setScannedCodes] = useState([]);
+  const [successfulScan, setSuccessfulScan] = useState(null);
 
   const handleActionChange = e => {
     setAction(e.target.value);
   };
 
   const sendScanRequest = async (code: string) => {
-    await fetch("/api/scan", {
-      method: "POST",
-      body: JSON.stringify({
-        code
-      }),
-      headers: {
-        "Content-Type": "application/json"
+    const idRequest = await fetch(`/api/live/identity-check/${code}`);
+
+    if (idRequest.status === 200) {
+      // We successfully ID'd a user, show the first and last name to the scanner
+      const idData = await idRequest.json();
+
+      // Send a request to the server to scan hacker for task
+      const scanRequest = await fetch("/api/live/dispatch", {
+        method: "POST",
+        body: JSON.stringify({
+          userId: code,
+          actionId: "checkin"
+        }),
+        headers: {
+          "Content-Type": "application/json"
+        }
+      });
+
+      if (scanRequest.status === 200) {
+        // Successful scan, let's display that to the user
+        setSuccessfulScan({
+          firstName: idData.firstName,
+          lastName: idData.lastName
+        });
       }
-    });
+    }
   };
 
   const handleScannedCode = useCallback(
@@ -47,45 +65,47 @@ const Scan = ({ profile }) => {
   return (
     <>
       <Head title="HackSC Odyssey - Scan" />
-      <Navbar loggedIn activePage="scan" admin />
-      <Background>
-        <Container>
-          <h1>Scan Codes</h1>
+      <Container>
+        <ScanTitle>Scan Codes</ScanTitle>
 
-          <br />
+        <br />
 
-          <h2>Select Action</h2>
-          <Form>
-            <Select
-              name="shirt-size"
-              options={[
-                {
-                  label: "HackSC Check In",
-                  value: "initial-check-in"
-                },
-                {
-                  label: "React Workshop Attendance",
-                  value: "react-check-in"
-                }
-              ]}
-              onChange={handleActionChange}
-              required
-            />
+        <h2>Select Action</h2>
+        <Form>
+          <Select
+            name="shirt-size"
+            options={[
+              {
+                label: "HackSC Check In",
+                value: "initial-check-in"
+              },
+              {
+                label: "React Workshop Attendance",
+                value: "react-check-in"
+              }
+            ]}
+            onChange={handleActionChange}
+            required
+          />
 
-            <Flex direction="column">
-              <ScanColumn>
-                {!!action && <Scanner handleScannedCode={handleScannedCode} />}
-              </ScanColumn>
+          <Flex direction="column">
+            <ScanContainer>
+              {!!action && (
+                <Scanner
+                  handleScannedCode={handleScannedCode}
+                  successfulScan={successfulScan}
+                />
+              )}
+            </ScanContainer>
 
-              <HistoryColumn>
-                {scannedCodes.map((code, index) => (
-                  <ScannedCode key={code + index}>{code}</ScannedCode>
-                ))}
-              </HistoryColumn>
-            </Flex>
-          </Form>
-        </Container>
-      </Background>
+            <HistoryContainer>
+              {scannedCodes.map((code, index) => (
+                <ScannedCode key={code + index}>{code}</ScannedCode>
+              ))}
+            </HistoryContainer>
+          </Flex>
+        </Form>
+      </Container>
     </>
   );
 };
@@ -105,14 +125,17 @@ Scan.getInitialProps = async ctx => {
   };
 };
 
-const ScanColumn = styled.div`
+const ScanTitle = styled.h1`
+  padding-top: 32px;
+`;
+
+const ScanContainer = styled.div`
   flex-grow: 1;
   margin-top: 30px;
 `;
 
-const HistoryColumn = styled.div`
-  margin-top: 30px;
-  padding-left: 30px;
+const HistoryContainer = styled.div`
+  margin-top: 16px;
 `;
 
 const ScannedCode = styled.p`

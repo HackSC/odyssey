@@ -3,7 +3,8 @@ module.exports = (sequelize, DataTypes) => {
     "Person",
     {
       identityId: { type: DataTypes.STRING(100), primaryKey: true },
-      isBattlepassComplete: DataTypes.BOOLEAN
+      isBattlepassComplete: DataTypes.BOOLEAN,
+      ProjectTeamId: DataTypes.NUMBER
     },
     { tableName: "persons" }
   );
@@ -11,6 +12,7 @@ module.exports = (sequelize, DataTypes) => {
   Person.associate = function(models) {
     Person.belongsTo(models.House, { foreignKey: "houseId" });
     Person.belongsTo(models.ProjectTeam);
+    Person.hasMany(models.Contribution, { foreignKey: "personId" });
   };
 
   return Person;
