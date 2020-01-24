@@ -111,7 +111,7 @@ async function handleCheckin(userId, req, res) {
       { where: { userId: userId } }
     );
 
-    return res.json({ pointsProfile: pointsProfile });
+    return res.json({ pointsProfile, profile });
   } catch (e) {
     return res.status(500).json({ err: e.message });
   }

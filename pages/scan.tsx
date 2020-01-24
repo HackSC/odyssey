@@ -19,7 +19,18 @@ const Scan = ({ profile }) => {
     setAction(e.target.value);
   };
 
+  const checkIfUserId = (code: string): boolean => {
+    const GOOGLE_AUTH_PREFIX = "google-oauth2|";
+    const AUTH0_PREFIX = "auth0|";
+
+    return code.startsWith(GOOGLE_AUTH_PREFIX) || code.startsWith(AUTH0_PREFIX);
+  };
+
   const sendScanRequest = async (code: string) => {
+    if (!checkIfUserId(code)) {
+      return;
+    }
+
     const idRequest = await fetch(`/api/live/identity-check/${code}`);
 
     if (idRequest.status === 200) {
