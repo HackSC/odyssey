@@ -10,6 +10,53 @@ const Sentry = require("@sentry/node");
 router.use(utils.authMiddleware);
 router.use(utils.requireNonHacker);
 
+router.get("/battlepass", async (req, res) => {
+  return res.json([
+    {
+      id: "5e29283758c29d352b47dd41",
+      isPremium: true,
+      pointValue: 38,
+      prizeName: "socks"
+    },
+    {
+      id: "5e2928376468ef47d5d4ac3b",
+      isPremium: true,
+      pointValue: 39,
+      prizeName: "socks"
+    },
+    {
+      id: "5e292837285ac2542f28eda9",
+      isPremium: true,
+      pointValue: 23,
+      prizeName: "socks"
+    },
+    {
+      id: "5e2928377f9e491c5bfd71ae",
+      isPremium: false,
+      pointValue: 30,
+      prizeName: "Supreme Brick"
+    },
+    {
+      id: "5e29283727dd79a7ae8f690a",
+      isPremium: true,
+      pointValue: 22,
+      prizeName: "Supreme Brick"
+    },
+    {
+      id: "5e292837493dc9bae67b6495",
+      isPremium: false,
+      pointValue: 23,
+      prizeName: "shoes"
+    },
+    {
+      id: "5e2928373ae0bf5885169106",
+      isPremium: false,
+      pointValue: 37,
+      prizeName: "hat"
+    }
+  ]);
+});
+
 router.get("/personInfo", async (req, res) => {
   try {
     const contribs = await models.Contribution.findAll({
