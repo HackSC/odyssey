@@ -7,7 +7,7 @@ import Head from "../components/Head";
 import Navbar from "../components/Navbar";
 import Scanner from "../components/Scanner";
 
-import { Background, Container, Form, Flex } from "../styles";
+import { Form } from "../styles";
 import Select from "../components/Select";
 
 const Scan = ({ profile }) => {

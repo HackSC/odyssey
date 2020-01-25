@@ -275,36 +275,4 @@ async function handleCheckin(userId, req, res) {
   }
 }
 
-router.get("/identity-check/:userId", async (req, res) => {
-  if (req.params.userId) {
-    try {
-      const userId = req.params.userId;
-      const profile = await models.HackerProfile.findOne({
-        where: { userId: userId }
-      });
-
-      if (profile) {
-        if (["checkedIn", "confirmed"].includes(profile.status)) {
-          return res.json({
-            firstName: profile.firstName,
-            lastName: profile.lastName
-          });
-        } else {
-          return res.status(400).json({
-            err: "user cannot be scanned! neither confirmed nor checkedIn"
-          });
-        }
-      } else {
-        return res
-          .status(404)
-          .json({ err: "could not find a profile with that userId" });
-      }
-    } catch (e) {
-      return res.status(500).json({ err: e.message });
-    }
-  } else {
-    return res.status(400).json({ err: "missing user ID" });
-  }
-});
-
 module.exports = router;
