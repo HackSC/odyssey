@@ -60,6 +60,24 @@ async function handleContrib(userId, req, res) {
 
 async function handleCheckin(userId, req, res) {
   try {
+    const profile = await models.HackerProfile.findOne({
+      where: { userId: userId }
+    });
+    const profileStatus = profile.get("status");
+    const invalidStatuses = [
+      "unverified",
+      "verified",
+      "rejected",
+      "submitted",
+      "checkedIn"
+    ];
+
+    if (invalidStatuses.includes(profileStatus)) {
+      return res
+        .status(400)
+        .json({ invalid: `User has status ${profileStatus}` });
+    }
+
     const result = await models.House.findAll({
       raw: true,
       attributes: {
@@ -88,23 +106,6 @@ async function handleCheckin(userId, req, res) {
       houseId: result[0].id,
       isBattlepassComplete: false
     });
-
-    const profile = await models.HackerProfile.findOne({
-      where: { userId: userId }
-    });
-    const profileStatus = profile.get("status");
-    const invalidStatuses = [
-      "unverified",
-      "verified",
-      "rejected",
-      "submitted",
-      "checkedIn"
-    ];
-    if (invalidStatuses.includes(profileStatus)) {
-      return res
-        .status(400)
-        .json({ invalid: `User has status ${profileStatus}` });
-    }
 
     await models.HackerProfile.update(
       { status: "checkedIn" },

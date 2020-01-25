@@ -104,7 +104,7 @@ const Scanner = (props: any) => {
           <p>
             {props.lastScan.isSuccess
               ? props.lastScan.message
-              : props.lastScan.invalid}
+              : props.lastScan.message}
           </p>
         </ScannerMessage>
       )}
@@ -114,12 +114,17 @@ const Scanner = (props: any) => {
 
 const ScannerContainer = styled.div`
   position: relative;
+  height: 100%;
 `;
 
 const ScannerCanvas = styled.canvas`
   width: 100%;
-  border-radius: 4px;
+  height: 100%;
   display: block;
+  margin-left: auto;
+  margin-right: auto;
+  object-fit: contain;
+  position: absolute;
 `;
 
 type ScannerMessageProps = {
@@ -127,11 +132,11 @@ type ScannerMessageProps = {
 };
 
 const ScannerMessage = styled.div<ScannerMessageProps>`
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  padding: 12px;
+  position: fixed;
+  left: 20px;
+  right: 20px;
+  bottom: 20px;
+  padding: 18px;
 
   ${({ success }) =>
     success
@@ -145,6 +150,7 @@ const ScannerMessage = styled.div<ScannerMessageProps>`
   p {
     color: #ffffff;
     font-weight: bold;
+    font-size: 18px;
   }
 `;
 

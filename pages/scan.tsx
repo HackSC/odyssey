@@ -13,8 +13,6 @@ import Select from "../components/Select";
 const Scan = ({ profile }) => {
   const [action, setAction] = useState(null);
   const [scannedCodes, setScannedCodes] = useState([]);
-  const [successfulScan, setSuccessfulScan] = useState(null);
-
   const [lastScan, setLastScan] = useState(null);
 
   const handleActionChange = e => {
@@ -56,7 +54,7 @@ const Scan = ({ profile }) => {
       const scanData = await scanRequest.json();
       // Invalid/unsuccessful scan, let's display that to the user
       setLastScan({
-        message: scanData.invalid,
+        message: scanData.err,
         isSuccess: false
       });
     }
@@ -79,47 +77,39 @@ const Scan = ({ profile }) => {
   return (
     <>
       <Head title="HackSC Odyssey - Scan" />
-      <Container>
-        <ScanTitle>Scan Codes</ScanTitle>
+      <PageContainer>
+        <ActionBar>
+          <h1>Scan Codes</h1>
 
-        <br />
+          <h2>Select Action</h2>
+          <Form>
+            <Select
+              name="shirt-size"
+              options={[
+                {
+                  label: "HackSC Check In",
+                  value: "initial-check-in"
+                },
+                {
+                  label: "React Workshop Attendance",
+                  value: "react-check-in"
+                }
+              ]}
+              onChange={handleActionChange}
+              required
+            />
+          </Form>
+        </ActionBar>
 
-        <h2>Select Action</h2>
-        <Form>
-          <Select
-            name="shirt-size"
-            options={[
-              {
-                label: "HackSC Check In",
-                value: "initial-check-in"
-              },
-              {
-                label: "React Workshop Attendance",
-                value: "react-check-in"
-              }
-            ]}
-            onChange={handleActionChange}
-            required
-          />
-
-          <Flex direction="column">
-            <ScanContainer>
-              {!!action && (
-                <Scanner
-                  handleScannedCode={handleScannedCode}
-                  lastScan={lastScan}
-                />
-              )}
-            </ScanContainer>
-
-            <HistoryContainer>
-              {scannedCodes.map((code, index) => (
-                <ScannedCode key={code + index}>{code}</ScannedCode>
-              ))}
-            </HistoryContainer>
-          </Flex>
-        </Form>
-      </Container>
+        <ScanContainer>
+          {!!action && (
+            <Scanner
+              handleScannedCode={handleScannedCode}
+              lastScan={lastScan}
+            />
+          )}
+        </ScanContainer>
+      </PageContainer>
     </>
   );
 };
@@ -139,23 +129,22 @@ Scan.getInitialProps = async ctx => {
   };
 };
 
-const ScanTitle = styled.h1`
-  padding-top: 32px;
+const PageContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  position: fixed;
+  width: 100vw;
+  height: 100vh;
+`;
+
+const ActionBar = styled.div`
+  background: ${({ theme }) => theme.colors.gray5};
+  padding: 24px;
 `;
 
 const ScanContainer = styled.div`
   flex-grow: 1;
-  margin-top: 30px;
-`;
-
-const HistoryContainer = styled.div`
-  margin-top: 16px;
-`;
-
-const ScannedCode = styled.p`
-  padding-bottom: 15px;
-  margin-bottom: 12px;
-  border-bottom: 1px solid #ededed;
+  background: #1d1d1d;
 `;
 
 export default Scan;
