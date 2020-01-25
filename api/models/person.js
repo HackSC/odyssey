@@ -12,6 +12,7 @@ module.exports = (sequelize, DataTypes) => {
   Person.associate = function(models) {
     Person.belongsTo(models.House, { foreignKey: "houseId" });
     Person.belongsTo(models.ProjectTeam);
+    Person.hasMany(models.Contribution, { foreignKey: "personId" });
   };
 
   return Person;

@@ -1,7 +1,7 @@
 const faker = require("faker");
 const models = require("../../api/models");
 
-const data = async (props = {}) => {
+const data = (props = {}) => {
   const defaultProps = {
     gender: "male",
     userId: faker.random.uuid(),
@@ -32,7 +32,7 @@ const data = async (props = {}) => {
     codeOfConduct: true,
     authorize: true,
     marketing: "",
-    promoCode: "",
+    promoCode: faker.random.uuid(),
     travelOrigin: "",
     travelMethod: "",
     shirtSize: "",
@@ -46,8 +46,9 @@ const data = async (props = {}) => {
   return { ...defaultProps, ...props };
 };
 
-const personFactory = async (props = {}) => {
-  return models.HackerProfile.create(await data(props));
+const hackerProfileFactory = (props = {}) => {
+  console.log("Creating HP", props);
+  return models.HackerProfile.create(data(props));
 };
 
-module.exports = personFactory;
+module.exports = hackerProfileFactory;
