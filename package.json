@@ -6,15 +6,17 @@
     "dev": "node << babel server.js",
     "build": "next build",
     "start": "node server.js",
+    "watch": "babel-watch -x .next server.js",
     "cli": "node tasks/cli.js",
     "cypress:open": "cypress open",
     "cypress:run": "cypress run",
     "E2ETest": "start-server-and-test start http://localhost:3000 cypress:run",
-    "test": "start-server-and-test start http://localhost:3000 cypress:run"
+    "test": "start-server-and-test start http://localhost:3000 cypress:run",
+    "jest": "jest"
   },
   "jest": {
-    "testPathIgnorePatterns": [
-      "integration/*"
+    "roots": [
+      "./tests/"
     ]
   },
   "dependencies": {
@@ -23,7 +25,7 @@
     "@sendgrid/client": "^6.4.0",
     "@sentry/browser": "^5.7.1",
     "@sentry/node": "^5.7.1",
-    "@types/styled-components": "^4.1.19",
+    "@types/styled-components": "^4.4.2",
     "@zeit/next-css": "^1.0.1",
     "art": "^0.10.3",
     "auth0-js": "^9.11.3",
@@ -38,11 +40,13 @@
     "express": "^4.17.1",
     "express-fileupload": "^1.1.6-alpha.6",
     "express-session": "^1.17.0",
+    "faker": "^4.1.0",
     "inquirer": "^7.0.3",
     "interactjs": "^1.8.2",
     "isomorphic-unfetch": "^3.0.0",
     "js-cookie": "^2.2.1",
     "moment": "^2.24.0",
+    "jsqr": "^1.2.0",
     "mysql": "^2.17.1",
     "mysql2": "^1.7.0",
     "next": "^9.1.1",
@@ -64,7 +68,7 @@
     "sequelize": "^5.21.1",
     "simplex-noise": "^2.4.0",
     "start-server-and-test": "^1.10.6",
-    "styled-components": "^4.4.0",
+    "styled-components": "^5.0.0",
     "styled-reset": "^4.0.2",
     "three": "0.105.0",
     "wait-on": "^3.3.0"
@@ -79,15 +83,17 @@
     "babel-jest": "^24.9.0",
     "babel-plugin-add-module-exports": "^1.0.2",
     "babel-plugin-styled-components": "^1.10.6",
+    "babel-watch": "^7.0.0",
     "enzyme": "^3.10.0",
     "enzyme-adapter-react-16": "^1.14.0",
     "husky": "^3.0.9",
-    "jest": "^24.9.0",
+    "jest": "^25.1.0",
     "prettier": "^1.18.2",
     "pretty-quick": "^2.0.0",
     "react-addons-test-utils": "^15.6.2",
     "react-test-renderer": "^16.9.0",
     "sequelize-cli": "^5.5.1",
+    "supertest": "^4.0.2",
     "ts-loader": "^6.1.2",
     "typescript": "^3.6.3"
   },

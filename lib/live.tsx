@@ -39,4 +39,52 @@ async function updateTask(updatedTask) {
   return result.status === 200;
 }
 
-export { getCurrentTasks, saveTask, updateTask };
+async function getHouses(req) {
+  const urlRoute = req
+    ? /* Serverside */ process.env.URL_BASE + "api/person/houses"
+    : /* Client */ "/api/person/houses";
+
+  const result = await fetch(
+    urlRoute,
+    req
+      ? {
+          headers: req.headers
+        }
+      : null
+  );
+  return await result.json();
+}
+// Should be of the form
+// { name: name, color: #..... }
+async function createHouse(houseObj) {
+  const urlRoute = "/api/person/houses/";
+  const result = await fetch(urlRoute, {
+    method: "POST",
+    headers: {
+      "content-type": "application/json"
+    },
+    body: JSON.stringify(houseObj)
+  });
+  return result.status === 200;
+}
+
+async function updateHouse(houseObj) {
+  const urlRoute = "/api/person/houses/";
+  const result = await fetch(urlRoute, {
+    method: "PUT",
+    headers: {
+      "content-type": "application/json"
+    },
+    body: JSON.stringify(houseObj)
+  });
+  return result.status === 200;
+}
+
+export {
+  getCurrentTasks,
+  saveTask,
+  updateTask,
+  getHouses,
+  createHouse,
+  updateHouse
+};

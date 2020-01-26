@@ -13,6 +13,28 @@ var secured = function(req, res, next) {
   res.redirect("/");
 };
 
+router.get("/devlogin", function(req, res) {
+  //Block in prod
+  if (process.env.NODE_ENV == "production") {
+    return res.redirect("/");
+  }
+
+  req.logout();
+  const { id, role } = req.query;
+  const user = {
+    id,
+    role,
+    _json: { email: "", email_verified: true }
+  };
+
+  req.logIn(user, function(err) {
+    if (err) {
+      res.status(400).send(err);
+    }
+    res.json(user);
+  });
+});
+
 router.get(
   "/login",
   passport.authenticate("auth0", {
