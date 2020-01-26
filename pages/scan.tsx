@@ -35,7 +35,8 @@ const Scan = ({ profile }) => {
       method: "POST",
       body: JSON.stringify({
         userId: code,
-        actionId: "checkin"
+        actionId: action === "checkin" ? "checkin" : "contrib",
+        taskId: action !== "checkin" ? action : null
       }),
       headers: {
         "Content-Type": "application/json"
@@ -61,11 +62,11 @@ const Scan = ({ profile }) => {
 
   const handleScannedCode = useCallback(
     (code: string) => {
+      const codeWithAction = `${action} -- ${code}`;
       setScannedCodes(prev => {
-        if (!prev.includes(code)) {
+        if (!prev.includes(codeWithAction)) {
           sendScanRequest(code);
-          console.log(action);
-          return [...prev, code];
+          return [...prev, codeWithAction];
         } else {
           return [...prev];
         }
