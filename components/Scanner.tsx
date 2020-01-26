@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useCallback } from "react";
 import styled from "styled-components";
 
 import jsQR from "jsqr";
@@ -25,7 +25,7 @@ const Scanner = (props: any) => {
     canvas.stroke();
   };
 
-  const animate = () => {
+  const animate = useCallback(() => {
     const video = videoRef.current;
 
     if (video.readyState === video.HAVE_ENOUGH_DATA && canvasRef.current) {
@@ -74,8 +74,8 @@ const Scanner = (props: any) => {
       }
     }
 
-    requestAnimationFrame(animate);
-  };
+    animationFrame.current = requestAnimationFrame(animate);
+  }, [props.action]);
 
   useEffect(() => {
     if (canvasRef.current !== null) {
@@ -94,7 +94,7 @@ const Scanner = (props: any) => {
 
       return () => cancelAnimationFrame(animationFrame.current);
     }
-  }, []);
+  }, [props.action]);
 
   return (
     <ScannerContainer>
