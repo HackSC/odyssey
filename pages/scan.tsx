@@ -147,6 +147,8 @@ const ActionBar = styled.div`
 const ScanContainer = styled.div`
   flex-grow: 1;
   background: #1d1d1d;
+  display: flex;
+  align-items: center;
 `;
 
 export default Scan;

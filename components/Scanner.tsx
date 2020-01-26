@@ -97,7 +97,7 @@ const Scanner = (props: any) => {
   }, [props.action]);
 
   return (
-    <ScannerContainer>
+    <>
       <ScannerCanvas ref={canvasRef} />
       {props.lastScan && (
         <ScannerMessage success={props.lastScan.isSuccess}>
@@ -108,18 +108,12 @@ const Scanner = (props: any) => {
           </p>
         </ScannerMessage>
       )}
-    </ScannerContainer>
+    </>
   );
 };
 
-const ScannerContainer = styled.div`
-  position: relative;
-  height: 100%;
-`;
-
 const ScannerCanvas = styled.canvas`
   width: 100%;
-  height: 100%;
   display: block;
   margin-left: auto;
   margin-right: auto;
