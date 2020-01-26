@@ -6,6 +6,7 @@ import LinkScroll from "../LinkScroll";
 import { Flex, Column } from "../../styles";
 import HouseLogo from "../../assets/hackscFox.png";
 import Announcements from "../announcements/Announcements";
+import Calendar from "../Calendar";
 
 type Props = {
   profile: Profile;
@@ -62,6 +63,9 @@ const CheckedIn: React.FunctionComponent<Props> = props => {
         <MarginedColumn flexBasis={35}>
           <Announcements />
         </MarginedColumn>
+      </Flex>
+      <Flex tabletVertical>
+        <Calendar />
       </Flex>
       <Flex justify="space-between" tabletVertical>
         <MarginedColumn flexBasis={35}>

@@ -39,7 +39,7 @@ const AnnouncementsFade = styled.div`
   background-image: linear-gradient(
     to bottom,
     rgba(255, 255, 255, 0),
-    white 90%
+    #f6f6f6 90%
   );
   width: 100%;
   height: 4rem;
