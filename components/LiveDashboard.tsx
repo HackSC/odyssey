@@ -9,15 +9,16 @@ import CheckedIn from "./steps/CheckedIn";
 type Props = {
   profile: Profile;
   socialPosts: any;
+  houses: any;
 };
 
 const LiveStep: React.FunctionComponent<Props> = props => {
-  const { profile, socialPosts } = props;
+  const { profile, socialPosts, houses } = props;
 
   if (profile.status === "confirmed") {
     return <Confirmed profile={profile} />;
   } else if (profile.status === "checkedIn") {
-    return <CheckedIn profile={profile} />;
+    return <CheckedIn houses={houses} profile={profile} />;
   } else {
     return <Step profile={profile} socialPosts={socialPosts} />;
   }

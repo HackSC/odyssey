@@ -8,13 +8,15 @@ import HouseLogo from "../../assets/hackscFox.png";
 import Announcements from "../announcements/Announcements";
 import Calendar from "../Calendar";
 
-type Props = {
+interface Props {
   profile: Profile;
-};
+  houses: any;
+}
 
 const CheckedIn: React.FunctionComponent<Props> = props => {
-  const { profile } = props;
+  const { profile, houses } = props;
 
+  console.log(houses);
   return (
     <>
       <Flex justify="space-between" tabletVertical>
