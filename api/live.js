@@ -176,9 +176,7 @@ router.post("/dispatch", async (req, res) => {
 async function handleContrib(userId, req, res) {
   const input = req.body;
 
-  const profile = await models.HackerProfile.findOne({
-    where: { userId: userId }
-  });
+  const profile = await models.HackerProfile.findByPk(userId);
 
   if (!input.taskId) {
     return res.status(400).json({ message: "Invalid request" });
@@ -224,9 +222,8 @@ async function handleEmailContrib(userEmail, req, res) {
 
 async function handleCheckin(userId, req, res) {
   try {
-    const profile = await models.HackerProfile.findOne({
-      where: { userId: userId }
-    });
+    const profile = await models.HackerProfile.findByPk(userId);
+
     const profileStatus = profile.get("status");
     const invalidStatuses = [
       "unverified",
@@ -237,11 +234,9 @@ async function handleCheckin(userId, req, res) {
     ];
 
     if (invalidStatuses.includes(profileStatus)) {
-      return res
-        .status(400)
-        .json({
-          message: `${profile.firstName} ${profile.lastName} has status ${profileStatus}`
-        });
+      return res.status(400).json({
+        message: `${profile.firstName} ${profile.lastName} has status ${profileStatus}`
+      });
     }
 
     const result = await models.House.findAll({
