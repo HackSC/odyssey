@@ -49,9 +49,9 @@ const Admin = ({ profile }) => {
             <Action href="/houseManager">
               <ActionTitle> Manage Houses </ActionTitle>
             </Action>
-            <action href="/judgingmanager">
-              <actiontitle> pass judgement </actiontitle>
-            </action>
+            <Action href="/judgingManager">
+              <ActionTitle> Pass Judgement </ActionTitle>
+            </Action>
           </Actions>
         </Container>
       </Background>
