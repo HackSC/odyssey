@@ -10,6 +10,53 @@ const Sentry = require("@sentry/node");
 router.use(utils.authMiddleware);
 router.use(utils.requireNonHacker);
 
+router.get("/battlepass", async (req, res) => {
+  return res.json([
+    {
+      id: "5e29283758c29d352b47dd41",
+      isPremium: true,
+      pointValue: 38,
+      prizeName: "socks"
+    },
+    {
+      id: "5e2928376468ef47d5d4ac3b",
+      isPremium: true,
+      pointValue: 39,
+      prizeName: "socks"
+    },
+    {
+      id: "5e292837285ac2542f28eda9",
+      isPremium: true,
+      pointValue: 23,
+      prizeName: "socks"
+    },
+    {
+      id: "5e2928377f9e491c5bfd71ae",
+      isPremium: false,
+      pointValue: 30,
+      prizeName: "Supreme Brick"
+    },
+    {
+      id: "5e29283727dd79a7ae8f690a",
+      isPremium: true,
+      pointValue: 22,
+      prizeName: "Supreme Brick"
+    },
+    {
+      id: "5e292837493dc9bae67b6495",
+      isPremium: false,
+      pointValue: 23,
+      prizeName: "shoes"
+    },
+    {
+      id: "5e2928373ae0bf5885169106",
+      isPremium: false,
+      pointValue: 37,
+      prizeName: "hat"
+    }
+  ]);
+});
+
 router.get("/personInfo", async (req, res) => {
   try {
     const contribs = await models.Contribution.findAll({
@@ -41,6 +88,38 @@ router.get("/tasks", async (req, res) => {
   }
 });
 
+router.get("/houseInfo/:id", async (req, res) => {
+  const houseId = req.params.id;
+  try {
+    const house = await models.House.findOne({
+      where: {
+        id: houseId
+      },
+      include: [
+        {
+          model: models.Person,
+          include: [
+            {
+              model: models.Contribution,
+              include: [
+                {
+                  model: models.Task,
+                  attributes: ["points"],
+                  required: false
+                }
+              ],
+              required: false
+            }
+          ],
+          required: false
+        }
+      ]
+    });
+    return res.json({ house });
+  } catch (e) {
+    return res.json({ err: e.message });
+  }
+});
 router.get("/houseInfo", async (req, res) => {
   try {
     const houses = await models.House.findAll({
@@ -73,7 +152,8 @@ router.get("/houseInfo", async (req, res) => {
 const actions = {
   CHECKIN: "checkin",
   CONTRIB: "contrib",
-  GROUP_CONTRIB: "groupContrib"
+  GROUP_CONTRIB: "groupContrib",
+  EMAIL_CONTRIB: "emailContrib"
 };
 
 router.post("/dispatch", async (req, res) => {
@@ -87,6 +167,8 @@ router.post("/dispatch", async (req, res) => {
       return await handleContrib(userId, req, res);
     case actions.GROUP_CONTRIB:
       return await handleGroupContrib(userId, req, res);
+    case actions.EMAIL_CONTRIB:
+      return await handleEmailContrib(userId, req, res);
   }
 });
 
@@ -144,6 +226,30 @@ async function handleContrib(userId, req, res) {
         personId: userId,
         taskId: input.taskId
       }).save();
+      return res.json({ contribution: result });
+    } catch (e) {
+      return res.status(500).json({ error: e.message });
+    }
+  }
+}
+
+async function handleEmailContrib(userEmail, req, res) {
+  const input = req.body;
+  if (!input.taskId) {
+    return res.status(400).json({ err: "Requires specified taskId" });
+  } else {
+    try {
+      // Try to find a model by email
+      const profile = await models.HackerProfile.findOne({
+        where: {
+          email: userEmail
+        }
+      });
+      const userId = profile.get("userId");
+      const result = await models.Contribution.create({
+        personId: userId,
+        taskId: input.taskId
+      });
       return res.json({ contribution: result });
     } catch (e) {
       return res.status(500).json({ error: e.message });
