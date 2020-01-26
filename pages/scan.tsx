@@ -47,14 +47,14 @@ const Scan = ({ profile }) => {
       const scanData = await scanRequest.json();
       // Successful scan, let's display that to the user
       setLastScan({
-        message: scanData.profile.firstName + " " + scanData.profile.lastName,
+        message: scanData.message,
         isSuccess: true
       });
     } else {
       const scanData = await scanRequest.json();
       // Invalid/unsuccessful scan, let's display that to the user
       setLastScan({
-        message: scanData.err,
+        message: scanData.message,
         isSuccess: false
       });
     }
