@@ -112,7 +112,6 @@ async function deleteEvent(event) {
     method: "DELETE"
   });
   return result.status === 200;
-  return false;
 }
 
 export {

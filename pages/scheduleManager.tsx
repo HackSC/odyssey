@@ -12,8 +12,6 @@ import { Button } from "../styles";
 
 import Step from "../components/steps/Results";
 
-function renderTask(task, updateTaskSet, setUpdateTaskSet) {}
-
 const EditableCell = ({ event }) => {
   const [currEvent, setCurrEvent] = useState(event);
   console.log(event);
