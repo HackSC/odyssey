@@ -1,12 +1,26 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 
 import Head from "../components/Head";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import { Background, Container, Flex, Column } from "../styles";
+import ButtonWithTextForm from "../components/ButtonWithTextForm";
+import { useToasts } from "react-toast-notifications";
 
-const ProjectTeam = ({ team }) => {
+const ProjectTeam = props => {
+  const [team, setTeam] = useState(props.team);
+  const { addToast } = useToasts();
+  const handleJoinProjectTeam = code => {
+    const res = fetch("/api/projectTeam/join/" + code)
+      .then(res => {
+        setTeam(res.json());
+      })
+      .catch(e => {
+        addToast("Failed to join team: " + code, { appearance: "error" });
+      });
+  };
+
   return (
     <>
       <Head title="HackSC Odyssey - Team Setup" />
@@ -21,11 +35,17 @@ const ProjectTeam = ({ team }) => {
             name and send out your team's code to potential team mates.
           </p>
           <NoTeamFlex direction="row" tabletVertical justify="space-between">
-            <Column flexBasis={48}>Join Team</Column>
+            <Column flexBasis={48}>
+              <ButtonWithTextForm
+                title="Join Team"
+                label="Enter your team code"
+                buttonText="Join"
+                onSubmit={handleJoinProjectTeam}
+              />
+            </Column>
 
             <Column flexBasis={48}>Create Team</Column>
           </NoTeamFlex>
-          )}
         </Container>
       </Background>
       <Footer />
