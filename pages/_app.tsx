@@ -43,7 +43,7 @@ class OdysseyApp extends App {
 
     return (
       <ThemeProvider theme={Theme}>
-        <ToastProvider>
+        <ToastProvider autoDismiss={true} autoDismissTimeout={3000}>
           <>
             <GlobalStyles />
             <Component {...pageProps} />
