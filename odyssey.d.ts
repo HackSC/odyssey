@@ -80,3 +80,15 @@ declare type QueryParamValues = {
 declare type CookieValues = {
   referrerCode?: string;
 };
+
+declare type Person = {};
+
+declare type Prize = {};
+
+declare type ProjectTeam = {
+  name: string;
+  devpostLink: string;
+  githubLink: string;
+  Persons: Persons[];
+  Prizes: Prize[];
+};
