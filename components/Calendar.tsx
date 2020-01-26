@@ -161,7 +161,6 @@ const Calendar: React.FunctionComponent<Props> = props => {
             paddingTop: "10px"
           }}
           intervalRenderer={({ getIntervalProps, intervalContext }) => {
-            console.log(intervalContext);
             return (
               <div {...getIntervalProps()}>{intervalContext.intervalText}</div>
             );
@@ -178,7 +177,6 @@ const Calendar: React.FunctionComponent<Props> = props => {
             paddingTop: "5px"
           }}
           intervalRenderer={({ getIntervalProps, intervalContext }) => {
-            console.log(intervalContext);
             return (
               <div {...getIntervalProps()}>{intervalContext.intervalText}</div>
             );

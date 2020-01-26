@@ -15,6 +15,7 @@ type Props = {
 const CheckedIn: React.FunctionComponent<Props> = props => {
   const { profile } = props;
 
+  console.log(profile);
   return (
     <>
       <Flex justify="space-between" tabletVertical>
