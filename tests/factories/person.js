@@ -1,6 +1,6 @@
 const models = require("../../api/models");
 
-const data = async (props = {}) => {
+const data = (props = {}) => {
   const defaultProps = {
     identityId: "",
     isBattlepassComplete: false
@@ -8,8 +8,9 @@ const data = async (props = {}) => {
   return { ...defaultProps, ...props };
 };
 
-const personFactory = async (props = {}) => {
-  return models.Person.create(await data(props));
+const personFactory = (props = {}) => {
+  console.log("Creating Person", props);
+  return models.Person.create(data(props));
 };
 
 module.exports = personFactory;
