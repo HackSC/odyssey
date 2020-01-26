@@ -80,11 +80,51 @@ async function updateHouse(houseObj) {
   return result.status === 200;
 }
 
+// getCurrentUnlockables, saveUnlockable, updateUnlockable
+
+async function getCurrentUnlockables(req) {
+  const urlRoute = req
+    ? /* Serverside */ process.env.URL_BASE + "api/unlockable"
+    : /* Client */ "api/unlockable";
+
+  const result = await fetch(
+    urlRoute,
+    req
+      ? {
+          headers: req.headers
+        }
+      : null
+  );
+  return await result.json();
+}
+
+async function saveUnlockable(newUnlockable) {
+  const urlRoute = "/api/unlockable";
+  const result = await fetch(urlRoute, {
+    method: "POST",
+    headers: { "content-type": "application/json" },
+    body: JSON.stringify(newUnlockable)
+  });
+  return result.status === 200;
+}
+async function updateUnlockable(updatedUnlockable) {
+  const urlRoute = "/api/unlockable";
+  const result = await fetch(urlRoute, {
+    method: "PUT",
+    headers: { "content-type": "application/json" },
+    body: JSON.stringify(updatedUnlockable)
+  });
+  return result.status === 200;
+}
+
 export {
   getCurrentTasks,
   saveTask,
   updateTask,
   getHouses,
   createHouse,
-  updateHouse
+  updateHouse,
+  getCurrentUnlockables,
+  saveUnlockable,
+  updateUnlockable
 };
