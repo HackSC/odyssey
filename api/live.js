@@ -118,13 +118,15 @@ async function handleGroupContrib(userId, req, res) {
     });
     const teammates = result.get("ProjectTeam").get("People");
     const taskId = req.body.taskId;
-    for (var i = 0; i < teammates.length; ++i) {
-      const tmId = teammates[i].dataValues.identityId;
-      await models.Contribution.create({
+    const teammateContribs = teammates.map(tm => {
+      const tmId = tm.dataValues.identityId;
+      return models.Contribution.create({
         personId: tmId,
         taskId: taskId
       });
-    }
+    });
+
+    await Promise.all(teammateContribs);
     return res.json({ teammates });
   } catch (e) {
     return res.status(400).json({ err: e.message });
