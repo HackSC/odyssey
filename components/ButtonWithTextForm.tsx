@@ -7,6 +7,7 @@ const ButtonWithTextForm = ({ title, label, onSubmit, buttonText }) => {
   const [text, setText] = useState("");
 
   const handleChange = e => {
+    e.preventDefault();
     setText(e.target.value);
   };
 
@@ -23,7 +24,14 @@ const ButtonWithTextForm = ({ title, label, onSubmit, buttonText }) => {
             required
             onChange={handleChange}
           />
-          <Button onClick={() => onSubmit(text)}>{buttonText}</Button>
+          <Button
+            onClick={e => {
+              e.preventDefault();
+              onSubmit(text);
+              setText("");
+            }}>
+            {buttonText}
+          </Button>
         </InputFlex>
       </FormGroup>
     </Form>
