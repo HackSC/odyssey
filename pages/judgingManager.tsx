@@ -16,41 +16,37 @@ import styled from "styled-components";
 import { Background, Container, Button, Flex, Column } from "../styles";
 
 const judgingManager = ({}) => {
-  const [uploaded, setUploaded] = useState(false)
-  const [message, setMessage] = useState("")
+  const [uploaded, setUploaded] = useState(false);
+  const [message, setMessage] = useState("");
 
   // control vars
-  const [currTable, setCurrTable] = useState(["", 0])
-  const [tables, setTables] = useState({})
-  const [projects, setProjects] = useState([])
-  const [sponsors, setSponsors] = useState([])
-  const [verticalJudges, setVerticalJudges] = useState({})
+  const [currTable, setCurrTable] = useState(["", 0]);
+  const [tables, setTables] = useState({});
+  const [projects, setProjects] = useState([]);
+  const [sponsors, setSponsors] = useState([]);
+  const [verticalJudges, setVerticalJudges] = useState({});
 
   const tablesBlocks = Object.keys(tables).map(table => {
-    return (  
+    return (
       <Cell>
         <Column>
-        <SmallCell>
-            {table}
-          </SmallCell>
-          <SmallCell>
-            {tables[table]}
-          </SmallCell>
+          <SmallCell>{table}</SmallCell>
+          <SmallCell>{tables[table]}</SmallCell>
           <Button
             onClick={e => {
-              delete tables[table]
-              setTables(tables)
+              delete tables[table];
+              setTables(tables);
               // hacky but it refreshes
-              setCurrTable([currTable[0], currTable[1]])
-              assignTables()
+              setCurrTable([currTable[0], currTable[1]]);
+              assignTables();
             }}
           >
             X
           </Button>
         </Column>
       </Cell>
-    )
-  })
+    );
+  });
 
   const verticalsBlocks = Object.keys(verticalJudges).map(vertical => {
     return (
@@ -63,23 +59,21 @@ const judgingManager = ({}) => {
           <Input
             type="number"
             onChange={e => {
-              let temp_verticalJudges = verticalJudges
-              temp_verticalJudges[vertical] = Number(e.target.value)
-              setVerticalJudges(temp_verticalJudges)
+              let temp_verticalJudges = verticalJudges;
+              temp_verticalJudges[vertical] = Number(e.target.value);
+              setVerticalJudges(temp_verticalJudges);
             }}
           />
         </Column>
       </Flex>
-    )
+    );
   });
 
   const sponsorsBlocks = sponsors.map(sponsor => {
-    return (
-      <p>{sponsor}</p>
-    )
-  }); 
-  
-  const handleUpload = function(event){
+    return <p>{sponsor}</p>;
+  });
+
+  const handleUpload = function(event) {
     // Check null
     if (event.target.files.length < 1) {
       return;
@@ -92,48 +86,48 @@ const judgingManager = ({}) => {
       return;
     }
 
-    setMessage("Uploading csv...")
+    setMessage("Uploading csv...");
 
     let reader = new FileReader();
-    let working_projects: Array<Project>
+    let working_projects: Array<Project>;
 
     // Read the file and attempt to upload
-    reader.onloadend = async function () {
+    reader.onloadend = async function() {
       // upload
       try {
-        setMessage("")
-        working_projects = await readCSV(reader.result)
-        setMessage("Successfully uploaded and parsed file!")
+        setMessage("");
+        working_projects = await readCSV(reader.result);
+        setMessage("Successfully uploaded and parsed file!");
       } catch (err) {
-        setMessage(err.message)
+        setMessage(err.message);
       }
 
       // populate
-      let verticals_obj = {}
-      let sponsors_list = new Set()
+      let verticals_obj = {};
+      let sponsors_list = new Set();
       for (let i = 0; i < working_projects.length; i++) {
         if (working_projects[i].vertical != "") {
           verticals_obj[working_projects[i].vertical.toString()] = 0;
         }
         for (let j = 0; j < working_projects[i].desiredPrizes.length; j++) {
           if (working_projects[i].desiredPrizes[j] != "") {
-            sponsors_list.add(working_projects[i].desiredPrizes[j])
+            sponsors_list.add(working_projects[i].desiredPrizes[j]);
           }
         }
       }
-      setProjects(working_projects)
-      setSponsors(Array.from(sponsors_list))
-      setVerticalJudges(verticals_obj)
+      setProjects(working_projects);
+      setSponsors(Array.from(sponsors_list));
+      setVerticalJudges(verticals_obj);
 
-      setUploaded(true)
+      setUploaded(true);
     };
 
-    reader.onerror = function () {
-      setMessage("Error reading file. Please select a different file.")
+    reader.onerror = function() {
+      setMessage("Error reading file. Please select a different file.");
     };
 
     reader.readAsText(file);
-  }
+  };
 
   class Profile {
     screenName: String;
@@ -150,55 +144,55 @@ const judgingManager = ({}) => {
     plainDescription: String;
     video: String;
     website: String;
-    fileUrl : String;
-    desiredPrizes : Array<String>;
-    builtWith : Array<String>;
+    fileUrl: String;
+    desiredPrizes: Array<String>;
+    builtWith: Array<String>;
     vertical: String;
     phone: String;
-    submitter : Profile;
+    submitter: Profile;
     schools: Array<String>;
     teammates: Array<Profile>;
     table: String;
   }
 
-  const parseCSV = async function (data): Promise<Array<String>>{
-    return new Promise(function(resolve, reject){
+  const parseCSV = async function(data): Promise<Array<String>> {
+    return new Promise(function(resolve, reject) {
       let output = [];
 
       let parser = parse({
         delimiter: ",",
-        relax_column_count: true,
+        relax_column_count: true
       });
 
-      parser.on("readable", function () {
+      parser.on("readable", function() {
         let record;
-        while (record = parser.read()) {
-          output.push(record)
+        while ((record = parser.read())) {
+          output.push(record);
         }
       });
 
-      parser.on("error", function (err) {
-        reject(new Error(err.message))
+      parser.on("error", function(err) {
+        reject(new Error(err.message));
       });
 
-      parser.on("end", function () {
-        resolve(output)
+      parser.on("end", function() {
+        resolve(output);
       });
 
       parser.write(data.trim());
 
-      parser.end()
+      parser.end();
     });
-  }
+  };
 
   const readCSV = async function(data): Promise<Array<Project>> {
-    let working_projects = []
-    let output: Array<String>
-    
+    let working_projects = [];
+    let output: Array<String>;
+
     try {
-      output = await parseCSV(data)
+      output = await parseCSV(data);
     } catch (err) {
-      throw err
+      throw err;
     }
 
     // remove first item the header
@@ -215,7 +209,10 @@ const judgingManager = ({}) => {
       p.video = val[5];
       p.website = val[6];
       p.fileUrl = val[7];
-      p.desiredPrizes = val[8].split(",").map(v => v.trim()).slice(0, 6);
+      p.desiredPrizes = val[8]
+        .split(",")
+        .map(v => v.trim())
+        .slice(0, 6);
       p.builtWith = val[9].split(",").map(v => v.trim());
       p.vertical = val[10];
       p.phone = val[11];
@@ -224,7 +221,7 @@ const judgingManager = ({}) => {
         screenName: val[15],
         firstName: val[16],
         lastName: val[17],
-        email: val[18],
+        email: val[18]
       };
       p.schools = val[19].split(",").map(v => v.trim());
       p.teammates = [];
@@ -236,141 +233,143 @@ const judgingManager = ({}) => {
           screenName: val[20 + index + 1],
           firstName: val[20 + index + 2],
           lastName: val[20 + index + 3],
-          email: val[20 + index + 4],
+          email: val[20 + index + 4]
         });
       }
-      p.table = ""
+      p.table = "";
 
-      working_projects.push(p)
+      working_projects.push(p);
     }
 
-    return working_projects
-  }
+    return working_projects;
+  };
 
-  const genProjectsCSV = async function (header, values, filters={}, split=1): Promise<Array<Array<String>>> {
+  const genProjectsCSV = async function(
+    header,
+    values,
+    filters = {},
+    split = 1
+  ): Promise<Array<Array<String>>> {
     return new Promise(function(resolve, reject) {
-      let promises = []
-      split = split < 1 ? 1: split
+      let promises = [];
+      split = split < 1 ? 1 : split;
       for (let splitCount = 0; splitCount < split; splitCount++) {
-        promises.push(new Promise(function(resolve, reject) {
-          let data = [];
-          let stringifier = stringify({
-            delimiter: ","
-          });
-          stringifier.on("readable", function () {
-            let row;
-            while (row = stringifier.read()) {
-              data.push(row)
-            }
-          });
-          stringifier.on("error", function (err) {
-            reject(new Error(err.message))
-          });
-          stringifier.write(header);
-          stringifier.on("finish", function () {
-            resolve(data)
-          });
-          // read projects sorry hella ugly
-          let projectCount = 0;
-          for (let i = 0; i < projects.length; i++) {
-            let project = projects[i]
-            let passFilter = true
-            Object.entries(filters).forEach(([key, value]) => {
-              if (Array.isArray(project[key])) {
-                if (!project[key].includes(value)) {
-                  passFilter = false
-                }
-              } else if (project[key] != value) {
-                passFilter = false
+        promises.push(
+          new Promise(function(resolve, reject) {
+            let data = [];
+            let stringifier = stringify({
+              delimiter: ","
+            });
+            stringifier.on("readable", function() {
+              let row;
+              while ((row = stringifier.read())) {
+                data.push(row);
               }
             });
-            if (passFilter) {
-              projectCount++;
-              let passSplit = false
-              if ((projectCount % split) === splitCount) {
-                passSplit = true
-              }
-              if (passSplit) {
-                let line = []
-                for (let j = 0; j < values.length; j++) {
-                  let value = values[j].split(".")
-                  if (value.length > 1) {
-                    line.push(project[value[0]][value[1]])
-                  } else {
-                    line.push(project[value[0]])
+            stringifier.on("error", function(err) {
+              reject(new Error(err.message));
+            });
+            stringifier.write(header);
+            stringifier.on("finish", function() {
+              resolve(data);
+            });
+            // read projects sorry hella ugly
+            let projectCount = 0;
+            for (let i = 0; i < projects.length; i++) {
+              let project = projects[i];
+              let passFilter = true;
+              Object.entries(filters).forEach(([key, value]) => {
+                if (Array.isArray(project[key])) {
+                  if (!project[key].includes(value)) {
+                    passFilter = false;
                   }
+                } else if (project[key] != value) {
+                  passFilter = false;
                 }
-                stringifier.write(line);
+              });
+              if (passFilter) {
+                projectCount++;
+                let passSplit = false;
+                if (projectCount % split === splitCount) {
+                  passSplit = true;
+                }
+                if (passSplit) {
+                  let line = [];
+                  for (let j = 0; j < values.length; j++) {
+                    let value = values[j].split(".");
+                    if (value.length > 1) {
+                      line.push(project[value[0]][value[1]]);
+                    } else {
+                      line.push(project[value[0]]);
+                    }
+                  }
+                  stringifier.write(line);
+                }
               }
             }
-          }
-          stringifier.end()
-        }));
+            stringifier.end();
+          })
+        );
       }
 
       // return all csvs
-      Promise.all(promises).then(resolve).catch(reject)
+      Promise.all(promises)
+        .then(resolve)
+        .catch(reject);
     });
   };
 
   const assignTables = function() {
-    let working_tables = Object.assign({}, tables)
-    let working_projects = [...projects]
+    let working_tables = Object.assign({}, tables);
+    let working_projects = [...projects];
     let count = 0;
     for (let i = 0; i < working_projects.length; i++) {
-      let assigned = false
+      let assigned = false;
       for (let table in working_tables) {
         if (working_tables[table] > 0) {
-          working_tables[table]--
-          working_projects[i].table = String(table) + String(tables[table]-working_tables[table])
-          assigned = true
-          break
+          working_tables[table]--;
+          working_projects[i].table =
+            String(table) + String(tables[table] - working_tables[table]);
+          assigned = true;
+          break;
         }
       }
       if (!assigned) {
-        count++
-        working_projects[i].table = count
+        count++;
+        working_projects[i].table = count;
       }
     }
-    setProjects(working_projects)
-  }
+    setProjects(working_projects);
+  };
 
   const exportTableAssignments = async function() {
-    setMessage("Generating Table Assignments CSV")
+    setMessage("Generating Table Assignments CSV");
 
     // run table assignments
-    assignTables()
+    assignTables();
 
-    let data: String
+    let data: String;
 
     try {
-      let headers = [
-        "Project Name",
-        "Submission Email",
-        "Table Number"
-      ]
-      let values = [
-        "submissionTitle",
-        "submitter.email",
-        "table"
-      ]
-      let csvs = await genProjectsCSV(headers, values)
-      data = csvs[0].join("")
+      let headers = ["Project Name", "Submission Email", "Table Number"];
+      let values = ["submissionTitle", "submitter.email", "table"];
+      let csvs = await genProjectsCSV(headers, values);
+      data = csvs[0].join("");
     } catch (err) {
-      setMessage(err.message)
-      return
+      setMessage(err.message);
+      return;
     }
 
-    let blob = new Blob([data.toString()], { type: "text/csv;charset=utf-8"})
-    saveAs(blob, "table_assignments.csv")
-    setMessage("")
-  }
+    let blob = new Blob([data.toString()], { type: "text/csv;charset=utf-8" });
+    saveAs(blob, "table_assignments.csv");
+    setMessage("");
+  };
 
   const exportVerticalsCSV = async function() {
-    setMessage("Generating Vertical CSV")
-    assignTables()
+    setMessage("Generating Vertical CSV");
+    assignTables();
 
-    let zip = new JSZip()
+    let zip = new JSZip();
 
     // split into vert datasets
     try {
@@ -383,101 +382,94 @@ const judgingManager = ({}) => {
         "Passion",
         "Wow Factor",
         "Total",
-        "Comments",
-      ]
-      let values = [
-        "submissionTitle",
-        "table",
-      ]
+        "Comments"
+      ];
+      let values = ["submissionTitle", "table"];
       for (let vertical in verticalJudges) {
         let filters = {
           vertical: vertical
-        }
-        let split = verticalJudges.hasOwnProperty(vertical) ? verticalJudges[vertical] : 1
-        let csvs = await genProjectsCSV(headers, values, filters, split)
+        };
+        let split = verticalJudges.hasOwnProperty(vertical)
+          ? verticalJudges[vertical]
+          : 1;
+        let csvs = await genProjectsCSV(headers, values, filters, split);
         for (let i = 0; i < csvs.length; i++) {
-          let data = csvs[i].join("")
-          zip.file(vertical.split(" ").join("_") + "_" + String(i) + "_judging.csv", data)
+          let data = csvs[i].join("");
+          zip.file(
+            vertical.split(" ").join("_") + "_" + String(i) + "_judging.csv",
+            data
+          );
         }
       }
     } catch (err) {
-      setMessage(err.message)
-      return
+      setMessage(err.message);
+      return;
     }
     // assign judges based on judges (can be teams, just print multiple times)
 
-    zip.generateAsync({type:"blob"})
-    .then(function(content) {
-      saveAs(content, "verticals_data.zip")
-      setMessage("")
-    });  
-  }
+    zip.generateAsync({ type: "blob" }).then(function(content) {
+      saveAs(content, "verticals_data.zip");
+      setMessage("");
+    });
+  };
 
   const exportSponsorsCSV = async function() {
-    setMessage("Generating Sponsor CSVs")
-    assignTables()
+    setMessage("Generating Sponsor CSVs");
+    assignTables();
 
-    let zip = new JSZip()
+    let zip = new JSZip();
 
     try {
-      let headers = [
-        "Project Name",
-        "Table",
-        "Points",
-        "Comments"
-      ]
-      let values = [
-        "submissionTitle",
-        "table",
-      ]
+      let headers = ["Project Name", "Table", "Points", "Comments"];
+      let values = ["submissionTitle", "table"];
       for (let i = 0; i < sponsors.length; i++) {
-        let sponsor = sponsors[i]
+        let sponsor = sponsors[i];
         let filters = {
           desiredPrizes: sponsor
-        }
-        let csvs = await genProjectsCSV(headers, values, filters)
-        let data = csvs[0].join("")
-        zip.file(sponsor.split(" ").join("_") + "_judging.csv", data)
+        };
+        let csvs = await genProjectsCSV(headers, values, filters);
+        let data = csvs[0].join("");
+        zip.file(sponsor.split(" ").join("_") + "_judging.csv", data);
       }
     } catch (err) {
-      setMessage(err.message)
-      return
+      setMessage(err.message);
+      return;
     }
 
-    zip.generateAsync({type:"blob"})
-    .then(function(content) {
-      saveAs(content, "sponsors_data.zip")
-      setMessage("")
-    });  
-  }
+    zip.generateAsync({ type: "blob" }).then(function(content) {
+      saveAs(content, "sponsors_data.zip");
+      setMessage("");
+    });
+  };
 
   return (
     <>
-      <Head title="HackSC Odyssey - Application"/>
-      <Navbar loggedIn admin activePage="/"/>
+      <Head title="HackSC Odyssey - Application" />
+      <Navbar loggedIn admin activePage="/" />
       <Background>
         <Container>
           <Flex direction="row" justify="space-between">
             <Column flexBasis={48}>
               <FullButton>
-                <label 
-                  htmlFor="devpost"> 
-                  Upload 
-                </label>
-                <InvisInput 
+                <label htmlFor="devpost">Upload</label>
+                <InvisInput
                   type="file"
                   id="devpost"
                   name="devpost"
-                  onChange={handleUpload}/>
+                  onChange={handleUpload}
+                />
               </FullButton>
             </Column>
             <Column flexBasis={48}>
-              <FullStyledButton onClick={exportTableAssignments} disabled={!uploaded}>
+              <FullStyledButton
+                onClick={exportTableAssignments}
+                disabled={!uploaded}
+              >
                 Export Table Assignments
               </FullStyledButton>
             </Column>
           </Flex>
-          <br/>
+          <br />
           <Flex direction="row" justify="space-between">
             <Column flexBasis={48}>
               <p>{message ? message : "Looking good!"}</p>
@@ -488,25 +480,27 @@ const judgingManager = ({}) => {
                   <TableInput
                     type="text"
                     onChange={e => {
-                      setCurrTable([e.target.value, currTable[1]])
+                      setCurrTable([e.target.value, currTable[1]]);
                     }}
                     value={currTable[0]}
                   />
                   <TableInput
                     type="number"
                     onChange={e => {
-                      setCurrTable([currTable[0], e.target.value])
+                      setCurrTable([currTable[0], e.target.value]);
                     }}
                     value={currTable[1]}
                   />
                   <Button
                     onClick={e => {
-                      let temp_tables = tables
-                      temp_tables[currTable[0]] = Math.round(Number(currTable[1]))
-                      setTables(temp_tables)
+                      let temp_tables = tables;
+                      temp_tables[currTable[0]] = Math.round(
+                        Number(currTable[1])
+                      );
+                      setTables(temp_tables);
                       // hacky but it refreshes
-                      setCurrTable([currTable[0], currTable[1]])
-                      assignTables()
+                      setCurrTable([currTable[0], currTable[1]]);
+                      assignTables();
                     }}
                   >
                     +
@@ -516,7 +510,7 @@ const judgingManager = ({}) => {
               {tablesBlocks}
             </Column>
           </Flex>
-          <br/>
+          <br />
           <Flex direction="row" justify="space-between">
             <Column flexBasis={48}>
               <h1> Verticals </h1>
@@ -530,9 +524,7 @@ const judgingManager = ({}) => {
               <Panel>
                 <h2>Number of Judges</h2>
 
-                <div id="judges-gen">
-                  {verticalsBlocks}
-                </div>
+                <div id="judges-gen">{verticalsBlocks}</div>
               </Panel>
             </Column>
 
@@ -548,9 +540,7 @@ const judgingManager = ({}) => {
               <Panel>
                 <h2> Sponsors </h2>
 
-                <div id="sponsors-gen">
-                  {sponsorsBlocks}
-                </div>
+                <div id="sponsors-gen">{sponsorsBlocks}</div>
               </Panel>
             </Column>
           </Flex>
@@ -590,8 +580,8 @@ const SmallCell = styled.div`
   min-width: 39px;
   display: inline-block;
   text-align: center;
-  font-size: 16px
-`
+  font-size: 16px;
+`;
 
 const Panel = styled.div`
   padding: 24px 36px;
