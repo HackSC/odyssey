@@ -125,7 +125,7 @@ async function handleGroupContrib(userId, req, res) {
         taskId: taskId
       });
     }
-    return res.json({ success });
+    return res.json({ teammates });
   } catch (e) {
     return res.status(400).json({ err: e.message });
   }
