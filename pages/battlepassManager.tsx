@@ -44,6 +44,8 @@ const EditableCell = ({ unlockable }) => {
               isPremium: isPremium
             });
           }}
+          //@ts-ignore
+          value={currUnlockable.isPremium ? "Premium" : "Standard"}
         >
           <option value="Premium">Premium</option>
           <option value="Standard">Standard</option>
@@ -108,6 +110,8 @@ const TaskManager = ({ profile, currentUnlockables }) => {
                   isPremium: isPremium
                 });
               }}
+              //@ts-ignore
+              value={newUnlockable.isPremium ? "Premium" : "Standard"}
             >
               <option value="Premium">Premium</option>
               <option value="Standard">Standard</option>
@@ -118,6 +122,7 @@ const TaskManager = ({ profile, currentUnlockables }) => {
             value="Create new Unlockable"
             onClick={async () => {
               const result = await saveUnlockable(newUnlockable);
+              console.log(result);
               if (result) {
                 // In theory we do optimistic local state updating, in practice, fuck it it'll do
                 window.location.reload();

@@ -84,8 +84,8 @@ async function getCurrentUnlockables(req) {
   const urlRoute = req
     ? /* Serverside */ process.env.URL_BASE + "api/unlockable"
     : /* Client */ "api/unlockable";
-    
-   const result = await fetch(
+
+  const result = await fetch(
     urlRoute,
     req
       ? {
@@ -113,11 +113,15 @@ async function getCurrentEvents(req) {
 
 async function saveUnlockable(newUnlockable) {
   const urlRoute = "/api/unlockable";
+  console.log(newUnlockable);
   const result = await fetch(urlRoute, {
     method: "POST",
     headers: { "content-type": "application/json" },
     body: JSON.stringify(newUnlockable)
   });
+  console.log(result);
+  const jsonResult = await result.json();
+  console.log(jsonResult);
   return result.status === 200;
 }
 async function updateUnlockable(updatedUnlockable) {
@@ -127,7 +131,9 @@ async function updateUnlockable(updatedUnlockable) {
     headers: { "content-type": "application/json" },
     body: JSON.stringify(updatedUnlockable)
   });
+  console.log(result);
   return result.status === 200;
+}
 
 async function saveEvent(newEvent) {
   const urlRoute = "/api/events";
@@ -157,7 +163,7 @@ export {
   updateHouse,
   getCurrentUnlockables,
   saveUnlockable,
-  updateUnlockable
+  updateUnlockable,
   getCurrentEvents,
   saveEvent,
   deleteEvent

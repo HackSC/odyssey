@@ -22,13 +22,13 @@ router.get("/", async (req, res) => {
 router.post("/", async (req, res) => {
   try {
     const unlockable = await models.Unlockable.create({
-      tier: req.body.tier,
+      tier: parseInt(req.body.tier),
       isPremium: req.body.isPremium,
-      pointThreshold: req.body.pointThreshold
+      pointThreshold: parseInt(req.body.pointThreshold)
     });
     return res.json({ unlockable });
   } catch (e) {
-    return res.json({ err: e.message });
+    return res.status(400).json({ err: e.message });
   }
 });
 
