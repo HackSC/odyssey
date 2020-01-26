@@ -96,6 +96,9 @@ router.post("/dispatch", async (req, res) => {
 
 async function handleGroupContrib(userId, req, res) {
   try {
+    if (!req.body.taskId) {
+      return res.status(400).json({ err: "Bad Request, taskId not found" });
+    }
     const result = await models.Person.findOne({
       where: {
         identityId: userId
@@ -113,7 +116,16 @@ async function handleGroupContrib(userId, req, res) {
         }
       ]
     });
-    return res.json({ result });
+    const teammates = result.get("ProjectTeam").get("People");
+    const taskId = req.body.taskId;
+    for (var i = 0; i < teammates.length; ++i) {
+      const tmId = teammates[i].dataValues.identityId;
+      await models.Contribution.create({
+        personId: tmId,
+        taskId: taskId
+      });
+    }
+    return res.json({ success });
   } catch (e) {
     return res.status(400).json({ err: e.message });
   }
@@ -185,10 +197,8 @@ async function handleCheckin(userId, req, res) {
         .json({ invalid: `User has status ${profileStatus}` });
     }
 
-    await models.HackerProfile.update(
-      { status: "checkedIn" },
-      { where: { userId: userId } }
-    );
+    profile.status = "checkedIn";
+    await profile.save();
 
     return res.json({ pointsProfile: pointsProfile });
   } catch (e) {
