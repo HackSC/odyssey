@@ -2,7 +2,7 @@ const faker = require("faker");
 
 const models = require("../../api/models");
 
-const data = async (props = {}) => {
+const data = (props = {}) => {
   const defaultProps = {
     title: faker.commerce.productName(),
     description: faker.company.catchPhrase()
@@ -11,7 +11,8 @@ const data = async (props = {}) => {
 };
 
 const prizeFactory = async (props = {}) => {
-  return models.Prize.create(await data(props));
+  console.log("Creating Prize", props);
+  return models.Prize.create(data(props));
 };
 
 module.exports = prizeFactory;
