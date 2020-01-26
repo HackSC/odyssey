@@ -4,7 +4,6 @@ import styled from "styled-components";
 import { handleLoginRedirect, getProfile } from "../lib/authenticate";
 
 import Head from "../components/Head";
-import Navbar from "../components/Navbar";
 import Scanner from "../components/Scanner";
 
 import { Form } from "../styles";
@@ -65,13 +64,14 @@ const Scan = ({ profile }) => {
       setScannedCodes(prev => {
         if (!prev.includes(code)) {
           sendScanRequest(code);
+          console.log(action);
           return [...prev, code];
         } else {
           return [...prev];
         }
       });
     },
-    [scannedCodes]
+    [scannedCodes, action]
   );
 
   return (
@@ -88,11 +88,11 @@ const Scan = ({ profile }) => {
               options={[
                 {
                   label: "HackSC Check In",
-                  value: "initial-check-in"
+                  value: "checkin"
                 },
                 {
                   label: "React Workshop Attendance",
-                  value: "react-check-in"
+                  value: "1"
                 }
               ]}
               onChange={handleActionChange}
@@ -106,6 +106,7 @@ const Scan = ({ profile }) => {
             <Scanner
               handleScannedCode={handleScannedCode}
               lastScan={lastScan}
+              action={action}
             />
           )}
         </ScanContainer>
