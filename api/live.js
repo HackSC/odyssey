@@ -182,6 +182,7 @@ async function handleContrib(userId, req, res) {
     try {
       const result = await models.Contribution.build({
         personId: userId,
+        scannerId: req.user.id,
         taskId: input.taskId
       }).save();
       return res.json({ contribution: result });
@@ -206,6 +207,7 @@ async function handleEmailContrib(userEmail, req, res) {
       const userId = profile.get("userId");
       const result = await models.Contribution.create({
         personId: userId,
+        scannerId: req.user.id,
         taskId: input.taskId
       });
       return res.json({ contribution: result });
