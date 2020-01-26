@@ -180,11 +180,11 @@ async function handleContrib(userId, req, res) {
     return res.status(400).json({ message: "Invalid request" });
   } else {
     try {
-      const result = await models.Contribution.build({
+      const result = await models.Contribution.create({
         personId: userId,
         scannerId: req.user.id,
         taskId: input.taskId
-      }).save();
+      });
       return res.json({ contribution: result });
     } catch (e) {
       return res.status(500).json({ error: e.message });
