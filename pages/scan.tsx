@@ -1,6 +1,8 @@
 import React, { useState, useCallback } from "react";
 import styled from "styled-components";
 
+import { useToasts } from "react-toast-notifications";
+
 import { handleLoginRedirect, getProfile } from "../lib/authenticate";
 
 import Head from "../components/Head";
@@ -12,7 +14,9 @@ import Select from "../components/Select";
 const Scan = ({ profile }) => {
   const [action, setAction] = useState(null);
   const [scannedCodes, setScannedCodes] = useState([]);
-  const [lastScan, setLastScan] = useState(null);
+
+  // TOASTS
+  const { addToast } = useToasts();
 
   const handleActionChange = e => {
     setAction(e.target.value);
@@ -43,20 +47,13 @@ const Scan = ({ profile }) => {
       }
     });
 
+    const scanData = await scanRequest.json();
+
     if (scanRequest.status === 200) {
-      const scanData = await scanRequest.json();
       // Successful scan, let's display that to the user
-      setLastScan({
-        message: scanData.message,
-        isSuccess: true
-      });
+      addToast(scanData.message, { appearance: "success", autoDismiss: true });
     } else {
-      const scanData = await scanRequest.json();
-      // Invalid/unsuccessful scan, let's display that to the user
-      setLastScan({
-        message: scanData.message,
-        isSuccess: false
-      });
+      addToast(scanData.message, { appearance: "error", autoDismiss: true });
     }
   };
 
@@ -104,11 +101,7 @@ const Scan = ({ profile }) => {
 
         <ScanContainer>
           {!!action && (
-            <Scanner
-              handleScannedCode={handleScannedCode}
-              lastScan={lastScan}
-              action={action}
-            />
+            <Scanner handleScannedCode={handleScannedCode} action={action} />
           )}
         </ScanContainer>
       </PageContainer>

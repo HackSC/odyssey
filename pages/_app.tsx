@@ -43,7 +43,7 @@ class OdysseyApp extends App {
 
     return (
       <ThemeProvider theme={Theme}>
-        <ToastProvider>
+        <ToastProvider placement="bottom-center">
           <>
             <GlobalStyles />
             <Component {...pageProps} />

@@ -96,20 +96,7 @@ const Scanner = (props: any) => {
     }
   }, [props.action]);
 
-  return (
-    <>
-      <ScannerCanvas ref={canvasRef} />
-      {props.lastScan && (
-        <ScannerMessage success={props.lastScan.isSuccess}>
-          <p>
-            {props.lastScan.isSuccess
-              ? props.lastScan.message
-              : props.lastScan.message}
-          </p>
-        </ScannerMessage>
-      )}
-    </>
-  );
+  return <ScannerCanvas ref={canvasRef} />;
 };
 
 const ScannerCanvas = styled.canvas`
@@ -124,28 +111,5 @@ const ScannerCanvas = styled.canvas`
 type ScannerMessageProps = {
   success: boolean;
 };
-
-const ScannerMessage = styled.div<ScannerMessageProps>`
-  position: fixed;
-  left: 20px;
-  right: 20px;
-  bottom: 20px;
-  padding: 18px;
-
-  ${({ success }) =>
-    success
-      ? `
-      background: rgba(6, 100, 6, 0.85);
-    `
-      : `
-      background: rgba(100, 6, 6, 0.85);
-    `}
-
-  p {
-    color: #ffffff;
-    font-weight: bold;
-    font-size: 18px;
-  }
-`;
 
 export default Scanner;
