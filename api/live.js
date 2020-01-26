@@ -239,7 +239,9 @@ async function handleCheckin(userId, req, res) {
     if (invalidStatuses.includes(profileStatus)) {
       return res
         .status(400)
-        .json({ message: `User has status ${profileStatus}` });
+        .json({
+          message: `${profile.firstName} ${profile.lastName} has status ${profileStatus}`
+        });
     }
 
     const result = await models.House.findAll({
