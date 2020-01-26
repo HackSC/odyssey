@@ -115,7 +115,7 @@ async function handleContrib(userId, req, res) {
 async function handleEmailContrib(userEmail, req, res) {
   const input = req.body;
   if (!input.taskId) {
-    return res.status(400).json({ message: "Invalid request" });
+    return res.status(400).json({ err: "Requires specified taskId" });
   } else {
     try {
       // Try to find a model by email
@@ -125,10 +125,10 @@ async function handleEmailContrib(userEmail, req, res) {
         }
       });
       const userId = profile.get("userId");
-      const result = await models.Contribution.build({
+      const result = await models.Contribution.create({
         personId: userId,
         taskId: input.taskId
-      }).save();
+      });
       return res.json({ contribution: result });
     } catch (e) {
       return res.status(500).json({ error: e.message });
