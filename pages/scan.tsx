@@ -129,7 +129,7 @@ const PageContainer = styled.div`
   flex-direction: column;
   position: fixed;
   width: 100vw;
-  height: 100vh;
+  height: 100%;
 `;
 
 const ActionBar = styled.div`

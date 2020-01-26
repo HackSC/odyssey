@@ -84,7 +84,17 @@ const Scanner = (props: any) => {
 
       // Use facingMode: environment to attemt to get the front camera on phones
       window.navigator.mediaDevices
-        .getUserMedia({ video: { facingMode: "environment" } })
+        .getUserMedia({
+          video: {
+            facingMode: "environment",
+            width: {
+              max: 256
+            },
+            height: {
+              max: 256
+            }
+          }
+        })
         .then(function(stream) {
           video.srcObject = stream;
           video.setAttribute("playsinline", "true"); // required to tell iOS safari we don't want fullscreen
@@ -100,12 +110,12 @@ const Scanner = (props: any) => {
 };
 
 const ScannerCanvas = styled.canvas`
-  width: 100%;
   display: block;
   margin-left: auto;
   margin-right: auto;
   object-fit: contain;
-  position: absolute;
+  width: 90%;
+  height: 90%;
 `;
 
 type ScannerMessageProps = {
