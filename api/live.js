@@ -43,6 +43,10 @@ router.post("/dispatch", async (req, res) => {
 async function handleContrib(userId, req, res) {
   const input = req.body;
 
+  const profile = await models.HackerProfile.findOne({
+    where: { userId: userId }
+  });
+
   if (!input.taskId) {
     return res.status(400).json({ message: "Invalid request" });
   } else {
@@ -51,9 +55,12 @@ async function handleContrib(userId, req, res) {
         personId: userId,
         taskId: input.taskId
       }).save();
-      return res.json({ contribution: result });
+      return res.json({
+        contribution: result,
+        message: `Successfully created a task contribution for ${profile.firstName} ${profile.lastName}`
+      });
     } catch (e) {
-      return res.status(500).json({ error: e.message });
+      return res.status(500).json({ message: e.message });
     }
   }
 }
@@ -75,7 +82,7 @@ async function handleCheckin(userId, req, res) {
     if (invalidStatuses.includes(profileStatus)) {
       return res
         .status(400)
-        .json({ invalid: `User has status ${profileStatus}` });
+        .json({ message: `User has status ${profileStatus}` });
     }
 
     const result = await models.House.findAll({
@@ -112,9 +119,13 @@ async function handleCheckin(userId, req, res) {
       { where: { userId: userId } }
     );
 
-    return res.json({ pointsProfile, profile });
+    return res.json({
+      pointsProfile,
+      profile,
+      message: `Successfully checked in ${profile.firstName} ${profile.lastName}`
+    });
   } catch (e) {
-    return res.status(500).json({ err: e.message });
+    return res.status(500).json({ message: e.message });
   }
 }
 
