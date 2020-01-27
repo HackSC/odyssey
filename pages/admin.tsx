@@ -55,6 +55,9 @@ const Admin = ({ profile }) => {
             <Action href="/judgingManager">
               <ActionTitle> Pass Judgement </ActionTitle>
             </Action>
+            <Action href="/apiRush">
+              <ActionTitle> Manage API Rush </ActionTitle>
+            </Action>
           </Actions>
         </Container>
       </Background>
