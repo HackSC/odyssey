@@ -9,7 +9,10 @@ module.exports = (sequelize, DataTypes) => {
     {}
   );
   Prize.associate = function(models) {
-    Prize.belongsToMany(models.ProjectTeam, { through: "ProjectTeamPrizes" });
+    Prize.belongsToMany(models.ProjectTeam, {
+      through: "ProjectTeamPrizes",
+      foreignKey: "projectTeam"
+    });
   };
   return Prize;
 };

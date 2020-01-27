@@ -15,7 +15,7 @@ const liveRouter = require("./api/live");
 const projectTeamRouter = require("./api/projectTeam");
 const eventRouter = require("./api/event");
 const hackerLiveRouter = require("./api/hackerLive");
-
+const prizeRouter = require("./api/prizes");
 const fileUpload = require("express-fileupload");
 const dotenv = require("dotenv");
 
@@ -74,6 +74,7 @@ server.use("/api/live", liveRouter);
 server.use("/api/projectTeam", projectTeamRouter);
 server.use("/api/events", eventRouter);
 server.use("/api/hacker/live", hackerLiveRouter);
+server.use("/api/prize", prizeRouter);
 
 server.post("/api/scan", (req, res) => {
   console.log("Scanned: ", req.body.code);

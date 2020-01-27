@@ -13,6 +13,7 @@ router.use(utils.requireNonHacker);
 const actions = {
   CHECKIN: "checkin",
   CONTRIB: "contrib",
+  GROUP_CONTRIB: "groupContrib",
   EMAIL_CONTRIB: "emailContrib"
 };
 
@@ -25,6 +26,8 @@ router.post("/dispatch", async (req, res) => {
       return await handleCheckin(userId, req, res);
     case actions.CONTRIB:
       return await handleContrib(userId, req, res);
+    case actions.GROUP_CONTRIB:
+      return await handleGroupContrib(userId, req, res);
     case actions.EMAIL_CONTRIB:
       return await handleEmailContrib(userId, req, res);
   }
@@ -33,6 +36,45 @@ router.post("/dispatch", async (req, res) => {
 /* 
 ----- Action Dispatchers below, register your action above and implement the appropriate handler below -----
 */
+
+async function handleGroupContrib(userId, req, res) {
+  try {
+    if (!req.body.taskId) {
+      return res.status(400).json({ err: "Bad Request, taskId not found" });
+    }
+    const result = await models.Person.findOne({
+      where: {
+        identityId: userId
+      },
+      include: [
+        {
+          model: models.ProjectTeam,
+          required: false,
+          include: [
+            {
+              model: models.Person,
+              required: false
+            }
+          ]
+        }
+      ]
+    });
+    const teammates = result.get("ProjectTeam").get("People");
+    const taskId = req.body.taskId;
+    const teammateContribs = teammates.map(tm => {
+      const tmId = tm.dataValues.identityId;
+      return models.Contribution.create({
+        personId: tmId,
+        taskId: taskId
+      });
+    });
+
+    await Promise.all(teammateContribs);
+    return res.json({ teammates });
+  } catch (e) {
+    return res.status(400).json({ err: e.message });
+  }
+}
 
 async function handleContrib(userId, req, res) {
   const input = req.body;
@@ -124,10 +166,8 @@ async function handleCheckin(userId, req, res) {
         .json({ invalid: `User has status ${profileStatus}` });
     }
 
-    await models.HackerProfile.update(
-      { status: "checkedIn" },
-      { where: { userId: userId } }
-    );
+    profile.status = "checkedIn";
+    await profile.save();
 
     return res.json({ pointsProfile: pointsProfile });
   } catch (e) {
