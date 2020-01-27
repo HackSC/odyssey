@@ -3,17 +3,42 @@ import styled from "styled-components";
 import Loader from "react-loader-spinner";
 import useBattlePass from "../lib/useBattlePass";
 import BPLock from "../assets/battlepasslock.svg";
+import BPOpenLock from "../assets/unlock.svg";
 
 type Props = {
   profile: Profile;
 };
 
+type ItemProps = {
+  prizeName?: string;
+  pointValue?: number;
+  unlocked?: boolean;
+};
+
+const bpItem: React.SFC<ItemProps> = ({ prizeName, pointValue, unlocked }) => {
+  return (
+    <TableTD
+      bgColor={unlocked ? "white" : "#757575"}
+      borderColor={unlocked ? "#FF8379" : "#757575"}
+    >
+      <LockImage src={unlocked ? BPOpenLock : BPLock} alt="lock" />
+      <MarginDiv>
+        <PrizeItem>{prizeName}</PrizeItem>
+        <p>Points: {pointValue}</p>
+      </MarginDiv>
+    </TableTD>
+  );
+};
+
 const BattlePass: React.FunctionComponent<Props> = props => {
   const { profile } = props;
+
   // * useBattlePass Custom Hook
   const bp = useBattlePass(profile);
 
-  console.log(bp);
+  // TODO: dynamically calculate user points and project submission
+  const userPoints = 50;
+  const projSubmitted = false;
 
   const loading = (
     <Loader
@@ -25,41 +50,49 @@ const BattlePass: React.FunctionComponent<Props> = props => {
     />
   );
 
+  const premiumItems = bp?.payload?.results?.filter(item => {
+    return item.isPremium;
+  });
+  const basicItems = bp?.payload?.results?.filter(item => {
+    return !item.isPremium;
+  });
+  if (premiumItems.length > 0) {
+    premiumItems.reduce(
+      (total, item, idx, arr) => {
+        let sum = idx === 0 ? item.pointValue : total.total + item.pointValue;
+        // TODO: Unlocked will only be true if user submitted project
+
+        item.unlocked =
+          userPoints > total.total && projSubmitted ? true : false;
+        item.total = sum;
+        return { total: sum };
+      },
+      { total: 0 }
+    );
+  }
+  if (basicItems.length > 0) {
+    basicItems.reduce(
+      (total, item, idx, arr) => {
+        let sum = idx === 0 ? item.pointValue : total.total + item.pointValue;
+        item.unlocked = userPoints > total.total ? true : false;
+        item.total = sum;
+        return { total: sum };
+      },
+      { total: 0 }
+    );
+  }
+
   const bptable = (
     <BPTable>
       <tbody>
         <RoundedTR>
-          {bp?.payload?.results?.map(item => {
-            return item && !item.isPremium ? (
-              <TableTD>
-                <LockImage src={BPLock} alt="lock" />
-                <MarginDiv>
-                  <PrizeItem>
-                    {item && item.prizeName ? item.prizeName : "Some Prize"}
-                  </PrizeItem>
-                  <p>Points: {item.pointValue}</p>
-                </MarginDiv>
-              </TableTD>
-            ) : (
-              ""
-            );
+          {basicItems.map(item => {
+            return item ? bpItem(item) : "";
           })}
         </RoundedTR>
         <RoundedTR>
-          {bp?.payload?.results?.map(item => {
-            return item && item.isPremium ? (
-              <TableTD>
-                <LockImage src={BPLock} alt="lock" />
-                <MarginDiv>
-                  <PrizeItem>
-                    {item && item.prizeName ? item.prizeName : "Some Prize"}
-                  </PrizeItem>
-                  <p>Points: {item.pointValue}</p>
-                </MarginDiv>
-              </TableTD>
-            ) : (
-              ""
-            );
+          {premiumItems.map(item => {
+            return item ? bpItem(item) : "";
           })}
         </RoundedTR>
       </tbody>
@@ -109,18 +142,18 @@ const RoundedTR = styled.tr`
   width: max-content;
 `;
 
-const TableTD = styled.td`
+const TableTD = styled.td<{ bgColor?: string; borderColor?: string }>`
   display: -webkit-inline-box;
   position: relative;
   height: 100px;
-  background-color: white;
+  background-color: ${({ bgColor = "white" }) => bgColor};
   width: 100px;
   border: solid;
   padding: 10px;
   margin: 5px;
   vertical-align: middle;
   border-width: 4px;
-  border-color: #757575;
+  border-color: ${({ borderColor = "#757575" }) => borderColor};
   border-radius: 6px;
 `;
 

@@ -2,10 +2,12 @@ import { useEffect, useState } from "react";
 import { Service } from "../types/Service";
 
 interface BPObject {
-  id: string;
-  isPremium: boolean;
-  pointValue: number;
-  prizeName: string;
+  id?: string;
+  isPremium?: boolean;
+  pointValue?: number;
+  prizeName?: string;
+  total?: number;
+  unlocked?: boolean;
 }
 
 export interface BPType {
