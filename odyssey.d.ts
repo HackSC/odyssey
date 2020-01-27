@@ -42,7 +42,7 @@ declare type Profile = {
   questionOne: string;
   questionTwo: string;
   questionThree: string;
-  role: "hacker" | "admin" | "sponsor" | "superadmin";
+  role: "hacker" | "admin" | "sponsor" | "volunteer";
   graduationDate:
     | "spring-2020"
     | "fall-2020"
