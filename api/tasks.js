@@ -25,7 +25,8 @@ router.post("/tasks", async (req, res) => {
     "description",
     "points",
     "name",
-    "type"
+    "type",
+    "isActive"
   ]);
   const formInput = req.body;
 

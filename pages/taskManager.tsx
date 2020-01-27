@@ -43,6 +43,20 @@ const EditableCell = ({ task }) => {
             setCurrTaskValue({ ...currTaskValue, points: e.target.value });
           }}
         />
+        <select
+          onChange={e => {
+            const isActive = e.target.value === "Active";
+            setCurrTaskValue({
+              ...currTaskValue,
+              isActive: isActive
+            });
+          }}
+          //@ts-ignore
+          value={currTaskValue.isActive ? "Active" : "Inactive"}
+        >
+          <option value="Active">Active</option>
+          <option value="Inactive">Inactive</option>
+        </select>
         <EditButton
           onClick={async () => {
             const result = await updateTask(currTaskValue);
@@ -105,6 +119,20 @@ const TaskManager = ({ profile, currentTasks }) => {
                 });
               }}
             />
+            <select
+              onChange={e => {
+                const isActive = e.target.value === "Active";
+                setNewTask({
+                  ...newTask,
+                  isActive: isActive
+                });
+              }}
+              //@ts-ignore
+              value={newTask.isActive ? "Active" : "Inactive"}
+            >
+              <option value="Active">Active</option>
+              <option value="Inactive">Inactive</option>
+            </select>
           </TaskInfo>
           <input
             type="submit"
