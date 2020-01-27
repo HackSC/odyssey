@@ -32,8 +32,8 @@ router.put("/join/:name", async (req, res) => {
     if (projectTeam.Members.length >= 4) {
       throw new Error("Team is full");
     }
-    projectTeam.addMember(req.user.id);
-    projectTeam.reload();
+    await projectTeam.addMember(req.user.id);
+    await projectTeam.reload();
 
     return res.json({ projectTeam });
   } catch (e) {
@@ -92,6 +92,7 @@ router.put("/self", async (req, res) => {
     const { body } = req;
     const projectTeam = await getProjectTeamForSelf(req);
     await projectTeam.update(body);
+    await projectTeam.reload();
     return res.json({ projectTeam });
   } catch (e) {
     return res.status(400).json({ err: e.message });

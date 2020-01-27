@@ -22,12 +22,12 @@ const ProjectTeam = (props: Props) => {
     joinProjectTeam(name)
       .then(projectTeam => {
         setTeam(projectTeam);
-        addToast("Joined Team: " + team.name, {
+        addToast("Joined Team: " + projectTeam.name, {
           appearance: "success"
         });
       })
       .catch(e => {
-        addToast("Failed to join team with code: " + name + e.err, {
+        addToast("Failed to join team with code: " + name, {
           appearance: "error"
         });
       });
@@ -92,7 +92,7 @@ const ProjectTeam = (props: Props) => {
   };
 
   const updateTeamHandler = async values => {
-    await updateTeamMetadata(values);
+    setTeam(await updateTeamMetadata(values));
     addToast("Updated Team Info", { appearance: "success" });
   };
 
@@ -191,7 +191,6 @@ async function createProjectTeam(name: string): Promise<ProjectTeam> {
   });
   if (!res.ok) {
     const errorMessage = await res.json();
-    console.log(errorMessage);
     throw Error(errorMessage);
   }
 
