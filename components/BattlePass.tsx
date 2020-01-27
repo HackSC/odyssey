@@ -2,8 +2,7 @@ import * as React from "react";
 import styled from "styled-components";
 import Loader from "react-loader-spinner";
 import useBattlePass from "../lib/useBattlePass";
-import BPLock from "../assets/battlepasslock.svg";
-import BPOpenLock from "../assets/unlock.svg";
+import { BPLock, BPOpenLock } from "../styles";
 
 type Props = {
   profile: Profile;
@@ -21,7 +20,9 @@ const bpItem: React.SFC<ItemProps> = ({ prizeName, pointValue, unlocked }) => {
       bgColor={unlocked ? "white" : "#757575"}
       borderColor={unlocked ? "#FF8379" : "#757575"}
     >
-      <LockImage src={unlocked ? BPOpenLock : BPLock} alt="lock" />
+      <LockImage>
+        {unlocked ? <BPOpenLock fill="#FF8379" /> : <BPLock />}
+      </LockImage>
       <MarginDiv>
         <PrizeItem>{prizeName}</PrizeItem>
         <p>Points: {pointValue}</p>
@@ -110,7 +111,7 @@ const BattlePass: React.FunctionComponent<Props> = props => {
   );
 };
 
-const LockImage = styled.img`
+const LockImage = styled.div`
   position: absolute;
   top: 2px;
   left: 2px;

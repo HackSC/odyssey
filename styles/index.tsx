@@ -11,6 +11,8 @@ export { default as Column } from "./Column";
 export { default as Flex } from "./Flex";
 export { default as Card } from "./Card";
 export { default as TextCardDiv } from "./TextCard";
+export { default as BPLock } from "./BPLock";
+export { default as BPOpenLock } from "./BPOpenLock";
 export {
   default as Form,
   FormGroup,

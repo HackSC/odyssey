@@ -64,6 +64,7 @@ declare type Profile = {
   referred: Profile[];
   teamId: string;
   team: Team;
+  qrCodeId: string;
 };
 
 declare type Team = {
