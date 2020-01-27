@@ -192,8 +192,6 @@ router.get("/lookup", async (req, res) => {
     lookupFilter["email"] = email;
   }
 
-  console.log({ firstName, lastName, email, lookupFilter });
-
   const profiles = await models.HackerProfile.findAll({
     where: lookupFilter
   });
