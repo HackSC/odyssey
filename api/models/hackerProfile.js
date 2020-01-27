@@ -116,7 +116,11 @@ module.exports = (sequelize, DataTypes) => {
       confirmCodeOfConduct: DataTypes.BOOLEAN,
       noBusCheck: DataTypes.BOOLEAN,
       confirmedAt: DataTypes.DATE,
-      declinedAt: DataTypes.DATE
+      declinedAt: DataTypes.DATE,
+      qrCodeId: {
+        type: DataTypes.STRING,
+        unique: true
+      }
     },
     {}
   );
