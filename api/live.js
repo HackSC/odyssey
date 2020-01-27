@@ -175,6 +175,34 @@ async function handleCheckin(userId, req, res) {
   }
 }
 
+router.get("/lookup", async (req, res) => {
+  const lookupFilter = {};
+
+  const { firstName, lastName, email } = req.query;
+
+  if (!!firstName) {
+    lookupFilter["firstName"] = firstName;
+  }
+
+  if (!!lastName) {
+    lookupFilter["lastName"] = lastName;
+  }
+
+  if (!!email) {
+    lookupFilter["email"] = email;
+  }
+
+  console.log({ firstName, lastName, email, lookupFilter });
+
+  const profiles = await models.HackerProfile.findAll({
+    where: lookupFilter
+  });
+
+  return res.json({
+    profiles
+  });
+});
+
 router.get("/identity-check/:userId", async (req, res) => {
   if (req.params.userId) {
     try {
