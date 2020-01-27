@@ -34,7 +34,7 @@ const seedDatabase = async () => {
   await projectTeamFactory({ name: "TestProjectTeam" });
 
   const fullTeam = await projectTeamFactory({ name: "FullTeam" });
-  fullTeam.addPerson(persons.slice(1));
+  fullTeam.addMember(persons.slice(1));
   return;
 };
 
