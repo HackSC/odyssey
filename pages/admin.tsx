@@ -40,7 +40,7 @@ const Admin = ({ profile }) => {
               <ActionTitle>Access Metabase</ActionTitle>
             </Action>
 
-            <Action href="javascript:alert('Coming soon')">
+            <Action href="/checkin">
               <ActionTitle>Check In Hackers</ActionTitle>
             </Action>
             <Action href="/taskManager">

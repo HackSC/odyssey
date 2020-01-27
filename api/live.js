@@ -201,6 +201,31 @@ router.get("/lookup", async (req, res) => {
   });
 });
 
+router.post("/assign-qr", async (req, res) => {
+  const { userId, qrCodeId } = req.body;
+
+  if (!!userId && !!qrCodeId) {
+    await models.HackerProfile.update(
+      {
+        qrCodeId: qrCodeId.trim().toUpperCase()
+      },
+      {
+        where: {
+          userId
+        }
+      }
+    );
+
+    return res.json({
+      message: `Updated profile with user ID ${userId} to have the QR Code Id ${qrCodeId}`
+    });
+  } else {
+    return res.status(400).json({
+      message: "Missing data, need both userId and qrCodeId"
+    });
+  }
+});
+
 router.get("/identity-check/:userId", async (req, res) => {
   if (req.params.userId) {
     try {
