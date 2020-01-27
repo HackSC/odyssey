@@ -17,7 +17,6 @@ interface Props {
 const CheckedIn: React.FunctionComponent<Props> = props => {
   const { profile, houses } = props;
 
-  console.log(houses);
   return (
     <>
       <Flex justify="space-between" tabletVertical>
