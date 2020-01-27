@@ -60,10 +60,10 @@ const CheckedIn: React.FunctionComponent<Props> = props => {
         </InstructionsColumn>
       </Flex>
       <Flex justify="space-between" tabletVertical>
-        <MarginedColumn flexBasis={65}>
+        <MarginedColumn style={{ overflowX: "scroll" }} flexBasis={75}>
           <BattlePass profile={profile} />
         </MarginedColumn>
-        <MarginedColumn flexBasis={35}>
+        <MarginedColumn flexBasis={25}>
           <Announcements />
         </MarginedColumn>
       </Flex>

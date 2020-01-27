@@ -24,9 +24,9 @@ const useBattlePass = (req: any) => {
   let result = bp;
 
   useEffect(() => {
-    fetch("/api/hackerLive/battlepass")
+    fetch("/api/hacker/live/battlepass")
       .then(res => res.json())
-      .then(res => setBP({ status: "loaded", payload: res }))
+      .then(res => setBP({ status: "loaded", payload: { results: res } }))
       .catch(err =>
         setBP({ status: "error", payload: defaultResult, error: err })
       );
