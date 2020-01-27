@@ -13,6 +13,7 @@ module.exports = (sequelize, DataTypes) => {
   );
   Task.associate = function(models) {
     // associations can be defined here
+    Task.belongsTo(models.Grouping);
   };
   return Task;
 };
