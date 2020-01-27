@@ -1,5 +1,6 @@
 import React from "react";
 import * as Sentry from "@sentry/browser";
+import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
 
 import {
   handleLoginRedirect,

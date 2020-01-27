@@ -7,6 +7,7 @@ import { Flex, Column } from "../../styles";
 import HouseLogo from "../../assets/hackscFox.png";
 import Announcements from "../announcements/Announcements";
 import Calendar from "../Calendar";
+import BattlePass from "../BattlePass";
 
 interface Props {
   profile: Profile;
@@ -60,7 +61,7 @@ const CheckedIn: React.FunctionComponent<Props> = props => {
       </Flex>
       <Flex justify="space-between" tabletVertical>
         <MarginedColumn flexBasis={65}>
-          <p>Battlepass goes here.</p>
+          <BattlePass profile={profile} />
         </MarginedColumn>
         <MarginedColumn flexBasis={35}>
           <Announcements />
