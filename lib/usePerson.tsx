@@ -28,24 +28,28 @@ const defaultResult = {
   }
 };
 
-const useHouses = (req: any) => {
-  const [houses, setHouses] = useState<Service<BPType>>({
+interface Props {
+  profile: Profile;
+  houses: any;
+}
+
+const usePerson = (props: Props) => {
+  const [person, setPerson] = useState<Service<BPType>>({
     status: "loading",
     payload: defaultResult
   });
-  let result = houses;
+  let result = person;
 
   useEffect(() => {
     fetch("/api/hacker/live/houseInfo")
       .then(res => res.json())
-      .then(res => setHouses({ status: "loaded", payload: { results: res } }))
+      .then(res => setPerson({ status: "loaded", payload: { results: res } }))
       .catch(err =>
-        setHouses({ status: "error", payload: defaultResult, error: err })
+        setPerson({ status: "error", payload: defaultResult, error: err })
       );
   }, []);
 
-  // * Return array of houses with sum field
-  let returnObj = result?.payload?.results?.houses.map(house => {
+  return result?.payload?.results?.houses.map(house => {
     let newHouse = Object.assign({ sum: 0 }, house);
     newHouse.sum =
       house?.People.length > 0
@@ -62,9 +66,6 @@ const useHouses = (req: any) => {
         : 0;
     return newHouse;
   });
-
-  // * Sort by sum so house at index 0 is the leading house
-  return returnObj.sort((a, b) => (a.sum > b.sum ? a.sum : b.sum));
 };
 
-export default useHouses;
+export default usePerson;

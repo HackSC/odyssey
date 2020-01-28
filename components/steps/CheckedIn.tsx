@@ -9,6 +9,9 @@ import Announcements from "../announcements/Announcements";
 import Calendar from "../Calendar";
 import BattlePass from "../BattlePass";
 import useHouses from "../../lib/useHouses";
+import usePerson from "../../lib/usePerson";
+import useWindowSize from "react-use/lib/useWindowSize";
+import Confetti from "react-confetti";
 
 interface Props {
   profile: Profile;
@@ -16,14 +19,37 @@ interface Props {
 }
 
 const CheckedIn: React.FunctionComponent<Props> = props => {
-  const { profile, houses } = props;
+  const { profile } = props;
   const houseInfo = useHouses(profile);
+  const person = usePerson(props);
+  const { width, height } = useWindowSize();
 
   console.log(houseInfo);
+  console.log(person);
+  console.log(profile);
+
+  // * Check if house is in the lead and display react-confetti
+  const confetti = (
+    <Confetti
+      width={width}
+      height={height}
+      numberOfPieces={400}
+      recycle={false}
+      colors={["#86DCEA", "#FEDA22", "#FF8379", "#FF414D", "#FF2B9D"]}
+      tweenDuration={10000}
+    />
+  );
+
+  let notie =
+    person.length > 0 &&
+    houseInfo.length > 1 &&
+    person[0].id === houseInfo[0].id &&
+    person[0].id !== houseInfo[1].id;
 
   return (
     <>
       <Flex justify="space-between" tabletVertical>
+        {notie ? confetti : ""}
         <Column flexBasis={40}>
           <QRCode profile={profile} />
         </Column>
@@ -37,13 +63,23 @@ const CheckedIn: React.FunctionComponent<Props> = props => {
 
           <Flex justify="space-between" tabletVertical>
             <Column flexBasis={50}>
-              <CheckInTitle>House</CheckInTitle>
+              <CheckInTitle>
+                {houseInfo.length > 0 && houseInfo[0].name
+                  ? houseInfo[0].name
+                  : ""}{" "}
+                House
+              </CheckInTitle>
               <Flex justify="space-between" tabletVertical>
                 <ImgColumn flexBasis={50}>
                   <HouseImg src={HouseLogo} alt="House Logo" />
                 </ImgColumn>
                 <Column flexBasis={50}>
-                  <CheckInTitle>Points here</CheckInTitle>
+                  <CheckInTitle>
+                    {houseInfo.length > 0 && houseInfo[0].sum
+                      ? houseInfo[0].sum
+                      : ""}{" "}
+                    points
+                  </CheckInTitle>
                 </Column>
               </Flex>
             </Column>
@@ -55,7 +91,9 @@ const CheckedIn: React.FunctionComponent<Props> = props => {
                   <HouseImg src={HouseLogo} alt="House Logo" />
                 </ImgColumn>
                 <Column flexBasis={50}>
-                  <CheckInTitle>Points here</CheckInTitle>
+                  <CheckInTitle>
+                    {person.length > 0 ? person[0]?.sum : ""} points
+                  </CheckInTitle>
                 </Column>
               </Flex>
             </Column>
