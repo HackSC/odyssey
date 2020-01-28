@@ -29,6 +29,12 @@ const seedDatabase = async () => {
     return personFactory({ identityId: hp.userId });
   });
 
+  const admin = await hpFactory({
+    userId: "adminy",
+    role: "admin",
+    firstName: "McAdmin"
+  });
+
   await IteratePromises(5, i => prizeFactory());
 
   await projectTeamFactory({ name: "TestProjectTeam" });
