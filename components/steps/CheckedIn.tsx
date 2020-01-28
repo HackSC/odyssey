@@ -8,6 +8,7 @@ import HouseLogo from "../../assets/hackscFox.png";
 import Announcements from "../announcements/Announcements";
 import Calendar from "../Calendar";
 import BattlePass from "../BattlePass";
+import useHouses from "../../lib/useHouses";
 
 interface Props {
   profile: Profile;
@@ -16,6 +17,9 @@ interface Props {
 
 const CheckedIn: React.FunctionComponent<Props> = props => {
   const { profile, houses } = props;
+  const houseInfo = useHouses(profile);
+
+  console.log(houseInfo);
 
   return (
     <>
