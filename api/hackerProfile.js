@@ -340,4 +340,9 @@ router.post("/undecline", async (req, res) => {
   });
 });
 
+router.get("/list", async (req, res) => {
+  const profiles = await models.HackerProfile.findAll({});
+  return res.json({ profiles });
+});
+
 module.exports = router;
