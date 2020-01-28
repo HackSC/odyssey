@@ -20,6 +20,43 @@ router.put("/:email", async (req, res) => {
   return res.json({ hackerProfile: newHackerProfile });
 });
 
+router.post("/profiles", async (req, res) => {
+  console.log('getting profiles')
+  try {
+    const profiles = await models.HackerProfile.findAll({
+      where: {
+        $or: [
+          {
+            email: {
+              $like: req.body
+            }
+          },
+          {
+            firstName: {
+              $like: req.body
+            }
+          },
+          {
+            lastName: {
+              $like: req.body
+            }
+          },
+        ]
+      },
+      include: [
+        {
+          model: models.HackerProfile
+        }
+      ]
+    });
+    return res.json({
+      profiles: profiles
+    });
+  } catch (e) {
+    return res.status(500).json({ error: e.message });
+  }
+});
+
 router.get("/reviews", async (req, res) => {
   try {
     const reviews = await models.HackerReview.findAll();

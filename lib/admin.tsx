@@ -1,3 +1,27 @@
+export async function getHackerProfiles(searchText) {
+  const fetchUrl = process.env.URL_BASE
+  ? process.env.URL_BASE + "api/admin/profiles"
+  : "api/admin/profiles";
+
+  const response = await fetch(
+    fetchUrl,
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(searchText)
+    }
+  );
+
+  const payload = await response.json();
+
+  // Randomly select an eligible review
+  const { profiles } = payload;
+
+  return profiles;
+}
+
 export async function getReviewHistory(req) {
   const fetchUrl = process.env.URL_BASE
     ? process.env.URL_BASE + "api/admin/reviewHistory"
