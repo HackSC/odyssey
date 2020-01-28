@@ -6,12 +6,13 @@ const router = express.Router();
 router.use(utils.authMiddleware);
 router.use(utils.preprocessRequest);
 
-const getProjectTeamForSelf = req => {
+const getProjectTeamForSelf = async req => {
   const { id } = req.user;
 
-  return models.Person.findByPk(id, {
+  const person = await models.Person.findByPk(id, {
     include: [{ model: models.ProjectTeam, required: true }]
-  }).then(p => p.ProjectTeam);
+  });
+  return person.ProjectTeam;
 };
 
 router.get("/self", async (req, res) => {
@@ -30,7 +31,7 @@ router.put("/join/:name", async (req, res) => {
       where: { name: req.params.name }
     });
     if (projectTeam.Members.length >= 4) {
-      throw new Error("Team is full");
+      return res.status(400).json({ err: "Team is full" });
     }
     await projectTeam.addMember(req.user.id);
     await projectTeam.reload();
@@ -90,8 +91,16 @@ router.post("/self", async (req, res) => {
 router.put("/self", async (req, res) => {
   try {
     const { body } = req;
+
+    const keys = ["devpostLink", "githubLink", "name"];
+
+    const updateObject = keys.reduce((obj, key) => {
+      obj[key] = body[key];
+      return obj;
+    }, {});
+
     const projectTeam = await getProjectTeamForSelf(req);
-    await projectTeam.update(body);
+    await projectTeam.update(updateObject);
     await projectTeam.reload();
     return res.json({ projectTeam });
   } catch (e) {
