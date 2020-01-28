@@ -60,5 +60,12 @@ module.exports = {
       Sentry.captureException(e);
       res.status(403).send("Unauthorized");
     }
+  },
+
+  requireDevelopmentEnv: function(req, res, next) {
+    if (process.env.NODE_ENV == "production") {
+      return res.redirect("/");
+    }
+    return next();
   }
 };
