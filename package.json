@@ -12,7 +12,7 @@
     "cypress:run": "cypress run",
     "E2ETest": "start-server-and-test start http://localhost:3000 cypress:run",
     "test": "start-server-and-test start http://localhost:3000 cypress:run",
-    "jest": "jest"
+    "jest": "jest --runInBand"
   },
   "jest": {
     "roots": [

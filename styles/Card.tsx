@@ -10,7 +10,7 @@ const Card = styled.div<CardProps>`
   border: 1px solid #cfcfcf !important;
   ${({ background }) => {
     if (background) {
-      return `background: ${background}%`;
+      return `background: ${background}`;
     }
     return `background: white`;
   }};
