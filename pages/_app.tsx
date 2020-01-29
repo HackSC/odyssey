@@ -53,7 +53,11 @@ class OdysseyApp extends App<any> {
 
     return (
       <ThemeProvider theme={Theme}>
-        <ToastProvider autoDismiss={true} autoDismissTimeout={3000} placement="bottom-center">
+        <ToastProvider
+          autoDismiss={true}
+          autoDismissTimeout={3000}
+          placement="bottom-center"
+        >
           <UserContext.Provider value={user}>
             <>
               <GlobalStyles />

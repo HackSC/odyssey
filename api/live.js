@@ -18,7 +18,12 @@ const actions = {
 };
 
 router.post("/dispatch", async (req, res) => {
-  const { userId, actionId } = { ...req.body };
+  const { qrCodeId, actionId } = { ...req.body };
+
+  const hackerProfile = await models.HackerProfile.findOne({
+    where: { qrCodeId: qrCodeId }
+  });
+  const userId = hackerProfile.get("userId");
 
   //TODO: Add sentry logging at the dispatch level
   switch (actionId) {
@@ -94,7 +99,6 @@ async function handleContrib(userId, req, res) {
         contribution: result,
         message: `Successfully created a task contribution for ${profile.firstName} ${profile.lastName}`
       });
-
     } catch (e) {
       return res.status(500).json({ message: e.message });
     }
@@ -128,9 +132,11 @@ async function handleEmailContrib(userEmail, req, res) {
 
 async function handleCheckin(userId, req, res) {
   try {
-    const profile = await models.HackerProfile.findByPk(userId);
-
+    const profile = await models.HackerProfile.findOne({
+      where: { userId: userId }
+    });
     const profileStatus = profile.get("status");
+
     const invalidStatuses = [
       "unverified",
       "verified",
@@ -138,52 +144,44 @@ async function handleCheckin(userId, req, res) {
       "submitted",
       "checkedIn"
     ];
-
     if (invalidStatuses.includes(profileStatus)) {
-      return res.status(400).json({
-        message: `${profile.firstName} ${profile.lastName} has status ${profileStatus}`
-      });
+      return res
+        .status(400)
+        .json({ invalid: `User has status ${profileStatus}` });
     }
 
-    const result = await models.House.findAll({
-      raw: true,
-      attributes: {
-        include: [
-          [
-            sequelize.fn("COUNT", sequelize.col("People.identityId")),
-            "personCount"
-          ]
+    const [pointsProfile, isCreated] = await models.Person.findOrCreate({
+      where: { identityId: userId },
+      defaults: { isBattlepassComplete: false }
+    });
+
+    if (!isCreated) {
+      return res
+        .status(400)
+        .json({ error: "Hacker has already had a person profile created" });
+    }
+
+    const minHouse = await models.House.findOne({
+      attributes: [
+        ["id", "id"],
+        ["name", "name"],
+        [
+          sequelize.literal(
+            "(SELECT COUNT(*) FROM persons where persons.houseId = House.id)"
+          ),
+          "personCount"
         ]
-      },
-      include: [
-        {
-          model: models.Person,
-          attributes: []
-        }
-      ]
+      ],
+      order: [[sequelize.literal("personCount"), "ASC"]]
     });
 
-    // Should sort result in ascending order (lowest personCount first)
-    result.sort(function(a, b) {
-      return a.personCount - b.personCount;
-    });
+    profile.status = "checkedIn";
+    await profile.save();
 
-    const pointsProfile = await models.Person.create({
-      identityId: userId,
-      houseId: result[0].id,
-      isBattlepassComplete: false
-    });
+    pointsProfile.houseId = minHouse.id;
+    await pointsProfile.save();
 
-    await models.HackerProfile.update(
-      { status: "checkedIn" },
-      { where: { userId: userId } }
-    );
-
-    return res.json({
-      pointsProfile,
-      profile,
-      message: `Successfully checked in ${profile.firstName} ${profile.lastName}`
-    });
+    return res.json({ pointsProfile: pointsProfile });
   } catch (e) {
     return res.status(500).json({ message: e.message });
   }
