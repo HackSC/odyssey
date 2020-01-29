@@ -107,13 +107,19 @@ const BattlePass: React.FunctionComponent<Props> = props => {
   return (
     <>
       <Header>BattlePass</Header>
-      <Scrollable>
-        {bp && bp.status === "loading" ? loading : ""}
-        {bp && bp.status === "loaded" ? bptable : ""}
-      </Scrollable>
+      <OverflowHidden>
+        <Scrollable>
+          {bp && bp.status === "loading" ? loading : ""}
+          {bp && bp.status === "loaded" ? bptable : ""}
+        </Scrollable>
+      </OverflowHidden>
     </>
   );
 };
+
+const OverflowHidden = styled.div`
+  overflow: hidden;
+`;
 
 const LockImage = styled.div`
   position: absolute;
