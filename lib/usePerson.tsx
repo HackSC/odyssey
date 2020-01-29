@@ -49,15 +49,16 @@ const usePerson = (props: Props) => {
       );
   }, []);
 
-  let returnObj = result?.payload?.results?.houses.map(house => {
+  let returnObj = [];
+  returnObj = result?.payload?.results?.houses.map(house => {
     let newHouse = Object.assign({ sum: 0 }, house);
     newHouse.sum =
       house?.People.length > 0
         ? house?.People?.map(person => {
             let newPerson = Object.assign({ sum: 0 }, person);
             newPerson.sum =
-              newPerson?.Contributions.length > 0
-                ? newPerson?.Contributions.map(a =>
+              newPerson.Contributions.length > 0
+                ? newPerson.Contributions.map(a =>
                     a.multiplier ? a.multiplier * a.Task.points : a.Task.points
                   ).reduce((a, b) => a + b)
                 : 0;

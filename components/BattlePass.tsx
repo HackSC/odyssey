@@ -59,7 +59,7 @@ const BattlePass: React.FunctionComponent<Props> = props => {
   });
   if (premiumItems && premiumItems.length > 0) {
     premiumItems.reduce(
-      (total, item, idx, arr) => {
+      (total, item, idx) => {
         let sum = idx === 0 ? item.pointValue : total.total + item.pointValue;
         // TODO: Unlocked will only be true if user submitted project
 
@@ -71,9 +71,9 @@ const BattlePass: React.FunctionComponent<Props> = props => {
       { total: 0 }
     );
   }
-  if (basicItems.length > 0) {
+  if (basicItems && basicItems.length > 0) {
     basicItems.reduce(
-      (total, item, idx, arr) => {
+      (total, item, idx) => {
         let sum = idx === 0 ? item.pointValue : total.total + item.pointValue;
         item.unlocked = userPoints > total.total ? true : false;
         item.total = sum;
@@ -87,14 +87,18 @@ const BattlePass: React.FunctionComponent<Props> = props => {
     <BPTable>
       <tbody>
         <RoundedTR>
-          {basicItems.map(item => {
-            return item ? bpItem(item) : "";
-          })}
+          {basicItems
+            ? basicItems.map(item => {
+                return item ? bpItem(item) : "";
+              })
+            : ""}
         </RoundedTR>
         <RoundedTR>
-          {premiumItems.map(item => {
-            return item ? bpItem(item) : "";
-          })}
+          {premiumItems
+            ? premiumItems.map(item => {
+                return item ? bpItem(item) : "";
+              })
+            : ""}
         </RoundedTR>
       </tbody>
     </BPTable>
@@ -104,8 +108,8 @@ const BattlePass: React.FunctionComponent<Props> = props => {
     <>
       <Header>BattlePass</Header>
       <Scrollable>
-        {bp.status === "loading" ? loading : ""}
-        {bp.status === "loaded" ? bptable : ""}
+        {bp && bp.status === "loading" ? loading : ""}
+        {bp && bp.status === "loaded" ? bptable : ""}
       </Scrollable>
     </>
   );

@@ -1,5 +1,4 @@
 import * as React from "react";
-import styled from "styled-components";
 import moment from "moment";
 import Timeline, {
   TimelineHeaders,
@@ -57,20 +56,14 @@ const staticItems = [
 ];
 
 const itemRenderer: React.FunctionComponent<ItemProps> = props => {
-  const {
-    item,
-    timelineContext,
-    itemContext,
-    getItemProps,
-    getResizeProps
-  } = props;
+  const { item, itemContext, getItemProps, getResizeProps } = props;
   const { left: leftResizeProps, right: rightResizeProps } = getResizeProps();
   const backgroundColor = itemContext.selected
     ? itemContext.dragging
       ? "red"
       : item.selectedBgColor
     : item.bgColor;
-  const borderColor = itemContext.resizing ? "red" : item.color;
+  //const borderColor = itemContext.resizing ? "red" : item.color;
   return (
     <div
       {...getItemProps({

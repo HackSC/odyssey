@@ -7,7 +7,7 @@ import {
   getProfile,
   handleAdminRedirect
 } from "../lib/authenticate";
-import { getHouses, getHouseInfo } from "../lib/live";
+//import { getHouses, getHouseInfo } from "../lib/live";
 
 import Head from "../components/Head";
 import Navbar from "../components/Navbar";
@@ -66,7 +66,10 @@ Dashboard.getInitialProps = async ({ req }) => {
     });
   }
 
-  const socialPosts = generatePosts(profile);
+  let socialPosts = {};
+  if (profile) {
+    socialPosts = generatePosts(profile);
+  }
 
   return {
     houses,

@@ -19,10 +19,4 @@ const CardWheel: React.FunctionComponent = () => {
   );
 };
 
-const AnnouncementsDiv = styled.div`
-  max-height: 20rem;
-  overflow-y: scroll;
-  padding-bottom: 2rem;
-`;
-
 export default CardWheel;
