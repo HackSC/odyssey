@@ -9,24 +9,33 @@ import "react-tippy/dist/tippy.css";
 
 import { Theme, GlobalStyles } from "../styles";
 import { ToastProvider } from "react-toast-notifications";
+import PersonSwitcher from "../components/PersonSwitcher";
+import { getProfile } from "../lib/authenticate";
+import UserContext from "../components/UserContext";
 
-class OdysseyApp extends App {
+class OdysseyApp extends App<any> {
+  state = {
+    isDev: false
+  };
+
   static async getInitialProps({ Component, ctx }) {
-    let pageProps = {};
+    let pageProps: any = {};
 
     if (Component.getInitialProps) {
       pageProps = await Component.getInitialProps(ctx);
     }
 
-    persistLinkReferrerCode(ctx, ctx.query);
+    const profile = await getProfile(ctx.req);
 
-    return { pageProps };
+    return { pageProps, user: { profile } };
   }
 
   componentDidMount() {
     // Let's just hardcode the hotjar
     if (process.env.NODE_ENV === "production") {
       hotjar.initialize("1547187");
+    } else {
+      this.setState({ isDev: true });
     }
 
     if (typeof window !== "undefined") {
@@ -39,15 +48,23 @@ class OdysseyApp extends App {
   }
 
   render() {
-    const { Component, pageProps } = this.props;
+    const { Component, pageProps, user } = this.props;
+    const { isDev } = this.state;
 
     return (
       <ThemeProvider theme={Theme}>
-        <ToastProvider autoDismiss={true} autoDismissTimeout={3000}>
-          <>
-            <GlobalStyles />
-            <Component {...pageProps} />
-          </>
+        <ToastProvider
+          autoDismiss={true}
+          autoDismissTimeout={3000}
+          placement="bottom-center"
+        >
+          <UserContext.Provider value={user}>
+            <>
+              <GlobalStyles />
+              {isDev && <PersonSwitcher />}
+              <Component {...pageProps} />
+            </>
+          </UserContext.Provider>
         </ToastProvider>
       </ThemeProvider>
     );

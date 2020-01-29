@@ -82,14 +82,21 @@ declare type CookieValues = {
   referrerCode?: string;
 };
 
-declare type Person = {};
+declare type Person = {
+  Profile: Profile;
+  identityId: string;
+};
 
-declare type Prize = {};
+declare type Prize = {
+  title: string;
+  description: string;
+  id: number;
+};
 
 declare type ProjectTeam = {
   name: string;
   devpostLink: string;
   githubLink: string;
-  Persons: Persons[];
+  Members: Person[];
   Prizes: Prize[];
 };
