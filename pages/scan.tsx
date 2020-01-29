@@ -22,15 +22,17 @@ const Scan = ({ profile }) => {
     setAction(e.target.value);
   };
 
-  const checkIfUserId = (code: string): boolean => {
-    const GOOGLE_AUTH_PREFIX = "google-oauth2|";
-    const AUTH0_PREFIX = "auth0|";
-
-    return code.startsWith(GOOGLE_AUTH_PREFIX) || code.startsWith(AUTH0_PREFIX);
+  const checkIfValidCode = (code: string): boolean => {
+    if (code.length === 4) {
+      const uppercaseAlphanumericRegEx = /[A-Z,0-9]{4}/;
+      return uppercaseAlphanumericRegEx.test(code);
+    } else {
+      return false;
+    }
   };
 
   const sendScanRequest = async (code: string) => {
-    if (!checkIfUserId(code)) {
+    if (!checkIfValidCode(code)) {
       return;
     }
 
