@@ -29,12 +29,12 @@ const HouseProgress = ({ houses }: Props) => {
                 <Fox fill={house.color} width={50} height={50} />
               </FoxFlex>
             </CenteredColumn>
-            <CenteredColumn flexBasis={40}>
+            <ProgressColumn flexBasis={40}>
               <ProgressBar
                 filledBackground={house.color}
                 percent={(house.sum * 100) / cumulativeSum}
               />
-            </CenteredColumn>
+            </ProgressColumn>
             <CenteredColumn flexBasis={30}>
               <Points>{house.sum} points</Points>
             </CenteredColumn>
@@ -45,6 +45,10 @@ const HouseProgress = ({ houses }: Props) => {
   }
   return <div>{result}</div>;
 };
+
+const ProgressColumn = styled(CenteredColumn)`
+  width: 100%;
+`;
 
 const FoxFlex = styled.div`
   align-items: center;
