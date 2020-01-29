@@ -42,20 +42,20 @@ Dashboard.getInitialProps = async ({ req }) => {
     handleLoginRedirect(req);
   } else if (profile.role == "admin") {
     handleAdminRedirect(req);
+  } else {
+    if (typeof window !== "undefined") {
+      Sentry.configureScope(function(scope) {
+        scope.setExtra("profile", profile);
+      });
+    }
+
+    const socialPosts = generatePosts(profile);
+
+    return {
+      profile,
+      socialPosts
+    };
   }
-
-  if (typeof window !== "undefined") {
-    Sentry.configureScope(function(scope) {
-      scope.setExtra("profile", profile);
-    });
-  }
-
-  const socialPosts = generatePosts(profile);
-
-  return {
-    profile,
-    socialPosts
-  };
 };
 
 export default Dashboard;
