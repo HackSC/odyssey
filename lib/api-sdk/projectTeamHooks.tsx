@@ -9,16 +9,46 @@ type SelfHookParams<T> = {
   req?: NextApiRequest;
 };
 
+const resourceRoute = Routes.ProjectTeamSelf;
+
+function getProjectTeamSelfFetch(req?: NextApiRequest) {
+  return APIGet<ProjectTeam>(resourceRoute, null, req);
+}
+
+function createProjectTeamSelfFetch(body: Partial<ProjectTeam>) {
+  return APIPost(resourceRoute, body);
+}
+
+function joinProjectTeamSelfFetch(projectName: string) {
+  return APIPut(Routes.ProjectTeamSelfJoin, {}, projectName as ResourceID);
+}
+
+function updateProjectTeamSelfFetch(
+  params: Partial<Extract<ProjectTeam, string>>
+) {
+  return APIPut(resourceRoute, params);
+}
+
+function addPrizeSelfFetch(prize: Prize) {
+  return APIPost(Routes.ProjectTeamSelfAddPrize, prize);
+}
+
+function removePrizeSelfFetch(prize: Prize) {
+  return APIDelete(Routes.ProjectTeamSelfDeletePrize, prize.id);
+}
+
+function removeMemberSelfFetch(person: Person) {
+  return APIDelete(Routes.ProjectTeamSelfDeleteMember, person.identityId);
+}
+
 function useProjectTeamSelf({
   defaultOnError,
   initialModel
 }: SelfHookParams<ProjectTeam>) {
-  const resourceRoute = Routes.ProjectTeamSelf;
-
   const { data: projectTeam, error } = useSWR<ProjectTeam, any>(
     resourceRoute,
     async () => {
-      const res = await APIGet<ProjectTeam>(resourceRoute);
+      const res = await getProjectTeamSelfFetch();
       if (res.success) {
         return res.success;
       }
@@ -47,32 +77,6 @@ function useProjectTeamSelf({
     };
   }
 
-  function createProjectTeamSelfFetch(body: Partial<ProjectTeam>) {
-    return APIPost(resourceRoute, body);
-  }
-
-  function joinProjectTeamSelfFetch(projectName: string) {
-    return APIPut(Routes.ProjectTeamSelfJoin, {}, projectName as ResourceID);
-  }
-
-  function updateProjectTeamSelfFetch(
-    params: Partial<Extract<ProjectTeam, string>>
-  ) {
-    return APIPut(resourceRoute, params);
-  }
-
-  function addPrizeSelfFetch(prize: Prize) {
-    return APIPost(Routes.ProjectTeamSelfAddPrize, prize);
-  }
-
-  function removePrizeSelfFetch(prize: Prize) {
-    return APIDelete(Routes.ProjectTeamSelfDeletePrize, prize.id);
-  }
-
-  function removeMemberSelfFetch(person: Person) {
-    return APIDelete(Routes.ProjectTeamSelfDeleteMember, person.identityId);
-  }
-
   const createProjectTeamSelf = fetchWithMutation(createProjectTeamSelfFetch);
   const joinProjectTeamSelf = fetchWithMutation(joinProjectTeamSelfFetch);
   const updateProjectTeamSelf = fetchWithMutation(updateProjectTeamSelfFetch);
@@ -91,4 +95,4 @@ function useProjectTeamSelf({
   };
 }
 
-export { useProjectTeamSelf };
+export { useProjectTeamSelf, getProjectTeamSelfFetch };

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import styled from "styled-components";
 
 import Head from "../components/Head";
@@ -8,8 +8,10 @@ import { Background, Container, Flex, Column, Card } from "../styles";
 import ButtonWithTextForm from "../components/ButtonWithTextForm";
 import { useToasts } from "react-toast-notifications";
 import MultiTextForm from "../components/MultiTextForm";
-import { useProjectTeamSelf } from "../lib/api-sdk/projectTeamHooks";
-import { APIPost, APIGet, Routes } from "../lib/api-sdk/fetcher";
+import {
+  useProjectTeamSelf,
+  getProjectTeamSelfFetch
+} from "../lib/api-sdk/projectTeamHooks";
 
 type Props = {
   projectTeam: ProjectTeam;
@@ -229,11 +231,7 @@ const TeamCard = styled(Card)`
 `;
 
 ProjectTeam.getInitialProps = async ({ req, query }): Promise<Props> => {
-  const { success } = await APIGet<ProjectTeam>(
-    Routes.ProjectTeamSelf,
-    null,
-    req
-  );
+  const { success } = await getProjectTeamSelfFetch(req);
   const allPrizes = await getAllPrizes(req);
 
   return {

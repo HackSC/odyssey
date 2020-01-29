@@ -1,12 +1,20 @@
 import { NextApiRequest } from "next";
 
-enum Routes {
-  ProjectTeamSelf = "api/projectTeam/self",
-  ProjectTeamSelfAddPrize = "api/projectTeam/self/addPrize",
-  ProjectTeamSelfDeletePrize = "api/projectTeam/self/deletePrize",
-  ProjectTeamSelfDeleteMember = "api/projectTeam/self/deleteMember",
-  ProjectTeamSelfJoin = "api/projectTeam/join"
+interface IRoutes {
+  ProjectTeamSelf: GetRoute & PostRoute;
+  ProjectTeamSelfAddPrize: PostRoute;
+  ProjectTeamSelfDeletePrize: DeleteRoute;
+  ProjectTeamSelfDeleteMember: DeleteRoute;
+  ProjectTeamSelfJoin: PutRoute;
 }
+
+const Routes: IRoutes = {
+  ProjectTeamSelf: "api/projectTeam/self" as Route,
+  ProjectTeamSelfAddPrize: "api/projectTeam/self/addPrize" as Route,
+  ProjectTeamSelfDeletePrize: "api/projectTeam/self/deletePrize" as Route,
+  ProjectTeamSelfDeleteMember: "api/projectTeam/self/deleteMember" as Route,
+  ProjectTeamSelfJoin: "api/projectTeam/join" as Route
+};
 
 async function processResponse<T>(res: Response): Promise<APIResponse<T>> {
   if (res.status == 400 || res.status == 200) {
@@ -30,7 +38,7 @@ function setupHeaders(req: any, additionalHeaders: HeadersInit): HeadersInit {
   };
 }
 
-function computeUrlRoute(route: Routes, req?: any, param?: ResourceID): string {
+function computeUrlRoute(route: string, req?: any, param?: ResourceID): string {
   const serverRoute = req
     ? /* Serverside */ process.env.URL_BASE + route
     : /* Client */ "/" + route;
@@ -42,7 +50,7 @@ function computeUrlRoute(route: Routes, req?: any, param?: ResourceID): string {
 }
 
 async function APIGet<T>(
-  route: Routes,
+  route: GetRoute,
   param?: ResourceID,
   req?: NextApiRequest
 ): Promise<APIResponse<T>> {
@@ -56,7 +64,7 @@ async function APIGet<T>(
 }
 
 async function APIPost<S, T>(
-  route: Routes,
+  route: PostRoute,
   body: S,
   req?: NextApiRequest
 ): Promise<APIResponse<T>> {
@@ -73,7 +81,7 @@ async function APIPost<S, T>(
 }
 
 async function APIPut<S, T>(
-  route: Routes,
+  route: PutRoute,
   body?: S,
   param?: ResourceID,
   req?: NextApiRequest
@@ -91,7 +99,7 @@ async function APIPut<S, T>(
 }
 
 async function APIDelete<S, T>(
-  route: Routes,
+  route: DeleteRoute,
   param?: ResourceID,
   req?: NextApiRequest
 ): Promise<APIResponse<T>> {
