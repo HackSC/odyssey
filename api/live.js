@@ -147,9 +147,6 @@ async function handleCheckin(userId, req, res) {
         .json({ invalid: `User has status ${profileStatus}` });
     }
 
-    profile.status = "checkedIn";
-    await profile.save();
-
     const [pointsProfile, isCreated] = await models.Person.findOrCreate({
       where: { identityId: userId },
       defaults: { isBattlepassComplete: false }
@@ -161,39 +158,58 @@ async function handleCheckin(userId, req, res) {
         .json({ error: "Hacker has already had a person profile created" });
     }
 
-    const result = await models.House.findAll({
-      raw: true,
-      attributes: {
-        include: [
-          [
-            sequelize.fn("COUNT", sequelize.col("People.identityId")),
-            "personCount"
-          ]
+    const minHouse = await models.House.findOne({
+      attributes: [
+        ["id", "id"],
+        ["name", "name"],
+        [
+          sequelize.literal(
+            "(SELECT COUNT(*) FROM persons where persons.houseId = House.id)"
+          ),
+          "personCount"
         ]
-      },
-      include: [
-        {
-          model: models.Person,
-          attributes: []
-        }
-      ]
+      ],
+      order: [[sequelize.literal("personCount"), "ASC"]]
     });
 
-    console.log(result);
+    profile.status = "checkedIn";
+    await profile.save();
 
-    // Should sort result in ascending order (lowest personCount first)
-    result.sort(function(a, b) {
-      return a.personCount - b.personCount;
-    });
-
-    console.log("After the fact");
-    console.log(result);
+    pointsProfile.houseId = minHouse.id;
+    await pointsProfile.save();
 
     return res.json({ pointsProfile: pointsProfile });
   } catch (e) {
     return res.status(500).json({ err: e.message });
   }
 }
+
+router.get("/testThing", async (req, res) => {
+  const result = await models.House.findAll({
+    attributes: [
+      ["id", "id"],
+      ["name", "name"],
+      [
+        sequelize.literal(
+          "(SELECT COUNT(*) FROM persons where persons.houseId = House.id)"
+        ),
+        "personCount"
+      ]
+    ],
+    order: [[sequelize.literal("personCount"), "ASC"]]
+  });
+  /*
+  console.log(result);
+
+  // Should sort result in ascending order (lowest personCount first)
+  result.sort(function(a, b) {
+    return a.personCount - b.personCount;
+  });
+  */
+  console.log("After the fact");
+  console.log(result);
+  return res.json({ result });
+});
 
 router.get("/lookup", async (req, res) => {
   const lookupFilter = {};
