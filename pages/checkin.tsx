@@ -92,9 +92,16 @@ const CheckinResult = ({ result, resetResults }) => {
           <input type="text" maxLength={4} ref={qrInput}></input>
           <Button onClick={handleAssignment}>Assign QR</Button>
         </Flex>
+      ) : result.status === "checkedIn" ? (
+        <p>
+          <b>Hacker is already checked in!</b>
+        </p>
       ) : (
         <p>
-          <b>Hacker cannot be checked in. Status is not confirmed</b>
+          <b>
+            Hacker cannot be checked in because they are neither confirmed nor
+            checked in
+          </b>
         </p>
       )}
     </Result>

@@ -54,22 +54,22 @@ const Scanner = (props: any) => {
         drawLine(
           code.location.topLeftCorner,
           code.location.topRightCorner,
-          "#3DDE1F"
+          "#1FA7DE"
         );
         drawLine(
           code.location.topRightCorner,
           code.location.bottomRightCorner,
-          "#3DDE1F"
+          "#1FA7DE"
         );
         drawLine(
           code.location.bottomRightCorner,
           code.location.bottomLeftCorner,
-          "#3DDE1F"
+          "#1FA7DE"
         );
         drawLine(
           code.location.bottomLeftCorner,
           code.location.topLeftCorner,
-          "#3DDE1F"
+          "#1FA7DE"
         );
       }
     }
@@ -88,10 +88,12 @@ const Scanner = (props: any) => {
           video: {
             facingMode: "environment",
             width: {
-              max: 256
+              min: 300,
+              max: 300
             },
             height: {
-              max: 256
+              min: 300,
+              max: 300
             }
           }
         })
@@ -114,8 +116,9 @@ const ScannerCanvas = styled.canvas`
   margin-left: auto;
   margin-right: auto;
   object-fit: contain;
-  width: 90%;
-  height: 90%;
+  max-width: 100%;
+  max-height: 100%;
+  border-radius: 4px;
 `;
 
 type ScannerMessageProps = {
