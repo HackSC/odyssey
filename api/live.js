@@ -19,15 +19,11 @@ const actions = {
 
 router.post("/dispatch", async (req, res) => {
   const { qrCodeId, actionId } = { ...req.body };
-  console.log("Action with items: ");
-  console.log(qrCodeId);
-  console.log(actionId);
+
   const hackerProfile = await models.HackerProfile.findOne({
     where: { qrCodeId: qrCodeId }
   });
-
   const userId = hackerProfile.get("userId");
-  console.log("Parsed userId: ", userId);
 
   //TODO: Add sentry logging at the dispatch level
   switch (actionId) {
