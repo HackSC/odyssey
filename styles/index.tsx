@@ -13,6 +13,7 @@ export { default as Card } from "./Card";
 export { default as TextCardDiv } from "./TextCard";
 export { default as BPLock } from "./BPLock";
 export { default as BPOpenLock } from "./BPOpenLock";
+export { default as Fox } from "./Fox";
 export {
   default as Form,
   FormGroup,

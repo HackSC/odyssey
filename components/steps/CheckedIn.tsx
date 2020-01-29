@@ -12,6 +12,7 @@ import useHouses from "../../lib/useHouses";
 import usePerson from "../../lib/usePerson";
 import useWindowSize from "react-use/lib/useWindowSize";
 import Confetti from "react-confetti";
+import { Fox } from "../../styles";
 
 interface Props {
   profile: Profile;
@@ -23,10 +24,6 @@ const CheckedIn: React.FunctionComponent<Props> = props => {
   const houseInfo = useHouses(profile);
   const person = usePerson(props);
   const { width, height } = useWindowSize();
-
-  console.log(houseInfo);
-  console.log(person);
-  console.log(profile);
 
   // * Check if house is in the lead and display react-confetti
   const confetti = (
@@ -40,11 +37,14 @@ const CheckedIn: React.FunctionComponent<Props> = props => {
     />
   );
 
-  let notie =
+  const notie =
     person.length > 0 &&
     houseInfo.length > 1 &&
     person[0].id === houseInfo[0].id &&
     person[0].id !== houseInfo[1].id;
+
+  let HouseFoxColor = person.length > 0 ? person[0].color : "#FF8379";
+  let PersonFoxColor = "#E7862B";
 
   return (
     <>
@@ -71,7 +71,7 @@ const CheckedIn: React.FunctionComponent<Props> = props => {
               </CheckInTitle>
               <Flex justify="space-between" tabletVertical>
                 <ImgColumn flexBasis={50}>
-                  <HouseImg src={HouseLogo} alt="House Logo" />
+                  <Fox fill={HouseFoxColor} width={"500"} height={"500"} />
                 </ImgColumn>
                 <Column flexBasis={50}>
                   <CheckInTitle>
@@ -88,7 +88,7 @@ const CheckedIn: React.FunctionComponent<Props> = props => {
               <CheckInTitle>You</CheckInTitle>
               <Flex justify="space-between" tabletVertical>
                 <ImgColumn flexBasis={50}>
-                  <HouseImg src={HouseLogo} alt="House Logo" />
+                  <Fox fill={PersonFoxColor} width={"500"} height={"500"} />
                 </ImgColumn>
                 <Column flexBasis={50}>
                   <CheckInTitle>
