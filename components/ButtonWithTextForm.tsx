@@ -29,7 +29,8 @@ const ButtonWithTextForm = ({ title, label, onSubmit, buttonText }) => {
               e.preventDefault();
               onSubmit(text);
               setText("");
-            }}>
+            }}
+          >
             {buttonText}
           </Button>
         </InputFlex>

@@ -39,7 +39,9 @@ const Admin = ({ profile }) => {
             >
               <ActionTitle>Access Metabase</ActionTitle>
             </Action>
-
+            <Action href="/scan">
+              <ActionTitle>Scan In Hackers</ActionTitle>
+            </Action>
             <Action href="/checkin">
               <ActionTitle>Check In Hackers</ActionTitle>
             </Action>
