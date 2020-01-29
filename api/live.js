@@ -71,10 +71,13 @@ async function handleGroupContrib(userId, req, res) {
     });
     const teammates = result.get("ProjectTeam").get("People");
     const taskId = req.body.taskId;
+    const taskMultiplier = getMultiplierForTask(taskId);
     const teammateContribs = teammates.map(tm => {
       const tmId = tm.dataValues.identityId;
       return models.Contribution.create({
         personId: tmId,
+        multiplier: taskMultiplier,
+        scannerId: req.user.id,
         taskId: taskId
       });
     });
@@ -95,11 +98,22 @@ async function handleContrib(userId, req, res) {
     return res.status(400).json({ error: "Invalid request" });
   } else {
     try {
-      const result = await models.Contribution.create({
-        personId: userId,
-        scannerId: req.user.id,
-        taskId: input.taskId
+      const taskMultiplier = getMultiplierForTask(input.taskId);
+      const [result, isCreated] = await models.Contribution.findOrCreate({
+        defaults: {
+          multiplier: taskMultiplier,
+          scannerId: req.user.id
+        },
+        where: {
+          personId: userId,
+          taskId: input.taskId
+        }
       });
+      if (!isCreated) {
+        return res.status(400).json({
+          error: "User already has completed this task"
+        });
+      }
       return res.json({
         contribution: result,
         message: `Successfully created a task contribution for ${profile.firstName} ${profile.lastName}`
@@ -107,6 +121,34 @@ async function handleContrib(userId, req, res) {
     } catch (e) {
       return res.status(500).json({ error: e.message });
     }
+  }
+}
+
+async function getMultiplierForTask(taskId) {
+  try {
+    const result = await models.Task.findOne({
+      where: {
+        id: taskId
+      },
+
+      include: [
+        {
+          model: models.Grouping,
+          required: false,
+          include: [
+            {
+              model: models.Multiplier,
+              required: false
+            }
+          ]
+        }
+      ]
+    });
+    const multipliers = result.get("Grouping").get("Multipliers");
+    return multipliers.reduce((x, y) => x + y.dataValues.multiplierValue, 0);
+  } catch (e) {
+    Sentry.captureMessage(e.message);
+    return 1;
   }
 }
 
@@ -123,11 +165,22 @@ async function handleEmailContrib(userEmail, req, res) {
         }
       });
       const userId = profile.get("userId");
-      const result = await models.Contribution.create({
-        personId: userId,
-        scannerId: req.user.id,
-        taskId: input.taskId
+      const taskMultiplier = getMultiplierForTask(input.taskId);
+      const [result, isCreated] = await models.Contribution.findOrCreate({
+        defaults: {
+          multiplier: taskMultiplier,
+          scannerId: req.user.id
+        },
+        where: {
+          personId: userId,
+          taskId: taskId
+        }
       });
+      if (!isCreated) {
+        return res.status(400).json({
+          error: "User already has completed this task"
+        });
+      }
       return res.json({ contribution: result });
     } catch (e) {
       return res.status(500).json({ error: e.message });

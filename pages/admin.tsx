@@ -79,7 +79,9 @@ Admin.getInitialProps = async ctx => {
   // Null profile means user is not logged in, and this is only relevant for admins
   if (!profile || profile.role !== "admin") {
     handleLoginRedirect(req);
-  } else {
+  }
+
+  if (profile) {
     //Referrer Code Special Case Handling
     profile.referrerCode = getReferrerCode(ctx, profile);
   }
