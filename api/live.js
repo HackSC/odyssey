@@ -19,10 +19,15 @@ const actions = {
 
 router.post("/dispatch", async (req, res) => {
   const { qrCodeId, actionId } = { ...req.body };
+  console.log("Action with items: ");
+  console.log(qrCodeId);
+  console.log(actionId);
   const hackerProfile = await models.HackerProfile.findOne({
     where: { qrCodeId: qrCodeId }
   });
+
   const userId = hackerProfile.get("userId");
+  console.log("Parsed userId: ", userId);
 
   //TODO: Add sentry logging at the dispatch level
   switch (actionId) {
@@ -124,6 +129,38 @@ async function handleEmailContrib(userEmail, req, res) {
 
 async function handleCheckin(userId, req, res) {
   try {
+    const profile = await models.HackerProfile.findOne({
+      where: { userId: userId }
+    });
+    const profileStatus = profile.get("status");
+
+    const invalidStatuses = [
+      "unverified",
+      "verified",
+      "rejected",
+      "submitted",
+      "checkedIn"
+    ];
+    if (invalidStatuses.includes(profileStatus)) {
+      return res
+        .status(400)
+        .json({ invalid: `User has status ${profileStatus}` });
+    }
+
+    profile.status = "checkedIn";
+    await profile.save();
+
+    const [pointsProfile, isCreated] = await models.Person.findOrCreate({
+      where: { identityId: userId },
+      defaults: { isBattlepassComplete: false }
+    });
+
+    if (!isCreated) {
+      return res
+        .status(400)
+        .json({ error: "Hacker has already had a person profile created" });
+    }
+
     const result = await models.House.findAll({
       raw: true,
       attributes: {
@@ -142,36 +179,15 @@ async function handleCheckin(userId, req, res) {
       ]
     });
 
+    console.log(result);
+
     // Should sort result in ascending order (lowest personCount first)
     result.sort(function(a, b) {
       return a.personCount - b.personCount;
     });
 
-    const pointsProfile = await models.Person.create({
-      identityId: userId,
-      houseId: result[0].id,
-      isBattlepassComplete: false
-    });
-
-    const profile = await models.HackerProfile.findOne({
-      where: { userId: userId }
-    });
-    const profileStatus = profile.get("status");
-    const invalidStatuses = [
-      "unverified",
-      "verified",
-      "rejected",
-      "submitted",
-      "checkedIn"
-    ];
-    if (invalidStatuses.includes(profileStatus)) {
-      return res
-        .status(400)
-        .json({ invalid: `User has status ${profileStatus}` });
-    }
-
-    profile.status = "checkedIn";
-    await profile.save();
+    console.log("After the fact");
+    console.log(result);
 
     return res.json({ pointsProfile: pointsProfile });
   } catch (e) {
