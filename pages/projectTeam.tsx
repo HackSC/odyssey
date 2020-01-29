@@ -8,6 +8,8 @@ import { Background, Container, Flex, Column, Card } from "../styles";
 import ButtonWithTextForm from "../components/ButtonWithTextForm";
 import { useToasts } from "react-toast-notifications";
 import MultiTextForm from "../components/MultiTextForm";
+import { useProjectTeamSelf } from "../lib/api-sdk/projectTeamHooks";
+import { APIPost, APIGet, Routes } from "../lib/api-sdk/fetcher";
 
 type Props = {
   projectTeam: ProjectTeam;
@@ -15,37 +17,31 @@ type Props = {
 };
 
 const ProjectTeam = (props: Props) => {
-  const [team, setTeam] = useState(props.projectTeam);
-  const [allPrizes, setAllPrizes] = useState(props.allPrizes);
   const { addToast } = useToasts();
+  const onError = (e: string) => {
+    addToast(e, { appearance: "error" });
+  };
+  const {
+    projectTeam,
+    createProjectTeamSelf,
+    updateProjectTeamSelf,
+    addPrizeSelf,
+    removePrizeSelf,
+    removeMemberSelf,
+    joinProjectTeamSelf
+  } = useProjectTeamSelf({
+    defaultOnError: onError,
+    initialModel: props.projectTeam
+  });
+
+  const { allPrizes } = props;
+
   const handleJoinProjectTeam = (name: string) => {
-    joinProjectTeam(name)
-      .then(projectTeam => {
-        setTeam(projectTeam);
-        addToast("Joined Team: " + projectTeam.name, {
-          appearance: "success"
-        });
-      })
-      .catch(e => {
-        addToast("Failed to join team with code: " + name, {
-          appearance: "error"
-        });
-      });
+    joinProjectTeamSelf(name);
   };
 
   const handleCreateProjectTeam = (name: string) => {
-    createProjectTeam(name)
-      .then(projectTeam => {
-        setTeam(projectTeam);
-        addToast("Created Team: " + name, {
-          appearance: "success"
-        });
-      })
-      .catch(e => {
-        addToast("Failed to create team:" + e.err, {
-          appearance: "error"
-        });
-      });
+    createProjectTeamSelf({ name });
   };
 
   const CreateTeamSection = () => {
@@ -81,25 +77,25 @@ const ProjectTeam = (props: Props) => {
     );
   };
 
-  const addPrizeHandler = async (p: Prize) => {
-    setTeam(await addPrize(p));
-    addToast("Added Prize: " + p.title, { appearance: "success" });
-  };
+  // const addPrizeHandler = async (p: Prize) => {
+  //   setTeam(await addPrize(p));
+  //   addToast("Added Prize: " + p.title, { appearance: "success" });
+  // };
 
-  const removePrizeHandler = async (p: Prize) => {
-    setTeam(await removePrize(p));
-    addToast("Removed Prize: " + p.title, { appearance: "info" });
-  };
+  // const removePrizeHandler = async (p: Prize) => {
+  //   setTeam(await removePrize(p));
+  //   addToast("Removed Prize: " + p.title, { appearance: "info" });
+  // };
 
-  const updateTeamHandler = async values => {
-    setTeam(await updateTeamMetadata(values));
-    addToast("Updated Team Info", { appearance: "success" });
-  };
+  // const updateTeamHandler = async values => {
+  //   setTeam(await updateTeamMetadata(values));
+  //   addToast("Updated Team Info", { appearance: "success" });
+  // };
 
-  const onTeamMemberRemove = async (p: Person) => {
-    setTeam(await removeTeamMember(p));
-    addToast("Removed: " + p.Profile.email, { appearance: "info" });
-  };
+  // const onTeamMemberRemove = async (p: Person) => {
+  //   setTeam(await removeTeamMember(p));
+  //   addToast("Removed: " + p.Profile.email, { appearance: "info" });
+  // };
 
   const TeamInfoSection = () => {
     return (
@@ -107,31 +103,34 @@ const ProjectTeam = (props: Props) => {
         <h1>Your HackSC Team</h1>
         <MultiTextForm
           title="Team Information"
-          onSubmit={updateTeamHandler}
+          onSubmit={updateProjectTeamSelf}
           fields={[
             {
-              initialValue: team.name,
+              initialValue: projectTeam.name,
               label: "Team Name",
               name: "name"
             },
             {
-              initialValue: team.devpostLink,
+              initialValue: projectTeam.devpostLink,
               label: "Devpost Link",
               name: "devpostLink"
             },
             {
-              initialValue: team.githubLink,
+              initialValue: projectTeam.githubLink,
               label: "Github Link",
               name: "githubLink"
             }
           ]}
         />
-        <TeamMemberTable projectTeam={team} onRemove={onTeamMemberRemove} />
+        <TeamMemberTable
+          projectTeam={projectTeam}
+          onRemove={removeMemberSelf}
+        />
         <PrizeTable
-          projectTeam={team}
+          projectTeam={projectTeam}
           allPrizes={allPrizes}
-          onAddPrize={addPrizeHandler}
-          onRemovePrize={removePrizeHandler}
+          onAddPrize={addPrizeSelf}
+          onRemovePrize={removePrizeSelf}
         />
       </>
     );
@@ -143,96 +142,13 @@ const ProjectTeam = (props: Props) => {
       <Navbar loggedIn activePage="team" />
       <Background>
         <Container>
-          {team ? <TeamInfoSection /> : <CreateTeamSection />}
+          {projectTeam ? <TeamInfoSection /> : <CreateTeamSection />}
         </Container>
       </Background>
       <Footer />
     </>
   );
 };
-
-async function getProjectTeam(req): Promise<ProjectTeam> {
-  const urlRoute = req
-    ? /* Serverside */ process.env.URL_BASE + "api/projectTeam/self"
-    : /* Client */ "/api/projectTeam/self";
-  const result = await fetch(
-    urlRoute,
-    req
-      ? {
-          headers: req.headers
-        }
-      : null
-  ).then(res => {
-    return res.json();
-  });
-
-  return result.projectTeam;
-}
-
-async function joinProjectTeam(name: string): Promise<ProjectTeam> {
-  const res = await fetch("/api/projectTeam/join/" + name, {
-    method: "PUT"
-  });
-
-  if (!res.ok) {
-    const errorMessage = (await res.json()).err;
-    throw Error(errorMessage);
-  }
-  return res.json().then(json => json.projectTeam);
-}
-
-async function createProjectTeam(name: string): Promise<ProjectTeam> {
-  const res = await fetch("/api/projectTeam/self", {
-    method: "POST",
-    body: JSON.stringify({ name }),
-    headers: {
-      "Content-Type": "application/json"
-    }
-  });
-  if (!res.ok) {
-    const errorMessage = await res.json();
-    throw Error(errorMessage);
-  }
-
-  return res.json().then(json => json.projectTeam);
-}
-
-async function removePrize(prize: Prize): Promise<ProjectTeam> {
-  const result = await fetch("/api/projectTeam/self/deletePrize/" + prize.id, {
-    method: "DELETE"
-  }).then(res => res.json());
-  return result.projectTeam;
-}
-
-async function removeTeamMember(member: Person): Promise<ProjectTeam> {
-  const result = await fetch(
-    "/api/projectTeam/self/deleteMember/" + member.identityId,
-    {
-      method: "DELETE"
-    }
-  ).then(res => res.json());
-  return result.projectTeam;
-}
-
-async function addPrize(prize: Prize): Promise<ProjectTeam> {
-  const result = await fetch("/api/projectTeam/self/addPrize/" + prize.id, {
-    method: "POST"
-  }).then(res => res.json());
-  return result.projectTeam;
-}
-
-async function updateTeamMetadata(
-  data: Partial<ProjectTeam>
-): Promise<ProjectTeam> {
-  const result = await fetch("/api/projectTeam/self", {
-    method: "PUT",
-    body: JSON.stringify(data),
-    headers: {
-      "Content-Type": "application/json"
-    }
-  }).then(res => res.json());
-  return result.projectTeam;
-}
 
 async function getAllPrizes(req): Promise<Prize[]> {
   const urlRoute = req
@@ -248,7 +164,7 @@ async function getAllPrizes(req): Promise<Prize[]> {
       : null
   ).then(res => res.json());
 
-  return result.prizes;
+  return result.success;
 }
 
 const TeamMemberTable = (props: {
@@ -312,11 +228,15 @@ const TeamCard = styled(Card)`
 `;
 
 ProjectTeam.getInitialProps = async ({ req, query }): Promise<Props> => {
-  const projectTeam = await getProjectTeam(req);
+  const { success } = await APIGet<ProjectTeam>(
+    Routes.ProjectTeamSelf,
+    null,
+    req
+  );
   const allPrizes = await getAllPrizes(req);
 
   return {
-    projectTeam,
+    projectTeam: success,
     allPrizes
   };
 };

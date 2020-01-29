@@ -99,3 +99,8 @@ declare type ProjectTeam = {
   Members: Person[];
   Prizes: Prize[];
 };
+
+declare type APIResponse<T> = {
+  success?: T;
+  error?: string;
+};
