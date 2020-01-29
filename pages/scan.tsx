@@ -1,111 +1,110 @@
 import React, { useState, useCallback } from "react";
 import styled from "styled-components";
 
+import { useToasts } from "react-toast-notifications";
+
 import { handleLoginRedirect, getProfile } from "../lib/authenticate";
 
 import Head from "../components/Head";
-import Navbar from "../components/Navbar";
 import Scanner from "../components/Scanner";
 
-import { Background, Container, Form, Flex } from "../styles";
+import { Form } from "../styles";
 import Select from "../components/Select";
 
 const Scan = ({ profile }) => {
   const [action, setAction] = useState(null);
   const [scannedCodes, setScannedCodes] = useState([]);
-  const [successfulScan, setSuccessfulScan] = useState(null);
+
+  // TOASTS
+  const { addToast } = useToasts();
 
   const handleActionChange = e => {
     setAction(e.target.value);
   };
 
+  const checkIfUserId = (code: string): boolean => {
+    const GOOGLE_AUTH_PREFIX = "google-oauth2|";
+    const AUTH0_PREFIX = "auth0|";
+
+    return code.startsWith(GOOGLE_AUTH_PREFIX) || code.startsWith(AUTH0_PREFIX);
+  };
+
   const sendScanRequest = async (code: string) => {
-    const idRequest = await fetch(`/api/live/identity-check/${code}`);
+    if (!checkIfUserId(code)) {
+      return;
+    }
 
-    if (idRequest.status === 200) {
-      // We successfully ID'd a user, show the first and last name to the scanner
-      const idData = await idRequest.json();
-
-      // Send a request to the server to scan hacker for task
-      const scanRequest = await fetch("/api/live/dispatch", {
-        method: "POST",
-        body: JSON.stringify({
-          userId: code,
-          actionId: "checkin"
-        }),
-        headers: {
-          "Content-Type": "application/json"
-        }
-      });
-
-      if (scanRequest.status === 200) {
-        // Successful scan, let's display that to the user
-        setSuccessfulScan({
-          firstName: idData.firstName,
-          lastName: idData.lastName
-        });
+    // Send a request to the server to scan hacker for task
+    const scanRequest = await fetch("/api/live/dispatch", {
+      method: "POST",
+      body: JSON.stringify({
+        userId: code,
+        actionId: action === "checkin" ? "checkin" : "contrib",
+        taskId: action !== "checkin" ? action : null
+      }),
+      headers: {
+        "Content-Type": "application/json"
       }
+    });
+
+    const scanData = await scanRequest.json();
+
+    if (scanRequest.status === 200) {
+      // Successful scan, let's display that to the user
+      addToast(scanData.message, { appearance: "success", autoDismiss: true });
+    } else {
+      addToast(scanData.message, { appearance: "error", autoDismiss: true });
     }
   };
 
   const handleScannedCode = useCallback(
     (code: string) => {
+      const codeWithAction = `${action} -- ${code}`;
       setScannedCodes(prev => {
-        if (!prev.includes(code)) {
+        if (!prev.includes(codeWithAction)) {
           sendScanRequest(code);
-          return [...prev, code];
+          return [...prev, codeWithAction];
         } else {
           return [...prev];
         }
       });
     },
-    [scannedCodes]
+    [scannedCodes, action]
   );
 
   return (
     <>
       <Head title="HackSC Odyssey - Scan" />
-      <Container>
-        <ScanTitle>Scan Codes</ScanTitle>
+      <PageContainer>
+        <ActionBar>
+          <h1>Scan Codes</h1>
 
-        <br />
+          <h2>Select Action</h2>
+          <Form>
+            <Select
+              name="shirt-size"
+              options={[
+                {
+                  label: "HackSC Check In",
+                  value: "checkin"
+                },
+                {
+                  label: "React Workshop Attendance",
+                  value: "1"
+                }
+              ]}
+              onChange={handleActionChange}
+              required
+            />
+          </Form>
+        </ActionBar>
 
-        <h2>Select Action</h2>
-        <Form>
-          <Select
-            name="shirt-size"
-            options={[
-              {
-                label: "HackSC Check In",
-                value: "initial-check-in"
-              },
-              {
-                label: "React Workshop Attendance",
-                value: "react-check-in"
-              }
-            ]}
-            onChange={handleActionChange}
-            required
-          />
-
-          <Flex direction="column">
-            <ScanContainer>
-              {!!action && (
-                <Scanner
-                  handleScannedCode={handleScannedCode}
-                  successfulScan={successfulScan}
-                />
-              )}
-            </ScanContainer>
-
-            <HistoryContainer>
-              {scannedCodes.map((code, index) => (
-                <ScannedCode key={code + index}>{code}</ScannedCode>
-              ))}
-            </HistoryContainer>
-          </Flex>
-        </Form>
-      </Container>
+        <ScanContainer>
+          {!!action && (
+            <Scanner handleScannedCode={handleScannedCode} action={action} />
+          )}
+        </ScanContainer>
+      </PageContainer>
     </>
   );
 };
@@ -125,23 +124,24 @@ Scan.getInitialProps = async ctx => {
   };
 };
 
-const ScanTitle = styled.h1`
-  padding-top: 32px;
+const PageContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  position: fixed;
+  width: 100vw;
+  height: 100%;
+`;
+
+const ActionBar = styled.div`
+  background: ${({ theme }) => theme.colors.gray5};
+  padding: 24px;
 `;
 
 const ScanContainer = styled.div`
   flex-grow: 1;
-  margin-top: 30px;
-`;
-
-const HistoryContainer = styled.div`
-  margin-top: 16px;
-`;
-
-const ScannedCode = styled.p`
-  padding-bottom: 15px;
-  margin-bottom: 12px;
-  border-bottom: 1px solid #ededed;
+  background: #1d1d1d;
+  display: flex;
+  align-items: center;
 `;
 
 export default Scan;

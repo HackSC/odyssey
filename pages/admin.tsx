@@ -39,7 +39,9 @@ const Admin = ({ profile }) => {
             >
               <ActionTitle>Access Metabase</ActionTitle>
             </Action>
-
+            <Action href="/scan">
+              <ActionTitle>Scan In Hackers</ActionTitle>
+            </Action>
             <Action href="/checkin">
               <ActionTitle>Check In Hackers</ActionTitle>
             </Action>
@@ -54,6 +56,9 @@ const Admin = ({ profile }) => {
             </Action>
             <Action href="/judgingManager">
               <ActionTitle> Pass Judgement </ActionTitle>
+            </Action>
+            <Action href="/battlepassManager">
+              <ActionTitle> Edit Battlepass </ActionTitle>
             </Action>
           </Actions>
         </Container>

@@ -3,6 +3,7 @@ var passport = require("passport");
 var util = require("util");
 var url = require("url");
 var querystring = require("querystring");
+var utils = require("./utils");
 var router = express.Router();
 
 var secured = function(req, res, next) {
@@ -13,12 +14,7 @@ var secured = function(req, res, next) {
   res.redirect("/");
 };
 
-router.get("/devlogin", function(req, res) {
-  //Block in prod
-  if (process.env.NODE_ENV == "production") {
-    return res.redirect("/");
-  }
-
+router.get("/devlogin", utils.requireDevelopmentEnv, function(req, res) {
   req.logout();
   const { id, role } = req.query;
   const user = {

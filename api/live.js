@@ -84,17 +84,23 @@ async function handleGroupContrib(userId, req, res) {
 async function handleContrib(userId, req, res) {
   const input = req.body;
 
+  const profile = await models.HackerProfile.findByPk(userId);
+
   if (!input.taskId) {
     return res.status(400).json({ message: "Invalid request" });
   } else {
     try {
-      const result = await models.Contribution.build({
+      const result = await models.Contribution.create({
         personId: userId,
+        scannerId: req.user.id,
         taskId: input.taskId
-      }).save();
-      return res.json({ contribution: result });
+      });
+      return res.json({
+        contribution: result,
+        message: `Successfully created a task contribution for ${profile.firstName} ${profile.lastName}`
+      });
     } catch (e) {
-      return res.status(500).json({ error: e.message });
+      return res.status(500).json({ message: e.message });
     }
   }
 }
@@ -114,6 +120,7 @@ async function handleEmailContrib(userEmail, req, res) {
       const userId = profile.get("userId");
       const result = await models.Contribution.create({
         personId: userId,
+        scannerId: req.user.id,
         taskId: input.taskId
       });
       return res.json({ contribution: result });
@@ -176,7 +183,7 @@ async function handleCheckin(userId, req, res) {
 
     return res.json({ pointsProfile: pointsProfile });
   } catch (e) {
-    return res.status(500).json({ err: e.message });
+    return res.status(500).json({ message: e.message });
   }
 }
 
