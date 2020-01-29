@@ -8,6 +8,7 @@ export { default as Background } from "./Background";
 export { default as Button } from "./Button";
 export { default as Container } from "./Container";
 export { default as Column } from "./Column";
+export { default as CenteredColumn } from "./CenteredColumn";
 export { default as Flex } from "./Flex";
 export { default as Card } from "./Card";
 export { default as TextCardDiv } from "./TextCard";

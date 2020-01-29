@@ -1,18 +1,17 @@
 import * as React from "react";
 type Props = {
   fill: string;
-  width: string;
-  height: string;
+  width: number;
+  height: number;
 };
 
 const Fox: React.SFC<Props> = ({
   fill = "#E7862B",
-  width = "150",
-  height = "150"
+  width = 100,
+  height = 100
 }) => {
-  console.log(fill);
   return (
-    <svg viewBox={`0 0 ${width} ${height}`}>
+    <svg width={width} height={height} viewBox={`0 0 200 200`}>
       <defs>
         <style>
           {`.prefix__cls-2{fill:#e9564f}.prefix__cls-3{fill:#fff}.prefix__cls-6{fill:#231f20}.prefix__cls-8{fill:none;stroke:#231f20;stroke-linecap:round;stroke-linejoin:round;stroke-width:4px}.prefix__cls-10{mix-blend-mode:darken}.prefix__cls-11{fill:#bd3837}.prefix__cls-12{fill:#b76528}`}

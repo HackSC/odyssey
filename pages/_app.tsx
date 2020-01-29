@@ -6,6 +6,7 @@ import * as Sentry from "@sentry/browser";
 
 import { persistLinkReferrerCode } from "../lib/referrerCode";
 import "react-tippy/dist/tippy.css";
+import "react-step-progress-bar/styles.css";
 
 import { Theme, GlobalStyles } from "../styles";
 import { ToastProvider } from "react-toast-notifications";

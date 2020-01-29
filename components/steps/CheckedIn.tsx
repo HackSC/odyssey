@@ -3,8 +3,7 @@ import styled from "styled-components";
 
 import QRCode from "../QRCode";
 import LinkScroll from "../LinkScroll";
-import { Flex, Column } from "../../styles";
-import HouseLogo from "../../assets/hackscFox.png";
+import { Flex, CenteredColumn, Column, Fox } from "../../styles";
 import Announcements from "../announcements/Announcements";
 import Calendar from "../Calendar";
 import BattlePass from "../BattlePass";
@@ -12,7 +11,7 @@ import useHouses from "../../lib/useHouses";
 import usePerson from "../../lib/usePerson";
 import useWindowSize from "react-use/lib/useWindowSize";
 import Confetti from "react-confetti";
-import { Fox } from "../../styles";
+import HouseProgress from "../HouseProgress";
 
 interface Props {
   profile: Profile;
@@ -24,8 +23,6 @@ const CheckedIn: React.FunctionComponent<Props> = props => {
   const houseInfo = useHouses(profile);
   const person = usePerson(props);
   const { width, height } = useWindowSize();
-
-  console.log(person);
 
   // * Check if house is in the lead and display react-confetti
   const confetti = (
@@ -45,8 +42,7 @@ const CheckedIn: React.FunctionComponent<Props> = props => {
     person[0].id === houseInfo[0].id &&
     person[0].id !== houseInfo[1].id;
 
-  let HouseFoxColor = person.length > 0 ? person[0].color : "#FF8379";
-  let PersonFoxColor = "#E7862B";
+  let HouseFoxColor = person.length > 0 ? person[0].color : "#E7862B";
 
   if (person.length > 0) {
     console.log(person[0].color);
@@ -68,41 +64,19 @@ const CheckedIn: React.FunctionComponent<Props> = props => {
           </CheckInTitle>
 
           <Flex justify="space-between" tabletVertical>
-            <Column flexBasis={50}>
-              <CheckInTitle>
-                {houseInfo.length > 0 && houseInfo[0].name
-                  ? houseInfo[0].name
-                  : ""}{" "}
-                House
-              </CheckInTitle>
-              <Flex justify="space-between" tabletVertical>
-                <ImgColumn flexBasis={50}>
-                  <Fox fill={HouseFoxColor} width={"500"} height={"500"} />
-                </ImgColumn>
-                <Column flexBasis={50}>
-                  <CheckInTitle>
-                    {houseInfo.length > 0 && houseInfo[0].sum
-                      ? houseInfo[0].sum
-                      : ""}{" "}
-                    points
-                  </CheckInTitle>
-                </Column>
-              </Flex>
-            </Column>
+            <CenteredColumn flexBasis={70}>
+              <HouseProgress houses={houseInfo} />
+            </CenteredColumn>
             <hr style={{ width: "5px" }}></hr>
-            <Column flexBasis={50}>
-              <CheckInTitle>You</CheckInTitle>
-              <Flex justify="space-between" tabletVertical>
-                <ImgColumn flexBasis={50}>
-                  <Fox fill={PersonFoxColor} width={"500"} height={"500"} />
-                </ImgColumn>
-                <Column flexBasis={50}>
-                  <CheckInTitle>
-                    {person.length > 0 ? person[0]?.sum : ""} points
-                  </CheckInTitle>
-                </Column>
-              </Flex>
-            </Column>
+            <CenteredColumn flexBasis={30}>
+              <FoxFlex>
+                <Fox fill={HouseFoxColor} width={50} height={50} />
+              </FoxFlex>
+              <PointsTitle>You've contributed</PointsTitle>
+              <PointsTitle>
+                {person.length > 0 ? person[0]?.sum : ""} points!
+              </PointsTitle>
+            </CenteredColumn>
           </Flex>
         </InstructionsColumn>
       </Flex>
@@ -138,13 +112,15 @@ const CheckedIn: React.FunctionComponent<Props> = props => {
   );
 };
 
-const MarginedColumn = styled(Column)`
-  margin: 2rem;
+const FoxFlex = styled.div`
+  align-items: center;
+  margin: auto;
+  width: fit-content;
+  padding: 0.5em;
 `;
 
-const HouseImg = styled.img`
-  width: 50px;
-  height: auto;
+const MarginedColumn = styled(Column)`
+  margin: 2rem;
 `;
 
 const InstructionsColumn = styled(Column)`
@@ -156,8 +132,9 @@ const InstructionsColumn = styled(Column)`
   `}
 `;
 
-const ImgColumn = styled(Column)`
+const PointsTitle = styled.h3`
   text-align: center;
+  padding-bottom: 0.1em;
 `;
 
 const CheckInTitle = styled.h2`
