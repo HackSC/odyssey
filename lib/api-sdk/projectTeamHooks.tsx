@@ -52,7 +52,7 @@ function useProjectTeamSelf({
   }
 
   function joinProjectTeamSelfFetch(projectName: string) {
-    return APIPut(Routes.ProjectTeamSelfJoin, {}, projectName);
+    return APIPut(Routes.ProjectTeamSelfJoin, {}, projectName as ResourceID);
   }
 
   function updateProjectTeamSelfFetch(

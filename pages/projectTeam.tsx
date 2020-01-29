@@ -41,7 +41,8 @@ const ProjectTeam = (props: Props) => {
   };
 
   const handleCreateProjectTeam = (name: string) => {
-    createProjectTeamSelf({ name });
+    const nameAsResource = name as ResourceID;
+    createProjectTeamSelf({ name: nameAsResource });
   };
 
   const CreateTeamSection = () => {
@@ -106,7 +107,7 @@ const ProjectTeam = (props: Props) => {
           onSubmit={updateProjectTeamSelf}
           fields={[
             {
-              initialValue: projectTeam.name,
+              initialValue: projectTeam.name as string,
               label: "Team Name",
               name: "name"
             },

@@ -30,11 +30,7 @@ function setupHeaders(req: any, additionalHeaders: HeadersInit): HeadersInit {
   };
 }
 
-function computeUrlRoute(
-  route: Routes,
-  req?: any,
-  param?: number | string
-): string {
+function computeUrlRoute(route: Routes, req?: any, param?: ResourceID): string {
   const serverRoute = req
     ? /* Serverside */ process.env.URL_BASE + route
     : /* Client */ "/" + route;
@@ -47,7 +43,7 @@ function computeUrlRoute(
 
 async function APIGet<T>(
   route: Routes,
-  param?: number | string,
+  param?: ResourceID,
   req?: NextApiRequest
 ): Promise<APIResponse<T>> {
   const urlRoute = computeUrlRoute(route, req, param);
@@ -79,7 +75,7 @@ async function APIPost<S, T>(
 async function APIPut<S, T>(
   route: Routes,
   body?: S,
-  param?: number | string,
+  param?: ResourceID,
   req?: NextApiRequest
 ): Promise<APIResponse<T>> {
   const urlRoute = computeUrlRoute(route, req, param);
@@ -96,7 +92,7 @@ async function APIPut<S, T>(
 
 async function APIDelete<S, T>(
   route: Routes,
-  param?: number | string,
+  param?: ResourceID,
   req?: NextApiRequest
 ): Promise<APIResponse<T>> {
   const urlRoute = computeUrlRoute(route, req, param);

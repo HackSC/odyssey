@@ -14,7 +14,7 @@ declare type FormStep = {
 
 declare type Profile = {
   gender: "male" | "female" | "non-binary" | "other" | "no-say";
-  userId: string;
+  userId: ResourceID;
   ethnicity: string;
   email: string;
   major: string;
@@ -83,22 +83,25 @@ declare type CookieValues = {
 
 declare type Person = {
   Profile: Profile;
-  identityId: string;
+  identityId: ResourceID;
 };
 
 declare type Prize = {
   title: string;
   description: string;
-  id: number;
+  id: ResourceID;
 };
 
 declare type ProjectTeam = {
-  name: string;
+  name: ResourceID;
   devpostLink: string;
   githubLink: string;
   Members: Person[];
   Prizes: Prize[];
 };
+
+//ID's have additional semantic meaning beyond string or number
+declare type ResourceID = (string | number) & { __type: "ResourceID" };
 
 declare type APIResponse<T> = {
   success?: T;
