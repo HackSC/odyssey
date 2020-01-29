@@ -57,7 +57,7 @@ const BattlePass: React.FunctionComponent<Props> = props => {
   const basicItems = bp?.payload?.results?.filter(item => {
     return !item.isPremium;
   });
-  if (premiumItems.length > 0) {
+  if (premiumItems && premiumItems.length > 0) {
     premiumItems.reduce(
       (total, item, idx, arr) => {
         let sum = idx === 0 ? item.pointValue : total.total + item.pointValue;

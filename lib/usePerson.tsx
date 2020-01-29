@@ -49,7 +49,7 @@ const usePerson = (props: Props) => {
       );
   }, []);
 
-  return result?.payload?.results?.houses.map(house => {
+  let returnObj = result?.payload?.results?.houses.map(house => {
     let newHouse = Object.assign({ sum: 0 }, house);
     newHouse.sum =
       house?.People.length > 0
@@ -66,6 +66,8 @@ const usePerson = (props: Props) => {
         : 0;
     return newHouse;
   });
+
+  return returnObj.sort((a, b) => (a.sum > b.sum ? a.sum : b.sum));
 };
 
 export default usePerson;

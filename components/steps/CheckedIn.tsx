@@ -25,6 +25,8 @@ const CheckedIn: React.FunctionComponent<Props> = props => {
   const person = usePerson(props);
   const { width, height } = useWindowSize();
 
+  console.log(person);
+
   // * Check if house is in the lead and display react-confetti
   const confetti = (
     <Confetti
@@ -45,6 +47,10 @@ const CheckedIn: React.FunctionComponent<Props> = props => {
 
   let HouseFoxColor = person.length > 0 ? person[0].color : "#FF8379";
   let PersonFoxColor = "#E7862B";
+
+  if (person.length > 0) {
+    console.log(person[0].color);
+  }
 
   return (
     <>
