@@ -157,5 +157,6 @@ export {
   updateHouse,
   getCurrentEvents,
   saveEvent,
-  deleteEvent
+  deleteEvent,
+  getPersonInfo
 };

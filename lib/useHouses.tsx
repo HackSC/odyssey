@@ -65,7 +65,7 @@ const useHouses = (req: any) => {
   });
 
   // * Sort by sum so house at index 0 is the leading house
-  return returnObj.sort((a, b) => (a.sum > b.sum ? a.sum : b.sum));
+  return returnObj?.sort((a, b) => (a.sum > b.sum ? a.sum : b.sum));
 };
 
 export default useHouses;
