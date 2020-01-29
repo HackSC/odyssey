@@ -119,6 +119,7 @@ router.get("/houseInfo/:id", async (req, res) => {
     return res.json({ err: e.message });
   }
 });
+
 router.get("/houseInfo", async (req, res) => {
   try {
     const houses = await models.House.findAll({

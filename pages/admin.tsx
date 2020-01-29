@@ -77,8 +77,10 @@ Admin.getInitialProps = async ctx => {
   if (!profile || profile.role !== "admin") {
     handleLoginRedirect(req);
   }
-  //Referrer Code Special Case Handling
-  profile.referrerCode = getReferrerCode(ctx, profile);
+  if (profile) {
+    //Referrer Code Special Case Handling
+    profile.referrerCode = getReferrerCode(ctx, profile);
+  }
 
   return {
     profile

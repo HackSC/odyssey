@@ -1,11 +1,13 @@
 import React from "react";
 import * as Sentry from "@sentry/browser";
+import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
 
 import {
   handleLoginRedirect,
   getProfile,
   handleAdminRedirect
 } from "../lib/authenticate";
+//import { getHouses, getHouseInfo } from "../lib/live";
 
 import Head from "../components/Head";
 import Navbar from "../components/Navbar";
@@ -17,15 +19,21 @@ import Steps from "../components/LiveDashboard";
 
 import { generatePosts } from "../lib/referrerCode";
 
-const Dashboard = ({ profile, socialPosts }) => {
+const Dashboard = ({ profile, houses, socialPosts }) => {
   return (
     <>
       <Head title="HackSC Odyssey - Dashboard" />
       <Navbar loggedIn activePage="dashboard" />
-      <Background>
+      <Background padding={"0.5em"}>
         {profile && (
           <Container>
-            {profile && <Steps profile={profile} socialPosts={socialPosts} />}
+            {profile && (
+              <Steps
+                houses={houses}
+                profile={profile}
+                socialPosts={socialPosts}
+              />
+            )}
           </Container>
         )}
       </Background>
@@ -36,6 +44,9 @@ const Dashboard = ({ profile, socialPosts }) => {
 
 Dashboard.getInitialProps = async ({ req }) => {
   const profile = await getProfile(req);
+  //const houses = await getHouses(req);
+  const houses = [];
+  //console.log(req);
 
   // Null profile means user is not logged in
   if (!profile) {
@@ -44,15 +55,24 @@ Dashboard.getInitialProps = async ({ req }) => {
     handleAdminRedirect(req);
   }
 
+  if (profile && profile.status == "checkedIn") {
+    //const houseInfo = await getHouseInfo(req, 1);
+    //console.log(houseInfo);
+  }
+
   if (typeof window !== "undefined") {
     Sentry.configureScope(function(scope) {
       scope.setExtra("profile", profile);
     });
   }
 
-  const socialPosts = generatePosts(profile);
+  let socialPosts = {};
+  if (profile) {
+    socialPosts = generatePosts(profile);
+  }
 
   return {
+    houses,
     profile,
     socialPosts
   };
