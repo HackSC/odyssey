@@ -2,13 +2,15 @@ module.exports = (sequelize, DataTypes) => {
   const Multiplier = sequelize.define(
     "Multiplier",
     {
-      personId: DataTypes.STRING(100),
-      taskId: DataTypes.INTEGER
+      name: DataTypes.STRING,
+      multiplierValue: DataTypes.INTEGER,
+      groupingId: DataTypes.INTEGER
     },
-    { tableName: "Contributions" }
+    { tableName: "Multipliers" }
   );
   Multiplier.associate = function(models) {
     Multiplier.belongsTo(models.Grouping);
+    models.Grouping.hasMany(Multiplier, { foreignKey: "groupingId" });
   };
   return Multiplier;
 };
