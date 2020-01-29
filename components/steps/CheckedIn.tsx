@@ -135,9 +135,10 @@ const InstructionsColumn = styled(Column)`
   `}
 `;
 
-const PointsTitle = styled.h3`
+const PointsTitle = styled.h4`
   text-align: center;
   padding-bottom: 0.1em;
+  margin: 0 15px;
 `;
 
 const CheckInTitle = styled.h2`
