@@ -23,8 +23,6 @@ async function saveTask(newTask) {
     },
     body: JSON.stringify({ ...newTask, blocking: false, description: "" })
   });
-  const jsonResult = await result.json();
-  console.log(jsonResult);
   return result.status === 200;
 }
 
