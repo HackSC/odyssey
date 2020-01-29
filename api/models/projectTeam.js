@@ -9,15 +9,20 @@ module.exports = (sequelize, DataTypes) => {
     },
     {
       defaultScope: {
-        include: [sequelize.models.Prize, sequelize.models.Person]
+        include: [
+          { model: sequelize.models.Prize, as: "Prizes" },
+          { model: sequelize.models.Person, as: "Members" }
+        ]
       }
     }
   );
   ProjectTeam.associate = function(models) {
-    ProjectTeam.hasMany(models.Person);
+    ProjectTeam.hasMany(models.Person, { as: "Members" });
     ProjectTeam.belongsToMany(models.Prize, {
       through: "ProjectTeamPrizes",
-      foreignKey: "prize"
+      foreignKey: "projectTeam",
+      as: "Prizes",
+      otherKey: "prize"
     });
   };
   return ProjectTeam;

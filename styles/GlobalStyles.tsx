@@ -50,6 +50,20 @@ const GlobalStyles = createGlobalStyle`
     color: #D3D3D4;
     opacity: 1; /* Firefox */
   }  
+
+  /* Used for react-simple-dropdown */
+  .dropdown {
+    display: inline-block;
+  }
+
+  .dropdown__content {
+      display: none;
+      position: absolute;
+  }
+
+  .dropdown--active .dropdown__content {
+      display: block;
+}
 `;
 
 export default GlobalStyles;

@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState } from "react";
 import { Form, FormGroup, Flex, Button } from "../styles";
 
 import styled from "styled-components";
@@ -29,7 +29,8 @@ const ButtonWithTextForm = ({ title, label, onSubmit, buttonText }) => {
               e.preventDefault();
               onSubmit(text);
               setText("");
-            }}>
+            }}
+          >
             {buttonText}
           </Button>
         </InputFlex>

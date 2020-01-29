@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useCallback } from "react";
 import styled from "styled-components";
 
 import jsQR from "jsqr";
@@ -25,7 +25,7 @@ const Scanner = (props: any) => {
     canvas.stroke();
   };
 
-  const animate = () => {
+  const animate = useCallback(() => {
     const video = videoRef.current;
 
     if (video.readyState === video.HAVE_ENOUGH_DATA && canvasRef.current) {
@@ -74,8 +74,8 @@ const Scanner = (props: any) => {
       }
     }
 
-    requestAnimationFrame(animate);
-  };
+    animationFrame.current = requestAnimationFrame(animate);
+  }, [props.action]);
 
   useEffect(() => {
     if (canvasRef.current !== null) {
@@ -84,7 +84,17 @@ const Scanner = (props: any) => {
 
       // Use facingMode: environment to attemt to get the front camera on phones
       window.navigator.mediaDevices
-        .getUserMedia({ video: { facingMode: "environment" } })
+        .getUserMedia({
+          video: {
+            facingMode: "environment",
+            width: {
+              max: 256
+            },
+            height: {
+              max: 256
+            }
+          }
+        })
         .then(function(stream) {
           video.srcObject = stream;
           video.setAttribute("playsinline", "true"); // required to tell iOS safari we don't want fullscreen
@@ -94,45 +104,22 @@ const Scanner = (props: any) => {
 
       return () => cancelAnimationFrame(animationFrame.current);
     }
-  }, []);
+  }, [props.action]);
 
-  return (
-    <ScannerContainer>
-      <ScannerCanvas ref={canvasRef} />
-      {props.successfulScan && (
-        <ScannerMessage>
-          <p>
-            Last scanned: {props.successfulScan.firstName}{" "}
-            {props.successfulScan.lastName}
-          </p>
-        </ScannerMessage>
-      )}
-    </ScannerContainer>
-  );
+  return <ScannerCanvas ref={canvasRef} />;
 };
 
-const ScannerContainer = styled.div`
-  position: relative;
-`;
-
 const ScannerCanvas = styled.canvas`
-  width: 100%;
-  border-radius: 4px;
   display: block;
+  margin-left: auto;
+  margin-right: auto;
+  object-fit: contain;
+  width: 90%;
+  height: 90%;
 `;
 
-const ScannerMessage = styled.div`
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  padding: 12px;
-  background: rgba(6, 100, 6, 0.85);
-
-  p {
-    color: #ffffff;
-    font-weight: bold;
-  }
-`;
+type ScannerMessageProps = {
+  success: boolean;
+};
 
 export default Scanner;

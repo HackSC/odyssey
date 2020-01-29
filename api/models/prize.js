@@ -11,7 +11,9 @@ module.exports = (sequelize, DataTypes) => {
   Prize.associate = function(models) {
     Prize.belongsToMany(models.ProjectTeam, {
       through: "ProjectTeamPrizes",
-      foreignKey: "projectTeam"
+      foreignKey: "prize",
+      as: "Prizes",
+      otherKey: "projectTeam"
     });
   };
   return Prize;

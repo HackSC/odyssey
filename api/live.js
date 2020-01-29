@@ -79,6 +79,8 @@ async function handleGroupContrib(userId, req, res) {
 async function handleContrib(userId, req, res) {
   const input = req.body;
 
+  const profile = await models.HackerProfile.findByPk(userId);
+
   if (!input.taskId) {
     return res.status(400).json({ message: "Invalid request" });
   } else {
@@ -88,9 +90,13 @@ async function handleContrib(userId, req, res) {
         scannerId: req.user.id,
         taskId: input.taskId
       });
-      return res.json({ contribution: result });
+      return res.json({
+        contribution: result,
+        message: `Successfully created a task contribution for ${profile.firstName} ${profile.lastName}`
+      });
+
     } catch (e) {
-      return res.status(500).json({ error: e.message });
+      return res.status(500).json({ message: e.message });
     }
   }
 }
@@ -122,6 +128,23 @@ async function handleEmailContrib(userEmail, req, res) {
 
 async function handleCheckin(userId, req, res) {
   try {
+    const profile = await models.HackerProfile.findByPk(userId);
+
+    const profileStatus = profile.get("status");
+    const invalidStatuses = [
+      "unverified",
+      "verified",
+      "rejected",
+      "submitted",
+      "checkedIn"
+    ];
+
+    if (invalidStatuses.includes(profileStatus)) {
+      return res.status(400).json({
+        message: `${profile.firstName} ${profile.lastName} has status ${profileStatus}`
+      });
+    }
+
     const result = await models.House.findAll({
       raw: true,
       attributes: {
@@ -151,31 +174,71 @@ async function handleCheckin(userId, req, res) {
       isBattlepassComplete: false
     });
 
-    const profile = await models.HackerProfile.findOne({
-      where: { userId: userId }
+    await models.HackerProfile.update(
+      { status: "checkedIn" },
+      { where: { userId: userId } }
+    );
+
+    return res.json({
+      pointsProfile,
+      profile,
+      message: `Successfully checked in ${profile.firstName} ${profile.lastName}`
     });
-    const profileStatus = profile.get("status");
-    const invalidStatuses = [
-      "unverified",
-      "verified",
-      "rejected",
-      "submitted",
-      "checkedIn"
-    ];
-    if (invalidStatuses.includes(profileStatus)) {
-      return res
-        .status(400)
-        .json({ invalid: `User has status ${profileStatus}` });
-    }
-
-    profile.status = "checkedIn";
-    await profile.save();
-
-    return res.json({ pointsProfile: pointsProfile });
   } catch (e) {
-    return res.status(500).json({ err: e.message });
+    return res.status(500).json({ message: e.message });
   }
 }
+
+router.get("/lookup", async (req, res) => {
+  const lookupFilter = {};
+
+  const { firstName, lastName, email } = req.query;
+
+  if (!!firstName) {
+    lookupFilter["firstName"] = firstName;
+  }
+
+  if (!!lastName) {
+    lookupFilter["lastName"] = lastName;
+  }
+
+  if (!!email) {
+    lookupFilter["email"] = email;
+  }
+
+  const profiles = await models.HackerProfile.findAll({
+    where: lookupFilter
+  });
+
+  return res.json({
+    profiles
+  });
+});
+
+router.post("/assign-qr", async (req, res) => {
+  const { userId, qrCodeId } = req.body;
+
+  if (!!userId && !!qrCodeId) {
+    await models.HackerProfile.update(
+      {
+        qrCodeId: qrCodeId.trim().toUpperCase()
+      },
+      {
+        where: {
+          userId
+        }
+      }
+    );
+
+    return res.json({
+      message: `Updated profile with user ID ${userId} to have the QR Code Id ${qrCodeId}`
+    });
+  } else {
+    return res.status(400).json({
+      message: "Missing data, need both userId and qrCodeId"
+    });
+  }
+});
 
 router.get("/identity-check/:userId", async (req, res) => {
   if (req.params.userId) {

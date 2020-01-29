@@ -26,7 +26,7 @@ router.post("/tasks", async (req, res) => {
     "points",
     "name",
     "isGroupTask",
-    "type"
+    "isActive"
   ]);
   const formInput = req.body;
 

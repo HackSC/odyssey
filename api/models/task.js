@@ -7,6 +7,7 @@ module.exports = (sequelize, DataTypes) => {
       blocking: DataTypes.BOOLEAN,
       type: DataTypes.STRING(100),
       isGroupTask: DataTypes.BOOLEAN,
+      isActive: DataTypes.BOOLEAN,
       name: DataTypes.STRING(100)
     },
     {}
