@@ -180,33 +180,6 @@ async function handleCheckin(userId, req, res) {
   }
 }
 
-router.get("/testThing", async (req, res) => {
-  const result = await models.House.findAll({
-    attributes: [
-      ["id", "id"],
-      ["name", "name"],
-      [
-        sequelize.literal(
-          "(SELECT COUNT(*) FROM persons where persons.houseId = House.id)"
-        ),
-        "personCount"
-      ]
-    ],
-    order: [[sequelize.literal("personCount"), "ASC"]]
-  });
-  /*
-  console.log(result);
-
-  // Should sort result in ascending order (lowest personCount first)
-  result.sort(function(a, b) {
-    return a.personCount - b.personCount;
-  });
-  */
-  console.log("After the fact");
-  console.log(result);
-  return res.json({ result });
-});
-
 router.get("/lookup", async (req, res) => {
   const lookupFilter = {};
 
