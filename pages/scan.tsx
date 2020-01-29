@@ -48,7 +48,7 @@ const Scan = ({ profile, tasks }) => {
     }
 
     const dispatchBody = {
-      qrCodeid: code
+      qrCodeId: code
     };
 
     // Either an action (ex: checkin) or a task (ex: 1, 2, etc)
