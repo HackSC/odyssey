@@ -44,10 +44,6 @@ const CheckedIn: React.FunctionComponent<Props> = props => {
 
   let HouseFoxColor = person.length > 0 ? person[0].color : "#E7862B";
 
-  if (person.length > 0) {
-    console.log(person[0].color);
-  }
-
   return (
     <>
       <Flex justify="space-between" tabletVertical>

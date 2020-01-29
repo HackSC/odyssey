@@ -19,7 +19,6 @@ const HouseProgress = ({ houses }: Props) => {
     houses.forEach(house => {
       cumulativeSum += house.sum;
     });
-    console.log(cumulativeSum);
     houses.forEach(house => {
       result = (
         <React.Fragment>
