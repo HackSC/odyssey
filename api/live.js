@@ -5,7 +5,6 @@ const models = require("./models");
 const utils = require("./utils");
 const router = express.Router();
 const sequelize = require("sequelize");
-const Sentry = require("@sentry/node");
 
 router.use(utils.authMiddleware);
 router.use(utils.requireNonHacker);
@@ -23,6 +22,12 @@ router.post("/dispatch", async (req, res) => {
   const hackerProfile = await models.HackerProfile.findOne({
     where: { qrCodeId: qrCodeId }
   });
+
+  if (hackerProfile === null) {
+    return res.status(404).json({
+      error: "No user has been assigned this QR code"
+    });
+  }
   const userId = hackerProfile.get("userId");
 
   //TODO: Add sentry logging at the dispatch level
@@ -45,7 +50,7 @@ router.post("/dispatch", async (req, res) => {
 async function handleGroupContrib(userId, req, res) {
   try {
     if (!req.body.taskId) {
-      return res.status(400).json({ err: "Bad Request, taskId not found" });
+      return res.status(400).json({ error: "Bad Request, taskId not found" });
     }
     const result = await models.Person.findOne({
       where: {
@@ -80,7 +85,7 @@ async function handleGroupContrib(userId, req, res) {
     await Promise.all(teammateContribs);
     return res.json({ teammates });
   } catch (e) {
-    return res.status(400).json({ err: e.message });
+    return res.status(400).json({ error: e.message });
   }
 }
 
@@ -90,7 +95,7 @@ async function handleContrib(userId, req, res) {
   const profile = await models.HackerProfile.findByPk(userId);
 
   if (!input.taskId) {
-    return res.status(400).json({ message: "Invalid request" });
+    return res.status(400).json({ error: "Invalid request" });
   } else {
     try {
       const taskMultiplier = getMultiplierForTask(input.taskId);
@@ -114,7 +119,7 @@ async function handleContrib(userId, req, res) {
         message: `Successfully created a task contribution for ${profile.firstName} ${profile.lastName}`
       });
     } catch (e) {
-      return res.status(500).json({ message: e.message });
+      return res.status(500).json({ error: e.message });
     }
   }
 }
@@ -150,7 +155,7 @@ async function getMultiplierForTask(taskId) {
 async function handleEmailContrib(userEmail, req, res) {
   const input = req.body;
   if (!input.taskId) {
-    return res.status(400).json({ err: "Requires specified taskId" });
+    return res.status(400).json({ error: "Requires specified taskId" });
   } else {
     try {
       // Try to find a model by email
@@ -200,7 +205,7 @@ async function handleCheckin(userId, req, res) {
     if (invalidStatuses.includes(profileStatus)) {
       return res
         .status(400)
-        .json({ invalid: `User has status ${profileStatus}` });
+        .json({ error: `User has status ${profileStatus}` });
     }
 
     const [pointsProfile, isCreated] = await models.Person.findOrCreate({
@@ -236,7 +241,7 @@ async function handleCheckin(userId, req, res) {
 
     return res.json({ pointsProfile: pointsProfile });
   } catch (e) {
-    return res.status(500).json({ message: e.message });
+    return res.status(500).json({ error: e.message });
   }
 }
 
@@ -286,7 +291,7 @@ router.post("/assign-qr", async (req, res) => {
     });
   } else {
     return res.status(400).json({
-      message: "Missing data, need both userId and qrCodeId"
+      error: "Missing data, need both userId and qrCodeId"
     });
   }
 });
@@ -307,19 +312,19 @@ router.get("/identity-check/:userId", async (req, res) => {
           });
         } else {
           return res.status(400).json({
-            err: "user cannot be scanned! neither confirmed nor checkedIn"
+            error: "user cannot be scanned! neither confirmed nor checkedIn"
           });
         }
       } else {
         return res
           .status(404)
-          .json({ err: "could not find a profile with that userId" });
+          .json({ error: "could not find a profile with that userId" });
       }
     } catch (e) {
-      return res.status(500).json({ err: e.message });
+      return res.status(500).json({ error: e.message });
     }
   } else {
-    return res.status(400).json({ err: "missing user ID" });
+    return res.status(400).json({ error: "missing user ID" });
   }
 });
 

@@ -29,6 +29,9 @@ const Admin = ({ profile }) => {
 
           <ActionsHeader>Actions</ActionsHeader>
           <Actions>
+            <Action href="/scan">
+              <ActionTitle>Scan In Hackers</ActionTitle>
+            </Action>
             <Action href="/appReview">
               <ActionTitle>Start App Review</ActionTitle>
             </Action>
@@ -77,6 +80,7 @@ Admin.getInitialProps = async ctx => {
   if (!profile || profile.role !== "admin") {
     handleLoginRedirect(req);
   }
+
   if (profile) {
     //Referrer Code Special Case Handling
     profile.referrerCode = getReferrerCode(ctx, profile);

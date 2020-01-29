@@ -81,9 +81,9 @@ router.get("/personInfo", async (req, res) => {
 router.get("/tasks", async (req, res) => {
   try {
     const tasks = await models.Task.findAll();
-    return res.json({ tasks: tasks });
+    return res.json({ success: tasks });
   } catch (e) {
-    return res.json({ err: e });
+    return res.json({ error: e });
   }
 });
 
