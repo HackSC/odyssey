@@ -15,7 +15,7 @@ describe("Prizes", () => {
       .get("/api/prize")
       .expect(200)
       .then(res => {
-        expect(res.body.prizes.length).toBe(5);
+        expect(res.body.success.length).toBe(5);
       });
   });
 });

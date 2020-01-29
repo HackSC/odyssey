@@ -17,7 +17,7 @@ async function AddPrizeSelf() {
 }
 
 function GetFirstPrize() {
-  return agent.get("/api/prize/").then(res => res.body.prizes[0]);
+  return agent.get("/api/prize/").then(res => res.body.success[0]);
 }
 
 describe("Project Team (Sequential)", () => {
@@ -30,8 +30,8 @@ describe("Project Team (Sequential)", () => {
     return CreateProjectTeamSelf(name)
       .expect(200)
       .then(res => {
-        const { projectTeam } = res.body;
-        expect(res.body.projectTeam.name).toBe(name);
+        const projectTeam = res.body.success;
+        expect(res.body.success.name).toBe(name);
 
         return agent
           .get("/api/person/self")
@@ -47,16 +47,17 @@ describe("Project Team (Sequential)", () => {
     return agent
       .put("/api/projectTeam/join/" + name)
       .expect(200)
-      .then(res => expect(res.body.projectTeam.name).toBe(name));
+      .then(res => expect(res.body.success.name).toBe(name));
   });
   test("Add Prize", async () => {
     await CreateProjectTeamSelf(name);
     const prize = await GetFirstPrize();
     return agent
-      .post("/api/projectTeam/self/addPrize/" + prize.id)
+      .post("/api/projectTeam/self/addPrize")
+      .send({ id: prize.id })
       .expect(200)
       .then(res => {
-        expect(res.body.projectTeam.Prizes.length).toBe(1);
+        expect(res.body.success.Prizes.length).toBe(1);
       });
   });
 
@@ -68,7 +69,7 @@ describe("Project Team (Sequential)", () => {
       .delete("/api/projectTeam/self/deletePrize/" + prize.id)
       .expect(200)
       .then(res => {
-        expect(res.body.projectTeam.Prizes.length).toBe(0);
+        expect(res.body.success.Prizes.length).toBe(0);
       });
   });
 
@@ -84,7 +85,7 @@ describe("Project Team (Sequential)", () => {
       .send(fields)
       .expect(200)
       .then(res => {
-        expect(res.body.projectTeam).toMatchObject(fields);
+        expect(res.body.success).toMatchObject(fields);
       });
   });
 
@@ -94,7 +95,7 @@ describe("Project Team (Sequential)", () => {
       .delete("/api/projectTeam/self/deleteMember/" + 1)
       .expect(200)
       .then(res => {
-        expect(res.body.projectTeam).not.toBeDefined();
+        expect(res.body.success).toBeNull();
       });
   });
 });
@@ -107,7 +108,7 @@ describe("Project Team Requests (Parallel)", () => {
       .get("/api/projectTeam/self")
       .expect(200)
       .then(res => {
-        expect(res.body.projectTeam.name).toBe(name);
+        expect(res.body.success.name).toBe(name);
       });
   });
 

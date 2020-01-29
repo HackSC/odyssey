@@ -80,6 +80,7 @@
     "start-server-and-test": "^1.10.6",
     "styled-components": "^5.0.0",
     "styled-reset": "^4.0.2",
+    "swr": "^0.1.16",
     "three": "0.105.0",
     "wait-on": "^3.3.0"
   },

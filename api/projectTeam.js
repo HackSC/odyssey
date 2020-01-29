@@ -10,144 +10,115 @@ const getProjectTeamForSelf = async req => {
   const { id } = req.user;
 
   const person = await models.Person.findByPk(id, {
-    include: [{ model: models.ProjectTeam, required: true }]
+    include: [{ model: models.ProjectTeam, required: false }]
   });
   return person.ProjectTeam;
 };
 
 router.get("/self", async (req, res) => {
-  try {
-    const ProjectTeam = await getProjectTeamForSelf(req);
-
-    return res.json({ projectTeam: ProjectTeam });
-  } catch (e) {
-    return res.status(400).json({ err: e.message });
-  }
+  const ProjectTeam = await getProjectTeamForSelf(req);
+  return res.json({ success: ProjectTeam });
 });
 
 router.put("/join/:name", async (req, res) => {
-  try {
-    const projectTeam = await models.ProjectTeam.findOne({
-      where: { name: req.params.name }
-    });
-    if (projectTeam.Members.length >= 4) {
-      return res.status(400).json({ err: "Team is full" });
-    }
-    await projectTeam.addMember(req.user.id);
-    await projectTeam.reload();
+  const { name } = req.params;
+  const projectTeam = await models.ProjectTeam.findOne({
+    where: { name }
+  });
 
-    return res.json({ projectTeam });
-  } catch (e) {
-    return res.status(400).json({ err: e.message });
+  if (!projectTeam) {
+    return res.status(400).json({
+      error: `Team: ${name} not found`
+    });
   }
+
+  if (projectTeam.Members.length >= 4) {
+    return res.status(400).json({ error: "Team is full" });
+  }
+  await projectTeam.addMember(req.user.id);
+  await projectTeam.reload();
+
+  return res.json({ success: projectTeam });
 });
 
 router.get("/list", async (req, res) => {
-  try {
-    const projectTeams = await models.ProjectTeam.findAll();
-    return res.json({ projectTeams });
-  } catch (e) {
-    return res.status(400).json({ err: e.message });
-  }
+  const projectTeams = await models.ProjectTeam.findAll();
+  return res.json({ success: projectTeams });
 });
 
 router.get("/:id", async (req, res) => {
-  try {
-    const { id } = req.params.id;
-    const projectTeam = await models.ProjectTeam.findByPk(id);
-    return res.json({ projectTeam });
-  } catch (e) {
-    return res.status(400).json({ err: e.message });
-  }
+  const { id } = req.params.id;
+  const projectTeam = await models.ProjectTeam.findByPk(id);
+  return res.json({ success: projectTeam });
 });
 
 router.post("/self", async (req, res) => {
-  try {
-    const userId = req.user.id;
-    const { body } = req;
+  const userId = req.user.id;
+  const { body } = req;
 
-    const person = await models.Person.findByPk(userId);
+  const person = await models.Person.findByPk(userId);
 
-    if (person.teamId) {
-      return res.status(400).json({ err: "Already has a team" });
-    }
+  if (person.teamId) {
+    return res.status(400).json({ error: "Already has a team" });
+  }
 
-    const result = await models.sequelize.transaction(async t => {
-      const projectTeam = await models.ProjectTeam.create(body, {
-        transaction: t
-      });
-
-      await person.setProjectTeam(projectTeam, { transaction: t });
+  const result = await models.sequelize.transaction(async t => {
+    const projectTeam = await models.ProjectTeam.create(body, {
+      transaction: t
     });
 
-    const projectTeam = await getProjectTeamForSelf(req);
+    await person.setProjectTeam(projectTeam, { transaction: t });
+  });
 
-    return res.json({ projectTeam });
-  } catch (e) {
-    return res.status(400).json({ err: e.message });
-  }
+  const projectTeam = await getProjectTeamForSelf(req);
+
+  return res.json({ success: projectTeam });
 });
 
 router.put("/self", async (req, res) => {
-  try {
-    const { body } = req;
+  const { body } = req;
 
-    const keys = ["devpostLink", "githubLink", "name"];
+  const keys = ["devpostLink", "githubLink", "name"];
 
-    const updateObject = keys.reduce((obj, key) => {
-      obj[key] = body[key];
-      return obj;
-    }, {});
+  const updateObject = keys.reduce((obj, key) => {
+    obj[key] = body[key];
+    return obj;
+  }, {});
 
-    const projectTeam = await getProjectTeamForSelf(req);
-    await projectTeam.update(updateObject);
-    await projectTeam.reload();
-    return res.json({ projectTeam });
-  } catch (e) {
-    return res.status(400).json({ err: e.message });
-  }
+  const projectTeam = await getProjectTeamForSelf(req);
+  await projectTeam.update(updateObject);
+  await projectTeam.reload();
+  return res.json({ success: projectTeam });
 });
 
-router.post("/self/addPrize/:prizeID", async (req, res) => {
-  try {
-    const { prizeID } = req.params;
-    const projectTeam = await getProjectTeamForSelf(req);
-    await projectTeam.addPrize(prizeID);
-    await projectTeam.reload();
-    return res.json({ projectTeam });
-  } catch (e) {
-    return res.status(400).json({ err: e.message });
-  }
+router.post("/self/addPrize", async (req, res) => {
+  const { id } = req.body;
+  const projectTeam = await getProjectTeamForSelf(req);
+  await projectTeam.addPrize(id);
+  await projectTeam.reload();
+  return res.json({ success: projectTeam });
 });
 
 router.delete("/self/deletePrize/:prizeID", async (req, res) => {
-  try {
-    const { prizeID } = req.params;
-    const projectTeam = await getProjectTeamForSelf(req);
-    await projectTeam.removePrize(prizeID);
-    await projectTeam.reload();
-    return res.json({ projectTeam });
-  } catch (e) {
-    return res.status(400).json({ err: e.message });
-  }
+  const { prizeID } = req.params;
+  const projectTeam = await getProjectTeamForSelf(req);
+  await projectTeam.removePrize(prizeID);
+  await projectTeam.reload();
+  return res.json({ success: projectTeam });
 });
 
 router.delete("/self/deleteMember/:memberId", async (req, res) => {
-  try {
-    const { memberId } = req.params;
-    const projectTeam = await getProjectTeamForSelf(req);
+  const { memberId } = req.params;
+  const projectTeam = await getProjectTeamForSelf(req);
 
-    await projectTeam.removeMember(memberId);
+  await projectTeam.removeMember(memberId);
 
-    //If you remove yourself
-    if (req.user.id == memberId) {
-      return res.json({ projectTeam: undefined });
-    }
-    await projectTeam.reload();
-    return res.json({ projectTeam });
-  } catch (e) {
-    return res.status(400).json({ err: e.message });
+  //If you remove yourself
+  if (req.user.id == memberId) {
+    return res.json({ success: null });
   }
+  await projectTeam.reload();
+  return res.json({ success });
 });
 
 module.exports = router;
