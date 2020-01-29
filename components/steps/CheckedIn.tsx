@@ -63,7 +63,7 @@ const CheckedIn: React.FunctionComponent<Props> = props => {
             <CenteredColumn flexBasis={70}>
               <HouseProgress houses={houseInfo} />
             </CenteredColumn>
-            <hr style={{ width: "5px" }}></hr>
+            <BlackHR />
             <CenteredColumn flexBasis={30}>
               <FoxFlex>
                 <Fox fill={HouseFoxColor} width={50} height={50} />
@@ -108,6 +108,13 @@ const CheckedIn: React.FunctionComponent<Props> = props => {
   );
 };
 
+const BlackHR = styled.hr`
+  width: 1px;
+  background-color: black;
+  border-radius: 6px;
+  border-color: black;
+`;
+
 const FoxFlex = styled.div`
   align-items: center;
   margin: auto;
@@ -135,7 +142,7 @@ const PointsTitle = styled.h3`
 
 const CheckInTitle = styled.h2`
   text-align: center;
-  padding: 10px;
+  padding-bottom: 15px;
 `;
 
 const CheckInInstructions = styled.p`
