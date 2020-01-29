@@ -69,22 +69,12 @@ async function handleGroupContrib(userId, req, res) {
     const taskMultiplier = getMultiplierForTask(taskId);
     const teammateContribs = teammates.map(tm => {
       const tmId = tm.dataValues.identityId;
-      const [result, isCreated] = await models.Contribution.findOrCreate({
-        defaults: {
-          multiplier: taskMultiplier,
-          scannerId: req.user.id
-        },
-        where: {
-          personId: tmId,
-          taskId: taskId
-        }
+      return models.Contribution.create({
+        personId: tmId,
+        multiplier: taskMultiplier,
+        scannerId: req.user.id,
+        taskId: taskId
       });
-      if (!isCreated) {
-        return res.status(400).json({
-          error: "User already has completed this task"
-        });
-      }
-      return res.json({ result });
     });
 
     await Promise.all(teammateContribs);
