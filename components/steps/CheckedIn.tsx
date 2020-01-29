@@ -68,7 +68,11 @@ const CheckedIn: React.FunctionComponent<Props> = props => {
         />
         <h2 style={{ padding: "0" }}>Keep it up! Your house is in the lead!</h2>
       </Alert>
-      <PaddedFlex justify="space-between" tabletVertical>
+      <PaddedFlex
+        style={!alert ? { paddingTop: "2em" } : {}}
+        justify="space-between"
+        tabletVertical
+      >
         {notie ? confetti : ""}
         <Column flexBasis={40}>
           <QRCode profile={profile} />

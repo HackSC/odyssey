@@ -3,18 +3,25 @@ import styled from "styled-components";
 import Loader from "react-loader-spinner";
 import useBattlePass from "../lib/useBattlePass";
 import { BPLock, BPOpenLock } from "../styles";
+import { MdStar } from "react-icons/md";
 
 type Props = {
   profile: Profile;
 };
 
 type ItemProps = {
+  premium?: boolean;
   prizeName?: string;
   pointValue?: number;
   unlocked?: boolean;
 };
 
-const bpItem: React.SFC<ItemProps> = ({ prizeName, pointValue, unlocked }) => {
+const bpItem: React.SFC<ItemProps> = ({
+  premium,
+  prizeName,
+  pointValue,
+  unlocked
+}) => {
   return (
     <TableTD
       bgColor={unlocked ? "white" : "#757575"}
@@ -23,6 +30,7 @@ const bpItem: React.SFC<ItemProps> = ({ prizeName, pointValue, unlocked }) => {
       <LockImage>
         {unlocked ? <BPOpenLock fill="#FF8379" /> : <BPLock />}
       </LockImage>
+      {premium ? <GoldStar /> : ""}
       <MarginDiv>
         <PrizeItem>{prizeName}</PrizeItem>
         <p>Points: {pointValue}</p>
@@ -89,14 +97,14 @@ const BattlePass: React.FunctionComponent<Props> = props => {
         <RoundedTR>
           {basicItems
             ? basicItems.map(item => {
-                return item ? bpItem(item) : "";
+                return item ? bpItem({ premium: false, ...item }) : "";
               })
             : ""}
         </RoundedTR>
         <RoundedTR>
           {premiumItems
             ? premiumItems.map(item => {
-                return item ? bpItem(item) : "";
+                return item ? bpItem({ premium: true, ...item }) : "";
               })
             : ""}
         </RoundedTR>
@@ -117,6 +125,13 @@ const BattlePass: React.FunctionComponent<Props> = props => {
     </>
   );
 };
+
+const GoldStar = styled(MdStar)`
+  color: #feda22;
+  position: absolute;
+  right: 2px;
+  top: 2px;
+`;
 
 const OverflowHidden = styled.div`
   overflow: hidden;
@@ -160,6 +175,7 @@ const PrizeItem = styled.h4`
 
 const BPTable = styled.table`
   border-collapse: collapse;
+  width: 110%;
 `;
 
 const Scrollable = styled.div`
