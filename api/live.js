@@ -10,145 +10,6 @@ const Sentry = require("@sentry/node");
 router.use(utils.authMiddleware);
 router.use(utils.requireNonHacker);
 
-router.get("/battlepass", async (req, res) => {
-  return res.json([
-    {
-      id: "5e29283758c29d352b47dd41",
-      isPremium: true,
-      pointValue: 38,
-      prizeName: "socks"
-    },
-    {
-      id: "5e2928376468ef47d5d4ac3b",
-      isPremium: true,
-      pointValue: 39,
-      prizeName: "socks"
-    },
-    {
-      id: "5e292837285ac2542f28eda9",
-      isPremium: true,
-      pointValue: 23,
-      prizeName: "socks"
-    },
-    {
-      id: "5e2928377f9e491c5bfd71ae",
-      isPremium: false,
-      pointValue: 30,
-      prizeName: "Supreme Brick"
-    },
-    {
-      id: "5e29283727dd79a7ae8f690a",
-      isPremium: true,
-      pointValue: 22,
-      prizeName: "Supreme Brick"
-    },
-    {
-      id: "5e292837493dc9bae67b6495",
-      isPremium: false,
-      pointValue: 23,
-      prizeName: "shoes"
-    },
-    {
-      id: "5e2928373ae0bf5885169106",
-      isPremium: false,
-      pointValue: 37,
-      prizeName: "hat"
-    }
-  ]);
-});
-
-router.get("/personInfo", async (req, res) => {
-  try {
-    const contribs = await models.Contribution.findAll({
-      where: {
-        personId: req.user.id
-      },
-      include: [{ model: models.Task, required: true }],
-      attributes: ["id", "createdAt"]
-    });
-
-    const person = await models.Person.findOne({
-      where: {
-        identityId: req.user.id
-      }
-    });
-
-    return res.json({ contribs, person });
-  } catch (e) {
-    return res.status(400).json({ err: e.message });
-  }
-});
-
-router.get("/tasks", async (req, res) => {
-  try {
-    const tasks = await models.Task.findAll();
-    return res.json({ tasks: tasks });
-  } catch (e) {
-    return res.json({ err: e });
-  }
-});
-
-router.get("/houseInfo/:id", async (req, res) => {
-  const houseId = req.params.id;
-  try {
-    const house = await models.House.findOne({
-      where: {
-        id: houseId
-      },
-      include: [
-        {
-          model: models.Person,
-          include: [
-            {
-              model: models.Contribution,
-              include: [
-                {
-                  model: models.Task,
-                  attributes: ["points"],
-                  required: false
-                }
-              ],
-              required: false
-            }
-          ],
-          required: false
-        }
-      ]
-    });
-    return res.json({ house });
-  } catch (e) {
-    return res.json({ err: e.message });
-  }
-});
-router.get("/houseInfo", async (req, res) => {
-  try {
-    const houses = await models.House.findAll({
-      include: [
-        {
-          model: models.Person,
-          include: [
-            {
-              model: models.Contribution,
-              include: [
-                {
-                  model: models.Task,
-                  attributes: ["points"],
-                  required: false
-                }
-              ],
-              required: false
-            }
-          ],
-          required: false
-        }
-      ]
-    });
-    return res.json({ houses });
-  } catch (e) {
-    return res.json({ err: e.message });
-  }
-});
-
 const actions = {
   CHECKIN: "checkin",
   CONTRIB: "contrib",
@@ -324,5 +185,88 @@ async function handleCheckin(userId, req, res) {
     return res.status(500).json({ message: e.message });
   }
 }
+
+router.get("/lookup", async (req, res) => {
+  const lookupFilter = {};
+
+  const { firstName, lastName, email } = req.query;
+
+  if (!!firstName) {
+    lookupFilter["firstName"] = firstName;
+  }
+
+  if (!!lastName) {
+    lookupFilter["lastName"] = lastName;
+  }
+
+  if (!!email) {
+    lookupFilter["email"] = email;
+  }
+
+  const profiles = await models.HackerProfile.findAll({
+    where: lookupFilter
+  });
+
+  return res.json({
+    profiles
+  });
+});
+
+router.post("/assign-qr", async (req, res) => {
+  const { userId, qrCodeId } = req.body;
+
+  if (!!userId && !!qrCodeId) {
+    await models.HackerProfile.update(
+      {
+        qrCodeId: qrCodeId.trim().toUpperCase()
+      },
+      {
+        where: {
+          userId
+        }
+      }
+    );
+
+    return res.json({
+      message: `Updated profile with user ID ${userId} to have the QR Code Id ${qrCodeId}`
+    });
+  } else {
+    return res.status(400).json({
+      message: "Missing data, need both userId and qrCodeId"
+    });
+  }
+});
+
+router.get("/identity-check/:userId", async (req, res) => {
+  if (req.params.userId) {
+    try {
+      const userId = req.params.userId;
+      const profile = await models.HackerProfile.findOne({
+        where: { userId: userId }
+      });
+
+      if (profile) {
+        if (["checkedIn", "confirmed"].includes(profile.status)) {
+          return res.json({
+            firstName: profile.firstName,
+            lastName: profile.lastName
+          });
+        } else {
+          return res.status(400).json({
+            err: "user cannot be scanned! neither confirmed nor checkedIn"
+          });
+        }
+      } else {
+        return res
+          .status(404)
+          .json({ err: "could not find a profile with that userId" });
+      }
+    } catch (e) {
+      return res.status(500).json({ err: e.message });
+    }
+  } else {
+    return res.status(400).json({ err: "missing user ID" });
+  }
+});
 
 module.exports = router;

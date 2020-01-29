@@ -2,16 +2,30 @@ module.exports = (sequelize, DataTypes) => {
   const Person = sequelize.define(
     "Person",
     {
-      identityId: { type: DataTypes.STRING(100), primaryKey: true },
+      identityId: {
+        type: DataTypes.STRING(100),
+        primaryKey: true
+      },
       isBattlepassComplete: DataTypes.BOOLEAN,
       ProjectTeamId: DataTypes.NUMBER
     },
-    { tableName: "persons" }
+    {
+      tableName: "persons",
+      defaultScope: {
+        include: [{ model: sequelize.models.HackerProfile, as: "Profile" }]
+      }
+    }
   );
 
   Person.associate = function(models) {
     Person.belongsTo(models.House, { foreignKey: "houseId" });
     Person.belongsTo(models.ProjectTeam);
+    Person.belongsTo(models.HackerProfile, {
+      foreignKey: "identityId",
+      targetKey: "userId",
+      constraints: false,
+      as: "Profile"
+    });
     Person.hasMany(models.Contribution, { foreignKey: "personId" });
   };
 

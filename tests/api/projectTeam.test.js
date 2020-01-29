@@ -11,6 +11,15 @@ function CreateProjectTeamSelf(name) {
   return agent.post("/api/projectTeam/self").send({ name });
 }
 
+async function AddPrizeSelf() {
+  const prize = await GetFirstPrize();
+  return agent.post("/api/projectTeam/self/addPrize/" + prize.id);
+}
+
+function GetFirstPrize() {
+  return agent.get("/api/prize/").then(res => res.body.prizes[0]);
+}
+
 describe("Project Team (Sequential)", () => {
   beforeEach(async () => {
     await seedDB();
@@ -35,7 +44,58 @@ describe("Project Team (Sequential)", () => {
 
   test("Join Project Team", () => {
     const name = "TestProjectTeam";
-    return agent.put("/api/projectTeam/join/" + name).expect(200);
+    return agent
+      .put("/api/projectTeam/join/" + name)
+      .expect(200)
+      .then(res => expect(res.body.projectTeam.name).toBe(name));
+  });
+  test("Add Prize", async () => {
+    await CreateProjectTeamSelf(name);
+    const prize = await GetFirstPrize();
+    return agent
+      .post("/api/projectTeam/self/addPrize/" + prize.id)
+      .expect(200)
+      .then(res => {
+        expect(res.body.projectTeam.Prizes.length).toBe(1);
+      });
+  });
+
+  test("Remove Prize", async () => {
+    await CreateProjectTeamSelf(name);
+    const prize = await GetFirstPrize();
+    await AddPrizeSelf();
+    return agent
+      .delete("/api/projectTeam/self/deletePrize/" + prize.id)
+      .expect(200)
+      .then(res => {
+        expect(res.body.projectTeam.Prizes.length).toBe(0);
+      });
+  });
+
+  test("Update a team", async () => {
+    await CreateProjectTeamSelf(name);
+    const fields = {
+      devpostLink: "devpost2",
+      githubLink: "github2",
+      name: "thicc new name"
+    };
+    return agent
+      .put("/api/projectTeam/self")
+      .send(fields)
+      .expect(200)
+      .then(res => {
+        expect(res.body.projectTeam).toMatchObject(fields);
+      });
+  });
+
+  test("Remove Only Team Member", async () => {
+    await CreateProjectTeamSelf(name);
+    return agent
+      .delete("/api/projectTeam/self/deleteMember/" + 1)
+      .expect(200)
+      .then(res => {
+        expect(res.body.projectTeam).not.toBeDefined();
+      });
   });
 });
 

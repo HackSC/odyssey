@@ -4,18 +4,17 @@ const server = require("../../express");
 
 agent = supertest.agent(server);
 
-beforeAll(async () => {
-  await seedDB();
+beforeAll(() => {
   return agent.get("/auth/devlogin").query({ id: 1 });
 });
 
-describe("Prizes", () => {
-  test("Get all prizes", () => {
+describe("Peoples", () => {
+  test("Gets self includes hacker profile", () => {
     return agent
-      .get("/api/prize")
+      .get("/api/person/self")
       .expect(200)
       .then(res => {
-        expect(res.body.prizes.length).toBe(5);
+        expect(res.body.person.Profile).toBeDefined();
       });
   });
 });

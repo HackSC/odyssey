@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState } from "react";
 import { Form, FormGroup, Flex, Button } from "../styles";
 
 import styled from "styled-components";
