@@ -24,7 +24,7 @@ const Dashboard = ({ profile, houses, socialPosts }) => {
     <>
       <Head title="HackSC Odyssey - Dashboard" />
       <Navbar loggedIn activePage="dashboard" />
-      <Background>
+      <Background padding={"0.5em"}>
         {profile && (
           <Container>
             {profile && (

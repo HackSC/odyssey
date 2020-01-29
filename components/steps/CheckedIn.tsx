@@ -1,9 +1,9 @@
-import * as React from "react";
+import { useState, useEffect } from "react";
 import styled from "styled-components";
 
 import QRCode from "../QRCode";
 import LinkScroll from "../LinkScroll";
-import { Flex, CenteredColumn, Column, Fox } from "../../styles";
+import { Flex, CenteredColumn, Column, Fox, Alert } from "../../styles";
 import Announcements from "../announcements/Announcements";
 import Calendar from "../Calendar";
 import BattlePass from "../BattlePass";
@@ -12,6 +12,7 @@ import usePerson from "../../lib/usePerson";
 import useWindowSize from "react-use/lib/useWindowSize";
 import Confetti from "react-confetti";
 import HouseProgress from "../HouseProgress";
+import { MdClose } from "react-icons/md";
 
 interface Props {
   profile: Profile;
@@ -19,10 +20,22 @@ interface Props {
 }
 
 const CheckedIn: React.FunctionComponent<Props> = props => {
+  const [alert, setAlert] = useState(false);
   const { profile } = props;
   const houseInfo = useHouses(profile);
   const person = usePerson(props);
   const { width, height } = useWindowSize();
+  const notie =
+    person.length > 0 &&
+    houseInfo.length > 1 &&
+    person[0].id === houseInfo[0].id &&
+    person[0].id !== houseInfo[1].id;
+
+  useEffect(() => {
+    if (notie) {
+      setAlert(true);
+    }
+  }, [notie]);
 
   // * Check if house is in the lead and display react-confetti
   const confetti = (
@@ -36,17 +49,26 @@ const CheckedIn: React.FunctionComponent<Props> = props => {
     />
   );
 
-  const notie =
-    person.length > 0 &&
-    houseInfo.length > 1 &&
-    person[0].id === houseInfo[0].id &&
-    person[0].id !== houseInfo[1].id;
-
   let HouseFoxColor = person.length > 0 ? person[0].color : "#E7862B";
 
   return (
     <>
-      <Flex justify="space-between" tabletVertical>
+      <Alert
+        display={alert}
+        background={"#FF8379"}
+        borderColor={"white"}
+        color={"white"}
+        borderRadius={7}
+        margin={"1em"}
+      >
+        <MdClose
+          color={"white"}
+          onClick={() => setAlert(false)}
+          style={{ position: "absolute", top: "5px", left: "5px" }}
+        />
+        <h2 style={{ padding: "0" }}>Keep it up! Your house is in the lead!</h2>
+      </Alert>
+      <PaddedFlex justify="space-between" tabletVertical>
         {notie ? confetti : ""}
         <Column flexBasis={40}>
           <QRCode profile={profile} />
@@ -75,19 +97,19 @@ const CheckedIn: React.FunctionComponent<Props> = props => {
             </CenteredColumn>
           </Flex>
         </InstructionsColumn>
-      </Flex>
-      <Flex justify="space-between" tabletVertical>
+      </PaddedFlex>
+      <PaddedFlex justify="space-between" tabletVertical>
         <MarginedColumn style={{ overflowX: "scroll" }} flexBasis={75}>
           <BattlePass profile={profile} />
         </MarginedColumn>
         <MarginedColumn flexBasis={25}>
           <Announcements />
         </MarginedColumn>
-      </Flex>
-      <Flex tabletVertical>
+      </PaddedFlex>
+      <PaddedFlex tabletVertical>
         <Calendar />
-      </Flex>
-      <Flex justify="space-between" tabletVertical>
+      </PaddedFlex>
+      <PaddedFlex justify="space-between" tabletVertical>
         <MarginedColumn flexBasis={35}>
           <LinkScroll />
         </MarginedColumn>
@@ -103,10 +125,14 @@ const CheckedIn: React.FunctionComponent<Props> = props => {
             culpa qui officia deserunt mollit anim id est laborum.
           </CheckInInstructions>
         </MarginedColumn>
-      </Flex>
+      </PaddedFlex>
     </>
   );
 };
+
+const PaddedFlex = styled(Flex)`
+  padding: 1em;
+`;
 
 const BlackHR = styled.hr`
   width: 1px;
@@ -123,7 +149,7 @@ const FoxFlex = styled.div`
 `;
 
 const MarginedColumn = styled(Column)`
-  margin: 2rem;
+  margin: 1rem;
 `;
 
 const InstructionsColumn = styled(Column)`

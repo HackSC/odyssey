@@ -58,7 +58,7 @@ const FoxFlex = styled.div`
 
 const CenteredFlex = styled(Flex)`
   align-items: center;
-  padding: 1em;
+  padding: 0.2em;
 `;
 
 const Points = styled.h4`
