@@ -24,7 +24,7 @@ const bpItem: React.SFC<ItemProps> = ({
   minimum,
   projSubmitted
 }) => {
-  let locked = false;
+  let locked = !unlocked;
   let showOverlay = false;
 
   if (!projSubmitted && premium) {
@@ -40,9 +40,7 @@ const bpItem: React.SFC<ItemProps> = ({
       bgColor={premium ? "#E3BF5F" : "#7FBDE9"}
       borderColor={currentTier ? "#FFFFFF" : "transparent"}
     >
-      <LockImage>
-        {locked ? <BPLock fill="#FFFFFF" /> : <BPOpenLock fill="#FFFFFF" />}
-      </LockImage>
+      <LockImage>{locked ? <BPLock fill="#FFFFFF" /> : null}</LockImage>
       <MarginDiv>
         <PrizeItem>{prizeName}</PrizeItem>
         <PrizeMinPoints>
@@ -138,6 +136,7 @@ const BattlePass = ({
     <BPTable>
       <tbody>
         <RoundedTR>
+          <TierLabel>Standard</TierLabel>
           {basicItems
             ? basicItems.map((item, index) => {
                 return item
@@ -152,6 +151,7 @@ const BattlePass = ({
             : ""}
         </RoundedTR>
         <RoundedTR>
+          <TierLabel>Premium</TierLabel>
           {premiumItems
             ? premiumItems.map((item, index) => {
                 return item
@@ -299,7 +299,7 @@ const RoundedTR = styled.tr`
 const TableTD = styled.td<{ bgColor?: string; borderColor?: string }>`
   display: -webkit-inline-box;
   position: relative;
-  height: 120px;
+  height: 180px;
   background-color: ${({ bgColor = "white" }) => bgColor};
   width: 140px;
   padding: 10px;
@@ -316,6 +316,13 @@ const LockedOverlay = styled.div`
   right: 0;
   bottom: 0;
   background: rgba(0, 0, 0, 0.65);
+`;
+
+const TierLabel = styled.td`
+  vertical-align: middle;
+  height: 180px;
+  padding-right: 12px;
+  font-weight: 600;
 `;
 
 export default BattlePass;
