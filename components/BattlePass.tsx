@@ -1,8 +1,8 @@
 import * as React from "react";
 import styled from "styled-components";
 import Loader from "react-loader-spinner";
-import { BPLock, BPOpenLock } from "../styles";
-import { MdStar } from "react-icons/md";
+import { BPLock, BPOpenLock, Flex, Column } from "../styles";
+import { useBattlepass } from "../lib/api-sdk/hackerLiveHooks";
 
 type Props = {
   profile: Profile;
@@ -108,10 +108,31 @@ const BattlePass = ({ bp }: { bp: Battlepass }) => {
   return (
     <>
       <Header>BattlePass</Header>
-      <OverflowHidden>
+
+      <Info>
+        <Flex direction="row" justify="space-between">
+          <Column flexBasis={30}>
+            <Flex direction="row" align="center">
+              <Subheader>Tier</Subheader>
+              <BigNumber>1</BigNumber>
+            </Flex>
+          </Column>
+
+          <Column flexBasis={70}>
+            <Flex direction="row" align="center">
+              <Subheader>Points till next tier</Subheader>
+              <BigNumber>4500</BigNumber>
+            </Flex>
+          </Column>
+        </Flex>
+      </Info>
+
+      {/* <OverflowHidden>
         <Scrollable>{bp ? bptable : ""}</Scrollable>
         <BattlePassFade />
-      </OverflowHidden>
+      </OverflowHidden> */}
+
+      <div />
     </>
   );
 };
@@ -152,6 +173,24 @@ const LockImage = styled.div`
 
 const Header = styled.h2`
   margin-left: 5px;
+`;
+
+const Subheader = styled.h3`
+  padding: 0;
+  margin-right: 15px;
+  font-size: 18px;
+  text-transform: uppercase;
+`;
+
+const BigNumber = styled.p`
+  font-size: 32px;
+`;
+
+const Info = styled.div`
+  padding: 24px;
+  background: #ffffff;
+  border-radius: 6px;
+  border: 1px solid #cfcfcf;
 `;
 
 const MarginDiv = styled.div`
