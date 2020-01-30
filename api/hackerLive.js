@@ -163,20 +163,7 @@ router.get("/houseInfo/:id", async (req, res) => {
     include: [
       {
         model: models.Person,
-        include: [
-          {
-            model: models.Contribution,
-            include: [
-              {
-                model: models.Task,
-                attributes: ["points"],
-                required: false
-              }
-            ],
-            required: false
-          }
-        ],
-        required: false
+        as: "HouseMembers"
       }
     ]
   });
@@ -188,19 +175,7 @@ router.get("/houseInfo/list", async (req, res) => {
     include: [
       {
         model: models.Person,
-        include: [
-          {
-            model: models.Contribution,
-            include: [
-              {
-                model: models.Task,
-                attributes: ["points"],
-                required: false
-              }
-            ],
-            required: false
-          }
-        ],
+        as: "HouseMembers",
         required: false
       }
     ]
