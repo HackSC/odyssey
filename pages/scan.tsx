@@ -175,16 +175,14 @@ Scan.getInitialProps = async ctx => {
   const { req } = ctx;
 
   const profile = await getProfile(req);
-  const { success: allTasks } = await getAllTasksFetch(req);
-
-  console.log(allTasks);
-
-  const activeTasks = allTasks.filter(t => t.isActive);
 
   // Null profile means user is not logged in, and this is only relevant for admins
   if (!profile || profile.role !== "admin") {
     handleLoginRedirect(req);
   }
+
+  const { success: allTasks } = await getAllTasksFetch(req);
+  const activeTasks = allTasks.filter(t => t.isActive);
 
   return {
     profile,
