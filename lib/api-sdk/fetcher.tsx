@@ -55,7 +55,7 @@ const HackerLiveRoutes: IHackerRoutes = {
   HackerLivePersonInfoSelf: "api/hacker/live/personInfo" as Route,
   HackerLiveTasks: "api/hacker/live/tasks" as Route,
   HackerLiveHouseInfo: "api/hacker/live/houseInfo" as Route,
-  HackerLiveHouseInfoList: "api/hacker/live/houseInfoList" as Route
+  HackerLiveHouseInfoList: "api/hacker/live/houseInfo/list" as Route
 };
 
 const Routes = {
