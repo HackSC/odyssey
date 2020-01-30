@@ -100,11 +100,11 @@ function computeUrlRoute(route: string, req?: any, param?: ResourceID): string {
 
 async function APIGet<T>(
   route: GetRoute,
-  param?: ResourceID,
-  opts?: {
+  opts: {
     queryParams?: { [key: string]: string };
     req?: NextApiRequest;
-  }
+  },
+  param?: ResourceID
 ): Promise<APIResponse<T>> {
   let urlRoute = computeUrlRoute(route, opts?.req, param);
   if (opts?.queryParams) {

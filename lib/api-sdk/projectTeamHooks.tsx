@@ -16,7 +16,7 @@ type SelfHookParams<T> = {
 const resourceRoute = Routes.ProjectTeamSelf;
 
 function getProjectTeamSelfFetch(req?: NextApiRequest) {
-  return APIGet<ProjectTeam>(resourceRoute, null, { req });
+  return APIGet<ProjectTeam>(resourceRoute, { req });
 }
 
 function createProjectTeamSelfFetch(body: Partial<ProjectTeam>) {

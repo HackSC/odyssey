@@ -10,23 +10,23 @@ import {
 import { fetcherToSVRHandler } from "./hook-utils";
 
 function battlepassFetch(req?: NextApiRequest) {
-  return APIGet(Routes.HackerLiveBattlepass, null, { req });
+  return APIGet(Routes.HackerLiveBattlepass, { req }, null);
 }
 
 function personInfoFetchSelf(req?: NextApiRequest) {
-  return APIGet(Routes.HackerLivePersonInfoSelf, null, { req });
+  return APIGet(Routes.HackerLivePersonInfoSelf, { req });
 }
 
 function allTasksFetch(req?: NextApiRequest) {
-  return APIGet(Routes.HackerLiveTasks, null, { req });
+  return APIGet(Routes.HackerLiveTasks, { req }, null);
 }
 
 function houseInfoFetch(houseId: NumberID, req?: NextApiRequest) {
-  return APIGet(Routes.HackerLiveHouseInfo, houseId, { req });
+  return APIGet(Routes.HackerLiveHouseInfo, { req }, houseId);
 }
 
-function allHouseInfoFetch() {
-  return APIGet(Routes.HackerLiveHouseInfoList);
+function allHouseInfoFetch(req?: NextApiRequest) {
+  return APIGet(Routes.HackerLiveHouseInfoList, { req });
 }
 
 function useBattlepass({

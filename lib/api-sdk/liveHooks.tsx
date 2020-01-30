@@ -15,7 +15,7 @@ type LiveLookupParams = {
 };
 
 function liveLookupFetch(params: LiveLookupParams) {
-  return APIGet<Profile[]>(Routes.LiveLookup, null, { queryParams: params });
+  return APIGet<Profile[]>(Routes.LiveLookup, { queryParams: params });
 }
 
 type LiveQRAssignBody = {
@@ -26,8 +26,8 @@ function liveAssignQRFetch(body: LiveQRAssignBody) {
   return APIPost(Routes.LiveAssignQR, body);
 }
 
-function liveIdentityCheckFetch(params) {
-  return APIGet(Routes.LiveIdentityCheck);
+function liveIdentityCheckFetch(req?: NextApiRequest) {
+  return APIGet(Routes.LiveIdentityCheck, { req });
 }
 
 export { liveAssignQRFetch, liveDispatchFetch, liveLookupFetch };
