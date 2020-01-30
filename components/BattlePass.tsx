@@ -87,26 +87,24 @@ const useBattlepassItems = (bp: Battlepass, userPoints: number) => {
       );
     }
 
-    const currentTier = useMemo(() => {
-      let i = 0;
-      for (i = 0; i < basicItems.length; i++) {
-        const item = basicItems[i];
+    // Get current tier
+    let i = 0;
+    for (i = 0; i < basicItems.length; i++) {
+      const item = basicItems[i];
 
-        if (userPoints < item.minimum) {
-          break;
-        }
+      if (userPoints < item.minimum) {
+        break;
       }
+    }
 
-      return i - 1;
-    }, [basicItems, userPoints]);
+    const currentTier = i - 1;
 
-    const pointsTillNextTier = useMemo(() => {
-      if (currentTier === basicItems.length - 1) {
-        return 0;
-      } else {
-        return basicItems[currentTier + 1].minimum - userPoints;
-      }
-    }, [basicItems, currentTier]);
+    let pointsTillNextTier;
+    if (currentTier === basicItems.length - 1) {
+      pointsTillNextTier = 0;
+    } else {
+      pointsTillNextTier = basicItems[currentTier + 1].minimum - userPoints;
+    }
 
     return {
       basicItems,
@@ -114,7 +112,7 @@ const useBattlepassItems = (bp: Battlepass, userPoints: number) => {
       currentTier,
       pointsTillNextTier
     };
-  }, [bp]);
+  }, [bp, userPoints]);
 };
 const BattlePass = ({
   bp,
