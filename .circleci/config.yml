@@ -17,6 +17,13 @@ jobs:
           command: "yarn run E2ETest"
       - store_artifacts:
           path: cypress/videos/odysseyTests
+  build:
+    docker:
+      - image: circleci/node
+    steps:
+      - checkout
+      - run: yarn install
+      - run: yarn build
   test:
     docker:
       - image: circleci/node
