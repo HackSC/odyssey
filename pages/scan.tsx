@@ -11,8 +11,7 @@ import Scanner from "../components/Scanner";
 import { Button, Form, Flex } from "../styles";
 import Select from "../components/Select";
 import { liveDispatchFetch } from "../lib/api-sdk/liveHooks";
-import { getCurrentTasks } from "../lib/live";
-
+import { getAllTasksFetch } from "../lib/api-sdk/taskHooks";
 // TO-DO -- pull this out, define elsewhere
 const ACTIONS = [
   {
@@ -21,7 +20,12 @@ const ACTIONS = [
   }
 ];
 
-const Scan = ({ profile, tasks }) => {
+type Props = {
+  profile: Profile;
+  tasks: ActiveTask[];
+};
+
+const Scan = ({ profile, tasks }: Props) => {
   const [action, setAction] = useState(null);
   const [lastScannedCode, setLastScannedCode] = useState(null);
 
@@ -171,7 +175,11 @@ Scan.getInitialProps = async ctx => {
   const { req } = ctx;
 
   const profile = await getProfile(req);
-  const tasks = await getCurrentTasks(req);
+  const { success: allTasks } = await getAllTasksFetch(req);
+
+  console.log(allTasks);
+
+  const activeTasks = allTasks.filter(t => t.isActive);
 
   // Null profile means user is not logged in, and this is only relevant for admins
   if (!profile || profile.role !== "admin") {
@@ -180,7 +188,7 @@ Scan.getInitialProps = async ctx => {
 
   return {
     profile,
-    tasks: tasks.tasks // TODO -- update this once we've standardized our server/client stuff
+    tasks: activeTasks // TODO -- update this once we've standardized our server/client stuff
   };
 };
 

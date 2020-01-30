@@ -10,16 +10,12 @@ const Sentry = require("@sentry/node");
 router.use(utils.authMiddleware);
 router.use(utils.requireAdmin);
 
-router.get("/tasks", async (req, res) => {
-  try {
-    const tasks = await models.Task.findAll();
-    return res.json({ tasks: tasks });
-  } catch (e) {
-    return res.json({ err: e });
-  }
+router.get("/list", async (req, res) => {
+  const tasks = await models.Task.findAll();
+  return res.json({ success: tasks });
 });
 
-router.post("/tasks", async (req, res) => {
+router.post("/create", async (req, res) => {
   const allowedFields = new Set([
     "blocking",
     "description",
@@ -37,38 +33,26 @@ router.post("/tasks", async (req, res) => {
       });
     }
   }
-  try {
-    const result = await models.Task.create(req.body);
-    return res.status(200).json({ result: result });
-  } catch (e) {
-    return res.status(500).json({ error: e });
-  }
+  const result = await models.Task.create(req.body);
+  return res.status(200).json({ success: result });
 });
 
-router.put("/tasks", async (req, res) => {
-  try {
-    const updatedObj = req.body;
-    const taskId = updatedObj.id;
-    delete updatedObj.id;
-    await models.Task.update({ ...updatedObj }, { where: { id: taskId } });
-    return res.status(200);
-  } catch (e) {
-    return res.status(500).json({ err: e.message });
-  }
+router.put("/:id", async (req, res) => {
+  const updatedObj = req.body;
+  const taskId = updatedObj.id;
+  delete updatedObj.id;
+  await models.Task.update({ ...updatedObj }, { where: { id: taskId } });
+  return res.status(200);
 });
 
-router.delete("/tasks/:id", async (req, res) => {
-  try {
-    const id = req.params.id;
-    await models.Task.destroy({
-      where: {
-        id: id
-      }
-    });
-    return res.status(200);
-  } catch (e) {
-    return res.status(500).json({ err: e });
-  }
+router.delete("/:id", async (req, res) => {
+  const id = req.params.id;
+  await models.Task.destroy({
+    where: {
+      id: id
+    }
+  });
+  return res.json({ success: null });
 });
 
 module.exports = router;
