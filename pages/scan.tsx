@@ -48,12 +48,18 @@ const Scan = ({ profile, tasks }) => {
     }
 
     const dispatchBody = {
-      qrCodeid: code
+      qrCodeId: code
     };
 
     // Either an action (ex: checkin) or a task (ex: 1, 2, etc)
     const [typeOfAction, value] = action.split(" ");
-    dispatchBody[typeOfAction === "action" ? "actionId" : "taskId"] = value;
+
+    if (typeOfAction === "action") {
+      dispatchBody["actionId"] = value;
+    } else {
+      dispatchBody["actionId"] = "contrib";
+      dispatchBody["taskId"] = value;
+    }
 
     const scanResponse = await liveDispatchFetch(dispatchBody);
 
