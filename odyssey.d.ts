@@ -84,17 +84,30 @@ declare type CookieValues = {
 
 declare type Person = {
   Profile: Profile;
-  identityId: ResourceID;
+  identityId: StringID;
 };
 
 declare type Prize = {
   title: string;
   description: string;
-  id: ResourceID;
+  id: NumberID;
+};
+
+declare type House = {
+  id: NumberID;
+  name: string;
+  color: string;
+};
+
+declare type Contribution = {
+  Person: Person;
+  Task: Task;
+  multiplier: number;
+  scannerId: StringID;
 };
 
 declare type ProjectTeam = {
-  name: ResourceID;
+  name: StringID;
   devpostLink: string;
   githubLink: string;
   Members: Person[];
@@ -103,6 +116,8 @@ declare type ProjectTeam = {
 
 //ID's have additional semantic meaning beyond string or number
 declare type ResourceID = (string | number) & { __type: "ResourceID" };
+declare type StringID = ResourceID & string;
+declare type NumberID = ResourceID & number;
 
 declare type GetRoute = string & { __type: "GetRoute" };
 declare type PostRoute = string & { __type: "PostRoute" };

@@ -1,6 +1,6 @@
 import { NextApiRequest } from "next";
 
-interface IRoutes {
+interface IProjectTeamRoutes {
   ProjectTeamSelf: GetRoute & PostRoute;
   ProjectTeamSelfAddPrize: PostRoute;
   ProjectTeamSelfDeletePrize: DeleteRoute;
@@ -8,12 +8,29 @@ interface IRoutes {
   ProjectTeamSelfJoin: PutRoute;
 }
 
-const Routes: IRoutes = {
+const ProjectTeamRoutes: IProjectTeamRoutes = {
   ProjectTeamSelf: "api/projectTeam/self" as Route,
   ProjectTeamSelfAddPrize: "api/projectTeam/self/addPrize" as Route,
   ProjectTeamSelfDeletePrize: "api/projectTeam/self/deletePrize" as Route,
   ProjectTeamSelfDeleteMember: "api/projectTeam/self/deleteMember" as Route,
   ProjectTeamSelfJoin: "api/projectTeam/join" as Route
+};
+
+interface IContributionRoutes {
+  ContributionAll: GetRoute;
+  ContributionOwned: GetRoute;
+  ContributionCreate: PostRoute;
+}
+
+const ContributionRoutes: IContributionRoutes = {
+  ContributionAll: "api/contribution/all" as Route,
+  ContributionOwned: "api/contribution/owned" as Route,
+  ContributionCreate: "api/contribution/create" as Route
+};
+
+const Routes = {
+  ...ProjectTeamRoutes,
+  ...ContributionRoutes
 };
 
 async function processResponse<T>(res: Response): Promise<APIResponse<T>> {
