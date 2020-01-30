@@ -4,7 +4,7 @@ import { ThemeProvider } from "styled-components";
 import { hotjar } from "react-hotjar";
 import * as Sentry from "@sentry/browser";
 
-//import { persistLinkReferrerCode } from "../lib/referrerCode";
+import { persistLinkReferrerCode } from "../lib/referrerCode";
 import "react-tippy/dist/tippy.css";
 import "react-step-progress-bar/styles.css";
 

@@ -12,46 +12,136 @@ router.use(utils.authMiddleware);
 router.get("/battlepass", async (req, res) => {
   return res.json([
     {
-      id: "5e29283758c29d352b47dd41",
-      isPremium: true,
-      pointValue: 38,
-      prizeName: "socks"
-    },
-    {
-      id: "5e2928376468ef47d5d4ac3b",
-      isPremium: true,
-      pointValue: 39,
-      prizeName: "socks"
-    },
-    {
-      id: "5e292837285ac2542f28eda9",
-      isPremium: true,
-      pointValue: 23,
-      prizeName: "socks"
-    },
-    {
-      id: "5e2928377f9e491c5bfd71ae",
+      id: "1",
       isPremium: false,
-      pointValue: 30,
-      prizeName: "Supreme Brick"
+      pointValue: 8000,
+      prizeName: "10 Raffle Tickets"
     },
     {
-      id: "5e29283727dd79a7ae8f690a",
+      id: "2",
+      isPremium: false,
+      pointValue: 8000,
+      prizeName: "HackSC T-Shirt"
+    },
+    {
+      id: "3",
+      isPremium: false,
+      pointValue: 8000,
+      prizeName: "10 Raffle Tickets"
+    },
+    {
+      id: "4",
+      isPremium: false,
+      pointValue: 8000,
+      prizeName: "10 Raffle Tickets"
+    },
+    {
+      id: "5",
+      isPremium: false,
+      pointValue: 8000,
+      prizeName: "10 Raffle Tickets"
+    },
+    {
+      id: "6",
+      isPremium: false,
+      pointValue: 8000,
+      prizeName: "10 Raffle Tickets"
+    },
+    {
+      id: "7",
+      isPremium: false,
+      pointValue: 8000,
+      prizeName: "10 Raffle Tickets"
+    },
+    {
+      id: "8",
+      isPremium: false,
+      pointValue: 8000,
+      prizeName: "HackSC Stickers"
+    },
+    {
+      id: "9",
+      isPremium: false,
+      pointValue: 8000,
+      prizeName: "10 Raffle Tickets"
+    },
+    {
+      id: "10",
+      isPremium: false,
+      pointValue: 8000,
+      prizeName: "Drawstring Bag"
+    },
+    {
+      id: "11",
+      isPremium: false,
+      pointValue: 8000,
+      prizeName: "100 Raffle Tickets"
+    },
+    {
+      id: "12",
       isPremium: true,
-      pointValue: 22,
-      prizeName: "Supreme Brick"
+      pointValue: 8000,
+      prizeName: "100 Raffle Tickets"
     },
     {
-      id: "5e292837493dc9bae67b6495",
-      isPremium: false,
-      pointValue: 23,
-      prizeName: "shoes"
+      id: "13",
+      isPremium: true,
+      pointValue: 8000,
+      prizeName: "100 Raffle Tickets"
     },
     {
-      id: "5e2928373ae0bf5885169106",
-      isPremium: false,
-      pointValue: 37,
-      prizeName: "hat"
+      id: "14",
+      isPremium: true,
+      pointValue: 8000,
+      prizeName: "100 Raffle Tickets"
+    },
+    {
+      id: "15",
+      isPremium: true,
+      pointValue: 8000,
+      prizeName: "100 Raffle Tickets & Travel Reimbursement!"
+    },
+    {
+      id: "16",
+      isPremium: true,
+      pointValue: 8000,
+      prizeName: "100 Raffle Tickets"
+    },
+    {
+      id: "17",
+      isPremium: true,
+      pointValue: 8000,
+      prizeName: "100 Raffle Tickets"
+    },
+    {
+      id: "18",
+      isPremium: true,
+      pointValue: 8000,
+      prizeName: "100 Raffle Tickets"
+    },
+    {
+      id: "19",
+      isPremium: true,
+      pointValue: 8000,
+      prizeName: "100 Raffle Tickets"
+    },
+    {
+      id: "20",
+      isPremium: true,
+      pointValue: 8000,
+      prizeName: "100 Raffle Tickets & Hacker Socks"
+    },
+    {
+      id: "21",
+      isPremium: true,
+      pointValue: 8000,
+      prizeName: "100 Raffle Tickets"
+    },
+    {
+      id: "22",
+      isPremium: true,
+      pointValue: 8000,
+      prizeName: "100 Raffle Tickets & Hacker Hat"
     }
   ]);
 });
@@ -81,9 +171,9 @@ router.get("/personInfo", async (req, res) => {
 router.get("/tasks", async (req, res) => {
   try {
     const tasks = await models.Task.findAll();
-    return res.json({ tasks: tasks });
+    return res.json({ success: tasks });
   } catch (e) {
-    return res.json({ err: e });
+    return res.json({ error: e });
   }
 });
 

@@ -113,6 +113,21 @@ async function updateHouse(houseObj) {
   return result.status === 200;
 }
 
+async function getCurrentUnlockables(req) {
+  const urlRoute = req
+    ? /* Serverside */ process.env.URL_BASE + "api/unlockable"
+    : /* Client */ "api/unlockable";
+
+  const result = await fetch(
+    urlRoute,
+    req
+      ? {
+          headers: req.headers
+        }
+      : null
+  );
+  return await result.json();
+}
 async function getCurrentEvents(req) {
   const urlRoute = req
     ? /* Serverside */ process.env.URL_BASE + "api/events/"
@@ -128,6 +143,31 @@ async function getCurrentEvents(req) {
   );
   return await result.json();
 }
+
+async function saveUnlockable(newUnlockable) {
+  const urlRoute = "/api/unlockable";
+  console.log(newUnlockable);
+  const result = await fetch(urlRoute, {
+    method: "POST",
+    headers: { "content-type": "application/json" },
+    body: JSON.stringify(newUnlockable)
+  });
+  console.log(result);
+  const jsonResult = await result.json();
+  console.log(jsonResult);
+  return result.status === 200;
+}
+async function updateUnlockable(updatedUnlockable) {
+  const urlRoute = "/api/unlockable";
+  const result = await fetch(urlRoute, {
+    method: "PUT",
+    headers: { "content-type": "application/json" },
+    body: JSON.stringify(updatedUnlockable)
+  });
+  console.log(result);
+  return result.status === 200;
+}
+
 async function saveEvent(newEvent) {
   const urlRoute = "/api/events";
   const result = await fetch(urlRoute, {
@@ -155,6 +195,9 @@ export {
   getHouseInfo,
   createHouse,
   updateHouse,
+  getCurrentUnlockables,
+  saveUnlockable,
+  updateUnlockable,
   getCurrentEvents,
   saveEvent,
   deleteEvent,

@@ -4,6 +4,7 @@ module.exports = (sequelize, DataTypes) => {
     {
       personId: DataTypes.STRING(100),
       multiplier: DataTypes.INTEGER,
+      scannerId: DataTypes.STRING(100),
       taskId: DataTypes.INTEGER
     },
     { tableName: "Contributions" }

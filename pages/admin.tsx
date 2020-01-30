@@ -29,6 +29,9 @@ const Admin = ({ profile }) => {
 
           <ActionsHeader>Actions</ActionsHeader>
           <Actions>
+            <Action href="/scan">
+              <ActionTitle>Scan In Hackers</ActionTitle>
+            </Action>
             <Action href="/appReview">
               <ActionTitle>Start App Review</ActionTitle>
             </Action>
@@ -56,6 +59,9 @@ const Admin = ({ profile }) => {
             </Action>
             <Action href="/judgingManager">
               <ActionTitle> Pass Judgement </ActionTitle>
+            </Action>
+            <Action href="/battlepassManager">
+              <ActionTitle> Edit Battlepass </ActionTitle>
             </Action>
           </Actions>
         </Container>
