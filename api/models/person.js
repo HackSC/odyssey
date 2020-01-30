@@ -14,15 +14,19 @@ module.exports = (sequelize, DataTypes) => {
       defaultScope: {
         include: [
           { model: sequelize.models.HackerProfile, as: "Profile" },
-          sequelize.models.Contribution,
-          sequelize.models.House
+          { model: sequelize.models.Contribution, as: "Contributions" },
+          { model: sequelize.models.House, as: "Home" }
         ]
       }
     }
   );
 
   Person.associate = function(models) {
-    Person.belongsTo(models.House, { foreignKey: "houseId" });
+    Person.belongsTo(models.House, {
+      foreignKey: "houseId",
+      as: "Home",
+      constraints: false
+    });
     Person.belongsTo(models.ProjectTeam);
     Person.belongsTo(models.HackerProfile, {
       foreignKey: "identityId",

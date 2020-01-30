@@ -8,7 +8,11 @@ module.exports = (sequelize, DataTypes) => {
     { tableName: "Houses" }
   );
   House.associate = function(models) {
-    House.hasMany(models.Person, { foreignKey: "houseId" });
+    House.hasMany(models.Person, {
+      foreignKey: "houseId",
+      as: "HouseMembers",
+      constraints: false
+    });
   };
 
   return House;

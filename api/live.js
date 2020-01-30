@@ -48,41 +48,45 @@ router.post("/dispatch", async (req, res) => {
 */
 
 async function handleGroupContrib(userId, req, res) {
-  if (!req.body.taskId) {
-    return res.status(400).json({ error: "Bad Request, taskId not found" });
-  }
-  const result = await models.Person.findOne({
-    where: {
-      identityId: userId
-    },
-    include: [
-      {
-        model: models.ProjectTeam,
-        required: false,
-        include: [
-          {
-            model: models.Person,
-            required: false
-          }
-        ]
-      }
-    ]
-  });
-  const teammates = result.get("ProjectTeam").get("People");
-  const taskId = req.body.taskId;
-  const taskMultiplier = getMultiplierForTask(taskId);
-  const teammateContribs = teammates.map(tm => {
-    const tmId = tm.dataValues.identityId;
-    return models.Contribution.create({
-      personId: tmId,
-      multiplier: taskMultiplier,
-      scannerId: req.user.id,
-      taskId: taskId
+  try {
+    if (!req.body.taskId) {
+      return res.status(400).json({ error: "Bad Request, taskId not found" });
+    }
+    const result = await models.Person.findOne({
+      where: {
+        identityId: userId
+      },
+      include: [
+        {
+          model: models.ProjectTeam,
+          required: false,
+          include: [
+            {
+              model: models.Person,
+              required: false
+            }
+          ]
+        }
+      ]
     });
-  });
+    const teammates = result.get("ProjectTeam").get("People");
+    const taskId = req.body.taskId;
+    const taskMultiplier = getMultiplierForTask(taskId);
+    const teammateContribs = teammates.map(tm => {
+      const tmId = tm.dataValues.identityId;
+      return models.Contribution.create({
+        personId: tmId,
+        multiplier: taskMultiplier,
+        scannerId: req.user.id,
+        taskId: taskId
+      });
+    });
 
-  await Promise.all(teammateContribs);
-  return res.json({ success: teammates });
+    await Promise.all(teammateContribs);
+    return res.json({ success: teammates });
+  } catch (e) {
+    return res.status(400).json({ error: e.message });
+  }
 }
 
 async function handleContrib(userId, req, res) {

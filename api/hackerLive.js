@@ -56,6 +56,7 @@ router.get("/battlepass", async (req, res) => {
   });
 });
 
+//TODO: Figure out why this route exists
 router.get("/personInfo", async (req, res) => {
   const person = await models.Person.findByPk(req.user.id);
   return res.json({ success: person });

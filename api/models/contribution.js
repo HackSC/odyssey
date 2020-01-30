@@ -7,14 +7,16 @@ module.exports = (sequelize, DataTypes) => {
       scannerId: DataTypes.STRING(100),
       taskId: DataTypes.INTEGER
     },
-    { tableName: "Contributions" }
+    {
+      tableName: "Contributions"
+    }
   );
   Contribution.associate = function(models) {
     Contribution.belongsTo(models.Person, {
       foreignKey: "personId",
       targetKey: "identityId"
     });
-    Contribution.belongsTo(models.Task);
+    Contribution.belongsTo(models.Task, { foreignKey: "id" });
   };
   return Contribution;
 };

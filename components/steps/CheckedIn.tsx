@@ -42,7 +42,7 @@ const CheckedIn: React.FunctionComponent<Props> = props => {
     />
   );
 
-  let HouseFoxColor = personInfo?.House.color ?? "#E7862B";
+  let HouseFoxColor = personInfo?.Home.color ?? "#E7862B";
 
   if (!personInfo) {
     return <span></span>;

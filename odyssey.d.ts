@@ -86,7 +86,7 @@ declare type Person = {
   Profile: Profile;
   Contributions: Contribution[];
   identityId: StringID;
-  House: House;
+  Home: House;
   totalPoints?: number;
 };
 
@@ -98,7 +98,7 @@ declare type Prize = {
 
 declare type House = {
   id: NumberID;
-  People: Person[];
+  HouseMembers: Person[];
   name: string;
   color: string;
   totalScore: number;

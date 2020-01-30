@@ -34,7 +34,7 @@ const seedDatabase = async () => {
     const house = await houseFactory();
 
     const person = await personFactory({ identityId: hp.userId });
-    await person.setHouse(house);
+    await person.setHome(house);
     return person;
   });
 
