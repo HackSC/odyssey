@@ -1,8 +1,7 @@
-import * as React from "react";
+import React, { useMemo } from "react";
 import styled from "styled-components";
 import Loader from "react-loader-spinner";
 import { BPLock, BPOpenLock, Flex, Column } from "../styles";
-import { useBattlepass } from "../lib/api-sdk/hackerLiveHooks";
 
 type Props = {
   profile: Profile;
@@ -13,13 +12,15 @@ type ItemProps = {
   prizeName?: string;
   pointValue?: number;
   unlocked?: boolean;
+  minimum: number;
 };
 
 const bpItem: React.SFC<ItemProps> = ({
   premium,
   prizeName,
   pointValue,
-  unlocked
+  unlocked,
+  minimum
 }) => {
   return (
     <TableTD
@@ -29,44 +30,32 @@ const bpItem: React.SFC<ItemProps> = ({
       <LockImage>
         {unlocked ? <BPOpenLock fill="#FF8379" /> : <BPLock />}
       </LockImage>
-      {premium ? <GoldStar /> : ""}
       <MarginDiv>
         <PrizeItem>{prizeName}</PrizeItem>
-        <p>Points: {pointValue}</p>
+        <p>Min Points: {minimum}</p>
       </MarginDiv>
     </TableTD>
   );
 };
 
 const BattlePass = ({ bp }: { bp: Battlepass }) => {
-  const userPoints = 50;
+  const userPoints = 0;
   const projSubmitted = false;
-
-  const loading = (
-    <Loader
-      type="Triangle"
-      color="#FF8379"
-      height={200}
-      width={200}
-      timeout={3000}
-    />
-  );
 
   const premiumItems = bp.filter(item => {
     return item.isPremium;
   });
+
   const basicItems = bp.filter(item => {
     return !item.isPremium;
   });
+
   if (premiumItems && premiumItems.length > 0) {
     premiumItems.reduce(
       (total, item, idx) => {
-        let sum = idx === 0 ? item.pointValue : total.total + item.pointValue;
-        // TODO: Unlocked will only be true if user submitted project
-
-        item.unlocked =
-          userPoints > total.total && projSubmitted ? true : false;
-        item.total = sum;
+        let sum = idx === 0 ? 0 : total.total + item.pointValue;
+        item.unlocked = userPoints >= sum;
+        item.minimum = sum;
         return { total: sum };
       },
       { total: 0 }
@@ -75,14 +64,35 @@ const BattlePass = ({ bp }: { bp: Battlepass }) => {
   if (basicItems && basicItems.length > 0) {
     basicItems.reduce(
       (total, item, idx) => {
-        let sum = idx === 0 ? item.pointValue : total.total + item.pointValue;
-        item.unlocked = userPoints > total.total ? true : false;
-        item.total = sum;
+        let sum = idx === 0 ? 0 : total.total + item.pointValue;
+        item.unlocked = userPoints >= sum;
+        item.minimum = sum;
         return { total: sum };
       },
       { total: 0 }
     );
   }
+
+  const currentTier = useMemo(() => {
+    let i = 0;
+    for (i = 0; i < basicItems.length; i++) {
+      const item = basicItems[i];
+
+      if (userPoints < item.minimum) {
+        break;
+      }
+    }
+
+    return i - 1;
+  }, [basicItems, userPoints]);
+
+  const pointsTillNextTier = useMemo(() => {
+    if (currentTier === basicItems.length) {
+      return 0;
+    } else {
+      return basicItems[currentTier + 1].minimum - userPoints;
+    }
+  }, [basicItems, currentTier]);
 
   const bptable = (
     <BPTable>
@@ -110,39 +120,44 @@ const BattlePass = ({ bp }: { bp: Battlepass }) => {
       <Header>BattlePass</Header>
 
       <Info>
-        <Flex direction="row" justify="space-between">
-          <Column flexBasis={30}>
+        <Flex
+          direction="row"
+          justify="space-between"
+          align="center"
+          tabletVertical
+        >
+          <Column flexGrow={1}>
             <Flex direction="row" align="center">
               <Subheader>Tier</Subheader>
-              <BigNumber>1</BigNumber>
+              <BigNumber>{currentTier}</BigNumber>
             </Flex>
           </Column>
 
-          <Column flexBasis={70}>
+          <Column flexGrow={1}>
+            <Flex direction="row" align="center">
+              <Subheader>Points</Subheader>
+              <BigNumber>{userPoints}</BigNumber>
+            </Flex>
+          </Column>
+
+          <Column flexBasis={40}>
             <Flex direction="row" align="center">
               <Subheader>Points till next tier</Subheader>
-              <BigNumber>4500</BigNumber>
+              <BigNumber>{pointsTillNextTier}</BigNumber>
             </Flex>
           </Column>
         </Flex>
       </Info>
 
-      {/* <OverflowHidden>
+      <OverflowHidden>
         <Scrollable>{bp ? bptable : ""}</Scrollable>
         <BattlePassFade />
-      </OverflowHidden> */}
+      </OverflowHidden>
 
       <div />
     </>
   );
 };
-
-const GoldStar = styled(MdStar)`
-  color: #feda22;
-  position: absolute;
-  right: 2px;
-  top: 2px;
-`;
 
 const OverflowHidden = styled.div`
   overflow: hidden;
@@ -159,9 +174,9 @@ const BattlePassFade = styled.div`
   background-image: linear-gradient(
     to right,
     rgba(255, 255, 255, 0),
-    #f6f6f6 20%
+    #f6f6f6 70%
   );
-  width: 4rem;
+  width: 8rem;
   height: 100%;
 `;
 
@@ -205,6 +220,7 @@ const PrizeItem = styled.h4`
 const BPTable = styled.table`
   border-collapse: collapse;
   width: 110%;
+  margin: 18px 0;
 `;
 
 const Scrollable = styled.div`
@@ -221,7 +237,7 @@ const TableTD = styled.td<{ bgColor?: string; borderColor?: string }>`
   position: relative;
   height: 100px;
   background-color: ${({ bgColor = "white" }) => bgColor};
-  width: 100px;
+  width: 120px;
   border: solid;
   padding: 10px;
   margin: 5px;
