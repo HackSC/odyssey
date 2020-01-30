@@ -130,7 +130,7 @@ declare type BattlepassObject = {
   total: number;
 };
 
-declare type Task = {
+interface Task {
   points: number;
   description: string;
   blocking: boolean;
@@ -139,7 +139,11 @@ declare type Task = {
   isActive: boolean;
   name: string;
   id: NumberID;
-};
+}
+
+interface ActiveTask extends Task {
+  isActive: true;
+}
 
 //ID's have additional semantic meaning beyond string or number
 declare type ResourceID = (string | number) & { __type: "ResourceID" };

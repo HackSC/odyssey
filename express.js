@@ -67,7 +67,7 @@ server.use(fileUpload());
 server.use("/auth", authRouter);
 server.use("/api/profile", profileRouter);
 server.use("/api/admin", adminRouter);
-server.use("/api/points", taskRouter);
+server.use("/api/task", taskRouter);
 server.use("/api/team", teamRouter);
 server.use("/api/person", personRouter);
 server.use("/api/contribution", contributionRouter);

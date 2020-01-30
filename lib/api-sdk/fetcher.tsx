@@ -58,11 +58,20 @@ const HackerLiveRoutes: IHackerRoutes = {
   HackerLiveHouseInfoList: "api/hacker/live/houseInfo/list" as Route
 };
 
+interface ITaskRoutes {
+  TasksList: GetRoute;
+}
+
+const TaskRoutes: ITaskRoutes = {
+  TasksList: "api/task/list" as Route
+};
+
 const Routes = {
   ...ProjectTeamRoutes,
   ...ContributionRoutes,
   ...LiveRoutes,
-  ...HackerLiveRoutes
+  ...HackerLiveRoutes,
+  ...TaskRoutes
 };
 
 async function processResponse<T>(res: Response): Promise<APIResponse<T>> {
