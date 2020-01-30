@@ -8,6 +8,11 @@ import { Container, Link } from "../styles";
 
 type NavbarProps = {
   loggedIn?: boolean;
+  showDash?: boolean;
+  showApp?: boolean;
+  showResults?: boolean;
+  showTeam?: boolean;
+  showLogout?: boolean;
   activePage?: string;
   admin?: boolean;
 };
@@ -28,6 +33,11 @@ const style = background => {
 
 const Navbar: React.FunctionComponent<NavbarProps> = ({
   loggedIn,
+  showDash = true,
+  showApp = true,
+  showResults = true,
+  showTeam = true,
+  showLogout = true,
   activePage,
   admin
 }: NavbarProps) => {
@@ -40,7 +50,7 @@ const Navbar: React.FunctionComponent<NavbarProps> = ({
         <Links>
           {loggedIn ? (
             <>
-              {!admin && (
+              {!admin && showDash && (
                 <Link
                   href="/dashboard"
                   style={style(
@@ -50,7 +60,7 @@ const Navbar: React.FunctionComponent<NavbarProps> = ({
                   Dashboard
                 </Link>
               )}
-              {!admin && (
+              {!admin && showApp && (
                 <Link
                   href="/application"
                   style={style(
@@ -60,7 +70,7 @@ const Navbar: React.FunctionComponent<NavbarProps> = ({
                   Application
                 </Link>
               )}
-              {!admin && (
+              {!admin && showResults && (
                 <Link
                   href="/results"
                   style={style(activePage === "results" ? "#FF8379" : "white")}
@@ -68,7 +78,7 @@ const Navbar: React.FunctionComponent<NavbarProps> = ({
                   Results
                 </Link>
               )}
-              {!admin && (
+              {!admin && showTeam && (
                 <Link
                   href="/team"
                   style={style(activePage === "team" ? "#FF8379" : "white")}
@@ -76,12 +86,14 @@ const Navbar: React.FunctionComponent<NavbarProps> = ({
                   Team
                 </Link>
               )}
-              <Link
-                href="/auth/logout"
-                style={style(activePage === "logout" ? "#FF8379" : "white")}
-              >
-                Logout
-              </Link>
+              {showLogout && (
+                <Link
+                  href="/auth/logout"
+                  style={style(activePage === "logout" ? "#FF8379" : "white")}
+                >
+                  Logout
+                </Link>
+              )}
             </>
           ) : (
             <>

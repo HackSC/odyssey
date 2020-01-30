@@ -23,7 +23,13 @@ const Dashboard = ({ profile, houses, socialPosts }) => {
   return (
     <>
       <Head title="HackSC Odyssey - Dashboard" />
-      <Navbar loggedIn activePage="dashboard" />
+      <Navbar
+        showApp={false}
+        showResults={false}
+        showTeam={false}
+        loggedIn
+        activePage="dashboard"
+      />
       <Background padding={"0.5em"}>
         {profile && (
           <Container>
