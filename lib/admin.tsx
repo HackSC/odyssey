@@ -1,16 +1,12 @@
-export async function getHackerProfiles(searchText) {
+export async function getProfiles(query) {
   const fetchUrl = process.env.URL_BASE
-  ? process.env.URL_BASE + "api/admin/profiles"
-  : "api/admin/profiles";
+  ? process.env.URL_BASE + "api/admin/profiles?query=" + query 
+  : "api/admin/profiles?query=" + query;
 
   const response = await fetch(
     fetchUrl,
     {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify(searchText)
+      method: "GET"
     }
   );
 
@@ -20,6 +16,22 @@ export async function getHackerProfiles(searchText) {
   const { profiles } = payload;
 
   return profiles;
+}
+
+export async function updateProfileRole(email, role) {
+  const fetchUrl = process.env.URL_BASE
+  ? process.env.URL_BASE + "api/admin/updateRole" 
+  : "api/admin/updateRole"
+
+  const response = await fetch(fetchUrl, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({email: email, role: role})
+  })
+
+  return response
 }
 
 export async function getReviewHistory(req) {
