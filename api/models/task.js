@@ -13,7 +13,9 @@ module.exports = (sequelize, DataTypes) => {
     {}
   );
   Task.associate = function(models) {
+    Task.hasMany(models.Contribution, { foreignKey: "taskId" });
     // associations can be defined here
   };
+
   return Task;
 };

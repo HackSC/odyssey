@@ -1,25 +1,22 @@
 import * as React from "react";
 import styled from "styled-components";
 import Loader from "react-loader-spinner";
-import useBattlePass from "../lib/useBattlePass";
 import { BPLock, BPOpenLock } from "../styles";
+import { useBattlepass } from "../lib/api-sdk/hackerLiveHooks";
 
 type Props = {
   profile: Profile;
 };
 
-type ItemProps = {
-  prizeName?: string;
-  pointValue?: number;
-  unlocked?: boolean;
-};
-
-const bpItem: React.SFC<ItemProps> = ({ prizeName, pointValue, unlocked }) => {
+const bpItem: React.SFC<BattlepassObject> = ({
+  prizeName,
+  pointValue,
+  unlocked
+}) => {
   return (
     <TableTD
       bgColor={unlocked ? "white" : "#757575"}
-      borderColor={unlocked ? "#FF8379" : "#757575"}
-    >
+      borderColor={unlocked ? "#FF8379" : "#757575"}>
       <LockImage>
         {unlocked ? <BPOpenLock fill="#FF8379" /> : <BPLock />}
       </LockImage>
@@ -31,13 +28,7 @@ const bpItem: React.SFC<ItemProps> = ({ prizeName, pointValue, unlocked }) => {
   );
 };
 
-const BattlePass: React.FunctionComponent<Props> = props => {
-  const { profile } = props;
-
-  // * useBattlePass Custom Hook
-  const bp = useBattlePass(profile);
-
-  // TODO: dynamically calculate user points and project submission
+const BattlePass = ({ bp }: { bp: Battlepass }) => {
   const userPoints = 50;
   const projSubmitted = false;
 
@@ -51,10 +42,10 @@ const BattlePass: React.FunctionComponent<Props> = props => {
     />
   );
 
-  const premiumItems = bp?.payload?.results?.filter(item => {
+  const premiumItems = bp.filter(item => {
     return item.isPremium;
   });
-  const basicItems = bp?.payload?.results?.filter(item => {
+  const basicItems = bp.filter(item => {
     return !item.isPremium;
   });
   if (premiumItems && premiumItems.length > 0) {
@@ -108,10 +99,7 @@ const BattlePass: React.FunctionComponent<Props> = props => {
     <>
       <Header>BattlePass</Header>
       <OverflowHidden>
-        <Scrollable>
-          {bp && bp.status === "loading" ? loading : ""}
-          {bp && bp.status === "loaded" ? bptable : ""}
-        </Scrollable>
+        <Scrollable>{bp ? bptable : ""}</Scrollable>
         <BattlePassFade />
       </OverflowHidden>
     </>

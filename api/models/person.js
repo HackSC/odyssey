@@ -12,13 +12,21 @@ module.exports = (sequelize, DataTypes) => {
     {
       tableName: "persons",
       defaultScope: {
-        include: [{ model: sequelize.models.HackerProfile, as: "Profile" }]
+        include: [
+          { model: sequelize.models.HackerProfile, as: "Profile" },
+          { model: sequelize.models.Contribution, as: "Contributions" },
+          { model: sequelize.models.House, as: "Home" }
+        ]
       }
     }
   );
 
   Person.associate = function(models) {
-    Person.belongsTo(models.House, { foreignKey: "houseId" });
+    Person.belongsTo(models.House, {
+      foreignKey: "houseId",
+      as: "Home",
+      constraints: false
+    });
     Person.belongsTo(models.ProjectTeam);
     Person.belongsTo(models.HackerProfile, {
       foreignKey: "identityId",

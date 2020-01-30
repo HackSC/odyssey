@@ -1,6 +1,6 @@
 import { NextApiRequest } from "next";
 
-interface IRoutes {
+interface IProjectTeamRoutes {
   ProjectTeamSelf: GetRoute & PostRoute;
   ProjectTeamSelfAddPrize: PostRoute;
   ProjectTeamSelfDeletePrize: DeleteRoute;
@@ -8,12 +8,61 @@ interface IRoutes {
   ProjectTeamSelfJoin: PutRoute;
 }
 
-const Routes: IRoutes = {
+const ProjectTeamRoutes: IProjectTeamRoutes = {
   ProjectTeamSelf: "api/projectTeam/self" as Route,
   ProjectTeamSelfAddPrize: "api/projectTeam/self/addPrize" as Route,
   ProjectTeamSelfDeletePrize: "api/projectTeam/self/deletePrize" as Route,
   ProjectTeamSelfDeleteMember: "api/projectTeam/self/deleteMember" as Route,
   ProjectTeamSelfJoin: "api/projectTeam/join" as Route
+};
+
+interface IContributionRoutes {
+  ContributionAll: GetRoute;
+  ContributionOwned: GetRoute;
+  ContributionCreate: PostRoute;
+}
+
+const ContributionRoutes: IContributionRoutes = {
+  ContributionAll: "api/contribution/all" as Route,
+  ContributionOwned: "api/contribution/owned" as Route,
+  ContributionCreate: "api/contribution/create" as Route
+};
+
+interface ILiveRoutes {
+  LiveDispatch: PostRoute;
+  LiveLookup: GetRoute;
+  LiveAssignQR: PostRoute;
+  LiveIdentityCheck: GetRoute;
+}
+
+const LiveRoutes: ILiveRoutes = {
+  LiveDispatch: "api/live/dispatch" as Route,
+  LiveLookup: "api/live/lookup" as Route,
+  LiveAssignQR: "api/live/assign-qr" as Route,
+  LiveIdentityCheck: "api/live/dispatch" as Route
+};
+
+interface IHackerRoutes {
+  HackerLiveBattlepass: GetRoute;
+  HackerLivePersonInfoSelf: GetRoute;
+  HackerLiveTasks: GetRoute;
+  HackerLiveHouseInfo: GetRoute;
+  HackerLiveHouseInfoList: GetRoute;
+}
+
+const HackerLiveRoutes: IHackerRoutes = {
+  HackerLiveBattlepass: "api/hacker/live/battlepass" as Route,
+  HackerLivePersonInfoSelf: "api/hacker/live/personInfo" as Route,
+  HackerLiveTasks: "api/hacker/live/tasks" as Route,
+  HackerLiveHouseInfo: "api/hacker/live/houseInfo" as Route,
+  HackerLiveHouseInfoList: "api/hacker/live/houseInfoList" as Route
+};
+
+const Routes = {
+  ...ProjectTeamRoutes,
+  ...ContributionRoutes,
+  ...LiveRoutes,
+  ...HackerLiveRoutes
 };
 
 async function processResponse<T>(res: Response): Promise<APIResponse<T>> {
@@ -52,10 +101,19 @@ function computeUrlRoute(route: string, req?: any, param?: ResourceID): string {
 async function APIGet<T>(
   route: GetRoute,
   param?: ResourceID,
-  req?: NextApiRequest
+  opts?: {
+    queryParams?: { [key: string]: string };
+    req?: NextApiRequest;
+  }
 ): Promise<APIResponse<T>> {
-  const urlRoute = computeUrlRoute(route, req, param);
-  const headers = setupHeaders(req, {});
+  let urlRoute = computeUrlRoute(route, opts.req, param);
+  if (opts.queryParams) {
+    const urlParams = new URLSearchParams(Object.entries(opts.queryParams));
+    urlRoute += `?${urlParams};`;
+  }
+
+  const headers = setupHeaders(opts.req, {});
+
   const res = await fetch(urlRoute, {
     headers
   });

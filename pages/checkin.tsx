@@ -15,6 +15,7 @@ import {
   Form,
   FormGroup
 } from "../styles";
+import { liveAssignQRFetch, liveLookupFetch } from "../lib/api-sdk/liveHooks";
 
 const CheckinResult = ({ result, resetResults }) => {
   const qrInput = useRef(null);
@@ -34,18 +35,12 @@ const CheckinResult = ({ result, resetResults }) => {
 
     if (confirmation) {
       console.log("send it");
-      const assignRequest = await fetch("/api/live/assign-qr", {
-        method: "POST",
-        body: JSON.stringify({
-          qrCodeId: qrInputValue,
-          userId: result.userId
-        }),
-        headers: {
-          "content-type": "application/json"
-        }
+      const assignRequest = await liveAssignQRFetch({
+        qrCodeId: qrInputValue,
+        userId: result.userId
       });
 
-      if (assignRequest.status === 200) {
+      if (!assignRequest.error) {
         alert("Successfully assigned hacker QR");
         resetResults();
       }
@@ -130,10 +125,13 @@ const Checkin = () => {
     const lastName = lastNameInput.current.value;
     const email = emailInput.current.value;
 
-    const lookupReq = await fetch(
-      `/api/live/lookup?firstName=${firstName}&lastName=${lastName}&email=${email}`
-    );
-    const { profiles } = await lookupReq.json();
+    const lookupResponse = await liveLookupFetch({
+      firstName,
+      lastName,
+      email
+    });
+
+    const profiles = lookupResponse.success;
     setResults(profiles);
   };
 

@@ -84,25 +84,67 @@ declare type CookieValues = {
 
 declare type Person = {
   Profile: Profile;
-  identityId: ResourceID;
+  Contributions: Contribution[];
+  identityId: StringID;
+  Home: House;
+  totalPoints?: number;
 };
 
 declare type Prize = {
   title: string;
   description: string;
-  id: ResourceID;
+  id: NumberID;
+};
+
+declare type House = {
+  id: NumberID;
+  HouseMembers: Person[];
+  name: string;
+  color: string;
+  totalScore: number;
+};
+
+declare type Contribution = {
+  Person: Person;
+  Task: Task;
+  multiplier: number;
+  scannerId: StringID;
 };
 
 declare type ProjectTeam = {
-  name: ResourceID;
+  name: StringID;
   devpostLink: string;
   githubLink: string;
   Members: Person[];
   Prizes: Prize[];
 };
 
+declare type Battlepass = BattlepassObject[];
+
+declare type BattlepassObject = {
+  id: StringID;
+  isPremium: boolean;
+  pointValue: number;
+  prizeName: string;
+  unlocked: boolean;
+  total: number;
+};
+
+declare type Task = {
+  points: number;
+  description: string;
+  blocking: boolean;
+  type: string;
+  isGroupTask: boolean;
+  isActive: boolean;
+  name: string;
+  id: NumberID;
+};
+
 //ID's have additional semantic meaning beyond string or number
 declare type ResourceID = (string | number) & { __type: "ResourceID" };
+declare type StringID = ResourceID & string;
+declare type NumberID = ResourceID & number;
 
 declare type GetRoute = string & { __type: "GetRoute" };
 declare type PostRoute = string & { __type: "PostRoute" };

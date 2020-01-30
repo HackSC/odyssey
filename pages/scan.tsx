@@ -10,7 +10,7 @@ import Scanner from "../components/Scanner";
 
 import { Button, Form, Flex } from "../styles";
 import Select from "../components/Select";
-import { getCurrentTasks } from "../lib/live";
+import { liveDispatchFetch } from "../lib/api-sdk/liveHooks";
 
 // TO-DO -- pull this out, define elsewhere
 const ACTIONS = [
@@ -61,25 +61,16 @@ const Scan = ({ profile, tasks }) => {
       dispatchBody["taskId"] = value;
     }
 
-    // Send a request to the server to scan hacker for task
-    const scanRequest = await fetch("/api/live/dispatch", {
-      method: "POST",
-      body: JSON.stringify(dispatchBody),
-      headers: {
-        "Content-Type": "application/json"
-      }
-    });
+    const scanResponse = await liveDispatchFetch(dispatchBody);
 
-    const scanData = await scanRequest.json();
-
-    if (scanRequest.status === 200) {
+    if (!scanResponse.error) {
       // Successful scan, let's display that to the user
-      addToast(scanData.message || "Successfully scanned hacker's QR code", {
+      addToast("Successfully scanned hacker's QR code", {
         appearance: "success",
         autoDismiss: true
       });
     } else {
-      addToast(scanData.error, { appearance: "error", autoDismiss: true });
+      addToast(scanResponse.error, { appearance: "error", autoDismiss: true });
     }
   };
 
