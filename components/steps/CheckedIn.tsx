@@ -97,7 +97,7 @@ const CheckedIn: React.FunctionComponent<Props> = props => {
       </PaddedFlex>
       <PaddedFlex justify="space-between" tabletVertical>
         <MarginedColumn style={{ overflowX: "scroll" }} flexBasis={100}>
-          <BattlePass bp={battlepass} />
+          <BattlePass bp={battlepass} userPoints={personInfo.totalPoints} />
           <UnlockMessage>
             Unlock premium tier prizes when your team submits a project
           </UnlockMessage>

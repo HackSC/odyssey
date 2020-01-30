@@ -13,6 +13,7 @@ type ItemProps = {
   unlocked?: boolean;
   currentTier: boolean;
   minimum: number;
+  projSubmitted: boolean;
 };
 
 const bpItem: React.SFC<ItemProps> = ({
@@ -20,15 +21,27 @@ const bpItem: React.SFC<ItemProps> = ({
   prizeName,
   unlocked,
   currentTier,
-  minimum
+  minimum,
+  projSubmitted
 }) => {
+  let locked = false;
+  let showOverlay = false;
+
+  if (!projSubmitted && premium) {
+    locked = true;
+  }
+
+  if (!unlocked) {
+    showOverlay = true;
+  }
+
   return (
     <TableTD
       bgColor={premium ? "#E3BF5F" : "#7FBDE9"}
       borderColor={currentTier ? "#FFFFFF" : "transparent"}
     >
       <LockImage>
-        {unlocked ? <BPOpenLock fill="#FFFFFF" /> : <BPLock />}
+        {locked ? <BPLock fill="#FFFFFF" /> : <BPOpenLock fill="#FFFFFF" />}
       </LockImage>
       <MarginDiv>
         <PrizeItem>{prizeName}</PrizeItem>
@@ -37,7 +50,7 @@ const bpItem: React.SFC<ItemProps> = ({
         </PrizeMinPoints>
       </MarginDiv>
 
-      {!unlocked && <LockedOverlay />}
+      {showOverlay && <LockedOverlay />}
     </TableTD>
   );
 };
@@ -93,7 +106,6 @@ const useBattlepassItems = (bp: Battlepass, userPoints: number) => {
       if (currentTier === basicItems.length - 1) {
         return 0;
       } else {
-        console.log({ currentTier, l: basicItems.length });
         return basicItems[currentTier + 1].minimum - userPoints;
       }
     }, [basicItems, currentTier]);
@@ -106,8 +118,13 @@ const useBattlepassItems = (bp: Battlepass, userPoints: number) => {
     };
   }, [bp]);
 };
-const BattlePass = ({ bp }: { bp: Battlepass }) => {
-  const userPoints = 24000;
+const BattlePass = ({
+  bp,
+  userPoints
+}: {
+  bp: Battlepass;
+  userPoints: number;
+}) => {
   const projSubmitted = false;
 
   const {
@@ -115,7 +132,7 @@ const BattlePass = ({ bp }: { bp: Battlepass }) => {
     premiumItems,
     currentTier,
     pointsTillNextTier
-  } = useBattlepassItems(bp, userPoints);
+  } = useBattlepassItems(bp, userPoints || 0);
 
   const bptable = (
     <BPTable>
@@ -126,6 +143,7 @@ const BattlePass = ({ bp }: { bp: Battlepass }) => {
                 return item
                   ? bpItem({
                       premium: false,
+                      projSubmitted,
                       ...item,
                       currentTier: index === currentTier
                     })
@@ -139,6 +157,7 @@ const BattlePass = ({ bp }: { bp: Battlepass }) => {
                 return item
                   ? bpItem({
                       premium: true,
+                      projSubmitted,
                       ...item,
                       currentTier: index === currentTier
                     })
@@ -171,7 +190,7 @@ const BattlePass = ({ bp }: { bp: Battlepass }) => {
           <Column flexGrow={1}>
             <Flex direction="row" align="center">
               <Subheader>Points</Subheader>
-              <BigNumber>{userPoints}</BigNumber>
+              <BigNumber>{userPoints || 0}</BigNumber>
             </Flex>
           </Column>
 
