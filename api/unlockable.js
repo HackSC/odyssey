@@ -10,7 +10,7 @@ const Sentry = require("@sentry/node");
 router.use(utils.authMiddleware);
 router.use(utils.requireAdmin);
 
-router.get("/", async (req, res) => {
+router.get("/list", async (req, res) => {
   try {
     const unlockables = await models.Unlockable.findAll();
     return res.json({ unlockables });
