@@ -75,6 +75,9 @@ const useBattlepassItems = (bp: Battlepass, userPoints: number) => {
       );
     }
 
+    let currentTier = 0;
+    let pointsTillNextTier = 0;
+
     if (basicItems && basicItems.length > 0) {
       basicItems.reduce(
         (total, item, idx) => {
@@ -85,25 +88,25 @@ const useBattlepassItems = (bp: Battlepass, userPoints: number) => {
         },
         { total: 0 }
       );
-    }
-
-    // Get current tier
-    let i = 0;
-    for (i = 0; i < basicItems.length; i++) {
-      const item = basicItems[i];
-
-      if (userPoints < item.minimum) {
-        break;
-      }
-    }
-
-    const currentTier = i - 1;
-
-    let pointsTillNextTier;
-    if (currentTier === basicItems.length - 1) {
-      pointsTillNextTier = 0;
     } else {
-      pointsTillNextTier = basicItems[currentTier + 1].minimum - userPoints;
+      // Get current tier
+      let i = 0;
+      for (i = 0; i < basicItems.length; i++) {
+        const item = basicItems[i];
+
+        if (userPoints < item.minimum) {
+          break;
+        }
+      }
+
+      currentTier = i - 1;
+
+      // Get points till next tier
+      if (currentTier === basicItems.length - 1) {
+        pointsTillNextTier = 0;
+      } else {
+        pointsTillNextTier = basicItems[currentTier + 1].minimum - userPoints;
+      }
     }
 
     return {
