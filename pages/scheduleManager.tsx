@@ -30,7 +30,8 @@ const EditableCell = ({ event }) => {
             } else {
               alert("failed to delete event");
             }
-          }}>
+          }}
+        >
           Delete Event
         </EditButton>
       </TaskInfo>

@@ -46,7 +46,8 @@ const EditableCell = ({ task }) => {
             });
           }}
           //@ts-ignore
-          value={currTaskValue.isActive ? "Active" : "Inactive"}>
+          value={currTaskValue.isActive ? "Active" : "Inactive"}
+        >
           <option value="Active">Active</option>
           <option value="Inactive">Inactive</option>
         </select>
@@ -58,7 +59,8 @@ const EditableCell = ({ task }) => {
             } else {
               alert("failed to update task");
             }
-          }}>
+          }}
+        >
           Update Task
         </EditButton>
       </TaskInfo>
@@ -119,7 +121,8 @@ const TaskManager = ({ profile, currentTasks }) => {
                 });
               }}
               //@ts-ignore
-              value={newTask.isActive ? "Active" : "Inactive"}>
+              value={newTask.isActive ? "Active" : "Inactive"}
+            >
               <option value="Active">Active</option>
               <option value="Inactive">Inactive</option>
             </select>

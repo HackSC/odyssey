@@ -56,7 +56,8 @@ const CheckedIn: React.FunctionComponent<Props> = props => {
         borderColor={"white"}
         color={"white"}
         borderRadius={7}
-        margin={"1em"}>
+        margin={"1em"}
+      >
         <MdClose
           color={"white"}
           onClick={() => setAlert(false)}
@@ -64,8 +65,11 @@ const CheckedIn: React.FunctionComponent<Props> = props => {
         />
         <h2 style={{ padding: "0" }}>Keep it up! Your house is in the lead!</h2>
       </Alert>
-      <PaddedFlex justify="space-between" tabletVertical>
-        {/* {notie ? confetti : ""} */}
+      <PaddedFlex
+        style={!alert ? { paddingTop: "2em" } : {}}
+        justify="space-between"
+        tabletVertical
+      >
         <Column flexBasis={40}>
           <QRCode profile={profile} />
         </Column>
