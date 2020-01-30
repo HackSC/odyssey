@@ -28,7 +28,7 @@ workflows:
   version: 2
   e2e_tests:
     jobs:
-      - e2e_tests
+      - E2ETest
   build:
     jobs:
       - build
