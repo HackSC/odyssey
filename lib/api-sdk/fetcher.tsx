@@ -28,9 +28,24 @@ const ContributionRoutes: IContributionRoutes = {
   ContributionCreate: "api/contribution/create" as Route
 };
 
+interface ILiveRoutes {
+  LiveDispatch: PostRoute;
+  LiveLookup: GetRoute;
+  LiveAssignQR: PostRoute;
+  LiveIdentityCheck: GetRoute;
+}
+
+const LiveRoutes: ILiveRoutes = {
+  LiveDispatch: "api/live/dispatch" as Route,
+  LiveLookup: "api/live/lookup" as Route,
+  LiveAssignQR: "api/live/assign-qr" as Route,
+  LiveIdentityCheck: "api/live/dispatch" as Route
+};
+
 const Routes = {
   ...ProjectTeamRoutes,
-  ...ContributionRoutes
+  ...ContributionRoutes,
+  ...LiveRoutes
 };
 
 async function processResponse<T>(res: Response): Promise<APIResponse<T>> {
@@ -69,10 +84,19 @@ function computeUrlRoute(route: string, req?: any, param?: ResourceID): string {
 async function APIGet<T>(
   route: GetRoute,
   param?: ResourceID,
-  req?: NextApiRequest
+  opts?: {
+    queryParams?: { [key: string]: string };
+    req?: NextApiRequest;
+  }
 ): Promise<APIResponse<T>> {
-  const urlRoute = computeUrlRoute(route, req, param);
-  const headers = setupHeaders(req, {});
+  let urlRoute = computeUrlRoute(route, opts.req, param);
+  if (opts.queryParams) {
+    const urlParams = new URLSearchParams(Object.entries(opts.queryParams));
+    urlRoute += `?${urlParams};`;
+  }
+
+  const headers = setupHeaders(opts.req, {});
+
   const res = await fetch(urlRoute, {
     headers
   });

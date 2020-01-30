@@ -55,6 +55,7 @@ async function getHouses(req) {
   return await result.json();
 }
 
+//TODO: Wrong Route?
 async function getPersonInfo(req) {
   const urlRoute = req
     ? /* Serverside */ process.env.URL_BASE + "api/live/personInfo"
@@ -71,6 +72,7 @@ async function getPersonInfo(req) {
   return await result.json();
 }
 
+//TODO: Wrong Route?
 async function getHouseInfo(req, houseId) {
   const urlRoute = req
     ? /* Serverside */ process.env.URL_BASE + `api/live/houseInfo/:${houseId}`

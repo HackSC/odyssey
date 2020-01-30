@@ -83,7 +83,7 @@ async function handleGroupContrib(userId, req, res) {
     });
 
     await Promise.all(teammateContribs);
-    return res.json({ teammates });
+    return res.json({ success: teammates });
   } catch (e) {
     return res.status(400).json({ error: e.message });
   }
@@ -115,8 +115,10 @@ async function handleContrib(userId, req, res) {
         });
       }
       return res.json({
-        contribution: result,
-        message: `Successfully created a task contribution for ${profile.firstName} ${profile.lastName}`
+        success: {
+          contribution: result,
+          message: `Successfully created a task contribution for ${profile.firstName} ${profile.lastName}`
+        }
       });
     } catch (e) {
       return res.status(500).json({ error: e.message });
@@ -157,92 +159,81 @@ async function handleEmailContrib(userEmail, req, res) {
   if (!input.taskId) {
     return res.status(400).json({ error: "Requires specified taskId" });
   } else {
-    try {
-      // Try to find a model by email
-      const profile = await models.HackerProfile.findOne({
-        where: {
-          email: userEmail
-        }
-      });
-      const userId = profile.get("userId");
-      const taskMultiplier = getMultiplierForTask(input.taskId);
-      const [result, isCreated] = await models.Contribution.findOrCreate({
-        defaults: {
-          multiplier: taskMultiplier,
-          scannerId: req.user.id
-        },
-        where: {
-          personId: userId,
-          taskId: taskId
-        }
-      });
-      if (!isCreated) {
-        return res.status(400).json({
-          error: "User already has completed this task"
-        });
+    // Try to find a model by email
+    const profile = await models.HackerProfile.findOne({
+      where: {
+        email: userEmail
       }
-      return res.json({ contribution: result });
-    } catch (e) {
-      return res.status(500).json({ error: e.message });
+    });
+    const userId = profile.get("userId");
+    const taskMultiplier = getMultiplierForTask(input.taskId);
+    const [result, isCreated] = await models.Contribution.findOrCreate({
+      defaults: {
+        multiplier: taskMultiplier,
+        scannerId: req.user.id
+      },
+      where: {
+        personId: userId,
+        taskId: taskId
+      }
+    });
+    if (!isCreated) {
+      return res.status(400).json({
+        error: "User already has completed this task"
+      });
     }
+    return res.json({ success: result });
   }
 }
-
 async function handleCheckin(userId, req, res) {
-  try {
-    const profile = await models.HackerProfile.findOne({
-      where: { userId: userId }
-    });
-    const profileStatus = profile.get("status");
+  const profile = await models.HackerProfile.findOne({
+    where: { userId: userId }
+  });
+  const profileStatus = profile.get("status");
 
-    const invalidStatuses = [
-      "unverified",
-      "verified",
-      "rejected",
-      "submitted",
-      "checkedIn"
-    ];
-    if (invalidStatuses.includes(profileStatus)) {
-      return res
-        .status(400)
-        .json({ error: `User has status ${profileStatus}` });
-    }
-
-    const [pointsProfile, isCreated] = await models.Person.findOrCreate({
-      where: { identityId: userId },
-      defaults: { isBattlepassComplete: false }
-    });
-
-    if (!isCreated) {
-      return res
-        .status(400)
-        .json({ error: "Hacker has already had a person profile created" });
-    }
-
-    const minHouse = await models.House.findOne({
-      attributes: [
-        ["id", "id"],
-        ["name", "name"],
-        [
-          sequelize.literal(
-            "(SELECT COUNT(*) FROM persons where persons.houseId = House.id)"
-          ),
-          "personCount"
-        ]
-      ],
-      order: [[sequelize.literal("personCount"), "ASC"]]
-    });
-
-    profile.status = "checkedIn";
-    await profile.save();
-
-    pointsProfile.houseId = minHouse.id;
-    await pointsProfile.save();
-
-    return res.json({ pointsProfile: pointsProfile });
-  } catch (e) {
-    return res.status(500).json({ error: e.message });
+  const invalidStatuses = [
+    "unverified",
+    "verified",
+    "rejected",
+    "submitted",
+    "checkedIn"
+  ];
+  if (invalidStatuses.includes(profileStatus)) {
+    return res.status(400).json({ error: `User has status ${profileStatus}` });
   }
+
+  const [pointsProfile, isCreated] = await models.Person.findOrCreate({
+    where: { identityId: userId },
+    defaults: { isBattlepassComplete: false }
+  });
+
+  if (!isCreated) {
+    return res
+      .status(400)
+      .json({ error: "Hacker has already had a person profile created" });
+  }
+
+  const minHouse = await models.House.findOne({
+    attributes: [
+      ["id", "id"],
+      ["name", "name"],
+      [
+        sequelize.literal(
+          "(SELECT COUNT(*) FROM persons where persons.houseId = House.id)"
+        ),
+        "personCount"
+      ]
+    ],
+    order: [[sequelize.literal("personCount"), "ASC"]]
+  });
+
+  profile.status = "checkedIn";
+  await profile.save();
+
+  pointsProfile.houseId = minHouse.id;
+  await pointsProfile.save();
+
+  return res.json({ success: pointsProfile });
 }
 
 router.get("/lookup", async (req, res) => {
@@ -267,7 +258,7 @@ router.get("/lookup", async (req, res) => {
   });
 
   return res.json({
-    profiles
+    success: profiles
   });
 });
 
@@ -287,7 +278,9 @@ router.post("/assign-qr", async (req, res) => {
     );
 
     return res.json({
-      message: `Updated profile with user ID ${userId} to have the QR Code Id ${qrCodeId}`
+      success: {
+        message: `Updated profile with user ID ${userId} to have the QR Code Id ${qrCodeId}`
+      }
     });
   } else {
     return res.status(400).json({
@@ -298,30 +291,28 @@ router.post("/assign-qr", async (req, res) => {
 
 router.get("/identity-check/:userId", async (req, res) => {
   if (req.params.userId) {
-    try {
-      const userId = req.params.userId;
-      const profile = await models.HackerProfile.findOne({
-        where: { userId: userId }
-      });
+    const userId = req.params.userId;
+    const profile = await models.HackerProfile.findOne({
+      where: { userId: userId }
+    });
 
-      if (profile) {
-        if (["checkedIn", "confirmed"].includes(profile.status)) {
-          return res.json({
+    if (profile) {
+      if (["checkedIn", "confirmed"].includes(profile.status)) {
+        return res.json({
+          success: {
             firstName: profile.firstName,
             lastName: profile.lastName
-          });
-        } else {
-          return res.status(400).json({
-            error: "user cannot be scanned! neither confirmed nor checkedIn"
-          });
-        }
+          }
+        });
       } else {
-        return res
-          .status(404)
-          .json({ error: "could not find a profile with that userId" });
+        return res.status(400).json({
+          error: "user cannot be scanned! neither confirmed nor checkedIn"
+        });
       }
-    } catch (e) {
-      return res.status(500).json({ error: e.message });
+    } else {
+      return res
+        .status(404)
+        .json({ error: "could not find a profile with that userId" });
     }
   } else {
     return res.status(400).json({ error: "missing user ID" });
