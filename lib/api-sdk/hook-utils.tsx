@@ -36,6 +36,7 @@ export function useErrorHandler(handler, error) {
   });
 }
 
+// LOOK AT THIS HIGHER ORDER FUNCTION
 export function fetchWithMutation<T extends (...args: any[]) => any>(
   func: T,
   defaultOnError,
