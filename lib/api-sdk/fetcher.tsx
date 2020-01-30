@@ -109,7 +109,7 @@ async function APIGet<T>(
   let urlRoute = computeUrlRoute(route, opts.req, param);
   if (opts.queryParams) {
     const urlParams = new URLSearchParams(Object.entries(opts.queryParams));
-    urlRoute += `?${urlParams};`;
+    urlRoute += `?${urlParams}`;
   }
 
   const headers = setupHeaders(opts.req, {});
