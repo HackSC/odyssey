@@ -88,7 +88,7 @@ const useBattlepassItems = (bp: Battlepass, userPoints: number) => {
         },
         { total: 0 }
       );
-    } else {
+
       // Get current tier
       let i = 0;
       for (i = 0; i < basicItems.length; i++) {
