@@ -11,6 +11,7 @@ import Scanner from "../components/Scanner";
 import { Button, Form, Flex } from "../styles";
 import Select from "../components/Select";
 import { liveDispatchFetch } from "../lib/api-sdk/liveHooks";
+import { getCurrentTasks } from "../lib/live";
 
 // TO-DO -- pull this out, define elsewhere
 const ACTIONS = [

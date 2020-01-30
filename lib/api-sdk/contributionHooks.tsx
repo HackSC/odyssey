@@ -1,15 +1,18 @@
 import useSWR from "swr";
 import { Routes, APIGet, APIPost } from "./fetcher";
 import { NextApiRequest } from "next";
-import { ListHookParams, useErrorHandler } from "./hook-utils";
-import { fetcherToSVRHandler } from "./hook-utils";
+import {
+  ListHookParams,
+  useErrorHandler,
+  fetcherToSVRHandler
+} from "./hook-utils";
 
 function getAllContributionsFetch(req?: NextApiRequest) {
-  return APIGet(Routes.ContributionAll);
+  return APIGet(Routes.ContributionAll, { req });
 }
 
 function ownedContributionsFetch(req?: NextApiRequest) {
-  return APIGet(Routes.ContributionOwned);
+  return APIGet(Routes.ContributionOwned, { req });
 }
 
 function createContribution(taskId: ResourceID) {
