@@ -2,6 +2,7 @@ const hpFactory = require("../tests/factories/hackerProfile");
 const personFactory = require("../tests/factories/person");
 const prizeFactory = require("../tests/factories/prize");
 const projectTeamFactory = require("../tests/factories/projectTeam");
+const houseFactory = require("../tests/factories/house");
 
 const db = require("../api/models");
 
@@ -25,8 +26,16 @@ const seedDatabase = async () => {
 
   // Generate 5 Test Persons & Hacker Profiles
   const persons = await IteratePromises(5, async i => {
-    const hp = await hpFactory({ userId: i.toString() }).catch(console.log);
-    return personFactory({ identityId: hp.userId });
+    const hp = await hpFactory({
+      userId: i.toString(),
+      status: "checkedIn"
+    }).catch(console.log);
+
+    const house = await houseFactory();
+
+    const person = await personFactory({ identityId: hp.userId });
+    await person.setHouse(house);
+    return person;
   });
 
   const admin = await hpFactory({

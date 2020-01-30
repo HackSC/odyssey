@@ -55,40 +55,6 @@ async function getHouses(req) {
   return await result.json();
 }
 
-//TODO: Wrong Route?
-async function getPersonInfo(req) {
-  const urlRoute = req
-    ? /* Serverside */ process.env.URL_BASE + "api/live/personInfo"
-    : /* Client */ "/api/live/personInfo";
-
-  const result = await fetch(
-    urlRoute,
-    req
-      ? {
-          headers: req.headers
-        }
-      : null
-  );
-  return await result.json();
-}
-
-//TODO: Wrong Route?
-async function getHouseInfo(req, houseId) {
-  const urlRoute = req
-    ? /* Serverside */ process.env.URL_BASE + `api/live/houseInfo/:${houseId}`
-    : /* Client */ `/api/live/houseInfo/:${houseId}`;
-
-  const result = await fetch(
-    urlRoute,
-    req
-      ? {
-          headers: req.headers
-        }
-      : null
-  );
-  return await result.json();
-}
-
 // Should be of the form
 // { name: name, color: #..... }
 async function createHouse(houseObj) {
@@ -194,7 +160,6 @@ export {
   saveTask,
   updateTask,
   getHouses,
-  getHouseInfo,
   createHouse,
   updateHouse,
   getCurrentUnlockables,
@@ -202,6 +167,5 @@ export {
   updateUnlockable,
   getCurrentEvents,
   saveEvent,
-  deleteEvent,
-  getPersonInfo
+  deleteEvent
 };

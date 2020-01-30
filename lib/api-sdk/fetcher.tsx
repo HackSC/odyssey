@@ -42,10 +42,27 @@ const LiveRoutes: ILiveRoutes = {
   LiveIdentityCheck: "api/live/dispatch" as Route
 };
 
+interface IHackerRoutes {
+  HackerLiveBattlepass: GetRoute;
+  HackerLivePersonInfoSelf: GetRoute;
+  HackerLiveTasks: GetRoute;
+  HackerLiveHouseInfo: GetRoute;
+  HackerLiveHouseInfoList: GetRoute;
+}
+
+const HackerLiveRoutes: IHackerRoutes = {
+  HackerLiveBattlepass: "api/hacker/live/battlepass" as Route,
+  HackerLivePersonInfoSelf: "api/hacker/live/personInfo" as Route,
+  HackerLiveTasks: "api/hacker/live/tasks" as Route,
+  HackerLiveHouseInfo: "api/hacker/live/houseInfo" as Route,
+  HackerLiveHouseInfoList: "api/hacker/live/houseInfoList" as Route
+};
+
 const Routes = {
   ...ProjectTeamRoutes,
   ...ContributionRoutes,
-  ...LiveRoutes
+  ...LiveRoutes,
+  ...HackerLiveRoutes
 };
 
 async function processResponse<T>(res: Response): Promise<APIResponse<T>> {

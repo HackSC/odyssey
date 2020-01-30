@@ -12,7 +12,11 @@ module.exports = (sequelize, DataTypes) => {
     {
       tableName: "persons",
       defaultScope: {
-        include: [{ model: sequelize.models.HackerProfile, as: "Profile" }]
+        include: [
+          { model: sequelize.models.HackerProfile, as: "Profile" },
+          sequelize.models.Contribution,
+          sequelize.models.House
+        ]
       }
     }
   );

@@ -7,11 +7,14 @@ import { Flex, CenteredColumn, Column, Fox, Alert } from "../../styles";
 import Announcements from "../announcements/Announcements";
 import Calendar from "../Calendar";
 import BattlePass from "../BattlePass";
-import useHouses from "../../lib/useHouses";
-import usePerson from "../../lib/usePerson";
 import useWindowSize from "react-use/lib/useWindowSize";
 import Confetti from "react-confetti";
 import HouseProgress from "../HouseProgress";
+import {
+  usePersonInfoSelf,
+  useBattlepass,
+  useAllHouseInfo
+} from "../../lib/api-sdk/hackerLiveHooks";
 import { MdClose } from "react-icons/md";
 
 interface Props {
@@ -20,23 +23,13 @@ interface Props {
 }
 
 const CheckedIn: React.FunctionComponent<Props> = props => {
-  const [alert, setAlert] = useState(false);
   const { profile } = props;
-  const houseInfo = useHouses(profile);
-  const person = usePerson(props);
+  const [alert, setAlert] = useState(false);
+  const { allHouses } = useAllHouseInfo({});
+  const { battlepass } = useBattlepass({ defaultOnError: console.log });
+  const { personInfo } = usePersonInfoSelf({ defaultOnError: console.log });
   const { width, height } = useWindowSize();
-  const notie =
-    person.length > 0 &&
-    houseInfo.length > 1 &&
-    person[0].id === houseInfo[0].id &&
-    person[0].id !== houseInfo[1].id;
-
-  useEffect(() => {
-    if (notie) {
-      setAlert(true);
-    }
-  }, [notie]);
-
+  // TODO: setup is winning again
   // * Check if house is in the lead and display react-confetti
   const confetti = (
     <Confetti
@@ -49,7 +42,11 @@ const CheckedIn: React.FunctionComponent<Props> = props => {
     />
   );
 
-  let HouseFoxColor = person.length > 0 ? person[0].color : "#E7862B";
+  let HouseFoxColor = personInfo?.House.color ?? "#E7862B";
+
+  if (!personInfo) {
+    return <span></span>;
+  }
 
   return (
     <>
@@ -59,8 +56,7 @@ const CheckedIn: React.FunctionComponent<Props> = props => {
         borderColor={"white"}
         color={"white"}
         borderRadius={7}
-        margin={"1em"}
-      >
+        margin={"1em"}>
         <MdClose
           color={"white"}
           onClick={() => setAlert(false)}
@@ -69,7 +65,7 @@ const CheckedIn: React.FunctionComponent<Props> = props => {
         <h2 style={{ padding: "0" }}>Keep it up! Your house is in the lead!</h2>
       </Alert>
       <PaddedFlex justify="space-between" tabletVertical>
-        {notie ? confetti : ""}
+        {/* {notie ? confetti : ""} */}
         <Column flexBasis={40}>
           <QRCode profile={profile} />
         </Column>
@@ -83,7 +79,7 @@ const CheckedIn: React.FunctionComponent<Props> = props => {
 
           <Flex justify="space-between" tabletVertical>
             <CenteredColumn flexBasis={70}>
-              <HouseProgress houses={houseInfo} />
+              <HouseProgress houses={allHouses} />
             </CenteredColumn>
             <BlackHR />
             <CenteredColumn flexBasis={30}>
@@ -91,16 +87,14 @@ const CheckedIn: React.FunctionComponent<Props> = props => {
                 <Fox fill={HouseFoxColor} width={50} height={50} />
               </FoxFlex>
               <PointsTitle>You've contributed</PointsTitle>
-              <PointsTitle>
-                {person.length > 0 ? person[0]?.sum : ""} points!
-              </PointsTitle>
+              <PointsTitle>{personInfo.totalPoints ?? ""} points!</PointsTitle>
             </CenteredColumn>
           </Flex>
         </InstructionsColumn>
       </PaddedFlex>
       <PaddedFlex justify="space-between" tabletVertical>
         <MarginedColumn style={{ overflowX: "scroll" }} flexBasis={75}>
-          <BattlePass profile={profile} />
+          <BattlePass bp={battlepass} />
         </MarginedColumn>
         <MarginedColumn flexBasis={25}>
           <Announcements />

@@ -48,45 +48,41 @@ router.post("/dispatch", async (req, res) => {
 */
 
 async function handleGroupContrib(userId, req, res) {
-  try {
-    if (!req.body.taskId) {
-      return res.status(400).json({ error: "Bad Request, taskId not found" });
-    }
-    const result = await models.Person.findOne({
-      where: {
-        identityId: userId
-      },
-      include: [
-        {
-          model: models.ProjectTeam,
-          required: false,
-          include: [
-            {
-              model: models.Person,
-              required: false
-            }
-          ]
-        }
-      ]
-    });
-    const teammates = result.get("ProjectTeam").get("People");
-    const taskId = req.body.taskId;
-    const taskMultiplier = getMultiplierForTask(taskId);
-    const teammateContribs = teammates.map(tm => {
-      const tmId = tm.dataValues.identityId;
-      return models.Contribution.create({
-        personId: tmId,
-        multiplier: taskMultiplier,
-        scannerId: req.user.id,
-        taskId: taskId
-      });
-    });
-
-    await Promise.all(teammateContribs);
-    return res.json({ success: teammates });
-  } catch (e) {
-    return res.status(400).json({ error: e.message });
+  if (!req.body.taskId) {
+    return res.status(400).json({ error: "Bad Request, taskId not found" });
   }
+  const result = await models.Person.findOne({
+    where: {
+      identityId: userId
+    },
+    include: [
+      {
+        model: models.ProjectTeam,
+        required: false,
+        include: [
+          {
+            model: models.Person,
+            required: false
+          }
+        ]
+      }
+    ]
+  });
+  const teammates = result.get("ProjectTeam").get("People");
+  const taskId = req.body.taskId;
+  const taskMultiplier = getMultiplierForTask(taskId);
+  const teammateContribs = teammates.map(tm => {
+    const tmId = tm.dataValues.identityId;
+    return models.Contribution.create({
+      personId: tmId,
+      multiplier: taskMultiplier,
+      scannerId: req.user.id,
+      taskId: taskId
+    });
+  });
+
+  await Promise.all(teammateContribs);
+  return res.json({ success: teammates });
 }
 
 async function handleContrib(userId, req, res) {
@@ -96,62 +92,52 @@ async function handleContrib(userId, req, res) {
 
   if (!input.taskId) {
     return res.status(400).json({ error: "Invalid request" });
-  } else {
-    try {
-      const taskMultiplier = getMultiplierForTask(input.taskId);
-      const [result, isCreated] = await models.Contribution.findOrCreate({
-        defaults: {
-          multiplier: taskMultiplier,
-          scannerId: req.user.id
-        },
-        where: {
-          personId: userId,
-          taskId: input.taskId
-        }
-      });
-      if (!isCreated) {
-        return res.status(400).json({
-          error: "User already has completed this task"
-        });
-      }
-      return res.json({
-        success: {
-          contribution: result,
-          message: `Successfully created a task contribution for ${profile.firstName} ${profile.lastName}`
-        }
-      });
-    } catch (e) {
-      return res.status(500).json({ error: e.message });
-    }
   }
+  const taskMultiplier = getMultiplierForTask(input.taskId);
+  const [result, isCreated] = await models.Contribution.findOrCreate({
+    defaults: {
+      multiplier: taskMultiplier,
+      scannerId: req.user.id
+    },
+    where: {
+      personId: userId,
+      taskId: input.taskId
+    }
+  });
+  if (!isCreated) {
+    return res.status(400).json({
+      error: "User already has completed this task"
+    });
+  }
+  return res.json({
+    success: {
+      contribution: result,
+      message: `Successfully created a task contribution for ${profile.firstName} ${profile.lastName}`
+    }
+  });
 }
 
 async function getMultiplierForTask(taskId) {
-  try {
-    const result = await models.Task.findOne({
-      where: {
-        id: taskId
-      },
+  const result = await models.Task.findOne({
+    where: {
+      id: taskId
+    },
 
-      include: [
-        {
-          model: models.Grouping,
-          required: false,
-          include: [
-            {
-              model: models.Multiplier,
-              required: false
-            }
-          ]
-        }
-      ]
-    });
-    const multipliers = result.get("Grouping").get("Multipliers");
-    return multipliers.reduce((x, y) => x + y.dataValues.multiplierValue, 0);
-  } catch (e) {
-    Sentry.captureMessage(e.message);
-    return 1;
-  }
+    include: [
+      {
+        model: models.Grouping,
+        required: false,
+        include: [
+          {
+            model: models.Multiplier,
+            required: false
+          }
+        ]
+      }
+    ]
+  });
+  const multipliers = result.get("Grouping").get("Multipliers");
+  return multipliers.reduce((x, y) => x + y.dataValues.multiplierValue, 0);
 }
 
 async function handleEmailContrib(userEmail, req, res) {

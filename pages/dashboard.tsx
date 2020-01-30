@@ -7,7 +7,6 @@ import {
   getProfile,
   handleAdminRedirect
 } from "../lib/authenticate";
-//import { getHouses, getHouseInfo } from "../lib/live";
 
 import Head from "../components/Head";
 import Navbar from "../components/Navbar";

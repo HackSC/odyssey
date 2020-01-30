@@ -4,10 +4,6 @@ import styled from "styled-components";
 
 import { Flex, CenteredColumn, Fox } from "../styles";
 
-type House = {
-  sum: number;
-  color: string;
-};
 type Props = {
   houses: Array<House>;
 };
@@ -17,7 +13,7 @@ const HouseProgress = ({ houses }: Props) => {
   let cumulativeSum = 0;
   if (houses && houses.length > 0) {
     houses.forEach(house => {
-      cumulativeSum += house.sum;
+      cumulativeSum += house.totalScore;
     });
     houses.forEach(house => {
       result = (
@@ -32,11 +28,11 @@ const HouseProgress = ({ houses }: Props) => {
             <ProgressColumn flexBasis={40}>
               <ProgressBar
                 filledBackground={house.color}
-                percent={(house.sum * 100) / cumulativeSum}
+                percent={(house.totalScore * 100) / cumulativeSum}
               />
             </ProgressColumn>
             <CenteredColumn flexBasis={30}>
-              <Points>{house.sum} points</Points>
+              <Points>{house.totalScore} points</Points>
             </CenteredColumn>
           </CenteredFlex>
         </React.Fragment>

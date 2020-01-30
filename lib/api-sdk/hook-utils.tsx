@@ -30,7 +30,7 @@ export function fetcherToSVRHandler(fetcher) {
   };
 }
 
-export function useErrorHandler(handler, error) {
+export function useErrorHandler(handler = console.log, error?) {
   useUpdateEffect(() => {
     if (error && error != "") handler(error), [error];
   });

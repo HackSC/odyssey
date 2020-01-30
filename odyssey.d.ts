@@ -84,7 +84,10 @@ declare type CookieValues = {
 
 declare type Person = {
   Profile: Profile;
+  Contributions: Contribution[];
   identityId: StringID;
+  House: House;
+  totalPoints?: number;
 };
 
 declare type Prize = {
@@ -95,8 +98,10 @@ declare type Prize = {
 
 declare type House = {
   id: NumberID;
+  People: Person[];
   name: string;
   color: string;
+  totalScore: number;
 };
 
 declare type Contribution = {
@@ -112,6 +117,28 @@ declare type ProjectTeam = {
   githubLink: string;
   Members: Person[];
   Prizes: Prize[];
+};
+
+declare type Battlepass = BattlepassObject[];
+
+declare type BattlepassObject = {
+  id: StringID;
+  isPremium: boolean;
+  pointValue: number;
+  prizeName: string;
+  unlocked: boolean;
+  total: number;
+};
+
+declare type Task = {
+  points: number;
+  description: string;
+  blocking: boolean;
+  type: string;
+  isGroupTask: boolean;
+  isActive: boolean;
+  name: string;
+  id: NumberID;
 };
 
 //ID's have additional semantic meaning beyond string or number

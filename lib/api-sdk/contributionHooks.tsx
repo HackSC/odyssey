@@ -1,5 +1,5 @@
-import useSWR, { mutate } from "swr";
-import { Routes, APIGet, APIPost, APIPut, APIDelete } from "./fetcher";
+import useSWR from "swr";
+import { Routes, APIGet, APIPost } from "./fetcher";
 import { NextApiRequest } from "next";
 import { ListHookParams, useErrorHandler } from "./hook-utils";
 import { fetcherToSVRHandler } from "./hook-utils";
