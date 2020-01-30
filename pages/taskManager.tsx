@@ -8,12 +8,6 @@ import Footer from "../components/Footer";
 
 import styled from "styled-components";
 
-import { Button } from "../styles";
-
-import Step from "../components/steps/Results";
-
-function renderTask(task, updateTaskSet, setUpdateTaskSet) {}
-
 const EditableCell = ({ task }) => {
   const [currTaskValue, setCurrTaskValue] = useState(task);
   return (
@@ -67,8 +61,7 @@ const EditableCell = ({ task }) => {
             }
           }}
         >
-          {" "}
-          Update Task{" "}
+          Update Task
         </EditButton>
       </TaskInfo>
     </Task>

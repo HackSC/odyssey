@@ -1,7 +1,11 @@
 import useSWR, { mutate } from "swr";
 import { Routes, APIGet, APIPost, APIPut, APIDelete } from "./fetcher";
 import { NextApiRequest } from "next";
-import { useUpdateEffect } from "react-use";
+import {
+  fetcherToSVRHandler,
+  useErrorHandler,
+  fetchWithMutation
+} from "./hook-utils";
 
 type SelfHookParams<T> = {
   defaultOnError?: (errorMsg: string) => void;
@@ -12,7 +16,7 @@ type SelfHookParams<T> = {
 const resourceRoute = Routes.ProjectTeamSelf;
 
 function getProjectTeamSelfFetch(req?: NextApiRequest) {
-  return APIGet<ProjectTeam>(resourceRoute, null, req);
+  return APIGet<ProjectTeam>(resourceRoute, { req });
 }
 
 function createProjectTeamSelfFetch(body: Partial<ProjectTeam>) {
@@ -47,42 +51,30 @@ function useProjectTeamSelf({
 }: SelfHookParams<ProjectTeam>) {
   const { data: projectTeam, error } = useSWR<ProjectTeam, any>(
     resourceRoute,
-    async () => {
-      const res = await getProjectTeamSelfFetch();
-      if (res.success) {
-        return res.success;
-      }
-      throw res.error;
-    },
+    fetcherToSVRHandler(getProjectTeamSelfFetch),
     {
       initialData: initialModel
     }
   );
 
-  useUpdateEffect(() => {
-    if (error && error != "") defaultOnError(error), [error];
-  });
+  useErrorHandler(defaultOnError, error);
 
-  // LOOK AT THIS HIGHER ORDER FUNCTION
-  function fetchWithMutation<T extends (...args: any[]) => any>(
-    func: T
-  ): (...funcArgs: Parameters<T>) => ReturnType<T> {
-    return (...args: Parameters<T>): ReturnType<T> => {
-      return func(...args).then(res => {
-        if (res.success !== undefined) {
-          mutate(resourceRoute, res.success, true);
-        }
-        if (res.error) defaultOnError(res.error);
-      });
-    };
-  }
+  let fetchWithMutationProjectTeam = f =>
+    fetchWithMutation(f, defaultOnError, resourceRoute);
 
-  const createProjectTeamSelf = fetchWithMutation(createProjectTeamSelfFetch);
-  const joinProjectTeamSelf = fetchWithMutation(joinProjectTeamSelfFetch);
-  const updateProjectTeamSelf = fetchWithMutation(updateProjectTeamSelfFetch);
-  const addPrizeSelf = fetchWithMutation(addPrizeSelfFetch);
-  const removePrizeSelf = fetchWithMutation(removePrizeSelfFetch);
-  const removeMemberSelf = fetchWithMutation(removeMemberSelfFetch);
+  const createProjectTeamSelf = fetchWithMutationProjectTeam(
+    createProjectTeamSelfFetch
+  );
+  const joinProjectTeamSelf = fetchWithMutationProjectTeam(
+    joinProjectTeamSelfFetch
+  );
+  const updateProjectTeamSelf = fetchWithMutationProjectTeam(
+    updateProjectTeamSelfFetch
+  );
+
+  const addPrizeSelf = fetchWithMutationProjectTeam(addPrizeSelfFetch);
+  const removePrizeSelf = fetchWithMutationProjectTeam(removePrizeSelfFetch);
+  const removeMemberSelf = fetchWithMutationProjectTeam(removeMemberSelfFetch);
 
   return {
     projectTeam,

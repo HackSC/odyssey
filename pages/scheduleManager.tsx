@@ -32,8 +32,7 @@ const EditableCell = ({ event }) => {
             }
           }}
         >
-          {" "}
-          Delete Event{" "}
+          Delete Event
         </EditButton>
       </TaskInfo>
     </Task>

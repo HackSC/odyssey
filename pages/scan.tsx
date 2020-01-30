@@ -10,8 +10,8 @@ import Scanner from "../components/Scanner";
 
 import { Button, Form, Flex } from "../styles";
 import Select from "../components/Select";
-import { getCurrentTasks } from "../lib/live";
-
+import { liveDispatchFetch } from "../lib/api-sdk/liveHooks";
+import { getAllTasksFetch } from "../lib/api-sdk/taskHooks";
 // TO-DO -- pull this out, define elsewhere
 const ACTIONS = [
   {
@@ -20,7 +20,12 @@ const ACTIONS = [
   }
 ];
 
-const Scan = ({ profile, tasks }) => {
+type Props = {
+  profile: Profile;
+  tasks: ActiveTask[];
+};
+
+const Scan = ({ profile, tasks }: Props) => {
   const [action, setAction] = useState(null);
   const [lastScannedCode, setLastScannedCode] = useState(null);
 
@@ -61,25 +66,16 @@ const Scan = ({ profile, tasks }) => {
       dispatchBody["taskId"] = value;
     }
 
-    // Send a request to the server to scan hacker for task
-    const scanRequest = await fetch("/api/live/dispatch", {
-      method: "POST",
-      body: JSON.stringify(dispatchBody),
-      headers: {
-        "Content-Type": "application/json"
-      }
-    });
+    const scanResponse = await liveDispatchFetch(dispatchBody);
 
-    const scanData = await scanRequest.json();
-
-    if (scanRequest.status === 200) {
+    if (!scanResponse.error) {
       // Successful scan, let's display that to the user
-      addToast(scanData.message || "Successfully scanned hacker's QR code", {
+      addToast("Successfully scanned hacker's QR code", {
         appearance: "success",
         autoDismiss: true
       });
     } else {
-      addToast(scanData.error, { appearance: "error", autoDismiss: true });
+      addToast(scanResponse.error, { appearance: "error", autoDismiss: true });
     }
   };
 
@@ -179,7 +175,11 @@ Scan.getInitialProps = async ctx => {
   const { req } = ctx;
 
   const profile = await getProfile(req);
-  const tasks = await getCurrentTasks(req);
+  const { success: allTasks } = await getAllTasksFetch(req);
+
+  console.log(allTasks);
+
+  const activeTasks = allTasks.filter(t => t.isActive);
 
   // Null profile means user is not logged in, and this is only relevant for admins
   if (!profile || profile.role !== "admin") {
@@ -188,7 +188,7 @@ Scan.getInitialProps = async ctx => {
 
   return {
     profile,
-    tasks: tasks.tasks // TODO -- update this once we've standardized our server/client stuff
+    tasks: activeTasks // TODO -- update this once we've standardized our server/client stuff
   };
 };
 

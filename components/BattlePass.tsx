@@ -1,7 +1,6 @@
 import * as React from "react";
 import styled from "styled-components";
 import Loader from "react-loader-spinner";
-import useBattlePass from "../lib/useBattlePass";
 import { BPLock, BPOpenLock } from "../styles";
 import { MdStar } from "react-icons/md";
 
@@ -39,13 +38,7 @@ const bpItem: React.SFC<ItemProps> = ({
   );
 };
 
-const BattlePass: React.FunctionComponent<Props> = props => {
-  const { profile } = props;
-
-  // * useBattlePass Custom Hook
-  const bp = useBattlePass(profile);
-
-  // TODO: dynamically calculate user points and project submission
+const BattlePass = ({ bp }: { bp: Battlepass }) => {
   const userPoints = 50;
   const projSubmitted = false;
 
@@ -59,10 +52,10 @@ const BattlePass: React.FunctionComponent<Props> = props => {
     />
   );
 
-  const premiumItems = bp?.payload?.results?.filter(item => {
+  const premiumItems = bp.filter(item => {
     return item.isPremium;
   });
-  const basicItems = bp?.payload?.results?.filter(item => {
+  const basicItems = bp.filter(item => {
     return !item.isPremium;
   });
   if (premiumItems && premiumItems.length > 0) {
@@ -116,10 +109,7 @@ const BattlePass: React.FunctionComponent<Props> = props => {
     <>
       <Header>BattlePass</Header>
       <OverflowHidden>
-        <Scrollable>
-          {bp && bp.status === "loading" ? loading : ""}
-          {bp && bp.status === "loaded" ? bptable : ""}
-        </Scrollable>
+        <Scrollable>{bp ? bptable : ""}</Scrollable>
         <BattlePassFade />
       </OverflowHidden>
     </>
