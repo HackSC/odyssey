@@ -39,7 +39,7 @@ const bpItem: React.SFC<ItemProps> = ({
 };
 
 const BattlePass = ({ bp }: { bp: Battlepass }) => {
-  const userPoints = 0;
+  const userPoints = 80001;
   const projSubmitted = false;
 
   const premiumItems = bp.filter(item => {
@@ -87,9 +87,10 @@ const BattlePass = ({ bp }: { bp: Battlepass }) => {
   }, [basicItems, userPoints]);
 
   const pointsTillNextTier = useMemo(() => {
-    if (currentTier === basicItems.length) {
+    if (currentTier === basicItems.length - 1) {
       return 0;
     } else {
+      console.log({ currentTier, l: basicItems.length });
       return basicItems[currentTier + 1].minimum - userPoints;
     }
   }, [basicItems, currentTier]);
