@@ -19,6 +19,13 @@ Cypress.Commands.add("login", (overrides = {}) => {
   cy.request(options);
 });
 
+Cypress.Commands.add("devLogin", role => {
+  let id = role == "admin" ? "adminy" : 0;
+  cy.request({
+    url: `/auth/devlogin?id=${id}`
+  });
+});
+
 Cypress.Commands.add("goToDashboard", (overrides = {}) => {
   cy.login()
     .then(resp => {
@@ -30,7 +37,7 @@ Cypress.Commands.add("goToDashboard", (overrides = {}) => {
         nonce: "",
         state: "some-random-state"
       };
-      const callbackUrl = `http://localhost:3000/auth/callback#access_token=${access_token}&scope=openid&id_token=${id_token}&expires_in=${expires_in}&token_type=Bearer&state=${auth0State.state}`;
+      const callbackUrl = `/auth/callback#access_token=${access_token}&scope=openid&id_token=${id_token}&expires_in=${expires_in}&token_type=Bearer&state=${auth0State.state}`;
       cy.visit(callbackUrl, {
         onBeforeLoad(win) {
           win.document.cookie =
@@ -43,8 +50,57 @@ Cypress.Commands.add("goToDashboard", (overrides = {}) => {
     });
 });
 
-describe("goDashboard", () => {
-  it("should land on the dashboard", () => {
-    cy.goToDashboard();
+// describe("goDashboard", () => {
+//   it("should land on the dashboard", () => {
+//     cy.goToDashboard();
+//   });
+// });
+
+beforeEach(() => {
+  cy.clearCookies();
+});
+
+describe("goToApplication", () => {
+  it("should land on the application", () => {
+    cy.devLogin("hacker").then(() => {
+      cy.visit("/application");
+    });
+  });
+});
+
+describe("goToResults", () => {
+  it("should land on the results page", () => {
+    cy.devLogin("hacker").then(() => {
+      cy.visit("/results");
+    });
+  });
+});
+
+describe("goToTeam", () => {
+  it("should land on the team page", () => {
+    cy.devLogin("hacker").then(() => {
+      cy.visit("/team");
+    });
+  });
+});
+
+describe("goToAdminDashboard", () => {
+  it("should redirect if not admin", () => {
+    cy.devLogin("");
+    cy.visit("/admin");
+    cy.url().should("include", "dashboard");
+  });
+  it("should land on the admin apge if admin", () => {
+    cy.devLogin("admin");
+    cy.visit("/admin");
+    cy.url().should("include", "admin");
+  });
+});
+
+describe("goToScan", () => {
+  it("should land on the scan page if admin", () => {
+    cy.devLogin("admin");
+    cy.visit("/scan");
+    cy.url().should("include", "scan");
   });
 });
