@@ -11,6 +11,8 @@ router.use(utils.authMiddleware);
 router.use(utils.requireAdmin);
 
 // Full write access to a user's hackerProfile
+// Variable parameters in the foremost endpoint path restricts use to just this route.
+// Consider changing route as to not use up all single-path put requests 
 router.put("/:email", async (req, res) => {
   const updatedhackerProfile = await models.HackerProfile.update(req.body, {
     where: {
@@ -20,40 +22,54 @@ router.put("/:email", async (req, res) => {
   return res.json({ hackerProfile: newHackerProfile });
 });
 
-router.post("/profiles", async (req, res) => {
-  console.log('getting profiles')
+router.get("/profiles", async (req, res) => {
+  const Op = sequelize.Op
+  const { query } = req.query;
+  const flexQuery = '%' + query + '%'
   try {
     const profiles = await models.HackerProfile.findAll({
       where: {
-        $or: [
+        [Op.or]: [
           {
             email: {
-              $like: req.body
+              [Op.like]: flexQuery
             }
           },
           {
             firstName: {
-              $like: req.body
+              [Op.like]: flexQuery
             }
           },
           {
             lastName: {
-              $like: req.body
+              [Op.like]: flexQuery
             }
           },
         ]
-      },
-      include: [
-        {
-          model: models.HackerProfile
-        }
-      ]
+      }
     });
     return res.json({
-      profiles: profiles
+      profiles
     });
   } catch (e) {
     return res.status(500).json({ error: e.message });
+  }
+});
+
+router.post("/updateRole", async (req, res) => {
+  try {
+    const { email, role } = req.body
+    const result = await models.HackerProfile.update({
+      role: role
+    }, {
+      where: {
+        email: email
+      }
+    })
+
+    return res.json({ result: result })
+  } catch (e) {
+    return res.status(500).json({ error: e.message});
   }
 });
 
