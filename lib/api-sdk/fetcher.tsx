@@ -106,8 +106,8 @@ async function APIGet<T>(
     req?: NextApiRequest;
   }
 ): Promise<APIResponse<T>> {
-  let urlRoute = computeUrlRoute(route, opts.req, param);
-  if (opts.queryParams) {
+  let urlRoute = computeUrlRoute(route, opts?.req, param);
+  if (opts?.queryParams) {
     const urlParams = new URLSearchParams(Object.entries(opts.queryParams));
     urlRoute += `?${urlParams};`;
   }
