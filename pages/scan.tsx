@@ -53,7 +53,13 @@ const Scan = ({ profile, tasks }) => {
 
     // Either an action (ex: checkin) or a task (ex: 1, 2, etc)
     const [typeOfAction, value] = action.split(" ");
-    dispatchBody[typeOfAction === "action" ? "actionId" : "taskId"] = value;
+
+    if (typeOfAction === "action") {
+      dispatchBody["actionId"] = value;
+    } else {
+      dispatchBody["actionId"] = "contrib";
+      dispatchBody["taskId"] = value;
+    }
 
     // Send a request to the server to scan hacker for task
     const scanRequest = await fetch("/api/live/dispatch", {
