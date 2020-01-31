@@ -91,7 +91,7 @@ const CheckedIn: React.FunctionComponent<Props> = props => {
                 <Fox fill={HouseFoxColor} width={50} height={50} />
               </FoxFlex>
               <PointsTitle>You've contributed</PointsTitle>
-              <PointsTitle>{personInfo.totalPoints ?? ""} points!</PointsTitle>
+              <PointsTitle>{personInfo.totalPoints || ""} points!</PointsTitle>
             </CenteredColumn>
           </Flex>
         </InstructionsColumn>
