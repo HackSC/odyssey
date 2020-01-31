@@ -117,9 +117,12 @@ const Calendar: React.FunctionComponent<Props> = props => {
     groupLabelKey: "title"
   };
 
-  const { allEvents } = useEventsList({ defaultOnError: console.log });
+  const obj = useEventsList({ defaultOnError: console.log });
 
-  console.log(allEvents);
+  if (obj?.allEvents) {
+    console.log(obj.allEvents);
+  }
+  console.log(obj.allEvents);
 
   return (
     <Timeline

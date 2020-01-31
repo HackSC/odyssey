@@ -63,7 +63,7 @@ interface IEventRoutes {
 }
 
 const EventRoutes: IEventRoutes = {
-  EventList: "api/hacker/event/list" as Route
+  EventList: "api/hacker/live/event/list" as Route
 };
 
 interface ITaskRoutes {
