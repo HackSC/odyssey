@@ -132,7 +132,7 @@ async function APIGet<T>(
     urlRoute += `?${urlParams}`;
   }
 
-  const headers = setupHeaders(opts.req, {});
+  const headers = setupHeaders(opts?.req, {});
 
   const res = await fetch(urlRoute, {
     headers
