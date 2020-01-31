@@ -206,6 +206,7 @@ Scan.getInitialProps = async ctx => {
     handleLoginRedirect(req);
   }
 
+  // jenk but fix later
   req.user.role = profile.role
 
   const { success: allTasks } = await getAllTasksFetch(req);
