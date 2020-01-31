@@ -28,14 +28,13 @@ const defaultTimeStart = moment()
 const defaultTimeEnd = moment()
   .startOf("day")
   .add(moment().hour(), "hour")
-  .add(10, "hour")
+  .add(1, "hour")
   .valueOf();
 
 const itemRenderer: React.FunctionComponent<ItemProps> = props => {
   const { item, itemContext, getItemProps, getResizeProps } = props;
   const { left: leftResizeProps, right: rightResizeProps } = getResizeProps();
 
-  console.log(itemContext);
   return (
     <div
       {...getItemProps({
