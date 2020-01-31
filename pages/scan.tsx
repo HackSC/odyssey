@@ -202,11 +202,12 @@ Scan.getInitialProps = async ctx => {
   const profile = await getProfile(req);
 
   // Null profile means user is not logged in, and this is only relevant for admins
-  if (!profile || !(profile.role == "admin" || profile.role == "volunteer" || profile.role == "sponsor")) {
+  // TODO: Change profile.role == hacker to a more managable page permissions system
+  if (!profile || profile.role == "hacker") {
     handleLoginRedirect(req);
   }
 
-  // jenk but fix later
+  // TODO: use passport to populate field in the future. Right now tasks null catches this
   req.user.role = profile.role
 
   const { success: allTasks } = await getAllTasksFetch(req);

@@ -6,7 +6,7 @@ module.exports = {
     if (req.user) {
       return next();
     }
-    res.status(403).send("Unauthorized");
+    res.status(400).send("Unauthorized");
   },
   preprocessRequest: function(req, res, next) {
     delete req.body.status;
@@ -27,15 +27,15 @@ module.exports = {
           if (hackerProfiles[0].get("role") === "admin") {
             return next();
           } else {
-            res.status(403).send("Unauthorized: Incorrect role");
+            res.status(400).send("Unauthorized: Incorrect role");
           }
         } else {
-          res.status(403).send("Unauthorized; profile not found");
+          res.status(400).send("Unauthorized; profile not found");
         }
       });
     } catch (e) {
       Sentry.captureException(e);
-      res.status(403).send("Unauthorized");
+      res.status(400).send("Unauthorized");
     }
   },
   requireVolunteer: function(req, res, next) {
@@ -50,15 +50,15 @@ module.exports = {
           if (hackerProfiles[0].get("role") === "volunteer") {
             return next();
           } else {
-            res.status(403).send("Unauthorized: Incorrect role");
+            res.status(400).send("Unauthorized: Incorrect role");
           }
         } else {
-          res.status(403).send("Unauthorized; profile not found");
+          res.status(400).send("Unauthorized; profile not found");
         }
       });
     } catch (e) {
       Sentry.captureException(e);
-      res.status(403).send("Unauthorized");
+      res.status(400).send("Unauthorized");
     }
   },
   requireSponsor: function(req, res, next) {
@@ -73,15 +73,15 @@ module.exports = {
           if (hackerProfiles[0].get("role") === "sponsor") {
             return next();
           } else {
-            res.status(403).send("Unauthorized: Incorrect role");
+            res.status(400).send("Unauthorized: Incorrect role");
           }
         } else {
-          res.status(403).send("Unauthorized; profile not found");
+          res.status(400).send("Unauthorized; profile not found");
         }
       });
     } catch (e) {
       Sentry.captureException(e);
-      res.status(403).send("Unauthorized");
+      res.status(400).send("Unauthorized");
     }
   },
   requireNonHacker: function(req, res, next) {
@@ -96,15 +96,15 @@ module.exports = {
           if (hackerProfiles[0].get("role") !== "hacker") {
             return next();
           } else {
-            res.status(403).send("Unauthorized: Incorrect role");
+            res.status(400).send("Unauthorized: Incorrect role");
           }
         } else {
-          res.status(403).send("Unauthorized; profile not found");
+          res.status(400).send("Unauthorized; profile not found");
         }
       });
     } catch (e) {
       Sentry.captureException(e);
-      res.status(403).send("Unauthorized");
+      res.status(400).send("Unauthorized");
     }
   },
 
