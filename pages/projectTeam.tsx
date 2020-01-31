@@ -253,6 +253,7 @@ const PrizeElement = (props: {
       <SpaceFlex>
         <div>
           <PrizeTitle>{prize.title}</PrizeTitle>
+
           <PrizeSubtitle>{prize.description}</PrizeSubtitle>
           {claimedPrize ? (
             <Button onClick={() => onRemovePrize(prize)}> Remove Prize</Button>
@@ -281,6 +282,12 @@ const PrizeTable = (props: {
   return (
     <PrizeContainer>
       <PrizeTableTitle>Prizes</PrizeTableTitle>
+      <PrizeTableDescription>
+        {" "}
+        Indicate what prizes you're interested in competing for below. This
+        helps us make sure that you get judged for all the prizes that you want
+        to be considered for!
+      </PrizeTableDescription>
       {props.allPrizes.map(p => {
         let claimedPrize = claimedPrizeIds.includes(p.id);
         return (
@@ -297,6 +304,12 @@ const PrizeTable = (props: {
 };
 
 const PrizeContainer = styled.div``;
+
+const PrizeTableDescription = styled.div`
+  margin: 20px;
+  margin-left: 0px;
+  font-size: 20px;
+`;
 
 const PrizeTableTitle = styled.h2`
   margin-left: 0px;
