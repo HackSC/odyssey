@@ -14,10 +14,10 @@ import { liveDispatchFetch } from "../lib/api-sdk/liveHooks";
 import { getAllTasksFetch } from "../lib/api-sdk/taskHooks";
 // TO-DO -- pull this out, define elsewhere
 const ACTIONS = [
-  {
-    label: "HackSC Check In",
-    value: "action checkin"
-  },
+  // {
+  //   label: "HackSC Check In",
+  //   value: "action checkin"
+  // },
   {
     label: "Identify Hacker",
     value: "action identify"
@@ -54,6 +54,10 @@ const Scan = ({ profile, tasks }: Props) => {
 
   const sendScanRequest = async (code: string) => {
     if (!checkIfValidCode(code)) {
+      addToast("Invalid QR Code", {
+        appearance: "error",
+        autoDismiss: true
+      })
       return;
     }
 
@@ -198,9 +202,13 @@ Scan.getInitialProps = async ctx => {
   const profile = await getProfile(req);
 
   // Null profile means user is not logged in, and this is only relevant for admins
-  if (!profile || profile.role !== "admin") {
+  // TODO: Change profile.role == hacker to a more managable page permissions system
+  if (!profile || profile.role == "hacker") {
     handleLoginRedirect(req);
   }
+
+  // TODO: use passport to populate field in the future. Right now tasks null catches this
+  req.user.role = profile ? profile.role : null
 
   const { success: allTasks } = await getAllTasksFetch(req);
   const activeTasks = allTasks.filter(t => t.isActive);
