@@ -17,6 +17,7 @@ const eventRouter = require("./api/event");
 const battlepassRouter = require("./api/unlockable");
 const prizeRouter = require("./api/prizes");
 const hackerLiveRouter = require("./api/hackerLive");
+const publicRouter = require("./api/public");
 const fileUpload = require("express-fileupload");
 const dotenv = require("dotenv");
 
@@ -77,6 +78,7 @@ server.use("/api/event", eventRouter);
 server.use("/api/unlockable", battlepassRouter);
 server.use("/api/hacker/live", hackerLiveRouter);
 server.use("/api/prize", prizeRouter);
+server.use("/api/public", publicRouter);
 
 server.post("/api/scan", (req, res) => {
   console.log("Scanned: ", req.body.code);
