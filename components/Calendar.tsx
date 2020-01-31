@@ -7,6 +7,7 @@ import Timeline, {
   TimelineMarkers,
   TodayMarker
 } from "react-calendar-timeline";
+import { useEventsList } from "../lib/api-sdk/eventHooks";
 import "react-calendar-timeline/lib/Timeline.css";
 
 type Props = {};
@@ -64,6 +65,7 @@ const itemRenderer: React.FunctionComponent<ItemProps> = props => {
       : item.selectedBgColor
     : item.bgColor;
   //const borderColor = itemContext.resizing ? "red" : item.color;
+
   return (
     <div
       {...getItemProps({
@@ -114,6 +116,10 @@ const Calendar: React.FunctionComponent<Props> = props => {
     itemTimeEndKey: "end",
     groupLabelKey: "title"
   };
+
+  const { allEvents } = useEventsList({ defaultOnError: console.log });
+
+  console.log(allEvents);
 
   return (
     <Timeline
