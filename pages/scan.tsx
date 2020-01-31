@@ -14,10 +14,10 @@ import { liveDispatchFetch } from "../lib/api-sdk/liveHooks";
 import { getAllTasksFetch } from "../lib/api-sdk/taskHooks";
 // TO-DO -- pull this out, define elsewhere
 const ACTIONS = [
-  {
-    label: "HackSC Check In",
-    value: "action checkin"
-  },
+  // {
+  //   label: "HackSC Check In",
+  //   value: "action checkin"
+  // },
   {
     label: "Identify Hacker",
     value: "action identify"
