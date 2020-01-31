@@ -28,9 +28,6 @@ const defaultTimeEnd = moment()
   .add(12, "hour")
   .toDate();
 
-console.log(defaultTimeStart);
-console.log(defaultTimeEnd);
-
 const staticGroup = [
   {
     id: "1",
