@@ -1,5 +1,4 @@
 import { NextApiRequest } from "next";
-import { Router } from "next/router";
 
 interface IProjectTeamRoutes {
   ProjectTeamSelf: GetRoute & PostRoute;

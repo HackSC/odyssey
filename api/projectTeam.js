@@ -115,7 +115,7 @@ router.put("/self/addMember", async (req, res) => {
   const projectTeam = await getProjectTeamForSelf(req);
   const newTeammate = await getPersonForQRID(memberId);
   projectTeam.addMember(newTeammate);
-  projectTeam.save();
+  await projectTeam.save();
 
   return res.json({ success: projectTeam });
 });
