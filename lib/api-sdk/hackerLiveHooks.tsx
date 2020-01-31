@@ -158,7 +158,7 @@ function useAllHouseInfo({
   }
 
   return {
-    allHouses
+    allHouses: allHouses.sort((a, b) => b.totalScore - a.totalScore)
   };
 }
 
