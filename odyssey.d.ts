@@ -127,7 +127,7 @@ declare type BattlepassObject = {
   pointValue: number;
   prizeName: string;
   unlocked: boolean;
-  total: number;
+  minimum: number;
 };
 
 interface Task {
