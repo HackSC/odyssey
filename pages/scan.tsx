@@ -17,6 +17,10 @@ const ACTIONS = [
   {
     label: "HackSC Check In",
     value: "action checkin"
+  },
+  {
+    label: "Identify Hacker",
+    value: "action identify"
   }
 ];
 
@@ -36,6 +40,7 @@ const Scan = ({ profile, tasks }: Props) => {
 
   const handleActionChange = e => {
     setAction(e.target.value);
+    setLastScannedCode(null);
   };
 
   const checkIfValidCode = (code: string): boolean => {
@@ -70,10 +75,26 @@ const Scan = ({ profile, tasks }: Props) => {
 
     if (!scanResponse.error) {
       // Successful scan, let's display that to the user
-      addToast("Successfully scanned hacker's QR code", {
-        appearance: "success",
-        autoDismiss: true
-      });
+      if (dispatchBody["actionId"] === "checkin") {
+        addToast("Successfully checked in user", {
+          appearance: "success",
+          autoDismiss: true
+        });
+      } else if (dispatchBody["actionId"] === "identify") {
+        const profile: Profile = scanResponse.success as Profile;
+        addToast(
+          `This code belongs to ${profile.firstName} ${profile.lastName} (${profile.email})`,
+          {
+            appearance: "success",
+            autoDismiss: true
+          }
+        );
+      } else if (dispatchBody["actionId"] === "contrib") {
+        addToast("Hacker has been credited points for finishing task", {
+          appearance: "success",
+          autoDismiss: true
+        });
+      }
     } else {
       addToast(scanResponse.error, { appearance: "error", autoDismiss: true });
     }
@@ -175,16 +196,14 @@ Scan.getInitialProps = async ctx => {
   const { req } = ctx;
 
   const profile = await getProfile(req);
-  const { success: allTasks } = await getAllTasksFetch(req);
-
-  console.log(allTasks);
-
-  const activeTasks = allTasks.filter(t => t.isActive);
 
   // Null profile means user is not logged in, and this is only relevant for admins
   if (!profile || profile.role !== "admin") {
     handleLoginRedirect(req);
   }
+
+  const { success: allTasks } = await getAllTasksFetch(req);
+  const activeTasks = allTasks.filter(t => t.isActive);
 
   return {
     profile,

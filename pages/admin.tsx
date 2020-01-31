@@ -32,19 +32,9 @@ const Admin = ({ profile }) => {
             <Action href="/scan">
               <ActionTitle>Scan In Hackers</ActionTitle>
             </Action>
-            <Action href="/appReview">
+            {/* <Action href="/appReview">
               <ActionTitle>Start App Review</ActionTitle>
-            </Action>
-
-            <Action
-              href="https://metabase-odyssey.herokuapp.com/"
-              target="_blank"
-            >
-              <ActionTitle>Access Metabase</ActionTitle>
-            </Action>
-            <Action href="/scan">
-              <ActionTitle>Scan In Hackers</ActionTitle>
-            </Action>
+            </Action> */}
             <Action href="/checkin">
               <ActionTitle>Check In Hackers</ActionTitle>
             </Action>
@@ -62,6 +52,12 @@ const Admin = ({ profile }) => {
             </Action>
             <Action href="/battlepassManager">
               <ActionTitle> Edit Battlepass </ActionTitle>
+            </Action>
+            <Action
+              href="https://metabase-odyssey.herokuapp.com/"
+              target="_blank"
+            >
+              <ActionTitle>Access Metabase</ActionTitle>
             </Action>
           </Actions>
         </Container>
