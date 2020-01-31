@@ -55,7 +55,7 @@ const itemRenderer: React.FunctionComponent<ItemProps> = props => {
 
       <div
         style={{
-          height: itemContext.dimensions.height,
+          maxHeight: "10px",
           paddingLeft: 3,
           textOverflow: "ellipsis",
           whiteSpace: "nowrap"
@@ -75,11 +75,13 @@ const Calendar: React.FunctionComponent<Props> = props => {
   const items = allEvents
     ? allEvents.map((e: any) => {
         let startTime = moment(e.startsAt)
-          .subtract(4, "hour")
+          .add(8, "hour")
           .valueOf();
         let endTime = moment(e.endsAt)
-          .subtract(4, "hour")
+          .add(8, "hour")
           .valueOf();
+        console.log(moment(e.startsAt).valueOf());
+        console.log(e.endsAt);
         return {
           id: e.id + "" ?? "",
           key: e.id + "" ?? "",
@@ -109,23 +111,24 @@ const Calendar: React.FunctionComponent<Props> = props => {
           id: 1,
           title: "HackSC-2020",
           rightTitle: "HackSC-2020",
-          bgColor: "#000000"
+          bgColor: "#000000",
+          height: 400
         }
       ]}
       items={items}
       sidebarWidth={0}
       itemTouchSendsClick={false}
       stackItems={true}
-      itemHeightRatio={0.75}
+      itemHeightRatio={0.8}
       showCursorLine
       canMove={false}
       canResize={false}
       defaultTimeStart={moment()
         .startOf("day")
         .valueOf()}
+      lineHeight={60}
       defaultTimeEnd={defaultTimeEnd}
       itemRenderer={itemRenderer}
-      lineHeight={400}
       style={{ width: "-webkit-fill-available", border: "hidden" }}
     >
       <TimelineHeaders
