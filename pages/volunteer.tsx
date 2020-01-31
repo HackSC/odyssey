@@ -32,7 +32,7 @@ const Volunteer = ({ profile }) => {
             <Action href="/scan">
               <ActionTitle>Scan In Hackers</ActionTitle>
             </Action>
-            <Action href="/">
+            <Action href="/live">
               <ActionTitle>Live Dashboard</ActionTitle>
             </Action>
           </Actions>
@@ -49,7 +49,7 @@ Volunteer.getInitialProps = async ctx => {
   const profile = await getProfile(req);
 
   // Null profile means user is not logged in, and this is only relevant for admins
-  if (!profile || profile.role !== "superadmin") {
+  if (!profile || !(profile.role == "admin" || profile.role == "volunteer")) {
     handleLoginRedirect(req);
   }
   if (profile) {

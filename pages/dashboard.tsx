@@ -59,7 +59,7 @@ Dashboard.getInitialProps = async ({ req }) => {
     handleLoginRedirect(req);
   } else if (profile.role == "admin") {
     handleAdminRedirect(req);
-  } else if (profile.role == "superadmin") {
+  } else if (profile.role == "volunteer") {
     handleVolunteerRedirect(req);
   }
 
