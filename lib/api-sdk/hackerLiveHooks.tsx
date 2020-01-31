@@ -158,7 +158,9 @@ function useAllHouseInfo({
   }
 
   return {
-    allHouses: allHouses.sort((a, b) => b.totalScore - a.totalScore)
+    allHouses: allHouses
+      ? allHouses.sort((a, b) => b.totalScore - a.totalScore)
+      : null
   };
 }
 

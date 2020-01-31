@@ -86,6 +86,7 @@ declare type Person = {
   Profile: Profile;
   Contributions: Contribution[];
   identityId: StringID;
+  isBattlepassComplete: boolean;
   Home: House;
   totalPoints?: number;
 };
