@@ -49,7 +49,7 @@ const itemRenderer: React.FunctionComponent<ItemProps> = props => {
           borderRightWidth: 3
         },
         onMouseDown: () => {
-          console.log("on item click", item);
+          //console.log("on item click", item);
         }
       })}
     >
