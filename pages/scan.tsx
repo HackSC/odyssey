@@ -208,7 +208,7 @@ Scan.getInitialProps = async ctx => {
   }
 
   // TODO: use passport to populate field in the future. Right now tasks null catches this
-  req.user.role = profile.role
+  req.user.role = profile ? profile.role : null
 
   const { success: allTasks } = await getAllTasksFetch(req);
   const activeTasks = allTasks.filter(t => t.isActive);
