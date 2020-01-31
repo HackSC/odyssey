@@ -157,19 +157,6 @@ router.get("/tasks", async (req, res) => {
   return res.json({ success: tasks });
 });
 
-router.get("/houseInfo/:id", async (req, res) => {
-  const houseId = req.params.id;
-  const house = await models.House.findByPk(houseId, {
-    include: [
-      {
-        model: models.Person,
-        as: "HouseMembers"
-      }
-    ]
-  });
-  return res.json({ success: house });
-});
-
 router.get("/houseInfo/list", async (req, res) => {
   const houses = await models.House.findAll({
     include: [
@@ -181,6 +168,19 @@ router.get("/houseInfo/list", async (req, res) => {
     ]
   });
   return res.json({ success: houses });
+});
+
+router.get("/houseInfo/:id", async (req, res) => {
+  const houseId = req.params.id;
+  const house = await models.House.findByPk(houseId, {
+    include: [
+      {
+        model: models.Person,
+        as: "HouseMembers"
+      }
+    ]
+  });
+  return res.json({ success: house });
 });
 
 module.exports = router;
