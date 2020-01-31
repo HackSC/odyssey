@@ -29,6 +29,21 @@ function allHouseInfoFetch(req?: NextApiRequest) {
   return APIGet(Routes.HackerLiveHouseInfoList, { req });
 }
 
+function sumPersonsContributionPoints(contributions: Contribution[]) {
+  let totalPoints = 0;
+  for (let i = 0; i < contributions.length; i++) {
+    let multiplier = 1;
+
+    if (contributions[i].multiplier !== 0) {
+      multiplier = contributions[i].multiplier;
+    }
+
+    totalPoints += contributions[i].Task.points * multiplier;
+  }
+
+  return totalPoints;
+}
+
 function useBattlepass({
   defaultOnError,
   initialModel
@@ -63,6 +78,12 @@ function usePersonInfoSelf({
   );
 
   useErrorHandler(defaultOnError, error);
+
+  if (personInfo && personInfo.Contributions) {
+    personInfo.totalPoints = sumPersonsContributionPoints(
+      personInfo.Contributions
+    );
+  }
 
   return {
     personInfo
@@ -120,8 +141,26 @@ function useAllHouseInfo({
   );
 
   useErrorHandler(defaultOnError, error);
+
+  if (allHouses) {
+    for (let i = 0; i < allHouses.length; i++) {
+      const housePersons = allHouses[i].HouseMembers;
+
+      let houseTotalPoints = 0;
+      for (let j = 0; j < housePersons.length; j++) {
+        houseTotalPoints += sumPersonsContributionPoints(
+          housePersons[j].Contributions
+        );
+      }
+
+      allHouses[i].totalScore = houseTotalPoints;
+    }
+  }
+
   return {
-    allHouses
+    allHouses: allHouses
+      ? allHouses.sort((a, b) => b.totalScore - a.totalScore)
+      : null
   };
 }
 

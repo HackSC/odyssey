@@ -86,6 +86,7 @@ declare type Person = {
   Profile: Profile;
   Contributions: Contribution[];
   identityId: StringID;
+  isBattlepassComplete: boolean;
   Home: House;
   totalPoints?: number;
 };
@@ -109,6 +110,7 @@ declare type Contribution = {
   Task: Task;
   multiplier: number;
   scannerId: StringID;
+  createdAt: Date;
 };
 
 declare type ProjectTeam = {

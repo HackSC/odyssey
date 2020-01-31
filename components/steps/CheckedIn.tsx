@@ -15,6 +15,7 @@ import {
   useAllHouseInfo
 } from "../../lib/api-sdk/hackerLiveHooks";
 import { MdClose } from "react-icons/md";
+import ContributionHistory from "../ContributionHistory";
 
 interface Props {
   profile: Profile;
@@ -89,15 +90,21 @@ const CheckedIn: React.FunctionComponent<Props> = props => {
               <FoxFlex>
                 <Fox fill={HouseFoxColor} width={50} height={50} />
               </FoxFlex>
-              <PointsTitle>You've contributed</PointsTitle>
-              <PointsTitle>{personInfo.totalPoints ?? ""} points!</PointsTitle>
+              <PointsTitle>You have</PointsTitle>
+              <PointsTitle>
+                <b>{personInfo.totalPoints ?? "0"} points!</b>
+              </PointsTitle>
             </CenteredColumn>
           </Flex>
         </InstructionsColumn>
       </PaddedFlex>
       <PaddedFlex justify="space-between" tabletVertical>
         <MarginedColumn style={{ overflowX: "scroll" }} flexBasis={100}>
-          <BattlePass bp={battlepass} userPoints={personInfo.totalPoints} />
+          <BattlePass
+            bp={battlepass}
+            userPoints={personInfo.totalPoints}
+            projSubmitted={personInfo.isBattlepassComplete}
+          />
           <UnlockMessage>
             Unlock premium tier prizes when your team submits a project
           </UnlockMessage>
@@ -111,15 +118,9 @@ const CheckedIn: React.FunctionComponent<Props> = props => {
           <LinkScroll />
         </MarginedColumn>
         <MarginedColumn flexBasis={65}>
-          <CheckInTitle>History</CheckInTitle>
+          <CheckInTitle>Task History</CheckInTitle>
           <CheckInInstructions>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-            eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim
-            ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut
-            aliquip ex ea commodo consequat. Duis aute irure dolor in
-            reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla
-            pariatur. Excepteur sint occaecat cupidatat non proident, sunt in
-            culpa qui officia deserunt mollit anim id est laborum.
+            <ContributionHistory contributions={personInfo.Contributions} />
           </CheckInInstructions>
         </MarginedColumn>
       </PaddedFlex>
