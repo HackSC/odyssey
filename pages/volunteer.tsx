@@ -30,9 +30,9 @@ const Volunteer = ({ profile }) => {
           <ActionsHeader>Actions</ActionsHeader>
           <Actions>
             <Action href="/scan">
-              <ActionTitle>Scan In Hackers</ActionTitle>
+              <ActionTitle>Scan Hackers</ActionTitle>
             </Action>
-            <Action href="/live">
+            <Action href="https://live.hacksc.com" target="_blank">
               <ActionTitle>Live Dashboard</ActionTitle>
             </Action>
           </Actions>

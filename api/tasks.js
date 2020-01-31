@@ -8,7 +8,13 @@ const Sentry = require("@sentry/node");
 /* This router supports superuser routes, such as updating the status of users */
 
 router.use(utils.authMiddleware);
-router.use(utils.requireAdmin);
+router.use((req, res, next) => {
+  if (req.user.role === "admin") {
+    utils.requireAdmin(req, res, next)
+  } else {
+    utils.requireVolunteer(req, res, next)
+  }
+});
 
 router.get("/list", async (req, res) => {
   const tasks = await models.Task.findAll();

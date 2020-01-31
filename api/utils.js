@@ -38,6 +38,29 @@ module.exports = {
       res.status(403).send("Unauthorized");
     }
   },
+  requireVolunteer: function(req, res, next) {
+    /* Read user from database, and make sure it is in fact an admin */
+    try {
+      models.HackerProfile.findAll({
+        where: {
+          userId: req.user.id
+        }
+      }).then(hackerProfiles => {
+        if (hackerProfiles.length >= 1) {
+          if (hackerProfiles[0].get("role") === "volunteer") {
+            return next();
+          } else {
+            res.status(403).send("Unauthorized: Incorrect role");
+          }
+        } else {
+          res.status(403).send("Unauthorized; profile not found");
+        }
+      });
+    } catch (e) {
+      Sentry.captureException(e);
+      res.status(403).send("Unauthorized");
+    }
+  },
   requireNonHacker: function(req, res, next) {
     /* Read user from database, and make sure it is in fact an admin */
     try {
