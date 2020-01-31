@@ -23,65 +23,28 @@ type ItemProps = {
 const defaultTimeStart = moment()
   .startOf("day")
   .valueOf();
-//.toDate();
+
 const defaultTimeEnd = moment()
   .startOf("day")
   .add(12, "hour")
   .valueOf();
-//.toDate();
-
-console.log(defaultTimeStart);
-
-const staticGroup = [
-  {
-    id: "1",
-    title: "HackSC-2020",
-    rightTitle: "HackSC-2020",
-    bgColor: "#000000"
-  }
-];
-
-const staticItems = [
-  {
-    id: "1",
-    group: "HackSC-2020",
-    title: "Event Title",
-    start: 1578810000000,
-    end: 1578831183563,
-    canMove: false,
-    canResize: false,
-    className: "rct-item",
-    bgColor: "#000000",
-    selectedBgColor: "#FF8379",
-    color: "#1C1C1C",
-    itemProps: {
-      "data-tip": "this is a description"
-    }
-  }
-];
 
 const itemRenderer: React.FunctionComponent<ItemProps> = props => {
   const { item, itemContext, getItemProps, getResizeProps } = props;
   const { left: leftResizeProps, right: rightResizeProps } = getResizeProps();
-  const backgroundColor = itemContext.selected
-    ? itemContext.dragging
-      ? "red"
-      : item.selectedBgColor
-    : item.bgColor;
-  //const borderColor = itemContext.resizing ? "red" : item.color;
 
   return (
     <div
       {...getItemProps({
         style: {
-          backgroundColor,
+          backgroundColor: itemContext.selected ? "#f6f6f6" : "white",
           color: item.color,
           borderColor: "#FF8379",
           borderStyle: "solid",
-          borderWidth: 1,
+          borderWidth: 3,
           borderRadius: 4,
-          borderLeftWidth: itemContext.selected ? 3 : 1,
-          borderRightWidth: itemContext.selected ? 3 : 1
+          borderLeftWidth: 3,
+          borderRightWidth: 3
         },
         onMouseDown: () => {
           console.log("on item click", item);
@@ -92,7 +55,7 @@ const itemRenderer: React.FunctionComponent<ItemProps> = props => {
 
       <div
         style={{
-          height: "10px",
+          height: itemContext.dimensions.height,
           paddingLeft: 3,
           textOverflow: "ellipsis",
           whiteSpace: "nowrap"
@@ -106,49 +69,29 @@ const itemRenderer: React.FunctionComponent<ItemProps> = props => {
   );
 };
 
-// type CalendarEvent = {
-//   id: number,
-//   name: string,
-//   description?: string,
-//   startsAt: string,
-//   endsAt: string,
-//   createdAt?: string,
-//   updatedAt?: string
-// };
-
 const Calendar: React.FunctionComponent<Props> = props => {
-  const keys = {
-    groupIdKey: "id",
-    groupTitleKey: "title",
-    groupRightTitleKey: "rightTitle",
-    itemIdKey: "id",
-    itemTitleKey: "title",
-    itemDivTitleKey: "title",
-    itemGroupKey: "group",
-    itemTimeStartKey: "start",
-    itemTimeEndKey: "end",
-    groupLabelKey: "title"
-  };
-
   const { allEvents } = useEventsList({ defaultOnError: console.log });
 
-  let items = allEvents
+  const items = allEvents
     ? allEvents.map((e: any) => {
-        let startTime =
-          Math.floor(moment(e.startsAt).valueOf() / 10000000) * 10000000; //moment(e.startsAt).toDate();
-        let endTime = moment(e.endsAt).valueOf(); //moment(e.endsAt).toDate();
+        let startTime = moment(e.startsAt)
+          .subtract(4, "hour")
+          .valueOf();
+        let endTime = moment(e.endsAt)
+          .subtract(4, "hour")
+          .valueOf();
         return {
           id: e.id + "" ?? "",
           key: e.id + "" ?? "",
-          group: "HackSC-2020",
+          group: 1,
           title: e.name ?? "Event",
-          start: startTime ?? "",
-          end: endTime ?? "",
+          start_time: startTime ?? "",
+          end_time: endTime ?? "",
           canMove: false,
           canResize: false,
-          className: "item-weekend",
-          bgColor: "#000000",
-          selectedBgColor: "#FF8379",
+          className: "rct-item",
+          bgColor: "#FFFFFF",
+          selectedBgColor: "#FFFFFF",
           color: "#1C1C1C",
           itemProps: {
             createdAt: e.createdAt ?? "",
@@ -157,30 +100,32 @@ const Calendar: React.FunctionComponent<Props> = props => {
         };
       })
     : [];
-
-  console.log(
-    moment()
-      .startOf("day")
-      .toDate()
-  );
   console.log(items);
 
   return (
     <Timeline
-      groups={staticGroup}
-      items={staticItems}
-      keys={keys}
+      groups={[
+        {
+          id: 1,
+          title: "HackSC-2020",
+          rightTitle: "HackSC-2020",
+          bgColor: "#000000"
+        }
+      ]}
+      items={items}
       sidebarWidth={0}
       itemTouchSendsClick={false}
-      stackItems
+      stackItems={true}
       itemHeightRatio={0.75}
       showCursorLine
       canMove={false}
       canResize={false}
-      defaultTimeStart={defaultTimeStart}
+      defaultTimeStart={moment()
+        .startOf("day")
+        .valueOf()}
       defaultTimeEnd={defaultTimeEnd}
-      lineHeight={300}
       itemRenderer={itemRenderer}
+      lineHeight={400}
       style={{ width: "-webkit-fill-available", border: "hidden" }}
     >
       <TimelineHeaders
