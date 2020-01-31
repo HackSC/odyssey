@@ -9,20 +9,11 @@ const Sentry = require("@sentry/node");
 
 router.use(utils.authMiddleware);
 
-router.get("/list", (req, res, next) => {
-    // fallback to check admin if role doesn't exist in req
-    if (!req.user.role || req.user.role === "admin") {
-      utils.requireAdmin(req, res, next)
-    } else if (req.user.role === "volunteer") {
-      utils.requireVolunteer(req, res, next)
-    } else {
-      utils.requireSponsor(req, res, next)
-    }
-  }, async (req, res) => {
+router.get("/list", utils.requireNonHacker, async (req, res) => {
     const Op = sequelize.Op
     let filter = []
 
-    if (req.user.role === "admin") {
+    if (req.user.role && req.user.role === "admin") {
       filter.push({
         type: "admin"
       })
@@ -32,14 +23,14 @@ router.get("/list", (req, res, next) => {
       filter.push({
         type: "sponsor"
       })
-    } else if (req.user.role === "volunteer") {
+    } else if (req.user.role && req.user.role === "volunteer") {
       filter.push({
         type: "volunteer"
       })
       filter.push({
         type: "sponsor"
       })
-    } else {
+    } else if (req.user.role && req.user.role === "sponsor") {
       filter.push({
         type: "sponsor"
       })
