@@ -46,7 +46,7 @@ function removeMemberSelfFetch(person: Person) {
 }
 
 function addTeamMemberFetch(personId: String) {
-  return APIPut(Routes.ProjectTeamSelfAddMember, personId);
+  return APIPut(Routes.ProjectTeamSelfAddMember, { memberId: personId });
 }
 
 function useProjectTeamSelf({
