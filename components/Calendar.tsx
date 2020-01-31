@@ -22,11 +22,13 @@ type ItemProps = {
 
 const defaultTimeStart = moment()
   .startOf("day")
-  .toDate();
+  .valueOf();
+//.toDate();
 const defaultTimeEnd = moment()
   .startOf("day")
   .add(12, "hour")
-  .toDate();
+  .valueOf();
+//.toDate();
 
 console.log(defaultTimeStart);
 
@@ -48,7 +50,7 @@ const staticItems = [
     end: 1578831183563,
     canMove: false,
     canResize: false,
-    className: "item-weekend",
+    className: "rct-item",
     bgColor: "#000000",
     selectedBgColor: "#FF8379",
     color: "#1C1C1C",
