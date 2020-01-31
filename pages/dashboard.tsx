@@ -17,6 +17,7 @@ import { Background, Container } from "../styles";
 import Steps from "../components/LiveDashboard";
 
 import { generatePosts } from "../lib/referrerCode";
+import CheckedIn from "../components/steps/CheckedIn";
 
 const Dashboard = ({ profile, houses, socialPosts }) => {
   return (
@@ -26,7 +27,7 @@ const Dashboard = ({ profile, houses, socialPosts }) => {
         showApp={false}
         showResults={false}
         showTeam={false}
-        showProjectTeam={true}
+        showProjectTeam={profile.status === CheckedIn}
         loggedIn
         activePage="dashboard"
       />
