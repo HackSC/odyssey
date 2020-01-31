@@ -15,15 +15,16 @@ const ContributionHistory = ({
 
   return (
     <>
-      {sortedContributions.map(contribution => (
-        <Contribution>
-          <h3>{contribution.Task.name}</h3>
-          <p>{contribution.Task.description}</p>
-          <b>Points Received:</b>{" "}
-          {contribution.Task.points *
-            (contribution.multiplier === 0 ? 1 : contribution.multiplier)}
-        </Contribution>
-      ))}
+      {sortedContributions &&
+        sortedContributions.map(contribution => (
+          <Contribution>
+            <h3>{contribution.Task.name}</h3>
+            <p>{contribution.Task.description}</p>
+            <b>Points Received:</b>{" "}
+            {contribution.Task.points *
+              (contribution.multiplier === 0 ? 1 : contribution.multiplier)}
+          </Contribution>
+        ))}
 
       {sortedContributions && sortedContributions.length === 0 && (
         <NoHistory>
