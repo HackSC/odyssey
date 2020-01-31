@@ -5,7 +5,8 @@ import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
 import {
   handleLoginRedirect,
   getProfile,
-  handleAdminRedirect
+  handleAdminRedirect,
+  handleVolunteerRedirect
 } from "../lib/authenticate";
 
 import Head from "../components/Head";
@@ -58,6 +59,8 @@ Dashboard.getInitialProps = async ({ req }) => {
     handleLoginRedirect(req);
   } else if (profile.role == "admin") {
     handleAdminRedirect(req);
+  } else if (profile.role == "superadmin") {
+    handleVolunteerRedirect(req);
   }
 
   if (profile && profile.status == "checkedIn") {
