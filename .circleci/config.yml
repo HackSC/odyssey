@@ -17,34 +17,18 @@ jobs:
           command: "yarn run E2ETest"
       - store_artifacts:
           path: cypress/videos/odysseyTests
-  test:
+  build:
     docker:
       - image: circleci/node
     steps:
       - checkout
       - run: yarn install
-      - run: yarn run test
-  deploy:
-    docker:
-      - image: circleci/node
-    steps:
-      - checkout
-      - run: sudo npm install -g now
-      - run:
-          name: Deploy to Now
-          command: cd client && now --token $ZEIT_TOKEN --local-config now.production.json --prod
+      - run: yarn build
 workflows:
   version: 2
   e2e_tests:
     jobs:
       - E2ETest
-  test_deploy:
+  build:
     jobs:
-      - E2ETest
-      - deploy:
-          requires:
-            - E2ETest
-          filters:
-            branches:
-              only:
-                - master
+      - build

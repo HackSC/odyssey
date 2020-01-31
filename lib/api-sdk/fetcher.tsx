@@ -58,6 +58,14 @@ const HackerLiveRoutes: IHackerRoutes = {
   HackerLiveHouseInfoList: "api/hacker/live/houseInfo/list" as Route
 };
 
+interface IEventRoutes {
+  EventList: GetRoute;
+}
+
+const EventRoutes: IEventRoutes = {
+  EventList: "api/hacker/event/list" as Route
+};
+
 interface ITaskRoutes {
   TasksList: GetRoute;
 }
@@ -71,7 +79,8 @@ const Routes = {
   ...ContributionRoutes,
   ...LiveRoutes,
   ...HackerLiveRoutes,
-  ...TaskRoutes
+  ...TaskRoutes,
+  ...EventRoutes
 };
 
 async function processResponse<T>(res: Response): Promise<APIResponse<T>> {
@@ -165,7 +174,7 @@ async function APIPut<S, T>(
   return processResponse(res);
 }
 
-async function APIDelete<S, T>(
+async function APIDelete<T>(
   route: DeleteRoute,
   param?: ResourceID,
   req?: NextApiRequest

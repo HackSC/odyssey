@@ -4,7 +4,6 @@ import styled from "styled-components";
 import QRCode from "../QRCode";
 import LinkScroll from "../LinkScroll";
 import { Flex, CenteredColumn, Column, Fox, Alert } from "../../styles";
-import Announcements from "../announcements/Announcements";
 import Calendar from "../Calendar";
 import BattlePass from "../BattlePass";
 import useWindowSize from "react-use/lib/useWindowSize";
@@ -97,11 +96,11 @@ const CheckedIn: React.FunctionComponent<Props> = props => {
         </InstructionsColumn>
       </PaddedFlex>
       <PaddedFlex justify="space-between" tabletVertical>
-        <MarginedColumn style={{ overflowX: "scroll" }} flexBasis={75}>
-          <BattlePass bp={battlepass} />
-        </MarginedColumn>
-        <MarginedColumn flexBasis={25}>
-          <Announcements />
+        <MarginedColumn style={{ overflowX: "scroll" }} flexBasis={100}>
+          <BattlePass bp={battlepass} userPoints={personInfo.totalPoints} />
+          <UnlockMessage>
+            Unlock premium tier prizes when your team submits a project
+          </UnlockMessage>
         </MarginedColumn>
       </PaddedFlex>
       <PaddedFlex tabletVertical>
@@ -174,6 +173,11 @@ const CheckInInstructions = styled.p`
   margin: 0;
   padding: 0;
   font-weight: 300;
+`;
+
+const UnlockMessage = styled.p`
+  font-size: 18px;
+  font-style: italic;
 `;
 
 export default CheckedIn;
