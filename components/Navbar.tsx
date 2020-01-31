@@ -13,6 +13,7 @@ type NavbarProps = {
   showResults?: boolean;
   showTeam?: boolean;
   showLogout?: boolean;
+  showProjectTeam?: boolean;
   activePage?: string;
   admin?: boolean;
 };
@@ -38,6 +39,7 @@ const Navbar: React.FunctionComponent<NavbarProps> = ({
   showResults = true,
   showTeam = true,
   showLogout = true,
+  showProjectTeam = true,
   activePage,
   admin
 }: NavbarProps) => {
@@ -84,6 +86,16 @@ const Navbar: React.FunctionComponent<NavbarProps> = ({
                   style={style(activePage === "team" ? "#FF8379" : "white")}
                 >
                   Team
+                </Link>
+              )}
+              {!admin && showProjectTeam && (
+                <Link
+                  href="/projectTeam"
+                  style={style(
+                    activePage === "projectTeam" ? "#FF8379" : "white"
+                  )}
+                >
+                  Manage Team
                 </Link>
               )}
               {showLogout && (

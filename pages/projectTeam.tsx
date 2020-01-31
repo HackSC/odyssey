@@ -1,10 +1,10 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 
 import Head from "../components/Head";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
-import { Background, Container, Flex, Column, Card } from "../styles";
+import { Background, Container, Flex, Column, Card, Button } from "../styles";
 import ButtonWithTextForm from "../components/ButtonWithTextForm";
 import { useToasts } from "react-toast-notifications";
 import MultiTextForm from "../components/MultiTextForm";
@@ -30,6 +30,7 @@ const ProjectTeam = (props: Props) => {
     addPrizeSelf,
     removePrizeSelf,
     removeMemberSelf,
+    addMemberProjectTeamSelf,
     joinProjectTeamSelf
   } = useProjectTeamSelf({
     defaultOnError: onError,
@@ -125,10 +126,16 @@ const ProjectTeam = (props: Props) => {
             }
           ]}
         />
-        <TeamMemberTable
-          projectTeam={projectTeam}
-          onRemove={removeMemberSelf}
-        />
+        <VertFlex>
+          <TeamMemberTable
+            projectTeam={projectTeam}
+            onRemove={removeMemberSelf}
+          />
+          <AddMember
+            projectTeam={projectTeam}
+            onAdd={addMemberProjectTeamSelf}
+          />
+        </VertFlex>
         <PrizeTable
           projectTeam={projectTeam}
           allPrizes={allPrizes}
@@ -142,7 +149,13 @@ const ProjectTeam = (props: Props) => {
   return (
     <>
       <Head title="HackSC Odyssey - Team Setup" />
-      <Navbar loggedIn activePage="team" />
+      <Navbar
+        loggedIn
+        showApp={false}
+        showResults={false}
+        showTeam={false}
+        activePage="projectTeam"
+      />
       <Background>
         <Container>
           {projectTeam ? <TeamInfoSection /> : <CreateTeamSection />}
@@ -170,6 +183,34 @@ async function getAllPrizes(req): Promise<Prize[]> {
   return result.success;
 }
 
+const AddMember = (props: {
+  projectTeam: ProjectTeam;
+  onAdd: (p: String) => void;
+}) => {
+  const [memberId, setMemberId] = useState("");
+
+  return (
+    <div>
+      <Button
+        onClick={() => {
+          props.onAdd(memberId);
+        }}
+      >
+        {" "}
+        Add Member{" "}
+      </Button>
+      <TeamTextInput
+        type="text"
+        placeholder="Teammate's 4 character Code"
+        onChange={e => {
+          console.log(e.target.value);
+          setMemberId(e.target.value);
+        }}
+      />
+    </div>
+  );
+};
+
 const TeamMemberTable = (props: {
   projectTeam: ProjectTeam;
   onRemove: (p: Person) => void;
@@ -183,7 +224,8 @@ const TeamMemberTable = (props: {
           <span>{p.Profile.firstName} </span>
           <span>{p.Profile.lastName} | </span>
           <span>{p.Profile.email}</span>
-          <button onClick={e => props.onRemove(p)}>Remove</button>
+
+          <DelButton onClick={e => props.onRemove(p)}>Remove</DelButton>
         </TeamCard>
       ))}
     </div>
@@ -228,6 +270,7 @@ const PrizeCard = styled(Card)`
 
 const TeamCard = styled(Card)`
   margin: 10px;
+  margin-left: 0px;
 `;
 
 ProjectTeam.getInitialProps = async ({ req, query }): Promise<Props> => {
@@ -242,6 +285,23 @@ ProjectTeam.getInitialProps = async ({ req, query }): Promise<Props> => {
 
 const NoTeamFlex = styled(Flex)`
   margin-top: 48px;
+`;
+
+const VertFlex = styled(Flex)`
+  flex-direction: column;
+  margin-top: 48px;
+  margin-bottom: 48px;
+`;
+
+const TeamTextInput = styled.input`
+  margin-left: 10px;
+  outline: 0px;
+  font-size: 16px;
+  padding: 7px 16px;
+`;
+
+const DelButton = styled(Button)`
+  margin-left: 10px;
 `;
 
 export default ProjectTeam;
