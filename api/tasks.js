@@ -13,11 +13,44 @@ router.get("/list", (req, res, next) => {
     // fallback to check admin if role doesn't exist in req
     if (!req.user.role || req.user.role === "admin") {
       utils.requireAdmin(req, res, next)
-    } else {
+    } else if (req.user.role === "volunteer") {
       utils.requireVolunteer(req, res, next)
+    } else {
+      utils.requireSponsor(req, res, next)
     }
   }, async (req, res) => {
-    const tasks = await models.Task.findAll();
+    const Op = sequelize.Op
+    let filter = []
+
+    if (req.user.role === "admin") {
+      filter.push({
+        type: "admin"
+      })
+      filter.push({
+        type: "volunteer"
+      })
+      filter.push({
+        type: "sponsor"
+      })
+    } else if (req.user.role === "volunteer") {
+      filter.push({
+        type: "volunteer"
+      })
+      filter.push({
+        type: "sponsor"
+      })
+    } else {
+      filter.push({
+        type: "sponsor"
+      })
+    }
+
+    const tasks = await models.Task.findAll({
+      where: {
+        [Op.or]: filter
+      }
+    });
+    
     return res.json({ success: tasks });
 });
 
