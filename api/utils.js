@@ -94,6 +94,8 @@ module.exports = {
       }).then(hackerProfiles => {
         if (hackerProfiles.length >= 1) {
           if (hackerProfiles[0].get("role") !== "hacker") {
+            // Add role to be used
+            req.user.role = hackerProfiles[0].get("role")
             return next();
           } else {
             res.status(400).send("Unauthorized: Incorrect role");
