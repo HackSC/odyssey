@@ -92,7 +92,7 @@ const CheckedIn: React.FunctionComponent<Props> = props => {
               </FoxFlex>
               <PointsTitle>You have</PointsTitle>
               <PointsTitle>
-                <b>{personInfo.totalPoints ?? ""} points!</b>
+                <b>{personInfo.totalPoints ?? "0"} points!</b>
               </PointsTitle>
             </CenteredColumn>
           </Flex>
