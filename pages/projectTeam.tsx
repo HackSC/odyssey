@@ -4,7 +4,15 @@ import styled from "styled-components";
 import Head from "../components/Head";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
-import { Background, Container, Flex, Column, Card, Button } from "../styles";
+import {
+  Background,
+  Container,
+  Flex,
+  Column,
+  Card,
+  Button,
+  TextCardDiv
+} from "../styles";
 import ButtonWithTextForm from "../components/ButtonWithTextForm";
 import { useToasts } from "react-toast-notifications";
 import MultiTextForm from "../components/MultiTextForm";
@@ -203,7 +211,6 @@ const AddMember = (props: {
         type="text"
         placeholder="Teammate's 4 character Code"
         onChange={e => {
-          console.log(e.target.value);
           setMemberId(e.target.value);
         }}
       />
@@ -232,6 +239,37 @@ const TeamMemberTable = (props: {
   );
 };
 
+const PrizeElement = (props: {
+  prize: Prize;
+  projectTeam: ProjectTeam;
+  onRemovePrize: Function;
+  onAddPrize: Function;
+}) => {
+  const claimedPrizeIds = props.projectTeam.Prizes.map(p => p.id);
+  const { onAddPrize, onRemovePrize, prize } = props;
+  let claimedPrize = claimedPrizeIds.includes(prize.id);
+  return (
+    <PrizeCard key={prize.id}>
+      <SpaceFlex>
+        <div>
+          <PrizeTitle>{prize.title}</PrizeTitle>
+          <PrizeSubtitle>{prize.description}</PrizeSubtitle>
+          {claimedPrize ? (
+            <Button onClick={() => onRemovePrize(prize)}> Remove Prize</Button>
+          ) : (
+            <Button onClick={() => onAddPrize(prize)}> Add Prize</Button>
+          )}
+        </div>
+        <PrizeStatus>
+          {claimedPrize
+            ? "You are competing for this prize!"
+            : "You are not competing for this prize!"}
+        </PrizeStatus>
+      </SpaceFlex>
+    </PrizeCard>
+  );
+};
+
 const PrizeTable = (props: {
   allPrizes: Prize[];
   projectTeam: ProjectTeam;
@@ -242,20 +280,16 @@ const PrizeTable = (props: {
   const { onAddPrize, onRemovePrize } = props;
   return (
     <PrizeContainer>
-      <h2>Prizes</h2>
+      <PrizeTableTitle>Prizes</PrizeTableTitle>
       {props.allPrizes.map(p => {
         let claimedPrize = claimedPrizeIds.includes(p.id);
         return (
-          <PrizeCard key={p.id} background={claimedPrize ? "magenta" : ""}>
-            <span>{p.title}</span>
-            <span>{p.description}</span>
-            <span>{claimedPrize.toString()}</span>
-            {claimedPrize ? (
-              <button onClick={() => onRemovePrize(p)}> Remove Prize</button>
-            ) : (
-              <button onClick={() => onAddPrize(p)}> Add Prize</button>
-            )}
-          </PrizeCard>
+          <PrizeElement
+            prize={p}
+            projectTeam={props.projectTeam}
+            onAddPrize={onAddPrize}
+            onRemovePrize={onRemovePrize}
+          />
         );
       })}
     </PrizeContainer>
@@ -264,8 +298,20 @@ const PrizeTable = (props: {
 
 const PrizeContainer = styled.div``;
 
+const PrizeTableTitle = styled.h2`
+  margin-left: 0px;
+`;
+
+const PrizeStatus = styled.div`
+  font-size: 18px;
+  display: flex;
+  align-items: center;
+  margin-right: 10px;
+`;
+
 const PrizeCard = styled(Card)`
   margin: 10px;
+  margin-left: 0px;
 `;
 
 const TeamCard = styled(Card)`
@@ -287,10 +333,26 @@ const NoTeamFlex = styled(Flex)`
   margin-top: 48px;
 `;
 
+const PrizeTitle = styled.div`
+  font-size: 22px;
+  color: black;
+  margin: 10px;
+  margin-left: 0px;
+`;
+
+const PrizeSubtitle = styled.div`
+  font-size: 18px;
+  margin-bottom: 10px;
+`;
+
 const VertFlex = styled(Flex)`
   flex-direction: column;
   margin-top: 48px;
   margin-bottom: 48px;
+`;
+
+const SpaceFlex = styled(Flex)`
+  justify-content: space-between;
 `;
 
 const TeamTextInput = styled.input`
