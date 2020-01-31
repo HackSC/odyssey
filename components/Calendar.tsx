@@ -122,7 +122,7 @@ const Calendar: React.FunctionComponent<Props> = props => {
   if (obj?.allEvents) {
     console.log(obj.allEvents);
   }
-  console.log(obj.allEvents);
+  console.log(obj);
 
   return (
     <Timeline

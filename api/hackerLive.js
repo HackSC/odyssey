@@ -160,9 +160,9 @@ router.get("/tasks", async (req, res) => {
 router.get("/event/list", async (req, res) => {
   try {
     const events = await models.Event.findAll();
-    return res.json({ events });
+    return res.json({ success: events });
   } catch (e) {
-    return res.json({ err: e });
+    return res.json({ error: e });
   }
 });
 
