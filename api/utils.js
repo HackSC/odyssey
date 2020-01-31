@@ -39,7 +39,7 @@ module.exports = {
     }
   },
   requireVolunteer: function(req, res, next) {
-    /* Read user from database, and make sure it is in fact an admin */
+    /* Read user from database, and make sure it is in fact an volunteer */
     try {
       models.HackerProfile.findAll({
         where: {
@@ -61,8 +61,31 @@ module.exports = {
       res.status(403).send("Unauthorized");
     }
   },
+  requireSponsor: function(req, res, next) {
+    /* Read user from database, and make sure it is in fact an sponsor */
+    try {
+      models.HackerProfile.findAll({
+        where: {
+          userId: req.user.id
+        }
+      }).then(hackerProfiles => {
+        if (hackerProfiles.length >= 1) {
+          if (hackerProfiles[0].get("role") === "sponsor") {
+            return next();
+          } else {
+            res.status(403).send("Unauthorized: Incorrect role");
+          }
+        } else {
+          res.status(403).send("Unauthorized; profile not found");
+        }
+      });
+    } catch (e) {
+      Sentry.captureException(e);
+      res.status(403).send("Unauthorized");
+    }
+  },
   requireNonHacker: function(req, res, next) {
-    /* Read user from database, and make sure it is in fact an admin */
+    /* Read user from database, and make sure it is in fact not a hacker */
     try {
       models.HackerProfile.findAll({
         where: {

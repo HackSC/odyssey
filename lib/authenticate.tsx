@@ -75,3 +75,7 @@ export function handleAdminRedirect(req) {
 export function handleVolunteerRedirect(req) {
   redirectToPath(req, "/volunteer");
 }
+
+export function handleSponsorRedirect(req) {
+  redirectToPath(req, "/sponsor");
+}

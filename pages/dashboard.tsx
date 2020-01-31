@@ -6,7 +6,8 @@ import {
   handleLoginRedirect,
   getProfile,
   handleAdminRedirect,
-  handleVolunteerRedirect
+  handleVolunteerRedirect,
+  handleSponsorRedirect
 } from "../lib/authenticate";
 
 import Head from "../components/Head";
@@ -61,6 +62,8 @@ Dashboard.getInitialProps = async ({ req }) => {
     handleAdminRedirect(req);
   } else if (profile.role == "volunteer") {
     handleVolunteerRedirect(req);
+  } else if (profile.role == "sponsor") {
+    handleSponsorRedirect(req);
   }
 
   if (profile && profile.status == "checkedIn") {
