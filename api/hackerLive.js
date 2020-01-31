@@ -170,6 +170,15 @@ router.get("/houseInfo/:id", async (req, res) => {
   return res.json({ success: house });
 });
 
+router.get("/event/list", async (req, res) => {
+  try {
+    const events = await models.Event.findAll();
+    return res.json({ events });
+  } catch (e) {
+    return res.json({ err: e });
+  }
+});
+
 router.get("/houseInfo/list", async (req, res) => {
   const houses = await models.House.findAll({
     include: [
