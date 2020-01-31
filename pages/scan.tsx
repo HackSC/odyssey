@@ -54,6 +54,10 @@ const Scan = ({ profile, tasks }: Props) => {
 
   const sendScanRequest = async (code: string) => {
     if (!checkIfValidCode(code)) {
+      addToast("Invalid QR Code", {
+        appearance: "error",
+        autoDismiss: true
+      })
       return;
     }
 
@@ -201,6 +205,8 @@ Scan.getInitialProps = async ctx => {
   if (!profile || !(profile.role == "admin" || profile.role == "volunteer")) {
     handleLoginRedirect(req);
   }
+
+  req.user.role = profile.role
 
   const { success: allTasks } = await getAllTasksFetch(req);
   const activeTasks = allTasks.filter(t => t.isActive);

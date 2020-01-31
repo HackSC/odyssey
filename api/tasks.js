@@ -8,20 +8,20 @@ const Sentry = require("@sentry/node");
 /* This router supports superuser routes, such as updating the status of users */
 
 router.use(utils.authMiddleware);
-router.use((req, res, next) => {
-  if (req.user.role === "admin") {
-    utils.requireAdmin(req, res, next)
-  } else {
-    utils.requireVolunteer(req, res, next)
-  }
+
+router.get("/list", (req, res, next) => {
+    // fallback to check admin if role doesn't exist in req
+    if (!req.user.role || req.user.role === "admin") {
+      utils.requireAdmin(req, res, next)
+    } else {
+      utils.requireVolunteer(req, res, next)
+    }
+  }, async (req, res) => {
+    const tasks = await models.Task.findAll();
+    return res.json({ success: tasks });
 });
 
-router.get("/list", async (req, res) => {
-  const tasks = await models.Task.findAll();
-  return res.json({ success: tasks });
-});
-
-router.post("/create", async (req, res) => {
+router.post("/create", utils.requireAdmin, async (req, res) => {
   const allowedFields = new Set([
     "blocking",
     "description",
@@ -43,7 +43,7 @@ router.post("/create", async (req, res) => {
   return res.status(200).json({ success: result });
 });
 
-router.put("/:id", async (req, res) => {
+router.put("/:id", utils.requireAdmin, async (req, res) => {
   const updatedObj = req.body;
   const taskId = updatedObj.id;
   delete updatedObj.id;
@@ -51,7 +51,7 @@ router.put("/:id", async (req, res) => {
   return res.status(200);
 });
 
-router.delete("/:id", async (req, res) => {
+router.delete("/:id", utils.requireAdmin, async (req, res) => {
   const id = req.params.id;
   await models.Task.destroy({
     where: {
