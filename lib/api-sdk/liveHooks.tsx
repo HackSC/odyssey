@@ -24,8 +24,4 @@ function liveAssignQRFetch(body: LiveQRAssignBody) {
   return APIPost(Routes.LiveAssignQR, body);
 }
 
-function liveIdentityCheckFetch(req?: NextApiRequest) {
-  return APIGet(Routes.LiveIdentityCheck, { req });
-}
-
 export { liveAssignQRFetch, liveDispatchFetch, liveLookupFetch };

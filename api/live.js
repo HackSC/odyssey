@@ -13,7 +13,8 @@ const actions = {
   CHECKIN: "checkin",
   CONTRIB: "contrib",
   GROUP_CONTRIB: "groupContrib",
-  EMAIL_CONTRIB: "emailContrib"
+  EMAIL_CONTRIB: "emailContrib",
+  IDENTIFY: "identify"
 };
 
 router.post("/dispatch", async (req, res) => {
@@ -40,6 +41,8 @@ router.post("/dispatch", async (req, res) => {
       return await handleGroupContrib(userId, req, res);
     case actions.EMAIL_CONTRIB:
       return await handleEmailContrib(userId, req, res);
+    case actions.IDENTIFY:
+      return await handleIdentify(userId, req, res);
   }
 });
 
@@ -175,6 +178,7 @@ async function handleEmailContrib(userEmail, req, res) {
     return res.json({ success: result });
   }
 }
+
 async function handleCheckin(userId, req, res) {
   const profile = await models.HackerProfile.findOne({
     where: { userId: userId }
@@ -224,6 +228,18 @@ async function handleCheckin(userId, req, res) {
   await pointsProfile.save();
 
   return res.json({ success: pointsProfile });
+}
+
+async function handleIdentify(userId, req, res) {
+  const profile = await models.HackerProfile.findOne({
+    where: { userId: userId }
+  });
+
+  if (profile) {
+    return res.json({ success: profile });
+  } else {
+    return res.status(404).json({ error: "Could not find user" });
+  }
 }
 
 router.get("/lookup", async (req, res) => {

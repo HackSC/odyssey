@@ -15,7 +15,11 @@ import {
   Form,
   FormGroup
 } from "../styles";
-import { liveAssignQRFetch, liveLookupFetch } from "../lib/api-sdk/liveHooks";
+import {
+  liveAssignQRFetch,
+  liveLookupFetch,
+  liveDispatchFetch
+} from "../lib/api-sdk/liveHooks";
 
 const CheckinResult = ({ result, resetResults }) => {
   const qrInput = useRef(null);
@@ -30,7 +34,7 @@ const CheckinResult = ({ result, resetResults }) => {
     }
 
     const confirmation = confirm(
-      `Are you sure you want to assign this hacker QR ${qrInputValue}?`
+      `Are you sure you want to assign this hacker QR ${qrInputValue} and check them in?`
     );
 
     if (confirmation) {
@@ -41,8 +45,19 @@ const CheckinResult = ({ result, resetResults }) => {
       });
 
       if (!assignRequest.error) {
-        alert("Successfully assigned hacker QR");
-        resetResults();
+        const checkinRequest = await liveDispatchFetch({
+          actionId: "checkin",
+          qrCodeId: qrInputValue
+        });
+
+        if (!checkinRequest.error) {
+          alert("Successfully assigned hacker QR and checked them in");
+          resetResults();
+        } else {
+          alert(
+            "Oh no, something went wrong! Flag down Wilhelm Willie and make him cry"
+          );
+        }
       }
     }
   };
@@ -85,7 +100,7 @@ const CheckinResult = ({ result, resetResults }) => {
       {result.status === "confirmed" ? (
         <Flex direction="row" justify-content="space-between">
           <input type="text" maxLength={4} ref={qrInput}></input>
-          <Button onClick={handleAssignment}>Assign QR</Button>
+          <Button onClick={handleAssignment}>Assign QR and check in</Button>
         </Flex>
       ) : result.status === "checkedIn" ? (
         <p>
