@@ -152,7 +152,9 @@ const BattlePass = ({
             : ""}
         </RoundedTR>
         <RoundedTR>
-          <TierLabel>Premium</TierLabel>
+          <TierLabel>
+            Premium <br /> {projSubmitted ? "Unlocked" : "Locked"}
+          </TierLabel>
           {premiumItems
             ? premiumItems.map((item, index) => {
                 return item
