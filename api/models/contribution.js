@@ -16,10 +16,9 @@ module.exports = (sequelize, DataTypes) => {
       foreignKey: "personId",
       targetKey: "identityId"
     });
-    Contribution.belongsTo(models.Task, { foreignKey: "id" });
-
+    Contribution.belongsTo(models.Task, { foreignKey: "taskId" });
     Contribution.addScope("defaultScope", {
-      include: [models.Task]
+      include: [{ model: models.Task }]
     });
   };
   return Contribution;
