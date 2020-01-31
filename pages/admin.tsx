@@ -33,7 +33,6 @@ const Admin = ({ profile }) => {
               <ActionTitle>Scan In Hackers</ActionTitle>
             </Action>
             {/* <Action href="/appReview">
-            <Action href="/appReview">
               <ActionTitle>Start App Review</ActionTitle>
             </Action> */}
             <Action href="/checkin">
