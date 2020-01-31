@@ -67,7 +67,7 @@ module.exports = (sequelize, DataTypes) => {
       questionThree: DataTypes.STRING(1000),
       role: {
         type: DataTypes.ENUM,
-        values: ["hacker", "admin", "sponsor", "superadmin"],
+        values: ["hacker", "admin", "sponsor", "volunteer"],
         defaultValue: "hacker"
       },
       graduationDate: {
