@@ -22,6 +22,7 @@ router.put("/:email", async (req, res) => {
   return res.json({ hackerProfile: newHackerProfile });
 });
 
+// TODO: use the new client fetcher api
 router.get("/profiles", async (req, res) => {
   const Op = sequelize.Op
   const { query } = req.query;
@@ -67,7 +68,7 @@ router.post("/updateRole", async (req, res) => {
       }
     })
 
-    return res.json({ result: result })
+    return res.json({ success: result })
   } catch (e) {
     return res.status(500).json({ error: e.message});
   }
