@@ -12,7 +12,6 @@ export async function getProfiles(query) {
 
   const payload = await response.json();
 
-  // Randomly select an eligible review
   const { profiles } = payload;
 
   return profiles;
