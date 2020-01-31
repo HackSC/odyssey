@@ -110,6 +110,7 @@ declare type Contribution = {
   Task: Task;
   multiplier: number;
   scannerId: StringID;
+  createdAt: Date;
 };
 
 declare type ProjectTeam = {
