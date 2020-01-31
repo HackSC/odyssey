@@ -35,6 +35,7 @@ const itemRenderer: React.FunctionComponent<ItemProps> = props => {
   const { item, itemContext, getItemProps, getResizeProps } = props;
   const { left: leftResizeProps, right: rightResizeProps } = getResizeProps();
 
+  console.log(itemContext);
   return (
     <div
       {...getItemProps({
@@ -57,9 +58,9 @@ const itemRenderer: React.FunctionComponent<ItemProps> = props => {
 
       <div
         style={{
-          maxHeight: "10px",
           paddingLeft: 3,
-          textOverflow: "ellipsis",
+          overflow: "scroll",
+          textOverflow: "ellipses",
           whiteSpace: "nowrap"
         }}
       >
@@ -86,7 +87,8 @@ const Calendar: React.FunctionComponent<Props> = props => {
           id: e.id + "" ?? "",
           key: e.id + "" ?? "",
           group: 1,
-          title: e.name ?? "Event",
+          desc: e.description ?? "",
+          title: e.name + " - " + e.description ?? "Event",
           start_time: startTime ?? "",
           end_time: endTime ?? "",
           canMove: false,
