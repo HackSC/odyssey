@@ -37,7 +37,10 @@ const Admin = ({ profile }) => {
             </Action> */}
             <Action href="/checkin">
               <ActionTitle>Check In Hackers</ActionTitle>
-            </Action>
+            </Action>     
+            <Action href="/roleManager">
+              <ActionTitle> Manage Roles </ActionTitle>
+            </Action>        
             <Action href="/taskManager">
               <ActionTitle> Manage Available Tasks </ActionTitle>
             </Action>

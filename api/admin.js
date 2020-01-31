@@ -11,6 +11,8 @@ router.use(utils.authMiddleware);
 router.use(utils.requireAdmin);
 
 // Full write access to a user's hackerProfile
+// Variable parameters in the foremost endpoint path restricts use to just this route.
+// Consider changing route as to not use up all single-path put requests 
 router.put("/:email", async (req, res) => {
   const updatedhackerProfile = await models.HackerProfile.update(req.body, {
     where: {
@@ -18,6 +20,58 @@ router.put("/:email", async (req, res) => {
     }
   });
   return res.json({ hackerProfile: newHackerProfile });
+});
+
+// TODO: use the new client fetcher api
+router.get("/profiles", async (req, res) => {
+  const Op = sequelize.Op
+  const { query } = req.query;
+  const flexQuery = '%' + query + '%'
+  try {
+    const profiles = await models.HackerProfile.findAll({
+      where: {
+        [Op.or]: [
+          {
+            email: {
+              [Op.like]: flexQuery
+            }
+          },
+          {
+            firstName: {
+              [Op.like]: flexQuery
+            }
+          },
+          {
+            lastName: {
+              [Op.like]: flexQuery
+            }
+          },
+        ]
+      }
+    });
+    return res.json({
+      profiles
+    });
+  } catch (e) {
+    return res.status(500).json({ error: e.message });
+  }
+});
+
+router.post("/updateRole", async (req, res) => {
+  try {
+    const { email, role } = req.body
+    const result = await models.HackerProfile.update({
+      role: role
+    }, {
+      where: {
+        email: email
+      }
+    })
+
+    return res.json({ success: result })
+  } catch (e) {
+    return res.status(500).json({ error: e.message});
+  }
 });
 
 router.get("/reviews", async (req, res) => {
