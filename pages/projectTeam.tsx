@@ -4,7 +4,7 @@ import styled from "styled-components";
 import Head from "../components/Head";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
-import { Background, Container, Flex, Column, Card } from "../styles";
+import { Background, Container, Flex, Column, Card, Button } from "../styles";
 import ButtonWithTextForm from "../components/ButtonWithTextForm";
 import { useToasts } from "react-toast-notifications";
 import MultiTextForm from "../components/MultiTextForm";
@@ -30,6 +30,7 @@ const ProjectTeam = (props: Props) => {
     addPrizeSelf,
     removePrizeSelf,
     removeMemberSelf,
+    addMemberProjectTeamSelf,
     joinProjectTeamSelf
   } = useProjectTeamSelf({
     defaultOnError: onError,
@@ -125,6 +126,7 @@ const ProjectTeam = (props: Props) => {
             }
           ]}
         />
+        <AddMember projectTeam={projectTeam} onAdd={addMemberProjectTeamSelf} />
         <TeamMemberTable
           projectTeam={projectTeam}
           onRemove={removeMemberSelf}
@@ -142,7 +144,13 @@ const ProjectTeam = (props: Props) => {
   return (
     <>
       <Head title="HackSC Odyssey - Team Setup" />
-      <Navbar loggedIn activePage="team" />
+      <Navbar
+        loggedIn
+        showApp={false}
+        showResults={false}
+        showTeam={false}
+        activePage="projectTeam"
+      />
       <Background>
         <Container>
           {projectTeam ? <TeamInfoSection /> : <CreateTeamSection />}
@@ -169,6 +177,18 @@ async function getAllPrizes(req): Promise<Prize[]> {
 
   return result.success;
 }
+
+const AddMember = (props: {
+  projectTeam: ProjectTeam;
+  onAdd: (p: String) => void;
+}) => {
+  return (
+    <div>
+      <Button> Add Member </Button>
+      <QRInput />
+    </div>
+  );
+};
 
 const TeamMemberTable = (props: {
   projectTeam: ProjectTeam;
@@ -229,6 +249,8 @@ const PrizeCard = styled(Card)`
 const TeamCard = styled(Card)`
   margin: 10px;
 `;
+
+const QRInput = styled.input``;
 
 ProjectTeam.getInitialProps = async ({ req, query }): Promise<Props> => {
   const { success } = await getProjectTeamSelfFetch(req);

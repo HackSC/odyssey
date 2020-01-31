@@ -15,6 +15,17 @@ const getProjectTeamForSelf = async req => {
   return person.ProjectTeam;
 };
 
+const getPersonForQRID = async qrCodeId => {
+  const hackerProfile = await models.HackerProfile.findOne({
+    where: {
+      qrCodeId: qrCodeId
+    }
+  });
+  const userId = hackerProfile.get("userId");
+  const person = await models.Person.findByPk(userId);
+  return person;
+};
+
 router.get("/self", async (req, res) => {
   const ProjectTeam = await getProjectTeamForSelf(req);
   return res.json({ success: ProjectTeam });
@@ -96,6 +107,16 @@ router.post("/self/addPrize", async (req, res) => {
   const projectTeam = await getProjectTeamForSelf(req);
   await projectTeam.addPrize(id);
   await projectTeam.reload();
+  return res.json({ success: projectTeam });
+});
+
+router.put("/self/addMember", async (req, res) => {
+  const { memberId } = req.body;
+  const projectTeam = await getProjectTeamForSelf(req);
+  const newTeammate = await getPersonForQRID(memberId);
+  projectTeam.addMember(newTeammate);
+  projectTeam.save();
+
   return res.json({ success: projectTeam });
 });
 

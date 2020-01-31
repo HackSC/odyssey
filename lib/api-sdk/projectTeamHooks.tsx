@@ -45,6 +45,10 @@ function removeMemberSelfFetch(person: Person) {
   return APIDelete(Routes.ProjectTeamSelfDeleteMember, person.identityId);
 }
 
+function addTeamMemberFetch(personId: String) {
+  return APIPut(Routes.ProjectTeamSelfAddMember, personId);
+}
+
 function useProjectTeamSelf({
   defaultOnError,
   initialModel
@@ -68,6 +72,11 @@ function useProjectTeamSelf({
   const joinProjectTeamSelf = fetchWithMutationProjectTeam(
     joinProjectTeamSelfFetch
   );
+
+  const addMemberProjectTeamSelf = fetchWithMutationProjectTeam(
+    addTeamMemberFetch
+  );
+
   const updateProjectTeamSelf = fetchWithMutationProjectTeam(
     updateProjectTeamSelfFetch
   );
@@ -83,6 +92,7 @@ function useProjectTeamSelf({
     addPrizeSelf,
     removePrizeSelf,
     removeMemberSelf,
+    addMemberProjectTeamSelf,
     joinProjectTeamSelf
   };
 }

@@ -26,6 +26,7 @@ const Dashboard = ({ profile, houses, socialPosts }) => {
         showApp={false}
         showResults={false}
         showTeam={false}
+        showProjectTeam={true}
         loggedIn
         activePage="dashboard"
       />
