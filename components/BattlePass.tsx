@@ -14,6 +14,8 @@ type ItemProps = {
   currentTier: boolean;
   minimum: number;
   projSubmitted: boolean;
+  userPoints?: number;
+  itemTier?: number;
 };
 
 const bpItem: React.SFC<ItemProps> = ({
@@ -21,6 +23,8 @@ const bpItem: React.SFC<ItemProps> = ({
   prizeName,
   unlocked,
   currentTier,
+  userPoints = 0,
+  itemTier = 0,
   minimum,
   projSubmitted
 }) => {
@@ -39,6 +43,7 @@ const bpItem: React.SFC<ItemProps> = ({
     <TableTD
       bgColor={premium ? "#E3BF5F" : "#7FBDE9"}
       borderColor={currentTier ? "#FFFFFF" : "transparent"}
+      key={itemTier + prizeName + currentTier + userPoints + premium}
     >
       <LockImage>{locked ? <BPLock fill="#FFFFFF" /> : null}</LockImage>
       <MarginDiv>
@@ -142,6 +147,8 @@ const BattlePass = ({
             ? basicItems.map((item, index) => {
                 return item
                   ? bpItem({
+                      userPoints: userPoints,
+                      itemTier: index,
                       premium: false,
                       projSubmitted,
                       ...item,
@@ -157,6 +164,8 @@ const BattlePass = ({
             ? premiumItems.map((item, index) => {
                 return item
                   ? bpItem({
+                      userPoints: userPoints,
+                      itemTier: index,
                       premium: true,
                       projSubmitted,
                       ...item,

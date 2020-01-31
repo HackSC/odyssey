@@ -132,6 +132,7 @@ const Calendar: React.FunctionComponent<Props> = props => {
   const items = allEvents?.map((e: any) => {
     return {
       id: e.id ?? "",
+      key: e.id ?? "",
       group: "HackSC-2020",
       title: e.name ?? "Event",
       start: moment(e.startsAt).format("X") ?? "",
