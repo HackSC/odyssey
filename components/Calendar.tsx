@@ -28,6 +28,8 @@ const defaultTimeEnd = moment()
   .add(12, "hour")
   .toDate();
 
+console.log(defaultTimeStart);
+
 const staticGroup = [
   {
     id: "1",
@@ -37,16 +39,16 @@ const staticGroup = [
   }
 ];
 
-/*const staticItems = [
+const staticItems = [
   {
     id: "1",
     group: "HackSC-2020",
     title: "Event Title",
-    start: defaultTimeStart,
-    end: defaultTimeEnd,
+    start: 1578810000000,
+    end: 1578831183563,
     canMove: false,
     canResize: false,
-    className: "hacksc",
+    className: "item-weekend",
     bgColor: "#000000",
     selectedBgColor: "#FF8379",
     color: "#1C1C1C",
@@ -54,7 +56,7 @@ const staticGroup = [
       "data-tip": "this is a description"
     }
   }
-];*/
+];
 
 const itemRenderer: React.FunctionComponent<ItemProps> = props => {
   const { item, itemContext, getItemProps, getResizeProps } = props;
@@ -88,8 +90,7 @@ const itemRenderer: React.FunctionComponent<ItemProps> = props => {
 
       <div
         style={{
-          height: itemContext.dimensions.height,
-          overflow: "hidden",
+          height: "10px",
           paddingLeft: 3,
           textOverflow: "ellipsis",
           whiteSpace: "nowrap"
@@ -129,31 +130,43 @@ const Calendar: React.FunctionComponent<Props> = props => {
 
   const { allEvents } = useEventsList({ defaultOnError: console.log });
 
-  const items = allEvents?.map((e: any) => {
-    return {
-      id: e.id ?? "",
-      key: e.id ?? "",
-      group: "HackSC-2020",
-      title: e.name ?? "Event",
-      start: moment(e.startsAt).format("X") ?? "",
-      end: moment(e.endsAt).format("X") ?? "",
-      canMove: false,
-      canResize: false,
-      className: "hacksc",
-      bgColor: "#000000",
-      selectedBgColor: "#FF8379",
-      color: "#1C1C1C",
-      itemProps: {
-        createdAt: e.createdAt ?? "",
-        updatedAt: e.updatedAt ?? ""
-      }
-    };
-  });
+  let items = allEvents
+    ? allEvents.map((e: any) => {
+        let startTime =
+          Math.floor(moment(e.startsAt).valueOf() / 10000000) * 10000000; //moment(e.startsAt).toDate();
+        let endTime = moment(e.endsAt).valueOf(); //moment(e.endsAt).toDate();
+        return {
+          id: e.id + "" ?? "",
+          key: e.id + "" ?? "",
+          group: "HackSC-2020",
+          title: e.name ?? "Event",
+          start: startTime ?? "",
+          end: endTime ?? "",
+          canMove: false,
+          canResize: false,
+          className: "item-weekend",
+          bgColor: "#000000",
+          selectedBgColor: "#FF8379",
+          color: "#1C1C1C",
+          itemProps: {
+            createdAt: e.createdAt ?? "",
+            updatedAt: e.updatedAt ?? ""
+          }
+        };
+      })
+    : [];
+
+  console.log(
+    moment()
+      .startOf("day")
+      .toDate()
+  );
+  console.log(items);
 
   return (
     <Timeline
       groups={staticGroup}
-      items={items || []}
+      items={staticItems}
       keys={keys}
       sidebarWidth={0}
       itemTouchSendsClick={false}
@@ -177,7 +190,7 @@ const Calendar: React.FunctionComponent<Props> = props => {
           borderWidth: "4px"
         }}
       >
-        <SidebarHeader style={{ display: "none" }} />
+        <SidebarHeader />
         <DateHeader
           unit="day"
           labelFormat="dddd, LL"
