@@ -22,11 +22,13 @@ type ItemProps = {
 
 const defaultTimeStart = moment()
   .startOf("day")
+  .add(moment().hour() - 2, "hour")
   .valueOf();
 
 const defaultTimeEnd = moment()
   .startOf("day")
-  .add(12, "hour")
+  .add(moment().hour(), "hour")
+  .add(10, "hour")
   .valueOf();
 
 const itemRenderer: React.FunctionComponent<ItemProps> = props => {
@@ -80,8 +82,6 @@ const Calendar: React.FunctionComponent<Props> = props => {
         let endTime = moment(e.endsAt)
           .add(8, "hour")
           .valueOf();
-        console.log(moment(e.startsAt).valueOf());
-        console.log(e.endsAt);
         return {
           id: e.id + "" ?? "",
           key: e.id + "" ?? "",
@@ -102,7 +102,6 @@ const Calendar: React.FunctionComponent<Props> = props => {
         };
       })
     : [];
-  console.log(items);
 
   return (
     <Timeline
@@ -123,9 +122,7 @@ const Calendar: React.FunctionComponent<Props> = props => {
       showCursorLine
       canMove={false}
       canResize={false}
-      defaultTimeStart={moment()
-        .startOf("day")
-        .valueOf()}
+      defaultTimeStart={defaultTimeStart}
       lineHeight={60}
       defaultTimeEnd={defaultTimeEnd}
       itemRenderer={itemRenderer}
