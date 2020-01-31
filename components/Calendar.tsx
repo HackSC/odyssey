@@ -28,6 +28,9 @@ const defaultTimeEnd = moment()
   .add(12, "hour")
   .toDate();
 
+console.log(defaultTimeStart);
+console.log(defaultTimeEnd);
+
 const staticGroup = [
   {
     id: "1",
@@ -37,7 +40,7 @@ const staticGroup = [
   }
 ];
 
-const staticItems = [
+/*const staticItems = [
   {
     id: "1",
     group: "HackSC-2020",
@@ -54,7 +57,7 @@ const staticItems = [
       "data-tip": "this is a description"
     }
   }
-];
+];*/
 
 const itemRenderer: React.FunctionComponent<ItemProps> = props => {
   const { item, itemContext, getItemProps, getResizeProps } = props;
@@ -103,6 +106,16 @@ const itemRenderer: React.FunctionComponent<ItemProps> = props => {
   );
 };
 
+// type CalendarEvent = {
+//   id: number,
+//   name: string,
+//   description?: string,
+//   startsAt: string,
+//   endsAt: string,
+//   createdAt?: string,
+//   updatedAt?: string
+// };
+
 const Calendar: React.FunctionComponent<Props> = props => {
   const keys = {
     groupIdKey: "id",
@@ -117,17 +130,32 @@ const Calendar: React.FunctionComponent<Props> = props => {
     groupLabelKey: "title"
   };
 
-  const obj = useEventsList({ defaultOnError: console.log });
+  const { allEvents } = useEventsList({ defaultOnError: console.log });
 
-  if (obj?.allEvents) {
-    console.log(obj.allEvents);
-  }
-  console.log(obj);
+  const items = allEvents?.map((e: any) => {
+    return {
+      id: e.id ?? "",
+      group: "HackSC-2020",
+      title: e.name ?? "Event",
+      start: e.startsAt ?? "",
+      end: e.endsAt ?? "",
+      canMove: false,
+      canResize: false,
+      className: "hacksc",
+      bgColor: "#000000",
+      selectedBgColor: "#FF8379",
+      color: "#1C1C1C",
+      itemProps: {
+        createdAt: e.createdAt ?? "",
+        updatedAt: e.updatedAt ?? ""
+      }
+    };
+  });
 
   return (
     <Timeline
       groups={staticGroup}
-      items={staticItems}
+      items={items || []}
       keys={keys}
       sidebarWidth={0}
       itemTouchSendsClick={false}
