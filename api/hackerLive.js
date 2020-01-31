@@ -74,7 +74,7 @@ router.get("/battlepass", async (req, res) => {
         id: "11",
         isPremium: false,
         pointValue: 8000,
-        prizeName: "100 Raffle Tickets"
+        prizeName: "100 Raffle Tickets & Travel Reimbursement!"
       },
       {
         id: "12",
@@ -98,7 +98,7 @@ router.get("/battlepass", async (req, res) => {
         id: "15",
         isPremium: true,
         pointValue: 8000,
-        prizeName: "100 Raffle Tickets & Travel Reimbursement!"
+        prizeName: "100 Raffle Tickets"
       },
       {
         id: "16",

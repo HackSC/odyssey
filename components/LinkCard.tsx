@@ -24,7 +24,7 @@ const LinkCard: React.FunctionComponent<Props> = ({
   const { propImg, propAlt } = props;
 
   return (
-    <CardLink href={propLink}>
+    <CardLink href={propLink} target="_blank">
       <MarginedCard>
         <Flex justify="space-between" tabletVertical>
           <MarginedColumn flexBasis={firstFlexBasis}>

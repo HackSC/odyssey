@@ -5,6 +5,7 @@ interface IProjectTeamRoutes {
   ProjectTeamSelfAddPrize: PostRoute;
   ProjectTeamSelfDeletePrize: DeleteRoute;
   ProjectTeamSelfDeleteMember: DeleteRoute;
+  ProjectTeamSelfAddMember: PutRoute;
   ProjectTeamSelfJoin: PutRoute;
 }
 
@@ -13,6 +14,7 @@ const ProjectTeamRoutes: IProjectTeamRoutes = {
   ProjectTeamSelfAddPrize: "api/projectTeam/self/addPrize" as Route,
   ProjectTeamSelfDeletePrize: "api/projectTeam/self/deletePrize" as Route,
   ProjectTeamSelfDeleteMember: "api/projectTeam/self/deleteMember" as Route,
+  ProjectTeamSelfAddMember: "api/projectTeam/self/addMember" as Route,
   ProjectTeamSelfJoin: "api/projectTeam/join" as Route
 };
 
@@ -128,7 +130,7 @@ async function APIGet<T>(
     urlRoute += `?${urlParams}`;
   }
 
-  const headers = setupHeaders(opts.req, {});
+  const headers = setupHeaders(opts?.req, {});
 
   const res = await fetch(urlRoute, {
     headers

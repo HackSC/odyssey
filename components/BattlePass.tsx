@@ -124,13 +124,13 @@ const useBattlepassItems = (bp: Battlepass, userPoints: number) => {
 };
 const BattlePass = ({
   bp,
-  userPoints
+  userPoints,
+  projSubmitted
 }: {
   bp: Battlepass;
   userPoints: number;
+  projSubmitted: boolean;
 }) => {
-  const projSubmitted = false;
-
   const {
     basicItems,
     premiumItems,
@@ -159,7 +159,9 @@ const BattlePass = ({
             : ""}
         </RoundedTR>
         <RoundedTR>
-          <TierLabel>Premium</TierLabel>
+          <TierLabel>
+            Premium <br /> {projSubmitted ? "Unlocked" : "Locked"}
+          </TierLabel>
           {premiumItems
             ? premiumItems.map((item, index) => {
                 return item

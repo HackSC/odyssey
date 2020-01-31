@@ -10,10 +10,10 @@ type Props = {
 
 const HouseProgress = ({ houses }: Props) => {
   let result = <div></div>;
-  let cumulativeSum = 0;
+  let highestScore = -1;
   if (houses && houses.length > 0) {
     houses.forEach(house => {
-      cumulativeSum += house.totalScore;
+      highestScore = Math.max(highestScore, house.totalScore);
     });
     houses.forEach(house => {
       result = (
@@ -28,7 +28,7 @@ const HouseProgress = ({ houses }: Props) => {
             <ProgressColumn flexBasis={40}>
               <ProgressBar
                 filledBackground={house.color}
-                percent={(house.totalScore * 100) / cumulativeSum}
+                percent={(house.totalScore * 100) / highestScore}
               />
             </ProgressColumn>
             <CenteredColumn flexBasis={30}>

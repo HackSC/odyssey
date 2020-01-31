@@ -1,10 +1,18 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 
 import Head from "../components/Head";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
-import { Background, Container, Flex, Column, Card } from "../styles";
+import {
+  Background,
+  Container,
+  Flex,
+  Column,
+  Card,
+  Button,
+  TextCardDiv
+} from "../styles";
 import ButtonWithTextForm from "../components/ButtonWithTextForm";
 import { useToasts } from "react-toast-notifications";
 import MultiTextForm from "../components/MultiTextForm";
@@ -30,6 +38,7 @@ const ProjectTeam = (props: Props) => {
     addPrizeSelf,
     removePrizeSelf,
     removeMemberSelf,
+    addMemberProjectTeamSelf,
     joinProjectTeamSelf
   } = useProjectTeamSelf({
     defaultOnError: onError,
@@ -125,10 +134,16 @@ const ProjectTeam = (props: Props) => {
             }
           ]}
         />
-        <TeamMemberTable
-          projectTeam={projectTeam}
-          onRemove={removeMemberSelf}
-        />
+        <VertFlex>
+          <TeamMemberTable
+            projectTeam={projectTeam}
+            onRemove={removeMemberSelf}
+          />
+          <AddMember
+            projectTeam={projectTeam}
+            onAdd={addMemberProjectTeamSelf}
+          />
+        </VertFlex>
         <PrizeTable
           projectTeam={projectTeam}
           allPrizes={allPrizes}
@@ -142,7 +157,13 @@ const ProjectTeam = (props: Props) => {
   return (
     <>
       <Head title="HackSC Odyssey - Team Setup" />
-      <Navbar loggedIn activePage="team" />
+      <Navbar
+        loggedIn
+        showApp={false}
+        showResults={false}
+        showTeam={false}
+        activePage="projectTeam"
+      />
       <Background>
         <Container>
           {projectTeam ? <TeamInfoSection /> : <CreateTeamSection />}
@@ -170,6 +191,33 @@ async function getAllPrizes(req): Promise<Prize[]> {
   return result.success;
 }
 
+const AddMember = (props: {
+  projectTeam: ProjectTeam;
+  onAdd: (p: String) => void;
+}) => {
+  const [memberId, setMemberId] = useState("");
+
+  return (
+    <div>
+      <Button
+        onClick={() => {
+          props.onAdd(memberId);
+        }}
+      >
+        {" "}
+        Add Member{" "}
+      </Button>
+      <TeamTextInput
+        type="text"
+        placeholder="Teammate's 4 character Code"
+        onChange={e => {
+          setMemberId(e.target.value);
+        }}
+      />
+    </div>
+  );
+};
+
 const TeamMemberTable = (props: {
   projectTeam: ProjectTeam;
   onRemove: (p: Person) => void;
@@ -183,10 +231,43 @@ const TeamMemberTable = (props: {
           <span>{p.Profile.firstName} </span>
           <span>{p.Profile.lastName} | </span>
           <span>{p.Profile.email}</span>
-          <button onClick={e => props.onRemove(p)}>Remove</button>
+
+          <DelButton onClick={e => props.onRemove(p)}>Remove</DelButton>
         </TeamCard>
       ))}
     </div>
+  );
+};
+
+const PrizeElement = (props: {
+  prize: Prize;
+  projectTeam: ProjectTeam;
+  onRemovePrize: Function;
+  onAddPrize: Function;
+}) => {
+  const claimedPrizeIds = props.projectTeam.Prizes.map(p => p.id);
+  const { onAddPrize, onRemovePrize, prize } = props;
+  let claimedPrize = claimedPrizeIds.includes(prize.id);
+  return (
+    <PrizeCard key={prize.id}>
+      <SpaceFlex>
+        <div>
+          <PrizeTitle>{prize.title}</PrizeTitle>
+
+          <PrizeSubtitle>{prize.description}</PrizeSubtitle>
+          {claimedPrize ? (
+            <Button onClick={() => onRemovePrize(prize)}> Remove Prize</Button>
+          ) : (
+            <Button onClick={() => onAddPrize(prize)}> Add Prize</Button>
+          )}
+        </div>
+        <PrizeStatus>
+          {claimedPrize
+            ? "You are competing for this prize!"
+            : "You are not competing for this prize!"}
+        </PrizeStatus>
+      </SpaceFlex>
+    </PrizeCard>
   );
 };
 
@@ -200,20 +281,22 @@ const PrizeTable = (props: {
   const { onAddPrize, onRemovePrize } = props;
   return (
     <PrizeContainer>
-      <h2>Prizes</h2>
+      <PrizeTableTitle>Prizes</PrizeTableTitle>
+      <PrizeTableDescription>
+        {" "}
+        Indicate what prizes you're interested in competing for below. This
+        helps us make sure that you get judged for all the prizes that you want
+        to be considered for!
+      </PrizeTableDescription>
       {props.allPrizes.map(p => {
         let claimedPrize = claimedPrizeIds.includes(p.id);
         return (
-          <PrizeCard key={p.id} background={claimedPrize ? "magenta" : ""}>
-            <span>{p.title}</span>
-            <span>{p.description}</span>
-            <span>{claimedPrize.toString()}</span>
-            {claimedPrize ? (
-              <button onClick={() => onRemovePrize(p)}> Remove Prize</button>
-            ) : (
-              <button onClick={() => onAddPrize(p)}> Add Prize</button>
-            )}
-          </PrizeCard>
+          <PrizeElement
+            prize={p}
+            projectTeam={props.projectTeam}
+            onAddPrize={onAddPrize}
+            onRemovePrize={onRemovePrize}
+          />
         );
       })}
     </PrizeContainer>
@@ -222,12 +305,31 @@ const PrizeTable = (props: {
 
 const PrizeContainer = styled.div``;
 
+const PrizeTableDescription = styled.div`
+  margin: 20px;
+  margin-left: 0px;
+  font-size: 20px;
+`;
+
+const PrizeTableTitle = styled.h2`
+  margin-left: 0px;
+`;
+
+const PrizeStatus = styled.div`
+  font-size: 18px;
+  display: flex;
+  align-items: center;
+  margin-right: 10px;
+`;
+
 const PrizeCard = styled(Card)`
   margin: 10px;
+  margin-left: 0px;
 `;
 
 const TeamCard = styled(Card)`
   margin: 10px;
+  margin-left: 0px;
 `;
 
 ProjectTeam.getInitialProps = async ({ req, query }): Promise<Props> => {
@@ -242,6 +344,39 @@ ProjectTeam.getInitialProps = async ({ req, query }): Promise<Props> => {
 
 const NoTeamFlex = styled(Flex)`
   margin-top: 48px;
+`;
+
+const PrizeTitle = styled.div`
+  font-size: 22px;
+  color: black;
+  margin: 10px;
+  margin-left: 0px;
+`;
+
+const PrizeSubtitle = styled.div`
+  font-size: 18px;
+  margin-bottom: 10px;
+`;
+
+const VertFlex = styled(Flex)`
+  flex-direction: column;
+  margin-top: 48px;
+  margin-bottom: 48px;
+`;
+
+const SpaceFlex = styled(Flex)`
+  justify-content: space-between;
+`;
+
+const TeamTextInput = styled.input`
+  margin-left: 10px;
+  outline: 0px;
+  font-size: 16px;
+  padding: 7px 16px;
+`;
+
+const DelButton = styled(Button)`
+  margin-left: 10px;
 `;
 
 export default ProjectTeam;
