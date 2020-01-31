@@ -14,23 +14,14 @@ type Props = {
 // hacking before being checked-in.`;
 
 const TITLE = `Congrats, you're confirmed for HackSC!`;
-const INSTRUCTIONS = `We're excited to have you at HackSC 2020! Be on the look out for future communications from us in the days leading up to the hackathon. If you have any questions or comments, don't hesitate to reach out to us via hackers@hacksc.com`;
+const INSTRUCTIONS = `We're excited to have you at HackSC 2020! Be on the look out for future communications from us in the days leading up to the hackathon. If you have any questions or comments, don't hesitate to reach out to us via hackers@hacksc.com or ask in the HackSC 2020 Slack org`;
 
 const ConfirmedStep: React.FunctionComponent<Props> = props => {
   const { profile } = props;
 
   return (
     <Flex justify="space-between" tabletVertical>
-      <Column flexBasis={50}>
-        <QRCode profile={profile} />
-
-        <QRCodeCaption>
-          Curious what this is for? Stay tuned for future updates from the
-          HackSC team!
-        </QRCodeCaption>
-      </Column>
-
-      <InstructionsColumn flexBasis={50}>
+      <InstructionsColumn flexBasis={100}>
         <CheckInTitle>{TITLE}</CheckInTitle>
 
         <CheckInInstructions>{INSTRUCTIONS}</CheckInInstructions>
@@ -40,6 +31,8 @@ const ConfirmedStep: React.FunctionComponent<Props> = props => {
 };
 
 const InstructionsColumn = styled(Column)`
+  padding: 64px 0;
+
   ${({ theme }) =>
     theme.media.tablet`
     margin-top: 32px;
