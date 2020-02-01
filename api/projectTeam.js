@@ -12,7 +12,10 @@ const getProjectTeamForSelf = async req => {
   const person = await models.Person.findByPk(id, {
     include: [{ model: models.ProjectTeam, required: false }]
   });
-  return person.ProjectTeam;
+  if (person) {
+    return person.ProjectTeam;
+  }
+  return person;
 };
 
 const getPersonForQRID = async qrCodeId => {
