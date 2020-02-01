@@ -38,7 +38,6 @@ const CheckinResult = ({ result, resetResults }) => {
     );
 
     if (confirmation) {
-      console.log("send it");
       const assignRequest = await liveAssignQRFetch({
         qrCodeId: qrInputValue,
         userId: result.userId
@@ -97,22 +96,15 @@ const CheckinResult = ({ result, resetResults }) => {
 
       <br />
 
-      {result.status === "confirmed" ? (
-        <Flex direction="row" justify-content="space-between">
-          <input type="text" maxLength={4} ref={qrInput}></input>
-          <Button onClick={handleAssignment}>Assign QR and check in</Button>
-        </Flex>
-      ) : result.status === "checkedIn" ? (
+      {result.status === "checkedIn" ? (
         <p>
           <b>Hacker is already checked in!</b>
         </p>
       ) : (
-        <p>
-          <b>
-            Hacker cannot be checked in because they are neither confirmed nor
-            checked in
-          </b>
-        </p>
+        <Flex direction="row" justify-content="space-between">
+          <input type="text" maxLength={4} ref={qrInput}></input>
+          <Button onClick={handleAssignment}>Assign QR and check in</Button>
+        </Flex>
       )}
     </Result>
   );
