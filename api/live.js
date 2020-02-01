@@ -336,6 +336,9 @@ router.get("/hacker/:qrCodeId", async (req, res) => {
       qrCodeId: qrCodeId
     }
   });
+  if (!result) {
+    return res.status(404).json({ error: "Hacker not Found" });
+  }
   const userId = result.get("userId");
   const contributions = await models.Contribution.findAll({
     where: {
