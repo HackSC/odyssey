@@ -14,8 +14,10 @@ import {
   useBattlepass,
   useAllHouseInfo
 } from "../../lib/api-sdk/hackerLiveHooks";
+import { useEventsList } from "../../lib/api-sdk/eventHooks";
 import { MdClose } from "react-icons/md";
 import ContributionHistory from "../ContributionHistory";
+import Events from "../events/Events";
 
 interface Props {
   profile: Profile;
@@ -28,6 +30,7 @@ const CheckedIn: React.FunctionComponent<Props> = props => {
   const { allHouses } = useAllHouseInfo({});
   const { battlepass } = useBattlepass({ defaultOnError: console.log });
   const { personInfo } = usePersonInfoSelf({ defaultOnError: console.log });
+  const { allEvents } = useEventsList({ defaultOnError: console.log });
   const { width, height } = useWindowSize();
   // TODO: setup is winning again
   // * Check if house is in the lead and display react-confetti
@@ -111,7 +114,7 @@ const CheckedIn: React.FunctionComponent<Props> = props => {
         </MarginedColumn>
       </PaddedFlex>
       <PaddedFlex tabletVertical>
-        <Calendar />
+        <Events events={allEvents} />
       </PaddedFlex>
       <PaddedFlex justify="space-between" tabletVertical>
         <MarginedColumn flexBasis={35}>
