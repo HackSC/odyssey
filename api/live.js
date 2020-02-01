@@ -187,18 +187,18 @@ async function handleCheckin(userId, req, res) {
   const profile = await models.HackerProfile.findOne({
     where: { userId: userId }
   });
-  const profileStatus = profile.get("status");
+  // const profileStatus = profile.get("status");
 
-  const invalidStatuses = [
-    "unverified",
-    "verified",
-    "rejected",
-    "submitted",
-    "checkedIn"
-  ];
-  if (invalidStatuses.includes(profileStatus)) {
-    return res.status(400).json({ error: `User has status ${profileStatus}` });
-  }
+  // const invalidStatuses = [
+  //   "unverified",
+  //   "verified",
+  //   "rejected",
+  //   "submitted",
+  //   "checkedIn"
+  // ];
+  // if (invalidStatuses.includes(profileStatus)) {
+  //   return res.status(400).json({ error: `User has status ${profileStatus}` });
+  // }
 
   const [pointsProfile, isCreated] = await models.Person.findOrCreate({
     where: { identityId: userId },
