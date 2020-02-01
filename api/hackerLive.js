@@ -192,6 +192,4 @@ router.get("/houseInfo/:id", async (req, res) => {
   return res.json({ success: house });
 });
 
-router.get("/incompleteTasks", async (req, res) => {});
-
 module.exports = router;
