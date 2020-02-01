@@ -34,12 +34,14 @@ interface ILiveRoutes {
   LiveDispatch: PostRoute;
   LiveLookup: GetRoute;
   LiveAssignQR: PostRoute;
+  LivePoints: GetRoute;
 }
 
 const LiveRoutes: ILiveRoutes = {
   LiveDispatch: "api/live/dispatch" as Route,
   LiveLookup: "api/live/lookup" as Route,
-  LiveAssignQR: "api/live/assign-qr" as Route
+  LiveAssignQR: "api/live/assign-qr" as Route,
+  LivePoints: "api/live/hacker" as Route
 };
 
 interface IHackerRoutes {
