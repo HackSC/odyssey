@@ -141,6 +141,8 @@ interface Task {
   isActive: boolean;
   name: string;
   id: NumberID;
+  sponsor: string;
+  isPast: boolean;
 }
 
 interface ActiveTask extends Task {

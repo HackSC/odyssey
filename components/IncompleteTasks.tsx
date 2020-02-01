@@ -8,7 +8,7 @@ const IncompleteTasks = ({ incompleteTasks }: { incompleteTasks: Task[] }) => {
     }
 
     const sort = (a: Task, b: Task) => b.points - a.points;
-    const filter = (a: Task) => a.isActive && a.points > 0;
+    const filter = (a: Task) => !a.isPast && a.points > 0;
 
     const sortedAndFilteredIncompleteTasks = incompleteTasks
       .filter(filter)
