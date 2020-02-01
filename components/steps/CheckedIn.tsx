@@ -3,8 +3,7 @@ import styled from "styled-components";
 
 import QRCode from "../QRCode";
 import LinkScroll from "../LinkScroll";
-import { Flex, CenteredColumn, Column, Fox, Alert } from "../../styles";
-import Calendar from "../Calendar";
+import { Flex, CenteredColumn, Column, Fox, Alert, Button } from "../../styles";
 import BattlePass from "../BattlePass";
 import useWindowSize from "react-use/lib/useWindowSize";
 import Confetti from "react-confetti";
@@ -117,7 +116,9 @@ const CheckedIn: React.FunctionComponent<Props> = props => {
         </MarginedColumn>
       </PaddedFlex>
       <PaddedFlex tabletVertical>
-        <Calendar />
+        <Button href="https://hacksc.com/schedule" as="a" target="_blank">
+          See Schedule
+        </Button>
       </PaddedFlex>
       <PaddedFlex justify="space-between" tabletVertical>
         <MarginedColumn flexBasis={35}>
