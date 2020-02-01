@@ -1,4 +1,4 @@
-import { useMemo } from "react";
+import { useEffect, useMemo, useRef } from "react";
 import styled from "styled-components";
 
 import moment from "moment";
@@ -10,84 +10,59 @@ type Props = {
 };
 
 const Events = ({ events }: Props) => {
+  const eventsRef = useRef(null);
+
+  const isEventActive = event => {
+    const start = moment(event.startsAt).add(8, "hour");
+    const now = moment(new Date());
+    const end = moment(event.endsAt).add(8, "hour");
+
+    return start.valueOf() < now.valueOf() && now.valueOf() < end.valueOf();
+  };
+
   const generateSchedule = useMemo(() => {
-    return events.map(event => <Event event={event} />);
+    if (!events) {
+      return <p>No events were found</p>;
+    }
+
+    const sortByStart = (a, b) =>
+      new Date(a.startsAt).getTime() - new Date(b.startsAt).getTime();
+
+    const eventsSortedByStart = events.sort(sortByStart);
+
+    let firstActiveEventIndex = 0;
+    for (let i = 0; i < events.length; i++) {
+      if (isEventActive(events[i])) {
+        firstActiveEventIndex = i;
+        break;
+      }
+    }
+
+    return eventsSortedByStart.map((event, index) => {
+      const isActive = isEventActive(event);
+      const formattedStart = moment(event.startsAt)
+        .add(8, "hour")
+        .format("dddd hh:mm a");
+      const formattedEnd = moment(event.endsAt)
+        .add(8, "hour")
+        .format("dddd hh:mm a");
+
+      return (
+        <Event
+          event={event}
+          isActive={isActive}
+          formattedStart={formattedStart}
+          formattedEnd={formattedEnd}
+          key={event.id}
+          isFirst={index === firstActiveEventIndex}
+          eventsRef={eventsRef}
+        />
+      );
+    });
   }, [events]);
 
-  // Generate a schedule event
-  // const generateScheduleEvent = (event, index) => (
-  //   <ScheduleEvent
-  //     time={event.time}
-  //     startTime={event.startTime}
-  //     endTime={event.endTime}
-  //     title={event.title}
-  //     description={event.description}
-  //     key={event.title + ' - ' + index}
-  //   />
-  // )
-
-  // // Generate schedule
-  // const generateSchedule = () => {
-  //   // TODO: Clean this up, make it more maintainable
-  //   const filter = this.state.filter
-  //   const schedule = this.state.schedule
-
-  //   const scheduleByDay = {
-  //     friday: [],
-  //     saturday: [],
-  //     sunday: []
-  //   }
-
-  //   schedule.forEach((event) => {
-  //     if (filter.event !== '' && filter.event !== event.label.trim()) {
-  //       return;
-  //     }
-
-  //     const eventDay = event.time.slice(0, 3)
-  //     if (eventDay === 'Fri') scheduleByDay.friday.push(event)
-  //     if (eventDay === 'Sat') scheduleByDay.saturday.push(event)
-  //     if (eventDay === 'Sun') scheduleByDay.sunday.push(event)
-  //   })
-
-  //   const fridayEvents = scheduleByDay.friday.map(this.generateScheduleEvent)
-  //   const saturdayEvents = scheduleByDay.saturday.map(this.generateScheduleEvent)
-  //   const sundayEvents = scheduleByDay.sunday.map(this.generateScheduleEvent)
-
-  //   const friday = ((this.state.filter.day === '' || this.state.filter.day === 'friday') && fridayEvents.length > 0) ? (
-  //     <div className="schedule-day">
-  //       <h3>Friday</h3>
-
-  //       {fridayEvents}
-  //     </div>
-  //   ) : (undefined)
-
-  //   const saturday = ((this.state.filter.day === '' || this.state.filter.day === 'saturday') && saturdayEvents.length > 0) ? (
-  //     <div className="schedule-day">
-  //       <h3>Saturday</h3>
-
-  //       {saturdayEvents}
-  //     </div>
-  //   ) : (undefined)
-
-  //   const sunday = ((this.state.filter.day === '' || this.state.filter.day === 'sunday') && sundayEvents.length > 0) ? (
-  //     <div className="schedule-day">
-  //       <h3>Sunday</h3>
-
-  //       {sundayEvents}
-  //     </div>
-  //   ) : (undefined)
-
-  //   return (
-  //     <div>
-  //       {friday}
-  //       {saturday}
-  //       {sunday}
-  //     </div>
-  //   )
-  // }
-
   return events ? (
-    <Container>
+    <Container ref={eventsRef}>
       <h2>Schedule</h2>
       <EventsContainer>{generateSchedule}</EventsContainer>
     </Container>
