@@ -74,13 +74,13 @@ router.get("/battlepass", async (req, res) => {
         id: "11",
         isPremium: false,
         pointValue: 8000,
-        prizeName: "100 Raffle Tickets & Travel Reimbursement!"
+        prizeName: "100 Raffle Tickets"
       },
       {
         id: "12",
         isPremium: true,
         pointValue: 8000,
-        prizeName: "100 Raffle Tickets"
+        prizeName: "100 Raffle Tickets & Travel Reimbursement!"
       },
       {
         id: "13",
@@ -191,5 +191,7 @@ router.get("/houseInfo/:id", async (req, res) => {
   });
   return res.json({ success: house });
 });
+
+router.get("/incompleteTasks", async (req, res) => {});
 
 module.exports = router;
