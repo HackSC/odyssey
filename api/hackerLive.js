@@ -199,6 +199,9 @@ router.get("/incompleteTasks", async (req, res) => {
       personId: req.user.id
     }
   });
+  if (!completedTasks) {
+    return res.json({ success: allTasks });
+  }
   const completeTaskIds = completedTasks.map(x => {
     return x.get("Task").get("id");
   });
