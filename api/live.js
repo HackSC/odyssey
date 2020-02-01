@@ -187,7 +187,7 @@ async function handleCheckin(userId, req, res) {
   const profile = await models.HackerProfile.findOne({
     where: { userId: userId }
   });
-  const profileStatus = profile.get("status");
+  // const profileStatus = profile.get("status");
 
   // const invalidStatuses = [
   //   "unverified",
