@@ -107,6 +107,26 @@ function useAllTasks({ defaultOnError, initialModels }: ListHookParams<Task>) {
   };
 }
 
+function useIncompleteTasks({
+  defaultOnError,
+  initialModels
+}: ListHookParams<Task>) {
+  const resourceRoute = Routes.HackerLiveIncompleteTasks;
+  const { data: incompleteTasks, error } = useSWR<Task[], any>(
+    resourceRoute,
+    fetcherToSVRHandler(allTasksFetch),
+    {
+      initialData: initialModels
+    }
+  );
+
+  useErrorHandler(defaultOnError, error);
+
+  return {
+    incompleteTasks
+  };
+}
+
 function useHouseInfo({
   defaultOnError,
   initialModel
@@ -169,5 +189,6 @@ export {
   useAllHouseInfo,
   useAllTasks,
   useHouseInfo,
-  usePersonInfoSelf
+  usePersonInfoSelf,
+  useIncompleteTasks
 };
