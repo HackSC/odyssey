@@ -15,7 +15,7 @@ const LinkScroll: React.FunctionComponent = () => {
     <Column>
       <h2>Links</h2>
       <LinkCard
-        propLink="https://hacksc.com"
+        propLink="https://docs.google.com/presentation/d/1_LyuEO9Zjfox9vt5Y7FvhgMkssgUUvsc4OnLW79tCJk/edit?usp=sharing"
         propImg={HackSC}
         propAlt="HackSC"
         propTitle="Opening Slides"
@@ -24,7 +24,7 @@ const LinkScroll: React.FunctionComponent = () => {
         secondFlexBasis={70}
       />
       <LinkCard
-        propLink="https://hacksc-2020.slack.com"
+        propLink="https://hacksc.com/join-slack"
         propImg={Slack}
         propAlt="Slack"
         propTitle="Slack"
