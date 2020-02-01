@@ -1,5 +1,7 @@
-import * as React from "react";
+import { useRef, useEffect, useState } from "react";
 import moment from "moment";
+import styled from "styled-components";
+import { MdClose } from "react-icons/md";
 import Timeline, {
   TimelineHeaders,
   SidebarHeader,
@@ -20,59 +22,104 @@ type ItemProps = {
   getResizeProps: any;
 };
 
-const defaultTimeStart = moment()
+let defaultTimeStart = moment()
   .startOf("day")
-  .add(moment().hour() - 2, "hour")
-  .valueOf();
+  .add(moment().hour(), "hour");
+//.valueOf();
 
-const defaultTimeEnd = moment()
+let defaultTimeEnd = moment()
   .startOf("day")
   .add(moment().hour(), "hour")
-  .add(1, "hour")
-  .valueOf();
-
-const itemRenderer: React.FunctionComponent<ItemProps> = props => {
-  const { item, itemContext, getItemProps, getResizeProps } = props;
-  const { left: leftResizeProps, right: rightResizeProps } = getResizeProps();
-
-  return (
-    <div
-      {...getItemProps({
-        style: {
-          backgroundColor: itemContext.selected ? "#f6f6f6" : "white",
-          color: item.color,
-          borderColor: "#FF8379",
-          borderStyle: "solid",
-          borderWidth: 3,
-          borderRadius: 4,
-          borderLeftWidth: 3,
-          borderRightWidth: 3
-        },
-        onMouseDown: () => {
-          //console.log("on item click", item);
-        }
-      })}
-    >
-      {itemContext.useResizeHandle ? <div {...leftResizeProps} /> : null}
-
-      <div
-        style={{
-          paddingLeft: 3,
-          overflow: "scroll",
-          textOverflow: "ellipses",
-          whiteSpace: "nowrap"
-        }}
-      >
-        {itemContext.title}
-      </div>
-
-      {itemContext.useResizeHandle ? <div {...rightResizeProps} /> : null}
-    </div>
-  );
-};
+  .add(2, "hour");
+//.valueOf();
 
 const Calendar: React.FunctionComponent<Props> = props => {
   const { allEvents } = useEventsList({ defaultOnError: console.log });
+  const [eventVisibility, setEventVisibility] = useState({
+    visible: false,
+    e: {},
+    title: "Event"
+  });
+
+  const useOutsideAlerter = ref => {
+    /**
+     * Alert if clicked on outside of element
+     */
+    const handleClickOutside = event => {
+      if (ref.current && !ref.current.contains(event.target)) {
+        setEventVisibility({
+          visible: false,
+          e: eventVisibility?.e,
+          title: eventVisibility?.title
+        });
+      }
+    };
+
+    useEffect(() => {
+      // Bind the event listener
+      document.addEventListener("mousedown", handleClickOutside);
+      return () => {
+        // Unbind the event listener on clean up
+        document.removeEventListener("mousedown", handleClickOutside);
+      };
+    });
+  };
+
+  const wrapperRef = useRef(null);
+  useOutsideAlerter(wrapperRef);
+
+  const itemRenderer: React.FunctionComponent<ItemProps> = props => {
+    const {
+      item,
+      itemContext,
+      getItemProps,
+      timelineContext,
+      getResizeProps
+    } = props;
+    const { left: leftResizeProps, right: rightResizeProps } = getResizeProps();
+
+    return (
+      <div
+        style={{ border: "3px solid #FF8379", backgroundColor: "white" }}
+        {...getItemProps({
+          style: {
+            backgroundColor: itemContext.selected ? "#FFFFFF" : "white",
+            color: item.color,
+            border: itemContext.selected ? "#FF8379" : "#FF8379",
+            borderColor: "#FF8379",
+            borderStyle: "solid",
+            borderWidth: 3,
+            borderRadius: 4,
+            borderLeftWidth: 3,
+            borderRightWidth: 3
+          },
+          onMouseDown: e => {
+            setEventVisibility({
+              visible: true,
+              e: eventVisibility?.e,
+              title: item.title
+            });
+          }
+        })}
+      >
+        {itemContext.useResizeHandle ? <div {...leftResizeProps} /> : null}
+
+        <div
+          style={{
+            paddingLeft: 3,
+            overflow: "scroll",
+            textOverflow: "ellipses",
+            whiteSpace: "nowrap"
+          }}
+          className="rct-item-content"
+        >
+          {itemContext.title}
+        </div>
+
+        {itemContext.useResizeHandle ? <div {...rightResizeProps} /> : null}
+      </div>
+    );
+  };
 
   const items = allEvents
     ? allEvents.map((e: any) => {
@@ -92,13 +139,17 @@ const Calendar: React.FunctionComponent<Props> = props => {
           end_time: endTime ?? "",
           canMove: false,
           canResize: false,
-          className: "rct-item",
+          className: "item-weekend",
           bgColor: "#FFFFFF",
           selectedBgColor: "#FFFFFF",
           color: "#1C1C1C",
           itemProps: {
             createdAt: e.createdAt ?? "",
-            updatedAt: e.updatedAt ?? ""
+            updatedAt: e.updatedAt ?? "",
+            style: {
+              background: "white !important",
+              border: "3px solid #FF8379 !important"
+            }
           }
         };
       })
@@ -127,6 +178,11 @@ const Calendar: React.FunctionComponent<Props> = props => {
       lineHeight={60}
       defaultTimeEnd={defaultTimeEnd}
       itemRenderer={itemRenderer}
+      onTimeChange={(vstart, vend, updateScroll) => {
+        updateScroll(vstart, vend);
+        defaultTimeStart = vstart;
+        defaultTimeEnd = vend;
+      }}
       style={{ width: "-webkit-fill-available", border: "hidden" }}
     >
       <TimelineHeaders
@@ -173,10 +229,43 @@ const Calendar: React.FunctionComponent<Props> = props => {
         />
       </TimelineHeaders>
       <TimelineMarkers>
+        <Popup ref={wrapperRef} display={eventVisibility}>
+          <MdClose
+            style={{ position: "absolute", top: "5px", right: "5px" }}
+            onClick={e =>
+              setEventVisibility({
+                visible: false,
+                e: eventVisibility?.e,
+                title: eventVisibility?.title
+              })
+            }
+          />
+          <h3>{eventVisibility.title}</h3>
+        </Popup>
         <TodayMarker />
       </TimelineMarkers>
     </Timeline>
   );
 };
+
+const Popup = styled.div<{ display?: any }>`
+  ${({ display = { visible: false, e: {}, title: "Event" } }) =>
+    `display: ${display?.visible ? "unset" : "none"};`}
+  width: 90%;
+  text-align: center;
+  margin-right: 5%;
+  padding: 10px;
+  margin-top: 10px;
+  border-width: 4px;
+  border: solid;
+  border-color: #ff8379;
+  border-radius: 7px;
+  height: 60px;
+  position: absolute;
+  top: 0px;
+  right: -100%;
+  z-index: 9999;
+  background-color: white;
+`;
 
 export default Calendar;

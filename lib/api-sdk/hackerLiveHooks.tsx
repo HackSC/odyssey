@@ -26,7 +26,7 @@ function houseInfoFetch(houseId: NumberID, req?: NextApiRequest) {
 }
 
 function allHouseInfoFetch(req?: NextApiRequest) {
-  return APIGet(Routes.HackerLiveHouseInfoList, { req });
+  return APIGet(Routes.HackerLiveHouseInfoList, { req }, null);
 }
 
 function sumPersonsContributionPoints(contributions: Contribution[]) {
@@ -129,7 +129,7 @@ function useHouseInfo({
 
 function useAllHouseInfo({
   defaultOnError,
-  initialModels = []
+  initialModels
 }: ListHookParams<House>) {
   const resourceRoute = Routes.HackerLiveHouseInfoList;
   const { data: allHouses, error } = useSWR<House[], any>(
