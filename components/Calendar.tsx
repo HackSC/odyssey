@@ -78,19 +78,14 @@ const Calendar: React.FunctionComponent<Props> = props => {
     } = props;
     const { left: leftResizeProps, right: rightResizeProps } = getResizeProps();
 
-    const backgroundColor = itemContext.selected
-      ? itemContext.dragging
-        ? "white"
-        : "white"
-      : "white";
-
     return (
       <div
         style={{ border: "3px solid #FF8379", backgroundColor: "white" }}
         {...getItemProps({
           style: {
-            backgroundColor,
+            backgroundColor: itemContext.selected ? "#FFFFFF" : "white",
             color: item.color,
+            border: itemContext.selected ? "#FF8379" : "#FF8379",
             borderColor: "#FF8379",
             borderStyle: "solid",
             borderWidth: 3,
