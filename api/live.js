@@ -125,26 +125,30 @@ async function handleContrib(userId, req, res) {
 }
 
 async function getMultiplierForTask(taskId) {
-  const result = await models.Task.findOne({
-    where: {
-      id: taskId
-    },
+  try {
+    const result = await models.Task.findOne({
+      where: {
+        id: taskId
+      },
 
-    include: [
-      {
-        model: models.Grouping,
-        required: false,
-        include: [
-          {
-            model: models.Multiplier,
-            required: false
-          }
-        ]
-      }
-    ]
-  });
-  const multipliers = result.get("Grouping").get("Multipliers");
-  return multipliers.reduce((x, y) => x + y.dataValues.multiplierValue, 0);
+      include: [
+        {
+          model: models.Grouping,
+          required: false,
+          include: [
+            {
+              model: models.Multiplier,
+              required: false
+            }
+          ]
+        }
+      ]
+    });
+    const multipliers = result.get("Grouping").get("Multipliers");
+    return multipliers.reduce((x, y) => x + y.dataValues.multiplierValue, 0);
+  } catch (e) {
+    return 1;
+  }
 }
 
 async function handleEmailContrib(userEmail, req, res) {
