@@ -112,7 +112,7 @@ const judgingManager = ({}) => {
         if (working_projects[i].vertical != "") {
           let vertical = working_projects[i].vertical.toString()
           verticalJudges_obj[vertical] = 0;
-          verticalCount_obj[vertical] = verticalCount_obj.hasOwnProperty(vertical) ? (verticalCount_obj[vertical]+1) : 0;
+          verticalCount_obj[vertical] = verticalCount_obj.hasOwnProperty(vertical) ? (verticalCount_obj[vertical]+1) : 1;
         }
         for (let j = 0; j < working_projects[i].desiredPrizes.length; j++) {
           if (working_projects[i].desiredPrizes[j] != "") {
@@ -483,6 +483,7 @@ const judgingManager = ({}) => {
             <Column flexBasis={48}>
               <Cell>
                 <Column>
+                  {'Special Tables (Key, Max): '}
                   <TableInput
                     type="text"
                     onChange={e => {
@@ -573,6 +574,7 @@ judgingManager.getInitialProps = async ctx => {
 const Cell = styled.div`
   display: inline-block;
   padding: 10px 20px;
+  margin: 5px 5px;
   background: #ffffff;
   border-radius: 8px;
   font-size: 16px;
@@ -580,6 +582,7 @@ const Cell = styled.div`
 
 const SmallCell = styled.div`
   padding: 12px 1px;
+  margin: 0px 1px;
   background: #ffffff;
   border-radius: 8px;
   border: 1px solid #b2b2b2;
