@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useRef, useEffect, useState } from "react";
 import moment from "moment";
 import styled from "styled-components";
 import { MdClose } from "react-icons/md";
@@ -41,6 +41,33 @@ const Calendar: React.FunctionComponent<Props> = props => {
     title: "Event"
   });
 
+  const useOutsideAlerter = ref => {
+    /**
+     * Alert if clicked on outside of element
+     */
+    const handleClickOutside = event => {
+      if (ref.current && !ref.current.contains(event.target)) {
+        setEventVisibility({
+          visible: false,
+          e: eventVisibility?.e,
+          title: eventVisibility?.title
+        });
+      }
+    };
+
+    useEffect(() => {
+      // Bind the event listener
+      document.addEventListener("mousedown", handleClickOutside);
+      return () => {
+        // Unbind the event listener on clean up
+        document.removeEventListener("mousedown", handleClickOutside);
+      };
+    });
+  };
+
+  const wrapperRef = useRef(null);
+  useOutsideAlerter(wrapperRef);
+
   const itemRenderer: React.FunctionComponent<ItemProps> = props => {
     const {
       item,
@@ -51,11 +78,18 @@ const Calendar: React.FunctionComponent<Props> = props => {
     } = props;
     const { left: leftResizeProps, right: rightResizeProps } = getResizeProps();
 
+    const backgroundColor = itemContext.selected
+      ? itemContext.dragging
+        ? "white"
+        : "white"
+      : "white";
+
     return (
       <div
+        style={{ border: "3px solid #FF8379", backgroundColor: "white" }}
         {...getItemProps({
           style: {
-            backgroundColor: itemContext.selected ? "#f6f6f6" : "white",
+            backgroundColor,
             color: item.color,
             borderColor: "#FF8379",
             borderStyle: "solid",
@@ -82,6 +116,7 @@ const Calendar: React.FunctionComponent<Props> = props => {
             textOverflow: "ellipses",
             whiteSpace: "nowrap"
           }}
+          className="rct-item-content"
         >
           {itemContext.title}
         </div>
@@ -109,13 +144,17 @@ const Calendar: React.FunctionComponent<Props> = props => {
           end_time: endTime ?? "",
           canMove: false,
           canResize: false,
-          className: "rct-item",
+          className: "item-weekend",
           bgColor: "#FFFFFF",
           selectedBgColor: "#FFFFFF",
           color: "#1C1C1C",
           itemProps: {
             createdAt: e.createdAt ?? "",
-            updatedAt: e.updatedAt ?? ""
+            updatedAt: e.updatedAt ?? "",
+            style: {
+              background: "white !important",
+              border: "3px solid #FF8379 !important"
+            }
           }
         };
       })
@@ -195,7 +234,7 @@ const Calendar: React.FunctionComponent<Props> = props => {
         />
       </TimelineHeaders>
       <TimelineMarkers>
-        <Popup display={eventVisibility}>
+        <Popup ref={wrapperRef} display={eventVisibility}>
           <MdClose
             style={{ position: "absolute", top: "5px", right: "5px" }}
             onClick={e =>
@@ -226,7 +265,7 @@ const Popup = styled.div<{ display?: any }>`
   border: solid;
   border-color: #ff8379;
   border-radius: 7px;
-  height: 100px;
+  height: 60px;
   position: absolute;
   top: 0px;
   right: -100%;

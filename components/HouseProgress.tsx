@@ -9,37 +9,37 @@ type Props = {
 };
 
 const HouseProgress = ({ houses }: Props) => {
-  let result = <div></div>;
   let highestScore = -1;
   if (houses && houses.length > 0) {
     houses.forEach(house => {
       highestScore = Math.max(highestScore, house.totalScore);
     });
-    houses.forEach(house => {
-      result = (
-        <React.Fragment>
-          {result}
-          <CenteredFlex justify="space-between" tabletVertical>
-            <CenteredColumn flexBasis={30}>
-              <FoxFlex>
-                <Fox fill={house.color} width={50} height={50} />
-              </FoxFlex>
-            </CenteredColumn>
-            <ProgressColumn flexBasis={40}>
-              <ProgressBar
-                filledBackground={house.color}
-                percent={(house.totalScore * 100) / highestScore}
-              />
-            </ProgressColumn>
-            <CenteredColumn flexBasis={30}>
-              <Points>{house.totalScore} points</Points>
-            </CenteredColumn>
-          </CenteredFlex>
-        </React.Fragment>
-      );
-    });
+    return (
+      <div>
+        {houses?.length > 0
+          ? houses.map(house => {
+              <CenteredFlex justify="space-between" tabletVertical>
+                <CenteredColumn flexBasis={30}>
+                  <FoxFlex>
+                    <Fox fill={house.color} width={50} height={50} />
+                  </FoxFlex>
+                </CenteredColumn>
+                <ProgressColumn flexBasis={40}>
+                  <ProgressBar
+                    filledBackground={house.color}
+                    percent={(house.totalScore * 100) / highestScore}
+                  />
+                </ProgressColumn>
+                <CenteredColumn flexBasis={30}>
+                  <Points>{house.totalScore} points</Points>
+                </CenteredColumn>
+              </CenteredFlex>;
+            })
+          : ""}
+      </div>
+    );
   }
-  return <div>{result}</div>;
+  return <div></div>;
 };
 
 const ProgressColumn = styled(CenteredColumn)`
