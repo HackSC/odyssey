@@ -10,6 +10,7 @@ type NavbarProps = {
   loggedIn?: boolean;
   showDash?: boolean;
   showApp?: boolean;
+  showMaps?: boolean;
   showResults?: boolean;
   showTeam?: boolean;
   showLogout?: boolean;
@@ -38,6 +39,7 @@ const Navbar: React.FunctionComponent<NavbarProps> = ({
   loggedIn,
   showDash = true,
   showApp = true,
+  showMaps = true,
   showResults = true,
   showTeam = true,
   showLogout = true,
@@ -64,6 +66,14 @@ const Navbar: React.FunctionComponent<NavbarProps> = ({
                   )}
                 >
                   Dashboard
+                </Link>
+              )}
+              {!admin && !volunteer && !sponsor && showMaps && (
+                <Link
+                  href="/maps"
+                  style={style(activePage === "maps" ? "#FF8379" : "white")}
+                >
+                  Maps
                 </Link>
               )}
               {!admin && !volunteer && !sponsor && showApp && (

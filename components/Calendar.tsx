@@ -80,12 +80,17 @@ const Calendar: React.FunctionComponent<Props> = props => {
 
     return (
       <div
-        style={{ border: "3px solid #FF8379", backgroundColor: "white" }}
+        style={{
+          border: "3px solid #FF8379",
+          backgroundColor: "white",
+          overflow: "scroll"
+        }}
         {...getItemProps({
           style: {
             backgroundColor: itemContext.selected ? "#FFFFFF" : "white",
             color: item.color,
             border: itemContext.selected ? "#FF8379" : "#FF8379",
+            overflow: "scroll",
             borderColor: "#FF8379",
             borderStyle: "solid",
             borderWidth: 3,
@@ -231,7 +236,7 @@ const Calendar: React.FunctionComponent<Props> = props => {
       <TimelineMarkers>
         <Popup ref={wrapperRef} display={eventVisibility}>
           <MdClose
-            style={{ position: "absolute", top: "5px", right: "5px" }}
+            style={{ position: "absolute", top: "5px", left: "5px" }}
             onClick={e =>
               setEventVisibility({
                 visible: false,
@@ -252,6 +257,7 @@ const Popup = styled.div<{ display?: any }>`
   ${({ display = { visible: false, e: {}, title: "Event" } }) =>
     `display: ${display?.visible ? "unset" : "none"};`}
   width: 90%;
+  overflow: scroll;
   text-align: center;
   margin-right: 5%;
   padding: 10px;
