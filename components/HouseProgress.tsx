@@ -11,11 +11,18 @@ type Props = {
 const HouseProgress = ({ houses }: Props) => {
   let result = <div></div>;
   let highestScore = -1;
+  let minScore = -1;
   if (houses && houses.length > 0) {
+    minScore = houses[0].totalScore;
     houses.forEach(house => {
       highestScore = Math.max(highestScore, house.totalScore);
+      minScore = Math.min(minScore, house.totalScore);
     });
     houses.forEach(house => {
+      let p = 50;
+      let formula =
+        ((house.totalScore * p - minScore) / (highestScore * p - minScore)) *
+        100;
       result = (
         <React.Fragment>
           {result}
@@ -26,10 +33,7 @@ const HouseProgress = ({ houses }: Props) => {
               </FoxFlex>
             </CenteredColumn>
             <ProgressColumn flexBasis={40}>
-              <ProgressBar
-                filledBackground={house.color}
-                percent={(house.totalScore * 100) / highestScore}
-              />
+              <ProgressBar filledBackground={house.color} percent={formula} />
             </ProgressColumn>
             <CenteredColumn flexBasis={30}>
               <Points>{house.totalScore} points</Points>
