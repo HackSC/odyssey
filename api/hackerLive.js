@@ -192,4 +192,26 @@ router.get("/houseInfo/:id", async (req, res) => {
   return res.json({ success: house });
 });
 
+router.get("/incompleteTasks", async (req, res) => {
+  const allTasks = await models.Task.findAll();
+  const completedTasks = await models.Contribution.findAll({
+    where: {
+      personId: req.user.id
+    }
+  });
+  if (!completedTasks) {
+    return res.json({ success: allTasks });
+  }
+  const completeTaskIds = completedTasks.map(x => {
+    return x.get("Task").get("id");
+  });
+
+  const incompleteTasks = allTasks.filter(x => {
+    const taskId = x.get("id");
+    return !completeTaskIds.includes(taskId);
+  });
+
+  return res.json({ success: incompleteTasks });
+});
+
 module.exports = router;
