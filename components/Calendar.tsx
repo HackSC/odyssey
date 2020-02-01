@@ -70,9 +70,6 @@ const Calendar: React.FunctionComponent<Props> = props => {
               e: eventVisibility?.e,
               title: item.title
             });
-          },
-          onTouchStart: () => {
-            console.log("hovering");
           }
         })}
       >
