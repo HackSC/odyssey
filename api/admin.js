@@ -47,7 +47,8 @@ router.get("/profiles", async (req, res) => {
             }
           },
         ]
-      }
+      },
+      limit: 50
     });
     return res.json({
       profiles

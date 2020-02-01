@@ -8,14 +8,44 @@ const Sentry = require("@sentry/node");
 /* This router supports superuser routes, such as updating the status of users */
 
 router.use(utils.authMiddleware);
-router.use(utils.requireAdmin);
 
-router.get("/list", async (req, res) => {
-  const tasks = await models.Task.findAll();
-  return res.json({ success: tasks });
+router.get("/list", utils.requireNonHacker, async (req, res) => {
+    const Op = sequelize.Op
+    let filter = []
+
+    if (req.user.role && req.user.role === "admin") {
+      filter.push({
+        type: "admin"
+      })
+      filter.push({
+        type: "volunteer"
+      })
+      filter.push({
+        type: "sponsor"
+      })
+    } else if (req.user.role && req.user.role === "volunteer") {
+      filter.push({
+        type: "volunteer"
+      })
+      filter.push({
+        type: "sponsor"
+      })
+    } else if (req.user.role && req.user.role === "sponsor") {
+      filter.push({
+        type: "sponsor"
+      })
+    }
+
+    const tasks = await models.Task.findAll({
+      where: {
+        [Op.or]: filter
+      }
+    });
+    
+    return res.json({ success: tasks });
 });
 
-router.post("/create", async (req, res) => {
+router.post("/create", utils.requireAdmin, async (req, res) => {
   const allowedFields = new Set([
     "blocking",
     "description",
@@ -37,7 +67,7 @@ router.post("/create", async (req, res) => {
   return res.status(200).json({ success: result });
 });
 
-router.put("/:id", async (req, res) => {
+router.put("/:id", utils.requireAdmin, async (req, res) => {
   const updatedObj = req.body;
   const taskId = updatedObj.id;
   delete updatedObj.id;
@@ -45,7 +75,7 @@ router.put("/:id", async (req, res) => {
   return res.status(200);
 });
 
-router.delete("/:id", async (req, res) => {
+router.delete("/:id", utils.requireAdmin, async (req, res) => {
   const id = req.params.id;
   await models.Task.destroy({
     where: {

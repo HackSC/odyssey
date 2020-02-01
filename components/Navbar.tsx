@@ -16,6 +16,8 @@ type NavbarProps = {
   showProjectTeam?: boolean;
   activePage?: string;
   admin?: boolean;
+  volunteer?: boolean;
+  sponsor?: boolean;
 };
 
 const style = background => {
@@ -41,7 +43,9 @@ const Navbar: React.FunctionComponent<NavbarProps> = ({
   showLogout = true,
   showProjectTeam = true,
   activePage,
-  admin
+  admin,
+  volunteer,
+  sponsor
 }: NavbarProps) => {
   return (
     <Wrapper>
@@ -52,7 +56,7 @@ const Navbar: React.FunctionComponent<NavbarProps> = ({
         <Links>
           {loggedIn ? (
             <>
-              {!admin && showDash && (
+              {!admin && !volunteer && !sponsor && showDash && (
                 <Link
                   href="/dashboard"
                   style={style(
@@ -62,7 +66,7 @@ const Navbar: React.FunctionComponent<NavbarProps> = ({
                   Dashboard
                 </Link>
               )}
-              {!admin && showApp && (
+              {!admin && !volunteer && !sponsor && showApp && (
                 <Link
                   href="/application"
                   style={style(
@@ -72,7 +76,7 @@ const Navbar: React.FunctionComponent<NavbarProps> = ({
                   Application
                 </Link>
               )}
-              {!admin && showResults && (
+              {!admin && !volunteer && !sponsor && showResults && (
                 <Link
                   href="/results"
                   style={style(activePage === "results" ? "#FF8379" : "white")}
@@ -80,7 +84,7 @@ const Navbar: React.FunctionComponent<NavbarProps> = ({
                   Results
                 </Link>
               )}
-              {!admin && showTeam && (
+              {!admin && !volunteer && !sponsor && showTeam && (
                 <Link
                   href="/team"
                   style={style(activePage === "team" ? "#FF8379" : "white")}
@@ -88,7 +92,7 @@ const Navbar: React.FunctionComponent<NavbarProps> = ({
                   Team
                 </Link>
               )}
-              {!admin && showProjectTeam && (
+              {!admin && !volunteer && !sponsor && showProjectTeam && (
                 <Link
                   href="/projectTeam"
                   style={style(

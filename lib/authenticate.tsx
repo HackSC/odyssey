@@ -71,3 +71,11 @@ export function handleDashboardRedirect(req) {
 export function handleAdminRedirect(req) {
   redirectToPath(req, "/admin");
 }
+
+export function handleVolunteerRedirect(req) {
+  redirectToPath(req, "/volunteer");
+}
+
+export function handleSponsorRedirect(req) {
+  redirectToPath(req, "/sponsor");
+}
