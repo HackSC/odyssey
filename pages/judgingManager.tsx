@@ -25,6 +25,7 @@ const judgingManager = ({}) => {
   const [projects, setProjects] = useState([]);
   const [sponsors, setSponsors] = useState([]);
   const [verticalJudges, setVerticalJudges] = useState({});
+  const [verticalCount, setVerticalCount] = useState({});
 
   const tablesBlocks = Object.keys(tables).map(table => {
     return (
@@ -52,7 +53,7 @@ const judgingManager = ({}) => {
     return (
       <Flex direction="row" justify="space-between" align="center">
         <Column flexBasis={50}>
-          <p>{vertical}</p>
+          <p>{vertical + " (" + verticalCount[vertical] + ")"}</p>
         </Column>
 
         <Column flexBasis={50}>
@@ -63,6 +64,7 @@ const judgingManager = ({}) => {
               temp_verticalJudges[vertical] = Number(e.target.value);
               setVerticalJudges(temp_verticalJudges);
             }}
+            defaultValue={verticalJudges[vertical]}
           />
         </Column>
       </Flex>
@@ -103,11 +105,14 @@ const judgingManager = ({}) => {
       }
 
       // populate
-      let verticals_obj = {};
+      let verticalJudges_obj = {};
+      let verticalCount_obj = {};
       let sponsors_list = new Set();
       for (let i = 0; i < working_projects.length; i++) {
         if (working_projects[i].vertical != "") {
-          verticals_obj[working_projects[i].vertical.toString()] = 0;
+          let vertical = working_projects[i].vertical.toString()
+          verticalJudges_obj[vertical] = 0;
+          verticalCount_obj[vertical] = verticalCount_obj.hasOwnProperty(vertical) ? (verticalCount_obj[vertical]+1) : 0;
         }
         for (let j = 0; j < working_projects[i].desiredPrizes.length; j++) {
           if (working_projects[i].desiredPrizes[j] != "") {
@@ -117,7 +122,8 @@ const judgingManager = ({}) => {
       }
       setProjects(working_projects);
       setSponsors(Array.from(sponsors_list));
-      setVerticalJudges(verticals_obj);
+      setVerticalJudges(verticalJudges_obj);
+      setVerticalCount(verticalCount_obj)
 
       setUploaded(true);
     };
