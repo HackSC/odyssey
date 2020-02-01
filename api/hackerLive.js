@@ -170,7 +170,7 @@ router.get("/houseInfo/list", async (req, res) => {
   const houses = await models.House.findAll({
     include: [
       {
-        model: models.Person,
+        model: models.Person.scope("hideProfile"),
         as: "HouseMembers",
         required: false
       }

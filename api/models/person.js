@@ -35,6 +35,12 @@ module.exports = (sequelize, DataTypes) => {
       as: "Profile"
     });
     Person.hasMany(models.Contribution, { foreignKey: "personId" });
+    Person.addScope("hideProfile", {
+      include: [
+        { model: sequelize.models.Contribution, as: "Contributions" },
+        { model: sequelize.models.House, as: "Home" }
+      ]
+    });
   };
 
   return Person;
