@@ -92,7 +92,7 @@ const Navbar: React.FunctionComponent<NavbarProps> = ({
                   Team
                 </Link>
               )}
-              {!admin && showProjectTeam && (
+              {!admin && !volunteer && !sponsor && showProjectTeam && (
                 <Link
                   href="/projectTeam"
                   style={style(
