@@ -329,4 +329,24 @@ router.get("/identity-check/:userId", async (req, res) => {
   }
 });
 
+router.get("/hacker/:qrCodeId", async (req, res) => {
+  const qrCodeId = req.params.qrCodeId;
+  const result = await models.HackerProfile.findOne({
+    where: {
+      qrCodeId: qrCodeId
+    }
+  });
+  const userId = result.get("userId");
+  const contributions = await models.Contribution.findAll({
+    where: {
+      personId: userId
+    },
+    attributes: [
+      [sequelize.fn("SUM", sequelize.col("Task.points")), "totalPoints"]
+    ],
+    include: [{ model: models.Task, required: true }]
+  });
+  return res.json({ success: contributions });
+});
+
 module.exports = router;
