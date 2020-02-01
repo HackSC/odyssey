@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useRef } from "react";
 import moment from "moment";
 import styled from "styled-components";
 
@@ -11,16 +11,29 @@ type Props = {
   formattedEnd: string;
   isFirst: boolean;
   eventsRef: any;
+  isOver: boolean;
 };
 
 const Event = (props: Props) => {
-  const { event, isActive, formattedStart, formattedEnd, eventsRef } = props;
+  const {
+    event,
+    isActive,
+    formattedStart,
+    formattedEnd,
+    eventsRef,
+    isFirst,
+    isOver
+  } = props;
+
+  const currEventRef = useRef(null);
 
   useEffect(() => {
-    if (eventsRef.current) {
-      eventsRef.current.scrollTo(300);
+    if (eventsRef.current && currEventRef.current) {
+      if (isFirst) {
+        currEventRef.current.scrollIntoView(-30);
+      }
     }
-  }, []);
+  }, [currEventRef]);
 
   const renderTimesRight = () => {
     return (
@@ -42,8 +55,10 @@ const Event = (props: Props) => {
     );
   };
   return (
-    <EventBox isActive={isActive}>
-      <h3>{event.name}</h3>
+    <EventBox isActive={isActive} isOver={isOver} ref={currEventRef}>
+      <h3>
+        {event.name} {isActive && <Live>Live</Live>}
+      </h3>
 
       <p>{event.description}</p>
 
@@ -54,6 +69,7 @@ const Event = (props: Props) => {
 
 type EventBoxProps = {
   isActive?: boolean;
+  isOver?: boolean;
 };
 
 const EventBox = styled.div<EventBoxProps>`
@@ -71,11 +87,23 @@ const EventBox = styled.div<EventBoxProps>`
     margin: 0;
   }
 
+  h3 {
+    vertical-align: middle;
+    line-height: 30px;
+  }
+
   ${({ isActive, theme }) =>
     isActive &&
     `
         border-width: 2px;
         border-color: ${theme.colors.peach};
+      `}
+  }
+
+  ${({ isOver }) =>
+    isOver &&
+    `
+        opacity: 0.4;
       `}
   }
 `;
@@ -85,6 +113,14 @@ const TimesBox = styled.div`
   border: 1px solid #cfcfcf;
   margin-top: 16px;
   border-radius: 4px;
+`;
+
+const Live = styled.span`
+  padding: 8px 10px;
+  font-size: 12px;
+  border-radius: 4px;
+  background-color: ${({ theme }) => theme.colors.peach};
+  color: white;
 `;
 
 export default Event;
