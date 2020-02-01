@@ -12,10 +12,12 @@ import HouseProgress from "../HouseProgress";
 import {
   usePersonInfoSelf,
   useBattlepass,
-  useAllHouseInfo
+  useAllHouseInfo,
+  useIncompleteTasks
 } from "../../lib/api-sdk/hackerLiveHooks";
 import { MdClose } from "react-icons/md";
 import ContributionHistory from "../ContributionHistory";
+import IncompleteTasks from "../IncompleteTasks";
 
 interface Props {
   profile: Profile;
@@ -28,6 +30,10 @@ const CheckedIn: React.FunctionComponent<Props> = props => {
   const { allHouses } = useAllHouseInfo({});
   const { battlepass } = useBattlepass({ defaultOnError: console.log });
   const { personInfo } = usePersonInfoSelf({ defaultOnError: console.log });
+  const { incompleteTasks } = useIncompleteTasks({
+    defaultOnError: console.log
+  });
+
   const { width, height } = useWindowSize();
   // TODO: setup is winning again
   // * Check if house is in the lead and display react-confetti
@@ -118,6 +124,14 @@ const CheckedIn: React.FunctionComponent<Props> = props => {
           <LinkScroll />
         </MarginedColumn>
         <MarginedColumn flexBasis={65}>
+          <CheckInTitle>Incomplete Tasks</CheckInTitle>
+          <CheckInInstructions>
+            <IncompleteTasks incompleteTasks={incompleteTasks} />
+          </CheckInInstructions>
+
+          <br />
+          <br />
+
           <CheckInTitle>Task History</CheckInTitle>
           <CheckInInstructions>
             <ContributionHistory contributions={personInfo.Contributions} />
