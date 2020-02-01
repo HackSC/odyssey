@@ -10,7 +10,7 @@ import Scanner from "../components/Scanner";
 
 import { Button, Form, Flex } from "../styles";
 import Select from "../components/Select";
-import { liveDispatchFetch } from "../lib/api-sdk/liveHooks";
+import { liveDispatchFetch, livePointFetch } from "../lib/api-sdk/liveHooks";
 import { getAllTasksFetch } from "../lib/api-sdk/taskHooks";
 // TO-DO -- pull this out, define elsewhere
 const ACTIONS = [
@@ -21,6 +21,10 @@ const ACTIONS = [
   {
     label: "Identify Hacker",
     value: "action identify"
+  },
+  {
+    label: "Check Points Total",
+    value: "action points"
   }
 ];
 
@@ -57,7 +61,7 @@ const Scan = ({ profile, tasks }: Props) => {
       addToast("Invalid QR Code", {
         appearance: "error",
         autoDismiss: true
-      })
+      });
       return;
     }
 
@@ -73,6 +77,51 @@ const Scan = ({ profile, tasks }: Props) => {
     } else {
       dispatchBody["actionId"] = "contrib";
       dispatchBody["taskId"] = value;
+    }
+
+    // If we're checking prizes, we don't use dispatch
+    if (dispatchBody["actionId"] === "points") {
+      const pointResponse = await livePointFetch(code as ResourceID);
+
+      if (!pointResponse.error) {
+        if (
+          pointResponse.success &&
+          pointResponse.success[0] &&
+          pointResponse.success[0].totalPoints
+        ) {
+          const pointTotal = pointResponse.success[0].totalPoints;
+
+          if (pointTotal >= 8000) {
+            addToast(
+              `User has enough points for a t-shirt. Needs 8000 and has ${pointTotal}`,
+              {
+                appearance: "success",
+                autoDismiss: true
+              }
+            );
+          } else {
+            addToast(
+              `User does not have enough points for a t-shirt. Needs 8000 but only has ${pointTotal}`,
+              {
+                appearance: "warning",
+                autoDismiss: true
+              }
+            );
+          }
+        } else {
+          addToast("Couldn't find point total... weird", {
+            appearance: "error",
+            autoDismiss: true
+          });
+        }
+      } else {
+        addToast(pointResponse.error, {
+          appearance: "error",
+          autoDismiss: true
+        });
+      }
+
+      return;
     }
 
     const scanResponse = await liveDispatchFetch(dispatchBody);

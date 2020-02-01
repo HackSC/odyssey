@@ -16,6 +16,10 @@ function liveLookupFetch(params: LiveLookupParams) {
   return APIGet<Profile[]>(Routes.LiveLookup, { queryParams: params });
 }
 
+function livePointFetch(qrCodeId: ResourceID, req?: NextApiRequest) {
+  return APIGet(Routes.LivePoints, { req }, qrCodeId);
+}
+
 type LiveQRAssignBody = {
   qrCodeId: string;
   userId: StringID;
@@ -24,4 +28,9 @@ function liveAssignQRFetch(body: LiveQRAssignBody) {
   return APIPost(Routes.LiveAssignQR, body);
 }
 
-export { liveAssignQRFetch, liveDispatchFetch, liveLookupFetch };
+export {
+  liveAssignQRFetch,
+  liveDispatchFetch,
+  liveLookupFetch,
+  livePointFetch
+};
