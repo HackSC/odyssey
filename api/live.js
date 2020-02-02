@@ -267,10 +267,7 @@ async function handleIdentify(userId, req, res) {
 
 async function handleJudge(userId, req, res) {
   const Op = sequelize.Op
-  const profile = await models.HackerProfile.findOne({
-    where: { userId: userId }
-  });
-  // pull teammates
+
   const person = await models.Person.findByPk(userId, {
     include: [{ model: models.ProjectTeam, required: false }]
   });
@@ -311,14 +308,7 @@ async function handleJudge(userId, req, res) {
     }
   )
 
-  if (profile) {
-    return res.json({ success: memberProfiles });
-  } else {
-    return res.status(400).json({
-      error: "User already has completed this task"
-    });
-    return res.status(404).json({ error: "Could not find user" });
-  }
+  return res.json({ success: memberProfiles });
 }
 
 router.get("/lookup", async (req, res) => {
