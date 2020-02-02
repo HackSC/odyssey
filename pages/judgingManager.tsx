@@ -351,8 +351,8 @@ const judgingManager = ({}) => {
     let data: String;
 
     try {
-      let headers = ["Project Name", "Submission Email", "Table Number"];
-      let values = ["submissionTitle", "submitter.email", "table"];
+      let headers = ["Project Name", "Table Number"];
+      let values = ["submissionTitle", "table"];
       let csvs = await genProjectsCSV(headers, values);
       data = csvs[0].join("");
     } catch (err) {
