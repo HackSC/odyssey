@@ -238,7 +238,7 @@ router.get("/rafflePoints", async (req, res) => {
     const totalPoints = parseInt(contributions[0].get("totalPoints"));
     const isPersonBPComplete = person.get("isBattlepassComplete") || 0;
 
-    const houseTier = Math.min(Math.floor(totalPoints / 8000), 10);
+    const houseTier = Math.min(Math.floor(totalPoints / 7000), 10);
     const tierPoints = [10, 10, 20, 30, 40, 50, 60, 60, 70, 70, 170];
     const premiumTierPoints = [
       100,
