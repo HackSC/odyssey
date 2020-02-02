@@ -4,6 +4,7 @@ const express = require("express");
 const models = require("./models");
 const utils = require("./utils");
 const router = express.Router();
+const sequelize = require("sequelize");
 
 router.use(utils.authMiddleware);
 
@@ -104,7 +105,7 @@ router.get("/battlepass", async (req, res) => {
         id: "16",
         isPremium: true,
         pointValue: 8000,
-        prizeName: "100 Raffle Tickets"
+        prizeName: "100 Rsequelizeaffle Tickets"
       },
       {
         id: "17",
@@ -212,6 +213,58 @@ router.get("/incompleteTasks", async (req, res) => {
   });
 
   return res.json({ success: incompleteTasks });
+});
+
+router.get("/rafflePoints", async (req, res) => {
+  const contributions = await models.Contribution.findAll({
+    where: {
+      personId: req.user.id
+    },
+    attributes: [
+      [sequelize.fn("SUM", sequelize.col("Task.points")), "totalPoints"]
+    ],
+    include: [{ model: models.Task, required: true }]
+  });
+
+  const person = await models.Person.findByPk(req.user.id);
+
+  if (!person) {
+    return res.status(404).json({ error: "Hacker Person Profile Not Found" });
+  }
+
+  if (!contributions) {
+    return res.status(404).json({ error: "Hacker Points Not Found" });
+  } else {
+    const totalPoints = parseInt(contributions[0].get("totalPoints"));
+    const isPersonBPComplete = person.get("isBattlepassComplete") || 0;
+
+    const houseTier = Math.min(Math.floor(totalPoints / 8000), 10);
+    const tierPoints = [10, 10, 20, 30, 40, 50, 60, 60, 70, 70, 170];
+    const premiumTierPoints = [
+      100,
+      200,
+      300,
+      400,
+      500,
+      600,
+      700,
+      800,
+      900,
+      1000,
+      11000
+    ];
+
+    const totalRafflePoints =
+      isPersonBPComplete == 0
+        ? tierPoints[houseTier]
+        : tierPoints[houseTier] + premiumTierPoints[houseTier];
+
+    return res.json({
+      success: {
+        totalRafflePoints
+      }
+    });
+  }
 });
 
 module.exports = router;
