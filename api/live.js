@@ -14,7 +14,8 @@ const actions = {
   CONTRIB: "contrib",
   GROUP_CONTRIB: "groupContrib",
   EMAIL_CONTRIB: "emailContrib",
-  IDENTIFY: "identify"
+  IDENTIFY: "identify",
+  SUBMIT: "submit"
 };
 
 router.post("/dispatch", async (req, res) => {
@@ -43,12 +44,27 @@ router.post("/dispatch", async (req, res) => {
       return await handleEmailContrib(userId, req, res);
     case actions.IDENTIFY:
       return await handleIdentify(userId, req, res);
+    case actions.SUBMIT:
+      return await handleSubmit(userId, req, res);
   }
 });
 
 /* 
 ----- Action Dispatchers below, register your action above and implement the appropriate handler below -----
 */
+
+async function handleSubmit(userId, req, res) {
+  const person = await models.Person.findByPk(userId);
+  if (!person) {
+    return res
+      .status(400)
+      .json({ error: "Couldn't find hacker points profile" });
+  }
+  person.isBattlepassComplete = true;
+  await person.save();
+
+  return res.json({ success: person });
+}
 
 async function handleGroupContrib(userId, req, res) {
   try {
