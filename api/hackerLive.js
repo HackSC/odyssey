@@ -105,7 +105,7 @@ router.get("/battlepass", async (req, res) => {
         id: "16",
         isPremium: true,
         pointValue: 8000,
-        prizeName: "100 Rsequelizeaffle Tickets"
+        prizeName: "100 Raffle Tickets"
       },
       {
         id: "17",
