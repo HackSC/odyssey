@@ -126,7 +126,7 @@ const CheckedIn: React.FunctionComponent<Props> = props => {
           <LinkScroll />
         </MarginedColumn>
         <MarginedColumn flexBasis={65}>
-          <CheckInTitle>Incomplete Tasks</CheckInTitle>
+          <CheckInTitle>Tasks To-Do</CheckInTitle>
           <CheckInInstructions>
             <IncompleteTasks incompleteTasks={incompleteTasks} />
           </CheckInInstructions>
