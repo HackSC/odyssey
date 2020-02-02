@@ -76,10 +76,6 @@ const Events = ({ events }: Props) => {
     <Container ref={eventsRef}>
       <h2>Schedule</h2>
       <EventsContainer>{generateSchedule}</EventsContainer>
-
-      <DocLink href="https://hacksc.com/schedule" target="_blank" as="a">
-        Click for Document View
-      </DocLink>
     </Container>
   ) : (
     <p>Loading schedule...</p>
