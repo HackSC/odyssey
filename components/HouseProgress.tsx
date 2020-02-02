@@ -19,7 +19,7 @@ const HouseProgress = ({ houses }: Props) => {
       minScore = Math.min(minScore, house.totalScore);
     });
     houses.forEach(house => {
-      let p = 50;
+      let p = 1.0112;
       let formula =
         ((house.totalScore * p - minScore) / (highestScore * p - minScore)) *
         100;
