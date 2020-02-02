@@ -152,11 +152,12 @@ const Scan = ({ profile, tasks }: Props) => {
           autoDismiss: true
         });
       } else if (dispatchBody["actionId"] === "judge") {
-        addToast("Submission has been successfully confirmed", {
+        const members: Array<Profile> = scanResponse.success as Array<Profile>
+        const memberNames = members.map(p => { return (p.firstName + " " + p.lastName)})
+        addToast(`Submission has been successfully confirmed for ${memberNames.join(", ")}`, {
           appearance: "success",
           autoDismiss: true
         });
-        console.log(scanResponse.success)
       }
     } else {
       addToast(scanResponse.error, { appearance: "error", autoDismiss: true });

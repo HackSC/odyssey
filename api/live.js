@@ -276,23 +276,26 @@ async function handleJudge(userId, req, res) {
 
   if (!person) {
     return res.status(404).json({ error: "Could not find user" });
-  } else if (person.isBattlepassComplete) {
-    return res.status(400).json({
-      error: "User has already been confirmed for submission"
-    });
-  } else if (!person.ProjectTeam) {
+  } else if (!person.ProjectTeam && !person.isBattlepassComplete) {
     // Enable single hacker for premium
     memberProfiles.push(person.Profile)
     memberIds.push(person.identityId)
-  } else {
-    // Enable team for premium
+  } else if (person.ProjectTeam) {
+    // enable everyone's
     const { Members } = person.ProjectTeam
-    memberProfiles = Members.map(p => {
-      return p.Profile
-    })
-    memberIds = memberProfiles.map(p => {
-      return p.userId
-    })
+    for (i in Members) {
+      let p = Members[i]
+      if (!p.isBattlepassComplete) {
+        memberProfiles.push(p.Profile)
+        memberIds.push(p.identityId)
+      }
+    }
+  }
+
+  if (memberIds.length < 1) {
+    return res.status(400).json({
+      error: "User & Team has already been confirmed for submission"
+    });
   }
 
   await models.Person.update(
