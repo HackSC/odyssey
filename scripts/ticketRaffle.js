@@ -96,6 +96,19 @@ async function getWinner() {
   await shuffle(tickets);
 
   console.log(tickets[0]);
+
+  const winner = await models.HackerProfile.findOne({
+    where: {
+      userId: tickets[0]
+    }
+  });
+
+  console.log({
+    firstname: winner.firstName,
+    lastName: winner.lastName,
+    email: winner.email,
+    userId: winner.userId
+  });
 }
 
 getWinner();
