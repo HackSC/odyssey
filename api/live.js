@@ -266,28 +266,28 @@ async function handleIdentify(userId, req, res) {
 }
 
 async function handleJudge(userId, req, res) {
-  const Op = sequelize.Op
+  const Op = sequelize.Op;
 
   const person = await models.Person.findByPk(userId, {
     include: [{ model: models.ProjectTeam, required: false }]
   });
-  let memberIds = []
-  let memberProfiles = []
+  let memberIds = [];
+  let memberProfiles = [];
 
   if (!person) {
     return res.status(404).json({ error: "Could not find user" });
   } else if (!person.ProjectTeam && !person.isBattlepassComplete) {
     // Enable single hacker for premium
-    memberProfiles.push(person.Profile)
-    memberIds.push(person.identityId)
+    memberProfiles.push(person.Profile);
+    memberIds.push(person.identityId);
   } else if (person.ProjectTeam) {
     // enable everyone's
-    const { Members } = person.ProjectTeam
+    const { Members } = person.ProjectTeam;
     for (i in Members) {
-      let p = Members[i]
+      let p = Members[i];
       if (!p.isBattlepassComplete) {
-        memberProfiles.push(p.Profile)
-        memberIds.push(p.identityId)
+        memberProfiles.push(p.Profile);
+        memberIds.push(p.identityId);
       }
     }
   }
@@ -297,6 +297,17 @@ async function handleJudge(userId, req, res) {
       error: "User & Team has already been confirmed for submission"
     });
   }
+  const contributionAdditions = memberIds.map(pId => {
+    return models.Contribution.create({
+      personId: pId,
+      taskId: 53, //Hardcoded ID of the project submission task
+      multiplier: 0,
+      scannerId: req.user.id
+    });
+  });
+
+  // Adds contributions
+  await Promise.all(contributionAdditions);
 
   await models.Person.update(
     {
@@ -305,11 +316,11 @@ async function handleJudge(userId, req, res) {
     {
       where: {
         identityId: {
-          [Op.in] : memberIds
+          [Op.in]: memberIds
         }
       }
     }
-  )
+  );
 
   return res.json({ success: memberProfiles });
 }
