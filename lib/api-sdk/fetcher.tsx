@@ -34,18 +34,21 @@ interface ILiveRoutes {
   LiveDispatch: PostRoute;
   LiveLookup: GetRoute;
   LiveAssignQR: PostRoute;
+  LivePoints: GetRoute;
 }
 
 const LiveRoutes: ILiveRoutes = {
   LiveDispatch: "api/live/dispatch" as Route,
   LiveLookup: "api/live/lookup" as Route,
-  LiveAssignQR: "api/live/assign-qr" as Route
+  LiveAssignQR: "api/live/assign-qr" as Route,
+  LivePoints: "api/live/hacker" as Route
 };
 
 interface IHackerRoutes {
   HackerLiveBattlepass: GetRoute;
   HackerLivePersonInfoSelf: GetRoute;
   HackerLiveTasks: GetRoute;
+  HackerLiveIncompleteTasks: GetRoute;
   HackerLiveHouseInfo: GetRoute;
   HackerLiveHouseInfoList: GetRoute;
 }
@@ -54,6 +57,7 @@ const HackerLiveRoutes: IHackerRoutes = {
   HackerLiveBattlepass: "api/hacker/live/battlepass" as Route,
   HackerLivePersonInfoSelf: "api/hacker/live/personInfo" as Route,
   HackerLiveTasks: "api/hacker/live/tasks" as Route,
+  HackerLiveIncompleteTasks: "api/hacker/live/incompleteTasks" as Route,
   HackerLiveHouseInfo: "api/hacker/live/houseInfo" as Route,
   HackerLiveHouseInfoList: "api/hacker/live/houseInfo/list" as Route
 };

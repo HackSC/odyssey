@@ -3,8 +3,7 @@ import styled from "styled-components";
 
 import QRCode from "../QRCode";
 import LinkScroll from "../LinkScroll";
-import { Flex, CenteredColumn, Column, Fox, Alert } from "../../styles";
-import Calendar from "../Calendar";
+import { Flex, CenteredColumn, Column, Fox, Alert, Button } from "../../styles";
 import BattlePass from "../BattlePass";
 import useWindowSize from "react-use/lib/useWindowSize";
 import Confetti from "react-confetti";
@@ -12,12 +11,14 @@ import HouseProgress from "../HouseProgress";
 import {
   usePersonInfoSelf,
   useBattlepass,
-  useAllHouseInfo
+  useAllHouseInfo,
+  useIncompleteTasks
 } from "../../lib/api-sdk/hackerLiveHooks";
 import { useEventsList } from "../../lib/api-sdk/eventHooks";
 import { MdClose } from "react-icons/md";
 import ContributionHistory from "../ContributionHistory";
 import Events from "../events/Events";
+import IncompleteTasks from "../IncompleteTasks";
 
 interface Props {
   profile: Profile;
@@ -31,6 +32,10 @@ const CheckedIn: React.FunctionComponent<Props> = props => {
   const { battlepass } = useBattlepass({ defaultOnError: console.log });
   const { personInfo } = usePersonInfoSelf({ defaultOnError: console.log });
   const { allEvents } = useEventsList({ defaultOnError: console.log });
+  const { incompleteTasks } = useIncompleteTasks({
+    defaultOnError: console.log
+  });
+
   const { width, height } = useWindowSize();
   // TODO: setup is winning again
   // * Check if house is in the lead and display react-confetti
@@ -121,6 +126,14 @@ const CheckedIn: React.FunctionComponent<Props> = props => {
           <LinkScroll />
         </MarginedColumn>
         <MarginedColumn flexBasis={65}>
+          <CheckInTitle>Incomplete Tasks</CheckInTitle>
+          <CheckInInstructions>
+            <IncompleteTasks incompleteTasks={incompleteTasks} />
+          </CheckInInstructions>
+
+          <br />
+          <br />
+
           <CheckInTitle>Task History</CheckInTitle>
           <CheckInInstructions>
             <ContributionHistory contributions={personInfo.Contributions} />

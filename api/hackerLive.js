@@ -74,13 +74,13 @@ router.get("/battlepass", async (req, res) => {
         id: "11",
         isPremium: false,
         pointValue: 8000,
-        prizeName: "100 Raffle Tickets & Travel Reimbursement!"
+        prizeName: "100 Raffle Tickets"
       },
       {
         id: "12",
         isPremium: true,
         pointValue: 8000,
-        prizeName: "100 Raffle Tickets"
+        prizeName: "100 Raffle Tickets & Travel Reimbursement!"
       },
       {
         id: "13",
@@ -190,6 +190,28 @@ router.get("/houseInfo/:id", async (req, res) => {
     ]
   });
   return res.json({ success: house });
+});
+
+router.get("/incompleteTasks", async (req, res) => {
+  const allTasks = await models.Task.findAll();
+  const completedTasks = await models.Contribution.findAll({
+    where: {
+      personId: req.user.id
+    }
+  });
+  if (!completedTasks) {
+    return res.json({ success: allTasks });
+  }
+  const completeTaskIds = completedTasks.map(x => {
+    return x.get("Task").get("id");
+  });
+
+  const incompleteTasks = allTasks.filter(x => {
+    const taskId = x.get("id");
+    return !completeTaskIds.includes(taskId);
+  });
+
+  return res.json({ success: incompleteTasks });
 });
 
 module.exports = router;

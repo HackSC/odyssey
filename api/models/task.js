@@ -8,6 +8,8 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING(100),
       isGroupTask: DataTypes.BOOLEAN,
       isActive: DataTypes.BOOLEAN,
+      sponsor: DataTypes.STRING,
+      isPast: DataTypes.BOOLEAN,
       name: DataTypes.STRING(100)
     },
     {}
