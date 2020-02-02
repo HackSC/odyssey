@@ -1,13 +1,16 @@
 import styled from "styled-components";
 
+import { useRaffleCount } from "../lib/api-sdk/hackerLiveHooks";
 import { Flex } from "../styles";
 
 const RaffleTicketCount = () => {
+  const { raffleCount } = useRaffleCount({ defaultOnError: console.log });
+
   return (
     <Info>
       <Flex direction="row" justify="center" align="center" tabletVertical>
         <Subheader>You Have</Subheader>
-        <BigNumber>1000</BigNumber>
+        <BigNumber>{raffleCount?.totalRafflePoints || 0}</BigNumber>
         <Subheader>Raffle Tickets</Subheader>
       </Flex>
     </Info>

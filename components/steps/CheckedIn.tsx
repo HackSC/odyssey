@@ -127,17 +127,13 @@ const CheckedIn: React.FunctionComponent<Props> = props => {
         </MarginedColumn>
         <MarginedColumn flexBasis={65}>
           <CheckInTitle>Tasks To-Do</CheckInTitle>
-          <CheckInInstructions>
-            <IncompleteTasks incompleteTasks={incompleteTasks} />
-          </CheckInInstructions>
+          <IncompleteTasks incompleteTasks={incompleteTasks} />
 
           <br />
           <br />
 
           <CheckInTitle>Task History</CheckInTitle>
-          <CheckInInstructions>
-            <ContributionHistory contributions={personInfo.Contributions} />
-          </CheckInInstructions>
+          <ContributionHistory contributions={personInfo.Contributions} />
         </MarginedColumn>
       </PaddedFlex>
     </>
