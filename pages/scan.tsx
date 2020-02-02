@@ -91,28 +91,18 @@ const Scan = ({ profile, tasks }: Props) => {
         ) {
           const pointTotal = pointResponse.success[0].totalPoints;
 
-          if (pointTotal >= 8000) {
-            addToast(
-              `User has enough points for a t-shirt. Needs 8000 and has ${pointTotal}`,
-              {
-                appearance: "success",
-                autoDismiss: true
-              }
-            );
-          } else {
-            addToast(
-              `User does not have enough points for a t-shirt. Needs 8000 but only has ${pointTotal}`,
-              {
-                appearance: "warning",
-                autoDismiss: true
-              }
-            );
-          }
-        } else {
-          addToast("Couldn't find point total... weird", {
-            appearance: "error",
+          addToast(`User has ${pointTotal} points`, {
+            appearance: "info",
             autoDismiss: true
           });
+        } else {
+          addToast(
+            "Couldn't find point total... user might not have scanned for any tasks",
+            {
+              appearance: "error",
+              autoDismiss: true
+            }
+          );
         }
       } else {
         addToast(pointResponse.error, {
