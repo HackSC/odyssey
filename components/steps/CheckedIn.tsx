@@ -14,8 +14,10 @@ import {
   useAllHouseInfo,
   useIncompleteTasks
 } from "../../lib/api-sdk/hackerLiveHooks";
+import { useEventsList } from "../../lib/api-sdk/eventHooks";
 import { MdClose } from "react-icons/md";
 import ContributionHistory from "../ContributionHistory";
+import Events from "../events/Events";
 import IncompleteTasks from "../IncompleteTasks";
 
 interface Props {
@@ -29,6 +31,7 @@ const CheckedIn: React.FunctionComponent<Props> = props => {
   const { allHouses } = useAllHouseInfo({});
   const { battlepass } = useBattlepass({ defaultOnError: console.log });
   const { personInfo } = usePersonInfoSelf({ defaultOnError: console.log });
+  const { allEvents } = useEventsList({ defaultOnError: console.log });
   const { incompleteTasks } = useIncompleteTasks({
     defaultOnError: console.log
   });
@@ -116,9 +119,7 @@ const CheckedIn: React.FunctionComponent<Props> = props => {
         </MarginedColumn>
       </PaddedFlex>
       <PaddedFlex tabletVertical>
-        <Button href="https://hacksc.com/schedule" as="a" target="_blank">
-          See Schedule
-        </Button>
+        <Events events={allEvents} />
       </PaddedFlex>
       <PaddedFlex justify="space-between" tabletVertical>
         <MarginedColumn flexBasis={35}>
