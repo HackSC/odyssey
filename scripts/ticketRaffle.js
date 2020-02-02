@@ -78,6 +78,8 @@ async function getTickets(profiles) {
       for (let i = 0; i < ticketCount; i++) {
         tickets.push(profile.userId);
       }
+
+      console.log({ userId: profile.userId, count: ticketCount });
     })
   );
 
@@ -94,8 +96,6 @@ async function getWinner() {
 
   // Shuffle tickets
   await shuffle(tickets);
-
-  console.log(tickets[0]);
 
   const winner = await models.HackerProfile.findOne({
     where: {
