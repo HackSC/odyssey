@@ -65,17 +65,17 @@ async function getTicketsForProfile(userId) {
         ? tierPoints[houseTier]
         : tierPoints[houseTier] + premiumTierPoints[houseTier];
 
-    // const houseId = person.houseId || 0;
+    const houseId = person.houseId || 0;
 
-    // if (houseId === 6) {
-    //   totalRafflePoints += 1000;
-    // } else if (houseId === 5) {
-    //   totalRafflePoints += 500;
-    // } else if (houseId === 4) {
-    //   totalRafflePoints += 250;
-    // } else if (houseId === 3) {
-    //   totalRafflePoints += 100;
-    // }
+    if (houseId === 6) {
+      totalRafflePoints += 1000;
+    } else if (houseId === 5) {
+      totalRafflePoints += 500;
+    } else if (houseId === 4) {
+      totalRafflePoints += 250;
+    } else if (houseId === 3) {
+      totalRafflePoints += 100;
+    }
 
     return totalRafflePoints || 0;
   }
@@ -109,18 +109,20 @@ async function getWinner() {
   // Shuffle tickets
   await shuffle(tickets);
 
-  const winner = await models.HackerProfile.findOne({
-    where: {
-      userId: tickets[0]
-    }
-  });
+  for (let i = 0; i < 20; i++) {
+    const winner = await models.HackerProfile.findOne({
+      where: {
+        userId: tickets[i]
+      }
+    });
 
-  console.log({
-    firstname: winner.firstName,
-    lastName: winner.lastName,
-    email: winner.email,
-    userId: winner.userId
-  });
+    console.log({
+      firstname: winner.firstName,
+      lastName: winner.lastName,
+      email: winner.email,
+      userId: winner.userId
+    });
+  }
 }
 
 getWinner();
