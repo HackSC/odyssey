@@ -60,7 +60,7 @@ async function getTicketsForProfile(userId) {
       11000
     ];
 
-    const totalRafflePoints =
+    let totalRafflePoints =
       isPersonBPComplete == 0
         ? tierPoints[houseTier]
         : tierPoints[houseTier] + premiumTierPoints[houseTier];
