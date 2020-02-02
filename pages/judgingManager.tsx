@@ -154,6 +154,7 @@ const judgingManager = ({}) => {
     desiredPrizes: Array<String>;
     builtWith: Array<String>;
     vertical: String;
+    videoDemo: String;
     phone: String;
     submitter: Profile;
     schools: Array<String>;
@@ -221,25 +222,26 @@ const judgingManager = ({}) => {
         .slice(0, 6);
       p.builtWith = val[9].split(",").map(v => v.trim());
       p.vertical = val[10];
-      p.phone = val[11];
+      p.videoDemo = val[11];
+      p.phone = val[12];
       // 12-14 is MLH
       p.submitter = {
-        screenName: val[15],
-        firstName: val[16],
-        lastName: val[17],
-        email: val[18]
+        screenName: val[16],
+        firstName: val[17],
+        lastName: val[18],
+        email: val[19]
       };
-      p.schools = val[19].split(",").map(v => v.trim());
+      p.schools = val[20].split(",").map(v => v.trim());
       p.teammates = [];
       // add teammates
-      let numTeammates = Number(val[20]);
+      let numTeammates = Number(val[21]);
       for (let j = 0; j < numTeammates; j++) {
         let index = 4 * j;
         p.teammates.push({
-          screenName: val[20 + index + 1],
-          firstName: val[20 + index + 2],
-          lastName: val[20 + index + 3],
-          email: val[20 + index + 4]
+          screenName: val[21 + index + 1],
+          firstName: val[21 + index + 2],
+          lastName: val[21 + index + 3],
+          email: val[21 + index + 4]
         });
       }
       p.table = "";
