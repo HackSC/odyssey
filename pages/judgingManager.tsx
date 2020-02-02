@@ -331,6 +331,7 @@ const judgingManager = ({}) => {
     let working_tables = Object.assign({}, tables);
     let working_projects = [...projects];
     let count = 0;
+    let max = 79;
     for (let i = 0; i < working_projects.length; i++) {
       let assigned = false;
       for (let table in working_tables) {
@@ -344,6 +345,9 @@ const judgingManager = ({}) => {
       }
       if (!assigned) {
         count++;
+        if (count > max) {
+          count = 1;
+        }
         working_projects[i].table = count;
       }
     }
