@@ -259,13 +259,13 @@ router.get("/rafflePoints", async (req, res) => {
         ? tierPoints[houseTier]
         : tierPoints[houseTier] + premiumTierPoints[houseTier];
 
-    const houseId = person.get("houseId") || 0;
+    const houseId = person.houseId || 0;
 
     if (houseId === 6) {
       totalRafflePoints += 1000;
     } else if (houseId === 4) {
       totalRafflePoints += 500;
-    } else if (houseid === 3) {
+    } else if (houseId === 3) {
       totalRafflePoints += 250;
     } else if (houseId === 5) {
       totalRafflePoints += 100;
