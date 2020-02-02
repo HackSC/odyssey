@@ -261,15 +261,15 @@ router.get("/rafflePoints", async (req, res) => {
 
     const houseId = person.houseId || 0;
 
-    // if (houseId === 6) {
-    //   totalRafflePoints += 1000;
-    // } else if (houseId === 5) {
-    //   totalRafflePoints += 500;
-    // } else if (houseId === 4) {
-    //   totalRafflePoints += 250;
-    // } else if (houseId === 3) {
-    //   totalRafflePoints += 100;
-    // }
+    if (houseId === 6) {
+      totalRafflePoints += 1000;
+    } else if (houseId === 5) {
+      totalRafflePoints += 500;
+    } else if (houseId === 4) {
+      totalRafflePoints += 250;
+    } else if (houseId === 3) {
+      totalRafflePoints += 100;
+    }
 
     return res.json({
       success: {
