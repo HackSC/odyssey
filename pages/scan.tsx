@@ -25,6 +25,10 @@ const ACTIONS = [
   {
     label: "Check Points Total",
     value: "action points"
+  },
+  {
+    label: "Confirm Project Submission",
+    value: "action judge"
   }
 ];
 
@@ -147,6 +151,12 @@ const Scan = ({ profile, tasks }: Props) => {
           appearance: "success",
           autoDismiss: true
         });
+      } else if (dispatchBody["actionId"] === "judge") {
+        addToast("Submission has been successfully confirmed", {
+          appearance: "success",
+          autoDismiss: true
+        });
+        console.log(scanResponse.success)
       }
     } else {
       addToast(scanResponse.error, { appearance: "error", autoDismiss: true });

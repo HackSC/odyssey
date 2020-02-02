@@ -14,7 +14,8 @@ const actions = {
   CONTRIB: "contrib",
   GROUP_CONTRIB: "groupContrib",
   EMAIL_CONTRIB: "emailContrib",
-  IDENTIFY: "identify"
+  IDENTIFY: "identify",
+  JUDGE: "judge"
 };
 
 router.post("/dispatch", async (req, res) => {
@@ -43,6 +44,8 @@ router.post("/dispatch", async (req, res) => {
       return await handleEmailContrib(userId, req, res);
     case actions.IDENTIFY:
       return await handleIdentify(userId, req, res);
+    case actions.JUDGE:
+      return await handleJudge(userId, req, res);
   }
 });
 
@@ -242,6 +245,62 @@ async function handleIdentify(userId, req, res) {
   if (profile) {
     return res.json({ success: profile });
   } else {
+    return res.status(404).json({ error: "Could not find user" });
+  }
+}
+
+async function handleJudge(userId, req, res) {
+  const Op = sequelize.Op
+  const profile = await models.HackerProfile.findOne({
+    where: { userId: userId }
+  });
+  // pull teammates
+  const person = await models.Person.findByPk(userId, {
+    include: [{ model: models.ProjectTeam, required: false }]
+  });
+  let memberIds = []
+  let memberProfiles = []
+
+  if (!person) {
+    return res.status(404).json({ error: "Could not find user" });
+  } else if (person.isBattlepassComplete) {
+    return res.status(400).json({
+      error: "User has already been confirmed for submission"
+    });
+  } else if (!person.ProjectTeam) {
+    // Enable single hacker for premium
+    memberProfiles.push(person.Profile)
+    memberIds.push(person.identityId)
+  } else {
+    // Enable team for premium
+    const { Members } = person.ProjectTeam
+    memberProfiles = Members.map(p => {
+      return p.Profile
+    })
+    memberIds = memberProfiles.map(p => {
+      return p.userId
+    })
+  }
+
+  await models.Person.update(
+    {
+      isBattlepassComplete: true
+    },
+    {
+      where: {
+        identityId: {
+          [Op.in] : memberIds
+        }
+      }
+    }
+  )
+
+  if (profile) {
+    return res.json({ success: memberProfiles });
+  } else {
+    return res.status(400).json({
+      error: "User already has completed this task"
+    });
     return res.status(404).json({ error: "Could not find user" });
   }
 }
