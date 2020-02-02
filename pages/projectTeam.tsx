@@ -23,7 +23,6 @@ import {
 
 type Props = {
   projectTeam: ProjectTeam;
-  allPrizes: Prize[];
 };
 
 const ProjectTeam = (props: Props) => {
@@ -44,8 +43,6 @@ const ProjectTeam = (props: Props) => {
     defaultOnError: onError,
     initialModel: props.projectTeam
   });
-
-  const { allPrizes } = props;
 
   const handleJoinProjectTeam = (name: string) => {
     joinProjectTeamSelf(name);
@@ -89,26 +86,6 @@ const ProjectTeam = (props: Props) => {
     );
   };
 
-  // const addPrizeHandler = async (p: Prize) => {
-  //   setTeam(await addPrize(p));
-  //   addToast("Added Prize: " + p.title, { appearance: "success" });
-  // };
-
-  // const removePrizeHandler = async (p: Prize) => {
-  //   setTeam(await removePrize(p));
-  //   addToast("Removed Prize: " + p.title, { appearance: "info" });
-  // };
-
-  // const updateTeamHandler = async values => {
-  //   setTeam(await updateTeamMetadata(values));
-  //   addToast("Updated Team Info", { appearance: "success" });
-  // };
-
-  // const onTeamMemberRemove = async (p: Person) => {
-  //   setTeam(await removeTeamMember(p));
-  //   addToast("Removed: " + p.Profile.email, { appearance: "info" });
-  // };
-
   const TeamInfoSection = () => {
     return (
       <>
@@ -144,12 +121,6 @@ const ProjectTeam = (props: Props) => {
             onAdd={addMemberProjectTeamSelf}
           />
         </VertFlex>
-        <PrizeTable
-          projectTeam={projectTeam}
-          allPrizes={allPrizes}
-          onAddPrize={addPrizeSelf}
-          onRemovePrize={removePrizeSelf}
-        />
       </>
     );
   };
@@ -174,23 +145,6 @@ const ProjectTeam = (props: Props) => {
   );
 };
 
-async function getAllPrizes(req): Promise<Prize[]> {
-  const urlRoute = req
-    ? /* Serverside */ process.env.URL_BASE + "api/prize/"
-    : /* Client */ "/api/prize/";
-
-  const result = await fetch(
-    urlRoute,
-    req
-      ? {
-          headers: req.headers
-        }
-      : null
-  ).then(res => res.json());
-
-  return result.success;
-}
-
 const AddMember = (props: {
   projectTeam: ProjectTeam;
   onAdd: (p: String) => void;
@@ -202,8 +156,7 @@ const AddMember = (props: {
       <Button
         onClick={() => {
           props.onAdd(memberId);
-        }}
-      >
+        }}>
         {" "}
         Add Member{" "}
       </Button>
@@ -334,11 +287,9 @@ const TeamCard = styled(Card)`
 
 ProjectTeam.getInitialProps = async ({ req, query }): Promise<Props> => {
   const { success } = await getProjectTeamSelfFetch(req);
-  const allPrizes = await getAllPrizes(req);
 
   return {
-    projectTeam: success,
-    allPrizes
+    projectTeam: success
   };
 };
 
