@@ -25,6 +25,7 @@ const judgingManager = ({}) => {
   const [projects, setProjects] = useState([]);
   const [sponsors, setSponsors] = useState([]);
   const [verticalJudges, setVerticalJudges] = useState({});
+  const [verticalCount, setVerticalCount] = useState({});
 
   const tablesBlocks = Object.keys(tables).map(table => {
     return (
@@ -52,7 +53,7 @@ const judgingManager = ({}) => {
     return (
       <Flex direction="row" justify="space-between" align="center">
         <Column flexBasis={50}>
-          <p>{vertical}</p>
+          <p>{vertical + " (" + verticalCount[vertical] + ")"}</p>
         </Column>
 
         <Column flexBasis={50}>
@@ -63,6 +64,7 @@ const judgingManager = ({}) => {
               temp_verticalJudges[vertical] = Number(e.target.value);
               setVerticalJudges(temp_verticalJudges);
             }}
+            defaultValue={verticalJudges[vertical]}
           />
         </Column>
       </Flex>
@@ -103,11 +105,14 @@ const judgingManager = ({}) => {
       }
 
       // populate
-      let verticals_obj = {};
+      let verticalJudges_obj = {};
+      let verticalCount_obj = {};
       let sponsors_list = new Set();
       for (let i = 0; i < working_projects.length; i++) {
         if (working_projects[i].vertical != "") {
-          verticals_obj[working_projects[i].vertical.toString()] = 0;
+          let vertical = working_projects[i].vertical.toString()
+          verticalJudges_obj[vertical] = 0;
+          verticalCount_obj[vertical] = verticalCount_obj.hasOwnProperty(vertical) ? (verticalCount_obj[vertical]+1) : 1;
         }
         for (let j = 0; j < working_projects[i].desiredPrizes.length; j++) {
           if (working_projects[i].desiredPrizes[j] != "") {
@@ -117,7 +122,8 @@ const judgingManager = ({}) => {
       }
       setProjects(working_projects);
       setSponsors(Array.from(sponsors_list));
-      setVerticalJudges(verticals_obj);
+      setVerticalJudges(verticalJudges_obj);
+      setVerticalCount(verticalCount_obj)
 
       setUploaded(true);
     };
@@ -477,6 +483,7 @@ const judgingManager = ({}) => {
             <Column flexBasis={48}>
               <Cell>
                 <Column>
+                  {'Special Tables (Key, Max): '}
                   <TableInput
                     type="text"
                     onChange={e => {
@@ -567,6 +574,7 @@ judgingManager.getInitialProps = async ctx => {
 const Cell = styled.div`
   display: inline-block;
   padding: 10px 20px;
+  margin: 5px 5px;
   background: #ffffff;
   border-radius: 8px;
   font-size: 16px;
@@ -574,6 +582,7 @@ const Cell = styled.div`
 
 const SmallCell = styled.div`
   padding: 12px 1px;
+  margin: 0px 1px;
   background: #ffffff;
   border-radius: 8px;
   border: 1px solid #b2b2b2;
