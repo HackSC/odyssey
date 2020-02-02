@@ -29,6 +29,10 @@ function allHouseInfoFetch(req?: NextApiRequest) {
   return APIGet(Routes.HackerLiveHouseInfoList, { req }, null);
 }
 
+function raffleCountFetch(req?: NextApiRequest) {
+  return APIGet(Routes.HackerLiveRaffleCount, { req }, null);
+}
+
 function sumPersonsContributionPoints(contributions: Contribution[]) {
   let totalPoints = 0;
   for (let i = 0; i < contributions.length; i++) {
@@ -184,11 +188,36 @@ function useAllHouseInfo({
   };
 }
 
+type RaffleCount = {
+  totalRafflePoints: number;
+};
+
+function useRaffleCount({
+  defaultOnError,
+  initialModel
+}: ResourceHookParams<RaffleCount>) {
+  const resourceRoute = Routes.HackerLiveRaffleCount;
+  const { data: raffleCount, error } = useSWR<RaffleCount, any>(
+    resourceRoute,
+    fetcherToSVRHandler(raffleCountFetch),
+    {
+      initialData: initialModel
+    }
+  );
+
+  useErrorHandler(defaultOnError, error);
+
+  return {
+    raffleCount
+  };
+}
+
 export {
   useBattlepass,
   useAllHouseInfo,
   useAllTasks,
   useHouseInfo,
   usePersonInfoSelf,
-  useIncompleteTasks
+  useIncompleteTasks,
+  useRaffleCount
 };

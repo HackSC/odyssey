@@ -25,16 +25,6 @@ const Event = (props: Props) => {
     isOver
   } = props;
 
-  const currEventRef = useRef(null);
-
-  useEffect(() => {
-    if (eventsRef.current && currEventRef.current) {
-      if (isFirst) {
-        currEventRef.current.scrollIntoView(-30);
-      }
-    }
-  }, [currEventRef]);
-
   const renderTimesRight = () => {
     return (
       <TimesBox>
@@ -55,7 +45,7 @@ const Event = (props: Props) => {
     );
   };
   return (
-    <EventBox isActive={isActive} isOver={isOver} ref={currEventRef}>
+    <EventBox isActive={isActive} isOver={isOver}>
       <h3>
         {event.name} {isActive && <Live>Live</Live>}
       </h3>

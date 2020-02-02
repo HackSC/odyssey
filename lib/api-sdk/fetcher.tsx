@@ -51,6 +51,7 @@ interface IHackerRoutes {
   HackerLiveIncompleteTasks: GetRoute;
   HackerLiveHouseInfo: GetRoute;
   HackerLiveHouseInfoList: GetRoute;
+  HackerLiveRaffleCount: GetRoute;
 }
 
 const HackerLiveRoutes: IHackerRoutes = {
@@ -59,7 +60,8 @@ const HackerLiveRoutes: IHackerRoutes = {
   HackerLiveTasks: "api/hacker/live/tasks" as Route,
   HackerLiveIncompleteTasks: "api/hacker/live/incompleteTasks" as Route,
   HackerLiveHouseInfo: "api/hacker/live/houseInfo" as Route,
-  HackerLiveHouseInfoList: "api/hacker/live/houseInfo/list" as Route
+  HackerLiveHouseInfoList: "api/hacker/live/houseInfo/list" as Route,
+  HackerLiveRaffleCount: "api/hacker/live/rafflePoints" as Route
 };
 
 interface IEventRoutes {

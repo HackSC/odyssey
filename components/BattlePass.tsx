@@ -3,6 +3,8 @@ import styled from "styled-components";
 import Loader from "react-loader-spinner";
 import { BPLock, BPOpenLock, Flex, Column } from "../styles";
 
+import RaffleTicketCount from "./RaffleTicketCount";
+
 type Props = {
   profile: Profile;
 };
@@ -220,7 +222,7 @@ const BattlePass = ({
         <BattlePassFade />
       </OverflowHidden>
 
-      <div />
+      <RaffleTicketCount />
     </>
   );
 };
