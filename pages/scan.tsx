@@ -25,6 +25,10 @@ const ACTIONS = [
   {
     label: "Check Points Total",
     value: "action points"
+  },
+  {
+    label: "Confirm Project Submission",
+    value: "action judge"
   }
 ];
 
@@ -134,6 +138,13 @@ const Scan = ({ profile, tasks }: Props) => {
         );
       } else if (dispatchBody["actionId"] === "contrib") {
         addToast("Hacker has been credited points for finishing task", {
+          appearance: "success",
+          autoDismiss: true
+        });
+      } else if (dispatchBody["actionId"] === "judge") {
+        const members: Array<Profile> = scanResponse.success as Array<Profile>
+        const memberNames = members.map(p => { return (p.firstName + " " + p.lastName)})
+        addToast(`Submission has been successfully confirmed for ${memberNames.join(", ")}`, {
           appearance: "success",
           autoDismiss: true
         });

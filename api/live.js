@@ -15,7 +15,8 @@ const actions = {
   GROUP_CONTRIB: "groupContrib",
   EMAIL_CONTRIB: "emailContrib",
   IDENTIFY: "identify",
-  SUBMIT: "submit"
+  SUBMIT: "submit",
+  JUDGE: "judge"
 };
 
 router.post("/dispatch", async (req, res) => {
@@ -46,6 +47,8 @@ router.post("/dispatch", async (req, res) => {
       return await handleIdentify(userId, req, res);
     case actions.SUBMIT:
       return await handleSubmit(userId, req, res);
+    case actions.JUDGE:
+      return await handleJudge(userId, req, res);
   }
 });
 
@@ -260,6 +263,55 @@ async function handleIdentify(userId, req, res) {
   } else {
     return res.status(404).json({ error: "Could not find user" });
   }
+}
+
+async function handleJudge(userId, req, res) {
+  const Op = sequelize.Op
+
+  const person = await models.Person.findByPk(userId, {
+    include: [{ model: models.ProjectTeam, required: false }]
+  });
+  let memberIds = []
+  let memberProfiles = []
+
+  if (!person) {
+    return res.status(404).json({ error: "Could not find user" });
+  } else if (!person.ProjectTeam && !person.isBattlepassComplete) {
+    // Enable single hacker for premium
+    memberProfiles.push(person.Profile)
+    memberIds.push(person.identityId)
+  } else if (person.ProjectTeam) {
+    // enable everyone's
+    const { Members } = person.ProjectTeam
+    for (i in Members) {
+      let p = Members[i]
+      if (!p.isBattlepassComplete) {
+        memberProfiles.push(p.Profile)
+        memberIds.push(p.identityId)
+      }
+    }
+  }
+
+  if (memberIds.length < 1) {
+    return res.status(400).json({
+      error: "User & Team has already been confirmed for submission"
+    });
+  }
+
+  await models.Person.update(
+    {
+      isBattlepassComplete: true
+    },
+    {
+      where: {
+        identityId: {
+          [Op.in] : memberIds
+        }
+      }
+    }
+  )
+
+  return res.json({ success: memberProfiles });
 }
 
 router.get("/lookup", async (req, res) => {
