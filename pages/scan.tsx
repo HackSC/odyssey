@@ -130,7 +130,9 @@ const Scan = ({ profile, tasks }: Props) => {
       } else if (dispatchBody["actionId"] === "identify") {
         const profile: Profile = scanResponse.success as Profile;
         addToast(
-          `This code belongs to ${profile.firstName} ${profile.lastName} (${profile.email})`,
+          `This code belongs to ${profile.firstName} ${profile.lastName} (${
+            profile.email
+          }) ${profile.isBattlepassComplete && " IS PREMIUM"}`,
           {
             appearance: "success",
             autoDismiss: true

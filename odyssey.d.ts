@@ -65,6 +65,7 @@ declare type Profile = {
   teamId: string;
   team: Team;
   qrCodeId: string;
+  isBattlepassComplete?: boolean;
 };
 
 declare type Team = {

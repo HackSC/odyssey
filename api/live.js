@@ -258,8 +258,18 @@ async function handleIdentify(userId, req, res) {
     where: { userId: userId }
   });
 
+  const person = await models.Person.findByPk(userId);
+
   if (profile) {
-    return res.json({ success: profile });
+    const returnProfile = {
+      userId: profile.userId,
+      firstName: profile.firstName,
+      lastName: profile.lastName,
+      email: profile.email,
+      isBattlepassComplete: person.isBattlepassComplete
+    };
+
+    return res.json({ success: returnProfile });
   } else {
     return res.status(404).json({ error: "Could not find user" });
   }
