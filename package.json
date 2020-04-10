@@ -29,7 +29,7 @@
     "@types/styled-components": "^4.4.2",
     "@zeit/next-css": "^1.0.1",
     "art": "^0.10.3",
-    "auth0-js": "^9.11.3",
+    "auth0-js": "^9.13.2",
     "aws-sdk": "^2.553.0",
     "body-parser": "^1.19.0",
     "busboy": "^0.3.1",
