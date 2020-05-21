@@ -16,8 +16,10 @@ interface ServiceError<T> {
   error: Error;
 }
 
-export type Service<T> =
+type Service<T> =
   | ServiceInit<T>
   | ServiceLoading<T>
   | ServiceLoaded<T>
   | ServiceError<T>;
+
+export default Service;
