@@ -33,7 +33,10 @@ const seedDatabase = async () => {
 
     const house = await houseFactory();
 
-    const person = await personFactory({ identityId: hp.userId });
+    const person =
+      hp !== undefined
+        ? await personFactory({ identityId: hp.userId }).catch(console.log)
+        : await personFactory({ identityId: i.toString() }).catch(console.log);
     await person.setHome(house);
     return person;
   });
