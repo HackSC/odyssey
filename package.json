@@ -1,6 +1,6 @@
 {
   "name": "odyssey-client",
-  "version": "0.1.0",
+  "version": "1.2.0",
   "private": true,
   "scripts": {
     "dev": "node << babel server.js",
@@ -27,6 +27,7 @@
     "@sentry/browser": "^5.7.1",
     "@sentry/node": "^5.7.1",
     "@types/styled-components": "^4.4.2",
+    "@types/supertest": "^2.0.9",
     "@zeit/next-css": "^1.0.1",
     "art": "^0.10.3",
     "auth0-js": "^9.11.3",
@@ -83,12 +84,13 @@
     "styled-reset": "^4.0.2",
     "swr": "^0.1.16",
     "three": "0.105.0",
+    "ts-jest": "^26.0.0",
     "wait-on": "^3.3.0"
   },
   "devDependencies": {
     "@babel/cli": "^7.6.4",
     "@babel/preset-env": "^7.6.3",
-    "@types/jest": "^24.0.18",
+    "@types/jest": "^25.2.3",
     "@types/node": "^12.7.7",
     "@types/react": "^16.9.3",
     "babel-core": "^6.26.3",
@@ -99,7 +101,7 @@
     "enzyme": "^3.10.0",
     "enzyme-adapter-react-16": "^1.14.0",
     "husky": "^3.0.9",
-    "jest": "^25.1.0",
+    "jest": "^26.0.1",
     "prettier": "^1.18.2",
     "pretty-quick": "^2.0.0",
     "react-addons-test-utils": "^15.6.2",

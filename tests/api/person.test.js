@@ -15,6 +15,7 @@ describe("Peoples", () => {
       .expect(200)
       .then(res => {
         expect(res.body.person.Profile).toBeDefined();
-      });
+      })
+      .catch(console.log);
   });
 });
