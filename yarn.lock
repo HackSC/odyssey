@@ -4944,10 +4944,10 @@ expect@^25.1.0:
     jest-message-util "^25.1.0"
     jest-regex-util "^25.1.0"
 
-express-fileupload@^1.1.6-alpha.6:
-  version "1.1.6-alpha.6"
-  resolved "https://registry.yarnpkg.com/express-fileupload/-/express-fileupload-1.1.6-alpha.6.tgz#75c6c397094a15165fb7b42e4905f95302e7d009"
-  integrity sha512-gG5qrVDGI6i00CuViSl3zdQVcydU74qikNkBpxgyMtDbshbX7wPRZ3hy2sdZEOgxVokrevJ22U6Dd4mdxTsLaQ==
+express-fileupload@^1.1.9:
+  version "1.1.9"
+  resolved "https://registry.yarnpkg.com/express-fileupload/-/express-fileupload-1.1.9.tgz#e798e9318394ed5083e56217ad6cda576da465d2"
+  integrity sha512-f2w0aoe7lj3NeD8a4MXmYQsqir3Z66I08l9AKq04QbFUAjeZNmPwTlR5Lx2NGwSu/PslsAjGC38MWzo5tTjoBg==
   dependencies:
     busboy "^0.3.1"
 
