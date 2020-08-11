@@ -19,9 +19,12 @@ export async function getUser(req) {
 export async function getProfile(req): Promise<Profile> {
   // If we have a req object, that means we're on the server and need to pass in cookies
   // Otherwise, fetch as normal
-  const url_route = req
+  let url_route = req
     ? /* Serverside */ process.env.URL_BASE + "api/profile"
     : /* Client */ "/api/profile";
+
+  //url_route.replaceAll('`', '')
+  console.log(url_route);
   const rawProfileData = await fetch(
     url_route,
     req

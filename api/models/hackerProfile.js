@@ -5,6 +5,11 @@ module.exports = (sequelize, DataTypes) => {
   const HackerProfile = sequelize.define(
     "HackerProfile",
     {
+      id: {
+        type: DataTypes.STRING,
+        defaultValue: "hacker_id",
+        allowNull: false
+      },
       gender: {
         type: DataTypes.ENUM,
         values: ["male", "female", "non-binary", "other", "no-say"]

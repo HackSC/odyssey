@@ -1,1 +1,3 @@
-export type { default as Service } from "./Service";
+import type { Service } from './Service';
+
+export type { Service };
