@@ -34,7 +34,7 @@ class OdysseyApp extends App<any> {
   componentDidMount() {
     // Let's just hardcode the hotjar
     if (process.env.NODE_ENV === "production") {
-      hotjar.initialize("1547187");
+      hotjar.initialize(1547187, 6);
     } else {
       this.setState({ isDev: true });
     }
