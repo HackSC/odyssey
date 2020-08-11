@@ -2,7 +2,7 @@
 
 Odyssey is a hackathon management platform that handles hacker applications, admin functionalities, and more. Built by the HackSC team.
 
-![HackSC Blob](https://media.giphy.com/media/vFKqnCdLPNOKc/giphy.gif)
+![HackSC Blob](https://giphy.com/gifs/fUHRIKfoiwtqF8ns91)
 
 ## Odyssey Setup
 
