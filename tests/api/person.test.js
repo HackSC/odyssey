@@ -16,6 +16,6 @@ describe("Peoples", () => {
       .then(res => {
         expect(res.body.person.Profile).toBeDefined();
       })
-      .catch(console.log);
+      .catch(e => console.error(e));
   });
 });

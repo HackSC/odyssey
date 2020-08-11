@@ -17,6 +17,6 @@ describe("Auth Tests", () => {
       .get(devLoginUrl)
       .query({ id: "a", role: "admin" })
       .expect(200, { ...user, ...addedVals })
-      .catch(console.log);
+      .catch(e => console.error(e));
   });
 });
