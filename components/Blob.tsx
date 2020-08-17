@@ -74,7 +74,7 @@ const Blob = () => {
           }
         }
 
-        geometry?.computeVertexNormals();
+        geometry.computeVertexNormals();
         if ("normalsNeedUpdate" in sphere.geometry) {
           (geometry as THREE.Geometry).normalsNeedUpdate = true;
         }
