@@ -2614,9 +2614,9 @@ auth0-js@^9.13.2:
     winchan "^0.2.2"
 
 aws-sdk@^2.553.0:
-  version "2.734.0"
-  resolved "https://registry.yarnpkg.com/aws-sdk/-/aws-sdk-2.734.0.tgz#522370a95e70d6df44d94677bc01fe3b3522da3c"
-  integrity sha512-F5SrcOm6WyaN5j+pybx97vfSCa0SIz/kukJNSeDzMdk5q0xsKUjtUzL/kc0QwtCspCni0WTNmBKiD+firP5JKQ==
+  version "2.735.0"
+  resolved "https://registry.yarnpkg.com/aws-sdk/-/aws-sdk-2.735.0.tgz#56533efc29a68f9bb46ed9566bdc2669a35b7003"
+  integrity sha512-nu5Cz2YcjHv2kgqtxW/DO0lz4Yc8g+xSB0Lb7Dp5iBEfyWLGGnhn5u4ALeFO9UUxLuSieirT1BR18BWSWH/Hlg==
   dependencies:
     buffer "4.9.2"
     events "1.1.1"
@@ -4453,7 +4453,7 @@ dom-serializer@0, dom-serializer@^0.2.1:
     domelementtype "^2.0.1"
     entities "^2.0.0"
 
-dom-serializer@1.0.1:
+dom-serializer@1.0.1, dom-serializer@^1.0.1:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/dom-serializer/-/dom-serializer-1.0.1.tgz#79695eb49af3cd8abc8d93a73da382deb1ca0795"
   integrity sha512-1Aj1Qy3YLbdslkI75QEOfdp9TkQ3o8LRISAzxOibjBs/xWwr1WxZFOQphFkZuepHFGo+kB8e5FVJSS0faAJ4Rw==
@@ -4514,7 +4514,7 @@ domutils@1.5.1:
     dom-serializer "0"
     domelementtype "1"
 
-domutils@2.1.0, domutils@^2.0.0:
+domutils@2.1.0:
   version "2.1.0"
   resolved "https://registry.yarnpkg.com/domutils/-/domutils-2.1.0.tgz#7ade3201af43703fde154952e3a868eb4b635f16"
   integrity sha512-CD9M0Dm1iaHfQ1R/TI+z3/JWp/pgub0j4jIQKH89ARR4ATAV2nbaOQS5XxU9maJP5jHaPdDDQSEHuE2UmpUTKg==
@@ -4530,6 +4530,22 @@ domutils@^1.5.1:
   dependencies:
     dom-serializer "0"
     domelementtype "1"
+
+domutils@^2.0.0:
+  version "2.2.0"
+  resolved "https://registry.yarnpkg.com/domutils/-/domutils-2.2.0.tgz#f3ce1610af5c30280bde1b71f84b018b958f32cf"
+  integrity sha512-0haAxVr1PR0SqYwCH7mxMpHZUwjih9oPPedqpR/KufsnxPyZ9dyVw1R5093qnJF3WXSbjBkdzRWLw/knJV/fAg==
+  dependencies:
+    dom-serializer "^1.0.1"
+    domelementtype "^2.0.1"
+    domhandler "^3.0.0"
+
+dot-prop@^5.1.1:
+  version "5.2.0"
+  resolved "https://registry.yarnpkg.com/dot-prop/-/dot-prop-5.2.0.tgz#c34ecc29556dc45f1f4c22697b6f4904e0cc4fcb"
+  integrity sha512-uEUyaDKoSQ1M4Oq8l45hSE26SnTxL6snNnqvK/VWx5wJhmff5z0FUVJDKDanor/6w3kzE3i7XZOk+7wC0EXr1A==
+  dependencies:
+    is-obj "^2.0.0"
 
 dotenv@^8.2.0:
   version "8.2.0"
@@ -6452,6 +6468,11 @@ is-number@^7.0.0:
   version "7.0.0"
   resolved "https://registry.yarnpkg.com/is-number/-/is-number-7.0.0.tgz#7535345b896734d5f80c4d06c50955527a14f12b"
   integrity sha512-41Cifkg6e8TylSpdtTpeLVMqvSBEVzTttHvERD741+pnZ8ANv0004MRL43QKPDlK9cGvNp6NZWZUBlbGXYxxng==
+
+is-obj@^2.0.0:
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/is-obj/-/is-obj-2.0.0.tgz#473fb05d973705e3fd9620545018ca8e22ef4982"
+  integrity sha512-drqDG3cbczxxEJRoOXcOjtdp1J/lyp1mNn0xaznRs8+muBhgQcrnbspox5X5fOw0HnMnbfDzvnEMEtqDEJEo8w==
 
 is-path-inside@^1.0.0:
   version "1.0.1"
@@ -10289,6 +10310,13 @@ sequelize@^5.21.1:
     uuid "^3.3.3"
     validator "^10.11.0"
     wkx "^0.4.8"
+
+serialize-javascript@^3.1.0:
+  version "3.1.0"
+  resolved "https://registry.yarnpkg.com/serialize-javascript/-/serialize-javascript-3.1.0.tgz#8bf3a9170712664ef2561b44b691eafe399214ea"
+  integrity sha512-JIJT1DGiWmIKhzRsG91aS6Ze4sFUrYbltlkg2onR5OrnNM02Kl/hnY/T4FN2omvyeBbQmMJv+K4cPOpGzOTFBg==
+  dependencies:
+    randombytes "^2.1.0"
 
 serialize-javascript@^4.0.0:
   version "4.0.0"
