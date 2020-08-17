@@ -2,21 +2,21 @@ import React from "react";
 
 import { handleLoginRedirect, getProfile } from "../lib/authenticate";
 
-import Head from "../components/Head";
-import Navbar from "../components/Navbar";
-import Footer from "../components/Footer";
+import { Head, Navbar, Footer, Results as ResultStep } from "../components";
 
 import { Background, Container } from "../styles";
-
-import Step from "../components/steps/Results";
 
 const Results = ({ profile }) => {
   return (
     <>
       <Head title="HackSC Odyssey - Results" />
-      <Navbar loggedIn activePage="results" />
+      <Navbar
+        loggedIn
+        showProjectTeam={profile?.status === "checkedIn"}
+        activePage="results"
+      />
       <Background>
-        <Container>{profile && <Step profile={profile} />}</Container>
+        <Container>{profile && <ResultStep profile={profile} />}</Container>
       </Background>
       <Footer />
     </>

@@ -3,6 +3,19 @@ import * as Sentry from "@sentry/browser";
 import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
 
 import {
+  Head,
+  Navbar,
+  Hero,
+  Footer,
+  Countdown,
+  LinkToSchedule,
+  LinksAndTasks
+} from "../components";
+
+import { Container } from "../styles";
+import { generatePosts } from "../lib/referrerCode";
+
+import {
   handleLoginRedirect,
   getProfile,
   handleAdminRedirect,
@@ -10,47 +23,26 @@ import {
   handleSponsorRedirect
 } from "../lib/authenticate";
 
-import Head from "../components/Head";
-import Navbar from "../components/Navbar";
-import Footer from "../components/Footer";
-
-import { Background, Container } from "../styles";
-
-import Steps from "../components/LiveDashboard";
-
-import { generatePosts } from "../lib/referrerCode";
-
-const Dashboard = ({ profile, houses, socialPosts }) => {
+const Live = ({ profile, houses, socialPosts }) => {
   return (
     <>
-      <Head title="HackSC Odyssey - Dashboard" />
+      <Head title="HackSC Odyssey - Live Dashboard" />
       <Navbar
-        showApp={false}
-        showResults={false}
-        showTeam={false}
-        showProjectTeam={profile.status === "checkedIn"}
         loggedIn
-        activePage="dashboard"
+        showProjectTeam={profile.status === "checkedIn"}
+        activePage="live"
       />
-      <Background padding={"0.5em"}>
-        {profile && (
-          <Container>
-            {profile && (
-              <Steps
-                houses={houses}
-                profile={profile}
-                socialPosts={socialPosts}
-              />
-            )}
-          </Container>
-        )}
-      </Background>
+      <Container>
+        <Countdown />
+        <LinkToSchedule />
+        <LinksAndTasks />
+      </Container>
       <Footer />
     </>
   );
 };
 
-Dashboard.getInitialProps = async ({ req }) => {
+Live.getInitialProps = async ({ req }) => {
   const profile = await getProfile(req);
   //const houses = await getHouses(req);
   const houses = [];
@@ -90,4 +82,4 @@ Dashboard.getInitialProps = async ({ req }) => {
   };
 };
 
-export default Dashboard;
+export default Live;

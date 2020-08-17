@@ -1,44 +1,87 @@
 import React from "react";
+import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
 
-import { handleLoginRedirect, getProfile } from "../lib/authenticate";
-import { getReferrerCode } from "../lib/referrerCode";
+import {
+  handleLoginRedirect,
+  getProfile,
+  handleAdminRedirect,
+  handleVolunteerRedirect,
+  handleSponsorRedirect
+} from "../lib/authenticate";
 
-import Head from "../components/Head";
-import Navbar from "../components/Navbar";
-import Footer from "../components/Footer";
+import { Head, Navbar, Footer, Steps } from "../components";
 
 import { Background, Container } from "../styles";
 
-import Step from "../components/steps/Profile";
+import { generatePosts } from "../lib/referrerCode";
 
-const Application = ({ profile }) => {
+const Application = ({ profile, houses, socialPosts }) => {
   return (
     <>
       <Head title="HackSC Odyssey - Application" />
-      <Navbar loggedIn activePage="application" />
-      <Background>
-        <Container>{profile && <Step profile={profile} />}</Container>
+      <Navbar
+        showProjectTeam={profile.status === "checkedIn"}
+        loggedIn
+        activePage="application"
+      />
+      <Background padding={"0.5em"}>
+        {profile && (
+          <Container>
+            {profile && (
+              <Steps
+                houses={houses}
+                profile={profile}
+                socialPosts={socialPosts}
+              />
+            )}
+          </Container>
+        )}
       </Background>
       <Footer />
     </>
   );
 };
 
-Application.getInitialProps = async ctx => {
-  const { req } = ctx;
-
+Application.getInitialProps = async ({ req }) => {
   const profile = await getProfile(req);
+  //const houses = await getHouses(req);
+  const houses = [];
+  //console.log(req);
 
   // Null profile means user is not logged in
   if (!profile) {
     handleLoginRedirect(req);
+  } else if (profile.role == "admin") {
+    handleAdminRedirect(req);
+  } else if (profile.role == "volunteer") {
+    handleVolunteerRedirect(req);
+  } else if (profile.role == "sponsor") {
+    handleSponsorRedirect(req);
   }
 
-  //Referrer Code Special Case Handling
-  profile.referrerCode = getReferrerCode(ctx, profile);
+  if (profile && profile.status == "checkedIn") {
+    //const houseInfo = await getHouseInfo(req, 1);
+    //console.log(houseInfo);
+  }
+
+  /*
+  Configure Sentry on the Live Page
+  if (typeof window !== "undefined") {
+    Sentry.configureScope(function(scope) {
+      scope.setExtra("profile", profile);
+    });
+  }
+  */
+
+  let socialPosts = {};
+  if (profile) {
+    socialPosts = generatePosts(profile);
+  }
 
   return {
-    profile
+    houses,
+    profile,
+    socialPosts
   };
 };
 

@@ -1,10 +1,8 @@
 import React from "react";
 import { getUser, handleDashboardRedirect } from "../lib/authenticate";
 
-import Head from "../components/Head";
-import Navbar from "../components/Navbar";
-import Hero from "../components/Hero";
-import Footer from "../components/Footer";
+import { Head, Hero, Footer, Navbar } from "../components";
+
 import { Container } from "../styles";
 
 const Home = () => {

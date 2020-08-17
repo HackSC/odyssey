@@ -1,9 +1,13 @@
 import React, { useEffect } from "react";
 
 import styled from "styled-components";
+import { ReactThreeFiber } from "react-three-fiber/types/three";
+import { Canvas, useFrame } from "react-three-fiber";
 
 import * as THREE from "three";
 import SimplexNoise from "simplex-noise";
+
+// * RETIRED COMPONENT
 
 const Blob = () => {
   useEffect(() => {
@@ -45,7 +49,10 @@ const Blob = () => {
     let ambientLight = new THREE.AmbientLight(0x86dcea);
     scene.add(ambientLight);
 
-    let sphere: any = new THREE.Mesh(geometry, material);
+    let sphere: ReactThreeFiber.Object3DNode<THREE.Mesh> = new THREE.Mesh(
+      geometry,
+      material
+    );
 
     scene.add(sphere);
 

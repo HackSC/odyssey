@@ -1,25 +1,26 @@
 import React from "react";
 
-import Head from "../components/Head";
-import Navbar from "../components/Navbar";
-import Footer from "../components/Footer";
+import { Head, Navbar, Footer, Maps } from "../components";
+
 import { Background, Container } from "../styles";
-import Maps from "../components/Maps";
+
+import { handleLoginRedirect, getProfile } from "../lib/authenticate";
 
 type Props = {
   projectTeam: ProjectTeam;
   allPrizes: Prize[];
+  profile: Profile;
 };
 
 const MapsPage = (props: Props) => {
+  let { profile } = props;
+
   return (
     <>
       <Head title="HackSC Odyssey - Team Setup" />
       <Navbar
         loggedIn
-        showApp={false}
-        showResults={false}
-        showTeam={false}
+        showProjectTeam={profile?.status === "checkedIn"}
         activePage="maps"
       />
       <Background>
@@ -30,6 +31,17 @@ const MapsPage = (props: Props) => {
       <Footer />
     </>
   );
+};
+
+MapsPage.getInitialProps = async ({ req }) => {
+  const profile = await getProfile(req);
+
+  // Null profile means user is not logged in
+  if (!profile) {
+    handleLoginRedirect(req);
+  }
+
+  return { profile };
 };
 
 export default MapsPage;
