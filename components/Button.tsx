@@ -12,7 +12,7 @@ const Button = styled.button`
   text-transform: uppercase;
   text-align: center;
 
-  ${({ hero }) =>
+  ${({ hero }: any) =>
     hero &&
     `
       font-size: 16px;

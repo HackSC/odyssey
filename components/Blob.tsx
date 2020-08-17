@@ -1,8 +1,7 @@
+// @ts-ignore
 import React, { useEffect } from "react";
 
 import styled from "styled-components";
-import { ReactThreeFiber } from "react-three-fiber/types/three";
-import { Canvas, useFrame } from "react-three-fiber";
 
 import * as THREE from "three";
 import SimplexNoise from "simplex-noise";
@@ -49,10 +48,7 @@ const Blob = () => {
     let ambientLight = new THREE.AmbientLight(0x86dcea);
     scene.add(ambientLight);
 
-    let sphere: ReactThreeFiber.Object3DNode<THREE.Mesh> = new THREE.Mesh(
-      geometry,
-      material
-    );
+    let sphere: THREE.Mesh = new THREE.Mesh(geometry, material);
 
     scene.add(sphere);
 
@@ -60,18 +56,26 @@ const Blob = () => {
       let time = performance.now() * 0.00001 * 13 * Math.pow(1, 3),
         spikes = 0.6 * 1;
 
-      for (let i = 0; i < sphere.geometry.vertices.length; i++) {
-        let p = sphere.geometry.vertices[i];
-        p.normalize().multiplyScalar(
-          1 +
-            0.3 *
-              simplex.noise3D(p.x * spikes, p.y * spikes, p.z * spikes + time)
-        );
+      let geometry: THREE.Geometry | THREE.BufferGeometry = sphere?.geometry;
+
+      if ("vertices" in geometry) {
+        for (let i = 0; i < geometry.vertices.length; i++) {
+          let p = geometry.vertices[i];
+          p.normalize().multiplyScalar(
+            1 +
+              0.3 *
+                simplex.noise3D(p.x * spikes, p.y * spikes, p.z * spikes + time)
+          );
+        }
       }
 
-      sphere.geometry.computeVertexNormals();
-      sphere.geometry.normalsNeedUpdate = true;
-      sphere.geometry.verticesNeedUpdate = true;
+      geometry?.computeVertexNormals();
+      if ("normalsNeedUpdate" in sphere.geometry) {
+        (geometry as THREE.Geometry).normalsNeedUpdate = true;
+      }
+      if ("verticesNeedUpdate" in sphere.geometry) {
+        sphere.geometry.verticesNeedUpdate = true;
+      }
     };
 
     function animate() {
