@@ -24,7 +24,6 @@ export async function getProfile(req): Promise<Profile> {
     : /* Client */ "/api/profile";
 
   //url_route.replaceAll('`', '')
-  console.log(url_route);
   const rawProfileData = await fetch(
     url_route,
     req

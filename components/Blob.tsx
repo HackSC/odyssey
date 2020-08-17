@@ -58,23 +58,29 @@ const Blob = () => {
 
       let geometry: THREE.Geometry | THREE.BufferGeometry = sphere?.geometry;
 
-      if ("vertices" in geometry) {
-        for (let i = 0; i < geometry.vertices.length; i++) {
-          let p = geometry.vertices[i];
-          p.normalize().multiplyScalar(
-            1 +
-              0.3 *
-                simplex.noise3D(p.x * spikes, p.y * spikes, p.z * spikes + time)
-          );
+      if (geometry !== null) {
+        if ("vertices" in geometry) {
+          for (let i = 0; i < geometry.vertices.length; i++) {
+            let p = geometry.vertices[i];
+            p.normalize().multiplyScalar(
+              1 +
+                0.3 *
+                  simplex.noise3D(
+                    p.x * spikes,
+                    p.y * spikes,
+                    p.z * spikes + time
+                  )
+            );
+          }
         }
-      }
 
-      geometry?.computeVertexNormals();
-      if ("normalsNeedUpdate" in sphere.geometry) {
-        (geometry as THREE.Geometry).normalsNeedUpdate = true;
-      }
-      if ("verticesNeedUpdate" in sphere.geometry) {
-        sphere.geometry.verticesNeedUpdate = true;
+        geometry?.computeVertexNormals();
+        if ("normalsNeedUpdate" in sphere.geometry) {
+          (geometry as THREE.Geometry).normalsNeedUpdate = true;
+        }
+        if ("verticesNeedUpdate" in sphere.geometry) {
+          sphere.geometry.verticesNeedUpdate = true;
+        }
       }
     };
 

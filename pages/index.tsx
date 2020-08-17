@@ -19,10 +19,16 @@ const Home = () => {
 };
 
 Home.getInitialProps = async ({ req }) => {
-  const user = await getUser(req);
-  if (user) {
-    // Redirect user to dashboard if they are logged in
-    handleDashboardRedirect(req);
+  let user = null;
+  try {
+    user = await getUser(req);
+  } catch (e) {
+    // * IGNORE
+  } finally {
+    if (user) {
+      // Redirect user to dashboard if they are logged in
+      handleDashboardRedirect(req);
+    }
   }
 };
 

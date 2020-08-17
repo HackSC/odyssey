@@ -20,20 +20,18 @@ const Application = ({ profile, houses, socialPosts }) => {
     <>
       <Head title="HackSC Odyssey - Application" />
       <Navbar
-        showProjectTeam={profile.status === "checkedIn"}
+        showProjectTeam={profile ? profile.status === "checkedIn" : false}
         loggedIn
         activePage="application"
       />
       <Background padding={"0.5em"}>
         {profile && (
           <Container>
-            {profile && (
-              <Steps
-                houses={houses}
-                profile={profile}
-                socialPosts={socialPosts}
-              />
-            )}
+            <Steps
+              houses={houses}
+              profile={profile}
+              socialPosts={socialPosts}
+            />
           </Container>
         )}
       </Background>
