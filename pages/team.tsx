@@ -44,7 +44,11 @@ const Teams = ({ profile, team, status }) => {
   return (
     <>
       <Head title="HackSC Odyssey - Team Setup" />
-      <Navbar loggedIn activePage="team" />
+      <Navbar
+        loggedIn
+        showProjectTeam={profile?.status === "checkedIn"}
+        activePage="team"
+      />
       <Background>
         <Container>
           <h1>HackSC Team Setup</h1>

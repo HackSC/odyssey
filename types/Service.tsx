@@ -21,3 +21,5 @@ export type Service<T> =
   | ServiceLoading<T>
   | ServiceLoaded<T>
   | ServiceError<T>;
+
+export default Service;

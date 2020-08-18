@@ -1,7 +1,4 @@
-import React from "react";
-import * as Sentry from "@sentry/browser";
-import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
-
+import Live from "./live";
 import {
   handleLoginRedirect,
   getProfile,
@@ -10,44 +7,10 @@ import {
   handleSponsorRedirect
 } from "../lib/authenticate";
 
-import Head from "../components/Head";
-import Navbar from "../components/Navbar";
-import Footer from "../components/Footer";
-
-import { Background, Container } from "../styles";
-
-import Steps from "../components/LiveDashboard";
-
 import { generatePosts } from "../lib/referrerCode";
 
 const Dashboard = ({ profile, houses, socialPosts }) => {
-  return (
-    <>
-      <Head title="HackSC Odyssey - Dashboard" />
-      <Navbar
-        showApp={false}
-        showResults={false}
-        showTeam={false}
-        showProjectTeam={profile.status === "checkedIn"}
-        loggedIn
-        activePage="dashboard"
-      />
-      <Background padding={"0.5em"}>
-        {profile && (
-          <Container>
-            {profile && (
-              <Steps
-                houses={houses}
-                profile={profile}
-                socialPosts={socialPosts}
-              />
-            )}
-          </Container>
-        )}
-      </Background>
-      <Footer />
-    </>
-  );
+  return <Live profile={profile} houses={houses} socialPosts={socialPosts} />;
 };
 
 Dashboard.getInitialProps = async ({ req }) => {
@@ -65,17 +28,6 @@ Dashboard.getInitialProps = async ({ req }) => {
     handleVolunteerRedirect(req);
   } else if (profile.role == "sponsor") {
     handleSponsorRedirect(req);
-  }
-
-  if (profile && profile.status == "checkedIn") {
-    //const houseInfo = await getHouseInfo(req, 1);
-    //console.log(houseInfo);
-  }
-
-  if (typeof window !== "undefined") {
-    Sentry.configureScope(function(scope) {
-      scope.setExtra("profile", profile);
-    });
   }
 
   let socialPosts = {};

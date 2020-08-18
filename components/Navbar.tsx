@@ -8,9 +8,11 @@ import { Container, Link } from "../styles";
 
 type NavbarProps = {
   loggedIn?: boolean;
+  showLive?: boolean;
   showDash?: boolean;
   showApp?: boolean;
   showMaps?: boolean;
+  showAPI?: boolean;
   showResults?: boolean;
   showTeam?: boolean;
   showLogout?: boolean;
@@ -37,9 +39,11 @@ const style = background => {
 
 const Navbar: React.FunctionComponent<NavbarProps> = ({
   loggedIn,
+  showLive = true,
   showDash = true,
   showApp = true,
   showMaps = true,
+  showAPI = true,
   showResults = true,
   showTeam = true,
   showLogout = true,
@@ -52,13 +56,21 @@ const Navbar: React.FunctionComponent<NavbarProps> = ({
   return (
     <Wrapper>
       <NavbarContainer>
-        <a href={loggedIn ? "/dashboard" : "/"}>
+        <a href={loggedIn ? "/live" : "/"}>
           <HeaderLogoImg src={HeaderLogo} />
         </a>
         <Links>
           {loggedIn ? (
             <>
-              {!admin && !volunteer && !sponsor && showDash && (
+              {!admin && !volunteer && !sponsor && showLive && (
+                <Link
+                  href="/live"
+                  style={style(activePage === "live" ? "#FF8379" : "white")}
+                >
+                  Live
+                </Link>
+              )}
+              {/*!admin && !volunteer && !sponsor && showDash && (
                 <Link
                   href="/dashboard"
                   style={style(
@@ -67,15 +79,7 @@ const Navbar: React.FunctionComponent<NavbarProps> = ({
                 >
                   Dashboard
                 </Link>
-              )}
-              {!admin && !volunteer && !sponsor && showMaps && (
-                <Link
-                  href="/maps"
-                  style={style(activePage === "maps" ? "#FF8379" : "white")}
-                >
-                  Maps
-                </Link>
-              )}
+                  )*/}
               {!admin && !volunteer && !sponsor && showApp && (
                 <Link
                   href="/application"
@@ -110,6 +114,22 @@ const Navbar: React.FunctionComponent<NavbarProps> = ({
                   )}
                 >
                   Manage Team
+                </Link>
+              )}
+              {!admin && !volunteer && !sponsor && showMaps && (
+                <Link
+                  href="/maps"
+                  style={style(activePage === "maps" ? "#FF8379" : "white")}
+                >
+                  Maps
+                </Link>
+              )}
+              {!admin && !volunteer && !sponsor && showAPI && (
+                <Link
+                  href="/api-directory"
+                  style={style(activePage === "api" ? "#FF8379" : "white")}
+                >
+                  APIs
                 </Link>
               )}
               {showLogout && (

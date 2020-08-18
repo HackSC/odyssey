@@ -1,5 +1,10 @@
 import React from "react";
-import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
+import * as Sentry from "@sentry/browser";
+
+import { Head, Navbar, DirectoryIntro, Directory, Footer } from "../components";
+
+import { Container } from "../styles";
+import { generatePosts } from "../lib/referrerCode";
 
 import {
   handleLoginRedirect,
@@ -9,38 +14,25 @@ import {
   handleSponsorRedirect
 } from "../lib/authenticate";
 
-import { Head, Navbar, Footer, Steps } from "../components";
-
-import { Background, Container } from "../styles";
-
-import { generatePosts } from "../lib/referrerCode";
-
-const Application = ({ profile, houses, socialPosts }) => {
+const API = ({ profile, houses, socialPosts }) => {
   return (
     <>
-      <Head title="HackSC Odyssey - Application" />
+      <Head title="HackSC Odyssey - API Directory" />
       <Navbar
-        showProjectTeam={profile ? profile.status === "checkedIn" : false}
         loggedIn
-        activePage="application"
+        showProjectTeam={profile ? profile.status === "checkedIn" : false}
+        activePage="api"
       />
-      <Background padding={"0.5em"}>
-        {profile && (
-          <Container>
-            <Steps
-              houses={houses}
-              profile={profile}
-              socialPosts={socialPosts}
-            />
-          </Container>
-        )}
-      </Background>
+      <Container>
+        <DirectoryIntro />
+        <Directory />
+      </Container>
       <Footer />
     </>
   );
 };
 
-Application.getInitialProps = async ({ req }) => {
+API.getInitialProps = async ({ req }) => {
   const profile = await getProfile(req);
   //const houses = await getHouses(req);
   const houses = [];
@@ -62,14 +54,11 @@ Application.getInitialProps = async ({ req }) => {
     //console.log(houseInfo);
   }
 
-  /*
-  Configure Sentry on the Live Page
   if (typeof window !== "undefined") {
     Sentry.configureScope(function(scope) {
       scope.setExtra("profile", profile);
     });
   }
-  */
 
   let socialPosts = {};
   if (profile) {
@@ -83,4 +72,4 @@ Application.getInitialProps = async ({ req }) => {
   };
 };
 
-export default Application;
+export default API;

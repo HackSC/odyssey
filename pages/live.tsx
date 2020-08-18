@@ -1,5 +1,19 @@
 import React from "react";
+import * as Sentry from "@sentry/browser";
 import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
+
+import {
+  Head,
+  Navbar,
+  Hero,
+  Footer,
+  Countdown,
+  LinkToSchedule,
+  LinksAndTasks
+} from "../components";
+
+import { Container } from "../styles";
+import { generatePosts } from "../lib/referrerCode";
 
 import {
   handleLoginRedirect,
@@ -9,38 +23,26 @@ import {
   handleSponsorRedirect
 } from "../lib/authenticate";
 
-import { Head, Navbar, Footer, Steps } from "../components";
-
-import { Background, Container } from "../styles";
-
-import { generatePosts } from "../lib/referrerCode";
-
-const Application = ({ profile, houses, socialPosts }) => {
+const Live = ({ profile, houses, socialPosts }) => {
   return (
     <>
-      <Head title="HackSC Odyssey - Application" />
+      <Head title="HackSC Odyssey - Live Dashboard" />
       <Navbar
-        showProjectTeam={profile ? profile.status === "checkedIn" : false}
         loggedIn
-        activePage="application"
+        showProjectTeam={profile.status === "checkedIn"}
+        activePage="live"
       />
-      <Background padding={"0.5em"}>
-        {profile && (
-          <Container>
-            <Steps
-              houses={houses}
-              profile={profile}
-              socialPosts={socialPosts}
-            />
-          </Container>
-        )}
-      </Background>
+      <Container>
+        <Countdown />
+        <LinkToSchedule />
+        <LinksAndTasks />
+      </Container>
       <Footer />
     </>
   );
 };
 
-Application.getInitialProps = async ({ req }) => {
+Live.getInitialProps = async ({ req }) => {
   const profile = await getProfile(req);
   //const houses = await getHouses(req);
   const houses = [];
@@ -62,14 +64,11 @@ Application.getInitialProps = async ({ req }) => {
     //console.log(houseInfo);
   }
 
-  /*
-  Configure Sentry on the Live Page
   if (typeof window !== "undefined") {
     Sentry.configureScope(function(scope) {
       scope.setExtra("profile", profile);
     });
   }
-  */
 
   let socialPosts = {};
   if (profile) {
@@ -83,4 +82,4 @@ Application.getInitialProps = async ({ req }) => {
   };
 };
 
-export default Application;
+export default Live;
