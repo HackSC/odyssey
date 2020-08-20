@@ -5,7 +5,7 @@ module.exports = {
     database: process.env.DEV_DB_NAME,
     host: process.env.DEV_DB_HOSTNAME,
     logging: false,
-    dialect: "mysql"
+    dialect: process.env.DEV_DB_DIALECT ? process.env.DEV_DB_DIALECT : "mysql"
   },
   test: {
     username: process.env.TEST_DB_USERNAME,
@@ -13,13 +13,13 @@ module.exports = {
     database: process.env.TEST_DB_NAME,
     host: process.env.TEST_DB_HOSTNAME,
     logging: false,
-    dialect: "mysql"
+    dialect: process.env.TEST_DB_DIALECT ? process.env.TEST_DB_DIALECT : "mysql"
   },
   production: {
     username: process.env.PROD_DB_USERNAME,
     password: process.env.PROD_DB_PASSWORD,
     database: process.env.PROD_DB_NAME,
     host: process.env.PROD_DB_HOSTNAME,
-    dialect: "mysql"
+    dialect: process.env.PROD_DB_DIALECT ? process.env.PROD_DB_DIALECT : "mysql"
   }
 };
