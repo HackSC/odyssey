@@ -66,6 +66,7 @@
     "nookies": "^2.0.8",
     "passport": "^0.4.0",
     "passport-auth0": "^1.2.1",
+    "pg": "^8.3.2",
     "react": "16.9.0",
     "react-calendar-timeline": "^0.26.7",
     "react-confetti": "^5.0.1",
