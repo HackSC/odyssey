@@ -1,4 +1,4 @@
-let express = require("express");
+const express = require("express");
 const models = require("./models");
 const utils = require("./utils");
 const router = express.Router();
@@ -19,7 +19,7 @@ router.put("/:email", async (req, res) => {
       email: req.params.email
     }
   });
-  return res.json({ hackerProfile: newHackerProfile });
+  return res.json({ hackerProfile: updatedhackerProfile });
 });
 
 // TODO: use the new client fetcher api
@@ -147,7 +147,7 @@ router.get("/eligibleProfiles", async (req, res) => {
         }
       ]
     });
-    filteredProfiles = allProfiles.filter(profile => {
+    let filteredProfiles = allProfiles.filter(profile => {
       const reviewsByCurrUser = profile.HackerReviews.filter(review => {
         return review.dataValues.createdBy === req.user.id;
       });
@@ -221,4 +221,4 @@ router.get("/review", async (req, res) => {
   }
 });
 
-module.exports = router;
+export { router };
