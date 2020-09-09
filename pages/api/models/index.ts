@@ -2,7 +2,7 @@ const Sequelize = require("sequelize");
 const env = process.env.NODE_ENV || "test";
 
 import config from "../config";
-import { DBType } from "./types";
+import { DBType } from './types';
 
 let env_config = config[env];
 

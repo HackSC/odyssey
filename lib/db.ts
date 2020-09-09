@@ -18,3 +18,5 @@ exports.query = async query => {
     return { error };
   }
 };
+
+export default db

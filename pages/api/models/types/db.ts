@@ -4,4 +4,4 @@ export default interface DBType {
   HackerProfile?: any;
 }
 
-module.exports = {};
+module.exports = {}
