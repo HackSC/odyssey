@@ -19,25 +19,37 @@ jobs:
           command: "yarn run E2ETest"
       - store_artifacts:
           path: cypress/videos/odysseyTests
+  slackNotify:
+    docker:
+      - image: circleci/node
+    steps:
+      - run: exit 0
+      - slack/status:
+          fail_only: true
+          mentions: ""
+          only_for_branches: "staging"
+          webhook: "${SLACK_WEBHOOK}"
   build:
     docker:
       - image: circleci/node
     steps:
       - checkout
-      - run: yarn install
-      - run: yarn build
-      - slack/notify:
-        color: "#42e2f4"
-        mentions: "abigger87,"
-        message: "Circleci notification here"
+      - run:
+        name: "Installing"
+        command: yarn install
+      - run:
+        name: "Building"
+        command: yarn build
       - slack/status:
         fail_only: true
-        mentions: "abigger87"
 workflows:
-  version: 2
+  version: 2.1
   e2e_tests:
     jobs:
       - E2ETest
+  slackNotify:
+    jobs:
+      - slackNotify
   build:
     jobs:
       - build
