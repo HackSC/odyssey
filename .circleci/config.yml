@@ -26,12 +26,11 @@ jobs:
       - checkout
       - run: yarn install
       - run: yarn build
-      - slack/notify:
-          channel: G01B137TAP2
-          color: "#FEDA22"
-          mentions: ""
-          message: circleci build pending
-          webhook: webhook
+      - slack/status:
+        fail_only: true
+        mentions: ""
+        only_for_branches: "staging"
+        webhook: webhook
 workflows:
   version: 2
   e2e_tests:
