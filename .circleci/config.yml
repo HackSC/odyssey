@@ -30,7 +30,6 @@ jobs:
         fail_only: true
         mentions: ""
         only_for_branches: "staging"
-        webhook: webhook
 workflows:
   version: 2
   e2e_tests:
