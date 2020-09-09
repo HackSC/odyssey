@@ -26,10 +26,13 @@ jobs:
       - checkout
       - run: yarn install
       - run: yarn build
+      - slack/notify:
+        color: "#42e2f4"
+        mentions: "abigger87,"
+        message: "Circleci notification here"
       - slack/status:
         fail_only: true
-        mentions: ""
-        only_for_branches: "staging"
+        mentions: "abigger87"
 workflows:
   version: 2
   e2e_tests:
