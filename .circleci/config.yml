@@ -19,17 +19,7 @@ jobs:
           command: "yarn run E2ETest"
       - store_artifacts:
           path: cypress/videos/odysseyTests
-  slackNotify:
-    docker:
-      - image: circleci/node
-    steps:
-      - run: exit 0
-      - slack/status:
-          fail_only: true
-          mentions: ""
-          only_for_branches: "staging"
-          webhook: "${SLACK_WEBHOOK}"
-  customBuild:
+  build:
     docker:
       - image: circleci/node
     steps:
@@ -42,17 +32,14 @@ jobs:
           command: yarn build
       - slack/status:
           fail_only: false
-          failure_message: ":red_circle: A $CIRCLE_JOB job has failed!"
+          failure_message: ":red_circle: A $CIRCLE_JOB job has failed for $CIRCLE_PROJECT_REPONAME on the $CIRCLE_BRANCH branch! Triggered by: $CIRCLE_USERNAME"
           only_for_branches: "staging,develop"
-          success_message: ":tada: A $CIRCLE_JOB job has succeeded!"
+          success_message: ":tada: A $CIRCLE_JOB job has succeeded for $CIRCLE_PROJECT_REPONAME on the $CIRCLE_BRANCH branch! Triggered by: $CIRCLE_USERNAME"
 workflows:
   version: 2.1
   e2e_tests:
     jobs:
       - E2ETest
-  slackNotify:
+  build:
     jobs:
-      - slackNotify
-  customBuild:
-    jobs:
-      - customBuild
+      - build
