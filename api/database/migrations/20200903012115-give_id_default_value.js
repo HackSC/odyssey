@@ -4,9 +4,9 @@ module.exports = {
   up: (queryInterface, Sequelize) => {
     return Promise.all([
       queryInterface.changeColumn("HackerProfiles", "id", {
-        type: Sequelize.STRING,
+        type: Sequelize.INTEGER,
         allowNull: false,
-        defaultValue: "hacker_id"
+        defaultValue: 0
       })
     ]);
   },

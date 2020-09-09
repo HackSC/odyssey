@@ -6,8 +6,8 @@ module.exports = (sequelize, DataTypes) => {
     "HackerProfile",
     {
       id: {
-        type: DataTypes.STRING,
-        defaultValue: "hacker_id",
+        type: DataTypes.INTEGER,
+        defaultValue: 0,
         allowNull: false
       },
       gender: {

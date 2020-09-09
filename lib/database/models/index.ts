@@ -5,7 +5,7 @@ import config from "../config";
 
 let env_config = config[env];
 
-let db = {
+let db: DBType = {
   sequelize: null,
   Sequelize: null
 };
