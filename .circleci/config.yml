@@ -41,7 +41,10 @@ jobs:
           name: "Building"
           command: yarn build
       - slack/status:
-          fail_only: true
+          fail_only: false
+          failure_message: ":red_circle: A $CIRCLE_JOB job has failed!"
+          only_for_branches: "staging,develop"
+          success_message: ":tada: A $CIRCLE_JOB job has succeeded!"
 workflows:
   version: 2.1
   e2e_tests:
