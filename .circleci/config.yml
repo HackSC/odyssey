@@ -1,4 +1,6 @@
-version: 2
+version: 2.1
+orbs:
+  slack: circleci/slack@3.4.2
 jobs:
   E2ETest:
     docker:
@@ -24,6 +26,12 @@ jobs:
       - checkout
       - run: yarn install
       - run: yarn build
+      - slack/notify:
+          channel: G01B137TAP2
+          color: "#FEDA22"
+          mentions: ""
+          message: circleci build pending
+          webhook: webhook
 workflows:
   version: 2
   e2e_tests:
