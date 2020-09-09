@@ -35,13 +35,13 @@ jobs:
     steps:
       - checkout
       - run:
-        name: "Installing"
-        command: yarn install
+          name: "Installing"
+          command: yarn install
       - run:
-        name: "Building"
-        command: yarn build
+          name: "Building"
+          command: yarn build
       - slack/status:
-        fail_only: true
+          fail_only: true
 workflows:
   version: 2.1
   e2e_tests:
