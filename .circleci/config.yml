@@ -1,4 +1,6 @@
-version: 2
+version: 2.1
+orbs:
+  slack: circleci/slack@3.4.2
 jobs:
   E2ETest:
     docker:
@@ -22,10 +24,19 @@ jobs:
       - image: circleci/node
     steps:
       - checkout
-      - run: yarn install
-      - run: yarn build
+      - run:
+          name: "Installing"
+          command: yarn install
+      - run:
+          name: "Building"
+          command: yarn build
+      - slack/status:
+          fail_only: false
+          failure_message: ":red_circle: A $CIRCLE_JOB job has failed for $CIRCLE_PROJECT_REPONAME on the $CIRCLE_BRANCH branch! Triggered by: $CIRCLE_USERNAME"
+          only_for_branches: "staging,develop"
+          success_message: ":tada: A $CIRCLE_JOB job has succeeded for $CIRCLE_PROJECT_REPONAME on the $CIRCLE_BRANCH branch! Triggered by: $CIRCLE_USERNAME"
 workflows:
-  version: 2
+  version: 2.1
   e2e_tests:
     jobs:
       - E2ETest
