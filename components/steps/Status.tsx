@@ -18,7 +18,9 @@ type Props = {
 };
 
 const getStatusLabel = (profile: Profile): string => {
-  const { status, submittedAt } = profile;
+  const { status, submittedAt } = profile
+    ? profile
+    : { status: null, submittedAt: null };
   if (!status || status === "unverified") {
     return "Unverified";
   }
