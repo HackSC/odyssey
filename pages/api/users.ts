@@ -13,3 +13,4 @@ var secured = function(req, res, next) {
   res.redirect("/login");
 };
 
+export { secured };
