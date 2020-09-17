@@ -13,7 +13,7 @@ declare type FormStep = {
 };
 
 declare type Profile = {
-  id: string;
+  id: number;
   gender: "male" | "female" | "non-binary" | "other" | "no-say";
   userId: ResourceID;
   ethnicity: string;
