@@ -1,13 +1,13 @@
 // If you make any changes to HackerProfile, make sure you do the following:
 // 1) Generate a Sequelize migration that adds/removes columns as needed
 // 2) Update the Profile type definition in odyssey.d.ts
-module.exports = (sequelize, DataTypes) => {
+const profile = (sequelize, DataTypes) => {
   const HackerProfile = sequelize.define(
     "HackerProfile",
     {
       id: {
-        type: DataTypes.INTEGER,
-        defaultValue: 0,
+        type: DataTypes.STRING,
+        defaultValue: "hacker_id",
         allowNull: false
       },
       gender: {
@@ -130,14 +130,14 @@ module.exports = (sequelize, DataTypes) => {
     {}
   );
 
-  HackerProfile.prototype.getReferred = function() {
+  HackerProfile.prototype.getReferred = () => {
     return sequelize.models.HackerProfile.findAll({
       where: {
         referrerCode: this.promoCode
       }
     });
   };
-  HackerProfile.associate = function(models) {
+  HackerProfile.associate = models => {
     HackerProfile.belongsTo(models.Team, {
       as: "team",
       foreignKey: "teamId",
@@ -146,3 +146,5 @@ module.exports = (sequelize, DataTypes) => {
   };
   return HackerProfile;
 };
+
+export default profile;

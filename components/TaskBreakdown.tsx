@@ -73,7 +73,7 @@ const content = [
 const TaskBreakdown = () => (
   <Tasks>
     {content.map(task => (
-      <Task>
+      <Task key={task.title ? task.title : ""}>
         <TaskInfo>
           <h3>{task.title}</h3>
           <p>{task.description}</p>
