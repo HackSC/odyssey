@@ -32,7 +32,7 @@ const Footer = () => {
               <img src={Twitter} />
             </a>
           </SocialLinks>
-          <Copyright>HackSC 2019 &copy;</Copyright>
+          <Copyright>HackSC 2020 &copy;</Copyright>
         </SocialColumn>
 
         <LinksColumn>
