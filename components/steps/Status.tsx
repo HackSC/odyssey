@@ -151,7 +151,7 @@ const StatusStep: React.FunctionComponent<Props> = props => {
               </p>
 
               {getStage(profile) === 2 && (
-                <StepButton onClick={() => navigateTo("application")}>
+                <StepButton onClick={() => navigateTo("appform")}>
                   Fill out application
                 </StepButton>
               )}
