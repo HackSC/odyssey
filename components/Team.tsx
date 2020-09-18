@@ -52,6 +52,29 @@ const Team = ({ team, profile }: Props) => {
     }
   }, []);
 
+  const handleKick = useCallback(async member => {
+    const confirm = window.confirm(
+      `Are you sure you want to kick ${member.firstName} ${member.lastName}, ${member.email}?`
+    );
+
+    if (!confirm) {
+      return;
+    }
+
+    const res = await fetch("/api/team/kick/" + member.userId, {
+      method: "POST"
+    });
+    const data = await res.json();
+
+    if (res.status === 200) {
+      setError(null);
+      await Router.push("/team");
+      window.scrollTo(0, 0);
+    } else {
+      setError(data.message);
+    }
+  }, []);
+
   return (
     <TeamSection>
       <Flex direction="row" tabletVertical justify="space-between">
@@ -74,7 +97,7 @@ const Team = ({ team, profile }: Props) => {
           <Members>
             {team.HackerProfiles.map((member: any) => (
               <Member key={member.email}>
-                <p>
+                <PaddedP>
                   <b>
                     {member.firstName && member.lastName
                       ? member.firstName + " " + member.lastName
@@ -84,7 +107,14 @@ const Team = ({ team, profile }: Props) => {
                   {member.userId === team.ownerId && ", Team Owner"})
                   <br />
                   <MemberStatus>{member.status}</MemberStatus>
-                </p>
+                </PaddedP>
+                {profile.userId === team.ownerId ? (
+                  <KickButton onClick={() => handleKick(member)}>
+                    Kick
+                  </KickButton>
+                ) : (
+                  <></>
+                )}
               </Member>
             ))}
           </Members>
@@ -105,6 +135,16 @@ const Team = ({ team, profile }: Props) => {
     </TeamSection>
   );
 };
+
+const PaddedP = styled.p`
+  padding-right: 3rem;
+`;
+
+const KickButton = styled(Button)`
+  margin: auto;
+  min-width: 150px;
+  align-self: end;
+`;
 
 const TeamSection = styled.div`
   border-radius: 4px;
@@ -145,6 +185,8 @@ const Members = styled.ul`
 `;
 
 const Member = styled.li`
+  display: flex;
+  flex-direction: row;
   padding: 16px 0;
   border-bottom: 1px solid ${({ theme }) => theme.colors.gray5};
 `;
