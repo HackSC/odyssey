@@ -157,6 +157,51 @@ router.post("/join/:code", async (req, res) => {
   });
 });
 
+// POST /api/team/kick/:userid
+// - If a hacker is not on a team, attempt to join a team
+router.post("/kick/:userid", async (req, res) => {
+  const hackerProfile = await models.HackerProfile.findOne({
+    where: { userId: req.user.id }
+  });
+
+  // Can't kick someone else from a team if you are not on a team!
+  let team = await hackerProfile.getTeam();
+  if (!team) {
+    return res.status(400).json({ message: "User does not belong on a team" });
+  }
+
+  if (team.ownerId === req.params.userid) {
+    return res
+      .status(400)
+      .json({
+        message: `Not allowed to kick yourself. Delete the team instead.`
+      });
+  }
+
+  if (team.ownerId === req.user.id) {
+    // Allow kicking
+    const kickProfile = await models.HackerProfile.findOne({
+      where: { userId: req.params.userid }
+    });
+
+    let kicked_team = await hackerProfile.getTeam();
+
+    if (kicked_team.teamCode == team.teamCode) {
+      // In the same team, we can kick
+      await kickProfile.setTeam(null);
+      return res
+        .status(200)
+        .json({ message: `User ${req.params.userid} successfully kicked.` });
+    }
+  }
+
+  return res
+    .status(400)
+    .json({
+      message: `Could not kick member with userid ${req.params.userid}.`
+    });
+});
+
 // POST /api/team/leave
 // - If a hacker is on a team, attempt to leave that team
 router.post("/leave", async (req, res) => {
