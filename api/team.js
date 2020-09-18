@@ -157,7 +157,7 @@ router.post("/join/:code", async (req, res) => {
   });
 });
 
-// POST /api/team/join/:code
+// POST /api/team/kick/:userid
 // - If a hacker is not on a team, attempt to join a team
 router.post("/kick/:userid", async (req, res) => {
   const hackerProfile = await models.HackerProfile.findOne({
