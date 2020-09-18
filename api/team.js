@@ -164,7 +164,7 @@ router.post("/kick/:userid", async (req, res) => {
     where: { userId: req.user.id }
   });
 
-  // Can't join a team if you're already on one!
+  // Can't kick someone else from a team if you are not on a team!
   let team = await hackerProfile.getTeam();
   if (!team) {
     return res.status(400).json({ message: "User does not belong on a team" });
