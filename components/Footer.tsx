@@ -16,7 +16,7 @@ const Footer = () => {
         <SocialColumn>
           <LogoGraphic src={Logo} />
           <SocialLinks>
-            <a href="mailto:hackers@hacksc.com">
+            <a href="mailto:team@hacksc.com">
               <img src={Email} />
             </a>
             <a href="https://www.facebook.com/hackscofficial/" target="_blank">
@@ -53,9 +53,9 @@ const Footer = () => {
           <b>Contact us</b>
           <ContactBody>
             Reach out to us at{" "}
-            <a href="mailto:hackers@hacksc.com">hackers@hacksc.com</a> or on
-            social media if you have any questions, want more information, or
-            want to talk about sponsorship!
+            <a href="mailto:team@hacksc.com">team@hacksc.com</a> or on social
+            media if you have any questions, want more information, or want to
+            talk about sponsorship!
           </ContactBody>
         </ContactColumn>
       </Row>
