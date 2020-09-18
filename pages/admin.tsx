@@ -23,7 +23,7 @@ const Admin = ({ profile }) => {
               Hello there -- welcome to the admin dashboard. Here you can access
               actions to help organize and run HackSC. If you have any questions
               or find any errors, hit up the engineers in{" "}
-              <b>#2020-engineering</b>
+              <b>#{new Date().getFullYear()}-engineering</b>
             </p>
           </Flex>
 
@@ -37,10 +37,10 @@ const Admin = ({ profile }) => {
             </Action> */}
             <Action href="/checkin">
               <ActionTitle>Check In Hackers</ActionTitle>
-            </Action>     
+            </Action>
             <Action href="/roleManager">
               <ActionTitle> Manage Roles </ActionTitle>
-            </Action>        
+            </Action>
             <Action href="/taskManager">
               <ActionTitle> Manage Available Tasks </ActionTitle>
             </Action>
