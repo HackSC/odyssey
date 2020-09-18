@@ -101,7 +101,7 @@ const StatusStep: React.FunctionComponent<Props> = props => {
             <b>If you would like to un-decline</b>, please do so on{" "}
             <a href="/results">the results page.</a> If you have any additional
             questions or comments, please let us know at{" "}
-            <a href="mailto:hackers@hacksc.com">hackers@hacksc.com</a>
+            <a href="mailto:team@hacksc.com">team@hacksc.com</a>
           </StatusMessage>
         )}
 
@@ -110,7 +110,7 @@ const StatusStep: React.FunctionComponent<Props> = props => {
             We're excited to have you at HackSC 2020! Be on the lookout for
             future updates and communications from us. If you have any updates
             or questions, please let us know at{" "}
-            <a href="mailto:hackers@hacksc.com">hackers@hacksc.com</a>
+            <a href="mailto:team@hacksc.com">team@hacksc.com</a>
           </StatusMessage>
         )}
 
