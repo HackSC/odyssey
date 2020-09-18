@@ -36,10 +36,10 @@ appform.getInitialProps = async ctx => {
   // Null profile means user is not logged in
   if (!profile) {
     handleLoginRedirect(req);
+  } else {
+    //Referrer Code Special Case Handling
+    profile.referrerCode = getReferrerCode(ctx, profile);
   }
-
-  //Referrer Code Special Case Handling
-  profile.referrerCode = getReferrerCode(ctx, profile);
 
   return {
     profile
