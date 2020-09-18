@@ -1,5 +1,4 @@
 // @ts-nocheck
-
 module.exports = async (req, res) => {
   try {
     const profilesWCount = await models.HackerProfile.findAll({
@@ -41,5 +40,6 @@ module.exports = async (req, res) => {
     return res.status(500).json({ err: e });
   }
 };
+
 
 export default {}
