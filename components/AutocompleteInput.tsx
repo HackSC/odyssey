@@ -7,7 +7,7 @@ type Props = {
   placeholder: string;
   name: string;
   defaultValue: string;
-  suggestions?: Array<String>;
+  suggestions?: Array<Array<String>>;
   required?: boolean;
   disabled?: boolean;
   maxLength?: number;
