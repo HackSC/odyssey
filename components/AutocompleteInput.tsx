@@ -26,9 +26,18 @@ const AutocompleteInput = React.forwardRef<Ref, Props>((props, ref: any) => {
     if (debouncedInput) {
       setShowSuggestions(true);
       const filteredSuggestions = props.suggestions.filter(suggestion => {
-        return (
-          suggestion.toLowerCase().indexOf(debouncedInput.toLowerCase()) >= 0
-        );
+        let return_val = false;
+        suggestion.map(item => {
+          return_val =
+            return_val ||
+            item.toLowerCase().indexOf(debouncedInput.toLowerCase()) >= 0;
+        });
+        return return_val;
+        // return suggestion.filter(choice => {
+        //   return (
+        //     suggestion.toLowerCase().indexOf(debouncedInput.toLowerCase()) >= 0
+        //   );
+        // })
       });
 
       setSuggestions(filteredSuggestions);
@@ -40,7 +49,7 @@ const AutocompleteInput = React.forwardRef<Ref, Props>((props, ref: any) => {
 
   const selectSuggestion = useCallback(suggestion => {
     if (ref && ref.current) {
-      ref.current.value = suggestion;
+      ref.current.value = suggestion[0];
       setShowSuggestions(false);
     }
   }, []);
@@ -70,7 +79,7 @@ const AutocompleteInput = React.forwardRef<Ref, Props>((props, ref: any) => {
                   selectSuggestion(suggestion);
                 }}
               >
-                {suggestion}
+                {suggestion[0]}
               </Suggestion>
             );
           })}
