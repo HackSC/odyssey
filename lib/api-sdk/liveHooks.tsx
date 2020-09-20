@@ -10,6 +10,14 @@ type LiveLookupParams = {
   firstName: string;
   lastName: string;
   email: string;
+  gender?: string;
+  ethnicity?: string;
+  needBus?: string;
+  status?: string;
+  role?: string;
+  school?: string;
+  year?: string;
+  graduationDate?: string;
 };
 
 function liveLookupFetch(params: LiveLookupParams) {
