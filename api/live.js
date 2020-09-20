@@ -369,7 +369,7 @@ router.get("/lookup", async (req, res) => {
   }
 
   if (!!ethnicity) {
-    lookupFilter["ethnicity"] = email;
+    lookupFilter["ethnicity"] = ethnicity;
   }
 
   if (!!needBus) {

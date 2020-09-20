@@ -21,11 +21,9 @@ import {
 } from "../styles";
 
 import {
-  liveAssignQRFetch,
-  liveLookupFetch,
-  liveDispatchFetch
+  liveHackerLookupFetch,
+  liveLookupFetch
 } from "../lib/api-sdk/liveHooks";
-import Countdown from "react-countdown";
 
 const Hacker = ({ result, resetResults }) => {
   return (
@@ -42,6 +40,18 @@ const Hacker = ({ result, resetResults }) => {
         {result.school}
       </p>
       <p>
+        <b>Year: </b>
+        {result.year}
+      </p>
+      <p>
+        <b>Graduation Date: </b>
+        {result.graduationDate}
+      </p>
+      <p>
+        <b>Needs Bus: </b>
+        {result.needBus ? "True" : "False"}
+      </p>
+      <p>
         <b>Gender: </b>
         {result.gender}
       </p>
@@ -54,6 +64,10 @@ const Hacker = ({ result, resetResults }) => {
         {result.status}
       </p>
       <p>
+        <b>Role: </b>
+        {result.role}
+      </p>
+      <p>
         <b>
           {result.qrCodeId === null
             ? "No QR code"
@@ -63,6 +77,56 @@ const Hacker = ({ result, resetResults }) => {
     </Result>
   );
 };
+
+const genderOptions = [
+  { label: "Male", value: "male" },
+  { label: "Female", value: "female" },
+  { label: "Non-Binary", value: "non-binary" },
+  { label: "Other", value: "other" },
+  { label: "Prefer not to say", value: "no-say" }
+];
+
+const ethnicityOptions = [
+  { label: "Native American or Alaskan Native", value: "american-indian" },
+  { label: "Asian / Pacific Islander", value: "asian" },
+  { label: "Black or African American", value: "black" },
+  { label: "Hispanic", value: "hispanic" },
+  { label: "White / Caucasian", value: "caucasian" },
+  { label: "Mixed / Other", value: "mixed-other" },
+  { label: "Prefer not to answer", value: "no-say" }
+];
+
+const roleOptions = [
+  { label: "Hacker", value: "hacker" },
+  { label: "Admin", value: "admin" },
+  { label: "Sponsor", value: "sponsor" },
+  { label: "Volunteer", value: "volunteer" }
+];
+
+const yearOptions = [
+  { label: "Freshman", value: "freshman" },
+  { label: "Sophomore", value: "sophomore" },
+  { label: "Junior", value: "junior" },
+  { label: "Senior", value: "senior" },
+  { label: "Graduate", value: "graduate" }
+];
+
+const gradDateOptions = [
+  { label: "Spring 2020", value: "spring-2020" },
+  { label: "Fall 2020", value: "fall-2020" },
+  { label: "Spring 2021", value: "spring-2021" },
+  { label: "Fall 2021", value: "fall-2021" },
+  { label: "Spring 2022", value: "spring-2022" },
+  { label: "Fall 2022", value: "fall-2022" },
+  { label: "Spring 2023", value: "spring-2023" },
+  { label: "Fall 2023", value: "fall-2023" },
+  { label: "Other", value: "other" }
+];
+
+const needBusOptions = [
+  { label: "False", value: 0 },
+  { label: "True", value: 1 }
+];
 
 const hackerManager = () => {
   const [
@@ -220,7 +284,7 @@ const hackerManager = () => {
     const email = emailInput.current.value;
     const gender = genderInput.current.value;
     const ethnicity = ethnicityInput.current.value;
-    const needBus = needBusInput.current.value;
+    const needBus = needBusInput.current.value == "on" ? 0 : 1;
     const status = statusInput.current.value;
     const role = roleInput.current.value;
     const school = schoolInput.current.value;
@@ -241,7 +305,7 @@ const hackerManager = () => {
       graduationDate
     );
 
-    const lookupResponse = await liveLookupFetch({
+    const lookupResponse = await liveHackerLookupFetch({
       firstName,
       lastName,
       email,
@@ -256,15 +320,17 @@ const hackerManager = () => {
     });
 
     const profiles = lookupResponse.success;
+
+    console.log("results: " + profiles);
     setResults(profiles);
   };
 
   const showAllHackers = async e => {
     e.preventDefault();
 
-    const firstName = null;
-    const lastName = null;
-    const email = null;
+    const firstName = "";
+    const lastName = "";
+    const email = "";
 
     const lookupResponse = await liveLookupFetch({
       firstName,
@@ -286,41 +352,6 @@ const hackerManager = () => {
     );
   }, [results]);
 
-  const genderOptions = [
-    { label: "Male", value: "male" },
-    { label: "Female", value: "female" },
-    { label: "Non-Binary", value: "non-binary" },
-    { label: "Other", value: "other" },
-    { label: "Prefer not to say", value: "no-say" }
-  ];
-
-  const roleOptions = [
-    { label: "Hacker", value: "hacker" },
-    { label: "Admin", value: "admin" },
-    { label: "Sponsor", value: "sponsor" },
-    { label: "Volunteer", value: "volunteer" }
-  ];
-
-  const yearOptions = [
-    { label: "Freshman", value: "freshman" },
-    { label: "Sophomore", value: "sophomore" },
-    { label: "Junior", value: "junior" },
-    { label: "Senior", value: "senior" },
-    { label: "Graduate", value: "graduate" }
-  ];
-
-  const gradDateOptions = [
-    { label: "Spring 2020", value: "spring-2020" },
-    { label: "Fall 2020", value: "fall-2020" },
-    { label: "Spring 2021", value: "spring-2021" },
-    { label: "Fall 2021", value: "fall-2021" },
-    { label: "Spring 2022", value: "spring-2022" },
-    { label: "Fall 2022", value: "fall-2022" },
-    { label: "Spring 2023", value: "spring-2023" },
-    { label: "Fall 2023", value: "fall-2023" },
-    { label: "Other", value: "other" }
-  ];
-
   return (
     <>
       <Head title="HackSC Odyssey - Check in Hackers" />
@@ -328,7 +359,7 @@ const hackerManager = () => {
       <Background>
         <Container>
           <Flex direction="column">
-            <h1>Assign Hackers QR Codes for Check In</h1>
+            <h1>Filter Hackers and Export to CSV</h1>
             <Form>
               <Flex direction="row" justify="space-between">
                 <Column flexBasis={49}>
@@ -371,39 +402,60 @@ const hackerManager = () => {
                 </Column>
               </Flex>
 
-              <FormGroup>
-                <label>School</label>
+              <Flex direction="row" justify="space-between">
+                <Column flexBasis={49}>
+                  <FormGroup>
+                    <label>School</label>
 
-                <AutocompleteInput
-                  placeholder="Your School"
-                  name="school"
-                  ref={schoolInput}
-                  defaultValue={""}
-                  maxLength={255}
-                  suggestions={Schools}
-                />
-              </FormGroup>
+                    <AutocompleteInput
+                      placeholder="Your School"
+                      name="school"
+                      ref={schoolInput}
+                      defaultValue={""}
+                      maxLength={255}
+                      suggestions={Schools}
+                    />
+                  </FormGroup>
+                </Column>
+                <Column flexBasis={49}>
+                  <FormGroup>
+                    <label>Needs Bus</label>
+                    <Select
+                      name="need-bus"
+                      options={needBusOptions}
+                      defaultValue={""}
+                      disabled={false}
+                      ref={needBusInput}
+                    />
+                  </FormGroup>
+                </Column>
+              </Flex>
 
-              <FormGroup>
-                <label>Year</label>
-                <Select
-                  name="year"
-                  options={yearOptions}
-                  defaultValue={""}
-                  ref={yearInput}
-                />
-              </FormGroup>
-
-              <FormGroup>
-                <label>Graduation Date</label>
-                <Select
-                  name="graduation-date"
-                  options={gradDateOptions}
-                  defaultValue={""}
-                  disabled={false}
-                  ref={graduationDateInput}
-                />
-              </FormGroup>
+              <Flex direction="row" justify="space-between">
+                <Column flexBasis={49}>
+                  <FormGroup>
+                    <label>Year</label>
+                    <Select
+                      name="year"
+                      options={yearOptions}
+                      defaultValue={""}
+                      ref={yearInput}
+                    />
+                  </FormGroup>
+                </Column>
+                <Column flexBasis={49}>
+                  <FormGroup>
+                    <label>Graduation Date</label>
+                    <Select
+                      name="graduation-date"
+                      options={gradDateOptions}
+                      defaultValue={""}
+                      disabled={false}
+                      ref={graduationDateInput}
+                    />
+                  </FormGroup>
+                </Column>
+              </Flex>
 
               <Flex direction="row" justify="space-between">
                 <Column flexBasis={49}>
@@ -416,143 +468,53 @@ const hackerManager = () => {
                       ref={genderInput}
                     />
                   </FormGroup>
-                  <FormGroup>
-                    <label>Gender</label>
-                    <RadioChoice>
-                      <input
-                        type="checkbox"
-                        name="need-bus"
-                        id="need-bus"
-                        defaultChecked={false}
-                        ref={needBusInput}
-                      />
-                      <RadioChoiceLabel htmlFor="need-bus">
-                        Yes, I need bus transportation
-                      </RadioChoiceLabel>
-                    </RadioChoice>
-                  </FormGroup>
                 </Column>
 
                 <Column flexBasis={49}>
                   <FormGroup>
                     <label>Ethnicity</label>
-                    <Flex justify="space-between" tabletVertical>
-                      <Column flexBasis={49}>
-                        <RadioChoice>
-                          <input
-                            type="radio"
-                            name="ethnicity"
-                            value="american-indian"
-                            id="ethnicity-american-indian"
-                            defaultChecked={false}
-                            ref={ethnicityInput}
-                          />
-                          <RadioChoiceLabel htmlFor="ethnicity-american-indian">
-                            Native American or Alaskan Native
-                          </RadioChoiceLabel>
-                        </RadioChoice>
-
-                        <RadioChoice>
-                          <input
-                            type="radio"
-                            name="ethnicity"
-                            value="asian"
-                            id="ethnicity-asian"
-                            defaultChecked={false}
-                            ref={ethnicityInput}
-                          />
-                          <RadioChoiceLabel htmlFor="ethnicity-asian">
-                            Asian / Pacific Islander
-                          </RadioChoiceLabel>
-                        </RadioChoice>
-
-                        <RadioChoice>
-                          <input
-                            type="radio"
-                            name="ethnicity"
-                            value="black"
-                            id="ethnicity-black"
-                            defaultChecked={false}
-                            ref={ethnicityInput}
-                          />
-                          <RadioChoiceLabel htmlFor="ethnicity-black">
-                            Black or African American
-                          </RadioChoiceLabel>
-                        </RadioChoice>
-
-                        <RadioChoice>
-                          <input
-                            type="radio"
-                            name="ethnicity"
-                            value="hispanic"
-                            id="ethnicity-hispanic"
-                            defaultChecked={false}
-                            ref={ethnicityInput}
-                          />
-                          <RadioChoiceLabel htmlFor="ethnicity-hispanic">
-                            Hispanic
-                          </RadioChoiceLabel>
-                        </RadioChoice>
-                      </Column>
-
-                      <Column flexBasis={49}>
-                        <RadioChoice>
-                          <input
-                            type="radio"
-                            name="ethnicity"
-                            value="caucasian"
-                            id="ethnicity-caucasian"
-                            defaultChecked={false}
-                            ref={ethnicityInput}
-                          />
-                          <RadioChoiceLabel htmlFor="ethnicity-caucasian">
-                            White / Caucasian
-                          </RadioChoiceLabel>
-                        </RadioChoice>
-
-                        <RadioChoice>
-                          <input
-                            type="radio"
-                            name="ethnicity"
-                            value="mixed-other"
-                            id="ethnicity-mixed-other"
-                            defaultChecked={false}
-                            ref={ethnicityInput}
-                          />
-                          <RadioChoiceLabel htmlFor="ethnicity-mixed-other">
-                            Mixed / Other
-                          </RadioChoiceLabel>
-                        </RadioChoice>
-
-                        <RadioChoice>
-                          <input
-                            type="radio"
-                            name="ethnicity"
-                            value="no-say"
-                            id="ethnicity-no-say"
-                            defaultChecked={false}
-                            ref={ethnicityInput}
-                          />
-                          <RadioChoiceLabel htmlFor="ethnicity-no-say">
-                            Prefer not to answer
-                          </RadioChoiceLabel>
-                        </RadioChoice>
-                      </Column>
-                    </Flex>
+                    <Select
+                      name="gender"
+                      options={ethnicityOptions}
+                      defaultValue="no-say"
+                      ref={ethnicityInput}
+                    />
                   </FormGroup>
                 </Column>
               </Flex>
 
-              <Flex direction="row" justify="space-between">
+              <Flex
+                direction="row"
+                style={{ paddingTop: "1rem" }}
+                justify="space-between"
+              >
                 <Column flexBasis={49}>
-                  <Button onClick={lookupHackers}>Look Up Hackers</Button>
+                  <FullButton onClick={lookupHackers}>
+                    Filter Hackers
+                  </FullButton>
                 </Column>
 
                 <Column flexBasis={49}>
-                  <Button onClick={showAllHackers}>Show All Hackers</Button>
+                  <FullButton onClick={showAllHackers}>
+                    Show All Hackers
+                  </FullButton>
                 </Column>
               </Flex>
             </Form>
+          </Flex>
+
+          <Flex
+            direction="row"
+            style={{ paddingTop: "1rem" }}
+            justify="space-between"
+          >
+            {results && results.length > 0 ? (
+              <FullButton onClick={exportHackerCSV}>
+                Export Results to CSV
+              </FullButton>
+            ) : (
+              ""
+            )}
           </Flex>
 
           {renderHackers}
@@ -577,6 +539,10 @@ hackerManager.getInitialProps = async ctx => {
     profile
   };
 };
+
+const FullButton = styled(Button)`
+  width: -webkit-fill-available;
+`;
 
 const Results = styled.div`
   padding: 18px 0;

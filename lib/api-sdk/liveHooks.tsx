@@ -20,7 +20,26 @@ type LiveLookupParams = {
   graduationDate?: string;
 };
 
+type LiveHackerLookupParams = {
+  firstName: string;
+  lastName: string;
+  email: string;
+  gender: string;
+  ethnicity: string;
+  needBus: number;
+  status: string;
+  role: string;
+  school: string;
+  year: string;
+  graduationDate: string;
+};
+
 function liveLookupFetch(params: LiveLookupParams) {
+  return APIGet<Profile[]>(Routes.LiveLookup, { queryParams: params });
+}
+
+function liveHackerLookupFetch(params: LiveHackerLookupParams) {
+  console.log(params);
   return APIGet<Profile[]>(Routes.LiveLookup, { queryParams: params });
 }
 
@@ -41,5 +60,6 @@ export {
   liveAssignQRFetch,
   liveDispatchFetch,
   liveLookupFetch,
+  liveHackerLookupFetch,
   livePointFetch
 };
