@@ -24,6 +24,7 @@ type LiveQRAssignBody = {
   qrCodeId: string;
   userId: StringID;
 };
+
 function liveAssignQRFetch(body: LiveQRAssignBody) {
   return APIPost(Routes.LiveAssignQR, body);
 }

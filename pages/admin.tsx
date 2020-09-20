@@ -50,6 +50,9 @@ const Admin = ({ profile }) => {
             <Action href="/scheduleManager">
               <ActionTitle> Manage Event Schedule </ActionTitle>
             </Action>
+            <Action href="/hackerManager">
+              <ActionTitle> Manage Hackers </ActionTitle>
+            </Action>
             <Action href="/judgingManager">
               <ActionTitle> Pass Judgement </ActionTitle>
             </Action>
