@@ -364,15 +364,15 @@ router.get("/lookup", async (req, res) => {
     lookupFilter["email"] = email;
   }
 
-  if (!!gender) {
+  if (!!gender && gender != "all") {
     lookupFilter["gender"] = gender;
   }
 
-  if (!!ethnicity) {
+  if (!!ethnicity && ethnicity != "all") {
     lookupFilter["ethnicity"] = ethnicity;
   }
 
-  if (!!needBus) {
+  if (!!needBus && needBus != "all") {
     lookupFilter["needBus"] = needBus;
   }
 
@@ -380,7 +380,7 @@ router.get("/lookup", async (req, res) => {
     lookupFilter["status"] = status;
   }
 
-  if (!!role) {
+  if (!!role && role != "all") {
     lookupFilter["role"] = role;
   }
 
@@ -388,11 +388,11 @@ router.get("/lookup", async (req, res) => {
     lookupFilter["school"] = school;
   }
 
-  if (!!year) {
+  if (!!year && year != "all") {
     lookupFilter["year"] = year;
   }
 
-  if (!!graduationDate) {
+  if (!!graduationDate && graduationDate != "all") {
     lookupFilter["graduationDate"] = graduationDate;
   }
 

@@ -80,6 +80,7 @@ const Hacker = ({ result, resetResults }) => {
 };
 
 const genderOptions = [
+  { label: "All", value: "all" },
   { label: "Male", value: "male" },
   { label: "Female", value: "female" },
   { label: "Non-Binary", value: "non-binary" },
@@ -88,6 +89,7 @@ const genderOptions = [
 ];
 
 const ethnicityOptions = [
+  { label: "All", value: "all" },
   { label: "Native American or Alaskan Native", value: "american-indian" },
   { label: "Asian / Pacific Islander", value: "asian" },
   { label: "Black or African American", value: "black" },
@@ -98,6 +100,7 @@ const ethnicityOptions = [
 ];
 
 const roleOptions = [
+  { label: "All", value: "all" },
   { label: "Hacker", value: "hacker" },
   { label: "Admin", value: "admin" },
   { label: "Sponsor", value: "sponsor" },
@@ -105,6 +108,7 @@ const roleOptions = [
 ];
 
 const yearOptions = [
+  { label: "All", value: "all" },
   { label: "Freshman", value: "freshman" },
   { label: "Sophomore", value: "sophomore" },
   { label: "Junior", value: "junior" },
@@ -113,6 +117,7 @@ const yearOptions = [
 ];
 
 const gradDateOptions = [
+  { label: "All", value: "all" },
   { label: "Spring 2020", value: "spring-2020" },
   { label: "Fall 2020", value: "fall-2020" },
   { label: "Spring 2021", value: "spring-2021" },
@@ -125,6 +130,7 @@ const gradDateOptions = [
 ];
 
 const needBusOptions = [
+  { label: "All", value: "all" },
   { label: "False", value: "False" },
   { label: "True", value: "True" }
 ];
@@ -257,7 +263,13 @@ const hackerManager = () => {
     const email = emailInput.current.value;
     const gender = genderInput.current.value;
     const ethnicity = ethnicityInput.current.value;
-    const needBus = needBusInput.current.value == "False" ? "0" : "1";
+    // * I am so sorry for this disgusting nested turnary operator... I'm lazy
+    const needBus =
+      needBusInput.current.value == "all"
+        ? "all"
+        : needBusInput.current.value == "False"
+        ? "0"
+        : "1";
     const status = statusInput.current.value;
     const role = roleInput.current.value;
     const school = schoolInput.current.value;
@@ -280,7 +292,6 @@ const hackerManager = () => {
 
     const profiles = lookupResponse.success;
 
-    console.log("results: " + profiles);
     setResults(profiles);
   };
 
@@ -423,7 +434,6 @@ const hackerManager = () => {
                     <Select
                       name="gender"
                       options={genderOptions}
-                      defaultValue="no-say"
                       ref={genderInput}
                     />
                   </FormGroup>
@@ -435,7 +445,6 @@ const hackerManager = () => {
                     <Select
                       name="gender"
                       options={ethnicityOptions}
-                      defaultValue="no-say"
                       ref={ethnicityInput}
                     />
                   </FormGroup>

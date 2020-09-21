@@ -39,7 +39,6 @@ function liveLookupFetch(params: LiveLookupParams) {
 }
 
 function liveHackerLookupFetch(params: LiveHackerLookupParams) {
-  console.log(params);
   return APIGet<Profile[]>(Routes.LiveLookup, { queryParams: params });
 }
 
