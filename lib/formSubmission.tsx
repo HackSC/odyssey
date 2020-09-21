@@ -18,7 +18,7 @@ function getProfileFromFormData(
     gender: formRef.current["gender"].value,
     ethnicity: formRef.current["ethnicity"].value,
     over18: formRef.current["is-over-18"].checked,
-    needBus: formRef.current["need-bus"].checked,
+    // needBus: formRef.current["need-bus"].checked, // NOT NEEDED DUE TO COVID
     skillLevel: formRef.current["skill-level"].value,
     skills: formRef.current["skills"].value,
     interests: formRef.current["interests"].value,

@@ -459,6 +459,7 @@ const ProfileStep: React.FunctionComponent<Props> = props => {
         <FormSection>
           <h2>Additional Information</h2>
 
+          {/* THANKS COVID, THIS ISN"T NEEDED ANYMORE
           <FormGroup>
             <label>
               Will you need bus transportation to/from your school to USC?
@@ -477,6 +478,7 @@ const ProfileStep: React.FunctionComponent<Props> = props => {
               </RadioChoiceLabel>
             </RadioChoice>
           </FormGroup>
+          */}
 
           <FormGroup>
             <label>Resume - Must be a PDF, 10MB Maximum</label>
@@ -575,11 +577,13 @@ const ProfileStep: React.FunctionComponent<Props> = props => {
           <p>
             Now that we know a bit more about you, we'd love to hear more about
             what you want to build at HackSC and what projects you've done in
-            the past.
+            the past. Please feel no pressure to write the full 1000 characters.
+            We very much prefer quality over quantity.
           </p>
 
           <FormGroup>
-            <label>
+            {/* HackSC 2020 Question 1
+               <label>
               HackSC has four verticals, all of which center around social
               justice: civil liberties, sustainability, equity, and mental
               health. If you'd like, you can read more about them at{" "}
@@ -587,6 +591,22 @@ const ProfileStep: React.FunctionComponent<Props> = props => {
                 hacksc.com
               </a>
               . If you were admitted to HackSC 2020, which vertical would you
+              tackle and what would you build? (This does not bind your project
+              to this vertical. 1000 characters)
+            </label>
+            */}
+
+            <label>
+              In order to address this tumultuous time of COVID and social
+              distancing, HackSC has elected to host a Connectivity hackathon.
+              At HackSC 2021, hackers can create technology solutions to bring
+              the world closer together under four verticals: device, team,
+              customer and person. If you'd like, you can read more about them
+              at{" "}
+              <a href="https://hacksc.com" target="_blank">
+                hacksc.com
+              </a>
+              . If you were admitted to HackSC 2021, which vertical would you
               tackle and what would you build? (This does not bind your project
               to this vertical. 1000 characters)
             </label>
@@ -603,8 +623,8 @@ const ProfileStep: React.FunctionComponent<Props> = props => {
 
           <FormGroup>
             <label>
-              Tell us about a project you have finished in the past. (1000
-              characters)
+              Tell us about a project (technical/non-technical) you have worked
+              on in the past? (1000 characters)
             </label>
 
             <textarea
