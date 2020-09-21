@@ -37,7 +37,7 @@ const Declined: React.FunctionComponent<Props> = props => {
 
         <p>
           If you have any additional comments or questions, please let us know
-          at <a href="mailto:hackers@hacksc.com">hackers@hacksc.com</a>
+          at <a href="mailto:team@hacksc.com">team@hacksc.com</a>
         </p>
 
         <br />
