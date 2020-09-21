@@ -1,6 +1,7 @@
 import React, { useRef, useState, useMemo, useCallback } from "react";
 import styled from "styled-components";
 import JSZip from "jszip";
+import stringify from "csv-stringify";
 import { saveAs } from "file-saver";
 
 import { handleLoginRedirect, getProfile } from "../lib/authenticate";
@@ -124,8 +125,8 @@ const gradDateOptions = [
 ];
 
 const needBusOptions = [
-  { label: "False", value: 0 },
-  { label: "True", value: 1 }
+  { label: "False", value: "False" },
+  { label: "True", value: "True" }
 ];
 
 const hackerManager = () => {
@@ -164,15 +165,7 @@ const hackerManager = () => {
     let zip = new JSZip();
 
     try {
-      let headers = ["Project Name", "Table", "Points", "Comments"];
-      let values = ["submissionTitle", "table"];
-      for (let i = 0; i < results.length; i++) {
-        let hacker = results[i];
-        let filters = {
-          desiredPrizes: hacker
-        };
-      }
-      let csvs = await genHackerCSV(headers, values, filters);
+      let csvs = await genHackerCSV();
       let data = csvs[0].join("");
       zip.file("hackers.csv", data);
     } catch (err) {
@@ -181,78 +174,58 @@ const hackerManager = () => {
     }
 
     zip.generateAsync({ type: "blob" }).then(function(content) {
-      saveAs(content, "sponsors_data.zip");
+      saveAs(content, "hacker_data.zip");
       setMessage("");
     });
   };
 
-  const genHackerCSV = async function(
-    header,
-    values,
-    filters = {},
-    split = 1
-  ): Promise<Array<Array<String>>> {
+  const genHackerCSV = async (): Promise<Array<Array<String>>> => {
     return new Promise(function(resolve, reject) {
       let promises = [];
-      split = split < 1 ? 1 : split;
-      for (let splitCount = 0; splitCount < split; splitCount++) {
-        promises.push(
-          new Promise(function(resolve, reject) {
-            let data = [];
-            let stringifier = stringify({
-              delimiter: ","
-            });
-            stringifier.on("readable", function() {
-              let row;
-              while ((row = stringifier.read())) {
-                data.push(row);
-              }
-            });
-            stringifier.on("error", function(err) {
-              reject(new Error(err.message));
-            });
-            stringifier.write(header);
-            stringifier.on("finish", function() {
-              resolve(data);
-            });
-            // read projects sorry hella ugly
-            let projectCount = 0;
-            for (let i = 0; i < projects.length; i++) {
-              let project = projects[i];
-              let passFilter = true;
-              Object.entries(filters).forEach(([key, value]) => {
-                if (Array.isArray(project[key])) {
-                  if (!project[key].includes(value)) {
-                    passFilter = false;
-                  }
-                } else if (project[key] != value) {
-                  passFilter = false;
-                }
-              });
-              if (passFilter) {
-                projectCount++;
-                let passSplit = false;
-                if (projectCount % split === splitCount) {
-                  passSplit = true;
-                }
-                if (passSplit) {
-                  let line = [];
-                  for (let j = 0; j < values.length; j++) {
-                    let value = values[j].split(".");
-                    if (value.length > 1) {
-                      line.push(project[value[0]][value[1]]);
-                    } else {
-                      line.push(project[value[0]]);
-                    }
-                  }
-                  stringifier.write(line);
-                }
-              }
+      promises.push(
+        new Promise(function(resolve, reject) {
+          let data = [];
+          let stringifier = stringify({
+            delimiter: ","
+          });
+          stringifier.on("readable", function() {
+            let row;
+            while ((row = stringifier.read())) {
+              data.push(row);
             }
-            stringifier.end();
-          })
-        );
-      }
+          });
+          stringifier.on("error", function(err) {
+            reject(new Error(err.message));
+          });
+          let headers = [
+            "firstName",
+            "lastName",
+            "email",
+            "gender",
+            "ethnicity",
+            "needBus",
+            "status",
+            "role",
+            "school",
+            "year",
+            "graduationDate"
+          ];
+          stringifier.write(headers);
+          stringifier.on("finish", function() {
+            resolve(data);
+          });
+
+          for (let i = 0; i < results.length; i++) {
+            let hacker = results[i];
+            let line = [];
+            for (let j = 0; j < headers.length; j++) {
+              line.push(hacker[headers[j]]);
+            }
+            stringifier.write(line);
+          }
+          stringifier.end();
+        })
+      );
 
       // return all csvs
       Promise.all(promises)
@@ -284,26 +257,12 @@ const hackerManager = () => {
     const email = emailInput.current.value;
     const gender = genderInput.current.value;
     const ethnicity = ethnicityInput.current.value;
-    const needBus = needBusInput.current.value == "on" ? 0 : 1;
+    const needBus = needBusInput.current.value == "False" ? "0" : "1";
     const status = statusInput.current.value;
     const role = roleInput.current.value;
     const school = schoolInput.current.value;
     const year = yearInput.current.value;
     const graduationDate = graduationDateInput.current.value;
-
-    console.log(
-      firstName,
-      lastName,
-      email,
-      gender,
-      ethnicity,
-      needBus,
-      status,
-      role,
-      school,
-      year,
-      graduationDate
-    );
 
     const lookupResponse = await liveHackerLookupFetch({
       firstName,

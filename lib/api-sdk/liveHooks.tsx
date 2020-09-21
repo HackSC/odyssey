@@ -26,7 +26,7 @@ type LiveHackerLookupParams = {
   email: string;
   gender: string;
   ethnicity: string;
-  needBus: number;
+  needBus: string;
   status: string;
   role: string;
   school: string;
