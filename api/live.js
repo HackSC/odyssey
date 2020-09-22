@@ -338,7 +338,19 @@ async function handleJudge(userId, req, res) {
 router.get("/lookup", async (req, res) => {
   const lookupFilter = {};
 
-  const { firstName, lastName, email } = req.query;
+  const {
+    firstName,
+    lastName,
+    email,
+    gender,
+    ethnicity,
+    needBus,
+    status,
+    role,
+    school,
+    year,
+    graduationDate
+  } = req.query;
 
   if (!!firstName) {
     lookupFilter["firstName"] = firstName;
@@ -350,6 +362,38 @@ router.get("/lookup", async (req, res) => {
 
   if (!!email) {
     lookupFilter["email"] = email;
+  }
+
+  if (!!gender && gender != "all") {
+    lookupFilter["gender"] = gender;
+  }
+
+  if (!!ethnicity && ethnicity != "all") {
+    lookupFilter["ethnicity"] = ethnicity;
+  }
+
+  if (!!needBus && needBus != "all") {
+    lookupFilter["needBus"] = needBus;
+  }
+
+  if (!!status) {
+    lookupFilter["status"] = status;
+  }
+
+  if (!!role && role != "all") {
+    lookupFilter["role"] = role;
+  }
+
+  if (!!school) {
+    lookupFilter["school"] = school;
+  }
+
+  if (!!year && year != "all") {
+    lookupFilter["year"] = year;
+  }
+
+  if (!!graduationDate && graduationDate != "all") {
+    lookupFilter["graduationDate"] = graduationDate;
   }
 
   const profiles = await models.HackerProfile.findAll({
