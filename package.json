@@ -14,6 +14,12 @@
     "test": "start-server-and-test start http://localhost:3000 cypress:run",
     "jest": "jest --runInBand"
   },
+  "size-limit": [
+    {
+      "path": "dist/index.js",
+      "limit": "4500 ms"
+    }
+  ],
   "jest": {
     "roots": [
       "./tests/"
