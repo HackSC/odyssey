@@ -59,6 +59,9 @@ const Admin = ({ profile }) => {
             <Action href="/battlepassManager">
               <ActionTitle> Edit Battlepass </ActionTitle>
             </Action>
+            <Action href="/mailQuery">
+              <ActionTitle> Mail Signups </ActionTitle>
+            </Action>
             <Action
               href="https://metabase-odyssey.herokuapp.com/"
               target="_blank"

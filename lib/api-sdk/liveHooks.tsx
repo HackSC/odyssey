@@ -34,12 +34,21 @@ type LiveHackerLookupParams = {
   graduationDate: string;
 };
 
+type LiveSignUpLookupParams = {
+  email: string;
+  ip: string;
+};
+
 function liveLookupFetch(params: LiveLookupParams) {
   return APIGet<Profile[]>(Routes.LiveLookup, { queryParams: params });
 }
 
 function liveHackerLookupFetch(params: LiveHackerLookupParams) {
   return APIGet<Profile[]>(Routes.LiveLookup, { queryParams: params });
+}
+
+function liveSignUpLookupFetch(params: LiveSignUpLookupParams) {
+  return APIGet<SignUp[]>(Routes.SignUpsLive, { queryParams: params });
 }
 
 function livePointFetch(qrCodeId: ResourceID, req?: NextApiRequest) {
@@ -59,6 +68,7 @@ export {
   liveAssignQRFetch,
   liveDispatchFetch,
   liveLookupFetch,
+  liveSignUpLookupFetch,
   liveHackerLookupFetch,
   livePointFetch
 };

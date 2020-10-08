@@ -335,6 +335,27 @@ async function handleJudge(userId, req, res) {
   return res.json({ success: memberProfiles });
 }
 
+router.get("/signups", async (req, res) => {
+  const lookupFilter = {};
+
+  const { email, ip } = req.query;
+
+  if (!!email) {
+    lookupFilter["email"] = email;
+  }
+  if (!!ip) {
+    lookupFilter["ip"] = ip;
+  }
+
+  const profiles = await models.signups.findAll({
+    where: lookupFilter
+  });
+
+  return res.json({
+    success: profiles
+  });
+});
+
 router.get("/lookup", async (req, res) => {
   const lookupFilter = {};
 
