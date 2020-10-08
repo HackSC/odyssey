@@ -23,7 +23,7 @@ const Admin = ({ profile }) => {
               Hello there -- welcome to the admin dashboard. Here you can access
               actions to help organize and run HackSC. If you have any questions
               or find any errors, hit up the engineers in{" "}
-              <b>#2020-engineering</b>
+              <b>#{new Date().getFullYear()}-engineering</b>
             </p>
           </Flex>
 
@@ -37,10 +37,10 @@ const Admin = ({ profile }) => {
             </Action> */}
             <Action href="/checkin">
               <ActionTitle>Check In Hackers</ActionTitle>
-            </Action>     
+            </Action>
             <Action href="/roleManager">
               <ActionTitle> Manage Roles </ActionTitle>
-            </Action>        
+            </Action>
             <Action href="/taskManager">
               <ActionTitle> Manage Available Tasks </ActionTitle>
             </Action>
@@ -50,11 +50,17 @@ const Admin = ({ profile }) => {
             <Action href="/scheduleManager">
               <ActionTitle> Manage Event Schedule </ActionTitle>
             </Action>
+            <Action href="/hackerManager">
+              <ActionTitle> Manage Hackers </ActionTitle>
+            </Action>
             <Action href="/judgingManager">
               <ActionTitle> Pass Judgement </ActionTitle>
             </Action>
             <Action href="/battlepassManager">
               <ActionTitle> Edit Battlepass </ActionTitle>
+            </Action>
+            <Action href="/mailQuery">
+              <ActionTitle> Mail Signups </ActionTitle>
             </Action>
             <Action
               href="https://metabase-odyssey.herokuapp.com/"
