@@ -2,7 +2,7 @@ import React from "react";
 
 import styled from "styled-components";
 
-import HeaderLogo from "../assets/header_logo.png";
+import HeaderLogo from "../assets/header_logo_21_transparent.png";
 
 import { Container, Link } from "../styles";
 
@@ -42,7 +42,7 @@ const Navbar: React.FunctionComponent<NavbarProps> = ({
   showLive = true,
   showDash = true,
   showApp = true,
-  showMaps = true,
+  showMaps = false, // * False because HackSC 2021 is virtual :( big sad
   showAPI = true,
   showResults = true,
   showTeam = true,
@@ -179,7 +179,7 @@ const NavbarContainer = styled(Container)`
 `;
 
 const HeaderLogoImg = styled.img`
-  width: 169px;
+  width: 220px;
 
   ${({ theme }) =>
     theme.media.mobile`

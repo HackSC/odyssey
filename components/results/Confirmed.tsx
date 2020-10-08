@@ -19,8 +19,7 @@ const Confirmed: React.FunctionComponent<Props> = props => {
           2020. We have a lot of exciting things planned and we can't wait for
           you to be a part of it. Be on the lookout for future updates and
           communications from us. If you have any updates or questions, please
-          contact us at{" "}
-          <a href="mailto:hackers@hacksc.com">hackers@hacksc.com</a>
+          contact us at <a href="mailto:team@hacksc.com">team@hacksc.com</a>
         </p>
 
         <br />

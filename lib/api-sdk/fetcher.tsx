@@ -64,6 +64,14 @@ const HackerLiveRoutes: IHackerRoutes = {
   HackerLiveRaffleCount: "api/hacker/live/rafflePoints" as Route
 };
 
+interface ISignUpsRoutes {
+  SignUpsLive: GetRoute;
+}
+
+const SignUpsLiveRoutes: ISignUpsRoutes = {
+  SignUpsLive: "api/live/signups" as Route
+};
+
 interface IEventRoutes {
   EventList: GetRoute;
 }
@@ -81,6 +89,7 @@ const TaskRoutes: ITaskRoutes = {
 };
 
 const Routes = {
+  ...SignUpsLiveRoutes,
   ...ProjectTeamRoutes,
   ...ContributionRoutes,
   ...LiveRoutes,
