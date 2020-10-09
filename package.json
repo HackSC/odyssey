@@ -18,7 +18,7 @@
   "size-limit": [
     {
       "path": "dist/index.js",
-      "limit": "30000 ms"
+      "limit": "100000 ms"
     }
   ],
   "jest": {
