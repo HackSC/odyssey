@@ -1,11 +1,16 @@
 const models = require("../models");
 const { sequelize } = require("../../../lib/database/models");
 const { authMiddleware, requireAdmin } = require("../utils");
+const Status = require("http-status-codes");
 
 // TODO: use the new client fetcher api
 const query = async (req, res, next) => {
   authMiddleware(req, res, next);
   requireAdmin(req, res, next);
+
+  if (req.method !== "GET") {
+    return res.status(Status.BAD_REQUEST).send("");
+  }
 
   const Op = sequelize.Op;
   const { query } = req.query;
