@@ -12,7 +12,7 @@ type Props = {
   houses: any;
 };
 
-const LiveStep: React.FunctionComponent<Props> = props => {
+const LiveStep: React.FunctionComponent<Props> = (props) => {
   const { profile, socialPosts, houses } = props;
 
   if (profile.status === "confirmed") {

@@ -55,6 +55,7 @@
     "js-cookie": "^2.2.1",
     "jsqr": "^1.2.0",
     "jszip": "^3.2.2",
+    "lint-staged": "^10.4.0",
     "list-react-files": "^0.2.0",
     "moment": "^2.24.0",
     "mysql": "^2.17.1",
@@ -111,7 +112,7 @@
     "enzyme-adapter-react-16": "^1.14.0",
     "husky": "^3.0.9",
     "jest": "^26.0.1",
-    "prettier": "^1.18.2",
+    "prettier": "^2.1.2",
     "pretty-quick": "^2.0.0",
     "react-addons-test-utils": "^15.6.2",
     "react-test-renderer": "^16.9.0",
@@ -122,8 +123,11 @@
   },
   "husky": {
     "hooks": {
-      "pre-commit": "pretty-quick --staged"
+      "pre-commit": "pretty-quick --staged && lint-staged"
     }
+  },
+  "lint-staged": {
+    "**/*": "prettier --write --ignore-unknown"
   },
   "bit": {
     "env": {

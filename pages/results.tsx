@@ -32,7 +32,7 @@ Results.getInitialProps = async ({ req }) => {
   }
 
   return {
-    profile
+    profile,
   };
 };
 

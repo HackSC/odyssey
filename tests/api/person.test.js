@@ -13,9 +13,9 @@ describe("Peoples", () => {
     return agent
       .get("/api/person/self")
       .expect(200)
-      .then(res => {
+      .then((res) => {
         expect(res.body.person.Profile).toBeDefined();
       })
-      .catch(e => console.error(e));
+      .catch((e) => console.error(e));
   });
 });

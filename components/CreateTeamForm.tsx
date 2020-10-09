@@ -11,7 +11,7 @@ const CreateTeamForm = () => {
   const [error, setError] = useState(null);
 
   const handleSubmit = useCallback(
-    async e => {
+    async (e) => {
       e.preventDefault();
 
       if (teamNameRef && teamNameRef.current) {
@@ -22,11 +22,11 @@ const CreateTeamForm = () => {
           const res = await fetch("/api/team", {
             method: "POST",
             body: JSON.stringify({
-              name
+              name,
             }),
             headers: {
-              "Content-Type": "application/json"
-            }
+              "Content-Type": "application/json",
+            },
           });
 
           const data = await res.json();

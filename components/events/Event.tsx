@@ -22,7 +22,7 @@ const Event = (props: Props) => {
     formattedEnd,
     eventsRef,
     isFirst,
-    isOver
+    isOver,
   } = props;
 
   const renderTimesRight = () => {
