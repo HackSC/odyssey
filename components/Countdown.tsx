@@ -8,7 +8,10 @@ const Countdown = () => {
     <Wrapper>
       <Row>
         <CountdownContainer>
-          <h2>Hacking has concluded! Thanks for coming to HackSC 2020</h2>
+          <h2>
+            Hacking has concluded! Thanks for coming to HackSC{" "}
+            {new Date().getFullYear()}
+          </h2>
         </CountdownContainer>
       </Row>
     </Wrapper>

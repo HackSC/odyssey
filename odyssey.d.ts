@@ -115,6 +115,12 @@ declare type Contribution = {
   createdAt: Date;
 };
 
+declare type SignUp = {
+  email: string;
+  ip: string;
+  created_at: Date;
+};
+
 declare type ProjectTeam = {
   name: StringID;
   devpostLink: string;

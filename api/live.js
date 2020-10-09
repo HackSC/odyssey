@@ -335,10 +335,43 @@ async function handleJudge(userId, req, res) {
   return res.json({ success: memberProfiles });
 }
 
+router.get("/signups", async (req, res) => {
+  const lookupFilter = {};
+
+  const { email, ip } = req.query;
+
+  if (!!email) {
+    lookupFilter["email"] = email;
+  }
+  if (!!ip) {
+    lookupFilter["ip"] = ip;
+  }
+
+  const profiles = await models.signups.findAll({
+    where: lookupFilter
+  });
+
+  return res.json({
+    success: profiles
+  });
+});
+
 router.get("/lookup", async (req, res) => {
   const lookupFilter = {};
 
-  const { firstName, lastName, email } = req.query;
+  const {
+    firstName,
+    lastName,
+    email,
+    gender,
+    ethnicity,
+    needBus,
+    status,
+    role,
+    school,
+    year,
+    graduationDate
+  } = req.query;
 
   if (!!firstName) {
     lookupFilter["firstName"] = firstName;
@@ -350,6 +383,38 @@ router.get("/lookup", async (req, res) => {
 
   if (!!email) {
     lookupFilter["email"] = email;
+  }
+
+  if (!!gender && gender != "all") {
+    lookupFilter["gender"] = gender;
+  }
+
+  if (!!ethnicity && ethnicity != "all") {
+    lookupFilter["ethnicity"] = ethnicity;
+  }
+
+  if (!!needBus && needBus != "all") {
+    lookupFilter["needBus"] = needBus;
+  }
+
+  if (!!status) {
+    lookupFilter["status"] = status;
+  }
+
+  if (!!role && role != "all") {
+    lookupFilter["role"] = role;
+  }
+
+  if (!!school) {
+    lookupFilter["school"] = school;
+  }
+
+  if (!!year && year != "all") {
+    lookupFilter["year"] = year;
+  }
+
+  if (!!graduationDate && graduationDate != "all") {
+    lookupFilter["graduationDate"] = graduationDate;
   }
 
   const profiles = await models.HackerProfile.findAll({
