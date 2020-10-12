@@ -1,8 +1,9 @@
 // If you make any changes to ApiLinks, make sure you do the following:
 // 1) Generate a Sequelize migration that adds/removes columns as needed
 // 2) Update the ApiLink type definition in odyssey.d.ts
+const Api = require("./apis");
 module.exports = (sequelize, DataTypes) => {
-  const ApiLinks = sequelize.define(
+  var ApiLinks = sequelize.define(
     "ApiLinks",
     {
       id: {
@@ -18,6 +19,10 @@ module.exports = (sequelize, DataTypes) => {
       timestamps: false,
     }
   );
+
+  ApiLinks.associate = function (models) {
+    ApiLinks.belongsTo(models.Apis, { foreignKey: "api_id" });
+  };
 
   return ApiLinks;
 };

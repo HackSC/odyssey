@@ -10,26 +10,12 @@ router.get("/", async (req, res) => {
     include: [
       {
         model: models.ApiLinks,
-        as: "ApiLink",
-        where: { api_id: this.id }, //
+        as: "links",
       },
     ],
   });
 
-  console.log(apis);
-
-  // apis.map(api => {
-  //   let api_obj = api;
-  //   api_obj.links = await models.ApiLinks.findAll({
-  //     where: {
-  //       api_id: api.id,
-  //     },
-  //   });
-  //   results = [...results, api_obj];
-  // })
-
-  // console.log(results)
-  return res.json({ results });
+  return res.json({ apis });
 });
 
 module.exports = router;

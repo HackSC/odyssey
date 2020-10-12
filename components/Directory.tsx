@@ -3,23 +3,27 @@ import styled from "styled-components";
 const Directory = ({ apis }) => {
   return (
     <Wrapper>
-      {apis.results.map((item) => (
-        <Company key={item.id}>
-          <h2>{item.name}</h2>
-          <p>{item.description}</p>
-          <br />
-          {!item.links || item.links.length == 0 ? (
-            <></>
-          ) : (
-            item.links.map((link) => (
-              <p key={link.name}>
-                <Link href={link.link}>{link.name}</Link>
-                <br />
-              </p>
-            ))
-          )}
-        </Company>
-      ))}
+      {apis
+        ? apis.apis.map((item) => (
+            <Company key={item.id}>
+              <h2>{item.name}</h2>
+              <p>{item.description}</p>
+              <br />
+              {!item.links || item.links.length == 0 ? (
+                <></>
+              ) : (
+                item.links.map((link) => (
+                  <div
+                    style={{ display: "flex", paddingBottom: ".5rem" }}
+                    key={link.name}
+                  >
+                    <Link href={link.link}>{link.name}</Link>
+                  </div>
+                ))
+              )}
+            </Company>
+          ))
+        : ""}
     </Wrapper>
   );
 };
