@@ -10,7 +10,7 @@ import {
   getMajorEvents,
 } from "../lib/authenticate";
 
-import { Head, Navbar, Footer, Select } from "../components";
+import { Head, Navbar, Footer, Select, Directory } from "../components";
 
 import {
   Button,
@@ -23,45 +23,33 @@ import {
 } from "../styles";
 
 import {
-  liveSignUpLookupFetch,
-  liveLookupFetch,
+  liveApiLookupFetch,
+  liveAllApiLookupFetch,
 } from "../lib/api-sdk/liveHooks";
 
-const Hacker = ({ result }) => {
-  return (
-    <Result key={result.userId}>
-      <h2>{result.email}</h2>
-      <p>
-        <b>IP Address: </b>
-        {result.ip}
-      </p>
-    </Result>
-  );
-};
-
 const manageApiDirectory = ({ events }) => {
-  const [action, setAction] = useState(null);
+  const [action, setAction] = useState("all");
   const [emailInput, ipInput] = [useRef(null), useRef(null)];
 
   const [results, setResults] = useState([]);
 
-  const exportHackerCSV = async function () {
+  const exportApiCSV = async function () {
     let zip = new JSZip();
 
     try {
-      let csvs = await genHackerCSV();
+      let csvs = await genApiCSV();
       let data = csvs[0].join("");
-      zip.file("signups.csv", data);
+      zip.file("apis.csv", data);
     } catch (err) {
       return;
     }
 
     zip.generateAsync({ type: "blob" }).then(function (content) {
-      saveAs(content, "signups.zip");
+      saveAs(content, "apis.zip");
     });
   };
 
-  const genHackerCSV = async (): Promise<Array<Array<String>>> => {
+  const genApiCSV = async (): Promise<Array<Array<String>>> => {
     return new Promise(function (resolve, reject) {
       let promises = [];
       promises.push(
@@ -79,17 +67,17 @@ const manageApiDirectory = ({ events }) => {
           stringifier.on("error", function (err) {
             reject(new Error(err.message));
           });
-          let headers = ["email", "ip"];
+          let headers = ["name", "description", "links"];
           stringifier.write(headers);
           stringifier.on("finish", function () {
             resolve(data);
           });
 
           for (let i = 0; i < results.length; i++) {
-            let hacker = results[i];
+            let api = results[i];
             let line = [];
             for (let j = 0; j < headers.length; j++) {
-              line.push(hacker[headers[j]]);
+              line.push(api[headers[j]]);
             }
             stringifier.write(line);
           }
@@ -102,40 +90,31 @@ const manageApiDirectory = ({ events }) => {
     });
   };
 
-  const lookupHackers = async (e) => {
+  const showApis = async (e) => {
     e.preventDefault();
 
-    const email = emailInput.current.value;
-    const ip = ipInput.current.value;
+    let id = events.filter((x) =>
+      x.name == action || action == "all" ? x : null
+    )[0].id;
 
-    const lookupResponse = await liveSignUpLookupFetch({
-      email,
-      ip,
-    });
+    const lookupResponse =
+      action == "all" || action == ""
+        ? await liveAllApiLookupFetch({})
+        : await liveApiLookupFetch({
+            id: id,
+          });
 
-    const profiles = lookupResponse.success;
+    const apis: API[] = lookupResponse.success;
 
-    setResults(profiles);
+    setResults(apis);
   };
 
-  const showAllHackers = async (e) => {
-    e.preventDefault();
-
-    const lookupResponse = await liveSignUpLookupFetch({ email: "", ip: "" });
-
-    const profiles = lookupResponse.success;
-    setResults(profiles);
-  };
-
-  const renderHackers = useMemo(() => {
-    return (
-      <Results>
-        {results ? results.map((result) => <Hacker result={result} />) : ""}
-      </Results>
-    );
-  }, [results]);
-
-  const ACTIONS = [];
+  const ACTIONS = [
+    {
+      label: "All",
+      value: "all",
+    },
+  ];
 
   const eventYear = useMemo(() => {
     const eventsAsSelectedOptions = !!events
@@ -162,73 +141,56 @@ const manageApiDirectory = ({ events }) => {
           <Flex direction="column">
             <h1>Manage Api Directory</h1>
             <Form>
-              <Select
-                name="event-year"
-                options={eventYear}
-                onChange={handleActionChange}
-                required
-              />
-              <Flex direction="row" justify="space-between">
-                <Column flexBasis={49}>
-                  <FormGroup>
-                    <label>Email</label>
-                    <input type="text" ref={emailInput} />
-                  </FormGroup>
-                </Column>
-                <Column flexBasis={49}>
-                  <FormGroup>
-                    <label>IP</label>
-                    <input type="text" ref={ipInput} />
-                  </FormGroup>
-                </Column>
+              <Flex
+                direction="column"
+                style={{ paddingTop: "1rem" }}
+                justify="space-between"
+              >
+                <label style={{ paddingBottom: "1rem" }}>Event Name</label>
+                <PaddedSelect
+                  name="event-year"
+                  options={eventYear}
+                  defaultValue="all"
+                  onChange={handleActionChange}
+                  required
+                />
               </Flex>
-
               <Flex
                 direction="row"
                 style={{ paddingTop: "1rem" }}
                 justify="space-between"
               >
-                <Column flexBasis={49}>
-                  <FullButton onClick={lookupHackers}>
-                    Filter Signups
-                  </FullButton>
-                </Column>
+                <Column flexBasis={49}>{/* Empty Column for spacing */}</Column>
 
                 <Column flexBasis={49}>
-                  <FullButton onClick={showAllHackers}>
-                    Show All Signups
-                  </FullButton>
+                  <FullButton onClick={showApis}>Show Apis</FullButton>
                 </Column>
               </Flex>
             </Form>
           </Flex>
 
-          <Flex
-            direction="row"
-            style={{ paddingTop: "1rem" }}
-            justify="space-between"
-          >
-            {results && results.length > 0 ? (
-              <FullButton onClick={exportHackerCSV}>
-                Export Results to CSV
-              </FullButton>
-            ) : (
-              ""
-            )}
-          </Flex>
-          <Flex
-            direction="row"
-            style={{ paddingTop: "1rem" }}
-            justify="space-between"
-          >
-            {results && results.length > 0 ? (
-              <h3 style={{ margin: "auto" }}>Count: {results.length}</h3>
-            ) : (
-              ""
-            )}
-          </Flex>
+          {results && results.length > 0 ? (
+            <Flex
+              direction="row"
+              style={{ paddingTop: "1rem" }}
+              justify="space-between"
+            >
+              <Column flexBasis={49}>
+                <h3 style={{ marginLeft: "2rem" }}>Count: {results.length}</h3>
+              </Column>
+              <Column flexBasis={49}>
+                <FullButton onClick={exportApiCSV}>Export to CSV</FullButton>
+              </Column>
+            </Flex>
+          ) : (
+            ""
+          )}
 
-          {renderHackers}
+          {results && results.length > 0 ? (
+            <Directory apis={{ success: results }} />
+          ) : (
+            ""
+          )}
         </Container>
       </Background>
       <Footer />
@@ -246,15 +208,17 @@ manageApiDirectory.getInitialProps = async (ctx) => {
     handleLoginRedirect(req);
   }
 
-  const events = await getMajorEvents(req);
-
-  console.log(events);
+  const { result } = await getMajorEvents(req);
 
   return {
     profile,
-    events,
+    events: result,
   };
 };
+
+const PaddedSelect = styled(Select)`
+  padding: 1rem 0 !important;
+`;
 
 const FullButton = styled(Button)`
   width: -webkit-fill-available;

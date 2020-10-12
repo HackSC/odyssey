@@ -38,7 +38,7 @@ export async function getAPIS(req): Promise<API> {
   }
 }
 
-export async function getMajorEvents(req): Promise<MajorEvent> {
+export async function getMajorEvents(req): Promise<MajorEvents> {
   let url_route = req
     ? /* Serverside */ process.env.URL_BASE + "api/majorEvents"
     : /* Client */ "/api/majorEvents";
@@ -54,6 +54,7 @@ export async function getMajorEvents(req): Promise<MajorEvent> {
 
   try {
     const data = await rawMajorEvents.json();
+    return data;
   } catch (e) {
     return null;
   }

@@ -15,7 +15,7 @@ const ProjectTeamRoutes: IProjectTeamRoutes = {
   ProjectTeamSelfDeletePrize: "api/projectTeam/self/deletePrize" as Route,
   ProjectTeamSelfDeleteMember: "api/projectTeam/self/deleteMember" as Route,
   ProjectTeamSelfAddMember: "api/projectTeam/self/addMember" as Route,
-  ProjectTeamSelfJoin: "api/projectTeam/join" as Route
+  ProjectTeamSelfJoin: "api/projectTeam/join" as Route,
 };
 
 interface IContributionRoutes {
@@ -27,7 +27,7 @@ interface IContributionRoutes {
 const ContributionRoutes: IContributionRoutes = {
   ContributionAll: "api/contribution/all" as Route,
   ContributionOwned: "api/contribution/owned" as Route,
-  ContributionCreate: "api/contribution/create" as Route
+  ContributionCreate: "api/contribution/create" as Route,
 };
 
 interface ILiveRoutes {
@@ -41,7 +41,7 @@ const LiveRoutes: ILiveRoutes = {
   LiveDispatch: "api/live/dispatch" as Route,
   LiveLookup: "api/live/lookup" as Route,
   LiveAssignQR: "api/live/assign-qr" as Route,
-  LivePoints: "api/live/hacker" as Route
+  LivePoints: "api/live/hacker" as Route,
 };
 
 interface IHackerRoutes {
@@ -61,7 +61,17 @@ const HackerLiveRoutes: IHackerRoutes = {
   HackerLiveIncompleteTasks: "api/hacker/live/incompleteTasks" as Route,
   HackerLiveHouseInfo: "api/hacker/live/houseInfo" as Route,
   HackerLiveHouseInfoList: "api/hacker/live/houseInfo/list" as Route,
-  HackerLiveRaffleCount: "api/hacker/live/rafflePoints" as Route
+  HackerLiveRaffleCount: "api/hacker/live/rafflePoints" as Route,
+};
+
+interface IApiRoutes {
+  ApiLive: GetRoute;
+  AllApiLive: GetRoute;
+}
+
+const ApiLiveRoutes: IApiRoutes = {
+  ApiLive: "api/apis/event" as Route,
+  AllApiLive: "api/apis/" as Route,
 };
 
 interface ISignUpsRoutes {
@@ -69,7 +79,7 @@ interface ISignUpsRoutes {
 }
 
 const SignUpsLiveRoutes: ISignUpsRoutes = {
-  SignUpsLive: "api/live/signups" as Route
+  SignUpsLive: "api/live/signups" as Route,
 };
 
 interface IEventRoutes {
@@ -77,7 +87,7 @@ interface IEventRoutes {
 }
 
 const EventRoutes: IEventRoutes = {
-  EventList: "api/hacker/live/event/list" as Route
+  EventList: "api/hacker/live/event/list" as Route,
 };
 
 interface ITaskRoutes {
@@ -85,17 +95,18 @@ interface ITaskRoutes {
 }
 
 const TaskRoutes: ITaskRoutes = {
-  TasksList: "api/task/list" as Route
+  TasksList: "api/task/list" as Route,
 };
 
 const Routes = {
+  ...ApiLiveRoutes,
   ...SignUpsLiveRoutes,
   ...ProjectTeamRoutes,
   ...ContributionRoutes,
   ...LiveRoutes,
   ...HackerLiveRoutes,
   ...TaskRoutes,
-  ...EventRoutes
+  ...EventRoutes,
 };
 
 async function processResponse<T>(res: Response): Promise<APIResponse<T>> {
@@ -116,7 +127,7 @@ function setupHeaders(req: any, additionalHeaders: HeadersInit): HeadersInit {
 
   return {
     ...headers,
-    ...additionalHeaders
+    ...additionalHeaders,
   };
 }
 
@@ -134,21 +145,23 @@ function computeUrlRoute(route: string, req?: any, param?: ResourceID): string {
 async function APIGet<T>(
   route: GetRoute,
   opts: {
-    queryParams?: { [key: string]: string };
+    queryParams?: { [key: string]: string | number };
     req?: NextApiRequest;
   },
   param?: ResourceID
 ): Promise<APIResponse<T>> {
   let urlRoute = computeUrlRoute(route, opts?.req, param);
   if (opts?.queryParams) {
-    const urlParams = new URLSearchParams(Object.entries(opts.queryParams));
+    const urlParams = new URLSearchParams(
+      Object.entries(opts.queryParams) + ""
+    );
     urlRoute += `?${urlParams}`;
   }
 
   const headers = setupHeaders(opts?.req, {});
 
   const res = await fetch(urlRoute, {
-    headers
+    headers,
   });
 
   return processResponse(res);
@@ -165,7 +178,7 @@ async function APIPost<S, T>(
   const res = await fetch(urlRoute, {
     method: "POST",
     body: JSON.stringify(body),
-    headers
+    headers,
   });
 
   return processResponse(res);
@@ -183,7 +196,7 @@ async function APIPut<S, T>(
   const res = await fetch(urlRoute, {
     method: "PUT",
     body: JSON.stringify(body),
-    headers
+    headers,
   });
 
   return processResponse(res);
@@ -199,7 +212,7 @@ async function APIDelete<T>(
 
   const res = await fetch(urlRoute, {
     method: "DELETE",
-    headers
+    headers,
   });
 
   return processResponse(res);

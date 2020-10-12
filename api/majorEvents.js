@@ -7,7 +7,6 @@ const Busboy = require("busboy");
 const AWS = require("aws-sdk");
 
 router.use(utils.authMiddleware);
-router.use(utils.preprocessRequest);
 
 router.get("/", async (req, res) => {
   const result = await models.MajorEvents.findAll({});
