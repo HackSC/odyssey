@@ -4,9 +4,13 @@ import JSZip from "jszip";
 import stringify from "csv-stringify";
 import { saveAs } from "file-saver";
 
-import { handleLoginRedirect, getProfile } from "../lib/authenticate";
+import {
+  handleLoginRedirect,
+  getProfile,
+  getMajorEvents,
+} from "../lib/authenticate";
 
-import { Head, Navbar, Footer } from "../components";
+import { Head, Navbar, Footer, Select } from "../components";
 
 import {
   Button,
@@ -35,7 +39,8 @@ const Hacker = ({ result }) => {
   );
 };
 
-const mailQuery = () => {
+const manageApiDirectory = ({ events }) => {
+  const [action, setAction] = useState(null);
   const [emailInput, ipInput] = [useRef(null), useRef(null)];
 
   const [results, setResults] = useState([]);
@@ -130,6 +135,24 @@ const mailQuery = () => {
     );
   }, [results]);
 
+  const ACTIONS = [];
+
+  const eventYear = useMemo(() => {
+    const eventsAsSelectedOptions = !!events
+      ? events.map((event) => ({
+          value: `${event.name}`,
+          label: event.name,
+        }))
+      : [];
+
+    // ACTIONS defined at top of scan.tsx -- will likely update later at some point
+    return [...ACTIONS, ...eventsAsSelectedOptions];
+  }, [events]);
+
+  const handleActionChange = (e) => {
+    setAction(e.target.value);
+  };
+
   return (
     <>
       <Head title="HackSC Odyssey - Filter Signups" />
@@ -137,8 +160,14 @@ const mailQuery = () => {
       <Background>
         <Container>
           <Flex direction="column">
-            <h1>Filter Signups and Export to CSV</h1>
+            <h1>Manage Api Directory</h1>
             <Form>
+              <Select
+                name="event-year"
+                options={eventYear}
+                onChange={handleActionChange}
+                required
+              />
               <Flex direction="row" justify="space-between">
                 <Column flexBasis={49}>
                   <FormGroup>
@@ -207,7 +236,7 @@ const mailQuery = () => {
   );
 };
 
-mailQuery.getInitialProps = async (ctx) => {
+manageApiDirectory.getInitialProps = async (ctx) => {
   const { req } = ctx;
 
   const profile = await getProfile(req);
@@ -217,8 +246,13 @@ mailQuery.getInitialProps = async (ctx) => {
     handleLoginRedirect(req);
   }
 
+  const events = await getMajorEvents(req);
+
+  console.log(events);
+
   return {
     profile,
+    events,
   };
 };
 
@@ -255,4 +289,4 @@ const Result = styled.div`
   }
 `;
 
-export default mailQuery;
+export default manageApiDirectory;

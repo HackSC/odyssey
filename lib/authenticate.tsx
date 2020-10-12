@@ -16,6 +16,28 @@ export async function getUser(req) {
   }
 }
 
+export async function getMajorEvents(req): Promise<MajorEvent> {
+  let url_route = req
+    ? /* Serverside */ process.env.URL_BASE + "api/majorEvents"
+    : /* Client */ "/api/majorEvents";
+
+  const rawMajorEvents = await fetch(
+    url_route,
+    req
+      ? {
+          headers: req.headers,
+        }
+      : null
+  );
+
+  try {
+    const data = await rawMajorEvents.json();
+    return data;
+  } catch (e) {
+    return null;
+  }
+}
+
 export async function getProfile(req): Promise<Profile> {
   // If we have a req object, that means we're on the server and need to pass in cookies
   // Otherwise, fetch as normal
@@ -28,7 +50,7 @@ export async function getProfile(req): Promise<Profile> {
     url_route,
     req
       ? {
-          headers: req.headers
+          headers: req.headers,
         }
       : null
   );
@@ -53,7 +75,7 @@ function redirectToPath(req, path: string) {
   if (req) {
     // Server side 302
     req.res.writeHead(302, {
-      Location: path
+      Location: path,
     });
     req.res.end();
   } else {

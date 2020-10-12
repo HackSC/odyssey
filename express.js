@@ -6,6 +6,7 @@ const cookieSession = require("cookie-session");
 const bodyParser = require("body-parser");
 const authRouter = require("./api/login");
 const profileRouter = require("./api/hackerProfile");
+const majorEventsRouter = require("./api/majorEvents");
 const adminRouter = require("./api/admin");
 const taskRouter = require("./api/tasks");
 const teamRouter = require("./api/team");
@@ -29,9 +30,9 @@ const strategy = new Auth0Strategy(
     clientID: process.env.AUTH0_CLIENT_ID,
     clientSecret: process.env.AUTH0_CLIENT_SECRET,
     callbackURL:
-      process.env.AUTH0_CALLBACK_URL || "http://localhost:3000/callback"
+      process.env.AUTH0_CALLBACK_URL || "http://localhost:3000/callback",
   },
-  function(accessToken, refreshToken, extraParams, profile, done) {
+  function (accessToken, refreshToken, extraParams, profile, done) {
     // extraParams.id_token should contain the JWT
     return done(null, profile);
   }
@@ -43,15 +44,15 @@ const sessionConfig = {
   maxAge: 24 * 60 * 60 * 1000,
   cookie: {
     secure: true,
-    httpOnly: true
-  }
+    httpOnly: true,
+  },
 };
 
 passport.use(strategy);
-passport.serializeUser(function(user, done) {
+passport.serializeUser(function (user, done) {
   done(null, user);
 });
-passport.deserializeUser(function(user, done) {
+passport.deserializeUser(function (user, done) {
   done(null, user);
 });
 
@@ -67,6 +68,7 @@ server.use(fileUpload());
 
 server.use("/auth", authRouter);
 server.use("/api/profile", profileRouter);
+server.use("/api/majorEvents", majorEventsRouter);
 server.use("/api/admin", adminRouter);
 server.use("/api/task", taskRouter);
 server.use("/api/team", teamRouter);
