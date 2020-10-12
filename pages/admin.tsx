@@ -62,6 +62,9 @@ const Admin = ({ profile }) => {
             <Action href="/mailQuery">
               <ActionTitle> Mail Signups </ActionTitle>
             </Action>
+            <Action href="/manageApiDirectory">
+              <ActionTitle> Manage Api Directory </ActionTitle>
+            </Action>
             <Action
               href="https://metabase-odyssey.herokuapp.com/"
               target="_blank"
@@ -76,7 +79,7 @@ const Admin = ({ profile }) => {
   );
 };
 
-Admin.getInitialProps = async ctx => {
+Admin.getInitialProps = async (ctx) => {
   const { req } = ctx;
 
   const profile = await getProfile(req);
@@ -91,7 +94,7 @@ Admin.getInitialProps = async ctx => {
   }
 
   return {
-    profile
+    profile,
   };
 };
 
