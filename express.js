@@ -6,6 +6,7 @@ const cookieSession = require("cookie-session");
 const bodyParser = require("body-parser");
 const authRouter = require("./api/login");
 const profileRouter = require("./api/hackerProfile");
+const majorEventsRouter = require("./api/majorEvents");
 const apiRouter = require("./api/apis");
 const adminRouter = require("./api/admin");
 const taskRouter = require("./api/tasks");
@@ -68,6 +69,7 @@ server.use(fileUpload());
 
 server.use("/auth", authRouter);
 server.use("/api/profile", profileRouter);
+server.use("/api/majorEvents", majorEventsRouter);
 server.use("/api/apis", apiRouter);
 server.use("/api/admin", adminRouter);
 server.use("/api/task", taskRouter);

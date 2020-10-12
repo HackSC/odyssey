@@ -12,6 +12,18 @@ declare type FormStep = {
   component: React.FunctionComponent<FormStepProps>;
 };
 
+declare type MajorEvents = {
+  result: Array<MajorEvent>;
+};
+
+declare type MajorEvent = {
+  id: number;
+  name: string;
+  isHackathon: boolean;
+  start_date: Date;
+  end_date: Date;
+};
+
 declare type API = {
   id: number;
   name: string;

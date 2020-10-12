@@ -30,9 +30,30 @@ export async function getAPIS(req): Promise<API> {
       : null
   );
 
-  console.log(rawAPIData);
   try {
     const data = await rawAPIData.json();
+    return data;
+  } catch (e) {
+    return null;
+  }
+}
+
+export async function getMajorEvents(req): Promise<MajorEvents> {
+  let url_route = req
+    ? /* Serverside */ process.env.URL_BASE + "api/majorEvents"
+    : /* Client */ "/api/majorEvents";
+
+  const rawMajorEvents = await fetch(
+    url_route,
+    req
+      ? {
+          headers: req.headers,
+        }
+      : null
+  );
+
+  try {
+    const data = await rawMajorEvents.json();
     return data;
   } catch (e) {
     return null;
