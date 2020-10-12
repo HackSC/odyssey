@@ -36,7 +36,7 @@ const API = ({ apis, profile, houses, socialPosts }) => {
 API.getInitialProps = async ({ req }) => {
   const profile = await getProfile(req);
   const houses = [];
-  const apis = await getAPIS();
+  const apis = await getAPIS(req);
 
   // Null profile means user is not logged in
   if (!profile) {

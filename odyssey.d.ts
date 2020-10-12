@@ -19,6 +19,13 @@ declare type API = {
   major_event: boolean;
 };
 
+declare type ApiLink = {
+  id: number;
+  name: string;
+  link: string;
+  api_id: number;
+};
+
 declare type Profile = {
   id: number;
   gender: "male" | "female" | "non-binary" | "other" | "no-say";
