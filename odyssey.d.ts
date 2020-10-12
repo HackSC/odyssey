@@ -12,6 +12,13 @@ declare type FormStep = {
   component: React.FunctionComponent<FormStepProps>;
 };
 
+declare type API = {
+  id: number;
+  name: string;
+  description: string;
+  major_event: boolean;
+};
+
 declare type Profile = {
   id: number;
   gender: "male" | "female" | "non-binary" | "other" | "no-say";

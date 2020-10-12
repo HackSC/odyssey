@@ -2,9 +2,20 @@ import styled from "styled-components";
 
 import { Header, Body } from "./type";
 
-const Directory = () => {
+const Directory = ({ apis }) => {
   return (
     <Wrapper>
+      {apis.map((item) => (
+        <Company>
+          <h2>{item.name}</h2>
+          <p>{item.description}</p>
+          <br />
+          {item.links.map((link) => (
+            <Link href={link.link}>{link.name}</Link>
+          ))}
+        </Company>
+      ))}
+
       <Company>
         <h2>Accenture</h2>
 
