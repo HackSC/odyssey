@@ -16,6 +16,28 @@ export async function getUser(req) {
   }
 }
 
+export async function getAPIS(req): Promise<API> {
+  let url_route = req
+    ? /* Serverside */ process.env.URL_BASE + "api/apis"
+    : /* Client */ "/api/apis";
+
+  const rawAPIData = await fetch(
+    url_route,
+    req
+      ? {
+          headers: req.headers,
+        }
+      : null
+  );
+
+  try {
+    const data = await rawAPIData.json();
+    return data;
+  } catch (e) {
+    return null;
+  }
+}
+
 export async function getMajorEvents(req): Promise<MajorEvent> {
   let url_route = req
     ? /* Serverside */ process.env.URL_BASE + "api/majorEvents"
@@ -32,7 +54,6 @@ export async function getMajorEvents(req): Promise<MajorEvent> {
 
   try {
     const data = await rawMajorEvents.json();
-    return data;
   } catch (e) {
     return null;
   }

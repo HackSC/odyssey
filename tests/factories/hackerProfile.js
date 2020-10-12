@@ -41,13 +41,12 @@ const data = (props = {}) => {
     confirmCodeOfConduct: true,
     noBusCheck: true,
     confirmedAt: faker.date.recent(20),
-    declinedAt: ""
+    declinedAt: "",
   };
   return { ...defaultProps, ...props };
 };
 
 const hackerProfileFactory = (props = {}) => {
-  console.log("Creating HP", props);
   return models.HackerProfile.create(data(props));
 };
 
