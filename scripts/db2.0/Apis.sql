@@ -1,9 +1,8 @@
-USE prod;
 CREATE TABLE Apis (
     id INT PRIMARY KEY NOT NULL,
     name VARCHAR(255) NOT NULL,
     description BLOB NOT NULL,
-    FOREIGN KEY (id) REFERENCES MajorEvents(id)
+    major_event INT NOT NULL
 );
 
 -- Create an array of links by referencing Apis.id with api_id entry
