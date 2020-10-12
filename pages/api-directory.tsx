@@ -26,7 +26,7 @@ const API = ({ apis, profile, houses, socialPosts }) => {
       />
       <Container>
         <DirectoryIntro />
-        <Directory apis={apis} />
+        <Directory apis={apis ? apis : []} />
       </Container>
       <Footer />
     </>

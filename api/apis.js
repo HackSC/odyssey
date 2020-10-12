@@ -7,7 +7,10 @@ router.use(utils.authMiddleware);
 router.use(utils.requireAdmin);
 
 router.get("/", async (req, res) => {
-  const apis = await models.Apis.find({});
+  console.log("in apis route");
+  const apis = await models.Apis.find();
+
+  console.log(apis);
 
   api.links = await models.ApiLinks.find({
     where: {

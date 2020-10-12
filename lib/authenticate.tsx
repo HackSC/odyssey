@@ -30,6 +30,7 @@ export async function getAPIS(req): Promise<API> {
       : null
   );
 
+  console.log(rawAPIData);
   try {
     const data = await rawAPIData.json();
     return data;
