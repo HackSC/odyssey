@@ -1,21 +1,23 @@
 import styled from "styled-components";
 
-import { Header, Body } from "./type";
-
 const Directory = ({ apis }) => {
   return (
     <Wrapper>
-      {apis.map((item) => (
-        <Company>
+      {apis.results.map((item) => (
+        <Company key={item.id}>
           <h2>{item.name}</h2>
           <p>{item.description}</p>
           <br />
-          {item.links.map((link) => (
-            <>
-              <Link href={link.link}>{link.name}</Link>
-              <br />
-            </>
-          ))}
+          {!item.links || item.links.length == 0 ? (
+            <></>
+          ) : (
+            item.links.map((link) => (
+              <p key={link.name}>
+                <Link href={link.link}>{link.name}</Link>
+                <br />
+              </p>
+            ))
+          )}
         </Company>
       ))}
     </Wrapper>

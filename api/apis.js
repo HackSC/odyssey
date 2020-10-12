@@ -4,21 +4,32 @@ const utils = require("./utils");
 const router = express.Router();
 
 router.use(utils.authMiddleware);
-router.use(utils.requireAdmin);
 
 router.get("/", async (req, res) => {
-  console.log("in apis route");
-  const apis = await models.Apis.find();
+  const apis = await models.Apis.findAll({
+    include: [
+      {
+        model: models.ApiLinks,
+        as: "ApiLink",
+        where: { api_id: this.id }, //
+      },
+    ],
+  });
 
   console.log(apis);
 
-  api.links = await models.ApiLinks.find({
-    where: {
-      api_id: apis.id,
-    },
-  });
+  // apis.map(api => {
+  //   let api_obj = api;
+  //   api_obj.links = await models.ApiLinks.findAll({
+  //     where: {
+  //       api_id: api.id,
+  //     },
+  //   });
+  //   results = [...results, api_obj];
+  // })
 
-  return res.json({ apis });
+  // console.log(results)
+  return res.json({ results });
 });
 
 module.exports = router;

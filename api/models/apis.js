@@ -14,7 +14,9 @@ module.exports = (sequelize, DataTypes) => {
       description: DataTypes.STRING,
       major_event: DataTypes.INTEGER,
     },
-    {}
+    {
+      timestamps: false,
+    }
   );
 
   return Apis;

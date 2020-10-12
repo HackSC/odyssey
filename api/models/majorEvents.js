@@ -1,9 +1,9 @@
-// If you make any changes to ApiLinks, make sure you do the following:
+// If you make any changes to MajorEvents, make sure you do the following:
 // 1) Generate a Sequelize migration that adds/removes columns as needed
 // 2) Update the ApiLink type definition in odyssey.d.ts
 module.exports = (sequelize, DataTypes) => {
-  const ApiLinks = sequelize.define(
-    "ApiLinks",
+  const MajorEvents = sequelize.define(
+    "MajorEvents",
     {
       id: {
         type: DataTypes.INTEGER,
@@ -11,13 +11,14 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false,
       },
       name: DataTypes.STRING,
-      link: DataTypes.STRING,
-      api_id: DataTypes.INTEGER,
+      isHackathon: DataTypes.BOOLEAN,
+      start_date: DataTypes.DATE,
+      end_date: DataTypes.DATE,
     },
     {
       timestamps: false,
     }
   );
 
-  return ApiLinks;
+  return MajorEvents;
 };
