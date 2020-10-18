@@ -11,7 +11,7 @@ jobs:
         uses: foo-software/lighthouse-check-action@master
         id: lighthouseCheck
         with:
-          urls: "https://staging.odyssey.com,https://odyssey.com"
+          urls: "https://dashboard.hacksc.com,https://odyssey.hacksc.com"
           # ... all your other inputs
       - name: Handle Lighthouse Check results
         uses: foo-software/lighthouse-check-status-action@master
