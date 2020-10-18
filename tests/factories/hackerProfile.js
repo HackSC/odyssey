@@ -19,13 +19,13 @@ const data = (props = {}) => {
     lastName: faker.name.lastName(),
     phoneNumber: faker.phone.phoneNumber(),
     school: "",
-    year: "",
-    skillLevel: "",
+    year: "freshman",
+    skillLevel: "beginner",
     questionOne: faker.company.bs(),
     questionTwo: faker.company.bs(),
     questionThree: faker.company.bs(),
     role: "hacker",
-    graduationDate: "",
+    graduationDate: "spring-2020",
     over18: true,
     needBus: false,
     links: "",
@@ -34,14 +34,14 @@ const data = (props = {}) => {
     marketing: "",
     promoCode: faker.random.uuid(),
     travelOrigin: "",
-    travelMethod: "",
-    shirtSize: "",
+    travelMethod: "driving",
+    shirtSize: "m",
     travelPlan: "",
     dietaryRestrictions: "",
     confirmCodeOfConduct: true,
     noBusCheck: true,
     confirmedAt: faker.date.recent(20),
-    declinedAt: ""
+    declinedAt: faker.date.past(1)
   };
   return { ...defaultProps, ...props };
 };
