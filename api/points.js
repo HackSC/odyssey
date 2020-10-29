@@ -44,14 +44,9 @@ router.post("/tasks", async (req, res) => {
     }
   }
   try {
-    console.log(req.body);
-    console.log("trying to create task");
     const result = await models.Task.create(req.body);
-    console.log("success");
     return res.status(200).json({ result: result });
   } catch (e) {
-    console.log("failed");
-    console.log(e);
     return res.status(500).json({ error: e });
   }
 });
