@@ -14,5 +14,5 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v1
-      - run: npm jest
-      - run: npm test
+      - run: yarn jest
+      - run: yarn test
