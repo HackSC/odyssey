@@ -9,7 +9,6 @@ const data = (props = {}) => {
 };
 
 const personFactory = (props = {}) => {
-  console.log("Creating Person", props);
   return models.Person.create(data(props));
 };
 

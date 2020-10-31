@@ -21,13 +21,12 @@ function GetFirstPrize() {
 }
 
 describe("Project Team (Sequential)", () => {
-  beforeEach(async () => {
-    await seedDB();
-  });
-  test("Create ProjectTeam Happy Path", () => {
+  var name = "TestProjectTeam";
+  test("Create ProjectTeam Happy Path", async () => {
     // Should set name & teamId on self
-    const name = "TestProjectName";
-    return CreateProjectTeamSelf(name)
+    await CreateProjectTeamSelf(name);
+    return agent
+      .get("/api/projectTeam/self")
       .expect(200)
       .then(res => {
         const projectTeam = res.body.success;
@@ -43,21 +42,20 @@ describe("Project Team (Sequential)", () => {
   });
 
   test("Join Project Team", () => {
-    const name = "TestProjectTeam";
     return agent
       .put("/api/projectTeam/join/" + name)
       .expect(200)
       .then(res => expect(res.body.success.name).toBe(name));
   });
+
   test("Add Prize", async () => {
     await CreateProjectTeamSelf(name);
-    const prize = await GetFirstPrize();
+    await AddPrizeSelf();
     return agent
-      .post("/api/projectTeam/self/addPrize")
-      .send({ id: prize.id })
+      .get("/api/projectTeam/self")
       .expect(200)
       .then(res => {
-        expect(res.body.success.Prizes.length).toBe(1);
+        expect(res.body.success.Prizes.length).toBeGreaterThan(0);
       });
   });
 
@@ -102,7 +100,7 @@ describe("Project Team (Sequential)", () => {
 
 describe("Project Team Requests (Parallel)", () => {
   test("Get my Project Team", async () => {
-    const name = "TestProjectName";
+    const name = "TestProjectTeam";
     await CreateProjectTeamSelf(name);
     return agent
       .get("/api/projectTeam/self")

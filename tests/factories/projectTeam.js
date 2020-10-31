@@ -12,7 +12,6 @@ const data = (props = {}) => {
 };
 
 const projectTeamFactory = async (props = {}) => {
-  console.log("Creating ProjectTeam", props);
   return models.ProjectTeam.create(data(props));
 };
 

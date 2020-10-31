@@ -47,7 +47,6 @@ const data = (props = {}) => {
 };
 
 const hackerProfileFactory = (props = {}) => {
-  console.log("Creating HP", props);
   return models.HackerProfile.create(data(props));
 };
 

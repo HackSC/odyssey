@@ -10,7 +10,6 @@ const data = (props = {}) => {
 };
 
 const houseFactory = (props = {}) => {
-  console.log("Creating House", props);
   return models.House.create(data(props));
 };
 
