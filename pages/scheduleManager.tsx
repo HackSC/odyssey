@@ -8,6 +8,8 @@ import Footer from "../components/Footer";
 
 import styled from "styled-components";
 
+import moment from "moment";
+
 import { Button, Background, Container } from "../styles";
 
 import Step from "../components/steps/Results";
@@ -15,25 +17,61 @@ import Step from "../components/steps/Results";
 const EditableCell = ({ event }) => {
   const [currEvent, setCurrEvent] = useState(event);
   console.log(event);
+  const startTime = moment(
+    currEvent.startsAt,
+    "YYYY-MM-DDTHH:mm:ss.SSSZ"
+  ).format("hh:mm a");
+  const endTime = moment(currEvent.endsAt, "YYYY-MM-DDTHH:mm:ss.SSSZ").format(
+    "hh:mm a"
+  );
   return (
     <Task>
       <TaskInfo>
-        <p>{currEvent.name}</p>
-        <p>{currEvent.description}</p>
-        <p>{currEvent.startsAt}</p>
-        <p>{currEvent.endsAt}</p>
-        <EditButton
-          onClick={async () => {
-            const result = await deleteEvent(currEvent);
-            if (result) {
-              window.location.reload();
-            } else {
-              alert("failed to delete event");
-            }
-          }}
-        >
-          Delete Event
-        </EditButton>
+        <TitleBox>
+          <EventTitle>{currEvent.name}</EventTitle>
+          <EditButton
+            onClick={async () => {
+              const result = await deleteEvent(currEvent);
+              if (result) {
+                window.location.reload();
+              } else {
+                alert("failed to delete event");
+              }
+            }}
+          >
+            Delete
+          </EditButton>
+        </TitleBox>
+        <Description>
+          <b>Description: </b>
+          <span>{currEvent.description}</span>
+        </Description>
+        <Description>
+          <b>Time: </b>
+          {moment(currEvent.startsAt, "YYYY-MM-DDTHH:mm:ss.SSSZ").format(
+            "MM/DD/YYYY"
+          ) ==
+          moment(currEvent.endsAt, "YYYY-MM-DDTHH:mm:ss.SSSZ").format(
+            "MM/DD/YYYY"
+          ) ? (
+            <span>
+              {moment(currEvent.startsAt, "YYYY-MM-DDTHH:mm:ss.SSSZ").format(
+                "MMM D"
+              )}
+              , {startTime} - {endTime}
+            </span>
+          ) : (
+            <span>
+              {moment(currEvent.startsAt, "YYYY-MM-DDTHH:mm:ss.SSSZ").format(
+                "MMM D hh:mm a"
+              )}{" "}
+              -{" "}
+              {moment(currEvent.endsAt, "YYYY-MM-DDTHH:mm:ss.SSSZ").format(
+                "MMM D hh:mm a"
+              )}
+            </span>
+          )}
+        </Description>
       </TaskInfo>
     </Task>
   );
@@ -42,7 +80,7 @@ const EditableCell = ({ event }) => {
 const TaskManager = ({ profile, currentEvents }) => {
   const [newEvent, setNewEvent] = useState({});
 
-  const taskBlocks = currentEvents.events.map((event) => {
+  const taskBlocks = currentEvents.events.map(event => {
     return <EditableCell event={event} />;
   });
   return (
@@ -58,40 +96,40 @@ const TaskManager = ({ profile, currentEvents }) => {
               <input
                 type="text"
                 placeholder="name"
-                onChange={(e) => {
+                onChange={e => {
                   setNewEvent({
                     ...newEvent,
-                    name: e.target.value,
+                    name: e.target.value
                   });
                 }}
               />
               <input
                 type="text"
                 placeholder="description"
-                onChange={(e) => {
+                onChange={e => {
                   setNewEvent({
                     ...newEvent,
-                    description: e.target.value,
+                    description: e.target.value
                   });
                 }}
               />
               <input
                 type="datetime-local"
                 placeholder="startsAt"
-                onChange={(e) => {
+                onChange={e => {
                   setNewEvent({
                     ...newEvent,
-                    startsAt: e.target.value,
+                    startsAt: e.target.value
                   });
                 }}
               />
               <input
                 type="datetime-local"
                 placeholder="endsAt"
-                onChange={(e) => {
+                onChange={e => {
                   setNewEvent({
                     ...newEvent,
-                    endsAt: e.target.value,
+                    endsAt: e.target.value
                   });
                 }}
               />
@@ -129,7 +167,7 @@ TaskManager.getInitialProps = async ({ req }) => {
 
   return {
     profile,
-    currentEvents,
+    currentEvents
   };
 };
 
@@ -141,6 +179,7 @@ const TaskText = styled.p`
 const TaskInfo = styled.div`
   display: flex;
   flex-direction: column;
+  width: 100%;
 `;
 
 const TaskName = styled.div`
@@ -149,7 +188,13 @@ const TaskName = styled.div`
 `;
 
 const EditButton = styled.button`
-  margin: 10 10 10px;
+  width: 5vw;
+  float: right;
+  color: red;
+  background-color: white;
+  align-self: flex-start;
+  border-radius: 5px;
+  border: 2px solid red;
 `;
 
 const Task = styled.div`
@@ -160,7 +205,6 @@ const Task = styled.div`
   display: flex;
   flex-direction: row;
   border-radius: 4px;
-  max-width: 50%;
   border: 1px solid ${({ theme }) => theme.colors.gray5};
   box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.05);
   transition: 0.25s all;
@@ -168,6 +212,21 @@ const Task = styled.div`
   &:hover {
     transform: scale(1.025);
   }
+`;
+
+const EventTitle = styled.div`
+  font-size: calc(12px + 0.75vw);
+`;
+
+const TitleBox = styled.div`
+  display: flex;
+  align-items: center;
+  width: 100%;
+  justify-content: space-between;
+`;
+
+const Description = styled.div`
+  padding-top: 0.5vh;
 `;
 
 export default TaskManager;
