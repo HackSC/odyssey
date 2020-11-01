@@ -8,6 +8,10 @@ beforeAll(async () => {
   return agent.get("/auth/devlogin").query({ id: 1 });
 });
 
+afterAll(done => {
+  done();
+});
+
 describe("Prizes", () => {
   test("Get all prizes", () => {
     return agent

@@ -7,6 +7,10 @@ beforeAll(() => {
   return agent.get("/auth/devlogin").query({ id: 1 });
 });
 
+afterAll(done => {
+  done();
+});
+
 function CreateProjectTeamSelf(name) {
   return agent.post("/api/projectTeam/self").send({ name });
 }

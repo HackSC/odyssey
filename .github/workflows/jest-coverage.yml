@@ -1,4 +1,12 @@
 uses: mattallty/jest-github-action@v1
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+      - staging
+
 env:
   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 with:
