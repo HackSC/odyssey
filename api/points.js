@@ -15,7 +15,6 @@ router.get("/tasks", async (req, res) => {
     const tasks = await models.Task.findAll();
     return res.json({ tasks: tasks });
   } catch (e) {
-    console.log(e);
     return res.json({ err: e });
   }
 });

@@ -55,7 +55,6 @@ const EditableCell = ({ task }) => {
         <EditButton
           onClick={async () => {
             const result = await updateTask(currTaskValue);
-            console.log(currTaskValue);
             if (result) {
               window.location.reload();
             } else {
@@ -68,7 +67,6 @@ const EditableCell = ({ task }) => {
         <EditButton
           onClick={async () => {
             const result = await deleteTask(currTaskValue);
-            console.log(result);
             if (result) {
               window.location.reload();
             } else {
@@ -149,8 +147,6 @@ const TaskManager = ({ profile, currentTasks }) => {
               value="Create new Task"
               onClick={async () => {
                 const result = await saveTask(newTask);
-                console.log(" UPPER RESULT: ");
-                console.log(result);
                 if (result) {
                   // In theory we do optimistic local state updating, in practice, fuck it it'll do
                   window.location.reload();
