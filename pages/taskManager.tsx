@@ -52,31 +52,31 @@ const EditableCell = ({ task }) => {
           <option value="Active">Active</option>
           <option value="Inactive">Inactive</option>
         </select>
-        <EditButton
-          onClick={async () => {
-            const result = await updateTask(currTaskValue);
-            if (result) {
-              window.location.reload();
-            } else {
-              alert("failed to update task");
-            }
-          }}
-        >
-          Update Task
-        </EditButton>
-        <EditButton
-          onClick={async () => {
-            const result = await deleteTask(currTaskValue);
-            if (result) {
-              window.location.reload();
-            } else {
-              alert("failed to delete task");
-            }
-          }}
-        >
-          Delete Task
-        </EditButton>
       </TaskInfo>
+      <EditButton
+        onClick={async () => {
+          const result = await updateTask(currTaskValue);
+          if (result) {
+            window.location.reload();
+          } else {
+            alert("failed to update task");
+          }
+        }}
+      >
+        Update Task
+      </EditButton>
+      <EditButton
+        onClick={async () => {
+          const result = await deleteTask(currTaskValue);
+          if (result) {
+            window.location.reload();
+          } else {
+            alert("failed to delete task");
+          }
+        }}
+      >
+        Delete Task
+      </EditButton>
     </Task>
   );
 };
@@ -195,7 +195,7 @@ const TaskName = styled.div`
 `;
 
 const EditButton = styled.button`
-  margin: 10 10 10px;
+  margin: 10px;
 `;
 
 const Task = styled.div`
@@ -206,14 +206,11 @@ const Task = styled.div`
   display: flex;
   flex-direction: row;
   border-radius: 4px;
-  max-width: 50%;
+  width: 100%;
   border: 1px solid ${({ theme }) => theme.colors.gray5};
   box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.05);
   transition: 0.25s all;
   justify-content: left;
-  &:hover {
-    transform: scale(1.025);
-  }
 `;
 
 export default TaskManager;

@@ -48,12 +48,9 @@ async function updateTask(updatedTask) {
 }
 
 async function deleteTask(task) {
-  const urlRoute = `/api/points/tasks/${task.id}`;
+  const urlRoute = "/api/points/tasks/" + task.id;
   const result = await fetch(urlRoute, {
-    method: "DELETE",
-    headers: {
-      "content-type": "application/json"
-    }
+    method: "DELETE"
   });
   return result.status === 200;
 }
