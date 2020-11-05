@@ -6,7 +6,7 @@ async function getCurrentTasks(req) {
     urlRoute,
     req
       ? {
-          headers: req.headers,
+          headers: req.headers
         }
       : null
   );
@@ -16,26 +16,51 @@ async function getCurrentTasks(req) {
 // CAN only be called from the client
 async function saveTask(newTask) {
   const urlRoute = "/api/points/tasks";
+  console.log(urlRoute);
   const result = await fetch(urlRoute, {
     method: "POST",
     headers: {
-      "content-type": "application/json",
+      "content-type": "application/json"
     },
-    body: JSON.stringify({ ...newTask, blocking: false, description: "" }),
+    body: JSON.stringify({
+      ...newTask,
+      blocking: false,
+      description: "",
+      isPast: 0
+    })
   });
+  console.log(result);
   return result.status === 200;
 }
 
 async function updateTask(updatedTask) {
   const urlRoute = "/api/points/tasks";
+  // console.log(updatedTask);
+  if (!updatedTask.createdAt) {
+    updatedTask.createdAt = new Date().toISOString();
+  }
   const result = await fetch(urlRoute, {
     method: "PUT",
     headers: {
-      "content-type": "application/json",
+      "content-type": "application/json"
     },
-    body: JSON.stringify(updatedTask),
+    body: JSON.stringify(updatedTask)
   });
   const jsonBody = await result.json();
+  console.log(jsonBody);
+  return result.status === 200;
+}
+
+async function deleteTask(task) {
+  const urlRoute = `/api/points/tasks/${task.id}`;
+  console.log(urlRoute);
+  const result = await fetch(urlRoute, {
+    method: "DELETE",
+    headers: {
+      "content-type": "application/json"
+    }
+  });
+  console.log(result);
   return result.status === 200;
 }
 
@@ -48,7 +73,7 @@ async function getHouses(req) {
     urlRoute,
     req
       ? {
-          headers: req.headers,
+          headers: req.headers
         }
       : null
   );
@@ -62,9 +87,9 @@ async function createHouse(houseObj) {
   const result = await fetch(urlRoute, {
     method: "POST",
     headers: {
-      "content-type": "application/json",
+      "content-type": "application/json"
     },
-    body: JSON.stringify(houseObj),
+    body: JSON.stringify(houseObj)
   });
   return result.status === 200;
 }
@@ -74,9 +99,9 @@ async function updateHouse(houseObj) {
   const result = await fetch(urlRoute, {
     method: "PUT",
     headers: {
-      "content-type": "application/json",
+      "content-type": "application/json"
     },
-    body: JSON.stringify(houseObj),
+    body: JSON.stringify(houseObj)
   });
   return result.status === 200;
 }
@@ -90,7 +115,7 @@ async function getCurrentUnlockables(req) {
     urlRoute,
     req
       ? {
-          headers: req.headers,
+          headers: req.headers
         }
       : null
   );
@@ -105,7 +130,7 @@ async function getCurrentEvents(req) {
     urlRoute,
     req
       ? {
-          headers: req.headers,
+          headers: req.headers
         }
       : null
   );
@@ -118,7 +143,7 @@ async function saveUnlockable(newUnlockable) {
   const result = await fetch(urlRoute, {
     method: "POST",
     headers: { "content-type": "application/json" },
-    body: JSON.stringify(newUnlockable),
+    body: JSON.stringify(newUnlockable)
   });
   console.log(result);
   const jsonResult = await result.json();
@@ -130,7 +155,7 @@ async function updateUnlockable(updatedUnlockable) {
   const result = await fetch(urlRoute, {
     method: "PUT",
     headers: { "content-type": "application/json" },
-    body: JSON.stringify(updatedUnlockable),
+    body: JSON.stringify(updatedUnlockable)
   });
   console.log(result);
   return result.status === 200;
@@ -141,16 +166,16 @@ async function saveEvent(newEvent) {
   const result = await fetch(urlRoute, {
     method: "POST",
     headers: {
-      "content-type": "application/json",
+      "content-type": "application/json"
     },
-    body: JSON.stringify(newEvent),
+    body: JSON.stringify(newEvent)
   });
   return result.status === 200;
 }
 async function deleteEvent(event) {
   const urlRoute = "/api/event/" + event.id;
   const result = await fetch(urlRoute, {
-    method: "DELETE",
+    method: "DELETE"
   });
   return result.status === 200;
 }
@@ -159,6 +184,7 @@ export {
   getCurrentTasks,
   saveTask,
   updateTask,
+  deleteTask,
   getHouses,
   createHouse,
   updateHouse,
@@ -167,5 +193,5 @@ export {
   updateUnlockable,
   getCurrentEvents,
   saveEvent,
-  deleteEvent,
+  deleteEvent
 };

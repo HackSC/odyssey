@@ -20,7 +20,7 @@ router.get("/tasks", async (req, res) => {
 });
 
 router.post("/tasks", async (req, res) => {
-  console.log("OTHER");
+  console.log("REAL API FOLDER");
   console.log(req.body);
   const allowedFields = new Set([
     "blocking",
@@ -32,13 +32,14 @@ router.post("/tasks", async (req, res) => {
     "type",
     "isPast"
   ]);
+  console.log(allowedFields);
   const formInput = req.body;
   console.log("forminput");
   console.log(formInput);
 
   for (let key of Object.keys(formInput)) {
     if (!allowedFields.has(key)) {
-      console.log("NOT SUPPORTED FIELD");
+      console.log("NOT SUPPORTED FIELD ");
       console.log(key);
       return res.status(400).json({
         error: `${key} is not a supported field`
@@ -49,7 +50,6 @@ router.post("/tasks", async (req, res) => {
     const result = await models.Task.create(req.body);
     return res.status(200).json({ result: result });
   } catch (e) {
-    console.log(e.message);
     return res.status(500).json({ error: e });
   }
 });

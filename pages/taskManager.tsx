@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 
 import { handleLoginRedirect, getProfile } from "../lib/authenticate";
-import { getCurrentTasks, saveTask, updateTask } from "../lib/live";
+import { getCurrentTasks, saveTask, updateTask, deleteTask } from "../lib/live";
 import Head from "../components/Head";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
@@ -18,7 +18,7 @@ const EditableCell = ({ task }) => {
           type="text"
           placeholder="name"
           value={currTaskValue.name}
-          onChange={(e) => {
+          onChange={e => {
             setCurrTaskValue({ ...currTaskValue, name: e.target.value });
           }}
         />
@@ -26,7 +26,7 @@ const EditableCell = ({ task }) => {
           type="text"
           placeholder="type"
           value={currTaskValue.type}
-          onChange={(e) => {
+          onChange={e => {
             setCurrTaskValue({ ...currTaskValue, type: e.target.value });
           }}
         />
@@ -34,16 +34,16 @@ const EditableCell = ({ task }) => {
           type="number"
           placeholder="points"
           value={currTaskValue.points}
-          onChange={(e) => {
+          onChange={e => {
             setCurrTaskValue({ ...currTaskValue, points: e.target.value });
           }}
         />
         <select
-          onChange={(e) => {
+          onChange={e => {
             const isActive = e.target.value === "Active";
             setCurrTaskValue({
               ...currTaskValue,
-              isActive: isActive,
+              isActive: isActive
             });
           }}
           //@ts-ignore
@@ -55,6 +55,7 @@ const EditableCell = ({ task }) => {
         <EditButton
           onClick={async () => {
             const result = await updateTask(currTaskValue);
+            console.log(currTaskValue);
             if (result) {
               window.location.reload();
             } else {
@@ -64,6 +65,19 @@ const EditableCell = ({ task }) => {
         >
           Update Task
         </EditButton>
+        <EditButton
+          onClick={async () => {
+            const result = await deleteTask(currTaskValue);
+            console.log(result);
+            if (result) {
+              window.location.reload();
+            } else {
+              alert("failed to delete task");
+            }
+          }}
+        >
+          Delete Task
+        </EditButton>
       </TaskInfo>
     </Task>
   );
@@ -72,7 +86,7 @@ const EditableCell = ({ task }) => {
 const TaskManager = ({ profile, currentTasks }) => {
   const [newTask, setNewTask] = useState({});
 
-  const taskBlocks = currentTasks.tasks.map((task) => {
+  const taskBlocks = currentTasks.tasks.map(task => {
     return <EditableCell task={task} />;
   });
   return (
@@ -88,39 +102,39 @@ const TaskManager = ({ profile, currentTasks }) => {
               <input
                 type="text"
                 placeholder="name"
-                onChange={(e) => {
+                onChange={e => {
                   setNewTask({
                     ...newTask,
-                    name: e.target.value,
+                    name: e.target.value
                   });
                 }}
               />
               <input
                 type="text"
                 placeholder="type"
-                onChange={(e) => {
+                onChange={e => {
                   setNewTask({
                     ...newTask,
-                    type: e.target.value,
+                    type: e.target.value
                   });
                 }}
               />
               <input
                 type="number"
                 placeholder="points"
-                onChange={(e) => {
+                onChange={e => {
                   setNewTask({
                     ...newTask,
-                    points: e.target.value,
+                    points: e.target.value
                   });
                 }}
               />
               <select
-                onChange={(e) => {
+                onChange={e => {
                   const isActive = e.target.value === "Active";
                   setNewTask({
                     ...newTask,
-                    isActive: isActive,
+                    isActive: isActive
                   });
                 }}
                 //@ts-ignore
@@ -135,6 +149,8 @@ const TaskManager = ({ profile, currentTasks }) => {
               value="Create new Task"
               onClick={async () => {
                 const result = await saveTask(newTask);
+                console.log(" UPPER RESULT: ");
+                console.log(result);
                 if (result) {
                   // In theory we do optimistic local state updating, in practice, fuck it it'll do
                   window.location.reload();
@@ -163,7 +179,7 @@ TaskManager.getInitialProps = async ({ req }) => {
 
   return {
     profile,
-    currentTasks,
+    currentTasks
   };
 };
 
