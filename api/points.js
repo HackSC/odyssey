@@ -15,6 +15,7 @@ router.get("/tasks", async (req, res) => {
     const tasks = await models.Task.findAll();
     return res.json({ tasks: tasks });
   } catch (e) {
+    console.log(e);
     return res.json({ err: e });
   }
 });
@@ -27,6 +28,7 @@ router.post("/tasks", async (req, res) => {
     "description",
     "points",
     "name",
+    "type",
     "isGroupTask",
     "isActive",
     "type",
@@ -36,7 +38,11 @@ router.post("/tasks", async (req, res) => {
   console.log("forminput");
   console.log(formInput);
 
+  console.log("in /tasks post api");
+  console.log(allowedFields);
+  console.log(formInput);
   for (let key of Object.keys(formInput)) {
+    console.log(key);
     if (!allowedFields.has(key)) {
       console.log("NOT SUPPORTED FIELD");
       console.log(key);
