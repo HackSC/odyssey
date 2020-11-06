@@ -188,13 +188,14 @@ const TaskName = styled.div`
 `;
 
 const EditButton = styled.button`
-  width: 5vw;
+  width: 30px + 1vw;
   float: right;
   color: red;
   background-color: white;
   align-self: flex-start;
   border-radius: 5px;
   border: 2px solid red;
+  margin-left: 1vw;
 `;
 
 const Task = styled.div`
