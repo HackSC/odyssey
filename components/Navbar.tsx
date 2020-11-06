@@ -132,6 +132,14 @@ const Navbar: React.FunctionComponent<NavbarProps> = ({
                   APIs
                 </Link>
               )}
+              {admin && activePage !== "/" && (
+                <Link
+                  href="/admin"
+                  style={style(activePage === "/" ? "#FF8379" : "white")}
+                >
+                  Admin Dashboard
+                </Link>
+              )}
               {showLogout && (
                 <Link
                   href="/auth/logout"

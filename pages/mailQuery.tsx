@@ -133,7 +133,7 @@ const mailQuery = () => {
   return (
     <>
       <Head title="HackSC Odyssey - Filter Signups" />
-      <Navbar loggedIn admin activePage="/" />
+      <Navbar loggedIn admin activePage="/mailQuery" />
       <Background>
         <Container>
           <Flex direction="column">

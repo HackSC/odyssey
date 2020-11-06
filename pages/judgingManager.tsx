@@ -459,7 +459,7 @@ const judgingManager = ({}) => {
   return (
     <>
       <Head title="HackSC Odyssey - Application" />
-      <Navbar loggedIn admin activePage="/" />
+      <Navbar loggedIn admin activePage="/judgingManager" />
       <Background>
         <Container>
           <Flex direction="row" justify="space-between">
