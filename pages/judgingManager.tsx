@@ -110,9 +110,13 @@ const judgingManager = ({}) => {
       let sponsors_list = new Set();
       for (let i = 0; i < working_projects.length; i++) {
         if (working_projects[i].vertical != "") {
-          let vertical = working_projects[i].vertical.toString()
+          let vertical = working_projects[i].vertical.toString();
           verticalJudges_obj[vertical] = 0;
-          verticalCount_obj[vertical] = verticalCount_obj.hasOwnProperty(vertical) ? (verticalCount_obj[vertical]+1) : 1;
+          verticalCount_obj[vertical] = verticalCount_obj.hasOwnProperty(
+            vertical
+          )
+            ? verticalCount_obj[vertical] + 1
+            : 1;
         }
         for (let j = 0; j < working_projects[i].desiredPrizes.length; j++) {
           if (working_projects[i].desiredPrizes[j] != "") {
@@ -123,7 +127,7 @@ const judgingManager = ({}) => {
       setProjects(working_projects);
       setSponsors(Array.from(sponsors_list));
       setVerticalJudges(verticalJudges_obj);
-      setVerticalCount(verticalCount_obj)
+      setVerticalCount(verticalCount_obj);
 
       setUploaded(true);
     };
@@ -457,7 +461,7 @@ const judgingManager = ({}) => {
   return (
     <>
       <Head title="HackSC Odyssey - Application" />
-      <Navbar loggedIn admin activePage="/" />
+      <Navbar loggedIn admin activePage="/judgingManager" />
       <Background>
         <Container>
           <Flex direction="row" justify="space-between">
@@ -489,7 +493,7 @@ const judgingManager = ({}) => {
             <Column flexBasis={48}>
               <Cell>
                 <Column>
-                  {'Special Tables (Key, Max): '}
+                  {"Special Tables (Key, Max): "}
                   <TableInput
                     type="text"
                     onChange={e => {
