@@ -3,16 +3,16 @@ const prize = (sequelize, DataTypes) => {
     "Prize",
     {
       title: DataTypes.STRING,
-      description: DataTypes.STRING
+      description: DataTypes.STRING,
     },
     {}
   );
-  Prize.associate = models => {
+  Prize.associate = (models) => {
     Prize.belongsToMany(models.ProjectTeam, {
       through: "ProjectTeamPrizes",
       foreignKey: "prize",
       as: "Prizes",
-      otherKey: "projectTeam"
+      otherKey: "projectTeam",
     });
   };
   return Prize;

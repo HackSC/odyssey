@@ -11,7 +11,7 @@ import {
   getProfile,
   handleAdminRedirect,
   handleVolunteerRedirect,
-  handleSponsorRedirect
+  handleSponsorRedirect,
 } from "../lib/authenticate";
 
 const API = ({ profile, houses, socialPosts }) => {
@@ -55,7 +55,7 @@ API.getInitialProps = async ({ req }) => {
   }
 
   if (typeof window !== "undefined") {
-    Sentry.configureScope(function(scope) {
+    Sentry.configureScope(function (scope) {
       scope.setExtra("profile", profile);
     });
   }
@@ -68,7 +68,7 @@ API.getInitialProps = async ({ req }) => {
   return {
     houses,
     profile,
-    socialPosts
+    socialPosts,
   };
 };
 

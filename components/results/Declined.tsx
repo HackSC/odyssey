@@ -9,10 +9,10 @@ type Props = {
   profile: Profile;
 };
 
-const Declined: React.FunctionComponent<Props> = props => {
+const Declined: React.FunctionComponent<Props> = (props) => {
   const handleUndecline = async () => {
     await fetch("/api/profile/undecline", {
-      method: "POST"
+      method: "POST",
     });
 
     await Router.push("/dashboard");

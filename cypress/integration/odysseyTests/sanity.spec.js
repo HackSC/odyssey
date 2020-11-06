@@ -1,6 +1,6 @@
 Cypress.Commands.add("login", (overrides = {}) => {
   Cypress.log({
-    name: "loginViaAuth0"
+    name: "loginViaAuth0",
   });
 
   const options = {
@@ -13,29 +13,29 @@ Cypress.Commands.add("login", (overrides = {}) => {
       scope: "openid profile email",
 
       client_id: Cypress.env("auth0_client_id"),
-      client_secret: Cypress.env("auth0_client_secret")
-    }
+      client_secret: Cypress.env("auth0_client_secret"),
+    },
   };
   cy.request(options);
 });
 
 Cypress.Commands.add("goToDashboard", (overrides = {}) => {
   cy.login()
-    .then(resp => {
+    .then((resp) => {
       return resp.body;
     })
-    .then(body => {
+    .then((body) => {
       const { access_token, expires_in, id_token } = body;
       const auth0State = {
         nonce: "",
-        state: "some-random-state"
+        state: "some-random-state",
       };
       const callbackUrl = `http://localhost:3000/auth/callback#access_token=${access_token}&scope=openid&id_token=${id_token}&expires_in=${expires_in}&token_type=Bearer&state=${auth0State.state}`;
       cy.visit(callbackUrl, {
         onBeforeLoad(win) {
           win.document.cookie =
             "com.auth0.auth.some-random-state=" + JSON.stringify(auth0State);
-        }
+        },
       });
       cy.get("#1-email").type(Cypress.env("test_username"));
       cy.get(":input[type=password]").type(Cypress.env("test_password"));

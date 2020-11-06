@@ -20,7 +20,7 @@ export {
   default as Form,
   FormGroup,
   RadioChoice,
-  RadioChoiceLabel
+  RadioChoiceLabel,
 } from "./Form";
 export { default as Panel } from "./Panel";
 export { default as Section } from "./Section";

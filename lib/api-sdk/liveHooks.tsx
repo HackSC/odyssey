@@ -70,5 +70,5 @@ export {
   liveLookupFetch,
   liveSignUpLookupFetch,
   liveHackerLookupFetch,
-  livePointFetch
+  livePointFetch,
 };

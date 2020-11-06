@@ -13,18 +13,18 @@ import {
   Flex,
   Container,
   Form,
-  FormGroup
+  FormGroup,
 } from "../styles";
 import {
   liveAssignQRFetch,
   liveLookupFetch,
-  liveDispatchFetch
+  liveDispatchFetch,
 } from "../lib/api-sdk/liveHooks";
 
 const CheckinResult = ({ result, resetResults }) => {
   const qrInput = useRef(null);
 
-  const handleAssignment = async e => {
+  const handleAssignment = async (e) => {
     e.preventDefault();
 
     const qrInputValue = qrInput.current.value.trim().toUpperCase();
@@ -40,13 +40,13 @@ const CheckinResult = ({ result, resetResults }) => {
     if (confirmation) {
       const assignRequest = await liveAssignQRFetch({
         qrCodeId: qrInputValue,
-        userId: result.userId
+        userId: result.userId,
       });
 
       if (!assignRequest.error) {
         const checkinRequest = await liveDispatchFetch({
           actionId: "checkin",
-          qrCodeId: qrInputValue
+          qrCodeId: qrInputValue,
         });
 
         if (!checkinRequest.error) {
@@ -114,7 +114,7 @@ const Checkin = () => {
   const [firstNameInput, lastNameInput, emailInput] = [
     useRef(null),
     useRef(null),
-    useRef(null)
+    useRef(null),
   ];
   const [results, setResults] = useState([]);
 
@@ -125,7 +125,7 @@ const Checkin = () => {
     emailInput.current.value = "";
   };
 
-  const lookupHackers = async e => {
+  const lookupHackers = async (e) => {
     e.preventDefault();
 
     const firstName = firstNameInput.current.value;
@@ -135,7 +135,7 @@ const Checkin = () => {
     const lookupResponse = await liveLookupFetch({
       firstName,
       lastName,
-      email
+      email,
     });
 
     const profiles = lookupResponse.success;
@@ -145,7 +145,7 @@ const Checkin = () => {
   const renderResults = useMemo(() => {
     return (
       <Results>
-        {results.map(result => (
+        {results.map((result) => (
           <CheckinResult result={result} resetResults={resetResults} />
         ))}
       </Results>
@@ -155,7 +155,7 @@ const Checkin = () => {
   return (
     <>
       <Head title="HackSC Odyssey - Check in Hackers" />
-      <Navbar loggedIn admin activePage="/" />
+      <Navbar loggedIn admin activePage="/checkin" />
       <Background>
         <Container>
           <Flex direction="column">
@@ -194,7 +194,7 @@ const Checkin = () => {
   );
 };
 
-Checkin.getInitialProps = async ctx => {
+Checkin.getInitialProps = async (ctx) => {
   const { req } = ctx;
 
   const profile = await getProfile(req);
@@ -205,7 +205,7 @@ Checkin.getInitialProps = async ctx => {
   }
 
   return {
-    profile
+    profile,
   };
 };
 

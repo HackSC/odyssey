@@ -26,7 +26,7 @@ router.post("/", async (req, res) => {
       name: name,
       description: description,
       startsAt: startsAt,
-      endsAt: endsAt
+      endsAt: endsAt,
     });
     return res.json({ newEvent });
   } catch (e) {
@@ -39,8 +39,8 @@ router.delete("/:id", async (req, res) => {
     const id = req.params.id;
     await models.Event.destroy({
       where: {
-        id: id
-      }
+        id: id,
+      },
     });
     return res.status(200).json({ result: "success" });
   } catch (e) {

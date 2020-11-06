@@ -13,7 +13,7 @@ const IncompleteTasks = ({ incompleteTasks }: { incompleteTasks: Task[] }) => {
     const sortedAndFilteredIncompleteTasks = incompleteTasks
       .filter(filter)
       .sort(sort);
-    return sortedAndFilteredIncompleteTasks.map(task => (
+    return sortedAndFilteredIncompleteTasks.map((task) => (
       <Task>
         <h3>{task.name}</h3>
         <p>{task.description}</p>

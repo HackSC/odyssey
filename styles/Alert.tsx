@@ -11,7 +11,7 @@ type AlertProps = {
 };
 
 const Alert = styled.div<AlertProps>`
-position: relative;
+  position: relative;
   ${({ display }) => `display: ${display ? "visible" : "none"};`}
   ${({ margin }) => `margin: ${margin ? margin : "1em"};`}
   ${({ borderColor }) =>

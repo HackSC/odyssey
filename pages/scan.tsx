@@ -7,6 +7,7 @@ import { handleLoginRedirect, getProfile } from "../lib/authenticate";
 
 import Head from "../components/Head";
 import Scanner from "../components/Scanner";
+import Navbar from "../components/Navbar";
 
 import { Button, Form, Flex } from "../styles";
 import Select from "../components/Select";
@@ -20,16 +21,16 @@ const ACTIONS = [
   // },
   {
     label: "Identify Hacker",
-    value: "action identify"
+    value: "action identify",
   },
   {
     label: "Check Points Total",
-    value: "action points"
+    value: "action points",
   },
   {
     label: "Confirm Project Submission",
-    value: "action judge"
-  }
+    value: "action judge",
+  },
 ];
 
 type Props = {
@@ -46,7 +47,7 @@ const Scan = ({ profile, tasks }: Props) => {
   // TOASTS
   const { addToast } = useToasts();
 
-  const handleActionChange = e => {
+  const handleActionChange = (e) => {
     setAction(e.target.value);
     setLastScannedCode(null);
   };
@@ -64,13 +65,13 @@ const Scan = ({ profile, tasks }: Props) => {
     if (!checkIfValidCode(code)) {
       addToast("Invalid QR Code", {
         appearance: "error",
-        autoDismiss: true
+        autoDismiss: true,
       });
       return;
     }
 
     const dispatchBody = {
-      qrCodeId: code
+      qrCodeId: code,
     };
 
     // Either an action (ex: checkin) or a task (ex: 1, 2, etc)
@@ -97,21 +98,21 @@ const Scan = ({ profile, tasks }: Props) => {
 
           addToast(`User has ${pointTotal} points`, {
             appearance: "info",
-            autoDismiss: true
+            autoDismiss: true,
           });
         } else {
           addToast(
             "Couldn't find point total... user might not have scanned for any tasks",
             {
               appearance: "error",
-              autoDismiss: true
+              autoDismiss: true,
             }
           );
         }
       } else {
         addToast(pointResponse.error, {
           appearance: "error",
-          autoDismiss: true
+          autoDismiss: true,
         });
       }
 
@@ -125,7 +126,7 @@ const Scan = ({ profile, tasks }: Props) => {
       if (dispatchBody["actionId"] === "checkin") {
         addToast("Successfully checked in user", {
           appearance: "success",
-          autoDismiss: true
+          autoDismiss: true,
         });
       } else if (dispatchBody["actionId"] === "identify") {
         const profile: Profile = scanResponse.success as Profile;
@@ -135,21 +136,28 @@ const Scan = ({ profile, tasks }: Props) => {
           }) ${profile.isBattlepassComplete && " IS PREMIUM"}`,
           {
             appearance: "success",
-            autoDismiss: true
+            autoDismiss: true,
           }
         );
       } else if (dispatchBody["actionId"] === "contrib") {
         addToast("Hacker has been credited points for finishing task", {
           appearance: "success",
-          autoDismiss: true
+          autoDismiss: true,
         });
       } else if (dispatchBody["actionId"] === "judge") {
-        const members: Array<Profile> = scanResponse.success as Array<Profile>
-        const memberNames = members.map(p => { return (p.firstName + " " + p.lastName)})
-        addToast(`Submission has been successfully confirmed for ${memberNames.join(", ")}`, {
-          appearance: "success",
-          autoDismiss: true
+        const members: Array<Profile> = scanResponse.success as Array<Profile>;
+        const memberNames = members.map(p => {
+          return p.firstName + " " + p.lastName;
         });
+        addToast(
+          `Submission has been successfully confirmed for ${memberNames.join(
+            ", "
+          )}`,
+          {
+            appearance: "success",
+            autoDismiss: true
+          }
+        );
       }
     } else {
       addToast(scanResponse.error, { appearance: "error", autoDismiss: true });
@@ -158,7 +166,7 @@ const Scan = ({ profile, tasks }: Props) => {
 
   const handleScannedCode = useCallback(
     (code: string) => {
-      setLastScannedCode(prev => {
+      setLastScannedCode((prev) => {
         if (prev !== code) {
           sendScanRequest(code);
           return code;
@@ -170,7 +178,7 @@ const Scan = ({ profile, tasks }: Props) => {
     [action]
   );
 
-  const handleManualInput = e => {
+  const handleManualInput = (e) => {
     e.preventDefault();
 
     if (manualInputRef.current) {
@@ -187,9 +195,9 @@ const Scan = ({ profile, tasks }: Props) => {
 
   const tasksWithActionsOptions = useMemo(() => {
     const tasksAsSelectOptions = !!tasks
-      ? tasks.map(task => ({
+      ? tasks.map((task) => ({
           value: `task ${task.id}`,
-          label: task.name
+          label: task.name,
         }))
       : [];
 
@@ -200,6 +208,7 @@ const Scan = ({ profile, tasks }: Props) => {
   return (
     <>
       <Head title="HackSC Odyssey - Scan" />
+      <Navbar loggedIn admin activePage="/scan" />
       <PageContainer>
         <ActionBar>
           <h1>Scan Codes</h1>
@@ -248,7 +257,7 @@ const Scan = ({ profile, tasks }: Props) => {
   );
 };
 
-Scan.getInitialProps = async ctx => {
+Scan.getInitialProps = async (ctx) => {
   const { req } = ctx;
 
   const profile = await getProfile(req);
@@ -260,11 +269,11 @@ Scan.getInitialProps = async ctx => {
   }
 
   const { success: allTasks } = await getAllTasksFetch(req);
-  const activeTasks = allTasks.filter(t => t.isActive);
+  const activeTasks = allTasks.filter((t) => t.isActive);
 
   return {
     profile,
-    tasks: activeTasks // TODO -- update this once we've standardized our server/client stuff
+    tasks: activeTasks, // TODO -- update this once we've standardized our server/client stuff
   };
 };
 

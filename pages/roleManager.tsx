@@ -3,10 +3,7 @@ import { useToasts } from "react-toast-notifications";
 
 import { handleLoginRedirect, getProfile } from "../lib/authenticate";
 
-import {
-  getProfiles,
-  updateProfileRole
-} from "../lib/admin";
+import { getProfiles, updateProfileRole } from "../lib/admin";
 
 import Head from "../components/Head";
 import Navbar from "../components/Navbar";
@@ -18,8 +15,8 @@ import styled from "styled-components";
 import { Background, Container, Button, Flex } from "../styles";
 
 const roleManager = ({ profile }) => {
-  const [query, setQuery] = useState("")
-  const [queryResults, setQueryResults] = useState([])
+  const [query, setQuery] = useState("");
+  const [queryResults, setQueryResults] = useState([]);
 
   const { addToast } = useToasts();
 
@@ -28,66 +25,65 @@ const roleManager = ({ profile }) => {
     { label: "admin", value: "admin" },
     { label: "sponsor", value: "sponsor" },
     { label: "volunteer", value: "volunteer" }
-  ]
+  ];
 
-  const queryResultBlocks = queryResults.map(profile => {
+  const queryResultBlocks = queryResults.map((profile) => {
     return (
-      <QueryResult
-        key={profile.email}
-        >
-        {'Name: ' + profile.firstName + ' ' + profile.lastName + ' | Email: ' + profile.email}
+      <QueryResult key={profile.email}>
+        {"Name: " +
+          profile.firstName +
+          " " +
+          profile.lastName +
+          " | Email: " +
+          profile.email}
         <Select
-                name="role"
-                options={roleOptions}
-                defaultValue={profile.role}
-                onChange={e => {
-                  updateRole(profile.email, e.target.value)
-                }}
-                />
+          name="role"
+          options={roleOptions}
+          defaultValue={profile.role}
+          onChange={e => {
+            updateRole(profile.email, e.target.value);
+          }}
+        />
       </QueryResult>
-    )
-  })
+    );
+  });
 
   const updateRole = async function(email, role) {
-    const result = await updateProfileRole(email, role)
+    const result = await updateProfileRole(email, role);
     if (result.status == 200) {
-      addToast('Updated role!', { appearance: 'success' })
+      addToast("Updated role!", { appearance: "success" });
     } else {
-      addToast('Error: ' + result.statusText, { appearance: 'error' })
+      addToast("Error: " + result.statusText, { appearance: "error" });
     }
-  }
+  };
 
   const search = async function() {
-    const profiles = await getProfiles(query)
-    setQueryResults(profiles)
-  }
+    const profiles = await getProfiles(query);
+    setQueryResults(profiles);
+  };
 
   return (
     <>
       <Head title="HackSC Odyssey - Application" />
-      <Navbar loggedIn admin activePage="/" />
+      <Navbar loggedIn admin activePage="/roleManager" />
       <Background>
         <Container>
           <SearchBar>
             <Input
               type="text"
               onChange={e => {
-                setQuery(e.target.value)
+                setQuery(e.target.value);
               }}
               onKeyPress={e => {
-                if (e.key === 'Enter') {
-                  search()
+                if (e.key === "Enter") {
+                  search();
                 }
               }}
               placeholder="Search"
-              />
-            <Button
-              onClick={search}
-            >
-              Search
-            </Button>
+            />
+            <Button onClick={search}>Search</Button>
           </SearchBar>
-          {queryResultBlocks}      
+          {queryResultBlocks}
         </Container>
       </Background>
       <Footer />
@@ -95,7 +91,7 @@ const roleManager = ({ profile }) => {
   );
 };
 
-roleManager.getInitialProps = async ctx => {
+roleManager.getInitialProps = async (ctx) => {
   const { req } = ctx;
 
   const profile = await getProfile(req);
@@ -126,7 +122,7 @@ const QueryResult = styled.div`
 
   div {
     width: 120px;
-    display: inline-block; 
+    display: inline-block;
     margin: 2px 10px;
   }
 
@@ -137,7 +133,7 @@ const QueryResult = styled.div`
     background: #ffffff;
     padding: 12px 16px;
     font-weight: 300;
-    color: #1C1C1C;
+    color: #1c1c1c;
     -webkit-appearance: none;
     border-image: initial;
     position: relative;

@@ -15,135 +15,135 @@ router.get("/battlepass", async (req, res) => {
         id: "1",
         isPremium: false,
         pointValue: 6000,
-        prizeName: "10 Raffle Tickets"
+        prizeName: "10 Raffle Tickets",
       },
       {
         id: "2",
         isPremium: false,
         pointValue: 6000,
-        prizeName: "HackSC T-Shirt"
+        prizeName: "HackSC T-Shirt",
       },
       {
         id: "3",
         isPremium: false,
         pointValue: 6000,
-        prizeName: "10 Raffle Tickets"
+        prizeName: "10 Raffle Tickets",
       },
       {
         id: "4",
         isPremium: false,
         pointValue: 6000,
-        prizeName: "10 Raffle Tickets"
+        prizeName: "10 Raffle Tickets",
       },
       {
         id: "5",
         isPremium: false,
         pointValue: 6000,
-        prizeName: "10 Raffle Tickets"
+        prizeName: "10 Raffle Tickets",
       },
       {
         id: "6",
         isPremium: false,
         pointValue: 6000,
-        prizeName: "10 Raffle Tickets"
+        prizeName: "10 Raffle Tickets",
       },
       {
         id: "7",
         isPremium: false,
         pointValue: 6000,
-        prizeName: "10 Raffle Tickets"
+        prizeName: "10 Raffle Tickets",
       },
       {
         id: "8",
         isPremium: false,
         pointValue: 6000,
-        prizeName: "HackSC Stickers"
+        prizeName: "HackSC Stickers",
       },
       {
         id: "9",
         isPremium: false,
         pointValue: 6000,
-        prizeName: "10 Raffle Tickets"
+        prizeName: "10 Raffle Tickets",
       },
       {
         id: "10",
         isPremium: false,
         pointValue: 6000,
-        prizeName: "Drawstring Bag"
+        prizeName: "Drawstring Bag",
       },
       {
         id: "11",
         isPremium: false,
         pointValue: 6000,
-        prizeName: "100 Raffle Tickets"
+        prizeName: "100 Raffle Tickets",
       },
       {
         id: "12",
         isPremium: true,
         pointValue: 6000,
-        prizeName: "100 Raffle Tickets & Travel Reimbursement!"
+        prizeName: "100 Raffle Tickets & Travel Reimbursement!",
       },
       {
         id: "13",
         isPremium: true,
         pointValue: 6000,
-        prizeName: "100 Raffle Tickets"
+        prizeName: "100 Raffle Tickets",
       },
       {
         id: "14",
         isPremium: true,
         pointValue: 6000,
-        prizeName: "100 Raffle Tickets"
+        prizeName: "100 Raffle Tickets",
       },
       {
         id: "15",
         isPremium: true,
         pointValue: 6000,
-        prizeName: "100 Raffle Tickets"
+        prizeName: "100 Raffle Tickets",
       },
       {
         id: "16",
         isPremium: true,
         pointValue: 6000,
-        prizeName: "100 Raffle Tickets"
+        prizeName: "100 Raffle Tickets",
       },
       {
         id: "17",
         isPremium: true,
         pointValue: 6000,
-        prizeName: "100 Raffle Tickets"
+        prizeName: "100 Raffle Tickets",
       },
       {
         id: "18",
         isPremium: true,
         pointValue: 6000,
-        prizeName: "100 Raffle Tickets"
+        prizeName: "100 Raffle Tickets",
       },
       {
         id: "19",
         isPremium: true,
         pointValue: 6000,
-        prizeName: "100 Raffle Tickets"
+        prizeName: "100 Raffle Tickets",
       },
       {
         id: "20",
         isPremium: true,
         pointValue: 6000,
-        prizeName: "100 Raffle Tickets & Hacker Socks"
+        prizeName: "100 Raffle Tickets & Hacker Socks",
       },
       {
         id: "21",
         isPremium: true,
         pointValue: 6000,
-        prizeName: "100 Raffle Tickets"
+        prizeName: "100 Raffle Tickets",
       },
       {
         id: "22",
         isPremium: true,
         pointValue: 6000,
-        prizeName: "100 Raffle Tickets & Hacker Hat"
-      }
-    ]
+        prizeName: "100 Raffle Tickets & Hacker Hat",
+      },
+    ],
   });
 });
 
@@ -173,9 +173,9 @@ router.get("/houseInfo/list", async (req, res) => {
       {
         model: models.Person.scope("hideProfile"),
         as: "HouseMembers",
-        required: false
-      }
-    ]
+        required: false,
+      },
+    ],
   });
   return res.json({ success: houses });
 });
@@ -186,9 +186,9 @@ router.get("/houseInfo/:id", async (req, res) => {
     include: [
       {
         model: models.Person,
-        as: "HouseMembers"
-      }
-    ]
+        as: "HouseMembers",
+      },
+    ],
   });
   return res.json({ success: house });
 });
@@ -197,17 +197,17 @@ router.get("/incompleteTasks", async (req, res) => {
   const allTasks = await models.Task.findAll();
   const completedTasks = await models.Contribution.findAll({
     where: {
-      personId: req.user.id
-    }
+      personId: req.user.id,
+    },
   });
   if (!completedTasks) {
     return res.json({ success: allTasks });
   }
-  const completeTaskIds = completedTasks.map(x => {
+  const completeTaskIds = completedTasks.map((x) => {
     return x.get("Task").get("id");
   });
 
-  const incompleteTasks = allTasks.filter(x => {
+  const incompleteTasks = allTasks.filter((x) => {
     const taskId = x.get("id");
     return !completeTaskIds.includes(taskId);
   });
@@ -218,12 +218,12 @@ router.get("/incompleteTasks", async (req, res) => {
 router.get("/rafflePoints", async (req, res) => {
   const contributions = await models.Contribution.findAll({
     where: {
-      personId: req.user.id
+      personId: req.user.id,
     },
     attributes: [
-      [sequelize.fn("SUM", sequelize.col("Task.points")), "totalPoints"]
+      [sequelize.fn("SUM", sequelize.col("Task.points")), "totalPoints"],
     ],
-    include: [{ model: models.Task, required: true }]
+    include: [{ model: models.Task, required: true }],
   });
 
   const person = await models.Person.findByPk(req.user.id);
@@ -251,7 +251,7 @@ router.get("/rafflePoints", async (req, res) => {
       800,
       900,
       1000,
-      11000
+      11000,
     ];
 
     let totalRafflePoints =
@@ -273,8 +273,8 @@ router.get("/rafflePoints", async (req, res) => {
 
     return res.json({
       success: {
-        totalRafflePoints
-      }
+        totalRafflePoints,
+      },
     });
   }
 });
