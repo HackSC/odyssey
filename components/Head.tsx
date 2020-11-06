@@ -16,7 +16,8 @@ const Head = ({ title }: HeadProps) => {
 
       <script
         async
-        src="https://www.googletagmanager.com/gtag/js?id=UA-127488741-2"></script>
+        src="https://www.googletagmanager.com/gtag/js?id=UA-127488741-2"
+      ></script>
 
       {/* Facebook pixel (come get my data zuck) */}
       <script
@@ -31,7 +32,7 @@ const Head = ({ title }: HeadProps) => {
   s.parentNode.insertBefore(t,s)}(window, document,'script',
   'https://connect.facebook.net/en_US/fbevents.js');
   fbq('init', '2475646642710223');
-  fbq('track', 'PageView');`
+  fbq('track', 'PageView');`,
         }}
       />
 
@@ -42,7 +43,7 @@ const Head = ({ title }: HeadProps) => {
         function gtag(){dataLayer.push(arguments);}
         gtag('js', new Date());
         gtag('config', 'UA-127488741-2');
-      `
+      `,
         }}
       />
 

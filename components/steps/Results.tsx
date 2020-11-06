@@ -13,7 +13,7 @@ type Props = {
   profile: Profile;
 };
 
-const ResultStep: React.FunctionComponent<Props> = props => {
+const ResultStep: React.FunctionComponent<Props> = (props) => {
   const { profile } = props;
 
   if (profile && profile.status === "accepted") {

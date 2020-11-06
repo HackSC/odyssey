@@ -14,7 +14,7 @@ type Props = {
 const Events = ({ events }: Props) => {
   const eventsRef = useRef(null);
 
-  const isEventActive = event => {
+  const isEventActive = (event) => {
     const start = moment(event.startsAt).add(8, "hour");
     const now = moment(new Date());
     const end = moment(event.endsAt).add(8, "hour");
@@ -22,7 +22,7 @@ const Events = ({ events }: Props) => {
     return start.valueOf() < now.valueOf() && now.valueOf() < end.valueOf();
   };
 
-  const isEventOver = event => {
+  const isEventOver = (event) => {
     const now = moment(new Date());
     const end = moment(event.endsAt).add(8, "hour");
 

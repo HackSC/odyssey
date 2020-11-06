@@ -14,7 +14,7 @@ describe("Prizes", () => {
     return agent
       .get("/api/prize")
       .expect(200)
-      .then(res => {
+      .then((res) => {
         expect(res.body.success.length).toBe(5);
       });
   });

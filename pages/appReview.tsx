@@ -6,7 +6,7 @@ import { handleLoginRedirect, getProfile } from "../lib/authenticate";
 import {
   getHackerProfileForReview,
   submitReview,
-  getReviewHistory
+  getReviewHistory,
 } from "../lib/admin";
 import Head from "../components/Head";
 import Navbar from "../components/Navbar";
@@ -28,7 +28,7 @@ const AppReview = ({ hackerProfile, reviewHistory }) => {
   const scoreInputs = [useRef(null), useRef(null), useRef(null)];
 
   const switchInputsOnKeyDown = useCallback(
-    e => {
+    (e) => {
       const { key } = e;
 
       if (key === "Enter") {
@@ -52,7 +52,7 @@ const AppReview = ({ hackerProfile, reviewHistory }) => {
       window.scrollTo({
         left: 0,
         top: scoreInputs[i].current.offsetTop - 50,
-        behavior: "smooth"
+        behavior: "smooth",
       });
 
       e.preventDefault();
@@ -100,7 +100,7 @@ const AppReview = ({ hackerProfile, reviewHistory }) => {
         userId: currentProfile.userId,
         scoreOne: s1,
         scoreTwo: s2,
-        scoreThree: s3
+        scoreThree: s3,
       };
 
       setSubmitting(true);
@@ -212,7 +212,7 @@ const AppReview = ({ hackerProfile, reviewHistory }) => {
                   <Column flexGrow={1}>
                     <Input
                       type="number"
-                      onChange={e => {
+                      onChange={(e) => {
                         setS1(e.target.value);
                       }}
                       value={s1}
@@ -233,7 +233,7 @@ const AppReview = ({ hackerProfile, reviewHistory }) => {
                   <Column flexGrow={1}>
                     <Input
                       type="number"
-                      onChange={e => {
+                      onChange={(e) => {
                         setS2(e.target.value);
                       }}
                       value={s2}
@@ -254,10 +254,10 @@ const AppReview = ({ hackerProfile, reviewHistory }) => {
                   <Column flexGrow={1}>
                     <Input
                       type="number"
-                      onChange={e => {
+                      onChange={(e) => {
                         setS3(e.target.value);
                       }}
-                      onKeyUp={e => {
+                      onKeyUp={(e) => {
                         if (e.key === "e") {
                           e.preventDefault();
                         }
@@ -285,7 +285,7 @@ const AppReview = ({ hackerProfile, reviewHistory }) => {
   );
 };
 
-AppReview.getInitialProps = async ctx => {
+AppReview.getInitialProps = async (ctx) => {
   const { req } = ctx;
 
   const profile = await getProfile(req);
@@ -298,7 +298,7 @@ AppReview.getInitialProps = async ctx => {
   const reviewHistory = await getReviewHistory(req);
   return {
     hackerProfile: profileReview,
-    reviewHistory
+    reviewHistory,
   };
 };
 

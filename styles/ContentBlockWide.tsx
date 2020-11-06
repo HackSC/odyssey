@@ -1,6 +1,6 @@
 import styled from "styled-components";
 
-const ContentBlockWide = props => {
+const ContentBlockWide = (props) => {
   const { children } = props;
   const MyStyledDiv = styled.div`
     width: 100%;

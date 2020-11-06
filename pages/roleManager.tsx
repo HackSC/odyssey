@@ -27,7 +27,7 @@ const roleManager = ({ profile }) => {
     { label: "volunteer", value: "volunteer" }
   ];
 
-  const queryResultBlocks = queryResults.map(profile => {
+  const queryResultBlocks = queryResults.map((profile) => {
     return (
       <QueryResult key={profile.email}>
         {"Name: " +
@@ -91,7 +91,7 @@ const roleManager = ({ profile }) => {
   );
 };
 
-roleManager.getInitialProps = async ctx => {
+roleManager.getInitialProps = async (ctx) => {
   const { req } = ctx;
 
   const profile = await getProfile(req);

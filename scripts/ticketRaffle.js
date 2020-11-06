@@ -14,8 +14,8 @@ const sequelize = require("sequelize");
 async function getAllProfiles() {
   const profiles = await models.HackerProfile.findAll({
     where: {
-      status: "checkedIn"
-    }
+      status: "checkedIn",
+    },
   });
 
   return profiles;
@@ -24,12 +24,12 @@ async function getAllProfiles() {
 async function getTicketsForProfile(userId) {
   const contributions = await models.Contribution.findAll({
     where: {
-      personId: userId
+      personId: userId,
     },
     attributes: [
-      [sequelize.fn("SUM", sequelize.col("Task.points")), "totalPoints"]
+      [sequelize.fn("SUM", sequelize.col("Task.points")), "totalPoints"],
     ],
-    include: [{ model: models.Task, required: true }]
+    include: [{ model: models.Task, required: true }],
   });
 
   const person = await models.Person.findByPk(userId);
@@ -57,7 +57,7 @@ async function getTicketsForProfile(userId) {
       800,
       900,
       1000,
-      11000
+      11000,
     ];
 
     let totalRafflePoints =
@@ -85,7 +85,7 @@ async function getTickets(profiles) {
   const tickets = [];
 
   const x = await Promise.all(
-    profiles.map(async profile => {
+    profiles.map(async (profile) => {
       const ticketCount = await getTicketsForProfile(profile.userId);
       for (let i = 0; i < ticketCount; i++) {
         tickets.push(profile.userId);
@@ -112,15 +112,15 @@ async function getWinner() {
   for (let i = 0; i < 20; i++) {
     const winner = await models.HackerProfile.findOne({
       where: {
-        userId: tickets[i]
-      }
+        userId: tickets[i],
+      },
     });
 
     console.log({
       firstname: winner.firstName,
       lastName: winner.lastName,
       email: winner.email,
-      userId: winner.userId
+      userId: winner.userId,
     });
   }
 }

@@ -10,7 +10,7 @@ type Props = {
   profile?: Profile;
 };
 
-const FormStepper: React.FunctionComponent<Props> = props => {
+const FormStepper: React.FunctionComponent<Props> = (props) => {
   const { steps, serverStep, profile } = props;
 
   const CurrentStep = steps[serverStep].component;

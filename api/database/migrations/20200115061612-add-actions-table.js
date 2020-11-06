@@ -7,28 +7,28 @@ module.exports = {
         type: Sequelize.INTEGER,
         primaryKey: true,
         autoIncrement: true,
-        allowNull: false
+        allowNull: false,
       },
       name: {
         type: Sequelize.STRING,
-        allowNull: false
+        allowNull: false,
       },
       role: {
         type: Sequelize.STRING,
-        allowNull: false
+        allowNull: false,
       },
       createdAt: {
         allowNull: false,
-        type: Sequelize.DATE
+        type: Sequelize.DATE,
       },
       updatedAt: {
         allowNull: false,
-        type: Sequelize.DATE
-      }
+        type: Sequelize.DATE,
+      },
     });
   },
 
   down: (queryInterface, Sequelize) => {
     return queryInterface.dropTable("Actions");
-  }
+  },
 };
