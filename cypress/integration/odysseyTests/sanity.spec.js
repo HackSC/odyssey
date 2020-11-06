@@ -50,8 +50,178 @@ Cypress.Commands.add("goToDashboard", (overrides = {}) => {
     });
 });
 
+Cypress.Commands.add("goToApplication", (overrides = {}) => {
+  cy.login()
+    .then(resp => {
+      return resp.body;
+    })
+    .then(body => {
+      const { access_token, expires_in, id_token } = body;
+      const auth0State = {
+        nonce: "",
+        state: "some-random-state"
+      };
+      const mainPage = `http://localhost:3000/auth/login`;
+      cy.visit(mainPage, {
+        onBeforeLoad(win) {
+          win.document.cookie =
+            "com.auth0.auth.some-random-state=" + JSON.stringify(auth0State);
+        }
+      });
+      cy.get("#username").type(Cypress.env("TEST_USERNAME"));
+      cy.get(":input[type=password]").type(
+        Cypress.env("TEST_PASSWORD").replace("{", "{{}")
+      );
+      cy.get("[name=action]").click();
+      cy.get("#application-page").click();
+      cy.url().should("eq", "http://localhost:3000/application");
+    });
+});
+
+Cypress.Commands.add("goToResults", (overrides = {}) => {
+  cy.login()
+    .then(resp => {
+      return resp.body;
+    })
+    .then(body => {
+      const { access_token, expires_in, id_token } = body;
+      const auth0State = {
+        nonce: "",
+        state: "some-random-state"
+      };
+      const mainPage = `http://localhost:3000/auth/login`;
+      cy.visit(mainPage, {
+        onBeforeLoad(win) {
+          win.document.cookie =
+            "com.auth0.auth.some-random-state=" + JSON.stringify(auth0State);
+        }
+      });
+      cy.get("#username").type(Cypress.env("TEST_USERNAME"));
+      cy.get(":input[type=password]").type(
+        Cypress.env("TEST_PASSWORD").replace("{", "{{}")
+      );
+      cy.get("[name=action]").click();
+      cy.get("#results-page").click();
+      cy.url().should("eq", "http://localhost:3000/results");
+    });
+});
+
+Cypress.Commands.add("goToTeam", (overrides = {}) => {
+  cy.login()
+    .then(resp => {
+      return resp.body;
+    })
+    .then(body => {
+      const { access_token, expires_in, id_token } = body;
+      const auth0State = {
+        nonce: "",
+        state: "some-random-state"
+      };
+      const mainPage = `http://localhost:3000/auth/login`;
+      cy.visit(mainPage, {
+        onBeforeLoad(win) {
+          win.document.cookie =
+            "com.auth0.auth.some-random-state=" + JSON.stringify(auth0State);
+        }
+      });
+      cy.get("#username").type(Cypress.env("TEST_USERNAME"));
+      cy.get(":input[type=password]").type(
+        Cypress.env("TEST_PASSWORD").replace("{", "{{}")
+      );
+      cy.get("[name=action]").click();
+      cy.get("#team-page").click();
+      cy.url().should("eq", "http://localhost:3000/team");
+    });
+});
+
+Cypress.Commands.add("goToApiDirectory", (overrides = {}) => {
+  cy.login()
+    .then(resp => {
+      return resp.body;
+    })
+    .then(body => {
+      const { access_token, expires_in, id_token } = body;
+      const auth0State = {
+        nonce: "",
+        state: "some-random-state"
+      };
+      const mainPage = `http://localhost:3000/auth/login`;
+      cy.visit(mainPage, {
+        onBeforeLoad(win) {
+          win.document.cookie =
+            "com.auth0.auth.some-random-state=" + JSON.stringify(auth0State);
+        }
+      });
+      cy.get("#username").type(Cypress.env("TEST_USERNAME"));
+      cy.get(":input[type=password]").type(
+        Cypress.env("TEST_PASSWORD").replace("{", "{{}")
+      );
+      cy.get("[name=action]").click();
+      cy.get("#api-directory-page").click();
+      cy.url().should("eq", "http://localhost:3000/api-directory");
+    });
+});
+
+Cypress.Commands.add("goToLogout", (overrides = {}) => {
+  cy.login()
+    .then(resp => {
+      return resp.body;
+    })
+    .then(body => {
+      const { access_token, expires_in, id_token } = body;
+      const auth0State = {
+        nonce: "",
+        state: "some-random-state"
+      };
+      const mainPage = `http://localhost:3000/auth/login`;
+      cy.visit(mainPage, {
+        onBeforeLoad(win) {
+          win.document.cookie =
+            "com.auth0.auth.some-random-state=" + JSON.stringify(auth0State);
+        }
+      });
+      cy.get("#username").type(Cypress.env("TEST_USERNAME"));
+      cy.get(":input[type=password]").type(
+        Cypress.env("TEST_PASSWORD").replace("{", "{{}")
+      );
+      cy.get("[name=action]").click();
+      cy.get("#auth-logout-page").click();
+      cy.url().should("eq", "http://localhost:3000/");
+    });
+});
+
 describe("goDashboard", () => {
   it("should land on the dashboard", () => {
     cy.goToDashboard();
+  });
+});
+
+describe("goApplication", () => {
+  it("should navigate to application page", () => {
+    cy.goToApplication();
+  });
+});
+
+describe("goResults", () => {
+  it("should navigate to results page", () => {
+    cy.goToResults();
+  });
+});
+
+describe("goTeam", () => {
+  it("should navigate to team page", () => {
+    cy.goToTeam();
+  });
+});
+
+describe("goApiDirectory", () => {
+  it("should navigate to api-directory page", () => {
+    cy.goToApiDirectory();
+  });
+});
+
+describe("goLogout", () => {
+  it("should navigate to main page on logout", () => {
+    cy.goToLogout();
   });
 });
