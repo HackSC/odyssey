@@ -29,16 +29,24 @@ Cypress.Commands.add("goToDashboard", (overrides = {}) => {
         nonce: "",
         state: "some-random-state"
       };
-      const callbackUrl = `http://localhost:3000/auth/callback?access_token=${access_token}&scope=openid&id_token=${id_token}&expires_in=${expires_in}&token_type=Bearer&state=${auth0State.state}`;
-      cy.visit(callbackUrl, {
+      const mainPage = `http://localhost:3000/auth/login`;
+      cy.visit(mainPage, {
         onBeforeLoad(win) {
           win.document.cookie =
             "com.auth0.auth.some-random-state=" + JSON.stringify(auth0State);
         }
       });
-      cy.get("#1-email").type(Cypress.env("TEST_USERNAME"));
-      cy.get(":input[type=password]").type(Cypress.env("TEST_PASSWORD"));
-      cy.get("[name=submit]").click();
+      // * Retired Callback Logic Below
+      // const callbackUrl = `http://localhost:3000/auth/callback?access_token=${access_token}&scope=openid&id_token=${id_token}&expires_in=${expires_in}&token_type=Bearer&state=${auth0State.state}`;
+      // cy.visit(callbackUrl, {
+      //   onBeforeLoad(win) {
+      //     win.document.cookie =
+      //       "com.auth0.auth.some-random-state=" + JSON.stringify(auth0State);
+      //   }
+      // });
+      // cy.get("#username").type(Cypress.env("TEST_USERNAME"));
+      // cy.get(":input[type=password]").type(Cypress.env("TEST_PASSWORD"));
+      // cy.get("[name=action]").click();
     });
 });
 
