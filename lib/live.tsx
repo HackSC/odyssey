@@ -83,8 +83,8 @@ async function updateHouse(houseObj) {
 
 async function getCurrentUnlockables(req) {
   const urlRoute = req
-    ? /* Serverside */ process.env.URL_BASE + "api/unlockable/live"
-    : /* Client */ "api/unlockable/live";
+    ? /* Serverside */ process.env.URL_BASE + "api/unlockable/list"
+    : /* Client */ "api/unlockable/list";
 
   const result = await fetch(
     urlRoute,
