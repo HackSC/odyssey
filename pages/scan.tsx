@@ -7,6 +7,7 @@ import { handleLoginRedirect, getProfile } from "../lib/authenticate";
 
 import Head from "../components/Head";
 import Scanner from "../components/Scanner";
+import Navbar from "../components/Navbar";
 
 import { Button, Form, Flex } from "../styles";
 import Select from "../components/Select";
@@ -144,12 +145,19 @@ const Scan = ({ profile, tasks }: Props) => {
           autoDismiss: true
         });
       } else if (dispatchBody["actionId"] === "judge") {
-        const members: Array<Profile> = scanResponse.success as Array<Profile>
-        const memberNames = members.map(p => { return (p.firstName + " " + p.lastName)})
-        addToast(`Submission has been successfully confirmed for ${memberNames.join(", ")}`, {
-          appearance: "success",
-          autoDismiss: true
+        const members: Array<Profile> = scanResponse.success as Array<Profile>;
+        const memberNames = members.map(p => {
+          return p.firstName + " " + p.lastName;
         });
+        addToast(
+          `Submission has been successfully confirmed for ${memberNames.join(
+            ", "
+          )}`,
+          {
+            appearance: "success",
+            autoDismiss: true
+          }
+        );
       }
     } else {
       addToast(scanResponse.error, { appearance: "error", autoDismiss: true });
@@ -200,6 +208,7 @@ const Scan = ({ profile, tasks }: Props) => {
   return (
     <>
       <Head title="HackSC Odyssey - Scan" />
+      <Navbar loggedIn admin activePage="/scan" />
       <PageContainer>
         <ActionBar>
           <h1>Scan Codes</h1>
