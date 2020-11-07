@@ -1,6 +1,6 @@
 Cypress.Commands.add("login", (overrides = {}) => {
   Cypress.log({
-    name: "loginViaAuth0"
+    name: "loginViaAuth0",
   });
 
   const options = {
@@ -12,29 +12,29 @@ Cypress.Commands.add("login", (overrides = {}) => {
       password: Cypress.env("ADMIN_TEST_PASSWORD"),
       scope: "openid profile email",
       client_id: Cypress.env("AUTH0_CLIENT_ID"),
-      client_secret: Cypress.env("AUTH0_CLIENT_SECRET")
-    }
+      client_secret: Cypress.env("AUTH0_CLIENT_SECRET"),
+    },
   };
   cy.request(options);
 });
 
 Cypress.Commands.add("goToAdmin", (overrides = {}) => {
   cy.login()
-    .then(resp => {
+    .then((resp) => {
       return resp.body;
     })
-    .then(body => {
+    .then((body) => {
       const { access_token, expires_in, id_token } = body;
       const auth0State = {
         nonce: "",
-        state: "some-random-state"
+        state: "some-random-state",
       };
       const mainPage = `http://localhost:3000/auth/login`;
       cy.visit(mainPage, {
         onBeforeLoad(win) {
           win.document.cookie =
             "com.auth0.auth.some-random-state=" + JSON.stringify(auth0State);
-        }
+        },
       });
       cy.get("#username").type(Cypress.env("ADMIN_TEST_USERNAME"));
       cy.get(":input[type=password]").type(
@@ -53,21 +53,21 @@ describe("goAdmin", () => {
 
 Cypress.Commands.add("goToScan", (overrides = {}) => {
   cy.login()
-    .then(resp => {
+    .then((resp) => {
       return resp.body;
     })
-    .then(body => {
+    .then((body) => {
       const { access_token, expires_in, id_token } = body;
       const auth0State = {
         nonce: "",
-        state: "some-random-state"
+        state: "some-random-state",
       };
       const mainPage = `http://localhost:3000/auth/login`;
       cy.visit(mainPage, {
         onBeforeLoad(win) {
           win.document.cookie =
             "com.auth0.auth.some-random-state=" + JSON.stringify(auth0State);
-        }
+        },
       });
       cy.get("#username").type(Cypress.env("ADMIN_TEST_USERNAME"));
       cy.get(":input[type=password]").type(
@@ -88,21 +88,21 @@ describe("goScan", () => {
 
 Cypress.Commands.add("goToCheckin", (overrides = {}) => {
   cy.login()
-    .then(resp => {
+    .then((resp) => {
       return resp.body;
     })
-    .then(body => {
+    .then((body) => {
       const { access_token, expires_in, id_token } = body;
       const auth0State = {
         nonce: "",
-        state: "some-random-state"
+        state: "some-random-state",
       };
       const mainPage = `http://localhost:3000/auth/login`;
       cy.visit(mainPage, {
         onBeforeLoad(win) {
           win.document.cookie =
             "com.auth0.auth.some-random-state=" + JSON.stringify(auth0State);
-        }
+        },
       });
       cy.get("#username").type(Cypress.env("ADMIN_TEST_USERNAME"));
       cy.get(":input[type=password]").type(
@@ -123,21 +123,21 @@ describe("goCheckin", () => {
 
 Cypress.Commands.add("goToRoleManager", (overrides = {}) => {
   cy.login()
-    .then(resp => {
+    .then((resp) => {
       return resp.body;
     })
-    .then(body => {
+    .then((body) => {
       const { access_token, expires_in, id_token } = body;
       const auth0State = {
         nonce: "",
-        state: "some-random-state"
+        state: "some-random-state",
       };
       const mainPage = `http://localhost:3000/auth/login`;
       cy.visit(mainPage, {
         onBeforeLoad(win) {
           win.document.cookie =
             "com.auth0.auth.some-random-state=" + JSON.stringify(auth0State);
-        }
+        },
       });
       cy.get("#username").type(Cypress.env("ADMIN_TEST_USERNAME"));
       cy.get(":input[type=password]").type(
@@ -163,21 +163,21 @@ describe("goRoleManager", () => {
 
 Cypress.Commands.add("goToTaskManager", (overrides = {}) => {
   cy.login()
-    .then(resp => {
+    .then((resp) => {
       return resp.body;
     })
-    .then(body => {
+    .then((body) => {
       const { access_token, expires_in, id_token } = body;
       const auth0State = {
         nonce: "",
-        state: "some-random-state"
+        state: "some-random-state",
       };
       const mainPage = `http://localhost:3000/auth/login`;
       cy.visit(mainPage, {
         onBeforeLoad(win) {
           win.document.cookie =
             "com.auth0.auth.some-random-state=" + JSON.stringify(auth0State);
-        }
+        },
       });
       cy.get("#username").type(Cypress.env("ADMIN_TEST_USERNAME"));
       cy.get(":input[type=password]").type(
@@ -203,21 +203,21 @@ describe("goTaskManager", () => {
 
 Cypress.Commands.add("goToHouseManager", (overrides = {}) => {
   cy.login()
-    .then(resp => {
+    .then((resp) => {
       return resp.body;
     })
-    .then(body => {
+    .then((body) => {
       const { access_token, expires_in, id_token } = body;
       const auth0State = {
         nonce: "",
-        state: "some-random-state"
+        state: "some-random-state",
       };
       const mainPage = `http://localhost:3000/auth/login`;
       cy.visit(mainPage, {
         onBeforeLoad(win) {
           win.document.cookie =
             "com.auth0.auth.some-random-state=" + JSON.stringify(auth0State);
-        }
+        },
       });
       cy.get("#username").type(Cypress.env("ADMIN_TEST_USERNAME"));
       cy.get(":input[type=password]").type(
@@ -243,21 +243,21 @@ describe("goHouseManager", () => {
 
 Cypress.Commands.add("goToScheduleManager", (overrides = {}) => {
   cy.login()
-    .then(resp => {
+    .then((resp) => {
       return resp.body;
     })
-    .then(body => {
+    .then((body) => {
       const { access_token, expires_in, id_token } = body;
       const auth0State = {
         nonce: "",
-        state: "some-random-state"
+        state: "some-random-state",
       };
       const mainPage = `http://localhost:3000/auth/login`;
       cy.visit(mainPage, {
         onBeforeLoad(win) {
           win.document.cookie =
             "com.auth0.auth.some-random-state=" + JSON.stringify(auth0State);
-        }
+        },
       });
       cy.get("#username").type(Cypress.env("ADMIN_TEST_USERNAME"));
       cy.get(":input[type=password]").type(
@@ -283,21 +283,21 @@ describe("goScheduleManager", () => {
 
 Cypress.Commands.add("goToHackerManager", (overrides = {}) => {
   cy.login()
-    .then(resp => {
+    .then((resp) => {
       return resp.body;
     })
-    .then(body => {
+    .then((body) => {
       const { access_token, expires_in, id_token } = body;
       const auth0State = {
         nonce: "",
-        state: "some-random-state"
+        state: "some-random-state",
       };
       const mainPage = `http://localhost:3000/auth/login`;
       cy.visit(mainPage, {
         onBeforeLoad(win) {
           win.document.cookie =
             "com.auth0.auth.some-random-state=" + JSON.stringify(auth0State);
-        }
+        },
       });
       cy.get("#username").type(Cypress.env("ADMIN_TEST_USERNAME"));
       cy.get(":input[type=password]").type(
@@ -323,21 +323,21 @@ describe("goHackerManager", () => {
 
 Cypress.Commands.add("goToJudgingManager", (overrides = {}) => {
   cy.login()
-    .then(resp => {
+    .then((resp) => {
       return resp.body;
     })
-    .then(body => {
+    .then((body) => {
       const { access_token, expires_in, id_token } = body;
       const auth0State = {
         nonce: "",
-        state: "some-random-state"
+        state: "some-random-state",
       };
       const mainPage = `http://localhost:3000/auth/login`;
       cy.visit(mainPage, {
         onBeforeLoad(win) {
           win.document.cookie =
             "com.auth0.auth.some-random-state=" + JSON.stringify(auth0State);
-        }
+        },
       });
       cy.get("#username").type(Cypress.env("ADMIN_TEST_USERNAME"));
       cy.get(":input[type=password]").type(
@@ -363,21 +363,21 @@ describe("goJudgingManager", () => {
 
 Cypress.Commands.add("goToBattlepassManager", (overrides = {}) => {
   cy.login()
-    .then(resp => {
+    .then((resp) => {
       return resp.body;
     })
-    .then(body => {
+    .then((body) => {
       const { access_token, expires_in, id_token } = body;
       const auth0State = {
         nonce: "",
-        state: "some-random-state"
+        state: "some-random-state",
       };
       const mainPage = `http://localhost:3000/auth/login`;
       cy.visit(mainPage, {
         onBeforeLoad(win) {
           win.document.cookie =
             "com.auth0.auth.some-random-state=" + JSON.stringify(auth0State);
-        }
+        },
       });
       cy.get("#username").type(Cypress.env("ADMIN_TEST_USERNAME"));
       cy.get(":input[type=password]").type(
@@ -403,21 +403,21 @@ describe("goBattlepassManager", () => {
 
 Cypress.Commands.add("goToMailQuery", (overrides = {}) => {
   cy.login()
-    .then(resp => {
+    .then((resp) => {
       return resp.body;
     })
-    .then(body => {
+    .then((body) => {
       const { access_token, expires_in, id_token } = body;
       const auth0State = {
         nonce: "",
-        state: "some-random-state"
+        state: "some-random-state",
       };
       const mainPage = `http://localhost:3000/auth/login`;
       cy.visit(mainPage, {
         onBeforeLoad(win) {
           win.document.cookie =
             "com.auth0.auth.some-random-state=" + JSON.stringify(auth0State);
-        }
+        },
       });
       cy.get("#username").type(Cypress.env("ADMIN_TEST_USERNAME"));
       cy.get(":input[type=password]").type(
@@ -443,21 +443,21 @@ describe("goMailQuery", () => {
 
 Cypress.Commands.add("goToMetabasePage", (overrides = {}) => {
   cy.login()
-    .then(resp => {
+    .then((resp) => {
       return resp.body;
     })
-    .then(body => {
+    .then((body) => {
       const { access_token, expires_in, id_token } = body;
       const auth0State = {
         nonce: "",
-        state: "some-random-state"
+        state: "some-random-state",
       };
       const mainPage = `http://localhost:3000/auth/login`;
       cy.visit(mainPage, {
         onBeforeLoad(win) {
           win.document.cookie =
             "com.auth0.auth.some-random-state=" + JSON.stringify(auth0State);
-        }
+        },
       });
       cy.get("#username").type(Cypress.env("ADMIN_TEST_USERNAME"));
       cy.get(":input[type=password]").type(
@@ -477,4 +477,41 @@ describe("goMetabasePage", () => {
     cy.goToMetabasePage();
   });
   // * Add in function to be able to navigate back to main /admin page
+});
+
+// ! Be sure to Logout so other sanity checks don't fail
+
+Cypress.Commands.add("goToLogout", (overrides = {}) => {
+  cy.login()
+    .then((resp) => {
+      return resp.body;
+    })
+    .then((body) => {
+      const { access_token, expires_in, id_token } = body;
+      const auth0State = {
+        nonce: "",
+        state: "some-random-state",
+      };
+      const mainPage = `http://localhost:3000/auth/login`;
+      cy.visit(mainPage, {
+        onBeforeLoad(win) {
+          win.document.cookie =
+            "com.auth0.auth.some-random-state=" + JSON.stringify(auth0State);
+        },
+      });
+      cy.location("pathname", { timeout: 10000 }).should("include", "/login");
+      cy.get("#username").type(Cypress.env("ADMIN_TEST_USERNAME"));
+      cy.get(":input[type=password]").type(
+        Cypress.env("ADMIN_TEST_PASSWORD").replace("{", "{{}")
+      );
+      cy.get("[name=action]").click();
+      cy.get("#auth-logout-page").click();
+      cy.location("pathname", { timeout: 10000 }).should("include", "");
+    });
+});
+
+describe("goLogout", () => {
+  it("should navigate to main page on logout", () => {
+    cy.goToLogout();
+  });
 });
