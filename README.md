@@ -76,3 +76,40 @@ For business / engineering tasks that are infrequent we have Tasks. These are co
 Invoke this command to see available tasks
 
 - `npm run cli`
+
+## How To: Test Github Actions locally
+
+Must define environment variables used in github actions in the .github/workflows/ directory.
+
+Install [Act](https://github.com/nektos/act), a library to run github actions locally by running `brew install act` on mac or `https://github.com/nektos/act/releases/latest` for windows.
+
+Alternatively, it can be installed by running `curl https://raw.githubusercontent.com/nektos/act/master/install.sh | sudo bash`
+
+To mock a pull request, run `act pull_request --secret-file .env` where your environment variables are defined in `.env`
+
+## How To: Create an End To End (E2E) Test with Cypress
+
+Cypress is an automated e2e framework. For Odyssey, its implementation exists in the ./cypress/ directory.
+
+In package.json, we define script commands to run cypress. It can be run locally with `yarn cypress:open`
+
+This will open the cypress interactive editor, which may need to be installed on your computer.
+
+From there, we can run all the tests defined in `cypress/integration/odysseyTests/*`
+
+Implemented E2E tests:
+
+- `admin_sanity.spec.js`
+  - Tests to visit each admin page on the /admin dashboard for an admin profile
+- `hacker_sanity.spec.js`
+  - Tests to visit each pach in the navbar for a hacker profile
+
+Need to implement:
+
+- `volunteer_sanity.spec.js`
+- `sponsor_sanity.spec.js`
+- `judge_sanity.spec.js`
+
+## How To: Create Unit Tests with Jest
+
+// TODO
