@@ -206,7 +206,7 @@ const mailQuery = () => {
     </>
   );
 };
-
+       
 mailQuery.getInitialProps = async (ctx) => {
   const { req } = ctx;
 

@@ -25,7 +25,6 @@ module.exports = (sequelize, DataTypes) => {
     },
     { timestamps: false }
   );
-
   signups.prototype.getSignUps = function () {
     return sequelize.models.signups.findAll({});
   };
