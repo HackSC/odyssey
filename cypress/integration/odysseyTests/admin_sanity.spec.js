@@ -35,7 +35,7 @@ Cypress.Commands.add("goToAdmin", (overrides = {}) => {
         state: "some-random-state",
       };
       const mainPage = `http://localhost:3000/auth/login`;
-      cy.visit(new URL(mainPage), {
+      cy.visit(mainPage, {
         onBeforeLoad(win) {
           win.document.cookie =
             "com.auth0.auth.some-random-state=" + JSON.stringify(auth0State);
@@ -68,7 +68,7 @@ Cypress.Commands.add("goToScan", (overrides = {}) => {
         state: "some-random-state",
       };
       const mainPage = `http://localhost:3000/auth/login`;
-      cy.visit(new URL(mainPage), {
+      cy.visit(mainPage, {
         onBeforeLoad(win) {
           win.document.cookie =
             "com.auth0.auth.some-random-state=" + JSON.stringify(auth0State);
@@ -103,7 +103,7 @@ Cypress.Commands.add("goToCheckin", (overrides = {}) => {
         state: "some-random-state",
       };
       const mainPage = `http://localhost:3000/auth/login`;
-      cy.visit(new URL(mainPage), {
+      cy.visit(mainPage, {
         onBeforeLoad(win) {
           win.document.cookie =
             "com.auth0.auth.some-random-state=" + JSON.stringify(auth0State);
@@ -138,7 +138,7 @@ Cypress.Commands.add("goToRoleManager", (overrides = {}) => {
         state: "some-random-state",
       };
       const mainPage = `http://localhost:3000/auth/login`;
-      cy.visit(new URL(mainPage), {
+      cy.visit(mainPage, {
         onBeforeLoad(win) {
           win.document.cookie =
             "com.auth0.auth.some-random-state=" + JSON.stringify(auth0State);
@@ -178,7 +178,7 @@ Cypress.Commands.add("goToTaskManager", (overrides = {}) => {
         state: "some-random-state",
       };
       const mainPage = `http://localhost:3000/auth/login`;
-      cy.visit(new URL(mainPage), {
+      cy.visit(mainPage, {
         onBeforeLoad(win) {
           win.document.cookie =
             "com.auth0.auth.some-random-state=" + JSON.stringify(auth0State);
@@ -218,7 +218,7 @@ Cypress.Commands.add("goToHouseManager", (overrides = {}) => {
         state: "some-random-state",
       };
       const mainPage = `http://localhost:3000/auth/login`;
-      cy.visit(new URL(mainPage), {
+      cy.visit(mainPage, {
         onBeforeLoad(win) {
           win.document.cookie =
             "com.auth0.auth.some-random-state=" + JSON.stringify(auth0State);
@@ -258,7 +258,7 @@ Cypress.Commands.add("goToScheduleManager", (overrides = {}) => {
         state: "some-random-state",
       };
       const mainPage = `http://localhost:3000/auth/login`;
-      cy.visit(new URL(mainPage), {
+      cy.visit(mainPage, {
         onBeforeLoad(win) {
           win.document.cookie =
             "com.auth0.auth.some-random-state=" + JSON.stringify(auth0State);
@@ -298,7 +298,7 @@ Cypress.Commands.add("goToHackerManager", (overrides = {}) => {
         state: "some-random-state",
       };
       const mainPage = `http://localhost:3000/auth/login`;
-      cy.visit(new URL(mainPage), {
+      cy.visit(mainPage, {
         onBeforeLoad(win) {
           win.document.cookie =
             "com.auth0.auth.some-random-state=" + JSON.stringify(auth0State);
@@ -338,7 +338,7 @@ Cypress.Commands.add("goToJudgingManager", (overrides = {}) => {
         state: "some-random-state",
       };
       const mainPage = `http://localhost:3000/auth/login`;
-      cy.visit(new URL(mainPage), {
+      cy.visit(mainPage, {
         onBeforeLoad(win) {
           win.document.cookie =
             "com.auth0.auth.some-random-state=" + JSON.stringify(auth0State);
@@ -378,7 +378,7 @@ Cypress.Commands.add("goToBattlepassManager", (overrides = {}) => {
         state: "some-random-state",
       };
       const mainPage = `http://localhost:3000/auth/login`;
-      cy.visit(new URL(mainPage), {
+      cy.visit(mainPage, {
         onBeforeLoad(win) {
           win.document.cookie =
             "com.auth0.auth.some-random-state=" + JSON.stringify(auth0State);
@@ -418,7 +418,7 @@ Cypress.Commands.add("goToMailQuery", (overrides = {}) => {
         state: "some-random-state",
       };
       const mainPage = `http://localhost:3000/auth/login`;
-      cy.visit(new URL(mainPage), {
+      cy.visit(mainPage, {
         onBeforeLoad(win) {
           win.document.cookie =
             "com.auth0.auth.some-random-state=" + JSON.stringify(auth0State);
@@ -458,7 +458,7 @@ Cypress.Commands.add("goToMetabasePage", (overrides = {}) => {
         state: "some-random-state",
       };
       const mainPage = `http://localhost:3000/auth/login`;
-      cy.visit(new URL(mainPage), {
+      cy.visit(mainPage, {
         onBeforeLoad(win) {
           win.document.cookie =
             "com.auth0.auth.some-random-state=" + JSON.stringify(auth0State);
@@ -498,7 +498,7 @@ Cypress.Commands.add("goToLogout", (overrides = {}) => {
         state: "some-random-state",
       };
       const mainPage = `http://localhost:3000/auth/login`;
-      cy.visit(new URL(mainPage), {
+      cy.visit(mainPage, {
         onBeforeLoad(win) {
           win.document.cookie =
             "com.auth0.auth.some-random-state=" + JSON.stringify(auth0State);
