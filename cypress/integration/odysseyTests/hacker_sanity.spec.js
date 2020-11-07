@@ -3,6 +3,8 @@ Cypress.on("uncaught:exception", (err, runnable) => {
   return false;
 });
 
+const timeout = 50000;
+
 Cypress.Commands.add("login", (overrides = {}) => {
   Cypress.log({
     name: "loginViaAuth0",
@@ -73,14 +75,14 @@ Cypress.Commands.add("goToApplication", (overrides = {}) => {
             "com.auth0.auth.some-random-state=" + JSON.stringify(auth0State);
         },
       });
-      cy.location("pathname", { timeout: 10000 }).should("include", "/login");
+      cy.location("pathname", { timeout: timeout }).should("include", "/login");
       cy.get("#username").type(Cypress.env("TEST_USERNAME"));
       cy.get(":input[type=password]").type(
         Cypress.env("TEST_PASSWORD").replace("{", "{{}")
       );
       cy.get("[name=action]").click();
       cy.get("#application-page").click();
-      cy.location("pathname", { timeout: 10000 }).should(
+      cy.location("pathname", { timeout: timeout }).should(
         "include",
         "/application"
       );
@@ -105,14 +107,17 @@ Cypress.Commands.add("goToResults", (overrides = {}) => {
             "com.auth0.auth.some-random-state=" + JSON.stringify(auth0State);
         },
       });
-      cy.location("pathname", { timeout: 10000 }).should("include", "/login");
+      cy.location("pathname", { timeout: timeout }).should("include", "/login");
       cy.get("#username").type(Cypress.env("TEST_USERNAME"));
       cy.get(":input[type=password]").type(
         Cypress.env("TEST_PASSWORD").replace("{", "{{}")
       );
       cy.get("[name=action]").click();
       cy.get("#results-page").click();
-      cy.location("pathname", { timeout: 10000 }).should("include", "/results");
+      cy.location("pathname", { timeout: timeout }).should(
+        "include",
+        "/results"
+      );
       //cy.url().should("contain", "results");
     });
 });
@@ -135,14 +140,14 @@ Cypress.Commands.add("goToTeam", (overrides = {}) => {
             "com.auth0.auth.some-random-state=" + JSON.stringify(auth0State);
         },
       });
-      cy.location("pathname", { timeout: 10000 }).should("include", "/login");
+      cy.location("pathname", { timeout: timeout }).should("include", "/login");
       cy.get("#username").type(Cypress.env("TEST_USERNAME"));
       cy.get(":input[type=password]").type(
         Cypress.env("TEST_PASSWORD").replace("{", "{{}")
       );
       cy.get("[name=action]").click();
       cy.get("#team-page").click();
-      cy.location("pathname", { timeout: 10000 }).should("include", "/team");
+      cy.location("pathname", { timeout: timeout }).should("include", "/team");
     });
 });
 
@@ -164,14 +169,14 @@ Cypress.Commands.add("goToApiDirectory", (overrides = {}) => {
             "com.auth0.auth.some-random-state=" + JSON.stringify(auth0State);
         },
       });
-      cy.location("pathname", { timeout: 10000 }).should("include", "/login");
+      cy.location("pathname", { timeout: timeout }).should("include", "/login");
       cy.get("#username").type(Cypress.env("TEST_USERNAME"));
       cy.get(":input[type=password]").type(
         Cypress.env("TEST_PASSWORD").replace("{", "{{}")
       );
       cy.get("[name=action]").click();
       cy.get("#api-directory-page").click();
-      cy.location("pathname", { timeout: 10000 }).should(
+      cy.location("pathname", { timeout: timeout }).should(
         "include",
         "/api-directory"
       );
@@ -196,14 +201,14 @@ Cypress.Commands.add("goToLogout", (overrides = {}) => {
             "com.auth0.auth.some-random-state=" + JSON.stringify(auth0State);
         },
       });
-      cy.location("pathname", { timeout: 10000 }).should("include", "/login");
+      cy.location("pathname", { timeout: timeout }).should("include", "/login");
       cy.get("#username").type(Cypress.env("TEST_USERNAME"));
       cy.get(":input[type=password]").type(
         Cypress.env("TEST_PASSWORD").replace("{", "{{}")
       );
       cy.get("[name=action]").click();
       cy.get("#auth-logout-page").click();
-      cy.location("pathname", { timeout: 10000 }).should("include", "");
+      cy.location("pathname", { timeout: timeout }).should("include", "");
     });
 });
 
