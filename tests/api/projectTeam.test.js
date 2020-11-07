@@ -114,7 +114,7 @@ describe("Project Team Requests (Parallel)", () => {
       });
   });
 
-  test("Get all Project Teams doesn't fail", async () => {
+  test("Get all Project Teams doesn't fail", () => {
     return agent.get("/api/projectTeam/list").expect(200);
   });
 });
