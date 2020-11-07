@@ -43,7 +43,7 @@ describe("Project Team (Sequential)", () => {
             expect(res.body.person.ProjectTeamId).toBe(projectTeam.id);
           });
       });
-  });
+  }, 10000);
 
   test("Join Project Team", () => {
     return agent
@@ -61,7 +61,7 @@ describe("Project Team (Sequential)", () => {
       .then((res) => {
         expect(res.body.success.Prizes.length).toBeGreaterThan(0);
       });
-  });
+  }, 10000);
 
   test("Remove Prize", async () => {
     await CreateProjectTeamSelf(name);
@@ -73,7 +73,7 @@ describe("Project Team (Sequential)", () => {
       .then((res) => {
         expect(res.body.success.Prizes.length).toBe(0);
       });
-  });
+  }, 10000);
 
   test("Update a team", async () => {
     await CreateProjectTeamSelf(name);
@@ -89,7 +89,7 @@ describe("Project Team (Sequential)", () => {
       .then((res) => {
         expect(res.body.success).toMatchObject(fields);
       });
-  });
+  }, 10000);
 
   test("Remove Only Team Member", async () => {
     await CreateProjectTeamSelf(name);
@@ -99,7 +99,7 @@ describe("Project Team (Sequential)", () => {
       .then((res) => {
         expect(res.body.success).toBeNull();
       });
-  });
+  }, 10000);
 });
 
 describe("Project Team Requests (Parallel)", () => {
@@ -112,7 +112,7 @@ describe("Project Team Requests (Parallel)", () => {
       .then((res) => {
         expect(res.body.success.name).toBe(name);
       });
-  });
+  }, 10000);
 
   test("Get all Project Teams doesn't fail", () => {
     return agent.get("/api/projectTeam/list").expect(200);

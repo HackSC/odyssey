@@ -6,7 +6,7 @@ agent = supertest.agent(server);
 
 beforeAll(async () => {
   return agent.get("/auth/devlogin").query({ id: 1 });
-});
+}, 10000);
 
 afterAll((done) => {
   done();
