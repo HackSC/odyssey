@@ -4,11 +4,11 @@ const multiplier = (sequelize, DataTypes) => {
     {
       name: DataTypes.STRING,
       multiplierValue: DataTypes.INTEGER,
-      groupingId: DataTypes.INTEGER
+      groupingId: DataTypes.INTEGER,
     },
     { tableName: "Multipliers" }
   );
-  Multiplier.associate = function(models) {
+  Multiplier.associate = function (models) {
     Multiplier.belongsTo(models.Grouping);
     models.Grouping.hasMany(Multiplier, { foreignKey: "groupingId" });
   };

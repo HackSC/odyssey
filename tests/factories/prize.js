@@ -5,7 +5,7 @@ const models = require("../../api/models");
 const data = (props = {}) => {
   const defaultProps = {
     title: faker.commerce.productName(),
-    description: faker.company.catchPhrase()
+    description: faker.company.catchPhrase(),
   };
   return { ...defaultProps, ...props };
 };

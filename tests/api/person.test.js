@@ -8,7 +8,7 @@ beforeAll(() => {
   return agent.get("/auth/devlogin").query({ id: 1 });
 });
 
-afterAll(done => {
+afterAll((done) => {
   done();
 });
 
@@ -17,9 +17,9 @@ describe("Peoples", () => {
     return agent
       .get("/api/person/self")
       .expect(200)
-      .then(res => {
+      .then((res) => {
         expect(res.body.person.Profile).toBeDefined();
       })
-      .catch(e => console.error(e));
+      .catch((e) => console.error(e));
   });
 });

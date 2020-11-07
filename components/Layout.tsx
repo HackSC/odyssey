@@ -7,7 +7,7 @@ type Props = {
   title?: string;
 };
 
-const Layout: React.FunctionComponent<Props> = props => {
+const Layout: React.FunctionComponent<Props> = (props) => {
   const { children, title = "This is the default title" } = props;
   return (
     <div style={{ height: "100%" }}>

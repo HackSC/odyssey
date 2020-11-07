@@ -45,7 +45,7 @@ const Scanner = (props: any) => {
       );
 
       const code = jsQR(imageData.data, imageData.width, imageData.height, {
-        inversionAttempts: "dontInvert"
+        inversionAttempts: "dontInvert",
       });
 
       if (code) {
@@ -89,15 +89,15 @@ const Scanner = (props: any) => {
             facingMode: "environment",
             width: {
               min: 300,
-              max: 300
+              max: 300,
             },
             height: {
               min: 300,
-              max: 300
-            }
-          }
+              max: 300,
+            },
+          },
         })
-        .then(function(stream) {
+        .then(function (stream) {
           video.srcObject = stream;
           video.setAttribute("playsinline", "true"); // required to tell iOS safari we don't want fullscreen
           video.play();

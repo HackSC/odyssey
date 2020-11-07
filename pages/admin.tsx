@@ -77,7 +77,7 @@ const Admin = ({ profile }) => {
   );
 };
 
-Admin.getInitialProps = async ctx => {
+Admin.getInitialProps = async (ctx) => {
   const { req } = ctx;
 
   const profile = await getProfile(req);
@@ -92,7 +92,7 @@ Admin.getInitialProps = async ctx => {
   }
 
   return {
-    profile
+    profile,
   };
 };
 

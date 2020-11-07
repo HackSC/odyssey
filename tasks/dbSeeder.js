@@ -17,7 +17,7 @@ const seedDatabase = async () => {
   // Quick truncate everything | much faster than sequelize.sync()
   try {
     await Promise.all[
-      Object.values(db).map(function(model) {
+      Object.values(db).map(function (model) {
         if (model.destroy) {
           console.log("Destroying", model);
           return model.destroy({ truncate: { cascade: true } });
@@ -29,7 +29,7 @@ const seedDatabase = async () => {
   }
 
   // Generate 5 Test Persons & Hacker Profiles
-  const persons = await IteratePromises(5, async temp_iterator => {
+  const persons = await IteratePromises(5, async (temp_iterator) => {
     var i = temp_iterator;
 
     prizeFactory();
@@ -37,7 +37,7 @@ const seedDatabase = async () => {
     console.log("hpFactory");
     const hp = await hpFactory({
       userId: i.toString(),
-      status: "checkedIn"
+      status: "checkedIn",
     }).catch(console.log);
 
     console.log("house factory");
@@ -50,11 +50,11 @@ const seedDatabase = async () => {
       hp !== undefined
         ? await personFactory({
             identityId: hp.userId,
-            ProjectTeamId: projTeam.id
+            ProjectTeamId: projTeam.id,
           }).catch(console.log)
         : await personFactory({
             identityId: i.toString(),
-            ProjectTeamId: projTeam.id
+            ProjectTeamId: projTeam.id,
           }).catch(console.log);
     await person.setHome(house);
     return person;
@@ -63,7 +63,7 @@ const seedDatabase = async () => {
   const admin = await hpFactory({
     userId: "adminy",
     role: "admin",
-    firstName: "McAdmin"
+    firstName: "McAdmin",
   });
 
   //await IteratePromises(5, i => prizeFactory());

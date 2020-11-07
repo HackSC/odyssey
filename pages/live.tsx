@@ -9,7 +9,7 @@ import {
   Footer,
   Countdown,
   LinkToSchedule,
-  LinksAndTasks
+  LinksAndTasks,
 } from "../components";
 
 import { Container } from "../styles";
@@ -20,7 +20,7 @@ import {
   getProfile,
   handleAdminRedirect,
   handleVolunteerRedirect,
-  handleSponsorRedirect
+  handleSponsorRedirect,
 } from "../lib/authenticate";
 
 const Live = ({ profile, houses, socialPosts }) => {
@@ -65,7 +65,7 @@ Live.getInitialProps = async ({ req }) => {
   }
 
   if (typeof window !== "undefined") {
-    Sentry.configureScope(function(scope) {
+    Sentry.configureScope(function (scope) {
       scope.setExtra("profile", profile);
     });
   }
@@ -78,7 +78,7 @@ Live.getInitialProps = async ({ req }) => {
   return {
     houses,
     profile,
-    socialPosts
+    socialPosts,
   };
 };
 

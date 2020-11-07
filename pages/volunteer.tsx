@@ -20,9 +20,9 @@ const Volunteer = ({ profile }) => {
           <Flex direction="column">
             <h1>Volunteer Dashboard</h1>
             <p>
-              Hello there -- welcome to the volunteer dashboard. Here you can access
-              actions to help organize and run HackSC. If you have any questions
-              or find any errors, hit up the organizers in{" "}
+              Hello there -- welcome to the volunteer dashboard. Here you can
+              access actions to help organize and run HackSC. If you have any
+              questions or find any errors, hit up the organizers in{" "}
               <b>#volunteers</b>
             </p>
           </Flex>
@@ -34,7 +34,7 @@ const Volunteer = ({ profile }) => {
             </Action>
             <Action href="/checkin">
               <ActionTitle>Check In Hackers</ActionTitle>
-            </Action>    
+            </Action>
             <Action href="https://live.hacksc.com" target="_blank">
               <ActionTitle>Live Dashboard</ActionTitle>
             </Action>
@@ -46,7 +46,7 @@ const Volunteer = ({ profile }) => {
   );
 };
 
-Volunteer.getInitialProps = async ctx => {
+Volunteer.getInitialProps = async (ctx) => {
   const { req } = ctx;
 
   const profile = await getProfile(req);
@@ -61,7 +61,7 @@ Volunteer.getInitialProps = async ctx => {
   }
 
   return {
-    profile
+    profile,
   };
 };
 

@@ -7,7 +7,7 @@ beforeAll(() => {
   return agent.get("/auth/devlogin").query({ id: 1 });
 });
 
-afterAll(done => {
+afterAll((done) => {
   done();
 });
 
@@ -21,7 +21,7 @@ async function AddPrizeSelf() {
 }
 
 function GetFirstPrize() {
-  return agent.get("/api/prize/").then(res => res.body.success[0]);
+  return agent.get("/api/prize/").then((res) => res.body.success[0]);
 }
 
 describe("Project Team (Sequential)", () => {
@@ -32,14 +32,14 @@ describe("Project Team (Sequential)", () => {
     return agent
       .get("/api/projectTeam/self")
       .expect(200)
-      .then(res => {
+      .then((res) => {
         const projectTeam = res.body.success;
         expect(res.body.success.name).toBe(name);
 
         return agent
           .get("/api/person/self")
           .expect(200)
-          .then(res => {
+          .then((res) => {
             expect(res.body.person.ProjectTeamId).toBe(projectTeam.id);
           });
       });
@@ -49,7 +49,7 @@ describe("Project Team (Sequential)", () => {
     return agent
       .put("/api/projectTeam/join/" + name)
       .expect(200)
-      .then(res => expect(res.body.success.name).toBe(name));
+      .then((res) => expect(res.body.success.name).toBe(name));
   });
 
   test("Add Prize", async () => {
@@ -58,7 +58,7 @@ describe("Project Team (Sequential)", () => {
     return agent
       .get("/api/projectTeam/self")
       .expect(200)
-      .then(res => {
+      .then((res) => {
         expect(res.body.success.Prizes.length).toBeGreaterThan(0);
       });
   });
@@ -70,7 +70,7 @@ describe("Project Team (Sequential)", () => {
     return agent
       .delete("/api/projectTeam/self/deletePrize/" + prize.id)
       .expect(200)
-      .then(res => {
+      .then((res) => {
         expect(res.body.success.Prizes.length).toBe(0);
       });
   });
@@ -80,13 +80,13 @@ describe("Project Team (Sequential)", () => {
     const fields = {
       devpostLink: "devpost2",
       githubLink: "github2",
-      name: "thicc new name"
+      name: "thicc new name",
     };
     return agent
       .put("/api/projectTeam/self")
       .send(fields)
       .expect(200)
-      .then(res => {
+      .then((res) => {
         expect(res.body.success).toMatchObject(fields);
       });
   });
@@ -96,7 +96,7 @@ describe("Project Team (Sequential)", () => {
     return agent
       .delete("/api/projectTeam/self/deleteMember/" + 1)
       .expect(200)
-      .then(res => {
+      .then((res) => {
         expect(res.body.success).toBeNull();
       });
   });
@@ -109,7 +109,7 @@ describe("Project Team Requests (Parallel)", () => {
     return agent
       .get("/api/projectTeam/self")
       .expect(200)
-      .then(res => {
+      .then((res) => {
         expect(res.body.success.name).toBe(name);
       });
   });

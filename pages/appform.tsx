@@ -28,7 +28,7 @@ const appform = ({ profile }) => {
   );
 };
 
-appform.getInitialProps = async ctx => {
+appform.getInitialProps = async (ctx) => {
   const { req } = ctx;
 
   const profile = await getProfile(req);
@@ -42,7 +42,7 @@ appform.getInitialProps = async ctx => {
   }
 
   return {
-    profile
+    profile,
   };
 };
 

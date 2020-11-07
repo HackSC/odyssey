@@ -16,9 +16,9 @@ type Props = {
 };
 
 const MultiTextForm = ({ title, fields, onSubmit }: Props) => {
-  const hooks = fields.map(f => useState(f.initialValue));
+  const hooks = fields.map((f) => useState(f.initialValue));
 
-  const handleSubmit = e => {
+  const handleSubmit = (e) => {
     e.preventDefault();
 
     const packagedValues = fields.reduce((vals, f, i) => {
@@ -40,7 +40,7 @@ const MultiTextForm = ({ title, fields, onSubmit }: Props) => {
               <input
                 type="text"
                 value={hooks[i][0]}
-                onChange={e => hooks[i][1](e.target.value)}
+                onChange={(e) => hooks[i][1](e.target.value)}
               />
             </InputFlex>
           </>
