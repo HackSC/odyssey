@@ -74,7 +74,7 @@ Cypress.Commands.add("goToApplication", (overrides = {}) => {
       );
       cy.get("[name=action]").click();
       cy.get("#application-page").click();
-      cy.url().should("eq", "http://localhost:3000/application");
+      cy.url().should("contain", "application");
     });
 });
 
@@ -102,7 +102,7 @@ Cypress.Commands.add("goToResults", (overrides = {}) => {
       );
       cy.get("[name=action]").click();
       cy.get("#results-page").click();
-      cy.url().should("eq", "http://localhost:3000/results");
+      cy.url().should("contain", "results");
     });
 });
 
@@ -130,7 +130,7 @@ Cypress.Commands.add("goToTeam", (overrides = {}) => {
       );
       cy.get("[name=action]").click();
       cy.get("#team-page").click();
-      cy.url().should("eq", "http://localhost:3000/team");
+      cy.url().should("contain", "team");
     });
 });
 
@@ -158,7 +158,7 @@ Cypress.Commands.add("goToApiDirectory", (overrides = {}) => {
       );
       cy.get("[name=action]").click();
       cy.get("#api-directory-page").click();
-      cy.url().should("eq", "http://localhost:3000/api-directory");
+      cy.url().should("contain", "api-directory");
     });
 });
 
@@ -186,7 +186,7 @@ Cypress.Commands.add("goToLogout", (overrides = {}) => {
       );
       cy.get("[name=action]").click();
       cy.get("#auth-logout-page").click();
-      cy.url().should("eq", "http://localhost:3000/");
+      cy.url().should("contain", "");
     });
 });
 
