@@ -23,6 +23,7 @@ jobs:
       DEV_DB_NAME: ${{ secrets.DEV_DB_NAME }}
       DEV_DB_HOSTNAME: ${{ secrets.DEV_DB_HOSTNAME }}
       DEV_DB_DIALECT: ${{ secrets.DEV_DB_DIALECT }}
+      NODE_ENV: ${{ secrets.NODE_ENV }}
     steps:
       - uses: actions/checkout@master
       - run: yarn
