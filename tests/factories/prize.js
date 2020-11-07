@@ -11,7 +11,6 @@ const data = (props = {}) => {
 };
 
 const prizeFactory = async (props = {}) => {
-  console.log("Creating Prize", props);
   return models.Prize.create(data(props));
 };
 

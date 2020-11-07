@@ -24,7 +24,7 @@ const roleManager = ({ profile }) => {
     { label: "hacker", value: "hacker" },
     { label: "admin", value: "admin" },
     { label: "sponsor", value: "sponsor" },
-    { label: "volunteer", value: "volunteer" }
+    { label: "volunteer", value: "volunteer" },
   ];
 
   const queryResultBlocks = queryResults.map((profile) => {
@@ -40,7 +40,7 @@ const roleManager = ({ profile }) => {
           name="role"
           options={roleOptions}
           defaultValue={profile.role}
-          onChange={e => {
+          onChange={(e) => {
             updateRole(profile.email, e.target.value);
           }}
         />
@@ -48,7 +48,7 @@ const roleManager = ({ profile }) => {
     );
   });
 
-  const updateRole = async function(email, role) {
+  const updateRole = async function (email, role) {
     const result = await updateProfileRole(email, role);
     if (result.status == 200) {
       addToast("Updated role!", { appearance: "success" });
@@ -57,7 +57,7 @@ const roleManager = ({ profile }) => {
     }
   };
 
-  const search = async function() {
+  const search = async function () {
     const profiles = await getProfiles(query);
     setQueryResults(profiles);
   };
@@ -71,10 +71,10 @@ const roleManager = ({ profile }) => {
           <SearchBar>
             <Input
               type="text"
-              onChange={e => {
+              onChange={(e) => {
                 setQuery(e.target.value);
               }}
-              onKeyPress={e => {
+              onKeyPress={(e) => {
                 if (e.key === "Enter") {
                   search();
                 }

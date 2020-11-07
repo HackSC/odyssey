@@ -146,7 +146,7 @@ const Scan = ({ profile, tasks }: Props) => {
         });
       } else if (dispatchBody["actionId"] === "judge") {
         const members: Array<Profile> = scanResponse.success as Array<Profile>;
-        const memberNames = members.map(p => {
+        const memberNames = members.map((p) => {
           return p.firstName + " " + p.lastName;
         });
         addToast(
@@ -155,7 +155,7 @@ const Scan = ({ profile, tasks }: Props) => {
           )}`,
           {
             appearance: "success",
-            autoDismiss: true
+            autoDismiss: true,
           }
         );
       }

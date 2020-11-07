@@ -8,6 +8,10 @@ beforeAll(() => {
   return agent.get("/auth/devlogin").query({ id: 1 });
 });
 
+afterAll((done) => {
+  done();
+});
+
 describe("Peoples", () => {
   test("Gets self includes hacker profile", () => {
     return agent
