@@ -1,3 +1,8 @@
+Cypress.on("uncaught:exception", (err, runnable) => {
+  // * Returning false here prevents Cypress from failing the test
+  return false;
+});
+
 Cypress.Commands.add("login", (overrides = {}) => {
   Cypress.log({
     name: "loginViaAuth0",
