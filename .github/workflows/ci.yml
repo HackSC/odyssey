@@ -17,6 +17,12 @@ jobs:
       AUTH0_CLIENT_SECRET: ${{ secrets.AUTH0_CLIENT_SECRET }}
       AUTH0_DOMAIN: ${{ secrets.AUTH0_DOMAIN }}
       AUTH0_CALLBACK_URL: ${{ secrets.AUTH0_CALLBACK_URL }}
+      DEV_DB_PORT: ${{ secrets.DEV_DB_PORT }}
+      DEV_DB_USERNAME: ${{ secrets.DEV_DB_USERNAME }}
+      DEV_DB_PASSWORD: ${{ secrets.DEV_DB_PASSWORD }}
+      DEV_DB_NAME: ${{ secrets.DEV_DB_NAME }}
+      DEV_DB_HOSTNAME: ${{ secrets.DEV_DB_HOSTNAME }}
+      DEV_DB_DIALECT: ${{ secrets.DEV_DB_DIALECT }}
     steps:
       - uses: actions/checkout@master
       - run: yarn
