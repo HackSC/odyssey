@@ -26,14 +26,14 @@ router.post("/tasks", async (req, res) => {
     "points",
     "name",
     "isGroupTask",
-    "isActive",
+    "isActive"
   ]);
   const formInput = req.body;
 
   for (let key of Object.keys(formInput)) {
     if (!allowedFields.has(key)) {
       return res.status(400).json({
-        error: `${key} is not a supported field`,
+        error: `${key} is not a supported field`
       });
     }
   }
@@ -62,8 +62,8 @@ router.delete("/tasks/:id", async (req, res) => {
     const id = req.params.id;
     await models.Task.destroy({
       where: {
-        id: id,
-      },
+        id: id
+      }
     });
     return res.status(200);
   } catch (e) {

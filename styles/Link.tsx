@@ -5,14 +5,15 @@ import A from "./A";
 type LinkProps = {
   href: string;
   as?: string;
+  id?: string;
   target?: string;
   children: React.ReactNode;
   style?: Object;
 };
 
-const Link = ({ href, as, target, children, style }: LinkProps) => (
+const Link = ({ href, as, id, target, children, style }: LinkProps) => (
   <NextLink href={href} as={as ? as : href}>
-    <A style={style} target={target ? target : "_self"}>
+    <A id={id} style={style} target={target ? target : "_self"}>
       {children}
     </A>
   </NextLink>

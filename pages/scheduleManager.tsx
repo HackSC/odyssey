@@ -80,14 +80,13 @@ const EditableCell = ({ event }) => {
 const TaskManager = ({ profile, currentEvents }) => {
   const [newEvent, setNewEvent] = useState({});
 
-  const taskBlocks = currentEvents.events.map(event => {
+  const taskBlocks = currentEvents.events.map((event) => {
     return <EditableCell event={event} />;
   });
   return (
     <>
       <Head title="HackSC Odyssey - Results" />
       <Navbar loggedIn admin activePage="/scheduleManager" />
-
       <Background>
         <Container>
           {" "}
@@ -96,40 +95,40 @@ const TaskManager = ({ profile, currentEvents }) => {
               <input
                 type="text"
                 placeholder="name"
-                onChange={e => {
+                onChange={(e) => {
                   setNewEvent({
                     ...newEvent,
-                    name: e.target.value
+                    name: e.target.value,
                   });
                 }}
               />
               <input
                 type="text"
                 placeholder="description"
-                onChange={e => {
+                onChange={(e) => {
                   setNewEvent({
                     ...newEvent,
-                    description: e.target.value
+                    description: e.target.value,
                   });
                 }}
               />
               <input
                 type="datetime-local"
                 placeholder="startsAt"
-                onChange={e => {
+                onChange={(e) => {
                   setNewEvent({
                     ...newEvent,
-                    startsAt: e.target.value
+                    startsAt: e.target.value,
                   });
                 }}
               />
               <input
                 type="datetime-local"
                 placeholder="endsAt"
-                onChange={e => {
+                onChange={(e) => {
                   setNewEvent({
                     ...newEvent,
-                    endsAt: e.target.value
+                    endsAt: e.target.value,
                   });
                 }}
               />
@@ -167,7 +166,7 @@ TaskManager.getInitialProps = async ({ req }) => {
 
   return {
     profile,
-    currentEvents
+    currentEvents,
   };
 };
 
@@ -188,14 +187,21 @@ const TaskName = styled.div`
 `;
 
 const EditButton = styled.button`
+<<<<<<< HEAD
+  width: 5vw;
+=======
   width: 30px + 1vw;
+>>>>>>> staging
   float: right;
   color: red;
   background-color: white;
   align-self: flex-start;
   border-radius: 5px;
   border: 2px solid red;
+<<<<<<< HEAD
+=======
   margin-left: 1vw;
+>>>>>>> staging
 `;
 
 const Task = styled.div`

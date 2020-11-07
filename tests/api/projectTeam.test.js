@@ -7,6 +7,10 @@ beforeAll(() => {
   return agent.get("/auth/devlogin").query({ id: 1 });
 });
 
+afterAll((done) => {
+  done();
+});
+
 function CreateProjectTeamSelf(name) {
   return agent.post("/api/projectTeam/self").send({ name });
 }
@@ -21,13 +25,12 @@ function GetFirstPrize() {
 }
 
 describe("Project Team (Sequential)", () => {
-  beforeEach(async () => {
-    await seedDB();
-  });
-  test("Create ProjectTeam Happy Path", () => {
+  var name = "TestProjectTeam";
+  test("Create ProjectTeam Happy Path", async () => {
     // Should set name & teamId on self
-    const name = "TestProjectName";
-    return CreateProjectTeamSelf(name)
+    await CreateProjectTeamSelf(name);
+    return agent
+      .get("/api/projectTeam/self")
       .expect(200)
       .then((res) => {
         const projectTeam = res.body.success;
@@ -40,26 +43,25 @@ describe("Project Team (Sequential)", () => {
             expect(res.body.person.ProjectTeamId).toBe(projectTeam.id);
           });
       });
-  });
+  }, 10000);
 
   test("Join Project Team", () => {
-    const name = "TestProjectTeam";
     return agent
       .put("/api/projectTeam/join/" + name)
       .expect(200)
       .then((res) => expect(res.body.success.name).toBe(name));
   });
+
   test("Add Prize", async () => {
     await CreateProjectTeamSelf(name);
-    const prize = await GetFirstPrize();
+    await AddPrizeSelf();
     return agent
-      .post("/api/projectTeam/self/addPrize")
-      .send({ id: prize.id })
+      .get("/api/projectTeam/self")
       .expect(200)
       .then((res) => {
-        expect(res.body.success.Prizes.length).toBe(1);
+        expect(res.body.success.Prizes.length).toBeGreaterThan(0);
       });
-  });
+  }, 10000);
 
   test("Remove Prize", async () => {
     await CreateProjectTeamSelf(name);
@@ -71,7 +73,7 @@ describe("Project Team (Sequential)", () => {
       .then((res) => {
         expect(res.body.success.Prizes.length).toBe(0);
       });
-  });
+  }, 10000);
 
   test("Update a team", async () => {
     await CreateProjectTeamSelf(name);
@@ -87,7 +89,7 @@ describe("Project Team (Sequential)", () => {
       .then((res) => {
         expect(res.body.success).toMatchObject(fields);
       });
-  });
+  }, 10000);
 
   test("Remove Only Team Member", async () => {
     await CreateProjectTeamSelf(name);
@@ -97,12 +99,12 @@ describe("Project Team (Sequential)", () => {
       .then((res) => {
         expect(res.body.success).toBeNull();
       });
-  });
+  }, 10000);
 });
 
 describe("Project Team Requests (Parallel)", () => {
   test("Get my Project Team", async () => {
-    const name = "TestProjectName";
+    const name = "TestProjectTeam";
     await CreateProjectTeamSelf(name);
     return agent
       .get("/api/projectTeam/self")
@@ -110,9 +112,9 @@ describe("Project Team Requests (Parallel)", () => {
       .then((res) => {
         expect(res.body.success.name).toBe(name);
       });
-  });
+  }, 10000);
 
-  test("Get all Project Teams doesn't fail", async () => {
+  test("Get all Project Teams doesn't fail", () => {
     return agent.get("/api/projectTeam/list").expect(200);
   });
 });

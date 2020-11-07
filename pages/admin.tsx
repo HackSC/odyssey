@@ -29,40 +29,41 @@ const Admin = ({ profile }) => {
 
           <ActionsHeader>Actions</ActionsHeader>
           <Actions>
-            <Action href="/scan">
+            <Action id="scan-page" href="/scan">
               <ActionTitle>Scan In Hackers</ActionTitle>
             </Action>
             {/* <Action href="/appReview">
               <ActionTitle>Start App Review</ActionTitle>
             </Action> */}
-            <Action href="/checkin">
+            <Action id="checkin-page" href="/checkin">
               <ActionTitle>Check In Hackers</ActionTitle>
             </Action>
-            <Action href="/roleManager">
+            <Action id="role-manager-page" href="/roleManager">
               <ActionTitle> Manage Roles </ActionTitle>
             </Action>
-            <Action href="/taskManager">
+            <Action id="task-manager-page" href="/taskManager">
               <ActionTitle> Manage Available Tasks </ActionTitle>
             </Action>
-            <Action href="/houseManager">
+            <Action id="house-manager-page" href="/houseManager">
               <ActionTitle> Manage Houses </ActionTitle>
             </Action>
-            <Action href="/scheduleManager">
+            <Action id="schedule-manager-page" href="/scheduleManager">
               <ActionTitle> Manage Event Schedule </ActionTitle>
             </Action>
-            <Action href="/hackerManager">
+            <Action id="hacker-manager-page" href="/hackerManager">
               <ActionTitle> Manage Hackers </ActionTitle>
             </Action>
-            <Action href="/judgingManager">
+            <Action id="judging-manager-page" href="/judgingManager">
               <ActionTitle> Pass Judgement </ActionTitle>
             </Action>
-            <Action href="/battlepassManager">
+            <Action id="battlepass-manager-page" href="/battlepassManager">
               <ActionTitle> Edit Battlepass </ActionTitle>
             </Action>
-            <Action href="/mailQuery">
+            <Action id="mail-query-page" href="/mailQuery">
               <ActionTitle> Mail Signups </ActionTitle>
             </Action>
             <Action
+              id="metabase-page"
               href="https://metabase-odyssey.herokuapp.com/"
               target="_blank"
             >
