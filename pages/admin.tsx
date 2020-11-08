@@ -62,6 +62,9 @@ const Admin = ({ profile }) => {
             <Action id="mail-query-page" href="/mailQuery">
               <ActionTitle> Mail Signups </ActionTitle>
             </Action>
+            <Action href="/manageApiDirectory">
+              <ActionTitle> Manage Api Directory </ActionTitle>
+            </Action>
             <Action
               id="metabase-page"
               href="https://metabase-odyssey.herokuapp.com/"
