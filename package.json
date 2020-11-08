@@ -13,7 +13,7 @@
     "E2ETest": "start-server-and-test start http://localhost:3000 cypress:run",
     "test": "start-server-and-test start http://localhost:3000 cypress:run",
     "jest": "jest --coverage",
-    "coverage": "codecov"
+    "coverage": "codecov -t $CODECOV_TOKEN"
   },
   "jest": {
     "coverageDirectory": "./coverage/",
@@ -129,7 +129,7 @@
   },
   "husky": {
     "hooks": {
-      "pre-commit": "pretty-quick --staged && yarn jest --forceExit && yarn coverage && lint-staged"
+      "pre-commit": "pretty-quick --staged && yarn jest --detectOpenHandles --forceExit && yarn coverage && lint-staged"
     }
   },
   "lint-staged": {
