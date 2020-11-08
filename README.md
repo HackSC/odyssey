@@ -1,5 +1,7 @@
 # HackSC Odyssey
 
+[![codecov](https://codecov.io/gh/HackSC/odyssey/branch/main/graph/badge.svg?token=JESBLPBF78)](https://codecov.io/gh/HackSC/odyssey)
+
 Odyssey is a hackathon management platform that handles hacker applications, admin functionalities, and more. Built by the HackSC team.
 
 ### Main

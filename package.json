@@ -12,9 +12,12 @@
     "cypress:run": "cypress run",
     "E2ETest": "start-server-and-test start http://localhost:3000 cypress:run",
     "test": "start-server-and-test start http://localhost:3000 cypress:run",
-    "jest": "jest"
+    "jest": "jest",
+    "coverage": "codecov"
   },
   "jest": {
+    "coverageDirectory": "./coverage/",
+    "collectCoverage": true,
     "roots": [
       "./tests/"
     ]
@@ -36,6 +39,7 @@
     "body-parser": "^1.19.0",
     "busboy": "^0.3.1",
     "caniuse-lite": "^1.0.30001148",
+    "codecov": "^3.8.1",
     "cookie": "^0.4.0",
     "cookie-session": "^1.3.3",
     "copy-to-clipboard": "^3.2.0",
@@ -125,7 +129,7 @@
   },
   "husky": {
     "hooks": {
-      "pre-commit": "pretty-quick --staged && yarn jest --forceExit && lint-staged"
+      "pre-commit": "pretty-quick --staged && yarn jest --forceExit && yarn coverage && lint-staged"
     }
   },
   "lint-staged": {
