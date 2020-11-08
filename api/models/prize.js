@@ -4,16 +4,16 @@ module.exports = (sequelize, DataTypes) => {
     "Prize",
     {
       title: DataTypes.STRING,
-      description: DataTypes.STRING
+      description: DataTypes.STRING,
     },
     {}
   );
-  Prize.associate = function(models) {
+  Prize.associate = function (models) {
     Prize.belongsToMany(models.ProjectTeam, {
       through: "ProjectTeamPrizes",
       foreignKey: "prize",
       as: "Prizes",
-      otherKey: "projectTeam"
+      otherKey: "projectTeam",
     });
   };
   return Prize;

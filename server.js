@@ -10,7 +10,7 @@ const scheduleCronJobs = require("./cronjobs/cronjobs");
 const dev = process.env.NODE_ENV !== "production";
 const app = next({
   dev,
-  dir: "."
+  dir: ".",
 });
 const handle = app.getRequestHandler();
 
@@ -24,7 +24,7 @@ if (!dev) {
 Sentry.init({
   dsn: process.env.SENTRY_DSN,
   environment: dev ? "dev" : process.env.NODE_ENV,
-  release: "odyssey@" + process.env.npm_package_version
+  release: "odyssey@" + process.env.npm_package_version,
 });
 
 app.prepare().then(() => {

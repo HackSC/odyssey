@@ -5,8 +5,11 @@ const server = require("../../express");
 agent = supertest.agent(server);
 
 beforeAll(async () => {
-  await seedDB();
   return agent.get("/auth/devlogin").query({ id: 1 });
+}, 10000);
+
+afterAll((done) => {
+  done();
 });
 
 describe("Prizes", () => {
@@ -14,8 +17,11 @@ describe("Prizes", () => {
     return agent
       .get("/api/prize")
       .expect(200)
-      .then(res => {
+      .then((res) => {
         expect(res.body.success.length).toBe(5);
+      })
+      .catch((e) => {
+        console.log("Get all prizes failed: ", e);
       });
   });
 });

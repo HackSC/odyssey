@@ -3,10 +3,10 @@ module.exports = (sequelize, DataTypes) => {
     "Action",
     {
       role: DataTypes.STRING(100),
-      name: DataTypes.STRING(100)
+      name: DataTypes.STRING(100),
     },
     { tableName: "Actions" }
   );
-  Action.associate = function(models) {};
+  Action.associate = function (models) {};
   return Action;
 };

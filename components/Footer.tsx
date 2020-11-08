@@ -32,7 +32,7 @@ const Footer = () => {
               <img src={Twitter} />
             </a>
           </SocialLinks>
-          <Copyright>HackSC {(new Date()).getFullYear()} &copy;</Copyright>
+          <Copyright>HackSC {new Date().getFullYear()} &copy;</Copyright>
         </SocialColumn>
 
         <LinksColumn>

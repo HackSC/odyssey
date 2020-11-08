@@ -82,6 +82,10 @@ const SignUpsLiveRoutes: ISignUpsRoutes = {
   SignUpsLive: "api/live/signups" as Route,
 };
 
+interface ISignUpsRoutes {
+  SignUpsLive: GetRoute;
+}
+
 interface IEventRoutes {
   EventList: GetRoute;
 }

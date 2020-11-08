@@ -29,7 +29,7 @@ function getProfileFromFormData(
     codeOfConduct: formRef.current["code-of-conduct"].checked,
     authorize: formRef.current["authorize"].checked,
     marketing: formRef.current["marketing"].value,
-    submit: isSubmit
+    submit: isSubmit,
   };
 }
 
@@ -48,8 +48,8 @@ export async function syncProfile(
     method: "PUT",
     body: JSON.stringify(profile),
     headers: {
-      "Content-Type": "application/json"
-    }
+      "Content-Type": "application/json",
+    },
   });
 
   if (response.status === 200) {

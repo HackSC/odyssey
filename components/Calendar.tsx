@@ -7,7 +7,7 @@ import Timeline, {
   SidebarHeader,
   DateHeader,
   TimelineMarkers,
-  TodayMarker
+  TodayMarker,
 } from "react-calendar-timeline";
 import { useEventsList } from "../lib/api-sdk/eventHooks";
 import "react-calendar-timeline/lib/Timeline.css";
@@ -22,9 +22,7 @@ type ItemProps = {
   getResizeProps: any;
 };
 
-let defaultTimeStart = moment()
-  .startOf("day")
-  .add(moment().hour(), "hour");
+let defaultTimeStart = moment().startOf("day").add(moment().hour(), "hour");
 //.valueOf();
 
 let defaultTimeEnd = moment()
@@ -33,24 +31,24 @@ let defaultTimeEnd = moment()
   .add(2, "hour");
 //.valueOf();
 
-const Calendar: React.FunctionComponent<Props> = props => {
+const Calendar: React.FunctionComponent<Props> = (props) => {
   const { allEvents } = useEventsList({ defaultOnError: console.log });
   const [eventVisibility, setEventVisibility] = useState({
     visible: false,
     e: {},
-    title: "Event"
+    title: "Event",
   });
 
-  const useOutsideAlerter = ref => {
+  const useOutsideAlerter = (ref) => {
     /**
      * Alert if clicked on outside of element
      */
-    const handleClickOutside = event => {
+    const handleClickOutside = (event) => {
       if (ref.current && !ref.current.contains(event.target)) {
         setEventVisibility({
           visible: false,
           e: eventVisibility?.e,
-          title: eventVisibility?.title
+          title: eventVisibility?.title,
         });
       }
     };
@@ -68,13 +66,13 @@ const Calendar: React.FunctionComponent<Props> = props => {
   const wrapperRef = useRef(null);
   useOutsideAlerter(wrapperRef);
 
-  const itemRenderer: React.FunctionComponent<ItemProps> = props => {
+  const itemRenderer: React.FunctionComponent<ItemProps> = (props) => {
     const {
       item,
       itemContext,
       getItemProps,
       timelineContext,
-      getResizeProps
+      getResizeProps,
     } = props;
     const { left: leftResizeProps, right: rightResizeProps } = getResizeProps();
 
@@ -83,7 +81,7 @@ const Calendar: React.FunctionComponent<Props> = props => {
         style={{
           border: "3px solid #FF8379",
           backgroundColor: "white",
-          overflow: "scroll"
+          overflow: "scroll",
         }}
         {...getItemProps({
           style: {
@@ -96,15 +94,15 @@ const Calendar: React.FunctionComponent<Props> = props => {
             borderWidth: 3,
             borderRadius: 4,
             borderLeftWidth: 3,
-            borderRightWidth: 3
+            borderRightWidth: 3,
           },
-          onMouseDown: e => {
+          onMouseDown: (e) => {
             setEventVisibility({
               visible: true,
               e: eventVisibility?.e,
-              title: item.title
+              title: item.title,
             });
-          }
+          },
         })}
       >
         {itemContext.useResizeHandle ? <div {...leftResizeProps} /> : null}
@@ -114,7 +112,7 @@ const Calendar: React.FunctionComponent<Props> = props => {
             paddingLeft: 3,
             overflow: "scroll",
             textOverflow: "ellipses",
-            whiteSpace: "nowrap"
+            whiteSpace: "nowrap",
           }}
           className="rct-item-content"
         >
@@ -128,12 +126,8 @@ const Calendar: React.FunctionComponent<Props> = props => {
 
   const items = allEvents
     ? allEvents.map((e: any) => {
-        let startTime = moment(e.startsAt)
-          .add(8, "hour")
-          .valueOf();
-        let endTime = moment(e.endsAt)
-          .add(8, "hour")
-          .valueOf();
+        let startTime = moment(e.startsAt).add(8, "hour").valueOf();
+        let endTime = moment(e.endsAt).add(8, "hour").valueOf();
         return {
           id: e.id + "" ?? "",
           key: e.id + "" ?? "",
@@ -153,9 +147,9 @@ const Calendar: React.FunctionComponent<Props> = props => {
             updatedAt: e.updatedAt ?? "",
             style: {
               background: "white !important",
-              border: "3px solid #FF8379 !important"
-            }
-          }
+              border: "3px solid #FF8379 !important",
+            },
+          },
         };
       })
     : [];
@@ -168,8 +162,8 @@ const Calendar: React.FunctionComponent<Props> = props => {
           title: "HackSC-2020",
           rightTitle: "HackSC-2020",
           bgColor: "#000000",
-          height: 400
-        }
+          height: 400,
+        },
       ]}
       items={items}
       sidebarWidth={0}
@@ -196,7 +190,7 @@ const Calendar: React.FunctionComponent<Props> = props => {
           background: "none",
           overflow: "hidden",
           borderRadius: "6px",
-          borderWidth: "4px"
+          borderWidth: "4px",
         }}
       >
         <SidebarHeader />
@@ -208,7 +202,7 @@ const Calendar: React.FunctionComponent<Props> = props => {
             backgroundColor: "white",
             border: "none",
             textAlign: "center",
-            paddingTop: "10px"
+            paddingTop: "10px",
           }}
           intervalRenderer={({ getIntervalProps, intervalContext }) => {
             return (
@@ -224,7 +218,7 @@ const Calendar: React.FunctionComponent<Props> = props => {
             backgroundColor: "white",
             border: "none",
             textAlign: "center",
-            paddingTop: "5px"
+            paddingTop: "5px",
           }}
           intervalRenderer={({ getIntervalProps, intervalContext }) => {
             return (
@@ -237,11 +231,11 @@ const Calendar: React.FunctionComponent<Props> = props => {
         <Popup ref={wrapperRef} display={eventVisibility}>
           <MdClose
             style={{ position: "absolute", top: "5px", left: "5px" }}
-            onClick={e =>
+            onClick={(e) =>
               setEventVisibility({
                 visible: false,
                 e: eventVisibility?.e,
-                title: eventVisibility?.title
+                title: eventVisibility?.title,
               })
             }
           />

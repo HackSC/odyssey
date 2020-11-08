@@ -4,7 +4,7 @@ import { NextApiRequest } from "next";
 import {
   ListHookParams,
   useErrorHandler,
-  fetcherToSVRHandler
+  fetcherToSVRHandler,
 } from "./hook-utils";
 
 function getAllContributionsFetch(req?: NextApiRequest) {
@@ -21,27 +21,27 @@ function createContribution(taskId: ResourceID) {
 
 function useContributionsList({
   defaultOnError,
-  initialModels
+  initialModels,
 }: ListHookParams<Contribution>) {
   const resourceRoute = Routes.ContributionAll;
   const { data: allContributions, error } = useSWR<Contribution[], any>(
     resourceRoute,
     fetcherToSVRHandler(getAllContributionsFetch),
     {
-      initialData: initialModels
+      initialData: initialModels,
     }
   );
 
   useErrorHandler(defaultOnError, error);
 
   return {
-    allContributions
+    allContributions,
   };
 }
 
 function useOwnedContributionsList({
   defaultOnError,
-  initialModels
+  initialModels,
 }: ListHookParams<Contribution>) {
   const resourceRoute = Routes.ContributionOwned;
 
@@ -49,14 +49,14 @@ function useOwnedContributionsList({
     resourceRoute,
     fetcherToSVRHandler(ownedContributionsFetch),
     {
-      initialData: initialModels
+      initialData: initialModels,
     }
   );
 
   useErrorHandler(defaultOnError, error);
 
   return {
-    ownedContributions
+    ownedContributions,
   };
 }
 

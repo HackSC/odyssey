@@ -3,15 +3,15 @@ const house = (sequelize, DataTypes) => {
     "House",
     {
       name: DataTypes.STRING(100),
-      color: DataTypes.STRING(100)
+      color: DataTypes.STRING(100),
     },
     { tableName: "Houses" }
   );
-  House.associate = models => {
+  House.associate = (models) => {
     House.hasMany(models.Person, {
       foreignKey: "houseId",
       as: "HouseMembers",
-      constraints: false
+      constraints: false,
     });
   };
 

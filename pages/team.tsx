@@ -22,7 +22,7 @@ async function getTeam(req): Promise<Team> {
     urlRoute,
     req
       ? {
-          headers: req.headers
+          headers: req.headers,
         }
       : null
   );
@@ -127,7 +127,7 @@ Teams.getInitialProps = async ({ req, query }) => {
   return {
     profile,
     team,
-    status
+    status,
   };
 };
 

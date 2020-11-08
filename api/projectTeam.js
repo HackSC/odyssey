@@ -6,11 +6,11 @@ const router = express.Router();
 router.use(utils.authMiddleware);
 router.use(utils.preprocessRequest);
 
-const getProjectTeamForSelf = async req => {
+const getProjectTeamForSelf = async (req) => {
   const { id } = req.user;
 
   const person = await models.Person.findByPk(id, {
-    include: [{ model: models.ProjectTeam, required: false }]
+    include: [{ model: models.ProjectTeam, required: false }],
   });
   if (person) {
     return person.ProjectTeam;
@@ -18,11 +18,11 @@ const getProjectTeamForSelf = async req => {
   return person;
 };
 
-const getPersonForQRID = async qrCodeId => {
+const getPersonForQRID = async (qrCodeId) => {
   const hackerProfile = await models.HackerProfile.findOne({
     where: {
-      qrCodeId: qrCodeId
-    }
+      qrCodeId: qrCodeId,
+    },
   });
   const userId = hackerProfile.get("userId");
   const person = await models.Person.findByPk(userId);
@@ -36,21 +36,25 @@ router.get("/self", async (req, res) => {
 
 router.put("/join/:name", async (req, res) => {
   const { name } = req.params;
-  const projectTeam = await models.ProjectTeam.findOne({
-    where: { name }
+  let projectTeam = await models.ProjectTeam.findOne({
+    where: { name },
   });
 
   if (!projectTeam) {
     return res.status(400).json({
-      error: `Team: ${name} not found`
+      error: `Team: ${name} not found`,
     });
   }
 
   if (projectTeam.Members.length >= 4) {
     return res.status(400).json({ error: "Team is full" });
   }
+
   await projectTeam.addMember(req.user.id);
-  await projectTeam.reload();
+
+  projectTeam = await models.ProjectTeam.findOne({
+    where: { name },
+  });
 
   return res.json({ success: projectTeam });
 });
@@ -76,9 +80,9 @@ router.post("/self", async (req, res) => {
     return res.status(400).json({ error: "Already has a team" });
   }
 
-  const result = await models.sequelize.transaction(async t => {
+  const result = await models.sequelize.transaction(async (t) => {
     const projectTeam = await models.ProjectTeam.create(body, {
-      transaction: t
+      transaction: t,
     });
 
     await person.setProjectTeam(projectTeam, { transaction: t });
@@ -86,7 +90,7 @@ router.post("/self", async (req, res) => {
 
   const projectTeam = await getProjectTeamForSelf(req);
 
-  return res.json({ success: projectTeam });
+  return res.status(200).json({ success: projectTeam });
 });
 
 router.put("/self", async (req, res) => {
@@ -101,15 +105,16 @@ router.put("/self", async (req, res) => {
 
   const projectTeam = await getProjectTeamForSelf(req);
   await projectTeam.update(updateObject);
-  await projectTeam.reload();
+  await projectTeam.save();
+
   return res.json({ success: projectTeam });
 });
 
-router.post("/self/addPrize", async (req, res) => {
-  const { id } = req.body;
+router.post("/self/addPrize/:prizeID", async (req, res) => {
+  const { prizeID } = req.params;
   const projectTeam = await getProjectTeamForSelf(req);
-  await projectTeam.addPrize(id);
-  await projectTeam.reload();
+  await projectTeam.addPrize(prizeID);
+  await projectTeam.save();
   return res.json({ success: projectTeam });
 });
 
@@ -119,15 +124,18 @@ router.put("/self/addMember", async (req, res) => {
   const newTeammate = await getPersonForQRID(memberId);
   projectTeam.addMember(newTeammate);
   await projectTeam.save();
-
   return res.json({ success: projectTeam });
 });
 
 router.delete("/self/deletePrize/:prizeID", async (req, res) => {
   const { prizeID } = req.params;
-  const projectTeam = await getProjectTeamForSelf(req);
+  let projectTeam = await getProjectTeamForSelf(req);
+  let { name } = projectTeam;
   await projectTeam.removePrize(prizeID);
-  await projectTeam.reload();
+  await projectTeam.save();
+  projectTeam = await models.ProjectTeam.findOne({
+    where: { name },
+  });
   return res.json({ success: projectTeam });
 });
 
