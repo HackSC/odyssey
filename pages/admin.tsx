@@ -66,7 +66,7 @@ const Admin = ({ profile }) => {
             </Action>
             <Action
               id="metabase-page"
-              href="https://metabase.hacksc.com"
+              href="https://metabase-odyssey.herokuapp.com/"
               target="_blank"
             >
               <ActionTitle>Access Metabase</ActionTitle>
