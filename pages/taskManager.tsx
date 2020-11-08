@@ -6,7 +6,7 @@ import Head from "../components/Head";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 
-import { Background, Container } from "../styles";
+import { Background, Container, EditButton, Task, TaskInfo } from "../styles";
 import styled from "styled-components";
 
 const EditableCell = ({ task }) => {
@@ -165,42 +165,5 @@ TaskManager.getInitialProps = async ({ req }) => {
     currentTasks,
   };
 };
-
-const TaskText = styled.p`
-  margin: 0 0 16px;
-  color: ${({ theme }) => theme.colors.gray50};
-`;
-
-const TaskInfo = styled.div`
-  display: flex;
-  flex-direction: column;
-`;
-
-const TaskName = styled.div`
-  margin: 0 0 16px;
-  color: ${({ theme }) => theme.colors.black};
-`;
-
-const EditButton = styled.button`
-  margin: 10 10 10px;
-`;
-
-const Task = styled.div`
-  box-sizing: border-box;
-  padding: 24px 36px;
-  margin: 10 10 16px;
-  background: #ffffff;
-  display: flex;
-  flex-direction: row;
-  border-radius: 4px;
-  max-width: 50%;
-  border: 1px solid ${({ theme }) => theme.colors.gray5};
-  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.05);
-  transition: 0.25s all;
-  justify-content: left;
-  &:hover {
-    transform: scale(1.025);
-  }
-`;
 
 export default TaskManager;
