@@ -6,17 +6,23 @@ import Head from "../components/Head";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 
-import styled from "styled-components";
-
 import moment from "moment";
 
-import { Button, Background, Container } from "../styles";
+import {
+  Background,
+  Container,
+  EditButton,
+  Task,
+  TaskInfo,
+  Description,
+  EventTitle,
+  TitleBox,
+} from "../styles";
 
 import Step from "../components/steps/Results";
 
 const EditableCell = ({ event }) => {
   const [currEvent, setCurrEvent] = useState(event);
-  console.log(event);
   const startTime = moment(
     currEvent.startsAt,
     "YYYY-MM-DDTHH:mm:ss.SSSZ"
@@ -169,64 +175,5 @@ TaskManager.getInitialProps = async ({ req }) => {
     currentEvents,
   };
 };
-
-const TaskText = styled.p`
-  margin: 0 0 16px;
-  color: ${({ theme }) => theme.colors.gray50};
-`;
-
-const TaskInfo = styled.div`
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-`;
-
-const TaskName = styled.div`
-  margin: 0 0 16px;
-  color: ${({ theme }) => theme.colors.black};
-`;
-
-const EditButton = styled.button`
-  width: 30px + 1vw;
-  float: right;
-  color: red;
-  background-color: white;
-  align-self: flex-start;
-  border-radius: 5px;
-  border: 2px solid red;
-  margin-left: 1vw;
-`;
-
-const Task = styled.div`
-  box-sizing: border-box;
-  padding: 24px 36px;
-  margin: 10 10 16px;
-  background: #ffffff;
-  display: flex;
-  flex-direction: row;
-  border-radius: 4px;
-  border: 1px solid ${({ theme }) => theme.colors.gray5};
-  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.05);
-  transition: 0.25s all;
-  justify-content: left;
-  &:hover {
-    transform: scale(1.025);
-  }
-`;
-
-const EventTitle = styled.div`
-  font-size: calc(12px + 0.75vw);
-`;
-
-const TitleBox = styled.div`
-  display: flex;
-  align-items: center;
-  width: 100%;
-  justify-content: space-between;
-`;
-
-const Description = styled.div`
-  padding-top: 0.5vh;
-`;
 
 export default TaskManager;
