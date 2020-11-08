@@ -112,4 +112,16 @@ Need to implement:
 
 ## How To: Create Unit Tests with Jest
 
-// TODO
+Jest tests are located in the `tests/` directory - split up into `tests/api/` where the js tests are written and the `tests/factories/` directory to build the mock database.
+
+Jest tests should be extensive coverage of the database.
+
+Implemented
+
+- Auth
+- Person
+- Prize
+- Project Team
+
+TODO
+The rest of the database and `api/` directory
