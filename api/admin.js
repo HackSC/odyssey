@@ -216,7 +216,6 @@ router.get("/review", async (req, res) => {
       return res.json({ review: null, profile: null }); // Returns empty when there are no more profiles
     }
   } catch (e) {
-    console.log(e);
     return res.status(500).json({ err: e });
   }
 });

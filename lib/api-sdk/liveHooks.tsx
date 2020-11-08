@@ -39,12 +39,24 @@ type LiveSignUpLookupParams = {
   ip: string;
 };
 
+type LiveApiLookupParams = {
+  id: number;
+};
+
 function liveLookupFetch(params: LiveLookupParams) {
   return APIGet<Profile[]>(Routes.LiveLookup, { queryParams: params });
 }
 
 function liveHackerLookupFetch(params: LiveHackerLookupParams) {
   return APIGet<Profile[]>(Routes.LiveLookup, { queryParams: params });
+}
+
+function liveAllApiLookupFetch(params: {}) {
+  return APIGet<API[]>(Routes.AllApiLive, { queryParams: params });
+}
+
+function liveApiLookupFetch(params: LiveApiLookupParams) {
+  return APIGet<API[]>(Routes.ApiLive, { queryParams: params });
 }
 
 function liveSignUpLookupFetch(params: LiveSignUpLookupParams) {
@@ -68,6 +80,8 @@ export {
   liveAssignQRFetch,
   liveDispatchFetch,
   liveLookupFetch,
+  liveAllApiLookupFetch,
+  liveApiLookupFetch,
   liveSignUpLookupFetch,
   liveHackerLookupFetch,
   livePointFetch,

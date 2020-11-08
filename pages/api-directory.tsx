@@ -12,9 +12,10 @@ import {
   handleAdminRedirect,
   handleVolunteerRedirect,
   handleSponsorRedirect,
+  getAPIS,
 } from "../lib/authenticate";
 
-const API = ({ profile, houses, socialPosts }) => {
+const API = ({ apis, profile, houses, socialPosts }) => {
   return (
     <>
       <Head title="HackSC Odyssey - API Directory" />
@@ -25,7 +26,7 @@ const API = ({ profile, houses, socialPosts }) => {
       />
       <Container>
         <DirectoryIntro />
-        <Directory />
+        <Directory apis={apis ? apis : []} />
       </Container>
       <Footer />
     </>
@@ -34,9 +35,8 @@ const API = ({ profile, houses, socialPosts }) => {
 
 API.getInitialProps = async ({ req }) => {
   const profile = await getProfile(req);
-  //const houses = await getHouses(req);
   const houses = [];
-  //console.log(req);
+  const apis = await getAPIS(req);
 
   // Null profile means user is not logged in
   if (!profile) {
@@ -66,6 +66,7 @@ API.getInitialProps = async ({ req }) => {
   }
 
   return {
+    apis,
     houses,
     profile,
     socialPosts,
