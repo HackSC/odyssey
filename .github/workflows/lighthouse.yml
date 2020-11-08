@@ -1,6 +1,9 @@
 name: Test Lighthouse Check with Minimum Score Enforcement
 
-on: [pull_request]
+on:
+  pull_request:
+    branches:
+      - main
 
 jobs:
   lighthouse-check:
