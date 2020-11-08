@@ -125,7 +125,7 @@
   },
   "husky": {
     "hooks": {
-      "pre-commit": "pretty-quick --staged && yarn jest && lint-staged"
+      "pre-commit": "pretty-quick --staged && yarn jest --forceExit && lint-staged"
     }
   },
   "lint-staged": {
