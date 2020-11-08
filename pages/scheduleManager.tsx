@@ -187,21 +187,14 @@ const TaskName = styled.div`
 `;
 
 const EditButton = styled.button`
-<<<<<<< HEAD
-  width: 5vw;
-=======
   width: 30px + 1vw;
->>>>>>> staging
   float: right;
   color: red;
   background-color: white;
   align-self: flex-start;
   border-radius: 5px;
   border: 2px solid red;
-<<<<<<< HEAD
-=======
   margin-left: 1vw;
->>>>>>> staging
 `;
 
 const Task = styled.div`
