@@ -112,4 +112,4 @@ Need to implement:
 
 ## How To: Create Unit Tests with Jest
 
-// TODO
+Jest tests are located in the `tests/` directory
