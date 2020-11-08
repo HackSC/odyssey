@@ -62,7 +62,7 @@ const Admin = ({ profile }) => {
             <Action id="mail-query-page" href="/mailQuery">
               <ActionTitle> Mail Signups </ActionTitle>
             </Action>
-            <Action href="/manageApiDirectory">
+            <Action id="manage-api-directory-page" href="/manageApiDirectory">
               <ActionTitle> Manage Api Directory </ActionTitle>
             </Action>
             <Action

@@ -2,6 +2,14 @@
 
 Odyssey is a hackathon management platform that handles hacker applications, admin functionalities, and more. Built by the HackSC team.
 
+### Main
+
+[![Main Build Status](https://img.shields.io/endpoint.svg?url=https%3A%2F%2Factions-badge.atrox.dev%2Fhacksc%2Fodyssey%2Fbadge%3Fref%3Dmain%26token%3Ddac24b76fbb2151adf59b38f61b84a2d542db2f2&style=flat)](https://actions-badge.atrox.dev/hacksc/odyssey/goto?ref=main&token=dac24b76fbb2151adf59b38f61b84a2d542db2f2)
+
+### Staging
+
+[![Staging Build Status](https://img.shields.io/endpoint.svg?url=https%3A%2F%2Factions-badge.atrox.dev%2Fhacksc%2Fodyssey%2Fbadge%3Fref%3Dstaging%26token%3Ddac24b76fbb2151adf59b38f61b84a2d542db2f2&style=flat)](https://actions-badge.atrox.dev/hacksc/odyssey/goto?ref=staging&token=dac24b76fbb2151adf59b38f61b84a2d542db2f2)
+
 ## Odyssey Setup
 
 - Clone this directory into your local dev environment
