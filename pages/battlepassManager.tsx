@@ -4,7 +4,7 @@ import { handleLoginRedirect, getProfile } from "../lib/authenticate";
 import {
   getCurrentUnlockables,
   saveUnlockable,
-  updateUnlockable,
+  updateUnlockable
 } from "../lib/live";
 import Head from "../components/Head";
 import Navbar from "../components/Navbar";
@@ -23,7 +23,7 @@ const EditableCell = ({ unlockable }) => {
           type="number"
           placeholder="tier"
           value={currUnlockable.tier}
-          onChange={(e) => {
+          onChange={e => {
             setCurrUnlockable({ ...currUnlockable, tier: e.target.value });
           }}
         />
@@ -31,19 +31,19 @@ const EditableCell = ({ unlockable }) => {
           type="number"
           placeholder="pointThreshold"
           value={currUnlockable.pointThreshold}
-          onChange={(e) => {
+          onChange={e => {
             setCurrUnlockable({
               ...currUnlockable,
-              pointThreshold: e.target.value,
+              pointThreshold: e.target.value
             });
           }}
         />
         <select
-          onChange={(e) => {
+          onChange={e => {
             const isPremium = e.target.value === "Premium";
             setCurrUnlockable({
               ...currUnlockable,
-              isPremium: isPremium,
+              isPremium: isPremium
             });
           }}
           //@ts-ignore
@@ -73,7 +73,7 @@ const EditableCell = ({ unlockable }) => {
 const TaskManager = ({ profile, currentUnlockables }) => {
   const [newUnlockable, setNewUnlockable] = useState({});
 
-  const taskBlocks = currentUnlockables.unlockables.map((unlockable) => {
+  const taskBlocks = currentUnlockables.unlockables.map(unlockable => {
     return <EditableCell unlockable={unlockable} />;
   });
   return (
@@ -89,29 +89,29 @@ const TaskManager = ({ profile, currentUnlockables }) => {
               <input
                 type="number"
                 placeholder="tier"
-                onChange={(e) => {
+                onChange={e => {
                   setNewUnlockable({
                     ...newUnlockable,
-                    tier: e.target.value,
+                    tier: e.target.value
                   });
                 }}
               />
               <input
                 type="number"
                 placeholder="pointThreshold"
-                onChange={(e) => {
+                onChange={e => {
                   setNewUnlockable({
                     ...newUnlockable,
-                    pointThreshold: e.target.value,
+                    pointThreshold: e.target.value
                   });
                 }}
               />
               <select
-                onChange={(e) => {
+                onChange={e => {
                   const isPremium = e.target.value === "Premium";
                   setNewUnlockable({
                     ...newUnlockable,
-                    isPremium: isPremium,
+                    isPremium: isPremium
                   });
                 }}
                 //@ts-ignore
@@ -126,7 +126,6 @@ const TaskManager = ({ profile, currentUnlockables }) => {
               value="Create new Unlockable"
               onClick={async () => {
                 const result = await saveUnlockable(newUnlockable);
-                console.log(result);
                 if (result) {
                   // In theory we do optimistic local state updating, in practice, fuck it it'll do
                   window.location.reload();
@@ -155,7 +154,7 @@ TaskManager.getInitialProps = async ({ req }) => {
 
   return {
     profile,
-    currentUnlockables,
+    currentUnlockables
   };
 };
 

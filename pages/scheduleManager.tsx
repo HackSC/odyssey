@@ -14,7 +14,6 @@ import Step from "../components/steps/Results";
 
 const EditableCell = ({ event }) => {
   const [currEvent, setCurrEvent] = useState(event);
-  console.log(event);
   return (
     <Task>
       <TaskInfo>
@@ -42,7 +41,7 @@ const EditableCell = ({ event }) => {
 const TaskManager = ({ profile, currentEvents }) => {
   const [newEvent, setNewEvent] = useState({});
 
-  const taskBlocks = currentEvents.events.map((event) => {
+  const taskBlocks = currentEvents.events.map(event => {
     return <EditableCell event={event} />;
   });
   return (
@@ -58,40 +57,40 @@ const TaskManager = ({ profile, currentEvents }) => {
               <input
                 type="text"
                 placeholder="name"
-                onChange={(e) => {
+                onChange={e => {
                   setNewEvent({
                     ...newEvent,
-                    name: e.target.value,
+                    name: e.target.value
                   });
                 }}
               />
               <input
                 type="text"
                 placeholder="description"
-                onChange={(e) => {
+                onChange={e => {
                   setNewEvent({
                     ...newEvent,
-                    description: e.target.value,
+                    description: e.target.value
                   });
                 }}
               />
               <input
                 type="datetime-local"
                 placeholder="startsAt"
-                onChange={(e) => {
+                onChange={e => {
                   setNewEvent({
                     ...newEvent,
-                    startsAt: e.target.value,
+                    startsAt: e.target.value
                   });
                 }}
               />
               <input
                 type="datetime-local"
                 placeholder="endsAt"
-                onChange={(e) => {
+                onChange={e => {
                   setNewEvent({
                     ...newEvent,
-                    endsAt: e.target.value,
+                    endsAt: e.target.value
                   });
                 }}
               />
@@ -129,7 +128,7 @@ TaskManager.getInitialProps = async ({ req }) => {
 
   return {
     profile,
-    currentEvents,
+    currentEvents
   };
 };
 
