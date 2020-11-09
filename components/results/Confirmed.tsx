@@ -8,7 +8,7 @@ type Props = {
   profile: Profile;
 };
 
-const Confirmed: React.FunctionComponent<Props> = (props) => {
+const Confirmed: React.FunctionComponent<Props> = props => {
   return (
     <Flex direction="column">
       <FormSection>

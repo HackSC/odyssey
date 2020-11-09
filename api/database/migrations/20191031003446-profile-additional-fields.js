@@ -14,35 +14,35 @@ module.exports = {
           "fall-2022",
           "spring-2023",
           "fall-2023",
-          "other",
-        ],
+          "other"
+        ]
       }),
       queryInterface.addColumn("HackerProfiles", "over18", {
-        type: Sequelize.BOOLEAN,
+        type: Sequelize.BOOLEAN
       }),
       queryInterface.addColumn("HackerProfiles", "needBus", {
-        type: Sequelize.BOOLEAN,
+        type: Sequelize.BOOLEAN
       }),
       queryInterface.addColumn("HackerProfiles", "links", {
-        type: Sequelize.STRING(1000),
+        type: Sequelize.STRING(1000)
       }),
       queryInterface.changeColumn("HackerProfiles", "role", {
         type: Sequelize.ENUM,
         values: ["hacker", "admin", "sponsor", "superadmin"],
-        defaultValue: "hacker",
+        defaultValue: "hacker"
       }),
       queryInterface.changeColumn("HackerProfiles", "year", {
         type: Sequelize.ENUM,
-        values: ["freshman", "sophomore", "junior", "senior", "graduate"],
+        values: ["freshman", "sophomore", "junior", "senior", "graduate"]
       }),
       queryInterface.changeColumn("HackerProfiles", "gender", {
         type: Sequelize.ENUM,
-        values: ["male", "female", "non-binary", "other", "no-say"],
+        values: ["male", "female", "non-binary", "other", "no-say"]
       }),
       queryInterface.changeColumn("HackerProfiles", "skillLevel", {
         type: Sequelize.ENUM,
-        values: ["beginner", "intermediate", "advanced"],
-      }),
+        values: ["beginner", "intermediate", "advanced"]
+      })
     ]);
   },
 
@@ -54,20 +54,20 @@ module.exports = {
       queryInterface.removeColumn("HackerProfiles", "links"),
       queryInterface.changeColumn("HackerProfiles", "role", {
         type: Sequelize.ENUM,
-        values: ["hacker", "admin", "sponsor", "superadmin"],
+        values: ["hacker", "admin", "sponsor", "superadmin"]
       }),
       queryInterface.changeColumn("HackerProfiles", "year", {
         type: Sequelize.ENUM,
-        values: ["Freshman", "Sophomore", "Junior", "Senior", "Graduate"],
+        values: ["Freshman", "Sophomore", "Junior", "Senior", "Graduate"]
       }),
       queryInterface.changeColumn("HackerProfiles", "gender", {
         type: Sequelize.ENUM,
-        values: ["male", "female", "other"],
+        values: ["male", "female", "other"]
       }),
       queryInterface.changeColumn("HackerProfiles", "skillLevel", {
         type: Sequelize.ENUM,
-        values: ["Beginner", "Intermediate", "Advanced"],
-      }),
+        values: ["Beginner", "Intermediate", "Advanced"]
+      })
     ]);
-  },
+  }
 };

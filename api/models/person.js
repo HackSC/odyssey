@@ -4,10 +4,10 @@ module.exports = (sequelize, DataTypes) => {
     {
       identityId: {
         type: DataTypes.STRING(100),
-        primaryKey: true,
+        primaryKey: true
       },
       isBattlepassComplete: DataTypes.BOOLEAN,
-      ProjectTeamId: DataTypes.NUMBER,
+      ProjectTeamId: DataTypes.NUMBER
     },
     {
       tableName: "persons",
@@ -15,31 +15,31 @@ module.exports = (sequelize, DataTypes) => {
         include: [
           { model: sequelize.models.HackerProfile, as: "Profile" },
           { model: sequelize.models.Contribution, as: "Contributions" },
-          { model: sequelize.models.House, as: "Home" },
-        ],
-      },
+          { model: sequelize.models.House, as: "Home" }
+        ]
+      }
     }
   );
 
-  Person.associate = function (models) {
+  Person.associate = function(models) {
     Person.belongsTo(models.House, {
       foreignKey: "houseId",
       as: "Home",
-      constraints: false,
+      constraints: false
     });
     Person.belongsTo(models.ProjectTeam);
     Person.belongsTo(models.HackerProfile, {
       foreignKey: "identityId",
       targetKey: "userId",
       constraints: false,
-      as: "Profile",
+      as: "Profile"
     });
     Person.hasMany(models.Contribution, { foreignKey: "personId" });
     Person.addScope("hideProfile", {
       include: [
         { model: sequelize.models.Contribution, as: "Contributions" },
-        { model: sequelize.models.House, as: "Home" },
-      ],
+        { model: sequelize.models.House, as: "Home" }
+      ]
     });
   };
 

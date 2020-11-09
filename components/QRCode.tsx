@@ -6,7 +6,7 @@ type Props = {
   profile: Profile;
 };
 
-const QRCode: React.FunctionComponent<Props> = (props) => {
+const QRCode: React.FunctionComponent<Props> = props => {
   const { profile } = props;
 
   return (

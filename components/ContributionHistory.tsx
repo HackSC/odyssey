@@ -2,7 +2,7 @@ import React from "react";
 import styled from "styled-components";
 
 const ContributionHistory = ({
-  contributions,
+  contributions
 }: {
   contributions: Contribution[];
 }) => {
@@ -16,7 +16,7 @@ const ContributionHistory = ({
   return (
     <>
       {sortedContributions &&
-        sortedContributions.map((contribution) => (
+        sortedContributions.map(contribution => (
           <Contribution>
             <h3>{contribution.Task.name}</h3>
             <p>{contribution.Task.description}</p>

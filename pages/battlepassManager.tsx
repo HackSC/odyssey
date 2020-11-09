@@ -124,7 +124,6 @@ const BattlepassManager = ({ profile, currentUnlockables }) => {
               value="Create new Unlockable"
               onClick={async () => {
                 const result = await saveUnlockable(newUnlockable);
-                console.log(result);
                 if (result) {
                   // In theory we do optimistic local state updating, in practice, fuck it it'll do
                   window.location.reload();

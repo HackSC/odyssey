@@ -29,7 +29,7 @@ const Maps = () => {
 
       <div
         style={{
-          paddingBottom: 100,
+          paddingBottom: 100
         }}
       />
     </Wrapper>

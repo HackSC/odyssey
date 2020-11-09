@@ -10,11 +10,11 @@ const task = (sequelize, DataTypes) => {
       isActive: DataTypes.BOOLEAN,
       sponsor: DataTypes.STRING,
       isPast: DataTypes.BOOLEAN,
-      name: DataTypes.STRING(100),
+      name: DataTypes.STRING(100)
     },
     {}
   );
-  Task.associate = (models) => {
+  Task.associate = models => {
     Task.hasMany(models.Contribution, { foreignKey: "taskId" });
     // associations can be defined here
   };

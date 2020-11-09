@@ -4,24 +4,24 @@ module.exports = {
   up: (queryInterface, Sequelize) => {
     return Promise.all([
       queryInterface.addColumn("HackerProfiles", "travelOrigin", {
-        type: Sequelize.STRING(500),
+        type: Sequelize.STRING(500)
       }),
       queryInterface.addColumn("HackerProfiles", "travelMethod", {
         type: Sequelize.ENUM,
-        values: ["driving", "bus", "flying", "usc", "other"],
+        values: ["driving", "bus", "flying", "usc", "other"]
       }),
       queryInterface.addColumn("HackerProfiles", "travelPlan", {
-        type: Sequelize.STRING(500),
+        type: Sequelize.STRING(500)
       }),
       queryInterface.addColumn("HackerProfiles", "dietaryRestrictions", {
-        type: Sequelize.STRING(1000),
+        type: Sequelize.STRING(1000)
       }),
       queryInterface.addColumn("HackerProfiles", "confirmCodeOfConduct", {
-        type: Sequelize.BOOLEAN,
+        type: Sequelize.BOOLEAN
       }),
       queryInterface.addColumn("HackerProfiles", "shirtSize", {
         type: Sequelize.ENUM,
-        values: ["xs", "s", "m", "l", "xl"],
+        values: ["xs", "s", "m", "l", "xl"]
       }),
       queryInterface.changeColumn("HackerProfiles", "status", {
         type: Sequelize.ENUM,
@@ -34,11 +34,11 @@ module.exports = {
           "rejected",
           "confirmed",
           "declined",
-          "checkedIn",
+          "checkedIn"
         ],
         defaultValue: "unverified",
-        allowNull: false,
-      }),
+        allowNull: false
+      })
     ]);
   },
 
@@ -60,11 +60,11 @@ module.exports = {
           "waitlisted",
           "rejected",
           "confirmed",
-          "checkedIn",
+          "checkedIn"
         ],
         defaultValue: "unverified",
-        allowNull: false,
-      }),
+        allowNull: false
+      })
     ]);
-  },
+  }
 };

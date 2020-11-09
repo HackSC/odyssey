@@ -7,27 +7,27 @@ module.exports = {
         type: Sequelize.INTEGER,
         autoIncrement: true,
         primaryKey: true,
-        allowNull: false,
+        allowNull: false
       },
       name: {
         type: Sequelize.STRING,
-        allowNull: false,
+        allowNull: false
       },
       isHackathon: {
         type: Sequelize.BOOLEAN,
-        allowNull: false,
+        allowNull: false
       },
       start_date: {
         type: Sequelize.DATE,
-        allowNull: false,
+        allowNull: false
       },
       end_date: {
         type: Sequelize.DATE,
-        allowNull: false,
-      },
+        allowNull: false
+      }
     });
   },
   down: (queryInterface, Sequelize) => {
     return queryInterface.dropTable("MajorEvents");
-  },
+  }
 };

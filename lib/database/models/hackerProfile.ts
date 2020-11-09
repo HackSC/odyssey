@@ -8,16 +8,16 @@ const profile = (sequelize, DataTypes) => {
       id: {
         type: DataTypes.STRING,
         defaultValue: "hacker_id",
-        allowNull: false,
+        allowNull: false
       },
       gender: {
         type: DataTypes.ENUM,
-        values: ["male", "female", "non-binary", "other", "no-say"],
+        values: ["male", "female", "non-binary", "other", "no-say"]
       },
       userId: {
         type: DataTypes.STRING,
         primaryKey: true,
-        allowNull: false,
+        allowNull: false
       },
       travelStatus: {
         type: DataTypes.ENUM,
@@ -28,8 +28,8 @@ const profile = (sequelize, DataTypes) => {
           "declined",
           "unknown",
           "submitted",
-          "reimbursed",
-        ],
+          "reimbursed"
+        ]
       },
       ethnicity: DataTypes.STRING,
       email: DataTypes.STRING,
@@ -50,10 +50,10 @@ const profile = (sequelize, DataTypes) => {
           "rejected",
           "confirmed",
           "declined",
-          "checkedIn",
+          "checkedIn"
         ],
         defaultValue: "unverified",
-        allowNull: false,
+        allowNull: false
       },
       firstName: DataTypes.STRING,
       lastName: DataTypes.STRING,
@@ -61,11 +61,11 @@ const profile = (sequelize, DataTypes) => {
       school: DataTypes.STRING,
       year: {
         type: DataTypes.ENUM,
-        values: ["freshman", "sophomore", "junior", "senior", "graduate"],
+        values: ["freshman", "sophomore", "junior", "senior", "graduate"]
       },
       skillLevel: {
         type: DataTypes.ENUM,
-        values: ["beginner", "intermediate", "advanced"],
+        values: ["beginner", "intermediate", "advanced"]
       },
       questionOne: DataTypes.STRING(1000),
       questionTwo: DataTypes.STRING(1000),
@@ -73,7 +73,7 @@ const profile = (sequelize, DataTypes) => {
       role: {
         type: DataTypes.ENUM,
         values: ["hacker", "admin", "sponsor", "volunteer"],
-        defaultValue: "hacker",
+        defaultValue: "hacker"
       },
       graduationDate: {
         type: DataTypes.ENUM,
@@ -86,8 +86,8 @@ const profile = (sequelize, DataTypes) => {
           "fall-2022",
           "spring-2023",
           "fall-2023",
-          "other",
-        ],
+          "other"
+        ]
       },
       over18: DataTypes.BOOLEAN,
       needBus: DataTypes.BOOLEAN,
@@ -97,24 +97,24 @@ const profile = (sequelize, DataTypes) => {
       marketing: DataTypes.STRING(100),
       promoCode: {
         type: DataTypes.STRING(100),
-        defaultValue: function () {
+        defaultValue: function() {
           //Random string of length 8
           return (Math.random().toString(36) + "00000000000000000").slice(
             2,
             10
           );
-        },
+        }
       },
       referrerCode: DataTypes.STRING(100),
       referred: DataTypes.VIRTUAL,
       travelOrigin: DataTypes.STRING(500),
       travelMethod: {
         type: DataTypes.ENUM,
-        values: ["driving", "bus", "flying", "usc", "other"],
+        values: ["driving", "bus", "flying", "usc", "other"]
       },
       shirtSize: {
         type: DataTypes.ENUM,
-        values: ["xs", "s", "m", "l", "xl"],
+        values: ["xs", "s", "m", "l", "xl"]
       },
       travelPlan: DataTypes.STRING(500),
       dietaryRestrictions: DataTypes.STRING(1000),
@@ -124,8 +124,8 @@ const profile = (sequelize, DataTypes) => {
       declinedAt: DataTypes.DATE,
       qrCodeId: {
         type: DataTypes.STRING,
-        unique: true,
-      },
+        unique: true
+      }
     },
     {}
   );
@@ -133,15 +133,15 @@ const profile = (sequelize, DataTypes) => {
   HackerProfile.prototype.getReferred = () => {
     return sequelize.models.HackerProfile.findAll({
       where: {
-        referrerCode: this.promoCode,
-      },
+        referrerCode: this.promoCode
+      }
     });
   };
-  HackerProfile.associate = (models) => {
+  HackerProfile.associate = models => {
     HackerProfile.belongsTo(models.Team, {
       as: "team",
       foreignKey: "teamId",
-      constraints: false,
+      constraints: false
     });
   };
   return HackerProfile;
