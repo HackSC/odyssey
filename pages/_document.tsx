@@ -32,13 +32,14 @@ export default class MyDocument extends Document {
   render() {
     return (
       <html>
-        <Head />
-        <script
-          src="https://betteruptime.com/widgets/announcement.js"
-          data-id="122813"
-          async
-          type="text/javascript"
-        ></script>
+        <Head>
+          <script
+            src="https://betteruptime.com/widgets/announcement.js"
+            data-id="122813"
+            async
+            type="text/javascript"
+          ></script>
+        </Head>
         <body>
           <Main />
           <NextScript />
