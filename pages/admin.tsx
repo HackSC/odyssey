@@ -5,9 +5,8 @@ import { getReferrerCode } from "../lib/referrerCode";
 
 import styled from "styled-components";
 
-import Head from "../components/Head";
-import Navbar from "../components/Navbar";
-import Footer from "../components/Footer";
+import { Head, Navbar, Footer } from "../components";
+
 import { Button, Background, Flex, Container } from "../styles";
 
 const Admin = ({ profile }) => {

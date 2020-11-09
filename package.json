@@ -3,7 +3,7 @@
   "version": "1.2.0",
   "private": true,
   "scripts": {
-    "dev": "node << babel server.js",
+    "dev": "echo 'http://localhost:3000' && node << babel server.js",
     "build": "next build",
     "start": "node server.js",
     "watch": "babel-watch -x .next server.js",
