@@ -33,6 +33,12 @@ export default class MyDocument extends Document {
     return (
       <html>
         <Head />
+        <script
+          src="https://betteruptime.com/widgets/announcement.js"
+          data-id="122813"
+          async
+          type="text/javascript"
+        ></script>
         <body>
           <Main />
           <NextScript />
