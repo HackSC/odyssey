@@ -39,7 +39,7 @@ const MetaTags = ({ title, description }: MetaTagTypes) => (
           function gtag(){dataLayer.push(arguments);}
           gtag('js', new Date());
           gtag('config', 'UA-127488741-1');
-        `,
+        `
         }}
       />
 

@@ -8,20 +8,20 @@ module.exports = {
           type: Sequelize.INTEGER,
           primaryKey: true,
           autoIncrement: true,
-          allowNull: false,
+          allowNull: false
         },
         name: {
           type: Sequelize.STRING,
-          allowNull: false,
+          allowNull: false
         },
         createdAt: {
           allowNull: false,
-          type: Sequelize.DATE,
+          type: Sequelize.DATE
         },
         updatedAt: {
           allowNull: false,
-          type: Sequelize.DATE,
-        },
+          type: Sequelize.DATE
+        }
       })
       .then(() => {
         return queryInterface.addColumn("Tasks", "groupingId", {
@@ -29,8 +29,8 @@ module.exports = {
           allowNull: true,
           references: {
             model: "Groupings",
-            key: "id",
-          },
+            key: "id"
+          }
         });
       });
   },
@@ -39,5 +39,5 @@ module.exports = {
     return queryInterface.removeColumn("Tasks", "groupingId").then(() => {
       return queryInterface.dropTable("Groupings");
     });
-  },
+  }
 };

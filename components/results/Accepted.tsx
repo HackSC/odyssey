@@ -9,7 +9,7 @@ import {
   Form,
   FormGroup,
   RadioChoice,
-  RadioChoiceLabel,
+  RadioChoiceLabel
 } from "../../styles";
 
 import Select from "../Select";
@@ -26,7 +26,7 @@ const travelOptions = [
   { label: "HackSC Bus", value: "bus" },
   { label: "Flying", value: "flying" },
   { label: "USC Student (N/A)", value: "usc" },
-  { label: "Other", value: "other" },
+  { label: "Other", value: "other" }
 ];
 
 const shirtSizeOptions = [
@@ -34,10 +34,10 @@ const shirtSizeOptions = [
   { label: "Small", value: "s" },
   { label: "Medium", value: "m" },
   { label: "Large", value: "l" },
-  { label: "X-Large", value: "xl" },
+  { label: "X-Large", value: "xl" }
 ];
 
-const Accepted: React.FunctionComponent<Props> = (props) => {
+const Accepted: React.FunctionComponent<Props> = props => {
   const [travelMethod, setTravelMethod] = useState(null);
   const [travelFile, setTravelFile] = useState(null);
 
@@ -57,13 +57,13 @@ const Accepted: React.FunctionComponent<Props> = (props) => {
       nutAllergy: useRef(null),
       lactoseIntolerant: useRef(null),
       glutenFree: useRef(null),
-      other: useRef(null),
+      other: useRef(null)
     },
     codeOfConduct: useRef(null),
-    noBusCheck: useRef(null),
+    noBusCheck: useRef(null)
   };
 
-  const checkFile = (e) => {
+  const checkFile = e => {
     const { travelPlan } = formRefs;
 
     if (travelPlan.current && !travelPlan.current.files[0]) {
@@ -77,7 +77,7 @@ const Accepted: React.FunctionComponent<Props> = (props) => {
     setError(null);
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async e => {
     e.preventDefault();
 
     if (submitting) {
@@ -91,7 +91,7 @@ const Accepted: React.FunctionComponent<Props> = (props) => {
       shirtSize,
       dietaryRestrictions,
       codeOfConduct,
-      noBusCheck,
+      noBusCheck
     } = formRefs;
 
     const reqBody = {
@@ -124,16 +124,16 @@ const Accepted: React.FunctionComponent<Props> = (props) => {
           dietaryRestrictions.glutenFree.current.checked,
         other:
           dietaryRestrictions.other.current &&
-          dietaryRestrictions.other.current.value,
+          dietaryRestrictions.other.current.value
       },
-      noBusCheck: noBusCheck.current && noBusCheck.current.checked,
+      noBusCheck: noBusCheck.current && noBusCheck.current.checked
     };
 
     const formData = jsonToFormData(reqBody);
     setSubmitting(true);
     const response = await fetch("/api/profile/confirm", {
       method: "POST",
-      body: formData,
+      body: formData
     });
     setSubmitting(false);
 
@@ -149,7 +149,7 @@ const Accepted: React.FunctionComponent<Props> = (props) => {
 
   const handleDecline = async () => {
     await fetch("/api/profile/decline", {
-      method: "POST",
+      method: "POST"
     });
 
     await Router.push("/dashboard");
@@ -197,35 +197,33 @@ const Accepted: React.FunctionComponent<Props> = (props) => {
             <Select
               name="travel-method"
               options={travelOptions}
-              onChange={(e) => setTravelMethod(e.target.value)}
+              onChange={e => setTravelMethod(e.target.value)}
               ref={formRefs.travelMethod}
               required
             />
           </FormGroup>
 
-          {
-            // Quick question
-            travelMethod !== null && travelMethod === "bus" && (
-              <FormGroup>
-                <label>
-                  If a bus is not made available to your school, would you still
-                  attend HackSC?
-                </label>
+          {// Quick question
+          travelMethod !== null && travelMethod === "bus" && (
+            <FormGroup>
+              <label>
+                If a bus is not made available to your school, would you still
+                attend HackSC?
+              </label>
 
-                <RadioChoice>
-                  <input
-                    type="checkbox"
-                    name="no-bus-check"
-                    id="no-bus-check"
-                    ref={formRefs.noBusCheck}
-                  />
-                  <RadioChoiceLabel htmlFor="no-bus-check">
-                    Yes, I would still attend HackSC if a bus was not provided
-                  </RadioChoiceLabel>
-                </RadioChoice>
-              </FormGroup>
-            )
-          }
+              <RadioChoice>
+                <input
+                  type="checkbox"
+                  name="no-bus-check"
+                  id="no-bus-check"
+                  ref={formRefs.noBusCheck}
+                />
+                <RadioChoiceLabel htmlFor="no-bus-check">
+                  Yes, I would still attend HackSC if a bus was not provided
+                </RadioChoiceLabel>
+              </RadioChoice>
+            </FormGroup>
+          )}
 
           <FormGroup>
             <label>What zip code are you traveling from?</label>
@@ -260,7 +258,7 @@ const Accepted: React.FunctionComponent<Props> = (props) => {
               name="travel-plan"
               id="travel-plan"
               ref={formRefs.travelPlan}
-              onChange={(e) => setTravelFile(e.target.files[0])}
+              onChange={e => setTravelFile(e.target.files[0])}
               required
             />
             <TravelPlanUploadButton

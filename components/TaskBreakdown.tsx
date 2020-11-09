@@ -5,74 +5,74 @@ const content = [
     title: "Talking to sponsors",
     description:
       "Get your code scanned by meet the sponsors to get points (earn 1500 points for each sponsor you talk to!)",
-    points: 1500,
+    points: 1500
   },
   {
     title: "Talking to non-profit organizations",
     description:
       "Get your code scanned by non-profit members to get points (earn 1500 points for each non-profit you talk to!)",
-    points: 1500,
+    points: 1500
   },
   {
     title: "Attending sponsor workshops",
     description: "Check into a sponsor workshop to get points",
-    points: 2500,
+    points: 2500
   },
   {
     title: "Minute To Win It",
     description: "Participate in minute to win to get points",
-    points: 1500,
+    points: 1500
   },
   {
     title: "Cinema Room and Facemasks",
     description: "Take some time to chill and relax (and earn points)",
-    points: 1500,
+    points: 1500
   },
   {
     title: "Succulent Arrangement",
     description: "Arrange some succulents!",
-    points: 1500,
+    points: 1500
   },
   {
     title: "Cookie Decoration",
     description: "Nomnomnomnomnom",
-    points: 1500,
+    points: 1500
   },
   {
     title: "HackSChillax",
     description: "Come chillax with HackSC",
-    points: 1500,
+    points: 1500
   },
   {
     title: "Hacker Pong",
     description: "Play pong with your fellow hackers",
-    points: 1500,
+    points: 1500
   },
   {
     title: "Opening Ceremony",
     description: "Attend opening ceremony",
-    points: 3000,
+    points: 3000
   },
   {
     title: "Closing Ceremony",
     description: "Attend closing ceremony",
-    points: 3000,
+    points: 3000
   },
   {
     title: "Minute To Win It (Win)",
     description: "Win minute to win it to get these points",
-    points: 3000,
+    points: 3000
   },
   {
     title: "Hacker Pong (win)",
     description: "Win hacker pong to get these points",
-    points: 3000,
-  },
+    points: 3000
+  }
 ];
 
 const TaskBreakdown = () => (
   <Tasks>
-    {content.map((task) => (
+    {content.map(task => (
       <Task key={task.title ? task.title : ""}>
         <TaskInfo>
           <h3>{task.title}</h3>

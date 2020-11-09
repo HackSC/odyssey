@@ -5,11 +5,11 @@ module.exports = (sequelize, DataTypes) => {
       name: DataTypes.STRING(100),
       description: DataTypes.STRING(500),
       startsAt: DataTypes.DATE,
-      endsAt: DataTypes.DATE,
+      endsAt: DataTypes.DATE
     },
     {}
   );
 
-  Event.associate = function (models) {};
+  Event.associate = function(models) {};
   return Event;
 };

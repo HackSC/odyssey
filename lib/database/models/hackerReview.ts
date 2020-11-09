@@ -7,15 +7,15 @@ const review = (sequelize, DataTypes) => {
       scoreOne: DataTypes.INTEGER,
       scoreTwo: DataTypes.INTEGER,
       scoreThree: DataTypes.INTEGER,
-      comments: DataTypes.STRING,
+      comments: DataTypes.STRING
     },
     {}
   );
-  HackerReview.associate = (models) => {
+  HackerReview.associate = models => {
     // associations can be defined here
     models.HackerProfile.hasMany(HackerReview, { foreignKey: "hackerId" });
     models.HackerReview.belongsTo(models.HackerProfile, {
-      foreignKey: "createdBy",
+      foreignKey: "createdBy"
     });
   };
   return HackerReview;

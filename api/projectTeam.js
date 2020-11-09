@@ -6,11 +6,11 @@ const router = express.Router();
 router.use(utils.authMiddleware);
 router.use(utils.preprocessRequest);
 
-const getProjectTeamForSelf = async (req) => {
+const getProjectTeamForSelf = async req => {
   const { id } = req.user;
 
   const person = await models.Person.findByPk(id, {
-    include: [{ model: models.ProjectTeam, required: false }],
+    include: [{ model: models.ProjectTeam, required: false }]
   });
   if (person) {
     return person.ProjectTeam;
@@ -18,11 +18,11 @@ const getProjectTeamForSelf = async (req) => {
   return person;
 };
 
-const getPersonForQRID = async (qrCodeId) => {
+const getPersonForQRID = async qrCodeId => {
   const hackerProfile = await models.HackerProfile.findOne({
     where: {
-      qrCodeId: qrCodeId,
-    },
+      qrCodeId: qrCodeId
+    }
   });
   const userId = hackerProfile.get("userId");
   const person = await models.Person.findByPk(userId);
@@ -37,12 +37,12 @@ router.get("/self", async (req, res) => {
 router.put("/join/:name", async (req, res) => {
   const { name } = req.params;
   let projectTeam = await models.ProjectTeam.findOne({
-    where: { name },
+    where: { name }
   });
 
   if (!projectTeam) {
     return res.status(400).json({
-      error: `Team: ${name} not found`,
+      error: `Team: ${name} not found`
     });
   }
 
@@ -53,7 +53,7 @@ router.put("/join/:name", async (req, res) => {
   await projectTeam.addMember(req.user.id);
 
   projectTeam = await models.ProjectTeam.findOne({
-    where: { name },
+    where: { name }
   });
 
   return res.json({ success: projectTeam });
@@ -80,9 +80,9 @@ router.post("/self", async (req, res) => {
     return res.status(400).json({ error: "Already has a team" });
   }
 
-  const result = await models.sequelize.transaction(async (t) => {
+  const result = await models.sequelize.transaction(async t => {
     const projectTeam = await models.ProjectTeam.create(body, {
-      transaction: t,
+      transaction: t
     });
 
     await person.setProjectTeam(projectTeam, { transaction: t });
@@ -134,7 +134,7 @@ router.delete("/self/deletePrize/:prizeID", async (req, res) => {
   await projectTeam.removePrize(prizeID);
   await projectTeam.save();
   projectTeam = await models.ProjectTeam.findOne({
-    where: { name },
+    where: { name }
   });
   return res.json({ success: projectTeam });
 });

@@ -2,7 +2,7 @@ import React, { useContext, useState, useEffect } from "react";
 import UserContext from "./UserContext";
 import Dropdown, {
   DropdownTrigger,
-  DropdownContent,
+  DropdownContent
 } from "react-simple-dropdown";
 
 import styled from "styled-components";
@@ -13,8 +13,8 @@ const PersonSwitcher = () => {
 
   useEffect(() => {
     fetch("/api/profile/list")
-      .then((res) => res.json())
-      .then((json) => {
+      .then(res => res.json())
+      .then(json => {
         setUsers(json.profiles);
       });
   }, []);
@@ -39,7 +39,7 @@ const PersonSwitcher = () => {
             )}
           </DropdownTrigger>
           <StyledDropdownContent>
-            {users.slice(0, 10).map((u) => (
+            {users.slice(0, 10).map(u => (
               <UserContainer onClick={() => userChangeHandler(u)}>
                 <span>{u.email}</span>
                 <Role>{u.role}</Role>

@@ -8,24 +8,24 @@ module.exports = {
           type: Sequelize.INTEGER,
           primaryKey: true,
           autoIncrement: true,
-          allowNull: false,
+          allowNull: false
         },
         name: {
           type: Sequelize.STRING,
-          allowNull: false,
+          allowNull: false
         },
         color: {
           type: Sequelize.STRING,
-          allowNull: false,
+          allowNull: false
         },
         createdAt: {
           allowNull: false,
-          type: Sequelize.DATE,
+          type: Sequelize.DATE
         },
         updatedAt: {
           allowNull: false,
-          type: Sequelize.DATE,
-        },
+          type: Sequelize.DATE
+        }
       })
       .then(() => {
         return queryInterface.addColumn("persons", "houseId", {
@@ -33,8 +33,8 @@ module.exports = {
           allowNull: true,
           references: {
             model: "Houses",
-            key: "id",
-          },
+            key: "id"
+          }
         });
       });
   },
@@ -42,5 +42,5 @@ module.exports = {
     return queryInterface.removeColumn("persons", "houseId").then(() => {
       return queryInterface.dropTable("Houses");
     });
-  },
+  }
 };

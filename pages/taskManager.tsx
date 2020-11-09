@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 
 import { handleLoginRedirect, getProfile } from "../lib/authenticate";
-import { getCurrentTasks, saveTask, updateTask } from "../lib/live";
+import { getCurrentTasks, saveTask, updateTask, deleteTask } from "../lib/live";
 import Head from "../components/Head";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
@@ -52,19 +52,31 @@ const EditableCell = ({ task }) => {
           <option value="Active">Active</option>
           <option value="Inactive">Inactive</option>
         </select>
-        <EditButton
-          onClick={async () => {
-            const result = await updateTask(currTaskValue);
-            if (result) {
-              window.location.reload();
-            } else {
-              alert("failed to update task");
-            }
-          }}
-        >
-          Update Task
-        </EditButton>
       </TaskInfo>
+      <EditButton
+        onClick={async () => {
+          const result = await updateTask(currTaskValue);
+          if (result) {
+            window.location.reload();
+          } else {
+            alert("failed to update task");
+          }
+        }}
+      >
+        Update Task
+      </EditButton>
+      <EditButton
+        onClick={async () => {
+          const result = await deleteTask(currTaskValue);
+          if (result) {
+            window.location.reload();
+          } else {
+            alert("failed to delete task");
+          }
+        }}
+      >
+        Delete Task
+      </EditButton>
     </Task>
   );
 };

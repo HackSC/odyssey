@@ -52,7 +52,7 @@ const Team = ({ team, profile }: Props) => {
     }
   }, []);
 
-  const handleKick = useCallback(async (member) => {
+  const handleKick = useCallback(async member => {
     const confirm = window.confirm(
       `Are you sure you want to kick ${member.firstName} ${member.lastName}, ${member.email}?`
     );
@@ -62,7 +62,7 @@ const Team = ({ team, profile }: Props) => {
     }
 
     const res = await fetch("/api/team/kick/" + member.userId, {
-      method: "POST",
+      method: "POST"
     });
     const data = await res.json();
 

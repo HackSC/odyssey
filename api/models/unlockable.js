@@ -4,10 +4,10 @@ module.exports = (sequelize, DataTypes) => {
     {
       tier: DataTypes.INTEGER,
       pointThreshold: DataTypes.INTEGER,
-      isPremium: DataTypes.BOOLEAN,
+      isPremium: DataTypes.BOOLEAN
     },
     {}
   );
-  Unlockable.associate = function (models) {};
+  Unlockable.associate = function(models) {};
   return Unlockable;
 };
