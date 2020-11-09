@@ -25,7 +25,7 @@ export async function getAPIS(req): Promise<API> {
     url_route,
     req
       ? {
-          headers: req.headers,
+          headers: req.headers
         }
       : null
   );
@@ -47,7 +47,7 @@ export async function getMajorEvents(req): Promise<MajorEvents> {
     url_route,
     req
       ? {
-          headers: req.headers,
+          headers: req.headers
         }
       : null
   );
@@ -72,7 +72,7 @@ export async function getProfile(req): Promise<Profile> {
     url_route,
     req
       ? {
-          headers: req.headers,
+          headers: req.headers
         }
       : null
   );
@@ -97,7 +97,7 @@ function redirectToPath(req, path: string) {
   if (req) {
     // Server side 302
     req.res.writeHead(302, {
-      Location: path,
+      Location: path
     });
     req.res.end();
   } else {

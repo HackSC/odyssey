@@ -7,15 +7,15 @@ module.exports = (sequelize, DataTypes) => {
       scoreOne: DataTypes.INTEGER,
       scoreTwo: DataTypes.INTEGER,
       scoreThree: DataTypes.INTEGER,
-      comments: DataTypes.STRING,
+      comments: DataTypes.STRING
     },
     {}
   );
-  HackerReview.associate = function (models) {
+  HackerReview.associate = function(models) {
     // associations can be defined here
     models.HackerProfile.hasMany(HackerReview, { foreignKey: "hackerId" });
     models.HackerReview.belongsTo(models.HackerProfile, {
-      foreignKey: "createdBy",
+      foreignKey: "createdBy"
     });
   };
   return HackerReview;

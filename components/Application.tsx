@@ -24,7 +24,7 @@ const Application = ({ profile }) => {
   );
 };
 
-Application.getInitialProps = async (ctx) => {
+Application.getInitialProps = async ctx => {
   const { req } = ctx;
 
   const profile = await getProfile(req);
@@ -38,7 +38,7 @@ Application.getInitialProps = async (ctx) => {
   }
 
   return {
-    profile,
+    profile
   };
 };
 

@@ -16,7 +16,7 @@ const Blob = () => {
         canvas: canvas,
         context: canvas.getContext("webgl2"),
         antialias: true,
-        alpha: true,
+        alpha: true
       }),
       simplex = new SimplexNoise();
 
@@ -32,7 +32,7 @@ const Blob = () => {
 
     let material = new THREE.MeshPhongMaterial({
       color: 0xff8379,
-      shininess: 40,
+      shininess: 40
     });
 
     let lightTop = new THREE.DirectionalLight(0xffffff, 0.55);

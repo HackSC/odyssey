@@ -5,27 +5,27 @@ module.exports = (sequelize, DataTypes) => {
       name: DataTypes.STRING(150),
       teamCode: {
         type: DataTypes.STRING(4),
-        unique: true,
+        unique: true
       },
       ownerId: {
         type: DataTypes.STRING,
         references: {
           model: "HackerProfiles",
-          key: "userId",
-        },
-      },
+          key: "userId"
+        }
+      }
     },
     {}
   );
-  Team.associate = function (models) {
+  Team.associate = function(models) {
     Team.belongsTo(models.HackerProfile, {
       as: "owner",
       foreignKey: "ownerId",
-      constraints: false,
+      constraints: false
     });
     Team.hasMany(models.HackerProfile, {
       foreignKey: "teamId",
-      constraints: false,
+      constraints: false
     });
   };
   return Team;

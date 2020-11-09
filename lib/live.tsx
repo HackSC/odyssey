@@ -21,13 +21,16 @@ async function saveTask(newTask) {
     headers: {
       "content-type": "application/json"
     },
-    body: JSON.stringify({ ...newTask, blocking: false, description: "" })
+    body: JSON.stringify({ ...newTask, blocking: false, description: "", isPast: 0 })
   });
   return result.status === 200;
 }
 
 async function updateTask(updatedTask) {
   const urlRoute = "/api/points/tasks";
+  if (!updatedTask.createdAt) {
+    updatedTask.createdAt = new Date().toISOString();
+  }
   const result = await fetch(urlRoute, {
     method: "PUT",
     headers: {
@@ -36,6 +39,14 @@ async function updateTask(updatedTask) {
     body: JSON.stringify(updatedTask)
   });
   const jsonBody = await result.json();
+  return result.status === 200;
+}
+
+async function deleteTask(task) {
+  const urlRoute = "/api/points/tasks/" + task.id;
+  const result = await fetch(urlRoute, {
+    method: "DELETE"
+  });
   return result.status === 200;
 }
 
@@ -114,15 +125,12 @@ async function getCurrentEvents(req) {
 
 async function saveUnlockable(newUnlockable) {
   const urlRoute = "/api/unlockable";
-  console.log(newUnlockable);
   const result = await fetch(urlRoute, {
     method: "POST",
     headers: { "content-type": "application/json" },
     body: JSON.stringify(newUnlockable)
   });
-  console.log(result);
   const jsonResult = await result.json();
-  console.log(jsonResult);
   return result.status === 200;
 }
 async function updateUnlockable(updatedUnlockable) {
@@ -132,7 +140,6 @@ async function updateUnlockable(updatedUnlockable) {
     headers: { "content-type": "application/json" },
     body: JSON.stringify(updatedUnlockable)
   });
-  console.log(result);
   return result.status === 200;
 }
 
@@ -159,6 +166,7 @@ export {
   getCurrentTasks,
   saveTask,
   updateTask,
+  deleteTask,
   getHouses,
   createHouse,
   updateHouse,

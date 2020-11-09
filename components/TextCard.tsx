@@ -15,7 +15,7 @@ const TextCard: React.FunctionComponent<Props> = ({
   propText = "Descriptive text...",
   propTime = "Sat 10:00 AM",
   firstFlexBasis = 50,
-  secondFlexBasis = 50,
+  secondFlexBasis = 50
 }: Props) => {
   return (
     <TextCardDiv>

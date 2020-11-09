@@ -25,9 +25,9 @@ const AutocompleteInput = React.forwardRef<Ref, Props>((props, ref: any) => {
   useEffect(() => {
     if (debouncedInput) {
       setShowSuggestions(true);
-      const filteredSuggestions = props.suggestions.filter((suggestion) => {
+      const filteredSuggestions = props.suggestions.filter(suggestion => {
         let return_val = false;
-        suggestion.map((item) => {
+        suggestion.map(item => {
           return_val =
             return_val ||
             item.toLowerCase().indexOf(debouncedInput.toLowerCase()) >= 0;
@@ -47,7 +47,7 @@ const AutocompleteInput = React.forwardRef<Ref, Props>((props, ref: any) => {
     }
   }, [debouncedInput]); // Only call effect if debounced search term changes
 
-  const selectSuggestion = useCallback((suggestion) => {
+  const selectSuggestion = useCallback(suggestion => {
     if (ref && ref.current) {
       ref.current.value = suggestion[0];
       setShowSuggestions(false);
@@ -65,7 +65,7 @@ const AutocompleteInput = React.forwardRef<Ref, Props>((props, ref: any) => {
         disabled={props.disabled}
         ref={ref}
         autoComplete="off"
-        onChange={(e) => setInput(e.target.value)}
+        onChange={e => setInput(e.target.value)}
         maxLength={props.maxLength}
       />
 
@@ -74,7 +74,7 @@ const AutocompleteInput = React.forwardRef<Ref, Props>((props, ref: any) => {
           {suggestions.map((suggestion, index) => {
             return (
               <Suggestion
-                onMouseDown={(e) => {
+                onMouseDown={e => {
                   e.preventDefault();
                   selectSuggestion(suggestion);
                 }}

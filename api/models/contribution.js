@@ -5,20 +5,20 @@ module.exports = (sequelize, DataTypes) => {
       personId: DataTypes.STRING(100),
       multiplier: DataTypes.INTEGER,
       scannerId: DataTypes.STRING(100),
-      taskId: DataTypes.INTEGER,
+      taskId: DataTypes.INTEGER
     },
     {
-      tableName: "Contributions",
+      tableName: "Contributions"
     }
   );
-  Contribution.associate = function (models) {
+  Contribution.associate = function(models) {
     Contribution.belongsTo(models.Person, {
       foreignKey: "personId",
-      targetKey: "identityId",
+      targetKey: "identityId"
     });
     Contribution.belongsTo(models.Task, { foreignKey: "taskId" });
     Contribution.addScope("defaultScope", {
-      include: [{ model: models.Task }],
+      include: [{ model: models.Task }]
     });
   };
   return Contribution;

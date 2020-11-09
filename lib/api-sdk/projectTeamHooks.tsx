@@ -4,7 +4,7 @@ import { NextApiRequest } from "next";
 import {
   fetcherToSVRHandler,
   useErrorHandler,
-  fetchWithMutation,
+  fetchWithMutation
 } from "./hook-utils";
 
 type SelfHookParams<T> = {
@@ -51,19 +51,19 @@ function addTeamMemberFetch(personId: String) {
 
 function useProjectTeamSelf({
   defaultOnError,
-  initialModel,
+  initialModel
 }: SelfHookParams<ProjectTeam>) {
   const { data: projectTeam, error } = useSWR<ProjectTeam, any>(
     resourceRoute,
     fetcherToSVRHandler(getProjectTeamSelfFetch),
     {
-      initialData: initialModel,
+      initialData: initialModel
     }
   );
 
   useErrorHandler(defaultOnError, error);
 
-  let fetchWithMutationProjectTeam = (f) =>
+  let fetchWithMutationProjectTeam = f =>
     fetchWithMutation(f, defaultOnError, resourceRoute);
 
   const createProjectTeamSelf = fetchWithMutationProjectTeam(
@@ -93,7 +93,7 @@ function useProjectTeamSelf({
     removePrizeSelf,
     removeMemberSelf,
     addMemberProjectTeamSelf,
-    joinProjectTeamSelf,
+    joinProjectTeamSelf
   };
 }
 

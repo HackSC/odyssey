@@ -6,8 +6,8 @@ module.exports = {
       queryInterface.changeColumn("HackerProfiles", "id", {
         type: Sequelize.INTEGER,
         allowNull: false,
-        defaultValue: 0,
-      }),
+        defaultValue: 0
+      })
     ]);
   },
 
@@ -16,8 +16,8 @@ module.exports = {
       queryInterface.changeColumn("HackerProfiles", "id", {
         type: Sequelize.STRING,
         allowNull: false,
-        defaultValue: "",
-      }),
+        defaultValue: ""
+      })
     ]);
-  },
+  }
 };

@@ -84,5 +84,5 @@ export {
   liveApiLookupFetch,
   liveSignUpLookupFetch,
   liveHackerLookupFetch,
-  livePointFetch,
+  livePointFetch
 };

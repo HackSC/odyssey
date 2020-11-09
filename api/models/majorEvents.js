@@ -8,15 +8,15 @@ module.exports = (sequelize, DataTypes) => {
       id: {
         type: DataTypes.INTEGER,
         primaryKey: true,
-        allowNull: false,
+        allowNull: false
       },
       name: DataTypes.STRING,
       isHackathon: DataTypes.BOOLEAN,
       start_date: DataTypes.DATE,
-      end_date: DataTypes.DATE,
+      end_date: DataTypes.DATE
     },
     {
-      timestamps: false,
+      timestamps: false
     }
   );
 
