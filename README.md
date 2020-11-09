@@ -1,5 +1,6 @@
 # HackSC Odyssey
 
+[![Better Uptime Badge](https://betteruptime.com/status-badges/v1/monitor/50yh.svg)](https://betteruptime.com/?utm_source=status_badge)
 [![codecov](https://codecov.io/gh/HackSC/odyssey/branch/main/graph/badge.svg?token=JESBLPBF78)](https://codecov.io/gh/HackSC/odyssey)
 
 Odyssey is a hackathon management platform that handles hacker applications, admin functionalities, and more. Built by the HackSC team.
