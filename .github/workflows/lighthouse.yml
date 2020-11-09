@@ -1,0 +1,37 @@
+name: Test Lighthouse Check with Minimum Score Enforcement
+
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  lighthouse-check:
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    steps:
+      - uses: actions/checkout@master
+      - run: npm install
+      - name: Run Lighthouse
+        uses: foo-software/lighthouse-check-action@master
+        id: lighthouseCheck
+        with:
+          accessToken: ${{ steps.lighthouseCheck.outputs.lighthouseCheckResults }}
+          apiToken: "5f8b9c5d94bddc0025bc528d_01cdb87c-1c48-4bf6-9729-a1c54fd55488"
+          urls: "8fb3f66a-791d-4ff8-a419-149c7882d20a,https://dashboard.hacksc.com,https://odyssey.hacksc.com"
+      - name: Handle Lighthouse Check results
+        uses: foo-software/lighthouse-check-status-action@master
+        with:
+          commentUrl: "push"
+          lighthouseCheckResults: ${{ steps.lighthouseCheck.outputs.lighthouseCheckResults }}
+          minAccessibilityScore: "10"
+          minBestPracticesScore: "10"
+          minPerformanceScore: "10"
+          minProgressiveWebAppScore: "10"
+          minSeoScore: "10"
+  continue-even-if-failure:
+    name: "Approve even if failing"
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    steps:
+      - run: exit 0

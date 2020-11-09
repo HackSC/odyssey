@@ -58,8 +58,7 @@ const TaskManager = ({ profile, currentHouses }) => {
   return (
     <>
       <Head title="HackSC Odyssey - Results" />
-      <Navbar loggedIn admin activePage="/" />
-
+      <Navbar loggedIn admin activePage="/houseManager" />
       <Background>
         <Container>
           {" "}

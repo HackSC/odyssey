@@ -21,12 +21,7 @@ async function saveTask(newTask) {
     headers: {
       "content-type": "application/json"
     },
-    body: JSON.stringify({
-      ...newTask,
-      blocking: false,
-      description: "",
-      isPast: 0
-    })
+    body: JSON.stringify({ ...newTask, blocking: false, description: "", isPast: 0 })
   });
   return result.status === 200;
 }
@@ -99,8 +94,8 @@ async function updateHouse(houseObj) {
 
 async function getCurrentUnlockables(req) {
   const urlRoute = req
-    ? /* Serverside */ process.env.URL_BASE + "api/unlockable"
-    : /* Client */ "api/unlockable";
+    ? /* Serverside */ process.env.URL_BASE + "api/unlockable/list"
+    : /* Client */ "api/unlockable/list";
 
   const result = await fetch(
     urlRoute,

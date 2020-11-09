@@ -1,4 +1,4 @@
-'use strict';
+"use strict";
 
 module.exports = {
   up: (queryInterface, Sequelize) => {
@@ -6,7 +6,7 @@ module.exports = {
       type: Sequelize.ENUM,
       values: ["hacker", "admin", "sponsor", "volunteer"],
       defaultValue: "hacker"
-    })
+    });
   },
 
   down: (queryInterface, Sequelize) => {
@@ -14,6 +14,6 @@ module.exports = {
       type: Sequelize.ENUM,
       values: ["hacker", "admin", "sponsor", "superadmin"],
       defaultValue: "hacker"
-    })
+    });
   }
 };

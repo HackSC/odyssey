@@ -65,6 +65,7 @@ const Navbar: React.FunctionComponent<NavbarProps> = ({
               {!admin && !volunteer && !sponsor && showLive && (
                 <Link
                   href="/live"
+                  id="live-page"
                   style={style(activePage === "live" ? "#FF8379" : "white")}
                 >
                   Live
@@ -83,6 +84,7 @@ const Navbar: React.FunctionComponent<NavbarProps> = ({
               {!admin && !volunteer && !sponsor && showApp && (
                 <Link
                   href="/application"
+                  id="application-page"
                   style={style(
                     activePage === "application" ? "#FF8379" : "white"
                   )}
@@ -93,6 +95,7 @@ const Navbar: React.FunctionComponent<NavbarProps> = ({
               {!admin && !volunteer && !sponsor && showResults && (
                 <Link
                   href="/results"
+                  id="results-page"
                   style={style(activePage === "results" ? "#FF8379" : "white")}
                 >
                   Results
@@ -101,6 +104,7 @@ const Navbar: React.FunctionComponent<NavbarProps> = ({
               {!admin && !volunteer && !sponsor && showTeam && (
                 <Link
                   href="/team"
+                  id="team-page"
                   style={style(activePage === "team" ? "#FF8379" : "white")}
                 >
                   Team
@@ -109,6 +113,7 @@ const Navbar: React.FunctionComponent<NavbarProps> = ({
               {!admin && !volunteer && !sponsor && showProjectTeam && (
                 <Link
                   href="/projectTeam"
+                  id="projectTeam-page"
                   style={style(
                     activePage === "projectTeam" ? "#FF8379" : "white"
                   )}
@@ -119,6 +124,7 @@ const Navbar: React.FunctionComponent<NavbarProps> = ({
               {!admin && !volunteer && !sponsor && showMaps && (
                 <Link
                   href="/maps"
+                  id="maps-page"
                   style={style(activePage === "maps" ? "#FF8379" : "white")}
                 >
                   Maps
@@ -127,14 +133,24 @@ const Navbar: React.FunctionComponent<NavbarProps> = ({
               {!admin && !volunteer && !sponsor && showAPI && (
                 <Link
                   href="/api-directory"
+                  id="api-directory-page"
                   style={style(activePage === "api" ? "#FF8379" : "white")}
                 >
                   APIs
                 </Link>
               )}
+              {admin && activePage !== "/" && (
+                <Link
+                  href="/admin"
+                  style={style(activePage === "/" ? "#FF8379" : "white")}
+                >
+                  Admin Dashboard
+                </Link>
+              )}
               {showLogout && (
                 <Link
                   href="/auth/logout"
+                  id="auth-logout-page"
                   style={style(activePage === "logout" ? "#FF8379" : "white")}
                 >
                   Logout
@@ -145,12 +161,14 @@ const Navbar: React.FunctionComponent<NavbarProps> = ({
             <>
               <Link
                 href="/"
+                id="main-page"
                 style={style(activePage === "/" ? "#FF8379" : "white")}
               >
                 Home
               </Link>
               <Link
                 href="/auth/login"
+                id="auth-login-page"
                 style={style(activePage === "login" ? "#FF8379" : "white")}
               >
                 Login

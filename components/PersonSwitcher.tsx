@@ -15,7 +15,7 @@ const PersonSwitcher = () => {
     fetch("/api/profile/list")
       .then(res => res.json())
       .then(json => {
-        setUsers(json.profiles.filter(it => it.role === "admin"));
+        setUsers(json.profiles);
       });
   }, []);
 

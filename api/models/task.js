@@ -9,11 +9,7 @@ module.exports = (sequelize, DataTypes) => {
       isGroupTask: DataTypes.BOOLEAN,
       isActive: DataTypes.BOOLEAN,
       sponsor: DataTypes.STRING,
-      isPast: {
-        type: DataTypes.BOOLEAN,
-        defaultValue: 0,
-        allowNull: false
-      },
+      isPast: DataTypes.BOOLEAN,
       name: DataTypes.STRING(100)
     },
     {}
