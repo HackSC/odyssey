@@ -1,0 +1,1 @@
+alter table Apis drop foreign key MajorEvents

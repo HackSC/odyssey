@@ -16,7 +16,8 @@ const Head = ({ title }: HeadProps) => {
 
       <script
         async
-        src="https://www.googletagmanager.com/gtag/js?id=UA-127488741-2"></script>
+        src="https://www.googletagmanager.com/gtag/js?id=UA-127488741-2"
+      ></script>
 
       {/* Facebook pixel (come get my data zuck) */}
       <script
