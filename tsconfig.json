@@ -27,6 +27,7 @@
     "**/*.tsx",
     "**/*.png",
     "**/*.svg",
-    "**/*.json"
+    "**/*.json",
+    "tasks/betterUptimeHeartbeat.js"
   ]
 }
