@@ -3,7 +3,7 @@
   "version": "1.2.0",
   "private": true,
   "scripts": {
-    "dev": "node << babel server.js",
+    "dev": "echo 'http://localhost:3000' && node << babel server.js",
     "build": "next build",
     "start": "node server.js",
     "watch": "babel-watch -x .next server.js",
@@ -12,9 +12,12 @@
     "cypress:run": "cypress run",
     "E2ETest": "start-server-and-test start http://localhost:3000 cypress:run",
     "test": "start-server-and-test start http://localhost:3000 cypress:run",
-    "jest": "jest --runInBand"
+    "jest": "jest --coverage",
+    "coverage": "codecov -t $CODECOV_TOKEN"
   },
   "jest": {
+    "coverageDirectory": "./coverage/",
+    "collectCoverage": true,
     "roots": [
       "./tests/"
     ]
@@ -35,6 +38,8 @@
     "aws-sdk": "^2.553.0",
     "body-parser": "^1.19.0",
     "busboy": "^0.3.1",
+    "caniuse-lite": "^1.0.30001148",
+    "codecov": "^3.8.1",
     "cookie": "^0.4.0",
     "cookie-session": "^1.3.3",
     "copy-to-clipboard": "^3.2.0",
@@ -55,6 +60,7 @@
     "js-cookie": "^2.2.1",
     "jsqr": "^1.2.0",
     "jszip": "^3.2.2",
+    "lint-staged": "^10.4.0",
     "list-react-files": "^0.2.0",
     "moment": "^2.24.0",
     "mysql": "^2.17.1",
@@ -107,11 +113,12 @@
     "babel-plugin-add-module-exports": "^1.0.2",
     "babel-plugin-styled-components": "^1.10.6",
     "babel-watch": "^7.0.0",
+    "cypress-dotenv": "^1.2.2",
     "enzyme": "^3.10.0",
     "enzyme-adapter-react-16": "^1.14.0",
     "husky": "^3.0.9",
     "jest": "^26.0.1",
-    "prettier": "^1.18.2",
+    "prettier": "^2.1.2",
     "pretty-quick": "^2.0.0",
     "react-addons-test-utils": "^15.6.2",
     "react-test-renderer": "^16.9.0",
@@ -122,8 +129,11 @@
   },
   "husky": {
     "hooks": {
-      "pre-commit": "pretty-quick --staged"
+      "pre-commit": "pretty-quick --staged && yarn jest --detectOpenHandles --forceExit && yarn coverage && lint-staged"
     }
+  },
+  "lint-staged": {
+    "**/*": "prettier --write --ignore-unknown"
   },
   "bit": {
     "env": {

@@ -5,12 +5,12 @@ const event = (sequelize, DataTypes) => {
       name: DataTypes.STRING(100),
       description: DataTypes.STRING(500),
       startsAt: DataTypes.DATE,
-      endsAt: DataTypes.DATE
+      endsAt: DataTypes.DATE,
     },
     {}
   );
 
-  Event.associate = models => {};
+  Event.associate = (models) => {};
   return Event;
 };
 

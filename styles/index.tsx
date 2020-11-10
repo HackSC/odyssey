@@ -4,7 +4,19 @@ export { default as Header } from "./Header";
 export { default as ContentBlockWide } from "./ContentBlockWide";
 export { default as Footer } from "./Footer";
 
-// HackSC Design System
+// * Admin Sub-Directory
+export {
+  Description,
+  EditButton,
+  EventTitle,
+  Task,
+  TaskInfo,
+  TaskName,
+  TaskText,
+  TitleBox,
+} from "./admin";
+
+// * HackSC Design System
 export { default as Background } from "./Background";
 export { default as Button } from "./Button";
 export { default as Container } from "./Container";
@@ -20,7 +32,7 @@ export {
   default as Form,
   FormGroup,
   RadioChoice,
-  RadioChoiceLabel
+  RadioChoiceLabel,
 } from "./Form";
 export { default as Panel } from "./Panel";
 export { default as Section } from "./Section";

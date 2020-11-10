@@ -6,8 +6,11 @@ const cookieSession = require("cookie-session");
 const bodyParser = require("body-parser");
 const authRouter = require("./api/login");
 const profileRouter = require("./api/hackerProfile");
+const majorEventsRouter = require("./api/majorEvents");
+const apiRouter = require("./api/apis");
 const adminRouter = require("./api/admin");
 const taskRouter = require("./api/tasks");
+const pointRouter = require("./api/points");
 const teamRouter = require("./api/team");
 const personRouter = require("./api/people");
 const contributionRouter = require("./api/contribution");
@@ -25,11 +28,11 @@ dotenv.config();
 
 const strategy = new Auth0Strategy(
   {
-    domain: process.env.AUTH0_DOMAIN,
-    clientID: process.env.AUTH0_CLIENT_ID,
-    clientSecret: process.env.AUTH0_CLIENT_SECRET,
+    domain: process.env.AUTH0_DOMAIN || "",
+    clientID: process.env.AUTH0_CLIENT_ID || "",
+    clientSecret: process.env.AUTH0_CLIENT_SECRET || "",
     callbackURL:
-      process.env.AUTH0_CALLBACK_URL || "http://localhost:3000/callback"
+      process.env.AUTH0_CALLBACK_URL || "http://localhost:3000/auth/callback"
   },
   function(accessToken, refreshToken, extraParams, profile, done) {
     // extraParams.id_token should contain the JWT
@@ -67,8 +70,11 @@ server.use(fileUpload());
 
 server.use("/auth", authRouter);
 server.use("/api/profile", profileRouter);
+server.use("/api/majorEvents", majorEventsRouter);
+server.use("/api/apis", apiRouter);
 server.use("/api/admin", adminRouter);
 server.use("/api/task", taskRouter);
+server.use("/api/points", pointRouter);
 server.use("/api/team", teamRouter);
 server.use("/api/person", personRouter);
 server.use("/api/contribution", contributionRouter);

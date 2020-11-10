@@ -11,9 +11,9 @@ router.get("/self", async (req, res) => {
   try {
     const [person, isCreated] = await models.Person.findOrCreate({
       where: {
-        identityId: req.user.id
+        identityId: req.user.id,
       },
-      defaults: { isBattlepassComplete: false }
+      defaults: { isBattlepassComplete: false },
     });
 
     return res.json({ person });

@@ -6,7 +6,7 @@ const utils = require("./utils");
 router.use(utils.authMiddleware);
 
 router.get("/", async (req, res) => {
-  const prizes = await models.Prize.findAll();
+  const prizes = await models.Prize.findAll({});
   return res.json({ success: prizes });
 });
 
