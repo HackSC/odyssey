@@ -1,12 +1,21 @@
 const cron = require("node-cron");
 
 const sendgridSync = require("../tasks/sendgridsync");
-const betterUptimeHeartbeat = require("../tasks/betterUptimeHeartbeat");
+
+// * Uptime Server Heartbeats
+const productionServerHeartbeat = require("../tasks/productionServerHeartbeat");
+const stagingServerHeartbeat = require("../tasks/stagingServerHeartbeat");
+
+// * Uptime Database Heartbeats
+// TODO
 
 const scheduleCronJobs = () => {
   /* Upsert to send grid once an hour */
   cron.schedule("0 * * * *", sendgridSync);
-  cron.schedule("59 23 * * *", betterUptimeHeartbeat);
+
+  // * Uptime Server Heartbeats
+  cron.schedule("0 0 * * * *", productionServerHeartbeat);
+  cron.schedule("0 0 * * * *", stagingServerHeartbeat);
 };
 
 module.exports = scheduleCronJobs;
