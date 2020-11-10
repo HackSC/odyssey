@@ -6,5 +6,3 @@ const betterUptimeHeartbeat = async () => {
 
   return res;
 };
-
-export default betterUptimeHeartbeat;
