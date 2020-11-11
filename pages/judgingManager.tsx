@@ -460,7 +460,7 @@ const judgingManager = ({}) => {
     <>
       <Head title="HackSC Odyssey - Application" />
       <Navbar loggedIn admin activePage="/judgingManager" />
-      <Background>
+      <Background padding="30px 0">
         <Container>
           <Flex direction="row" justify="space-between">
             <Column flexBasis={48}>

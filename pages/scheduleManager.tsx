@@ -93,7 +93,7 @@ const TaskManager = ({ profile, currentEvents }) => {
     <>
       <Head title="HackSC Odyssey - Results" />
       <Navbar loggedIn admin activePage="/scheduleManager" />
-      <Background>
+      <Background padding="30px 0">
         <Container>
           {" "}
           <Task>
