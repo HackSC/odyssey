@@ -324,7 +324,7 @@ const hackerManager = () => {
     <>
       <Head title="HackSC Odyssey - Check in Hackers" />
       <Navbar loggedIn admin activePage="/hackerManager" />
-      <Background>
+      <Background padding="30px 0">
         <Container>
           <Flex direction="column">
             <h1>Filter Hackers and Export to CSV</h1>
