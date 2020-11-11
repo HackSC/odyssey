@@ -1,14 +1,14 @@
 import React, { useState } from "react";
 
 import { handleLoginRedirect, getProfile } from "../lib/authenticate";
-import { getHouses, createHouse, updateHouse } from "../lib/live";
+import { getHouses, createHouse, updateHouse, deleteHouse } from "../lib/live";
 import Head from "../components/Head";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 
 import styled from "styled-components";
 
-import { Flex, Container, Background } from "../styles";
+import { Background, Container, EditButton, Task, TaskInfo } from "../styles";
 
 const EditableCell = ({ house }) => {
   const [currHouse, setCurrHouse] = useState(house);
@@ -31,25 +31,37 @@ const EditableCell = ({ house }) => {
             setCurrHouse({ ...currHouse, type: e.target.value });
           }}
         />
-        <EditButton
-          onClick={async () => {
-            const result = await updateHouse(currHouse);
-            if (result) {
-              window.location.reload();
-            } else {
-              alert("failed to update task");
-            }
-          }}
-        >
-          {" "}
-          Update Task{" "}
-        </EditButton>
       </TaskInfo>
+      <EditButton
+        onClick={async () => {
+          const result = await updateHouse(currHouse);
+          if (result) {
+            window.location.reload();
+          } else {
+            alert("failed to update house");
+          }
+        }}
+      >
+        {" "}
+        Update House{" "}
+      </EditButton>
+      <EditButton
+        onClick={async () => {
+          const result = await deleteHouse(currHouse);
+          if (result) {
+            window.location.reload();
+          } else {
+            alert("failed to delete house");
+          }
+        }}
+      >
+        Delete House
+      </EditButton>
     </Task>
   );
 };
 
-const TaskManager = ({ profile, currentHouses }) => {
+const houseManager = ({ profile, currentHouses }) => {
   const [newHouse, setNewHouse] = useState({});
 
   const taskBlocks = currentHouses.houses.map((house) => {
@@ -59,7 +71,7 @@ const TaskManager = ({ profile, currentHouses }) => {
     <>
       <Head title="HackSC Odyssey - Results" />
       <Navbar loggedIn admin activePage="/houseManager" />
-      <Background>
+      <Background padding="30px 0">
         <Container>
           {" "}
           <Task>
@@ -94,7 +106,7 @@ const TaskManager = ({ profile, currentHouses }) => {
                   // In theory we do optimistic local state updating, in practice, fuck it it'll do
                   window.location.reload();
                 } else {
-                  alert("Failed to create task");
+                  alert("Failed to create house");
                 }
               }}
             />
@@ -107,7 +119,7 @@ const TaskManager = ({ profile, currentHouses }) => {
   );
 };
 
-TaskManager.getInitialProps = async ({ req }) => {
+houseManager.getInitialProps = async ({ req }) => {
   const profile = await getProfile(req);
   const currentHouses = await getHouses(req);
 
@@ -122,41 +134,4 @@ TaskManager.getInitialProps = async ({ req }) => {
   };
 };
 
-const TaskText = styled.p`
-  margin: 0 0 16px;
-  color: ${({ theme }) => theme.colors.gray50};
-`;
-
-const TaskInfo = styled.div`
-  display: flex;
-  flex-direction: column;
-`;
-
-const TaskName = styled.div`
-  margin: 0 0 16px;
-  color: ${({ theme }) => theme.colors.black};
-`;
-
-const EditButton = styled.button`
-  margin: 10 10 10px;
-`;
-
-const Task = styled.div`
-  box-sizing: border-box;
-  padding: 24px 36px;
-  margin: 10 10 16px;
-  background: #ffffff;
-  display: flex;
-  flex-direction: row;
-  border-radius: 4px;
-  max-width: 50%;
-  border: 1px solid ${({ theme }) => theme.colors.gray5};
-  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.05);
-  transition: 0.25s all;
-  justify-content: left;
-  &:hover {
-    transform: scale(1.025);
-  }
-`;
-
-export default TaskManager;
+export default houseManager;
