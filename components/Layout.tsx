@@ -7,7 +7,7 @@ type Props = {
   title?: string;
 };
 
-const Layout: React.FunctionComponent<Props> = props => {
+const Layout: React.FunctionComponent<Props> = (props) => {
   const { children, title = "This is the default title" } = props;
   return (
     <div style={{ height: "100%" }}>
@@ -19,7 +19,7 @@ const Layout: React.FunctionComponent<Props> = props => {
       <HeaderComponent />
       <div style={{ height: "80%", paddingTop: "1px" }}>{children}</div>
       <Footer>
-        <h3>© 2020 HackSC.</h3>
+        <h3>© {new Date().getFullYear()} HackSC.</h3>
         <h3>All rights reserved.</h3>
       </Footer>
     </div>

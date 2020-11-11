@@ -1,5 +1,5 @@
 /*
-  HackSC 2020 Ticket Raffle
+  HackSC 2021 Ticket Raffle
   To ensure a fair raffle, this script calculates how many raffle tickets each hacker has. It creates raffle ticket entires for each hacker, shuffles the tickets, then selects one at random. In the spirit of open source, we have opened up this script to the public to ensure that we are enforcing a fair random raffle.
 
   To run this script, simply run:
