@@ -34,7 +34,7 @@ const Live = ({ profile, houses, socialPosts }) => {
       />
       <Container>
         <Countdown />
-        <LinkToSchedule />
+        {/* <LinkToSchedule /> */}
         <LinksAndTasks />
       </Container>
       <Footer />
