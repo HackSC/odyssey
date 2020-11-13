@@ -64,6 +64,16 @@ const HackerLiveRoutes: IHackerRoutes = {
   HackerLiveRaffleCount: "api/hacker/live/rafflePoints" as Route
 };
 
+interface IApiRoutes {
+  ApiLive: GetRoute;
+  AllApiLive: GetRoute;
+}
+
+const ApiLiveRoutes: IApiRoutes = {
+  ApiLive: "api/apis/event" as Route,
+  AllApiLive: "api/apis/" as Route
+};
+
 interface ISignUpsRoutes {
   SignUpsLive: GetRoute;
 }
@@ -71,6 +81,10 @@ interface ISignUpsRoutes {
 const SignUpsLiveRoutes: ISignUpsRoutes = {
   SignUpsLive: "api/live/signups" as Route
 };
+
+interface ISignUpsRoutes {
+  SignUpsLive: GetRoute;
+}
 
 interface IEventRoutes {
   EventList: GetRoute;
@@ -89,6 +103,7 @@ const TaskRoutes: ITaskRoutes = {
 };
 
 const Routes = {
+  ...ApiLiveRoutes,
   ...SignUpsLiveRoutes,
   ...ProjectTeamRoutes,
   ...ContributionRoutes,
@@ -134,14 +149,16 @@ function computeUrlRoute(route: string, req?: any, param?: ResourceID): string {
 async function APIGet<T>(
   route: GetRoute,
   opts: {
-    queryParams?: { [key: string]: string };
+    queryParams?: { [key: string]: string | number };
     req?: NextApiRequest;
   },
   param?: ResourceID
 ): Promise<APIResponse<T>> {
   let urlRoute = computeUrlRoute(route, opts?.req, param);
   if (opts?.queryParams) {
-    const urlParams = new URLSearchParams(Object.entries(opts.queryParams));
+    const urlParams = new URLSearchParams(
+      Object.entries(opts.queryParams) + ""
+    );
     urlRoute += `?${urlParams}`;
   }
 

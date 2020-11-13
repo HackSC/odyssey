@@ -31,7 +31,7 @@ const LinksAndTasks = () => {
               </LinkDescription>
             </Link>
 
-            <Link href="https://hacksc-2020.devpost.com/" target="_blank">
+            <Link href="https://hacksc-2021.devpost.com/" target="_blank">
               <img src={Devpost} />
 
               <LinkDescription>

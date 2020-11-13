@@ -13,8 +13,8 @@ const sendgridSync = async () => {
   // https://github.com/sendgrid/sendgrid-nodejs/issues/953
   // Explains why we have weird custom field ID's, it's kinda disgusting but ok
   const contacts = hackerProfiles
-    .filter(hp => hp.submittedAt) // Only Submitted Hackers
-    .map(hp => {
+    .filter((hp) => hp.submittedAt) // Only Submitted Hackers
+    .map((hp) => {
       return {
         first_name: hp.firstName,
         last_name: hp.lastName,
@@ -22,8 +22,8 @@ const sendgridSync = async () => {
         custom_fields: {
           e9_T: hp.status,
           e3_T: hp.school,
-          e10_D: hp.submittedAt
-        }
+          e10_D: hp.submittedAt,
+        },
       };
     });
 
@@ -32,8 +32,8 @@ const sendgridSync = async () => {
     url: "/v3/marketing/contacts",
     body: {
       list_ids: [HackersListID],
-      contacts
-    }
+      contacts,
+    },
   };
 
   sgClient.request(updateListRequest).then(([response, body]) => {

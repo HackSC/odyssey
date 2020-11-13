@@ -14,9 +14,9 @@ type Props = {
 // hacking before being checked-in.`;
 
 const TITLE = `Congrats, you're confirmed for HackSC!`;
-const INSTRUCTIONS = `We're excited to have you at HackSC 2020! Be on the look out for future communications from us in the days leading up to the hackathon. If you have any questions or comments, don't hesitate to reach out to us via team@hacksc.com or ask in the HackSC 2020 Slack org`;
+const INSTRUCTIONS = `We're excited to have you at HackSC 2021! Be on the look out for future communications from us in the days leading up to the hackathon. If you have any questions or comments, don't hesitate to reach out to us via team@hacksc.com or ask in the HackSC 2021 Slack org`;
 
-const ConfirmedStep: React.FunctionComponent<Props> = props => {
+const ConfirmedStep: React.FunctionComponent<Props> = (props) => {
   const { profile } = props;
 
   return (

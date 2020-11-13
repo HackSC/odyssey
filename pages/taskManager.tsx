@@ -1,12 +1,12 @@
 import React, { useState } from "react";
 
 import { handleLoginRedirect, getProfile } from "../lib/authenticate";
-import { getCurrentTasks, saveTask, updateTask } from "../lib/live";
+import { getCurrentTasks, saveTask, updateTask, deleteTask } from "../lib/live";
 import Head from "../components/Head";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 
-import { Background, Container } from "../styles";
+import { Background, Container, EditButton, Task, TaskInfo } from "../styles";
 import styled from "styled-components";
 
 const EditableCell = ({ task }) => {
@@ -18,7 +18,7 @@ const EditableCell = ({ task }) => {
           type="text"
           placeholder="name"
           value={currTaskValue.name}
-          onChange={e => {
+          onChange={(e) => {
             setCurrTaskValue({ ...currTaskValue, name: e.target.value });
           }}
         />
@@ -26,7 +26,7 @@ const EditableCell = ({ task }) => {
           type="text"
           placeholder="type"
           value={currTaskValue.type}
-          onChange={e => {
+          onChange={(e) => {
             setCurrTaskValue({ ...currTaskValue, type: e.target.value });
           }}
         />
@@ -34,16 +34,16 @@ const EditableCell = ({ task }) => {
           type="number"
           placeholder="points"
           value={currTaskValue.points}
-          onChange={e => {
+          onChange={(e) => {
             setCurrTaskValue({ ...currTaskValue, points: e.target.value });
           }}
         />
         <select
-          onChange={e => {
+          onChange={(e) => {
             const isActive = e.target.value === "Active";
             setCurrTaskValue({
               ...currTaskValue,
-              isActive: isActive
+              isActive: isActive,
             });
           }}
           //@ts-ignore
@@ -52,19 +52,31 @@ const EditableCell = ({ task }) => {
           <option value="Active">Active</option>
           <option value="Inactive">Inactive</option>
         </select>
-        <EditButton
-          onClick={async () => {
-            const result = await updateTask(currTaskValue);
-            if (result) {
-              window.location.reload();
-            } else {
-              alert("failed to update task");
-            }
-          }}
-        >
-          Update Task
-        </EditButton>
       </TaskInfo>
+      <EditButton
+        onClick={async () => {
+          const result = await updateTask(currTaskValue);
+          if (result) {
+            window.location.reload();
+          } else {
+            alert("failed to update task");
+          }
+        }}
+      >
+        Update Task
+      </EditButton>
+      <EditButton
+        onClick={async () => {
+          const result = await deleteTask(currTaskValue);
+          if (result) {
+            window.location.reload();
+          } else {
+            alert("failed to delete task");
+          }
+        }}
+      >
+        Delete Task
+      </EditButton>
     </Task>
   );
 };
@@ -72,15 +84,14 @@ const EditableCell = ({ task }) => {
 const TaskManager = ({ profile, currentTasks }) => {
   const [newTask, setNewTask] = useState({});
 
-  const taskBlocks = currentTasks.tasks.map(task => {
+  const taskBlocks = currentTasks.tasks.map((task) => {
     return <EditableCell task={task} />;
   });
   return (
     <>
       <Head title="HackSC Odyssey - Results" />
       <Navbar loggedIn admin activePage="/taskManager" />
-
-      <Background>
+      <Background padding="30px 0">
         <Container>
           {" "}
           <Task>
@@ -88,39 +99,39 @@ const TaskManager = ({ profile, currentTasks }) => {
               <input
                 type="text"
                 placeholder="name"
-                onChange={e => {
+                onChange={(e) => {
                   setNewTask({
                     ...newTask,
-                    name: e.target.value
+                    name: e.target.value,
                   });
                 }}
               />
               <input
                 type="text"
                 placeholder="type"
-                onChange={e => {
+                onChange={(e) => {
                   setNewTask({
                     ...newTask,
-                    type: e.target.value
+                    type: e.target.value,
                   });
                 }}
               />
               <input
                 type="number"
                 placeholder="points"
-                onChange={e => {
+                onChange={(e) => {
                   setNewTask({
                     ...newTask,
-                    points: e.target.value
+                    points: e.target.value,
                   });
                 }}
               />
               <select
-                onChange={e => {
+                onChange={(e) => {
                   const isActive = e.target.value === "Active";
                   setNewTask({
                     ...newTask,
-                    isActive: isActive
+                    isActive: isActive,
                   });
                 }}
                 //@ts-ignore
@@ -163,45 +174,8 @@ TaskManager.getInitialProps = async ({ req }) => {
 
   return {
     profile,
-    currentTasks
+    currentTasks,
   };
 };
-
-const TaskText = styled.p`
-  margin: 0 0 16px;
-  color: ${({ theme }) => theme.colors.gray50};
-`;
-
-const TaskInfo = styled.div`
-  display: flex;
-  flex-direction: column;
-`;
-
-const TaskName = styled.div`
-  margin: 0 0 16px;
-  color: ${({ theme }) => theme.colors.black};
-`;
-
-const EditButton = styled.button`
-  margin: 10 10 10px;
-`;
-
-const Task = styled.div`
-  box-sizing: border-box;
-  padding: 24px 36px;
-  margin: 10 10 16px;
-  background: #ffffff;
-  display: flex;
-  flex-direction: row;
-  border-radius: 4px;
-  max-width: 50%;
-  border: 1px solid ${({ theme }) => theme.colors.gray5};
-  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.05);
-  transition: 0.25s all;
-  justify-content: left;
-  &:hover {
-    transform: scale(1.025);
-  }
-`;
 
 export default TaskManager;

@@ -20,10 +20,9 @@ const Sponsor = ({ profile }) => {
           <Flex direction="column">
             <h1>Sponsor Dashboard</h1>
             <p>
-              Hello there -- welcome to the sponsor dashboard. Here you can access
-              actions and data for HackSC. If you have any questions
-              or find any errors, let the organizers know in{" "}
-              <b>#sponsors</b>
+              Hello there -- welcome to the sponsor dashboard. Here you can
+              access actions and data for HackSC. If you have any questions or
+              find any errors, let the organizers know in <b>#sponsors</b>
             </p>
           </Flex>
 
@@ -49,7 +48,7 @@ const Sponsor = ({ profile }) => {
   );
 };
 
-Sponsor.getInitialProps = async ctx => {
+Sponsor.getInitialProps = async (ctx) => {
   const { req } = ctx;
 
   const profile = await getProfile(req);
@@ -64,7 +63,7 @@ Sponsor.getInitialProps = async ctx => {
   }
 
   return {
-    profile
+    profile,
   };
 };
 

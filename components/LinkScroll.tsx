@@ -33,7 +33,7 @@ const LinkScroll: React.FunctionComponent = () => {
         secondFlexBasis={70}
       />
       <LinkCard
-        propLink="https://hacksc-2020.devpost.com"
+        propLink="https://hacksc-2021.devpost.com"
         propImg={Devpost}
         propAlt="Devpost"
         propTitle="Devpost"

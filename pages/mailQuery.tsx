@@ -15,12 +15,12 @@ import {
   Flex,
   Container,
   Form,
-  FormGroup
+  FormGroup,
 } from "../styles";
 
 import {
   liveSignUpLookupFetch,
-  liveLookupFetch
+  liveLookupFetch,
 } from "../lib/api-sdk/liveHooks";
 
 const Hacker = ({ result }) => {
@@ -40,7 +40,7 @@ const mailQuery = () => {
 
   const [results, setResults] = useState([]);
 
-  const exportHackerCSV = async function() {
+  const exportHackerCSV = async function () {
     let zip = new JSZip();
 
     try {
@@ -51,32 +51,32 @@ const mailQuery = () => {
       return;
     }
 
-    zip.generateAsync({ type: "blob" }).then(function(content) {
+    zip.generateAsync({ type: "blob" }).then(function (content) {
       saveAs(content, "signups.zip");
     });
   };
 
   const genHackerCSV = async (): Promise<Array<Array<String>>> => {
-    return new Promise(function(resolve, reject) {
+    return new Promise(function (resolve, reject) {
       let promises = [];
       promises.push(
-        new Promise(function(resolve, reject) {
+        new Promise(function (resolve, reject) {
           let data = [];
           let stringifier = stringify({
-            delimiter: ","
+            delimiter: ",",
           });
-          stringifier.on("readable", function() {
+          stringifier.on("readable", function () {
             let row;
             while ((row = stringifier.read())) {
               data.push(row);
             }
           });
-          stringifier.on("error", function(err) {
+          stringifier.on("error", function (err) {
             reject(new Error(err.message));
           });
           let headers = ["email", "ip"];
           stringifier.write(headers);
-          stringifier.on("finish", function() {
+          stringifier.on("finish", function () {
             resolve(data);
           });
 
@@ -93,13 +93,11 @@ const mailQuery = () => {
       );
 
       // return all csvs
-      Promise.all(promises)
-        .then(resolve)
-        .catch(reject);
+      Promise.all(promises).then(resolve).catch(reject);
     });
   };
 
-  const lookupHackers = async e => {
+  const lookupHackers = async (e) => {
     e.preventDefault();
 
     const email = emailInput.current.value;
@@ -107,7 +105,7 @@ const mailQuery = () => {
 
     const lookupResponse = await liveSignUpLookupFetch({
       email,
-      ip
+      ip,
     });
 
     const profiles = lookupResponse.success;
@@ -115,7 +113,7 @@ const mailQuery = () => {
     setResults(profiles);
   };
 
-  const showAllHackers = async e => {
+  const showAllHackers = async (e) => {
     e.preventDefault();
 
     const lookupResponse = await liveSignUpLookupFetch({ email: "", ip: "" });
@@ -127,7 +125,7 @@ const mailQuery = () => {
   const renderHackers = useMemo(() => {
     return (
       <Results>
-        {results ? results.map(result => <Hacker result={result} />) : ""}
+        {results ? results.map((result) => <Hacker result={result} />) : ""}
       </Results>
     );
   }, [results]);
@@ -208,8 +206,8 @@ const mailQuery = () => {
     </>
   );
 };
-
-mailQuery.getInitialProps = async ctx => {
+       
+mailQuery.getInitialProps = async (ctx) => {
   const { req } = ctx;
 
   const profile = await getProfile(req);
@@ -220,7 +218,7 @@ mailQuery.getInitialProps = async ctx => {
   }
 
   return {
-    profile
+    profile,
   };
 };
 

@@ -24,7 +24,7 @@ router.post("/", async (req, res) => {
     const unlockable = await models.Unlockable.create({
       tier: parseInt(req.body.tier),
       isPremium: req.body.isPremium,
-      pointThreshold: parseInt(req.body.pointThreshold)
+      pointThreshold: parseInt(req.body.pointThreshold),
     });
     return res.json({ unlockable });
   } catch (e) {
@@ -38,7 +38,7 @@ router.put("/", async (req, res) => {
     delete req.body.id;
     const unlockable = await models.Unlockable.update(
       {
-        ...req.body
+        ...req.body,
       },
       { where: { id: unlockableId } }
     );

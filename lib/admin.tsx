@@ -1,14 +1,11 @@
 export async function getProfiles(query) {
   const fetchUrl = process.env.URL_BASE
-  ? process.env.URL_BASE + "api/admin/profiles?query=" + query 
-  : "api/admin/profiles?query=" + query;
+    ? process.env.URL_BASE + "api/admin/profiles?query=" + query
+    : "api/admin/profiles?query=" + query;
 
-  const response = await fetch(
-    fetchUrl,
-    {
-      method: "GET"
-    }
-  );
+  const response = await fetch(fetchUrl, {
+    method: "GET"
+  });
 
   const payload = await response.json();
 
@@ -19,18 +16,18 @@ export async function getProfiles(query) {
 
 export async function updateProfileRole(email, role) {
   const fetchUrl = process.env.URL_BASE
-  ? process.env.URL_BASE + "api/admin/updateRole" 
-  : "api/admin/updateRole"
+    ? process.env.URL_BASE + "api/admin/updateRole"
+    : "api/admin/updateRole";
 
   const response = await fetch(fetchUrl, {
     method: "POST",
     headers: {
       "Content-Type": "application/json"
     },
-    body: JSON.stringify({email: email, role: role})
-  })
+    body: JSON.stringify({ email: email, role: role })
+  });
 
-  return response
+  return response;
 }
 
 export async function getReviewHistory(req) {

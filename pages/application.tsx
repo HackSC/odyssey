@@ -6,7 +6,7 @@ import {
   getProfile,
   handleAdminRedirect,
   handleVolunteerRedirect,
-  handleSponsorRedirect
+  handleSponsorRedirect,
 } from "../lib/authenticate";
 
 import { Head, Navbar, Footer, Steps } from "../components";
@@ -79,7 +79,7 @@ Application.getInitialProps = async ({ req }) => {
   return {
     houses,
     profile,
-    socialPosts
+    socialPosts,
   };
 };
 
