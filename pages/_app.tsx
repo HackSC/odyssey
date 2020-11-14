@@ -32,8 +32,9 @@ class OdysseyApp extends App<any> {
 
     // ! Make sure this fetch only happens in a strict development environment.
     // ! We should never provide other profiles outside of the development environment unless user role is admin.
-    if (process.env.NODE_ENV === "development")
+    if (process.env.NODE_ENV === "development") {
       profile_list = await getProfileList(ctx.req);
+    }
 
     return { pageProps, user: { profile }, profileList: profile_list };
   }
