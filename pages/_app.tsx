@@ -11,7 +11,7 @@ import "react-step-progress-bar/styles.css";
 import { Theme, GlobalStyles } from "../styles";
 import { ToastProvider } from "react-toast-notifications";
 import PersonSwitcher from "../components/PersonSwitcher";
-import { getProfile } from "../lib/authenticate";
+import { getProfile, getProfileList } from "../lib/authenticate";
 import UserContext from "../components/UserContext";
 
 class OdysseyApp extends App<any> {
@@ -28,7 +28,9 @@ class OdysseyApp extends App<any> {
 
     const profile = await getProfile(ctx.req);
 
-    return { pageProps, user: { profile } };
+    const profile_list = await getProfileList(ctx.req);
+
+    return { pageProps, user: { profile }, profileList: profile_list };
   }
 
   componentDidMount() {
@@ -49,7 +51,7 @@ class OdysseyApp extends App<any> {
   }
 
   render() {
-    const { Component, pageProps, user } = this.props;
+    const { Component, pageProps, user, profileList } = this.props;
     const { isDev } = this.state;
 
     return (
@@ -62,7 +64,7 @@ class OdysseyApp extends App<any> {
           <UserContext.Provider value={user}>
             <>
               <GlobalStyles />
-              {isDev && <PersonSwitcher />}
+              {isDev && <PersonSwitcher profileList={profileList} />}
               <Component {...pageProps} />
             </>
           </UserContext.Provider>

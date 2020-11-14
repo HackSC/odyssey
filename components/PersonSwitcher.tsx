@@ -2,22 +2,15 @@ import React, { useContext, useState, useEffect } from "react";
 import UserContext from "./UserContext";
 import Dropdown, {
   DropdownTrigger,
-  DropdownContent
+  DropdownContent,
 } from "react-simple-dropdown";
 
+import { getProfileList } from "../lib/authenticate";
 import styled from "styled-components";
 
-const PersonSwitcher = () => {
+const PersonSwitcher = ({ profileList }) => {
   const { profile } = useContext(UserContext);
-  const [users, setUsers] = useState([]);
-
-  useEffect(() => {
-    fetch("/api/profile/list")
-      .then(res => res.json())
-      .then(json => {
-        setUsers(json.profiles);
-      });
-  }, []);
+  const [users, setUsers] = useState(profileList ? profileList : []);
 
   const userChangeHandler = async (u: Profile) => {
     await fetch("/auth/devlogin?id=" + u.userId);
@@ -39,7 +32,7 @@ const PersonSwitcher = () => {
             )}
           </DropdownTrigger>
           <StyledDropdownContent>
-            {users.slice(0, 10).map(u => (
+            {users.slice(0, 10).map((u) => (
               <UserContainer onClick={() => userChangeHandler(u)}>
                 <span>{u.email}</span>
                 <Role>{u.role}</Role>
