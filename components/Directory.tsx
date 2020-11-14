@@ -1,11 +1,10 @@
 import styled from "styled-components";
 
 const Directory = ({ apis }) => {
-  console.log("apis:", apis);
   return (
     <Wrapper>
       {apis && apis.success && apis.success.length > 0
-        ? apis.success.map(item => (
+        ? apis.success.map((item) => (
             <Company key={item.id}>
               <h2>{item.name}</h2>
               <p>{item.description}</p>
@@ -13,7 +12,7 @@ const Directory = ({ apis }) => {
               {!item.links || item.links.length == 0 ? (
                 <></>
               ) : (
-                item.links.map(link => (
+                item.links.map((link) => (
                   <div
                     style={{ display: "flex", paddingBottom: ".5rem" }}
                     key={link.name}

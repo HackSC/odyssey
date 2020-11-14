@@ -16,6 +16,30 @@ export async function getUser(req) {
   }
 }
 
+export async function getProfileList(req): Promise<Array<Profile>> {
+  // If we have a req object, that means we're on the server and need to pass in cookies
+  // Otherwise, fetch as normal
+  let url_route = req
+    ? /* Serverside */ process.env.URL_BASE + "api/profile/list"
+    : /* Client */ "/api/profile/list";
+
+  const rawProfileData = await fetch(
+    url_route,
+    req
+      ? {
+          headers: req.headers,
+        }
+      : null
+  );
+
+  try {
+    const data = await rawProfileData.json();
+    return data.profiles;
+  } catch (e) {
+    return null;
+  }
+}
+
 export async function getAPIS(req): Promise<API> {
   let url_route = req
     ? /* Serverside */ process.env.URL_BASE + "api/apis"
@@ -25,7 +49,7 @@ export async function getAPIS(req): Promise<API> {
     url_route,
     req
       ? {
-          headers: req.headers
+          headers: req.headers,
         }
       : null
   );
@@ -47,7 +71,7 @@ export async function getMajorEvents(req): Promise<MajorEvents> {
     url_route,
     req
       ? {
-          headers: req.headers
+          headers: req.headers,
         }
       : null
   );
@@ -72,7 +96,7 @@ export async function getProfile(req): Promise<Profile> {
     url_route,
     req
       ? {
-          headers: req.headers
+          headers: req.headers,
         }
       : null
   );
@@ -97,7 +121,7 @@ function redirectToPath(req, path: string) {
   if (req) {
     // Server side 302
     req.res.writeHead(302, {
-      Location: path
+      Location: path,
     });
     req.res.end();
   } else {
