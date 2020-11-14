@@ -36,5 +36,5 @@ jobs:
     steps:
       - uses: actions/checkout@master
       - run: yarn
-      - run: codecov -t $CODECOV_TOKEN
+      - run: coverage -t $CODECOV_TOKEN
       - run: exit 0
