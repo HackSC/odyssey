@@ -129,7 +129,7 @@
   },
   "husky": {
     "hooks": {
-      "pre-commit": "pretty-quick --staged && yarn jest --detectOpenHandles --forceExit && yarn coverage -t $CODECOV_TOKEN && lint-staged"
+      "pre-commit": "pretty-quick --staged && yarn jest --detectOpenHandles --forceExit && yarn coverage -t $CODECOV_TOKEN && echo $CODECOV_TOKEN && lint-staged"
     }
   },
   "lint-staged": {

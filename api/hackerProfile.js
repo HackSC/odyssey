@@ -342,7 +342,10 @@ router.post("/undecline", async (req, res) => {
 
 router.get("/list", utils.requireDevelopmentEnv, async (req, res) => {
   try {
-    const profiles = await models.HackerProfile.findAll();
+    const profiles = await models.HackerProfile.findAll({
+      limit: 10,
+      order: "follower DESC",
+    });
     return res.json({ profiles });
   } catch (e) {
     return res.status(500).json({ error: e });
