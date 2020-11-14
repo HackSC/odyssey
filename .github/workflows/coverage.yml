@@ -1,15 +1,11 @@
-name: "Jest + Test Coverage"
+name: "Codecov"
 
-on:
-  pull_request:
-    branches:
-      - main
-      - staging
+on: [pull_request]
 
 jobs:
   # unit tests
-  tests:
-    name: "Jest + Coverage Tests"
+  codecov:
+    name: "Codecov"
     continue-on-error: true
     runs-on: ubuntu-latest
     container:
@@ -36,11 +32,8 @@ jobs:
       DEV_DB_DIALECT: ${{ secrets.DEV_DB_DIALECT }}
       NODE_ENV: ${{ secrets.NODE_ENV }}
       URL_BASE: ${{ secrets.URL_BASE }}
+      CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
     steps:
       - uses: actions/checkout@master
-      # - run: apt-get install libgtk2.0-0 libgtk-3-0 libgbm-dev libnotify-dev libgconf-2-4 libnss3 libxss1 libasound2 libxtst6 xauth xvfb
-      - run: yarn
-      - run: yarn jest --detectOpenHandles --forceExit
-      # - run: ps -ef | grep Xvfb | grep -v grep | awk '{print $2}' | xargs kill -9
-      - run: yarn test
+      - run: yarn coverage -t $CODECOV_TOKEN
       - run: exit 0
