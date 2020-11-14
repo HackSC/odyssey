@@ -35,5 +35,5 @@ jobs:
       CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
     steps:
       - uses: actions/checkout@master
-      - run: yarn coverage -t $CODECOV_TOKEN
+      - run: bash <(curl -s https://codecov.io/bash) -t $CODECOV_TOKEN
       - run: exit 0

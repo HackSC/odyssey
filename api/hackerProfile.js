@@ -342,7 +342,7 @@ router.post("/undecline", async (req, res) => {
 
 router.get("/list", utils.requireDevelopmentEnv, async (req, res) => {
   try {
-    const profiles = await models.HackerProfile.findAll({ role: "admin" });
+    const profiles = await models.HackerProfile.findAll();
     return res.json({ profiles });
   } catch (e) {
     return res.status(500).json({ error: e });
