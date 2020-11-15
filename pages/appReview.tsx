@@ -143,7 +143,7 @@ const AppReview = ({ hackerProfile, reviewHistory }) => {
   return (
     <>
       <Head title="HackSC Odyssey - Application" />
-      <Navbar loggedIn admin activePage="/" />
+      <Navbar loggedIn admin activePage="/appReview" />
       <Background>
         <Container>
           <InfoPanel>
