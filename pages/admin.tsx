@@ -31,9 +31,9 @@ const Admin = ({ profile }) => {
             <Action id="scan-page" href="/scan">
               <ActionTitle>Scan In Hackers</ActionTitle>
             </Action>
-            {/* <Action href="/appReview">
-              <ActionTitle>Start App Review</ActionTitle>
-            </Action> */}
+            <Action id="app-review-page" href="/appReview">
+              <ActionTitle>App Review</ActionTitle>
+            </Action>
             <Action id="checkin-page" href="/checkin">
               <ActionTitle>Check In Hackers</ActionTitle>
             </Action>
