@@ -7,6 +7,7 @@ import Dropdown, {
 
 import { getProfileList } from "../lib/authenticate";
 import styled from "styled-components";
+import { randomInt } from "crypto";
 
 const PersonSwitcher = ({ profileList }) => {
   const { profile } = useContext(UserContext);
@@ -33,7 +34,10 @@ const PersonSwitcher = ({ profileList }) => {
           </DropdownTrigger>
           <StyledDropdownContent>
             {users.slice(0, 10).map((u) => (
-              <UserContainer onClick={() => userChangeHandler(u)}>
+              <UserContainer
+                key={`${u.email}-${new Date().getTime()}`}
+                onClick={() => userChangeHandler(u)}
+              >
                 <span>{u.email}</span>
                 <Role>{u.role}</Role>
               </UserContainer>
