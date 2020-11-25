@@ -459,7 +459,7 @@ const ProfileStep: React.FunctionComponent<Props> = (props) => {
         <FormSection>
           <h2>Additional Information</h2>
 
-          <FormGroup>
+          {/* <FormGroup>
             <label>
               Will you need bus transportation to/from your school to USC?
             </label>
@@ -476,7 +476,7 @@ const ProfileStep: React.FunctionComponent<Props> = (props) => {
                 Yes, I need bus transportation
               </RadioChoiceLabel>
             </RadioChoice>
-          </FormGroup>
+         </FormGroup>*/}
 
           <FormGroup>
             <label>Resume - Must be a PDF, 10MB Maximum</label>
