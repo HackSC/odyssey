@@ -185,7 +185,7 @@ const Accepted: React.FunctionComponent<Props> = (props) => {
         </DeclineBanner>
 
         <Form onSubmit={handleSubmit}>
-          <FormGroup>
+          {/*<FormGroup>
             <label>How do you plan on getting to USC?</label>
 
             <p>
@@ -275,7 +275,7 @@ const Accepted: React.FunctionComponent<Props> = (props) => {
             <TravelPlanLabel>
               {travelFile && "Selected '" + travelFile.name + "'"}
             </TravelPlanLabel>
-          </FormGroup>
+          </FormGroup>*/}
 
           <FormGroup>
             <label>T-shirt Size (Unisex)</label>
@@ -288,7 +288,7 @@ const Accepted: React.FunctionComponent<Props> = (props) => {
             />
           </FormGroup>
 
-          <FormGroup>
+          {/*<FormGroup>
             <label>Dietary Restrictions (select all that apply)</label>
 
             <Flex justify="space-between" tabletVertical>
@@ -374,7 +374,7 @@ const Accepted: React.FunctionComponent<Props> = (props) => {
                 />
               </Column>
             </Flex>
-          </FormGroup>
+          </FormGroup>*/}
 
           <FormGroup>
             <label>Code of Conduct</label>
