@@ -31,7 +31,7 @@ const AppReview = ({ hackerProfile, reviewHistory, totalReviews }) => {
   const [submitting, setSubmitting] = useState(false);
   const [loadingNewProfile, setLoadingNewProfile] = useState(false);
 
-  const { width, height } = useWindowSize();
+  const { width, height } = useWindowSize(3000, 3000);
 
   const [s1, setS1] = useState("");
   const [s2, setS2] = useState("");
@@ -161,7 +161,12 @@ const AppReview = ({ hackerProfile, reviewHistory, totalReviews }) => {
         <Container>
           {totalReviewHistory <= 0 ? (
             <InfoPanel>
-              <Confetti recycle={false} width={width} height={height} />
+              <Confetti
+                recycle={false}
+                numberOfPieces={500}
+                width={width}
+                height={height}
+              />
               <h2 style={{ textAlign: "center", padding: "0" }}>
                 Thank you for your reviews! Enjoy the confetti!
               </h2>
