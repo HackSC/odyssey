@@ -2,24 +2,36 @@ import React, { useState, useRef, useEffect, useCallback } from "react";
 import styled from "styled-components";
 
 import { handleLoginRedirect, getProfile } from "../lib/authenticate";
-
+import Confetti from "react-confetti";
 import {
   getHackerProfileForReview,
   submitReview,
   getReviewHistory,
+  getTotalReviewHistory,
 } from "../lib/admin";
 import Head from "../components/Head";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import { Button, Container, Background, Flex, Column } from "../styles";
+import { useWindowSize } from "react-use";
 
-const AppReview = ({ hackerProfile, reviewHistory }) => {
+const AppReview = ({ hackerProfile, reviewHistory, totalReviews }) => {
+  let total_review_len_initial = totalReviews.eligibleReviews
+    ? totalReviews.eligibleReviews.length
+    : 0;
   const [currentProfile, setCurrentProfile] = useState(hackerProfile);
   const [reviewCount, setReviewCount] = useState(
     reviewHistory ? reviewHistory.length : 0
   );
+  const [totalReviewHistory, setTotalReviewHistory] = useState(
+    total_review_len_initial > 200
+      ? 200 - reviewCount
+      : total_review_len_initial - reviewCount
+  );
   const [submitting, setSubmitting] = useState(false);
   const [loadingNewProfile, setLoadingNewProfile] = useState(false);
+
+  const { width, height } = useWindowSize();
 
   const [s1, setS1] = useState("");
   const [s2, setS2] = useState("");
@@ -119,6 +131,7 @@ const AppReview = ({ hackerProfile, reviewHistory }) => {
         setS2("");
         setS3("");
         setReviewCount(reviewCount + 1);
+        setTotalReviewHistory(totalReviews - 1);
         scoreInputs[0].current.focus();
       }
     },
@@ -143,25 +156,39 @@ const AppReview = ({ hackerProfile, reviewHistory }) => {
   return (
     <>
       <Head title="HackSC Odyssey - Application" />
-      <Navbar loggedIn admin activePage="/" />
+      <Navbar loggedIn admin activePage="/appReview" />
       <Background>
         <Container>
+          {totalReviewHistory <= 0 ? (
+            <InfoPanel>
+              <Confetti recycle={false} width={width} height={height} />
+              <h2 style={{ textAlign: "center", padding: "0" }}>
+                Thank you for your reviews! Enjoy the confetti!
+              </h2>
+            </InfoPanel>
+          ) : (
+            ""
+          )}
           <InfoPanel>
             <p>
               Before you review, please look at this Quip document which
               outlines the application review rubric:{" "}
               <a
-                href="https://quip.com/szj7AiMJRTad/Application-Review-Rubric-Instructions"
+                href="https://quip.com/ya1oAGhDpIvz/Application-Review-Rubric-Instructions"
                 target="_blank"
               >
-                READ_ME
+                READ ME
               </a>
             </p>
 
             <br />
 
             <p>
-              You have reviewed <b>{reviewCount}/200</b> applications.
+              You have reviewed <b>{reviewCount}</b> applications.
+            </p>
+
+            <p>
+              Please review <b>{totalReviewHistory}</b> more applications.
             </p>
           </InfoPanel>
 
@@ -174,7 +201,9 @@ const AppReview = ({ hackerProfile, reviewHistory }) => {
                   {" "}
                   {loadingNewProfile
                     ? "Loading..."
-                    : currentProfile.questionOne || "(No response)"}{" "}
+                    : currentProfile
+                    ? currentProfile.questionOne
+                    : "(No response)"}{" "}
                 </p>
               </Panel>
 
@@ -184,7 +213,9 @@ const AppReview = ({ hackerProfile, reviewHistory }) => {
                   {" "}
                   {loadingNewProfile
                     ? "Loading..."
-                    : currentProfile.questionTwo || "(No response)"}{" "}
+                    : currentProfile
+                    ? currentProfile.questionTwo
+                    : "(No response)"}{" "}
                 </p>
               </Panel>
 
@@ -194,7 +225,9 @@ const AppReview = ({ hackerProfile, reviewHistory }) => {
                   {" "}
                   {loadingNewProfile
                     ? "Loading..."
-                    : currentProfile.questionThree || "(No response)"}{" "}
+                    : currentProfile
+                    ? currentProfile.questionThree
+                    : "(No response)"}{" "}
                 </p>
               </Panel>
             </Column>
@@ -296,9 +329,11 @@ AppReview.getInitialProps = async (ctx) => {
   }
   const profileReview = await getHackerProfileForReview(req);
   const reviewHistory = await getReviewHistory(req);
+  const totalReviews = await getTotalReviewHistory(req);
   return {
     hackerProfile: profileReview,
     reviewHistory,
+    totalReviews,
   };
 };
 
