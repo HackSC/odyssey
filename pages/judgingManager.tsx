@@ -460,7 +460,7 @@ const judgingManager = ({}) => {
     <>
       <Head title="HackSC Odyssey - Application" />
       <Navbar loggedIn admin activePage="/judgingManager" />
-      <Background>
+      <Background padding="30px 0">
         <Container>
           <Flex direction="row" justify="space-between">
             <Column flexBasis={48}>
@@ -572,7 +572,7 @@ judgingManager.getInitialProps = async (ctx) => {
   const profile = await getProfile(req);
 
   // Null profile means user is not logged in or user does not have enough rights
-  if (!profile || profile.role != "admin") {
+  if (!profile || !(profile.role == "admin" || profile.role == "volunteer")) {
     handleLoginRedirect(req);
   }
 

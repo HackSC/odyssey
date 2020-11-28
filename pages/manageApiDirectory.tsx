@@ -136,7 +136,7 @@ const manageApiDirectory = ({ events }) => {
     <>
       <Head title="HackSC Odyssey - Filter Signups" />
       <Navbar loggedIn admin activePage="/manageApiDirectory" />
-      <Background>
+      <Background padding="30px 0">
         <Container>
           <Flex direction="column">
             <h1>Manage Api Directory</h1>

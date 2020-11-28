@@ -1,15 +1,11 @@
-name: "Jest + Test Coverage"
+name: "Codecov"
 
-on:
-  pull_request:
-    branches:
-      - main
-      - staging
+on: [pull_request]
 
 jobs:
   # unit tests
-  tests:
-    name: "Jest + Coverage Tests"
+  codecov:
+    name: "Codecov"
     continue-on-error: true
     runs-on: ubuntu-latest
     container:
@@ -24,16 +20,10 @@ jobs:
       CYPRESS_AUTH0_CLIENT_SECRET: ${{ secrets.CYPRESS_AUTH0_CLIENT_SECRET }}
       CYPRESS_AUTH0_DOMAIN: ${{ secrets.CYPRESS_AUTH0_DOMAIN }}
       CYPRESS_AUTH0_CALLBACK_URL: ${{ secrets.CYPRESS_AUTH0_CALLBACK_URL }}
-      CYPRESS_USER_TEST_USERNAME: ${{ secrets.CYPRESS_USER_TEST_USERNAME }}
-      CYPRESS_USER_TEST_PASSWORD: ${{ secrets.CYPRESS_USER_TEST_PASSWORD }}
+      CYPRESS_TEST_USERNAME: ${{ secrets.CYPRESS_TEST_USERNAME }}
+      CYPRESS_TEST_PASSWORD: ${{ secrets.CYPRESS_TEST_PASSWORD }}
       CYPRESS_ADMIN_TEST_USERNAME: ${{ secrets.CYPRESS_ADMIN_TEST_USERNAME }}
       CYPRESS_ADMIN_TEST_PASSWORD: ${{ secrets.CYPRESS_ADMIN_TEST_PASSWORD }}
-      CYPRESS_SPONSOR_TEST_USERNAME: ${{ secrets.CYPRESS_SPONSOR_TEST_USERNAME }}
-      CYPRESS_SPONSOR_TEST_PASSWORD: ${{ secrets.CYPRESS_SPONSOR_TEST_PASSWORD }}
-      CYPRESS_JUDGE_TEST_USERNAME: ${{ secrets.CYPRESS_JUDGE_TEST_USERNAME }}
-      CYPRESS_JUDGE_TEST_PASSWORD: ${{ secrets.CYPRESS_JUDGE_TEST_PASSWORD }}
-      CYPRESS_VOLUNTEER_TEST_USERNAME: ${{ secrets.CYPRESS_VOLUNTEER_TEST_USERNAME }}
-      CYPRESS_VOLUNTEER_TEST_PASSWORD: ${{ secrets.CYPRESS_VOLUNTEER_TEST_PASSWORD }}
       DEV_DB_PORT: ${{ secrets.DEV_DB_PORT }}
       DEV_DB_USERNAME: ${{ secrets.DEV_DB_USERNAME }}
       DEV_DB_PASSWORD: ${{ secrets.DEV_DB_PASSWORD }}
@@ -42,11 +32,9 @@ jobs:
       DEV_DB_DIALECT: ${{ secrets.DEV_DB_DIALECT }}
       NODE_ENV: ${{ secrets.NODE_ENV }}
       URL_BASE: ${{ secrets.URL_BASE }}
+      CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
     steps:
       - uses: actions/checkout@master
-      # - run: apt-get install libgtk2.0-0 libgtk-3-0 libgbm-dev libnotify-dev libgconf-2-4 libnss3 libxss1 libasound2 libxtst6 xauth xvfb
       - run: yarn
-      - run: yarn jest --detectOpenHandles --forceExit
-      # - run: ps -ef | grep Xvfb | grep -v grep | awk '{print $2}' | xargs kill -9
-      - run: yarn test
+      - run: yarn coverage -t $CODECOV_TOKEN
       - run: exit 0
