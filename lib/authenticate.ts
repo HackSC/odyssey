@@ -135,6 +135,7 @@ export function handleLoginRedirect(req) {
 }
 
 export function handleDashboardRedirect(req) {
+  
   redirectToPath(req, "/live");
 }
 
