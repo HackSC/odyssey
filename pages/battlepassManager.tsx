@@ -79,7 +79,7 @@ const BattlepassManager = ({ profile, currentUnlockables }) => {
     <>
       <Head title="HackSC Odyssey - Results" />
       <Navbar loggedIn admin activePage="/battlepassManager" />
-      <Background>
+      <Background padding="30px 0">
         <Container>
           {" "}
           <Task>

@@ -6,7 +6,7 @@ async function getCurrentTasks(req) {
     urlRoute,
     req
       ? {
-          headers: req.headers
+          headers: req.headers,
         }
       : null
   );
@@ -19,9 +19,14 @@ async function saveTask(newTask) {
   const result = await fetch(urlRoute, {
     method: "POST",
     headers: {
-      "content-type": "application/json"
+      "content-type": "application/json",
     },
-    body: JSON.stringify({ ...newTask, blocking: false, description: "", isPast: 0 })
+    body: JSON.stringify({
+      ...newTask,
+      blocking: false,
+      description: "",
+      isPast: 0,
+    }),
   });
   return result.status === 200;
 }
@@ -34,9 +39,9 @@ async function updateTask(updatedTask) {
   const result = await fetch(urlRoute, {
     method: "PUT",
     headers: {
-      "content-type": "application/json"
+      "content-type": "application/json",
     },
-    body: JSON.stringify(updatedTask)
+    body: JSON.stringify(updatedTask),
   });
   const jsonBody = await result.json();
   return result.status === 200;
@@ -45,7 +50,7 @@ async function updateTask(updatedTask) {
 async function deleteTask(task) {
   const urlRoute = "/api/points/tasks/" + task.id;
   const result = await fetch(urlRoute, {
-    method: "DELETE"
+    method: "DELETE",
   });
   return result.status === 200;
 }
@@ -59,7 +64,7 @@ async function getHouses(req) {
     urlRoute,
     req
       ? {
-          headers: req.headers
+          headers: req.headers,
         }
       : null
   );
@@ -73,9 +78,9 @@ async function createHouse(houseObj) {
   const result = await fetch(urlRoute, {
     method: "POST",
     headers: {
-      "content-type": "application/json"
+      "content-type": "application/json",
     },
-    body: JSON.stringify(houseObj)
+    body: JSON.stringify(houseObj),
   });
   return result.status === 200;
 }
@@ -85,9 +90,17 @@ async function updateHouse(houseObj) {
   const result = await fetch(urlRoute, {
     method: "PUT",
     headers: {
-      "content-type": "application/json"
+      "content-type": "application/json",
     },
-    body: JSON.stringify(houseObj)
+    body: JSON.stringify(houseObj),
+  });
+  return result.status === 200;
+}
+
+async function deleteHouse(house) {
+  const urlRoute = "/api/person/houses/" + house.id;
+  const result = await fetch(urlRoute, {
+    method: "DELETE",
   });
   return result.status === 200;
 }
@@ -101,7 +114,7 @@ async function getCurrentUnlockables(req) {
     urlRoute,
     req
       ? {
-          headers: req.headers
+          headers: req.headers,
         }
       : null
   );
@@ -116,7 +129,7 @@ async function getCurrentEvents(req) {
     urlRoute,
     req
       ? {
-          headers: req.headers
+          headers: req.headers,
         }
       : null
   );
@@ -128,7 +141,7 @@ async function saveUnlockable(newUnlockable) {
   const result = await fetch(urlRoute, {
     method: "POST",
     headers: { "content-type": "application/json" },
-    body: JSON.stringify(newUnlockable)
+    body: JSON.stringify(newUnlockable),
   });
   const jsonResult = await result.json();
   return result.status === 200;
@@ -138,7 +151,7 @@ async function updateUnlockable(updatedUnlockable) {
   const result = await fetch(urlRoute, {
     method: "PUT",
     headers: { "content-type": "application/json" },
-    body: JSON.stringify(updatedUnlockable)
+    body: JSON.stringify(updatedUnlockable),
   });
   return result.status === 200;
 }
@@ -148,16 +161,16 @@ async function saveEvent(newEvent) {
   const result = await fetch(urlRoute, {
     method: "POST",
     headers: {
-      "content-type": "application/json"
+      "content-type": "application/json",
     },
-    body: JSON.stringify(newEvent)
+    body: JSON.stringify(newEvent),
   });
   return result.status === 200;
 }
 async function deleteEvent(event) {
   const urlRoute = "/api/event/" + event.id;
   const result = await fetch(urlRoute, {
-    method: "DELETE"
+    method: "DELETE",
   });
   return result.status === 200;
 }
@@ -170,10 +183,11 @@ export {
   getHouses,
   createHouse,
   updateHouse,
+  deleteHouse,
   getCurrentUnlockables,
   saveUnlockable,
   updateUnlockable,
   getCurrentEvents,
   saveEvent,
-  deleteEvent
+  deleteEvent,
 };

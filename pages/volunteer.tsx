@@ -29,11 +29,14 @@ const Volunteer = ({ profile }) => {
 
           <ActionsHeader>Actions</ActionsHeader>
           <Actions>
-            <Action href="/scan">
-              <ActionTitle>Scan Hackers</ActionTitle>
+            <Action id="scan-page" href="/scan">
+              <ActionTitle>Scan In Hackers</ActionTitle>
             </Action>
-            <Action href="/checkin">
+            <Action id="checkin-page" href="/checkin">
               <ActionTitle>Check In Hackers</ActionTitle>
+            </Action>
+            <Action id="judging-manager-page" href="/judgingManager">
+              <ActionTitle> Pass Judgement </ActionTitle>
             </Action>
             <Action href="https://live.hacksc.com" target="_blank">
               <ActionTitle>Live Dashboard</ActionTitle>

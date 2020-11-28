@@ -316,7 +316,7 @@ router.post("/decline", async (req, res) => {
   );
 
   return res.json({
-    message: "Successfully processed request to decline HackSC 2020 acceptance",
+    message: "Successfully processed request to decline HackSC 2021 acceptance",
   });
 });
 
@@ -336,7 +336,7 @@ router.post("/undecline", async (req, res) => {
 
   return res.json({
     message:
-      "Successfully processed request to un-decline HackSC 2020 acceptance",
+      "Successfully processed request to un-decline HackSC 2021 acceptance",
   });
 });
 
