@@ -23,40 +23,40 @@ type NavbarProps = {
   sponsor?: boolean;
 };
 
-const style = background => {
+const style = (background) => {
   return {
     "&:hover": {
       backgroundColor: "#FF8379 !important",
-      color: "white !important"
+      color: "white !important",
     },
     padding: "10px",
     margin: "10px",
     color: background !== "white" ? "white" : "black",
     backgroundColor: background,
-    cursor: "pointer"
+    cursor: "pointer",
   };
 };
 
 const Navbar: React.FunctionComponent<NavbarProps> = ({
   loggedIn,
-  showLive = true,
+  showLive = false, // * False until event or soon before
   showDash = true,
-  showApp = true,
+  showApp = true, // * True until Dec. 14ish
   showMaps = false, // * False because HackSC 2021 is virtual :( big sad
-  showAPI = true,
-  showResults = true,
-  showTeam = true,
+  showAPI = false, // * False until event
+  showResults = false, // ^
+  showTeam = false, // * False until closer to event
   showLogout = true,
-  showProjectTeam = true,
+  showProjectTeam = false, // * False until closer to event
   activePage,
   admin,
   volunteer,
-  sponsor
+  sponsor,
 }: NavbarProps) => {
   return (
     <Wrapper>
       <NavbarContainer>
-        <a href={loggedIn ? "/live" : "/"}>
+        <a href={loggedIn && showLive ? "/live" : "/"}>
           <HeaderLogoImg src={HeaderLogo} />
         </a>
         <Links>

@@ -4,7 +4,7 @@ import { NextApiRequest } from "next";
 import {
   ListHookParams,
   useErrorHandler,
-  fetcherToSVRHandler
+  fetcherToSVRHandler,
 } from "./hook-utils";
 
 function getAllEventsFetch(req?: NextApiRequest) {
@@ -13,21 +13,21 @@ function getAllEventsFetch(req?: NextApiRequest) {
 
 function useEventsList({
   defaultOnError,
-  initialModels
+  initialModels,
 }: ListHookParams<Event>) {
   const resourceRoute = Routes.EventList;
   const { data: allEvents, error } = useSWR<Event[], any>(
     resourceRoute,
     fetcherToSVRHandler(getAllEventsFetch),
     {
-      initialData: initialModels
+      initialData: initialModels,
     }
   );
 
   useErrorHandler(defaultOnError, error);
 
   return {
-    allEvents
+    allEvents,
   };
 }
 

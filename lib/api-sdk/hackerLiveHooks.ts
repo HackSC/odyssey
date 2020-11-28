@@ -5,7 +5,7 @@ import {
   ListHookParams,
   useErrorHandler,
   ResourceHookParams,
-  SelfHookParams
+  SelfHookParams,
 } from "./hook-utils";
 import { fetcherToSVRHandler } from "./hook-utils";
 
@@ -50,34 +50,34 @@ function sumPersonsContributionPoints(contributions: Contribution[]) {
 
 function useBattlepass({
   defaultOnError,
-  initialModel
+  initialModel,
 }: ResourceHookParams<Battlepass>) {
   const resourceRoute = Routes.HackerLiveBattlepass;
   const { data: battlepass, error } = useSWR<Battlepass, any>(
     resourceRoute,
     fetcherToSVRHandler(battlepassFetch),
     {
-      initialData: initialModel
+      initialData: initialModel,
     }
   );
 
   useErrorHandler(defaultOnError, error);
 
   return {
-    battlepass
+    battlepass,
   };
 }
 
 function usePersonInfoSelf({
   defaultOnError,
-  initialModel
+  initialModel,
 }: SelfHookParams<Person>) {
   const resourceRoute = Routes.HackerLivePersonInfoSelf;
   const { data: personInfo, error } = useSWR<Person, any>(
     resourceRoute,
     fetcherToSVRHandler(personInfoFetchSelf),
     {
-      initialData: initialModel
+      initialData: initialModel,
     }
   );
 
@@ -90,7 +90,7 @@ function usePersonInfoSelf({
   }
 
   return {
-    personInfo
+    personInfo,
   };
 }
 
@@ -100,67 +100,67 @@ function useAllTasks({ defaultOnError, initialModels }: ListHookParams<Task>) {
     resourceRoute,
     fetcherToSVRHandler(allTasksFetch),
     {
-      initialData: initialModels
+      initialData: initialModels,
     }
   );
 
   useErrorHandler(defaultOnError, error);
 
   return {
-    allTasks
+    allTasks,
   };
 }
 
 function useIncompleteTasks({
   defaultOnError,
-  initialModels
+  initialModels,
 }: ListHookParams<Task>) {
   const resourceRoute = Routes.HackerLiveIncompleteTasks;
   const { data: incompleteTasks, error } = useSWR<Task[], any>(
     resourceRoute,
     fetcherToSVRHandler(allTasksFetch),
     {
-      initialData: initialModels
+      initialData: initialModels,
     }
   );
 
   useErrorHandler(defaultOnError, error);
 
   return {
-    incompleteTasks
+    incompleteTasks,
   };
 }
 
 function useHouseInfo({
   defaultOnError,
-  initialModel
+  initialModel,
 }: ResourceHookParams<House>) {
   const resourceRoute = Routes.HackerLiveHouseInfo;
   const { data: houseInfo, error } = useSWR<House, any>(
     resourceRoute,
     fetcherToSVRHandler(houseInfoFetch),
     {
-      initialData: initialModel
+      initialData: initialModel,
     }
   );
 
   useErrorHandler(defaultOnError, error);
 
   return {
-    houseInfo
+    houseInfo,
   };
 }
 
 function useAllHouseInfo({
   defaultOnError,
-  initialModels
+  initialModels,
 }: ListHookParams<House>) {
   const resourceRoute = Routes.HackerLiveHouseInfoList;
   const { data: allHouses, error } = useSWR<House[], any>(
     resourceRoute,
     fetcherToSVRHandler(allHouseInfoFetch),
     {
-      initialData: initialModels
+      initialData: initialModels,
     }
   );
 
@@ -184,7 +184,7 @@ function useAllHouseInfo({
   return {
     allHouses: allHouses
       ? allHouses.sort((a, b) => b.totalScore - a.totalScore)
-      : null
+      : null,
   };
 }
 
@@ -194,21 +194,21 @@ type RaffleCount = {
 
 function useRaffleCount({
   defaultOnError,
-  initialModel
+  initialModel,
 }: ResourceHookParams<RaffleCount>) {
   const resourceRoute = Routes.HackerLiveRaffleCount;
   const { data: raffleCount, error } = useSWR<RaffleCount, any>(
     resourceRoute,
     fetcherToSVRHandler(raffleCountFetch),
     {
-      initialData: initialModel
+      initialData: initialModel,
     }
   );
 
   useErrorHandler(defaultOnError, error);
 
   return {
-    raffleCount
+    raffleCount,
   };
 }
 
@@ -219,5 +219,5 @@ export {
   useHouseInfo,
   usePersonInfoSelf,
   useIncompleteTasks,
-  useRaffleCount
+  useRaffleCount,
 };
