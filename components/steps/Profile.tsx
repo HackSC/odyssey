@@ -46,6 +46,7 @@ const gradDateOptions = [
   { label: "Other", value: "other" },
 ];
 
+/** TODO: Add Not Listed / custom input option */
 const genderOptions = [
   { label: "Male", value: "male" },
   { label: "Female", value: "female" },
@@ -315,7 +316,7 @@ const ProfileStep: React.FunctionComponent<Props> = (props) => {
           <h2>Demographics</h2>
 
           <FormGroup>
-            <label>Gender</label>
+            <label>To which gender identity do you most identify?</label>
 
             <Select
               name="gender"
@@ -514,7 +515,7 @@ const ProfileStep: React.FunctionComponent<Props> = (props) => {
           </FormGroup>
 
           <FormGroup>
-            <label>Skill Level - How experienced are you as a hacker?</label>
+            <label>Skill Level - How experienced are you as a hacker? </label>
 
             <Select
               name="skill-level"
@@ -523,11 +524,15 @@ const ProfileStep: React.FunctionComponent<Props> = (props) => {
               disabled={submitted}
               required
             />
+            <InputSubText>
+              HackSC welcomes all skill levels! Answering this allows us to
+              tailor the event to you.
+            </InputSubText>
           </FormGroup>
 
           <FormGroup>
             <label>
-              Skills (Optional) - List out your skills (comma separated)
+              Skills (optional) - List out your skills (comma separated)
             </label>
 
             <textarea
@@ -538,10 +543,11 @@ const ProfileStep: React.FunctionComponent<Props> = (props) => {
               disabled={submitted}
             />
           </FormGroup>
-
+          {/* TODO: Will belong in Dashboard */}
+          {/* 
           <FormGroup>
             <label>
-              Interests (Optional) - List out technology related topics that
+              Interests (optional) - List out technology related topics that
               interest you (comma separated)
             </label>
 
@@ -552,11 +558,11 @@ const ProfileStep: React.FunctionComponent<Props> = (props) => {
               defaultValue={profile.interests}
               disabled={submitted}
             />
-          </FormGroup>
+          </FormGroup> */}
 
           <FormGroup>
             <label>
-              Links (Optional) - Feel free to share your portfolio, GitHub,
+              Links (optional) - Feel free to share your portfolio, GitHub,
               LinkedIn, and more
             </label>
 
@@ -580,31 +586,29 @@ const ProfileStep: React.FunctionComponent<Props> = (props) => {
 
           <FormGroup>
             <label>
-              HackSC has four verticals, all of which center around social
-              justice: civil liberties, sustainability, equity, and mental
-              health. If you'd like, you can read more about them at{" "}
+              Which vertical are you interested in and why? If you'd like, you
+              can read more about them at{" "}
               <a href="https://hacksc.com" target="_blank">
                 hacksc.com
               </a>
-              . If you were admitted to HackSC 2020, which vertical would you
-              tackle and what would you build? (This does not bind your project
-              to this vertical. 1000 characters)
+              . This does not bind your project to this vertical.
             </label>
 
             <textarea
-              rows={5}
+              rows={4}
               name="question-one"
               maxLength={1000}
               defaultValue={profile.questionOne}
               required
               disabled={submitted}
             />
+            <InputSubText>Character limit: 1000</InputSubText>
           </FormGroup>
 
           <FormGroup>
             <label>
-              Tell us about a project you have finished in the past. (1000
-              characters)
+              Tell us about a project (technical or non-technical) you have
+              worked on in the past.
             </label>
 
             <textarea
@@ -615,10 +619,11 @@ const ProfileStep: React.FunctionComponent<Props> = (props) => {
               required
               disabled={submitted}
             />
+            <InputSubText>Character limit: 1000</InputSubText>
           </FormGroup>
 
           <FormGroup>
-            <label>What is your favorite beverage? (100 characters)</label>
+            <label>What is your favorite beverage?</label>
 
             <input
               type="text"
@@ -628,6 +633,7 @@ const ProfileStep: React.FunctionComponent<Props> = (props) => {
               required
               disabled={submitted}
             />
+            <InputSubText>Character limit: 100</InputSubText>
           </FormGroup>
 
           <FormGroup>
@@ -749,6 +755,11 @@ const FormSection = styled.div`
   &:last-child {
     margin-bottom: 0;
   }
+`;
+
+const InputSubText = styled.p`
+  margin-top: 8px;
+  color: ${({ theme }) => theme.colors.gray50};
 `;
 
 const ResumeUploadInput = styled.input`
