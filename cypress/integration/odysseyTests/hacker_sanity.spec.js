@@ -1,3 +1,6 @@
+const { assert } = require("console");
+const hackathonConstants = require("../../../lib/hackathonConstants");
+
 Cypress.on("uncaught:exception", (err, runnable) => {
   // * Returning false here prevents Cypress from failing the test
   return false;
@@ -214,31 +217,51 @@ Cypress.Commands.add("goToLogout", (overrides = {}) => {
 
 describe("goDashboard", () => {
   it("should land on the dashboard", () => {
-    cy.goToDashboard();
+    if(hackathonConstants.showDash) {
+      cy.goToDashboard();
+    } else {
+      assert(true);
+    }
   });
 });
 
 describe("goApplication", () => {
   it("should navigate to application page", () => {
-    cy.goToApplication();
+    if(hackathonConstants.showApp) {
+      cy.goToApplication();
+    } else {
+      assert(true);
+    }
   });
 });
 
 describe("goResults", () => {
   it("should navigate to results page", () => {
-    cy.goToResults();
+    if(hackathonConstants.showResults) {
+      cy.goToResults();
+    } else {
+      assert(true);
+    }
   });
 });
 
 describe("goTeam", () => {
   it("should navigate to team page", () => {
-    cy.goToTeam();
+    if(hackathonConstants.showTeam) {
+      cy.goToTeam();
+    } else {
+      assert(true);
+    }
   });
 });
 
 describe("goApiDirectory", () => {
   it("should navigate to api-directory page", () => {
-    cy.goToApiDirectory();
+    if(hackathonConstants.showAPI) {
+      cy.goToApiDirectory();
+    } else {
+      assert(true);
+    }
   });
 });
 
