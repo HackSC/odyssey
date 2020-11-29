@@ -49,7 +49,7 @@ const Navbar: React.FunctionComponent<NavbarProps> = ({
   showResults = constants.showResults,
   showTeam = constants.showTeam,
   showLogout = true,
-  showProjectTeam = false,
+  showProjectTeam = constants.showProjectTeam,
   activePage,
   admin,
   volunteer,

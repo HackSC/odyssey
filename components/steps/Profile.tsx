@@ -451,7 +451,7 @@ const ProfileStep: React.FunctionComponent<Props> = (props) => {
                 disabled={submitted}
               />
               <RadioChoiceLabel htmlFor="is-over-18">
-                Yes, I will be 18+ by January 31, 2021
+                Yes, I will be 18+ by February 19, 2021
               </RadioChoiceLabel>
             </RadioChoice>
           </FormGroup>

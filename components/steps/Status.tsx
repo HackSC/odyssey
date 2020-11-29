@@ -156,7 +156,7 @@ const StatusStep: React.FunctionComponent<Props> = (props) => {
                 </StepButton>
               )}
             </Step>
-            <Step disabled={profileStage !== 4 && profileStage !== 3}>
+            <Step disabled={profileStage == 4}>
               <h3>
                 {profile.status === "accepted"
                   ? "3) Confirm Attendance"

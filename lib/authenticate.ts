@@ -142,7 +142,12 @@ export function handleDashboardRedirect(req) {
     redirectToPath(req, "/application");
   } else {
     // TODO: whats the state? Ideally /dash when it exists.
+    redirectToPath(req, "/application"); // * Put this here temporary so we avoid unforeseen issues
   }
+}
+
+export function handleApplicationRedirect(req) {
+  redirectToPath(req, "/application");
 }
 
 export function handleAdminRedirect(req) {

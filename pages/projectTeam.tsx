@@ -130,9 +130,7 @@ const ProjectTeam = (props: Props) => {
       <Head title="HackSC Odyssey - Team Setup" />
       <Navbar
         loggedIn
-        showApp={false}
-        showResults={false}
-        showTeam={false}
+        showProjectTeam={true}
         activePage="projectTeam"
       />
       <Background>
