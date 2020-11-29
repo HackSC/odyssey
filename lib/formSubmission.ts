@@ -23,9 +23,9 @@ function getProfileFromFormData(
       : false,
     skillLevel: formRef.current["skill-level"].value,
     skills: formRef.current["skills"].value,
-    interests:
-      (formRef.current["interests"] && formRef.current["interests"].value) ||
-      "",
+    interests: formRef.current["interests"]
+      ? formRef.current["interests"].value
+      : "",
     links: formRef.current["links"].value,
     questionOne: formRef.current["question-one"].value,
     questionTwo: formRef.current["question-two"].value,

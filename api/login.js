@@ -5,7 +5,6 @@ var url = require("url");
 var querystring = require("querystring");
 var utils = require("./utils");
 var router = express.Router();
-var constants = require("../lib/hackathonConstants");
 
 var secured = function (req, res, next) {
   if (req.user) {
@@ -54,12 +53,7 @@ router.get("/callback", function (req, res, next) {
       if (err) {
         return next(err);
       }
-
-      if (constants.showApp) {
-        res.redirect("/application");
-      } else {
-        res.redirect("/dashboard");
-      }
+      res.redirect("/dashboard");
     });
   })(req, res, next);
 });
