@@ -34,7 +34,6 @@ const getStatusLabel = (profile: Profile): string => {
 
 const getStage = (profile: Profile): number => {
   const { status, submittedAt } = profile;
-
   if (status === "unverified") {
     return 1;
   } else if (status === "verified") {
@@ -75,6 +74,7 @@ const StatusStep: React.FunctionComponent<Props> = (props) => {
 
   const statusLabel = getStatusLabel(profile);
   const isMobile = useIsMobile();
+  const profileStage = getStage(profile);
 
   return (
     <Flex direction="column">
@@ -136,27 +136,27 @@ const StatusStep: React.FunctionComponent<Props> = (props) => {
         <Column flexBasis={63}>
           <h2>Next Steps</h2>
           <Steps>
-            <Step disabled={getStage(profile) > 1}>
+            <Step disabled={profileStage !== 1}>
               <h3>1. Verify your e-mail</h3>
               <p>
                 Make sure to check your e-mail and verify your account. If you
                 run into issues, log-out and log back in.
               </p>
             </Step>
-            <Step disabled={getStage(profile) > 2}>
+            <Step disabled={profileStage !== 2}>
               <h3>2. Fill out an application</h3>
               <p>
                 Answer a few questions to show why you want to be at HackSC
                 2021!
               </p>
 
-              {getStage(profile) === 2 && (
+              {profileStage == 2 && (
                 <StepButton onClick={() => navigateTo("appform")}>
                   Fill out application
                 </StepButton>
               )}
             </Step>
-            <Step disabled={getStage(profile) === 4}>
+            <Step disabled={profileStage == 4}>
               <h3>
                 {profile.status === "accepted"
                   ? "3) Confirm Attendance"
@@ -167,7 +167,7 @@ const StatusStep: React.FunctionComponent<Props> = (props) => {
                   ? "Congrats, you have been accepted to HackSC 2021. Please confirm/decline your attendance by January 1st"
                   : "Come back soon and see your results."}
               </p>
-              {getStage(profile) === 3 && (
+              {profileStage === 3 && (
                 <StepButton onClick={() => navigateTo("results")}>
                   {profile.status === "accepted"
                     ? "Confirm Attendance"

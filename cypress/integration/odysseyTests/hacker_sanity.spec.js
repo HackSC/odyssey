@@ -1,3 +1,17 @@
+const { assert } = require("console");
+
+let hackathonConstants = {
+  showLive: false, // * False until event or soon before
+  showDash: false,
+  showApp: true, // * True until Dec. 14ish
+  showMaps: false, // * False because HackSC 2021 is virtual :( big sad
+  showAPI: false, // * False until event
+  showResults: true, 
+  showTeam: false, // * False until closer to event
+  showProjectTeam: false, // * False until closer to event
+}
+
+
 Cypress.on("uncaught:exception", (err, runnable) => {
   // * Returning false here prevents Cypress from failing the test
   return false;
@@ -214,31 +228,51 @@ Cypress.Commands.add("goToLogout", (overrides = {}) => {
 
 describe("goDashboard", () => {
   it("should land on the dashboard", () => {
-    cy.goToDashboard();
+    if(hackathonConstants.showDash) {
+      cy.goToDashboard();
+    } else {
+      assert(true);
+    }
   });
 });
 
 describe("goApplication", () => {
   it("should navigate to application page", () => {
-    cy.goToApplication();
+    if(hackathonConstants.showApp) {
+      cy.goToApplication();
+    } else {
+      assert(true);
+    }
   });
 });
 
 describe("goResults", () => {
   it("should navigate to results page", () => {
-    cy.goToResults();
+    if(hackathonConstants.showResults) {
+      cy.goToResults();
+    } else {
+      assert(true);
+    }
   });
 });
 
 describe("goTeam", () => {
   it("should navigate to team page", () => {
-    cy.goToTeam();
+    if(hackathonConstants.showTeam) {
+      cy.goToTeam();
+    } else {
+      assert(true);
+    }
   });
 });
 
 describe("goApiDirectory", () => {
   it("should navigate to api-directory page", () => {
-    cy.goToApiDirectory();
+    if(hackathonConstants.showAPI) {
+      cy.goToApiDirectory();
+    } else {
+      assert(true);
+    }
   });
 });
 

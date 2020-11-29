@@ -6,7 +6,7 @@ var querystring = require("querystring");
 var utils = require("./utils");
 var router = express.Router();
 
-var secured = function(req, res, next) {
+var secured = function (req, res, next) {
   if (req.user) {
     return next();
   }
@@ -14,16 +14,16 @@ var secured = function(req, res, next) {
   res.redirect("/");
 };
 
-router.get("/devlogin", utils.requireDevelopmentEnv, function(req, res) {
+router.get("/devlogin", utils.requireDevelopmentEnv, function (req, res) {
   req.logout();
   const { id, role } = req.query;
   const user = {
     id,
     role,
-    _json: { email: "", email_verified: true }
+    _json: { email: "", email_verified: true },
   };
 
-  req.logIn(user, function(err) {
+  req.logIn(user, function (err) {
     if (err) {
       res.status(400).send(err);
     }
@@ -34,22 +34,22 @@ router.get("/devlogin", utils.requireDevelopmentEnv, function(req, res) {
 router.get(
   "/login",
   passport.authenticate("auth0", {
-    scope: "openid email profile"
+    scope: "openid email profile",
   }),
-  function(req, res) {
+  function (req, res) {
     res.redirect("/");
   }
 );
 
-router.get("/callback", function(req, res, next) {
-  passport.authenticate("auth0", function(err, user, info) {
+router.get("/callback", function (req, res, next) {
+  passport.authenticate("auth0", function (err, user, info) {
     if (err) {
       return next(err);
     }
     if (!user) {
       return res.redirect("/");
     }
-    req.logIn(user, function(err) {
+    req.logIn(user, function (err) {
       if (err) {
         return next(err);
       }
@@ -75,18 +75,18 @@ router.get("/logout", (req, res) => {
   );
   var searchString = querystring.stringify({
     client_id: process.env.AUTH0_CLIENT_ID,
-    returnTo: returnTo
+    returnTo: returnTo,
   });
   logoutURL.search = searchString;
 
   res.redirect(logoutURL);
 });
 
-router.get("/needAuth", secured, function(req, res, next) {
+router.get("/needAuth", secured, function (req, res, next) {
   res.send("Hey, you're authenticated!");
 });
 
-router.get("/profile", secured, function(req, res, next) {
+router.get("/profile", secured, function (req, res, next) {
   if (!req.user) {
     res.json(403, { message: "No User is logged in" });
   } else {
