@@ -1,6 +1,18 @@
 # HackSC Odyssey
 
+[![CircleCI](https://circleci.com/gh/HackSC/odyssey.svg?style=svg&circle-token=c6bb6e1d905f809fd2e269a0b5088631fbbe4256)](https://status.hacksc.com)
+[![Better Uptime Badge](https://betteruptime.com/status-badges/v1/monitor/50yk.svg)](https://status.hacksc.com)
+[![codecov](https://codecov.io/gh/HackSC/odyssey/branch/main/graph/badge.svg)](https://codecov.io/gh/HackSC/odyssey)
+
 Odyssey is a hackathon management platform that handles hacker applications, admin functionalities, and more. Built by the HackSC team.
+
+### Main
+
+[![Main Build Status](https://img.shields.io/endpoint.svg?url=https%3A%2F%2Factions-badge.atrox.dev%2Fhacksc%2Fodyssey%2Fbadge%3Fref%3Dmain%26token%3Ddac24b76fbb2151adf59b38f61b84a2d542db2f2&style=flat)](https://actions-badge.atrox.dev/hacksc/odyssey/goto?ref=main&token=dac24b76fbb2151adf59b38f61b84a2d542db2f2)
+
+### Staging
+
+[![Staging Build Status](https://img.shields.io/endpoint.svg?url=https%3A%2F%2Factions-badge.atrox.dev%2Fhacksc%2Fodyssey%2Fbadge%3Fref%3Dstaging%26token%3Ddac24b76fbb2151adf59b38f61b84a2d542db2f2&style=flat)](https://actions-badge.atrox.dev/hacksc/odyssey/goto?ref=staging&token=dac24b76fbb2151adf59b38f61b84a2d542db2f2)
 
 ## Odyssey Setup
 
@@ -76,3 +88,52 @@ For business / engineering tasks that are infrequent we have Tasks. These are co
 Invoke this command to see available tasks
 
 - `npm run cli`
+
+## How To: Test Github Actions locally
+
+Must define environment variables used in github actions in the .github/workflows/ directory.
+
+Install [Act](https://github.com/nektos/act), a library to run github actions locally by running `brew install act` on mac or `https://github.com/nektos/act/releases/latest` for windows.
+
+Alternatively, it can be installed by running `curl https://raw.githubusercontent.com/nektos/act/master/install.sh | sudo bash`
+
+To mock a pull request, run `act pull_request --secret-file .env` where your environment variables are defined in `.env`
+
+## How To: Create an End To End (E2E) Test with Cypress
+
+Cypress is an automated e2e framework. For Odyssey, its implementation exists in the ./cypress/ directory.
+
+In package.json, we define script commands to run cypress. It can be run locally with `yarn cypress:open`
+
+This will open the cypress interactive editor, which may need to be installed on your computer.
+
+From there, we can run all the tests defined in `cypress/integration/odysseyTests/*`
+
+Implemented E2E tests:
+
+- `admin_sanity.spec.js`
+  - Tests to visit each admin page on the /admin dashboard for an admin profile
+- `hacker_sanity.spec.js`
+  - Tests to visit each pach in the navbar for a hacker profile
+
+Need to implement:
+
+- `volunteer_sanity.spec.js`
+- `sponsor_sanity.spec.js`
+- `judge_sanity.spec.js`
+
+## How To: Create Unit Tests with Jest
+
+Jest tests are located in the `tests/` directory - split up into `tests/api/` where the js tests are written and the `tests/factories/` directory to build the mock database.
+
+Jest tests should be extensive coverage of the database.
+
+Implemented
+
+- Auth
+- Person
+- Prize
+- Project Team
+
+TODO
+The rest of the database and `api/` directory

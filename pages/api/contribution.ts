@@ -15,8 +15,8 @@ router.get("/all", async (req, res) => {
 router.get("/owned", async (req, res) => {
   const contributions = await models.Contribution.findAll({
     where: {
-      personId: req.user.id
-    }
+      personId: req.user.id,
+    },
   });
   return res.json({ success: contributions });
 });
@@ -29,7 +29,7 @@ router.post("/create", async (req, res) => {
   } else {
     const result = await models.Contribution.build({
       personId: req.user.id,
-      taskId: input.taskId
+      taskId: input.taskId,
     }).save();
     return res.json({ success: result });
   }

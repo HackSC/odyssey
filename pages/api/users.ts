@@ -5,7 +5,7 @@ var url = require("url");
 var querystring = require("querystring");
 var router = express.Router();
 
-var secured = function(req, res, next) {
+var secured = function (req, res, next) {
   if (req.user) {
     return next();
   }

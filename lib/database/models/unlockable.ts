@@ -4,11 +4,11 @@ const unlockable = (sequelize, DataTypes) => {
     {
       tier: DataTypes.INTEGER,
       pointThreshold: DataTypes.INTEGER,
-      isPremium: DataTypes.BOOLEAN
+      isPremium: DataTypes.BOOLEAN,
     },
     {}
   );
-  Unlockable.associate = models => {};
+  Unlockable.associate = (models) => {};
   return Unlockable;
 };
 

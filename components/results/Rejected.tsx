@@ -8,13 +8,13 @@ const Rejected = () => {
   return (
     <Flex direction="column">
       <FormSection>
-        <h1>HackSC 2020 Results</h1>
+        <h1>HackSC 2021 Results</h1>
 
         <p>
-          Thank you for applying to HackSC 2020. This year, we received many
+          Thank you for applying to HackSC 2021. This year, we received many
           applicants from across the nation and had to make some tough calls.
           Unfortunately, we regret to inform you that we have not accepted you
-          to HackSC 2020. While we know this isn't the news you'd like to hear,
+          to HackSC 2021. While we know this isn't the news you'd like to hear,
           we wish you the best of luck going forward.
         </p>
 

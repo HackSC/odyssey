@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import {
   handleLoginRedirect,
   getProfile,
-  handleAdminRedirect
+  handleAdminRedirect,
 } from "../lib/authenticate";
 import { getReferrerCode } from "../lib/referrerCode";
 
@@ -28,12 +28,12 @@ const TestConsole = ({ profile }) => {
         <input
           placeholder="/api/..."
           type="text"
-          onChange={e => {
+          onChange={(e) => {
             setRouteUrl(e.target.value);
           }}
         />
         <select
-          onChange={e => {
+          onChange={(e) => {
             console.log(e.target.value);
             setReqType(e.target.value);
           }}
@@ -48,7 +48,7 @@ const TestConsole = ({ profile }) => {
         <p> request body (if it exists) </p>
         <textarea
           placeholder="{ message: 'hi' ...}"
-          onChange={e => {
+          onChange={(e) => {
             setBody(e.target.value);
           }}
         />
@@ -65,8 +65,8 @@ const TestConsole = ({ profile }) => {
                   method: reqType,
                   body: needsBody ? JSON.stringify(JSON.parse(body)) : null,
                   headers: {
-                    "Content-Type": "application/json"
-                  }
+                    "Content-Type": "application/json",
+                  },
                 });
                 const result = await response.json();
                 setResponse(JSON.stringify(result));
@@ -84,7 +84,7 @@ const TestConsole = ({ profile }) => {
   );
 };
 
-TestConsole.getInitialProps = async ctx => {
+TestConsole.getInitialProps = async (ctx) => {
   const { req } = ctx;
   if (process.env.NODE_ENV !== "development") {
     handleAdminRedirect(req);
@@ -97,7 +97,7 @@ TestConsole.getInitialProps = async ctx => {
   }
 
   return {
-    profile
+    profile,
   };
 };
 
