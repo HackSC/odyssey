@@ -21,7 +21,10 @@ import {
   handleAdminRedirect,
   handleVolunteerRedirect,
   handleSponsorRedirect,
+  handleDashboardRedirect,
+  handleApplicationRedirect,
 } from "../lib/authenticate";
+import hackathonConstants from "../lib/hackathonConstants";
 
 const Live = ({ profile, houses, socialPosts }) => {
   return (
@@ -55,6 +58,11 @@ Live.getInitialProps = async ({ req }) => {
     handleVolunteerRedirect(req);
   } else if (profile.role == "sponsor") {
     handleSponsorRedirect(req);
+  }
+
+  if (profile && !hackathonConstants.showLive) {
+    // Redirect user to dashboard if they are logged in
+    handleApplicationRedirect(req);
   }
 
   if (profile && profile.status == "checkedIn") {

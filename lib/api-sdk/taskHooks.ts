@@ -4,7 +4,7 @@ import { NextApiRequest } from "next";
 import {
   ListHookParams,
   useErrorHandler,
-  fetcherToSVRHandler
+  fetcherToSVRHandler,
 } from "./hook-utils";
 
 function isActiveTask(task: Task): task is ActiveTask {
@@ -21,7 +21,7 @@ function useTasksList({ defaultOnError, initialModels }: ListHookParams<Task>) {
     resourceRoute,
     fetcherToSVRHandler(getAllTasksFetch),
     {
-      initialData: initialModels
+      initialData: initialModels,
     }
   );
 
@@ -31,7 +31,7 @@ function useTasksList({ defaultOnError, initialModels }: ListHookParams<Task>) {
 
   return {
     activeTasks,
-    allTasks
+    allTasks,
   };
 }
 
