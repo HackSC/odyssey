@@ -1,5 +1,6 @@
 import Router from "next/router";
 import fetch from "isomorphic-unfetch";
+import constants from "./hackathonConstants";
 
 export async function getUser(req) {
   if (!req) {
@@ -135,7 +136,18 @@ export function handleLoginRedirect(req) {
 }
 
 export function handleDashboardRedirect(req) {
-  redirectToPath(req, "/live");
+  if (constants.showLive) {
+    redirectToPath(req, "/live");
+  } else if (constants.showApp) {
+    redirectToPath(req, "/application");
+  } else {
+    // TODO: whats the state? Ideally /dash when it exists.
+    redirectToPath(req, "/application"); // * Put this here temporary so we avoid unforeseen issues
+  }
+}
+
+export function handleApplicationRedirect(req) {
+  redirectToPath(req, "/application");
 }
 
 export function handleAdminRedirect(req) {
