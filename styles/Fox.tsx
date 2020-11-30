@@ -8,7 +8,7 @@ type Props = {
 const Fox: React.SFC<Props> = ({
   fill = "#E7862B",
   width = 100,
-  height = 100
+  height = 100,
 }) => {
   return (
     <svg width={width} height={height} viewBox={`0 0 200 200`}>
@@ -19,7 +19,7 @@ const Fox: React.SFC<Props> = ({
       </defs>
       <g
         style={{
-          isolation: "isolate"
+          isolation: "isolate",
         }}
       >
         <g id="prefix__Layer_2" data-name="Layer 2">
@@ -181,7 +181,7 @@ const Fox: React.SFC<Props> = ({
             <path d="M135.31 39.86c-8.18-4.64-18.25-8.27-27.2-3.39-1.69.92-.18 3.51 1.52 2.59 7.92-4.32 17-.68 24.17 3.39a1.5 1.5 0 001.51-2.59z" />
             <g
               style={{
-                mixBlendMode: "color-dodge"
+                mixBlendMode: "color-dodge",
               }}
             >
               <path

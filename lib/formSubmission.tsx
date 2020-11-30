@@ -18,7 +18,9 @@ function getProfileFromFormData(
     gender: formRef.current["gender"].value,
     ethnicity: formRef.current["ethnicity"].value,
     over18: formRef.current["is-over-18"].checked,
-    needBus: formRef.current["need-bus"].checked,
+    needBus: formRef.current["need-bus"]
+      ? formRef.current["need-bus"].checked
+      : false,
     skillLevel: formRef.current["skill-level"].value,
     skills: formRef.current["skills"].value,
     interests: formRef.current["interests"].value,
@@ -29,7 +31,7 @@ function getProfileFromFormData(
     codeOfConduct: formRef.current["code-of-conduct"].checked,
     authorize: formRef.current["authorize"].checked,
     marketing: formRef.current["marketing"].value,
-    submit: isSubmit
+    submit: isSubmit,
   };
 }
 
@@ -48,8 +50,8 @@ export async function syncProfile(
     method: "PUT",
     body: JSON.stringify(profile),
     headers: {
-      "Content-Type": "application/json"
-    }
+      "Content-Type": "application/json",
+    },
   });
 
   if (response.status === 200) {

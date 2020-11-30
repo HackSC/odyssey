@@ -1,6 +1,6 @@
 import styled from "styled-components";
 
-const Header = props => {
+const Header = (props) => {
   const { children } = props;
 
   const MyHeaderBox = styled.div`

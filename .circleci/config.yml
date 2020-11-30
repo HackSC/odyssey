@@ -15,7 +15,7 @@ jobs:
       # installs cypress deps onto container ( I think )
       - run: yarn install --frozen-lockfile
       - run:
-          name: "Runs end to end tests"
+          name: "Running end to end tests"
           command: "yarn run E2ETest"
       - store_artifacts:
           path: cypress/videos/odysseyTests

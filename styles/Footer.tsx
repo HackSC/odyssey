@@ -1,6 +1,6 @@
 import styled from "styled-components";
 
-const Footer = props => {
+const Footer = (props) => {
   const { children } = props;
 
   const MyFooterBox = styled.div`

@@ -4,7 +4,7 @@ import {
   getProfile,
   handleAdminRedirect,
   handleVolunteerRedirect,
-  handleSponsorRedirect
+  handleSponsorRedirect,
 } from "../lib/authenticate";
 
 import { generatePosts } from "../lib/referrerCode";
@@ -38,7 +38,7 @@ Dashboard.getInitialProps = async ({ req }) => {
   return {
     houses,
     profile,
-    socialPosts
+    socialPosts,
   };
 };
 
