@@ -87,7 +87,11 @@ const Live = ({ profile, houses, socialPosts }) => {
           <MarginedColumn style={{ overflowX: "scroll" }} flexBasis={100}>
             <BattlePass
               bp={battlepass}
-              userPoints={battlepass.reduce((a, b) => a + b.pointValue, 0)}
+              userPoints={
+                battlepass
+                  ? battlepass.reduce((a, b) => a + b.pointValue, 0)
+                  : 0
+              }
               projSubmitted={false}
             />
             <UnlockMessage>
