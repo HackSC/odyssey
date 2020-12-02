@@ -22,7 +22,7 @@ import {
   handleVolunteerRedirect,
   handleSponsorRedirect,
   handleDashboardRedirect,
-  handleApplicationRedirect
+  handleApplicationRedirect,
 } from "../lib/authenticate";
 import hackathonConstants from "../lib/hackathonConstants";
 
@@ -64,6 +64,11 @@ Live.getInitialProps = async ({ req }) => {
   // } else if (profile.role == "sponsor") {
   //   handleSponsorRedirect(req);
   // }
+
+  if (profile && !hackathonConstants.showLive) {
+    // Redirect user to dashboard if they are logged in
+    handleApplicationRedirect(req);
+  }
 
   if (profile && !hackathonConstants.showLive) {
     // Redirect user to dashboard if they are logged in

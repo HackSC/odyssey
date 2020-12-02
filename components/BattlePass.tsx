@@ -62,19 +62,13 @@ const bpItem: React.SFC<ItemProps> = ({
 
 const useBattlepassItems = (bp: Battlepass, userPoints: number) => {
   return useMemo(() => {
-    const premiumItems =
-      bp && bp.length > 0
-        ? bp.filter(item => {
-            return item.isPremium;
-          })
-        : [];
+    const premiumItems = bp && bp.length > 0 ? bp.filter(item => {
+      return item.isPremium;
+    }) : [];
 
-    const basicItems =
-      bp && bp.length > 0
-        ? bp.filter(item => {
-            return !item.isPremium;
-          })
-        : [];
+    const basicItems = bp && bp.length > 0 ? bp.filter(item => {
+      return !item.isPremium;
+    }): [];
 
     if (premiumItems && premiumItems.length > 0) {
       premiumItems.reduce(

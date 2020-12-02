@@ -43,7 +43,7 @@ export function fetchWithMutation<T extends (...args: any[]) => any>(
   resourceRoute
 ): (...funcArgs: Parameters<T>) => ReturnType<T> {
   return (...args: Parameters<T>): ReturnType<T> => {
-    return func(...args).then(res => {
+    return func(...args).then((res) => {
       if (res.success !== undefined) {
         mutate(resourceRoute, res.success, true);
       }

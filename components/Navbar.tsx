@@ -25,17 +25,17 @@ type NavbarProps = {
   sponsor?: boolean;
 };
 
-const style = background => {
+const style = (background) => {
   return {
     "&:hover": {
       backgroundColor: "#FF8379 !important",
-      color: "white !important"
+      color: "white !important",
     },
     padding: "10px",
     margin: "10px",
     color: background !== "white" ? "white" : "black",
     backgroundColor: background,
-    cursor: "pointer"
+    cursor: "pointer",
   };
 };
 
@@ -53,7 +53,7 @@ const Navbar: React.FunctionComponent<NavbarProps> = ({
   activePage,
   admin,
   volunteer,
-  sponsor
+  sponsor,
 }: NavbarProps) => {
   return (
     <Wrapper>
