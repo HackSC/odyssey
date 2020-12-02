@@ -102,6 +102,65 @@ Cypress.Commands.add("goToApplication", (overrides = {}) => {
     });
 });
 
+function uuid4() {
+  let array = new Uint8Array(16);
+  crypto.getRandomValues(array);
+
+  // manipulate 9th byte
+  array[8] &= 0b00111111; // clear first two bits
+  array[8] |= 0b10000000; // set first two bits to 10
+
+  // manipulate 7th byte
+  array[6] &= 0b00001111; // clear first four bits
+  array[6] |= 0b01000000; // set first four bits to 0100
+
+  const pattern = "XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX";
+  let idx = 0;
+
+  return pattern.replace(
+    /XX/g,
+    () => array[idx++].toString(16).padStart(2, "0") // padStart ensures leading zero, if needed
+  );
+}
+
+Cypress.Commands.add("signUp", (overrides = {}) => {
+  cy.login()
+    .then((resp) => {
+      return resp.body;
+    })
+    .then((body) => {
+      const { access_token, expires_in, id_token } = body;
+      const auth0State = {
+        nonce: "",
+        state: "some-random-state",
+      };
+      const mainPage = `http://localhost:3000/auth/login`;
+      cy.visit(mainPage, {
+        onBeforeLoad(win) {
+          win.document.cookie =
+            "com.auth0.auth.some-random-state=" + JSON.stringify(auth0State);
+        },
+      });
+      cy.location("pathname", { timeout: timeout }).should("include", "/login");
+      cy.findAllByText("Sign up").click();
+      cy.location("pathname", { timeout: timeout }).should(
+        "include",
+        "/signup"
+      );
+      cy.get("#email").type(uuid4() + Cypress.env("USER_TEST_USERNAME"));
+      cy.get(":input[type=password]").type(
+        Cypress.env("USER_TEST_PASSWORD").replace("{", "{{}")
+      );
+      cy.get("[name=action]").click();
+      cy.get("[name=action]").click();
+      cy.get("#application-page").click();
+      cy.location("pathname", { timeout: timeout }).should(
+        "include",
+        "/application"
+      );
+    });
+});
+
 Cypress.Commands.add("goToAdmin", (overrides = {}) => {
   cy.login()
     .then((resp) => {
@@ -311,6 +370,13 @@ describe("goApplication", () => {
     } else {
       assert(true);
     }
+  });
+});
+
+describe("signUp", () => {
+  it("should sign up user", () => {
+    // TODO: implement the signUp function
+    // * cy.signUp();
   });
 });
 
