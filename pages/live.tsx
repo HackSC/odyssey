@@ -120,16 +120,16 @@ Live.getInitialProps = async ({ req }) => {
   // Null profile means user is not logged in
   if (!profile) {
     handleLoginRedirect(req);
-  }
+  } else {
+    let is_super_user =
+      profile.role == "admin" ||
+      profile.role == "volunteer" ||
+      profile.role == "sponsor";
 
-  let is_super_user =
-    profile.role == "admin" ||
-    profile.role == "volunteer" ||
-    profile.role == "sponsor";
-
-  if (profile && !is_super_user && !hackathonConstants.showLive) {
-    // Redirect user to dashboard if they are logged in
-    handleApplicationRedirect(req);
+    if (profile && !is_super_user && !hackathonConstants.showLive) {
+      // Redirect user to dashboard if they are logged in
+      handleApplicationRedirect(req);
+    }
   }
 
   if (typeof window !== "undefined") {
