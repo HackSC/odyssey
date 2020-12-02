@@ -54,7 +54,7 @@ const Live = ({ profile, houses, socialPosts }) => {
       ) : (
         <Navbar
           loggedIn
-          showProjectTeam={profile.status === "checkedIn"}
+          showProjectTeam={profile ? profile.status === "checkedIn" : false}
           activePage="live"
         />
       )}
