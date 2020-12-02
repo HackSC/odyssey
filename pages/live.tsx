@@ -31,7 +31,7 @@ const Live = ({ profile, houses, socialPosts }) => {
     <>
       <Head title="HackSC Odyssey - Live Dashboard" />
       {profile.role == "admin" || profile.role == "volunteer" ? (
-        <Navbar loggedIn admin activePage="/hackerManager" />
+        <Navbar loggedIn admin activePage="live" />
       ) : (
         <Navbar
           loggedIn

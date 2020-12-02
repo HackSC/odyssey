@@ -144,7 +144,7 @@ const Navbar: React.FunctionComponent<NavbarProps> = ({
               {(admin || volunteer) && (
                 <Link
                   href="/admin"
-                  style={style(activePage === "admin" ? "#FF8379" : "white")}
+                  style={style(activePage === "/" ? "#FF8379" : "white")}
                 >
                   Admin Dashboard
                 </Link>
