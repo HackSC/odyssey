@@ -6,10 +6,10 @@ let hackathonConstants = {
   showApp: true, // * True until Dec. 14ish
   showMaps: false, // * False because HackSC 2021 is virtual :( big sad
   showAPI: false, // * False until event
-  showResults: true,
+  showResults: true, 
   showTeam: false, // * False until closer to event
-  showProjectTeam: false // * False until closer to event
-};
+  showProjectTeam: false, // * False until closer to event
+}
 
 Cypress.on("uncaught:exception", (err, runnable) => {
   // * Returning false here prevents Cypress from failing the test
@@ -227,7 +227,7 @@ Cypress.Commands.add("goToLogout", (overrides = {}) => {
 
 describe("goDashboard", () => {
   it("should land on the dashboard", () => {
-    if (hackathonConstants.showDash) {
+    if(hackathonConstants.showDash) {
       cy.goToDashboard();
     } else {
       assert(true);
@@ -237,7 +237,7 @@ describe("goDashboard", () => {
 
 describe("goApplication", () => {
   it("should navigate to application page", () => {
-    if (hackathonConstants.showApp) {
+    if(hackathonConstants.showApp) {
       cy.goToApplication();
     } else {
       assert(true);
@@ -247,7 +247,7 @@ describe("goApplication", () => {
 
 describe("goResults", () => {
   it("should navigate to results page", () => {
-    if (hackathonConstants.showResults) {
+    if(hackathonConstants.showResults) {
       cy.goToResults();
     } else {
       assert(true);
@@ -257,7 +257,7 @@ describe("goResults", () => {
 
 describe("goTeam", () => {
   it("should navigate to team page", () => {
-    if (hackathonConstants.showTeam) {
+    if(hackathonConstants.showTeam) {
       cy.goToTeam();
     } else {
       assert(true);
@@ -267,7 +267,7 @@ describe("goTeam", () => {
 
 describe("goApiDirectory", () => {
   it("should navigate to api-directory page", () => {
-    if (hackathonConstants.showAPI) {
+    if(hackathonConstants.showAPI) {
       cy.goToApiDirectory();
     } else {
       assert(true);
