@@ -5,7 +5,7 @@ import {
   handleAdminRedirect,
   handleVolunteerRedirect,
   handleSponsorRedirect,
-  handleDashboardRedirect,
+  handleDashboardRedirect
 } from "../lib/authenticate";
 
 import constants from "../lib/hackathonConstants";
@@ -45,7 +45,7 @@ Dashboard.getInitialProps = async ({ req }) => {
   return {
     houses,
     profile,
-    socialPosts,
+    socialPosts
   };
 };
 

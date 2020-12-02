@@ -52,7 +52,7 @@ const Sponsor = ({ profile }) => {
   );
 };
 
-Sponsor.getInitialProps = async (ctx) => {
+Sponsor.getInitialProps = async ctx => {
   const { req } = ctx;
 
   const profile = await getProfile(req);
@@ -67,7 +67,7 @@ Sponsor.getInitialProps = async (ctx) => {
   }
 
   return {
-    profile,
+    profile
   };
 };
 

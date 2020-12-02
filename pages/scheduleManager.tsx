@@ -16,7 +16,7 @@ import {
   TaskInfo,
   Description,
   EventTitle,
-  TitleBox,
+  TitleBox
 } from "../styles";
 
 import Step from "../components/steps/Results";
@@ -86,7 +86,7 @@ const EditableCell = ({ event }) => {
 const TaskManager = ({ profile, currentEvents }) => {
   const [newEvent, setNewEvent] = useState({});
 
-  const taskBlocks = currentEvents.events.map((event) => {
+  const taskBlocks = currentEvents.events.map(event => {
     return <EditableCell event={event} />;
   });
   return (
@@ -101,40 +101,40 @@ const TaskManager = ({ profile, currentEvents }) => {
               <input
                 type="text"
                 placeholder="name"
-                onChange={(e) => {
+                onChange={e => {
                   setNewEvent({
                     ...newEvent,
-                    name: e.target.value,
+                    name: e.target.value
                   });
                 }}
               />
               <input
                 type="text"
                 placeholder="description"
-                onChange={(e) => {
+                onChange={e => {
                   setNewEvent({
                     ...newEvent,
-                    description: e.target.value,
+                    description: e.target.value
                   });
                 }}
               />
               <input
                 type="datetime-local"
                 placeholder="startsAt"
-                onChange={(e) => {
+                onChange={e => {
                   setNewEvent({
                     ...newEvent,
-                    startsAt: e.target.value,
+                    startsAt: e.target.value
                   });
                 }}
               />
               <input
                 type="datetime-local"
                 placeholder="endsAt"
-                onChange={(e) => {
+                onChange={e => {
                   setNewEvent({
                     ...newEvent,
-                    endsAt: e.target.value,
+                    endsAt: e.target.value
                   });
                 }}
               />
@@ -166,13 +166,13 @@ TaskManager.getInitialProps = async ({ req }) => {
   const currentEvents = await getCurrentEvents(req);
 
   // Null profile means user is not logged in
-  if (!profile) {
+  if (!profile || profile.role !== "admin") {
     handleLoginRedirect(req);
   }
 
   return {
     profile,
-    currentEvents,
+    currentEvents
   };
 };
 
