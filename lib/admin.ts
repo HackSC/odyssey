@@ -4,7 +4,7 @@ export async function getProfiles(query) {
     : "api/admin/profiles?query=" + query;
 
   const response = await fetch(fetchUrl, {
-    method: "GET",
+    method: "GET"
   });
 
   const payload = await response.json();
@@ -22,9 +22,9 @@ export async function updateProfileRole(email, role) {
   const response = await fetch(fetchUrl, {
     method: "POST",
     headers: {
-      "Content-Type": "application/json",
+      "Content-Type": "application/json"
     },
-    body: JSON.stringify({ email: email, role: role }),
+    body: JSON.stringify({ email: email, role: role })
   });
 
   return response;
@@ -39,7 +39,7 @@ export async function getReviewHistory(req) {
     fetchUrl,
     req
       ? {
-          headers: req.headers,
+          headers: req.headers
         }
       : null
   );
@@ -57,7 +57,7 @@ export async function getTotalReviewHistory(req) {
     fetchUrl,
     req
       ? {
-          headers: req.headers,
+          headers: req.headers
         }
       : null
   );
@@ -75,7 +75,7 @@ export async function getHackerProfileForReview(req) {
     fetchUrl,
     req
       ? {
-          headers: req.headers,
+          headers: req.headers
         }
       : null
   );
@@ -95,9 +95,9 @@ export async function submitReview(review) {
   const response = await fetch(fetchUrl, {
     method: "POST",
     headers: {
-      "Content-Type": "application/json",
+      "Content-Type": "application/json"
     },
-    body: JSON.stringify(review),
+    body: JSON.stringify(review)
   });
   return response;
 }

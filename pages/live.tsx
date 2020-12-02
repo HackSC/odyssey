@@ -9,7 +9,7 @@ import {
   Footer,
   Countdown,
   LinkToSchedule,
-  LinksAndTasks,
+  LinksAndTasks
 } from "../components";
 
 import { Container } from "../styles";
@@ -22,7 +22,7 @@ import {
   handleVolunteerRedirect,
   handleSponsorRedirect,
   handleDashboardRedirect,
-  handleApplicationRedirect,
+  handleApplicationRedirect
 } from "../lib/authenticate";
 import hackathonConstants from "../lib/hackathonConstants";
 
@@ -30,11 +30,15 @@ const Live = ({ profile, houses, socialPosts }) => {
   return (
     <>
       <Head title="HackSC Odyssey - Live Dashboard" />
-      <Navbar
-        loggedIn
-        showProjectTeam={profile.status === "checkedIn"}
-        activePage="live"
-      />
+      {profile.role == "admin" || profile.role == "volunteer" ? (
+        <Navbar loggedIn admin activePage="live" />
+      ) : (
+        <Navbar
+          loggedIn
+          showProjectTeam={profile.status === "checkedIn"}
+          activePage="live"
+        />
+      )}
       <Container>
         <Countdown />
         {/* <LinkToSchedule /> */}
@@ -52,13 +56,14 @@ Live.getInitialProps = async ({ req }) => {
   // Null profile means user is not logged in
   if (!profile) {
     handleLoginRedirect(req);
-  } else if (profile.role == "admin") {
-    handleAdminRedirect(req);
-  } else if (profile.role == "volunteer") {
-    handleVolunteerRedirect(req);
-  } else if (profile.role == "sponsor") {
-    handleSponsorRedirect(req);
   }
+  // else if (profile.role == "admin") {
+  //   handleAdminRedirect(req);
+  // } else if (profile.role == "volunteer") {
+  //   handleVolunteerRedirect(req);
+  // } else if (profile.role == "sponsor") {
+  //   handleSponsorRedirect(req);
+  // }
 
   if (profile && !hackathonConstants.showLive) {
     // Redirect user to dashboard if they are logged in
@@ -71,7 +76,7 @@ Live.getInitialProps = async ({ req }) => {
   }
 
   if (typeof window !== "undefined") {
-    Sentry.configureScope(function (scope) {
+    Sentry.configureScope(function(scope) {
       scope.setExtra("profile", profile);
     });
   }
@@ -84,7 +89,7 @@ Live.getInitialProps = async ({ req }) => {
   return {
     houses,
     profile,
-    socialPosts,
+    socialPosts
   };
 };
 
