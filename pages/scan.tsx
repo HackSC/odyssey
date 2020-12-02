@@ -264,7 +264,14 @@ Scan.getInitialProps = async ctx => {
 
   // Null profile means user is not logged in, and this is only relevant for admins
   // TODO: Change profile.role == hacker to a more managable page permissions system
-  if (!profile || !(profile.role == "admin" || profile.role == "volunteer")) {
+  if (
+    !profile ||
+    !(
+      profile.role == "admin" ||
+      profile.role == "volunteer" ||
+      profile.role == "sponsor"
+    )
+  ) {
     handleLoginRedirect(req);
   }
 
