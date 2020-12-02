@@ -1,4 +1,5 @@
 // * Main Components
+export { default as AdminStats } from "./AdminStats";
 export { default as Application } from "./Application";
 export { default as AutocompleteInput } from "./AutocompleteInput";
 export { default as BattlePass } from "./BattlePass";

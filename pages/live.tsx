@@ -14,7 +14,7 @@ import {
   IncompleteTasks,
 } from "../components";
 
-import { Container, Flex, CenteredColumn, Column } from "../styles";
+import { Container, Flex, CenteredColumn, Column, Background } from "../styles";
 import { generatePosts } from "../lib/referrerCode";
 
 import {
@@ -43,6 +43,8 @@ const Live = ({ profile, houses, socialPosts }) => {
     defaultOnError: console.log,
   });
 
+  console.log(profile);
+
   // * Local Hooks
   const [alert, setAlert] = useState(false);
 
@@ -58,60 +60,63 @@ const Live = ({ profile, houses, socialPosts }) => {
           activePage="live"
         />
       )}
-      <Container>
-        <Countdown />
-        <PaddedFlex
-          style={!alert ? { paddingTop: "2em" } : {}}
-          justify="space-between"
-          tabletVertical
-        >
-          <Column flexBasis={40}>
-            <QRCode profile={profile} />
-          </Column>
+      <Background>
+        <Container>
+          <Countdown />
+          <PaddedFlex
+            style={!alert ? { paddingTop: "2em" } : {}}
+            justify="space-between"
+            tabletVertical
+          >
+            <Column flexBasis={40}>
+              <QRCode profile={profile} />
+            </Column>
 
-          <InstructionsColumn flexBasis={60}>
-            <CheckInTitle>
-              {profile && profile.firstName
-                ? `Hey there, ${profile.firstName}!`
-                : "Hey there!"}
-            </CheckInTitle>
+            <InstructionsColumn flexBasis={60}>
+              <CheckInTitle>
+                {profile && profile.firstName
+                  ? `Hey there, ${profile.firstName}!`
+                  : "Hey there!"}
+              </CheckInTitle>
 
-            <Flex justify="space-between" tabletVertical>
-              <CenteredColumn flexBasis={100}>
-                <HouseProgress houses={allHouses} />
-              </CenteredColumn>
-            </Flex>
-          </InstructionsColumn>
-        </PaddedFlex>
-        <PaddedFlex justify="space-between" tabletVertical>
-          <MarginedColumn style={{ overflowX: "scroll" }} flexBasis={100}>
-            <BattlePass
-              bp={battlepass}
-              userPoints={
-                battlepass
-                  ? battlepass.reduce((a, b) => a + b.pointValue, 0)
-                  : 0
-              }
-              projSubmitted={false}
-            />
-            <UnlockMessage>
-              Premium tier prizes are unlocked when a team submits their project
-            </UnlockMessage>
-          </MarginedColumn>
-        </PaddedFlex>
-        <PaddedFlex tabletVertical>
-          <Events events={allEvents} />
-        </PaddedFlex>
-        <PaddedFlex justify="space-between" tabletVertical>
-          <MarginedColumn flexBasis={35}>
-            <LinkScroll />
-          </MarginedColumn>
-          <MarginedColumn flexBasis={65}>
-            <CheckInTitle>All Tasks</CheckInTitle>
-            <IncompleteTasks incompleteTasks={allTasks} />
-          </MarginedColumn>
-        </PaddedFlex>
-      </Container>
+              <Flex justify="space-between" tabletVertical>
+                <CenteredColumn flexBasis={100}>
+                  <HouseProgress houses={allHouses} />
+                </CenteredColumn>
+              </Flex>
+            </InstructionsColumn>
+          </PaddedFlex>
+          <PaddedFlex justify="space-between" tabletVertical>
+            <MarginedColumn style={{ overflowX: "scroll" }} flexBasis={100}>
+              <BattlePass
+                bp={battlepass}
+                userPoints={
+                  battlepass
+                    ? battlepass.reduce((a, b) => a + b.pointValue, 0)
+                    : 0
+                }
+                projSubmitted={false}
+              />
+              <UnlockMessage>
+                Premium tier prizes are unlocked when a team submits their
+                project
+              </UnlockMessage>
+            </MarginedColumn>
+          </PaddedFlex>
+          <PaddedFlex tabletVertical>
+            <Events events={allEvents} />
+          </PaddedFlex>
+          <PaddedFlex justify="space-between" tabletVertical>
+            <MarginedColumn flexBasis={35}>
+              <LinkScroll />
+            </MarginedColumn>
+            <MarginedColumn flexBasis={65}>
+              <CheckInTitle>All Tasks</CheckInTitle>
+              <IncompleteTasks incompleteTasks={allTasks} />
+            </MarginedColumn>
+          </PaddedFlex>
+        </Container>
+      </Background>
       <Footer />
     </>
   );
