@@ -62,7 +62,7 @@ const Navbar: React.FunctionComponent<NavbarProps> = ({
         <Links>
           {loggedIn ? (
             <>
-              {!admin && !volunteer && !sponsor && showLive && (
+              {showLive && (
                 <Link
                   href="/live"
                   id="live-page"
@@ -139,10 +139,10 @@ const Navbar: React.FunctionComponent<NavbarProps> = ({
                   APIs
                 </Link>
               )}
-              {admin && activePage !== "/" && (
+              {(admin || volunteer) && (
                 <Link
                   href="/admin"
-                  style={style(activePage === "/" ? "#FF8379" : "white")}
+                  style={style(activePage === "admin" ? "#FF8379" : "white")}
                 >
                   Admin Dashboard
                 </Link>
