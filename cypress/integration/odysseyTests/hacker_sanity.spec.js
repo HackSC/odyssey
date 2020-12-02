@@ -6,10 +6,10 @@ let hackathonConstants = {
   showApp: true, // * True until Dec. 14ish
   showMaps: false, // * False because HackSC 2021 is virtual :( big sad
   showAPI: false, // * False until event
-  showResults: true, 
+  showResults: true,
   showTeam: false, // * False until closer to event
   showProjectTeam: false, // * False until closer to event
-}
+};
 
 Cypress.on("uncaught:exception", (err, runnable) => {
   // * Returning false here prevents Cypress from failing the test
@@ -20,7 +20,7 @@ const timeout = 50000;
 
 Cypress.Commands.add("login", (overrides = {}) => {
   Cypress.log({
-    name: "loginViaAuth0"
+    name: "loginViaAuth0",
   });
 
   const options = {
@@ -32,29 +32,29 @@ Cypress.Commands.add("login", (overrides = {}) => {
       password: Cypress.env("USER_TEST_PASSWORD"),
       scope: "openid profile email",
       client_id: Cypress.env("AUTH0_CLIENT_ID"),
-      client_secret: Cypress.env("AUTH0_CLIENT_SECRET")
-    }
+      client_secret: Cypress.env("AUTH0_CLIENT_SECRET"),
+    },
   };
   cy.request(options);
 });
 
 Cypress.Commands.add("goToDashboard", (overrides = {}) => {
   cy.login()
-    .then(resp => {
+    .then((resp) => {
       return resp.body;
     })
-    .then(body => {
+    .then((body) => {
       const { access_token, expires_in, id_token } = body;
       const auth0State = {
         nonce: "",
-        state: "some-random-state"
+        state: "some-random-state",
       };
       const mainPage = `http://localhost:3000/auth/login`;
       cy.visit(mainPage, {
         onBeforeLoad(win) {
           win.document.cookie =
             "com.auth0.auth.some-random-state=" + JSON.stringify(auth0State);
-        }
+        },
       });
       // * Retired Callback Logic Below
       // const callbackUrl = `http://localhost:3000/auth/callback?access_token=${access_token}&scope=openid&id_token=${id_token}&expires_in=${expires_in}&token_type=Bearer&state=${auth0State.state}`;
@@ -72,21 +72,21 @@ Cypress.Commands.add("goToDashboard", (overrides = {}) => {
 
 Cypress.Commands.add("goToApplication", (overrides = {}) => {
   cy.login()
-    .then(resp => {
+    .then((resp) => {
       return resp.body;
     })
-    .then(body => {
+    .then((body) => {
       const { access_token, expires_in, id_token } = body;
       const auth0State = {
         nonce: "",
-        state: "some-random-state"
+        state: "some-random-state",
       };
       const mainPage = `http://localhost:3000/auth/login`;
       cy.visit(mainPage, {
         onBeforeLoad(win) {
           win.document.cookie =
             "com.auth0.auth.some-random-state=" + JSON.stringify(auth0State);
-        }
+        },
       });
       cy.location("pathname", { timeout: timeout }).should("include", "/login");
       cy.get("#username").type(Cypress.env("USER_TEST_USERNAME"));
@@ -102,23 +102,92 @@ Cypress.Commands.add("goToApplication", (overrides = {}) => {
     });
 });
 
-Cypress.Commands.add("goToResults", (overrides = {}) => {
+Cypress.Commands.add("goToAdmin", (overrides = {}) => {
   cy.login()
-    .then(resp => {
+    .then((resp) => {
       return resp.body;
     })
-    .then(body => {
+    .then((body) => {
       const { access_token, expires_in, id_token } = body;
       const auth0State = {
         nonce: "",
-        state: "some-random-state"
+        state: "some-random-state",
       };
       const mainPage = `http://localhost:3000/auth/login`;
       cy.visit(mainPage, {
         onBeforeLoad(win) {
           win.document.cookie =
             "com.auth0.auth.some-random-state=" + JSON.stringify(auth0State);
-        }
+        },
+      });
+      cy.location("pathname", { timeout: timeout }).should("include", "/login");
+      cy.get("#username").type(Cypress.env("USER_TEST_USERNAME"));
+      cy.get(":input[type=password]").type(
+        Cypress.env("USER_TEST_PASSWORD").replace("{", "{{}")
+      );
+      cy.get("[name=action]").click();
+      cy.get("#application-page").click();
+      // * Hackers should get redirected back to the application page
+      cy.request({
+        url: "http://localhost:3000/admin",
+        followRedirect: false,
+      }).then((res) => {
+        console.log(res);
+        expect(res.redirectedToUrl).to.eq("http://localhost:3000/application");
+      });
+    });
+});
+
+Cypress.Commands.add("goToLive", (overrides = {}) => {
+  cy.login()
+    .then((resp) => {
+      return resp.body;
+    })
+    .then((body) => {
+      const { access_token, expires_in, id_token } = body;
+      const auth0State = {
+        nonce: "",
+        state: "some-random-state",
+      };
+      const mainPage = `http://localhost:3000/auth/login`;
+      cy.visit(mainPage, {
+        onBeforeLoad(win) {
+          win.document.cookie =
+            "com.auth0.auth.some-random-state=" + JSON.stringify(auth0State);
+        },
+      });
+      cy.location("pathname", { timeout: timeout }).should("include", "/login");
+      cy.get("#username").type(Cypress.env("USER_TEST_USERNAME"));
+      cy.get(":input[type=password]").type(
+        Cypress.env("USER_TEST_PASSWORD").replace("{", "{{}")
+      );
+      cy.get("[name=action]").click();
+      // * Hackers should get redirected back to the application page
+      cy.visit("http://localhost:3000/live");
+      cy.location("pathname", { timeout: timeout }).should(
+        "include",
+        "/application"
+      );
+    });
+});
+
+Cypress.Commands.add("goToResults", (overrides = {}) => {
+  cy.login()
+    .then((resp) => {
+      return resp.body;
+    })
+    .then((body) => {
+      const { access_token, expires_in, id_token } = body;
+      const auth0State = {
+        nonce: "",
+        state: "some-random-state",
+      };
+      const mainPage = `http://localhost:3000/auth/login`;
+      cy.visit(mainPage, {
+        onBeforeLoad(win) {
+          win.document.cookie =
+            "com.auth0.auth.some-random-state=" + JSON.stringify(auth0State);
+        },
       });
       cy.location("pathname", { timeout: timeout }).should("include", "/login");
       cy.get("#username").type(Cypress.env("USER_TEST_USERNAME"));
@@ -137,21 +206,21 @@ Cypress.Commands.add("goToResults", (overrides = {}) => {
 
 Cypress.Commands.add("goToTeam", (overrides = {}) => {
   cy.login()
-    .then(resp => {
+    .then((resp) => {
       return resp.body;
     })
-    .then(body => {
+    .then((body) => {
       const { access_token, expires_in, id_token } = body;
       const auth0State = {
         nonce: "",
-        state: "some-random-state"
+        state: "some-random-state",
       };
       const mainPage = `http://localhost:3000/auth/login`;
       cy.visit(mainPage, {
         onBeforeLoad(win) {
           win.document.cookie =
             "com.auth0.auth.some-random-state=" + JSON.stringify(auth0State);
-        }
+        },
       });
       cy.location("pathname", { timeout: timeout }).should("include", "/login");
       cy.get("#username").type(Cypress.env("USER_TEST_USERNAME"));
@@ -166,21 +235,21 @@ Cypress.Commands.add("goToTeam", (overrides = {}) => {
 
 Cypress.Commands.add("goToApiDirectory", (overrides = {}) => {
   cy.login()
-    .then(resp => {
+    .then((resp) => {
       return resp.body;
     })
-    .then(body => {
+    .then((body) => {
       const { access_token, expires_in, id_token } = body;
       const auth0State = {
         nonce: "",
-        state: "some-random-state"
+        state: "some-random-state",
       };
       const mainPage = `http://localhost:3000/auth/login`;
       cy.visit(mainPage, {
         onBeforeLoad(win) {
           win.document.cookie =
             "com.auth0.auth.some-random-state=" + JSON.stringify(auth0State);
-        }
+        },
       });
       cy.location("pathname", { timeout: timeout }).should("include", "/login");
       cy.get("#username").type(Cypress.env("USER_TEST_USERNAME"));
@@ -198,21 +267,21 @@ Cypress.Commands.add("goToApiDirectory", (overrides = {}) => {
 
 Cypress.Commands.add("goToLogout", (overrides = {}) => {
   cy.login()
-    .then(resp => {
+    .then((resp) => {
       return resp.body;
     })
-    .then(body => {
+    .then((body) => {
       const { access_token, expires_in, id_token } = body;
       const auth0State = {
         nonce: "",
-        state: "some-random-state"
+        state: "some-random-state",
       };
       const mainPage = `http://localhost:3000/auth/login`;
       cy.visit(mainPage, {
         onBeforeLoad(win) {
           win.document.cookie =
             "com.auth0.auth.some-random-state=" + JSON.stringify(auth0State);
-        }
+        },
       });
       cy.location("pathname", { timeout: timeout }).should("include", "/login");
       cy.get("#username").type(Cypress.env("USER_TEST_USERNAME"));
@@ -227,7 +296,7 @@ Cypress.Commands.add("goToLogout", (overrides = {}) => {
 
 describe("goDashboard", () => {
   it("should land on the dashboard", () => {
-    if(hackathonConstants.showDash) {
+    if (hackathonConstants.showDash) {
       cy.goToDashboard();
     } else {
       assert(true);
@@ -237,7 +306,7 @@ describe("goDashboard", () => {
 
 describe("goApplication", () => {
   it("should navigate to application page", () => {
-    if(hackathonConstants.showApp) {
+    if (hackathonConstants.showApp) {
       cy.goToApplication();
     } else {
       assert(true);
@@ -245,9 +314,30 @@ describe("goApplication", () => {
   });
 });
 
+// TODO: These are complex tests that dont really work because cypress cannot visit two unique urls in one test :/
+// describe("goAdmin", () => {
+//   it("should redirect from admin page to application page", () => {
+//     if(hackathonConstants.showApp) {
+//       cy.goToAdmin();
+//     } else {
+//       assert(true);
+//     }
+//   });
+// });
+
+// describe("goLive", () => {
+//   it("should navigate to application page", () => {
+//     if(hackathonConstants.showApp) {
+//       cy.goToLive();
+//     } else {
+//       assert(true);
+//     }
+//   });
+// });
+
 describe("goResults", () => {
   it("should navigate to results page", () => {
-    if(hackathonConstants.showResults) {
+    if (hackathonConstants.showResults) {
       cy.goToResults();
     } else {
       assert(true);
@@ -257,7 +347,7 @@ describe("goResults", () => {
 
 describe("goTeam", () => {
   it("should navigate to team page", () => {
-    if(hackathonConstants.showTeam) {
+    if (hackathonConstants.showTeam) {
       cy.goToTeam();
     } else {
       assert(true);
@@ -267,7 +357,7 @@ describe("goTeam", () => {
 
 describe("goApiDirectory", () => {
   it("should navigate to api-directory page", () => {
-    if(hackathonConstants.showAPI) {
+    if (hackathonConstants.showAPI) {
       cy.goToApiDirectory();
     } else {
       assert(true);
