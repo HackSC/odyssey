@@ -66,3 +66,5 @@ typings/
 
 # cypress config
 cypress.env.json
+cypress/videos/*
+cypress/screenshots/*

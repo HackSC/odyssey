@@ -1,3 +1,16 @@
+const { assert } = require("console");
+
+let hackathonConstants = {
+  showLive: false, // * False until event or soon before
+  showDash: false,
+  showApp: true, // * True until Dec. 14ish
+  showMaps: false, // * False because HackSC 2021 is virtual :( big sad
+  showAPI: false, // * False until event
+  showResults: true,
+  showTeam: false, // * False until closer to event
+  showProjectTeam: false // * False until closer to event
+};
+
 Cypress.on("uncaught:exception", (err, runnable) => {
   // * Returning false here prevents Cypress from failing the test
   return false;
@@ -15,8 +28,8 @@ Cypress.Commands.add("login", (overrides = {}) => {
     url: "https://odyssey-hacksc.auth0.com/oauth/token",
     body: {
       grant_type: "password",
-      username: Cypress.env("TEST_USERNAME"),
-      password: Cypress.env("TEST_PASSWORD"),
+      username: Cypress.env("USER_TEST_USERNAME"),
+      password: Cypress.env("USER_TEST_PASSWORD"),
       scope: "openid profile email",
       client_id: Cypress.env("AUTH0_CLIENT_ID"),
       client_secret: Cypress.env("AUTH0_CLIENT_SECRET")
@@ -51,8 +64,8 @@ Cypress.Commands.add("goToDashboard", (overrides = {}) => {
       //       "com.auth0.auth.some-random-state=" + JSON.stringify(auth0State);
       //   }
       // });
-      // cy.get("#username").type(Cypress.env("TEST_USERNAME"));
-      // cy.get(":input[type=password]").type(Cypress.env("TEST_PASSWORD"));
+      // cy.get("#username").type(Cypress.env("USER_TEST_USERNAME"));
+      // cy.get(":input[type=password]").type(Cypress.env("USER_TEST_PASSWORD"));
       // cy.get("[name=action]").click();
     });
 });
@@ -76,9 +89,9 @@ Cypress.Commands.add("goToApplication", (overrides = {}) => {
         }
       });
       cy.location("pathname", { timeout: timeout }).should("include", "/login");
-      cy.get("#username").type(Cypress.env("TEST_USERNAME"));
+      cy.get("#username").type(Cypress.env("USER_TEST_USERNAME"));
       cy.get(":input[type=password]").type(
-        Cypress.env("TEST_PASSWORD").replace("{", "{{}")
+        Cypress.env("USER_TEST_PASSWORD").replace("{", "{{}")
       );
       cy.get("[name=action]").click();
       cy.get("#application-page").click();
@@ -108,9 +121,9 @@ Cypress.Commands.add("goToResults", (overrides = {}) => {
         }
       });
       cy.location("pathname", { timeout: timeout }).should("include", "/login");
-      cy.get("#username").type(Cypress.env("TEST_USERNAME"));
+      cy.get("#username").type(Cypress.env("USER_TEST_USERNAME"));
       cy.get(":input[type=password]").type(
-        Cypress.env("TEST_PASSWORD").replace("{", "{{}")
+        Cypress.env("USER_TEST_PASSWORD").replace("{", "{{}")
       );
       cy.get("[name=action]").click();
       cy.get("#results-page").click();
@@ -141,9 +154,9 @@ Cypress.Commands.add("goToTeam", (overrides = {}) => {
         }
       });
       cy.location("pathname", { timeout: timeout }).should("include", "/login");
-      cy.get("#username").type(Cypress.env("TEST_USERNAME"));
+      cy.get("#username").type(Cypress.env("USER_TEST_USERNAME"));
       cy.get(":input[type=password]").type(
-        Cypress.env("TEST_PASSWORD").replace("{", "{{}")
+        Cypress.env("USER_TEST_PASSWORD").replace("{", "{{}")
       );
       cy.get("[name=action]").click();
       cy.get("#team-page").click();
@@ -170,9 +183,9 @@ Cypress.Commands.add("goToApiDirectory", (overrides = {}) => {
         }
       });
       cy.location("pathname", { timeout: timeout }).should("include", "/login");
-      cy.get("#username").type(Cypress.env("TEST_USERNAME"));
+      cy.get("#username").type(Cypress.env("USER_TEST_USERNAME"));
       cy.get(":input[type=password]").type(
-        Cypress.env("TEST_PASSWORD").replace("{", "{{}")
+        Cypress.env("USER_TEST_PASSWORD").replace("{", "{{}")
       );
       cy.get("[name=action]").click();
       cy.get("#api-directory-page").click();
@@ -202,9 +215,9 @@ Cypress.Commands.add("goToLogout", (overrides = {}) => {
         }
       });
       cy.location("pathname", { timeout: timeout }).should("include", "/login");
-      cy.get("#username").type(Cypress.env("TEST_USERNAME"));
+      cy.get("#username").type(Cypress.env("USER_TEST_USERNAME"));
       cy.get(":input[type=password]").type(
-        Cypress.env("TEST_PASSWORD").replace("{", "{{}")
+        Cypress.env("USER_TEST_PASSWORD").replace("{", "{{}")
       );
       cy.get("[name=action]").click();
       cy.get("#auth-logout-page").click();
@@ -214,31 +227,51 @@ Cypress.Commands.add("goToLogout", (overrides = {}) => {
 
 describe("goDashboard", () => {
   it("should land on the dashboard", () => {
-    cy.goToDashboard();
+    if (hackathonConstants.showDash) {
+      cy.goToDashboard();
+    } else {
+      assert(true);
+    }
   });
 });
 
 describe("goApplication", () => {
   it("should navigate to application page", () => {
-    cy.goToApplication();
+    if (hackathonConstants.showApp) {
+      cy.goToApplication();
+    } else {
+      assert(true);
+    }
   });
 });
 
 describe("goResults", () => {
   it("should navigate to results page", () => {
-    cy.goToResults();
+    if (hackathonConstants.showResults) {
+      cy.goToResults();
+    } else {
+      assert(true);
+    }
   });
 });
 
 describe("goTeam", () => {
   it("should navigate to team page", () => {
-    cy.goToTeam();
+    if (hackathonConstants.showTeam) {
+      cy.goToTeam();
+    } else {
+      assert(true);
+    }
   });
 });
 
 describe("goApiDirectory", () => {
   it("should navigate to api-directory page", () => {
-    cy.goToApiDirectory();
+    if (hackathonConstants.showAPI) {
+      cy.goToApiDirectory();
+    } else {
+      assert(true);
+    }
   });
 });
 

@@ -22,7 +22,7 @@ function persistLinkReferrerCode(ctx, paramValues: QueryParamValues) {
 
   if (referrerCode) {
     setCookiesBaseDomain(ctx, REF_CODE_KEY, referrerCode, {
-      maxAge: 60 * 60 * 24,
+      maxAge: 60 * 60 * 24
     });
     // Attempt to write it up to the server
     submitReferrerCode(referrerCode);
@@ -39,8 +39,8 @@ export async function submitReferrerCode(referrerCode: string) {
     method: "PUT",
     body: JSON.stringify({ referrerCode }),
     headers: {
-      "Content-Type": "application/json",
-    },
+      "Content-Type": "application/json"
+    }
   });
 }
 
@@ -52,7 +52,7 @@ function generateFacebookPost(hackerProfile: Profile) {
   const url = generateReferralLink(hackerProfile);
   return {
     url,
-    quote: "I'm applying to HackSC! Come Join me!",
+    quote: "I'm applying to HackSC! Come Join me!"
   };
 }
 
@@ -62,7 +62,7 @@ function generateTwitterPost(hackerProfile: Profile) {
   return {
     url,
     title: "HackSC",
-    hashtags: ["HackSC", "Hackathons", "USC"],
+    hashtags: ["HackSC", "Hackathons", "USC"]
   };
 }
 
@@ -72,7 +72,7 @@ function generateEmailPost(hackerProfile: Profile) {
   return {
     url,
     subject: "Apply to HackSC with me!",
-    body: "Got you a referral code, apply rn.",
+    body: "Got you a referral code, apply rn."
   };
 }
 
@@ -81,7 +81,7 @@ function generatePosts(hackerProfile: Profile) {
     twitter: generateTwitterPost(hackerProfile),
     facebook: generateFacebookPost(hackerProfile),
     email: generateEmailPost(hackerProfile),
-    link: generateReferralLink(hackerProfile),
+    link: generateReferralLink(hackerProfile)
   };
 }
 

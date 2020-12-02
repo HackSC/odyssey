@@ -1,5 +1,6 @@
 import Router from "next/router";
 import fetch from "isomorphic-unfetch";
+import constants from "./hackathonConstants";
 
 export async function getUser(req) {
   if (!req) {
@@ -27,7 +28,7 @@ export async function getProfileList(req): Promise<Array<Profile>> {
     url_route,
     req
       ? {
-          headers: req.headers,
+          headers: req.headers
         }
       : null
   );
@@ -49,7 +50,7 @@ export async function getAPIS(req): Promise<API> {
     url_route,
     req
       ? {
-          headers: req.headers,
+          headers: req.headers
         }
       : null
   );
@@ -71,7 +72,7 @@ export async function getMajorEvents(req): Promise<MajorEvents> {
     url_route,
     req
       ? {
-          headers: req.headers,
+          headers: req.headers
         }
       : null
   );
@@ -96,7 +97,7 @@ export async function getProfile(req): Promise<Profile> {
     url_route,
     req
       ? {
-          headers: req.headers,
+          headers: req.headers
         }
       : null
   );
@@ -121,7 +122,7 @@ function redirectToPath(req, path: string) {
   if (req) {
     // Server side 302
     req.res.writeHead(302, {
-      Location: path,
+      Location: path
     });
     req.res.end();
   } else {
@@ -135,7 +136,18 @@ export function handleLoginRedirect(req) {
 }
 
 export function handleDashboardRedirect(req) {
-  redirectToPath(req, "/live");
+  if (constants.showLive) {
+    redirectToPath(req, "/live");
+  } else if (constants.showApp) {
+    redirectToPath(req, "/application");
+  } else {
+    // TODO: whats the state? Ideally /dash when it exists.
+    redirectToPath(req, "/application"); // * Put this here temporary so we avoid unforeseen issues
+  }
+}
+
+export function handleApplicationRedirect(req) {
+  redirectToPath(req, "/application");
 }
 
 export function handleAdminRedirect(req) {

@@ -6,6 +6,8 @@ import HeaderLogo from "../assets/header_logo_21_transparent.png";
 
 import { Container, Link } from "../styles";
 
+import constants from "../lib/hackathonConstants";
+
 type NavbarProps = {
   loggedIn?: boolean;
   showLive?: boolean;
@@ -39,15 +41,15 @@ const style = background => {
 
 const Navbar: React.FunctionComponent<NavbarProps> = ({
   loggedIn,
-  showLive = true,
-  showDash = true,
-  showApp = true,
-  showMaps = false, // * False because HackSC 2021 is virtual :( big sad
-  showAPI = true,
-  showResults = true,
-  showTeam = true,
+  showLive = constants.showLive,
+  showDash = constants.showDash,
+  showApp = constants.showApp,
+  showMaps = constants.showMaps,
+  showAPI = constants.showAPI,
+  showResults = constants.showResults,
+  showTeam = constants.showTeam,
   showLogout = true,
-  showProjectTeam = true,
+  showProjectTeam = constants.showProjectTeam,
   activePage,
   admin,
   volunteer,
@@ -56,7 +58,7 @@ const Navbar: React.FunctionComponent<NavbarProps> = ({
   return (
     <Wrapper>
       <NavbarContainer>
-        <a href={loggedIn ? "/live" : "/"}>
+        <a href={loggedIn && showLive ? "/live" : "/"}>
           <HeaderLogoImg src={HeaderLogo} />
         </a>
         <Links>

@@ -7,7 +7,7 @@ import {
   getHackerProfileForReview,
   submitReview,
   getReviewHistory,
-  getTotalReviewHistory,
+  getTotalReviewHistory
 } from "../lib/admin";
 import Head from "../components/Head";
 import Navbar from "../components/Navbar";
@@ -31,7 +31,7 @@ const AppReview = ({ hackerProfile, reviewHistory, totalReviews }) => {
   const [submitting, setSubmitting] = useState(false);
   const [loadingNewProfile, setLoadingNewProfile] = useState(false);
 
-  const { width, height } = useWindowSize();
+  const { width, height } = useWindowSize(3000, 3000);
 
   const [s1, setS1] = useState("");
   const [s2, setS2] = useState("");
@@ -40,7 +40,7 @@ const AppReview = ({ hackerProfile, reviewHistory, totalReviews }) => {
   const scoreInputs = [useRef(null), useRef(null), useRef(null)];
 
   const switchInputsOnKeyDown = useCallback(
-    (e) => {
+    e => {
       const { key } = e;
 
       if (key === "Enter") {
@@ -64,7 +64,7 @@ const AppReview = ({ hackerProfile, reviewHistory, totalReviews }) => {
       window.scrollTo({
         left: 0,
         top: scoreInputs[i].current.offsetTop - 50,
-        behavior: "smooth",
+        behavior: "smooth"
       });
 
       e.preventDefault();
@@ -112,7 +112,7 @@ const AppReview = ({ hackerProfile, reviewHistory, totalReviews }) => {
         userId: currentProfile.userId,
         scoreOne: s1,
         scoreTwo: s2,
-        scoreThree: s3,
+        scoreThree: s3
       };
 
       setSubmitting(true);
@@ -161,7 +161,12 @@ const AppReview = ({ hackerProfile, reviewHistory, totalReviews }) => {
         <Container>
           {totalReviewHistory <= 0 ? (
             <InfoPanel>
-              <Confetti recycle={false} width={width} height={height} />
+              <Confetti
+                recycle={false}
+                numberOfPieces={500}
+                width={width}
+                height={height}
+              />
               <h2 style={{ textAlign: "center", padding: "0" }}>
                 Thank you for your reviews! Enjoy the confetti!
               </h2>
@@ -245,7 +250,7 @@ const AppReview = ({ hackerProfile, reviewHistory, totalReviews }) => {
                   <Column flexGrow={1}>
                     <Input
                       type="number"
-                      onChange={(e) => {
+                      onChange={e => {
                         setS1(e.target.value);
                       }}
                       value={s1}
@@ -266,7 +271,7 @@ const AppReview = ({ hackerProfile, reviewHistory, totalReviews }) => {
                   <Column flexGrow={1}>
                     <Input
                       type="number"
-                      onChange={(e) => {
+                      onChange={e => {
                         setS2(e.target.value);
                       }}
                       value={s2}
@@ -287,10 +292,10 @@ const AppReview = ({ hackerProfile, reviewHistory, totalReviews }) => {
                   <Column flexGrow={1}>
                     <Input
                       type="number"
-                      onChange={(e) => {
+                      onChange={e => {
                         setS3(e.target.value);
                       }}
-                      onKeyUp={(e) => {
+                      onKeyUp={e => {
                         if (e.key === "e") {
                           e.preventDefault();
                         }
@@ -318,7 +323,7 @@ const AppReview = ({ hackerProfile, reviewHistory, totalReviews }) => {
   );
 };
 
-AppReview.getInitialProps = async (ctx) => {
+AppReview.getInitialProps = async ctx => {
   const { req } = ctx;
 
   const profile = await getProfile(req);
@@ -333,7 +338,7 @@ AppReview.getInitialProps = async (ctx) => {
   return {
     hackerProfile: profileReview,
     reviewHistory,
-    totalReviews,
+    totalReviews
   };
 };
 
