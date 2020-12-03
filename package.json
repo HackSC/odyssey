@@ -29,6 +29,7 @@
     "@sendgrid/client": "^6.4.0",
     "@sentry/browser": "^5.7.1",
     "@sentry/node": "^5.7.1",
+    "@slack/bolt": "^2.5.0",
     "@types/react-dom": "^16.9.8",
     "@types/styled-components": "^5.1.2",
     "@types/supertest": "^2.0.9",
@@ -129,7 +130,7 @@
   },
   "husky": {
     "hooks": {
-      "pre-commit": "pretty-quick --staged && yarn jest --detectOpenHandles --forceExit && export $(cat .env | xargs) && yarn coverage -t $CODECOV_TOKEN && lint-staged"
+      "pre-commit": "pretty-quick --staged && yarn jest --detectOpenHandles --forceExit && lint-staged"
     }
   },
   "lint-staged": {
