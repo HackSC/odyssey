@@ -17,8 +17,8 @@ const handle = app.getRequestHandler();
 dotenv.config();
 
 // Cron Jobs
+scheduleCronJobs();
 if (!dev) {
-  scheduleCronJobs();
 }
 
 Sentry.init({

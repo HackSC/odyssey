@@ -6,7 +6,10 @@ const CreateSlackApp = async () => {
   // * Slackbot Event-based Cron Job
   if (!process.env.SLACK_BOT_TOKEN || !process.env.SIGNING_SECRET) {
     console.error("!!!Missing SLACK BOT TOKENS!!!");
-  } else if (process.env.URL_BASE && process.env.URL_BASE.includes("staging")) {
+  } else if (
+    process.env.URL_BASE &&
+    process.env.URL_BASE.includes("localhost")
+  ) {
     SlackApp = new App({
       token: process.env.SLACK_BOT_TOKEN,
       signingSecret: process.env.SIGNING_SECRET,

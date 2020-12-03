@@ -1,10 +1,13 @@
 const SendSlackMessage = async (e, app, starting_phrase) => {
   try {
+    let slack_channel = process.env.SLACK_ANNOUNCEMENTS_CHANNEL
+      ? process.env.SLACK_ANNOUNCEMENTS_CHANNEL
+      : "C01FUMML1JA"; // * #2021-app-announcements
+
+    console.log("Sending Slack Announcement to ", slack_channel);
     await app.client.chat.postMessage({
       token: process.env.SLACK_BOT_TOKEN,
-      channel: process.env.SLACK_ANNOUNCEMENTS_CHANNEL
-        ? process.env.SLACK_ANNOUNCEMENTS_CHANNEL
-        : "C01FUMML1JA", // * #2021-app-announcements
+      channel: slack_channel,
       text: ``,
       blocks: [
         {
@@ -50,7 +53,7 @@ const productionServerSlackBot = async (app) => {
       .then((events) => {
         events.events.forEach((e) => {
           let curr_date_min_10 = Math.round(
-            new Date().setMinutes(new Date().getMinutes() - 10) / (1000 * 60) -
+            new Date().setMinutes(new Date().getMinutes() + 10) / (1000 * 60) -
               new Date().getTimezoneOffset()
           );
           let curr_time = Math.round(
