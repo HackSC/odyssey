@@ -69,7 +69,7 @@ const getCheck = (profile: Profile) => {
   }
 };
 
-const StatusStep: React.FunctionComponent<Props> = props => {
+const StatusStep: React.FunctionComponent<Props> = (props) => {
   const { profile, socialPosts } = props;
 
   const statusLabel = getStatusLabel(profile);
@@ -156,7 +156,8 @@ const StatusStep: React.FunctionComponent<Props> = props => {
                 </StepButton>
               )}
             </Step>
-            <Step disabled={profileStage == 4}>
+            {/* 3 and 4 is awaiting results and received results, respectively*/}
+            <Step disabled={profileStage !== 3 && profileStage !== 4}>
               <h3>
                 {profile.status === "accepted"
                   ? "3) Confirm Attendance"
