@@ -1,0 +1,9 @@
+INSERT INTO `chloedb`.`MajorEvents` (`id`, `name`, `isHackathon`, `start_date`, `end_date`) VALUES ('0', 'HackSC 2020', '1', '2020-01-31 19:30:00', '2020-02-02 00:00:00');
+INSERT INTO `rolanddb`.`MajorEvents` (`id`, `name`, `isHackathon`, `start_date`, `end_date`) VALUES ('0', 'HackSC 2020', '1', '2020-01-31 19:30:00', '2020-02-02 00:00:00');
+INSERT INTO `jasondb`.`MajorEvents` (`id`, `name`, `isHackathon`, `start_date`, `end_date`) VALUES ('0', 'HackSC 2020', '1', '2020-01-31 19:30:00', '2020-02-02 00:00:00');
+INSERT INTO `wilsondb`.`MajorEvents` (`id`, `name`, `isHackathon`, `start_date`, `end_date`) VALUES ('0', 'HackSC 2020', '1', '2020-01-31 19:30:00', '2020-02-02 00:00:00');
+INSERT INTO `maxdb`.`MajorEvents` (`id`, `name`, `isHackathon`, `start_date`, `end_date`) VALUES ('0', 'HackSC 2020', '1', '2020-01-31 19:30:00', '2020-02-02 00:00:00');
+INSERT INTO `katiedb`.`MajorEvents` (`id`, `name`, `isHackathon`, `start_date`, `end_date`) VALUES ('0', 'HackSC 2020', '1', '2020-01-31 19:30:00', '2020-02-02 00:00:00');
+INSERT INTO `testdb`.`MajorEvents` (`id`, `name`, `isHackathon`, `start_date`, `end_date`) VALUES ('0', 'HackSC 2020', '1', '2020-01-31 19:30:00', '2020-02-02 00:00:00');
+INSERT INTO `production`.`MajorEvents` (`id`, `name`, `isHackathon`, `start_date`, `end_date`) VALUES ('0', 'HackSC 2020', '1', '2020-01-31 19:30:00', '2020-02-02 00:00:00');
+INSERT INTO `d4v1qrf33toril`.`MajorEvents` (`id`, `name`, `isHackathon`, `start_date`, `end_date`) VALUES ('0', 'HackSC 2020', '1', '2020-01-31 19:30:00', '2020-02-02 00:00:00');
