@@ -5,7 +5,7 @@ import { getReferrerCode } from "../lib/referrerCode";
 
 import styled from "styled-components";
 
-import { Head, Navbar, Footer, AdminStats } from "../components";
+import { Head, Navbar, Footer } from "../components";
 
 import { Background, Flex, Container } from "../styles";
 
@@ -25,8 +25,6 @@ const Admin = ({ profile }) => {
               <b>#{new Date().getFullYear()}-engineering</b>
             </p>
           </Flex>
-
-          <AdminStats profile={profile} />
 
           <ActionsHeader>Actions</ActionsHeader>
           <Actions>
