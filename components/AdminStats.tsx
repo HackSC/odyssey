@@ -336,6 +336,14 @@ const AdminStats = ({ profile }) => {
           </SubTitle>
         </FlexCenterColumn>
       </PaddedFlex>
+      <PaddedFlex>
+        <iframe
+          src="http://metabase.hacksc.com/public/dashboard/29e596c2-2fa7-4bfd-abf2-ef3cd3034a79"
+          width="800"
+          height="600"
+          style={{ margin: "auto", borderRadius: "15px" }}
+        ></iframe>
+      </PaddedFlex>
     </Container>
   );
 };
