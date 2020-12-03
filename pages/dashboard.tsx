@@ -45,7 +45,7 @@ Dashboard.getInitialProps = async ({ req }) => {
   return {
     houses,
     profile,
-    socialPosts,
+    socialPosts
   };
 };
 
