@@ -5,6 +5,7 @@ import { getReferrerCode } from "../lib/referrerCode";
 
 import styled from "styled-components";
 
+import Iframe from "react-iframe";
 import { Head, Navbar, Footer, AdminStats } from "../components";
 
 import { Background, Flex, Container } from "../styles";
@@ -25,13 +26,14 @@ const Metabase = ({ profile }) => {
           <PaddedFlex>
             <h1>Metabase Statistics</h1>
           </PaddedFlex>
-          <PaddedFlex>
-            <iframe
+          <PaddedFlex style={{ margin: "auto", width: "min-content" }}>
+            <Iframe
+              url="http://metabase.hacksc.com/public/dashboard/29e596c2-2fa7-4bfd-abf2-ef3cd3034a79"
               src="http://metabase.hacksc.com/public/dashboard/29e596c2-2fa7-4bfd-abf2-ef3cd3034a79"
               width="800"
               height="600"
-              style={{ margin: "auto", borderRadius: "15px" }}
-            ></iframe>
+              styles={{ margin: "auto", borderRadius: "15px" }}
+            ></Iframe>
           </PaddedFlex>
         </Container>
       </Background>
