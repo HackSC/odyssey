@@ -26,8 +26,6 @@ const Admin = ({ profile }) => {
             </p>
           </Flex>
 
-          <AdminStats profile={profile} />
-
           <ActionsHeader>Actions</ActionsHeader>
           <Actions>
             <Action id="scan-page" href="/scan">
