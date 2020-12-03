@@ -58,7 +58,7 @@ const productionServerSlackBot = async () => {
       await app.start(3035);
 
       // * Fetch event schedule from odyssey API
-      fetch("https://staging.hacksc.com/api/public/events/list")
+      fetch("https://dashboard.hacksc.com/api/public/events/list")
         .then((res) => res.json())
         .then((events) => {
           events.events.forEach((e) => {
