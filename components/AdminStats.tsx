@@ -104,6 +104,7 @@ const AdminStats = ({ profile }) => {
                       a +
                       (b.status != "verified" &&
                       b.status != "unverified" &&
+                      b.status != "submitted" &&
                       b.status != "waitlisted" &&
                       b.status != "rejected"
                         ? 1
