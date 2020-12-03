@@ -52,16 +52,16 @@ const productionServerSlackBot = async () => {
     process.env.URL_BASE &&
     process.env.URL_BASE.includes("dashboard")
   ) {
-    try {
-      const app = new App({
-        token: process.env.SLACK_BOT_TOKEN,
-        signingSecret: process.env.SIGNING_SECRET,
-      });
+    const app = new App({
+      token: process.env.SLACK_BOT_TOKEN,
+      signingSecret: process.env.SIGNING_SECRET,
+    });
 
+    try {
       await app.start(3035);
 
       // * Fetch event schedule from odyssey API
-      fetch("https://dashboard.hacksc.com/api/public/events/list")
+      fetch("https://staging.hacksc.com/api/public/events/list")
         .then((res) => res.json())
         .then((events) => {
           events.events.forEach((e) => {
@@ -77,6 +77,7 @@ const productionServerSlackBot = async () => {
 
             let event_start_time = Date.parse(e.startsAt) / (1000 * 60);
 
+            //console.log(e)
             if (
               event_start_time - curr_date_min_10 > -1 &&
               event_start_time - curr_date_min_10 < 1
@@ -92,7 +93,15 @@ const productionServerSlackBot = async () => {
           });
         });
     } catch (error) {
-      console.error(error);
+      console.log(error);
+    }
+
+    try {
+      if (app) {
+        app.stop();
+      }
+    } catch (e) {
+      console.log("Could not stop app");
     }
   }
 };
