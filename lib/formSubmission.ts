@@ -59,6 +59,17 @@ export async function syncProfile(
   if (response.status === 200) {
     setSuccess(true);
 
+    // Slack announcement
+    if (isSubmit) {
+      await fetch("/api/slack/appSubmit", {
+        method: "POST",
+        body: JSON.stringify(profile),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+    }
+
     if (isSubmit) {
       await Router.push("/results");
       window.scrollTo(0, 0);
