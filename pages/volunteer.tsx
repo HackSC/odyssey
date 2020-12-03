@@ -49,7 +49,7 @@ const Volunteer = ({ profile }) => {
   );
 };
 
-Volunteer.getInitialProps = async (ctx) => {
+Volunteer.getInitialProps = async ctx => {
   const { req } = ctx;
 
   const profile = await getProfile(req);
@@ -64,7 +64,7 @@ Volunteer.getInitialProps = async (ctx) => {
   }
 
   return {
-    profile,
+    profile
   };
 };
 

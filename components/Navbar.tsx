@@ -6,6 +6,8 @@ import HeaderLogo from "../assets/header_logo_21_transparent.png";
 
 import { Container, Link } from "../styles";
 
+import constants from "../lib/hackathonConstants";
+
 type NavbarProps = {
   loggedIn?: boolean;
   showLive?: boolean;
@@ -23,54 +25,45 @@ type NavbarProps = {
   sponsor?: boolean;
 };
 
-const style = background => {
+const style = (background) => {
   return {
     "&:hover": {
       backgroundColor: "#FF8379 !important",
-      color: "white !important"
+      color: "white !important",
     },
     padding: "10px",
     margin: "10px",
     color: background !== "white" ? "white" : "black",
     backgroundColor: background,
-    cursor: "pointer"
+    cursor: "pointer",
   };
 };
 
 const Navbar: React.FunctionComponent<NavbarProps> = ({
   loggedIn,
-  showLive = true,
-  showDash = true,
-  showApp = true,
-  showMaps = false, // * False because HackSC 2021 is virtual :( big sad
-  showAPI = true,
-  showResults = true,
-  showTeam = true,
+  showLive = constants.showLive,
+  showDash = constants.showDash,
+  showApp = constants.showApp,
+  showMaps = constants.showMaps,
+  showAPI = constants.showAPI,
+  showResults = constants.showResults,
+  showTeam = constants.showTeam,
   showLogout = true,
-  showProjectTeam = true,
+  showProjectTeam = constants.showProjectTeam,
   activePage,
   admin,
   volunteer,
-  sponsor
+  sponsor,
 }: NavbarProps) => {
   return (
     <Wrapper>
       <NavbarContainer>
-        <a href={loggedIn ? "/live" : "/"}>
+        <a href={loggedIn && showLive ? "/live" : "/"}>
           <HeaderLogoImg src={HeaderLogo} />
         </a>
         <Links>
           {loggedIn ? (
             <>
-              {!admin && !volunteer && !sponsor && showLive && (
-                <Link
-                  href="/live"
-                  id="live-page"
-                  style={style(activePage === "live" ? "#FF8379" : "white")}
-                >
-                  Live
-                </Link>
-              )}
               {/*!admin && !volunteer && !sponsor && showDash && (
                 <Link
                   href="/dashboard"
@@ -139,12 +132,33 @@ const Navbar: React.FunctionComponent<NavbarProps> = ({
                   APIs
                 </Link>
               )}
-              {admin && activePage !== "/" && (
+              {(admin || sponsor || volunteer) && ( // * showLive - should be true always since admins, sponsors, volunteers, and judges need visibility
+                <Link
+                  href="/live"
+                  id="live-page"
+                  style={style(activePage === "live" ? "#FF8379" : "white")}
+                >
+                  Live
+                </Link>
+              )}
+              {(admin || sponsor || volunteer) && (
                 <Link
                   href="/admin"
+                  id="admin-dashboard-page"
                   style={style(activePage === "/" ? "#FF8379" : "white")}
                 >
                   Admin Dashboard
+                </Link>
+              )}
+              {admin && (
+                <Link
+                  href="/admin-stats"
+                  id="admin-stats-page"
+                  style={style(
+                    activePage === "/admin-stats" ? "#FF8379" : "white"
+                  )}
+                >
+                  Statistics
                 </Link>
               )}
               {showLogout && (

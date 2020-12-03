@@ -93,7 +93,7 @@ const LogoGraphic = styled.img`
 `;
 
 const SocialColumn = styled(Column)`
-  width: 35%;
+  width: 100%;
   padding: 0 32px;
   box-sizing: border-box;
 
@@ -103,7 +103,7 @@ const SocialColumn = styled(Column)`
 `;
 
 const LinksColumn = styled(Column)`
-  width: 25%;
+  width: 100%;
   padding: 0 32px;
   box-sizing: border-box;
 
@@ -113,7 +113,7 @@ const LinksColumn = styled(Column)`
 `;
 
 const ContactColumn = styled(Column)`
-  width: 40%;
+  width: 100%;
   padding: 0 32px;
   box-sizing: border-box;
 
