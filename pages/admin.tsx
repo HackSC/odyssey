@@ -5,7 +5,8 @@ import { getReferrerCode } from "../lib/referrerCode";
 
 import styled from "styled-components";
 
-import { Head, Navbar, Footer, AdminStats } from "../components";
+import ReactMarkdown from "react-markdown";
+import { Head, Navbar, Footer } from "../components";
 
 import { Background, Flex, Container } from "../styles";
 
@@ -24,6 +25,27 @@ const Admin = ({ profile }) => {
               or find any errors, hit up the engineers in{" "}
               <b>#{new Date().getFullYear()}-engineering</b>
             </p>
+
+            <PaddedFlex direction="column">
+              <PaddedFlex direction="row">
+                <PaddedSubTitle>hacksc.com: </PaddedSubTitle>
+                <ReactMarkdown>
+                  [![HackSC.com](https://betteruptime.com/status-badges/v1/monitor/50yh.svg)](https://betteruptime.com/?utm_source=status_badge)
+                </ReactMarkdown>
+              </PaddedFlex>
+              <PaddedFlex direction="row">
+                <PaddedSubTitle>staging.hacksc.com: </PaddedSubTitle>
+                <ReactMarkdown>
+                  [![Staging](https://betteruptime.com/status-badges/v1/monitor/518z.svg)](https://betteruptime.com/?utm_source=status_badge)
+                </ReactMarkdown>
+              </PaddedFlex>
+              <PaddedFlex direction="row">
+                <PaddedSubTitle>dashboard.hacksc.com: </PaddedSubTitle>
+                <ReactMarkdown>
+                  [![Dashboard](https://betteruptime.com/status-badges/v1/monitor/50yp.svg)](https://betteruptime.com/?utm_source=status_badge)
+                </ReactMarkdown>
+              </PaddedFlex>
+            </PaddedFlex>
           </Flex>
 
           <ActionsHeader>Actions</ActionsHeader>
@@ -98,8 +120,16 @@ Admin.getInitialProps = async (ctx) => {
   };
 };
 
+const PaddedSubTitle = styled.h3`
+  margin: 0 1rem 0 0;
+`;
+
+const PaddedFlex = styled(Flex)`
+  margin: 0.25rem 0 0 0;
+`;
+
 const ActionsHeader = styled.h2`
-  margin: 48px 0 16px;
+  margin: 2rem 0 1rem;
 `;
 
 const Actions = styled.div`
