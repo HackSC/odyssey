@@ -26,8 +26,6 @@ const Admin = ({ profile }) => {
             </p>
           </Flex>
 
-          <AdminStats profile={profile} />
-
           <ActionsHeader>Actions</ActionsHeader>
           <Actions>
             <Action id="scan-page" href="/scan">
@@ -68,7 +66,7 @@ const Admin = ({ profile }) => {
             </Action>
             <Action
               id="metabase-page"
-              href="https://metabase-odyssey.herokuapp.com/"
+              href="https://metabase.hacksc.com/"
               target="_blank"
             >
               <ActionTitle>Access Metabase</ActionTitle>
