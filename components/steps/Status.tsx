@@ -69,7 +69,7 @@ const getCheck = (profile: Profile) => {
   }
 };
 
-const StatusStep: React.FunctionComponent<Props> = (props) => {
+const StatusStep: React.FunctionComponent<Props> = props => {
   const { profile, socialPosts } = props;
 
   const statusLabel = getStatusLabel(profile);
