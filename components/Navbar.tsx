@@ -150,6 +150,17 @@ const Navbar: React.FunctionComponent<NavbarProps> = ({
                   Admin Dashboard
                 </Link>
               )}
+              {admin && (
+                <Link
+                  href="/admin-stats"
+                  id="admin-stats-page"
+                  style={style(
+                    activePage === "/admin-stats" ? "#FF8379" : "white"
+                  )}
+                >
+                  Statistics
+                </Link>
+              )}
               {showLogout && (
                 <Link
                   href="/auth/logout"

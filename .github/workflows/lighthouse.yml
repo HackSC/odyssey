@@ -24,8 +24,8 @@ jobs:
         with:
           commentUrl: "push"
           lighthouseCheckResults: ${{ steps.lighthouseCheck.outputs.lighthouseCheckResults }}
-          minAccessibilityScore: "10"
-          minBestPracticesScore: "10"
-          minPerformanceScore: "10"
-          minProgressiveWebAppScore: "10"
-          minSeoScore: "10"
+          minAccessibilityScore: "0"
+          minBestPracticesScore: "0"
+          minPerformanceScore: "0"
+          minProgressiveWebAppScore: "0"
+          minSeoScore: "0"
