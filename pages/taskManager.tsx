@@ -9,7 +9,7 @@ import Footer from "../components/Footer";
 import { Background, Container, EditButton, Task, TaskInfo } from "../styles";
 import styled from "styled-components";
 
-const EditableCell = ({ task }) => {
+const EditableCell = ({ req, allTasks, task }) => {
   const [currTaskValue, setCurrTaskValue] = useState(task);
   return (
     <Task>
@@ -18,7 +18,7 @@ const EditableCell = ({ task }) => {
           type="text"
           placeholder="name"
           value={currTaskValue.name}
-          onChange={e => {
+          onChange={(e) => {
             setCurrTaskValue({ ...currTaskValue, name: e.target.value });
           }}
         />
@@ -26,7 +26,7 @@ const EditableCell = ({ task }) => {
           type="text"
           placeholder="type"
           value={currTaskValue.type}
-          onChange={e => {
+          onChange={(e) => {
             setCurrTaskValue({ ...currTaskValue, type: e.target.value });
           }}
         />
@@ -34,16 +34,16 @@ const EditableCell = ({ task }) => {
           type="number"
           placeholder="points"
           value={currTaskValue.points}
-          onChange={e => {
+          onChange={(e) => {
             setCurrTaskValue({ ...currTaskValue, points: e.target.value });
           }}
         />
         <select
-          onChange={e => {
+          onChange={(e) => {
             const isActive = e.target.value === "Active";
             setCurrTaskValue({
               ...currTaskValue,
-              isActive: isActive
+              isActive: isActive,
             });
           }}
           //@ts-ignore
@@ -67,11 +67,11 @@ const EditableCell = ({ task }) => {
       </EditButton>
       <EditButton
         onClick={async () => {
-          const result = await deleteTask(currTaskValue);
+          const result = await deleteTask(null, task);
           if (result) {
             window.location.reload();
           } else {
-            alert("failed to delete task");
+            alert("failed to delete house");
           }
         }}
       >
@@ -84,8 +84,8 @@ const EditableCell = ({ task }) => {
 const TaskManager = ({ profile, currentTasks }) => {
   const [newTask, setNewTask] = useState({});
 
-  const taskBlocks = currentTasks.tasks.map(task => {
-    return <EditableCell task={task} />;
+  const taskBlocks = currentTasks.tasks.map((task) => {
+    return <EditableCell req={null} allTasks={currentTasks} task={task} />;
   });
   return (
     <>
@@ -99,39 +99,39 @@ const TaskManager = ({ profile, currentTasks }) => {
               <input
                 type="text"
                 placeholder="name"
-                onChange={e => {
+                onChange={(e) => {
                   setNewTask({
                     ...newTask,
-                    name: e.target.value
+                    name: e.target.value,
                   });
                 }}
               />
               <input
                 type="text"
                 placeholder="type"
-                onChange={e => {
+                onChange={(e) => {
                   setNewTask({
                     ...newTask,
-                    type: e.target.value
+                    type: e.target.value,
                   });
                 }}
               />
               <input
                 type="number"
                 placeholder="points"
-                onChange={e => {
+                onChange={(e) => {
                   setNewTask({
                     ...newTask,
-                    points: e.target.value
+                    points: e.target.value,
                   });
                 }}
               />
               <select
-                onChange={e => {
+                onChange={(e) => {
                   const isActive = e.target.value === "Active";
                   setNewTask({
                     ...newTask,
-                    isActive: isActive
+                    isActive: isActive,
                   });
                 }}
                 //@ts-ignore
@@ -174,7 +174,7 @@ TaskManager.getInitialProps = async ({ req }) => {
 
   return {
     profile,
-    currentTasks
+    currentTasks,
   };
 };
 

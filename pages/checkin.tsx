@@ -54,7 +54,7 @@ const CheckinResult = ({ result, resetResults }) => {
           resetResults();
         } else {
           alert(
-            "Oh no, something went wrong! Flag down Wilhelm Willie and make him cry"
+            "Oh no, something went wrong! Flag down HackSC Engineering and make them all cry"
           );
         }
       }

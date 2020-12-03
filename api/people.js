@@ -11,9 +11,9 @@ router.get("/self", async (req, res) => {
   try {
     const [person, isCreated] = await models.Person.findOrCreate({
       where: {
-        identityId: req.user.id
+        identityId: req.user.id,
       },
-      defaults: { isBattlepassComplete: false }
+      defaults: { isBattlepassComplete: false },
     });
 
     return res.json({ person });
@@ -53,6 +53,20 @@ router.put("/houses", async (req, res) => {
     return res.json({ result: result });
   } catch (e) {
     return res.status(400).json({ err: e.message });
+  }
+});
+
+router.delete("/houses/:id", async (req, res) => {
+  try {
+    const id = req.params.id;
+    await models.House.destroy({
+      where: {
+        id: id,
+      },
+    });
+    return res.status(200);
+  } catch (e) {
+    return res.status(500).json({ err: e });
   }
 });
 
