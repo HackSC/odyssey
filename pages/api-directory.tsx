@@ -18,7 +18,7 @@ import {
 const API = ({ apis, profile, houses, socialPosts }) => {
   return (
     <>
-      <Head title="HackSC Odyssey - API Directory" />
+      <Head title="HackSC Dashboard - API Directory" />
       <Navbar
         loggedIn
         showProjectTeam={profile ? profile.status === "checkedIn" : false}

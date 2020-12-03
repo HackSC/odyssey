@@ -69,7 +69,7 @@ const getCheck = (profile: Profile) => {
   }
 };
 
-const StatusStep: React.FunctionComponent<Props> = props => {
+const StatusStep: React.FunctionComponent<Props> = (props) => {
   const { profile, socialPosts } = props;
 
   const statusLabel = getStatusLabel(profile);
@@ -139,8 +139,15 @@ const StatusStep: React.FunctionComponent<Props> = props => {
             <Step disabled={profileStage !== 1}>
               <h3>1. Verify your e-mail</h3>
               <p>
-                Make sure to check your e-mail and verify your account. If you
-                run into issues, log-out and log back in.
+                Make sure to check your e-mail and verify your account. If
+                you've just verified your email,{" "}
+                <a
+                  href={
+                    typeof window !== "undefined" ? window.location.href : ""
+                  }
+                >
+                  click here.
+                </a>
               </p>
             </Step>
             <Step disabled={profileStage !== 2}>
@@ -156,7 +163,8 @@ const StatusStep: React.FunctionComponent<Props> = props => {
                 </StepButton>
               )}
             </Step>
-            <Step disabled={profileStage == 4}>
+            {/* 3 and 4 is awaiting results and received results, respectively*/}
+            <Step disabled={profileStage !== 3 && profileStage !== 4}>
               <h3>
                 {profile.status === "accepted"
                   ? "3) Confirm Attendance"
@@ -167,7 +175,7 @@ const StatusStep: React.FunctionComponent<Props> = props => {
                   ? "Congrats, you have been accepted to HackSC 2021. Please confirm/decline your attendance by January 1st"
                   : "Come back soon and see your results."}
               </p>
-              {profileStage === 3 && (
+              {profileStage === 4 && (
                 <StepButton onClick={() => navigateTo("results")}>
                   {profile.status === "accepted"
                     ? "Confirm Attendance"
