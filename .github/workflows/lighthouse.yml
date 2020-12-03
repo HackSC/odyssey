@@ -1,7 +1,7 @@
 name: Test Lighthouse Check with Minimum Score Enforcement
 
 on:
-  pull_request:
+  push:
     branches:
       - main
 
