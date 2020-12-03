@@ -168,7 +168,7 @@ const StatusStep: React.FunctionComponent<Props> = (props) => {
                   ? "Congrats, you have been accepted to HackSC 2021. Please confirm/decline your attendance by January 1st"
                   : "Come back soon and see your results."}
               </p>
-              {profileStage === 4 && (
+              {profileStage === 3 && (
                 <StepButton onClick={() => navigateTo("results")}>
                   {profile.status === "accepted"
                     ? "Confirm Attendance"
