@@ -18,7 +18,7 @@ import { generatePosts } from "../lib/referrerCode";
 const Application = ({ profile, houses, socialPosts }) => {
   return (
     <>
-      <Head title="HackSC Odyssey - Application" />
+      <Head title="HackSC Dashboard - Application" />
       <Navbar
         showProjectTeam={profile ? profile.status === "checkedIn" : false}
         loggedIn
