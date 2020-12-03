@@ -3,7 +3,7 @@ import { CenteredColumn, Flex } from "../styles";
 import { liveLookupFetch } from "../lib/api-sdk/liveHooks";
 import styled from "styled-components";
 
-const AdminStats = ({ profile }) => {
+const AdminStats = ({ profile, showtitle = true }) => {
   const [profiles, setProfiles] = useState([]);
   useEffect(() => {
     let [firstName, lastName, email] = ["", "", ""];
@@ -15,7 +15,7 @@ const AdminStats = ({ profile }) => {
   if (profile.role != "admin") return <></>;
   return (
     <Container>
-      <h2>Statistics</h2>
+      {showtitle ? <h2>Statistics</h2> : ""}
       <PaddedFlex justify="space-between" tabletVertical>
         <FlexCenterColumn flexBasis={50}>
           <SubHeader>Profile Stats</SubHeader>
@@ -335,14 +335,6 @@ const AdminStats = ({ profile }) => {
             </OrangeColoredText>
           </SubTitle>
         </FlexCenterColumn>
-      </PaddedFlex>
-      <PaddedFlex>
-        <iframe
-          src="http://metabase.hacksc.com/public/dashboard/29e596c2-2fa7-4bfd-abf2-ef3cd3034a79"
-          width="800"
-          height="600"
-          style={{ margin: "auto", borderRadius: "15px" }}
-        ></iframe>
       </PaddedFlex>
     </Container>
   );
