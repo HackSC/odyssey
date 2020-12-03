@@ -21,7 +21,7 @@ const scheduleCronJobs = async () => {
   cron.schedule("0 * * * *", sendgridSync);
 
   // * Slackbot Event-based Cron Job
-  cron.schedule("*/10 * * * * *", () => productionServerEventSlackBot(app));
+  cron.schedule("0 * * * * *", () => productionServerEventSlackBot(app));
 
   // * Better Uptime Server Heartbeats
   cron.schedule("0 0 * * * *", productionServerHeartbeat);
