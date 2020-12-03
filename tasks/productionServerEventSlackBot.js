@@ -1,12 +1,13 @@
-const { App } = require("@slack/bolt");
-
 const SendSlackMessage = async (e, app, starting_phrase) => {
   try {
+    let slack_channel = process.env.SLACK_ANNOUNCEMENTS_CHANNEL
+      ? process.env.SLACK_ANNOUNCEMENTS_CHANNEL
+      : "C01FUMML1JA"; // * #2021-app-announcements
+
+    console.log("Sending Slack Announcement to ", slack_channel);
     await app.client.chat.postMessage({
       token: process.env.SLACK_BOT_TOKEN,
-      channel: process.env.SLACK_ANNOUNCEMENTS_CHANNEL
-        ? process.env.SLACK_ANNOUNCEMENTS_CHANNEL
-        : "C01FUMML1JA", // * #2021-app-announcements
+      channel: slack_channel,
       text: ``,
       blocks: [
         {
@@ -44,62 +45,37 @@ const SendSlackMessage = async (e, app, starting_phrase) => {
   }
 };
 
-const productionServerSlackBot = async () => {
-  // * Null check slackbot tokens
-  if (!process.env.SLACK_BOT_TOKEN || !process.env.SIGNING_SECRET) {
-    console.error("!!!Missing SLACK BOT TOKENS!!!");
-  } else if (process.env.URL_BASE && process.env.URL_BASE.includes("staging")) {
-    const app = new App({
-      token: process.env.SLACK_BOT_TOKEN,
-      signingSecret: process.env.SIGNING_SECRET,
-    });
+const productionServerSlackBot = async (app) => {
+  if (!!app) {
+    // * Fetch event schedule from odyssey API
+    fetch("https://dashboard.hacksc.com/api/public/events/list")
+      .then((res) => res.json())
+      .then((events) => {
+        events.events.forEach((e) => {
+          let curr_date_min_10 = Math.round(
+            new Date().setMinutes(new Date().getMinutes() + 10) / (1000 * 60) -
+              new Date().getTimezoneOffset()
+          );
+          let curr_time = Math.round(
+            new Date().getTime() / (1000 * 60) - new Date().getTimezoneOffset()
+          );
 
-    try {
-      await app.start(3035);
+          let event_start_time = Date.parse(e.startsAt) / (1000 * 60);
 
-      // * Fetch event schedule from odyssey API
-      fetch("https://dashboard.hacksc.com/api/public/events/list")
-        .then((res) => res.json())
-        .then((events) => {
-          events.events.forEach((e) => {
-            let curr_date_min_10 = Math.round(
-              new Date().setMinutes(new Date().getMinutes() - 10) /
-                (1000 * 60) -
-                new Date().getTimezoneOffset()
-            );
-            let curr_time = Math.round(
-              new Date().getTime() / (1000 * 60) -
-                new Date().getTimezoneOffset()
-            );
-
-            let event_start_time = Date.parse(e.startsAt) / (1000 * 60);
-
-            //console.log(e)
-            if (
-              event_start_time - curr_date_min_10 > -1 &&
-              event_start_time - curr_date_min_10 < 1
-            ) {
-              SendSlackMessage(e, app, "starting in 10 minutes");
-            }
-            if (
-              event_start_time - curr_time > -1 &&
-              event_start_time - curr_time < 1
-            ) {
-              SendSlackMessage(e, app, "starts now");
-            }
-          });
+          if (
+            event_start_time - curr_date_min_10 > -1 &&
+            event_start_time - curr_date_min_10 < 1
+          ) {
+            SendSlackMessage(e, app, "starting in 10 minutes");
+          }
+          if (
+            event_start_time - curr_time > -1 &&
+            event_start_time - curr_time < 1
+          ) {
+            SendSlackMessage(e, app, "starts now");
+          }
         });
-    } catch (error) {
-      console.log(error);
-    }
-
-    try {
-      if (app) {
-        app.stop();
-      }
-    } catch (e) {
-      console.log("Could not stop app");
-    }
+      });
   }
 };
 
