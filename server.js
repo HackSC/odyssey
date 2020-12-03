@@ -25,7 +25,6 @@ Sentry.init({
   dsn: process.env.SENTRY_DSN,
   environment: dev ? "dev" : process.env.NODE_ENV,
   release: "odyssey@" + process.env.npm_package_version,
-  ignoreErrors: dev ? true : false,
 });
 
 app.prepare().then(() => {
