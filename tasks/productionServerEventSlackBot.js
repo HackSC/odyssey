@@ -48,16 +48,13 @@ const productionServerSlackBot = async () => {
   // * Null check slackbot tokens
   if (!process.env.SLACK_BOT_TOKEN || !process.env.SIGNING_SECRET) {
     console.error("!!!Missing SLACK BOT TOKENS!!!");
-  } else if (
-    process.env.URL_BASE &&
-    process.env.URL_BASE.includes("dashboard")
-  ) {
-    try {
-      const app = new App({
-        token: process.env.SLACK_BOT_TOKEN,
-        signingSecret: process.env.SIGNING_SECRET,
-      });
+  } else if (process.env.URL_BASE && process.env.URL_BASE.includes("staging")) {
+    const app = new App({
+      token: process.env.SLACK_BOT_TOKEN,
+      signingSecret: process.env.SIGNING_SECRET,
+    });
 
+    try {
       await app.start(3035);
 
       // * Fetch event schedule from odyssey API
@@ -77,6 +74,7 @@ const productionServerSlackBot = async () => {
 
             let event_start_time = Date.parse(e.startsAt) / (1000 * 60);
 
+            //console.log(e)
             if (
               event_start_time - curr_date_min_10 > -1 &&
               event_start_time - curr_date_min_10 < 1
@@ -92,7 +90,15 @@ const productionServerSlackBot = async () => {
           });
         });
     } catch (error) {
-      console.error(error);
+      console.log(error);
+    }
+
+    try {
+      if (app) {
+        app.stop();
+      }
+    } catch (e) {
+      console.log("Could not stop app");
     }
   }
 };
