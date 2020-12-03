@@ -26,7 +26,7 @@ const Metabase = ({ profile }) => {
           <PaddedFlex>
             <h1>Metabase Statistics</h1>
           </PaddedFlex>
-          <PaddedFlex>
+          <PaddedFlex style={{ margin: "auto", width: "min-content" }}>
             <Iframe
               url="http://metabase.hacksc.com/public/dashboard/29e596c2-2fa7-4bfd-abf2-ef3cd3034a79"
               src="http://metabase.hacksc.com/public/dashboard/29e596c2-2fa7-4bfd-abf2-ef3cd3034a79"
