@@ -5,7 +5,7 @@ Cypress.on("uncaught:exception", (err, runnable) => {
 
 Cypress.Commands.add("login", (overrides = {}) => {
   Cypress.log({
-    name: "loginViaAuth0"
+    name: "loginViaAuth0",
   });
 
   const options = {
@@ -17,29 +17,29 @@ Cypress.Commands.add("login", (overrides = {}) => {
       password: Cypress.env("SPONSOR_TEST_PASSWORD"),
       scope: "openid profile email",
       client_id: Cypress.env("AUTH0_CLIENT_ID"),
-      client_secret: Cypress.env("AUTH0_CLIENT_SECRET")
-    }
+      client_secret: Cypress.env("AUTH0_CLIENT_SECRET"),
+    },
   };
   cy.request(options);
 });
 
 Cypress.Commands.add("goToSponsor", (overrides = {}) => {
   cy.login()
-    .then(resp => {
+    .then((resp) => {
       return resp.body;
     })
-    .then(body => {
+    .then((body) => {
       const { access_token, expires_in, id_token } = body;
       const auth0State = {
         nonce: "",
-        state: "some-random-state"
+        state: "some-random-state",
       };
       const mainPage = `http://localhost:3000/auth/login`;
       cy.visit(mainPage, {
         onBeforeLoad(win) {
           win.document.cookie =
             "com.auth0.auth.some-random-state=" + JSON.stringify(auth0State);
-        }
+        },
       });
       cy.get("#username").type(Cypress.env("SPONSOR_TEST_USERNAME"));
       cy.get(":input[type=password]").type(
@@ -56,23 +56,57 @@ describe("goSponsor", () => {
   });
 });
 
-Cypress.Commands.add("goToScan", (overrides = {}) => {
+Cypress.Commands.add("goToLive", (overrides = {}) => {
   cy.login()
-    .then(resp => {
+    .then((resp) => {
       return resp.body;
     })
-    .then(body => {
+    .then((body) => {
       const { access_token, expires_in, id_token } = body;
       const auth0State = {
         nonce: "",
-        state: "some-random-state"
+        state: "some-random-state",
       };
       const mainPage = `http://localhost:3000/auth/login`;
       cy.visit(mainPage, {
         onBeforeLoad(win) {
           win.document.cookie =
             "com.auth0.auth.some-random-state=" + JSON.stringify(auth0State);
-        }
+        },
+      });
+      cy.get("#username").type(Cypress.env("SPONSOR_TEST_USERNAME"));
+      cy.get(":input[type=password]").type(
+        Cypress.env("SPONSOR_TEST_PASSWORD").replace("{", "{{}")
+      );
+      cy.get("[name=action]").click();
+      cy.get("#live-page").click();
+      cy.location("pathname", { timeout: 10000 }).should("include", "/sponsor");
+    });
+});
+
+describe("goLive", () => {
+  it("should navigate to the live page", () => {
+    cy.goToLive();
+  });
+});
+
+Cypress.Commands.add("goToScan", (overrides = {}) => {
+  cy.login()
+    .then((resp) => {
+      return resp.body;
+    })
+    .then((body) => {
+      const { access_token, expires_in, id_token } = body;
+      const auth0State = {
+        nonce: "",
+        state: "some-random-state",
+      };
+      const mainPage = `http://localhost:3000/auth/login`;
+      cy.visit(mainPage, {
+        onBeforeLoad(win) {
+          win.document.cookie =
+            "com.auth0.auth.some-random-state=" + JSON.stringify(auth0State);
+        },
       });
       cy.get("#username").type(Cypress.env("SPONSOR_TEST_USERNAME"));
       cy.get(":input[type=password]").type(
@@ -95,21 +129,21 @@ describe("goScan", () => {
 
 Cypress.Commands.add("goToMetabasePage", (overrides = {}) => {
   cy.login()
-    .then(resp => {
+    .then((resp) => {
       return resp.body;
     })
-    .then(body => {
+    .then((body) => {
       const { access_token, expires_in, id_token } = body;
       const auth0State = {
         nonce: "",
-        state: "some-random-state"
+        state: "some-random-state",
       };
       const mainPage = `http://localhost:3000/auth/login`;
       cy.visit(mainPage, {
         onBeforeLoad(win) {
           win.document.cookie =
             "com.auth0.auth.some-random-state=" + JSON.stringify(auth0State);
-        }
+        },
       });
       cy.get("#username").type(Cypress.env("SPONSOR_TEST_USERNAME"));
       cy.get(":input[type=password]").type(
@@ -129,21 +163,21 @@ describe("goMetabasePage", () => {
 
 Cypress.Commands.add("goToHackerManager", (overrides = {}) => {
   cy.login()
-    .then(resp => {
+    .then((resp) => {
       return resp.body;
     })
-    .then(body => {
+    .then((body) => {
       const { access_token, expires_in, id_token } = body;
       const auth0State = {
         nonce: "",
-        state: "some-random-state"
+        state: "some-random-state",
       };
       const mainPage = `http://localhost:3000/auth/login`;
       cy.visit(mainPage, {
         onBeforeLoad(win) {
           win.document.cookie =
             "com.auth0.auth.some-random-state=" + JSON.stringify(auth0State);
-        }
+        },
       });
       cy.get("#username").type(Cypress.env("SPONSOR_TEST_USERNAME"));
       cy.get(":input[type=password]").type(
@@ -168,21 +202,21 @@ describe("goHackerManager", () => {
 
 Cypress.Commands.add("goToLogout", (overrides = {}) => {
   cy.login()
-    .then(resp => {
+    .then((resp) => {
       return resp.body;
     })
-    .then(body => {
+    .then((body) => {
       const { access_token, expires_in, id_token } = body;
       const auth0State = {
         nonce: "",
-        state: "some-random-state"
+        state: "some-random-state",
       };
       const mainPage = `http://localhost:3000/auth/login`;
       cy.visit(mainPage, {
         onBeforeLoad(win) {
           win.document.cookie =
             "com.auth0.auth.some-random-state=" + JSON.stringify(auth0State);
-        }
+        },
       });
       cy.location("pathname", { timeout: 10000 }).should("include", "/login");
       cy.get("#username").type(Cypress.env("SPONSOR_TEST_USERNAME"));
