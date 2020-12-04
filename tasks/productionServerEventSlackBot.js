@@ -1,5 +1,5 @@
 const productionServerSlackBot = async () => {
-  if (process.env.URL_BASE && process.env.URL_BASE.includes("localhost")) {
+  if (process.env.URL_BASE && process.env.URL_BASE.includes("staging")) {
     fetch("https://cronjobs.hacksc.com/api/send_slack_message").then(
       async (res) => {
         if (res.status !== 200)
