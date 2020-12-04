@@ -42,7 +42,7 @@ const ResultStep: React.FunctionComponent<Props> = (props) => {
             Looks like you haven't finished the application process... please
             make sure you have set-up a hacker profile and filled out our
             application. You must submit an application by 11:59pm on December
-            8, 2019, to be considered for HackSC 2020.
+            14, 2020, to be considered for HackSC 2021.
           </p>
 
           <Blob />
@@ -57,7 +57,7 @@ const ResultStep: React.FunctionComponent<Props> = (props) => {
         <h1>HackSC Application Complete</h1>
 
         <p>
-          Thank you for filling out an application for HackSC 2020! Be on the
+          Thank you for filling out an application for HackSC 2021! Be on the
           look out for updates on when application decisions come out.
         </p>
 

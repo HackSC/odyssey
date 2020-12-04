@@ -14,7 +14,7 @@ const MetaTags = ({ title, description }: MetaTagTypes) => (
         name="description"
         content={
           description ||
-          "USC's largest hackathon. The future is in your hands at HackSC 2020."
+          "USC's largest hackathon. The future is in your hands at HackSC 2021."
         }
       ></meta>
 
@@ -24,7 +24,7 @@ const MetaTags = ({ title, description }: MetaTagTypes) => (
         property="og:description"
         content={
           description ||
-          "USC's largest hackathon. The future is in your hands at HackSC 2020."
+          "USC's largest hackathon. The future is in your hands at HackSC 2021."
         }
       />
 

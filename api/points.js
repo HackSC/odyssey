@@ -25,11 +25,13 @@ router.post("/tasks", async (req, res) => {
     "description",
     "points",
     "name",
+    "type",
     "isGroupTask",
-    "isActive"
+    "isActive",
+    "type",
+    "isPast"
   ]);
   const formInput = req.body;
-
   for (let key of Object.keys(formInput)) {
     if (!allowedFields.has(key)) {
       return res.status(400).json({
@@ -48,6 +50,9 @@ router.post("/tasks", async (req, res) => {
 router.put("/tasks", async (req, res) => {
   try {
     const updatedObj = req.body;
+    if (updatedObj.createdAt === null) {
+      updatedObj.createdAt = new Date();
+    }
     const taskId = updatedObj.id;
     delete updatedObj.id;
     await models.Task.update({ ...updatedObj }, { where: { id: taskId } });

@@ -56,6 +56,40 @@ describe("goAdmin", () => {
   });
 });
 
+Cypress.Commands.add("goToLive", (overrides = {}) => {
+  cy.login()
+    .then((resp) => {
+      return resp.body;
+    })
+    .then((body) => {
+      const { access_token, expires_in, id_token } = body;
+      const auth0State = {
+        nonce: "",
+        state: "some-random-state",
+      };
+      const mainPage = `http://localhost:3000/auth/login`;
+      cy.visit(mainPage, {
+        onBeforeLoad(win) {
+          win.document.cookie =
+            "com.auth0.auth.some-random-state=" + JSON.stringify(auth0State);
+        },
+      });
+      cy.get("#username").type(Cypress.env("ADMIN_TEST_USERNAME"));
+      cy.get(":input[type=password]").type(
+        Cypress.env("ADMIN_TEST_PASSWORD").replace("{", "{{}")
+      );
+      cy.get("[name=action]").click();
+      cy.get("#live-page").click();
+      cy.location("pathname", { timeout: 10000 }).should("include", "/live");
+    });
+});
+
+describe("goLive", () => {
+  it("should navigate to the live page", () => {
+    cy.goToLive();
+  });
+});
+
 Cypress.Commands.add("goToScan", (overrides = {}) => {
   cy.login()
     .then((resp) => {
@@ -125,6 +159,48 @@ describe("goCheckin", () => {
   });
   // * Add in function to be able to navigate back to main /admin page
 });
+
+// * App Review Page
+
+Cypress.Commands.add("goToAppReview", (overrides = {}) => {
+  cy.login()
+    .then((resp) => {
+      return resp.body;
+    })
+    .then((body) => {
+      const { access_token, expires_in, id_token } = body;
+      const auth0State = {
+        nonce: "",
+        state: "some-random-state",
+      };
+      const mainPage = `http://localhost:3000/auth/login`;
+      cy.visit(mainPage, {
+        onBeforeLoad(win) {
+          win.document.cookie =
+            "com.auth0.auth.some-random-state=" + JSON.stringify(auth0State);
+        },
+      });
+      cy.get("#username").type(Cypress.env("ADMIN_TEST_USERNAME"));
+      cy.get(":input[type=password]").type(
+        Cypress.env("ADMIN_TEST_PASSWORD").replace("{", "{{}")
+      );
+      cy.get("[name=action]").click();
+      cy.get("#app-review-page").click();
+      cy.location("pathname", { timeout: 10000 }).should(
+        "include",
+        "/appReview"
+      );
+    });
+});
+
+describe("goAppReview", () => {
+  it("should navigate to App Review page", () => {
+    cy.goToAppReview();
+  });
+  // * Add in function to be able to navigate back to main /admin page
+});
+
+// * Role Manager Page
 
 Cypress.Commands.add("goToRoleManager", (overrides = {}) => {
   cy.login()
@@ -440,6 +516,46 @@ Cypress.Commands.add("goToMailQuery", (overrides = {}) => {
 describe("goMailQuery", () => {
   it("should navigate to mail query page", () => {
     cy.goToMailQuery();
+  });
+  // * Add in function to be able to navigate back to main /admin page
+});
+
+// * Manage API Directory Page
+
+Cypress.Commands.add("goToManageApiDirectory", (overrides = {}) => {
+  cy.login()
+    .then((resp) => {
+      return resp.body;
+    })
+    .then((body) => {
+      const { access_token, expires_in, id_token } = body;
+      const auth0State = {
+        nonce: "",
+        state: "some-random-state",
+      };
+      const mainPage = `http://localhost:3000/auth/login`;
+      cy.visit(mainPage, {
+        onBeforeLoad(win) {
+          win.document.cookie =
+            "com.auth0.auth.some-random-state=" + JSON.stringify(auth0State);
+        },
+      });
+      cy.get("#username").type(Cypress.env("ADMIN_TEST_USERNAME"));
+      cy.get(":input[type=password]").type(
+        Cypress.env("ADMIN_TEST_PASSWORD").replace("{", "{{}")
+      );
+      cy.get("[name=action]").click();
+      cy.get("#manage-api-directory-page").click();
+      cy.location("pathname", { timeout: 10000 }).should(
+        "include",
+        "/manageApiDirectory"
+      );
+    });
+});
+
+describe("goManageApiDirectory", () => {
+  it("should navigate to manage api directory page", () => {
+    cy.goToManageApiDirectory();
   });
   // * Add in function to be able to navigate back to main /admin page
 });

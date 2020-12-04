@@ -1,5 +1,6 @@
 import Router from "next/router";
 import fetch from "isomorphic-unfetch";
+import constants from "./hackathonConstants";
 
 export async function getUser(req) {
   if (!req) {
@@ -13,6 +14,30 @@ export async function getUser(req) {
     }
   } else {
     return req.user;
+  }
+}
+
+export async function getProfileList(req): Promise<Array<Profile>> {
+  // If we have a req object, that means we're on the server and need to pass in cookies
+  // Otherwise, fetch as normal
+  let url_route = req
+    ? /* Serverside */ process.env.URL_BASE + "api/profile/list"
+    : /* Client */ "/api/profile/list";
+
+  const rawProfileData = await fetch(
+    url_route,
+    req
+      ? {
+          headers: req.headers,
+        }
+      : null
+  );
+
+  try {
+    const data = await rawProfileData.json();
+    return data.profiles;
+  } catch (e) {
+    return null;
   }
 }
 
@@ -111,7 +136,18 @@ export function handleLoginRedirect(req) {
 }
 
 export function handleDashboardRedirect(req) {
-  redirectToPath(req, "/live");
+  if (constants.showLive) {
+    redirectToPath(req, "/live");
+  } else if (constants.showApp) {
+    redirectToPath(req, "/application");
+  } else {
+    // TODO: whats the state? Ideally /dash when it exists.
+    redirectToPath(req, "/application"); // * Put this here temporary so we avoid unforeseen issues
+  }
+}
+
+export function handleApplicationRedirect(req) {
+  redirectToPath(req, "/application");
 }
 
 export function handleAdminRedirect(req) {

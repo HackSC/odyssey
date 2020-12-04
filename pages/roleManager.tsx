@@ -66,7 +66,7 @@ const roleManager = ({ profile }) => {
     <>
       <Head title="HackSC Odyssey - Application" />
       <Navbar loggedIn admin activePage="/roleManager" />
-      <Background>
+      <Background padding="30px 0">
         <Container>
           <SearchBar>
             <Input

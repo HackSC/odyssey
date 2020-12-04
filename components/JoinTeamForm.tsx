@@ -11,7 +11,7 @@ const JoinTeamForm = () => {
   const [team, setTeam] = useState(null);
   const [error, setError] = useState(null);
 
-  const handleJoinClick = useCallback(async (e) => {
+  const handleJoinClick = useCallback(async e => {
     e.preventDefault();
 
     if (teamCodeRef && teamCodeRef.current) {
@@ -30,7 +30,7 @@ const JoinTeamForm = () => {
   }, []);
 
   const handleSubmit = useCallback(
-    async (e) => {
+    async e => {
       e.preventDefault();
 
       if (!error && team) {
@@ -38,7 +38,7 @@ const JoinTeamForm = () => {
         const res = await fetch("/api/team/join/" + team.teamCode, {
           method: "POST",
           body: "",
-          credentials: "include",
+          credentials: "include"
         });
 
         const data = await res.json();

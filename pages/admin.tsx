@@ -5,10 +5,9 @@ import { getReferrerCode } from "../lib/referrerCode";
 
 import styled from "styled-components";
 
-import Head from "../components/Head";
-import Navbar from "../components/Navbar";
-import Footer from "../components/Footer";
-import { Button, Background, Flex, Container } from "../styles";
+import { Head, Navbar, Footer, AdminStats } from "../components";
+
+import { Background, Flex, Container } from "../styles";
 
 const Admin = ({ profile }) => {
   return (
@@ -32,9 +31,9 @@ const Admin = ({ profile }) => {
             <Action id="scan-page" href="/scan">
               <ActionTitle>Scan In Hackers</ActionTitle>
             </Action>
-            {/* <Action href="/appReview">
-              <ActionTitle>Start App Review</ActionTitle>
-            </Action> */}
+            <Action id="app-review-page" href="/appReview">
+              <ActionTitle>App Review</ActionTitle>
+            </Action>
             <Action id="checkin-page" href="/checkin">
               <ActionTitle>Check In Hackers</ActionTitle>
             </Action>
@@ -62,12 +61,12 @@ const Admin = ({ profile }) => {
             <Action id="mail-query-page" href="/mailQuery">
               <ActionTitle> Mail Signups </ActionTitle>
             </Action>
-            <Action href="/manageApiDirectory">
+            <Action id="manage-api-directory-page" href="/manageApiDirectory">
               <ActionTitle> Manage Api Directory </ActionTitle>
             </Action>
             <Action
               id="metabase-page"
-              href="https://metabase-odyssey.herokuapp.com/"
+              href="https://metabase.hacksc.com/"
               target="_blank"
             >
               <ActionTitle>Access Metabase</ActionTitle>

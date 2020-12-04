@@ -32,7 +32,7 @@ const Select = React.forwardRef<Ref, SelectProps>((props, ref) => {
         onChange={onChange}
       >
         {required && <option></option>}
-        {options.map((option) => (
+        {options.map(option => (
           <option
             value={option.value}
             key={option.value}

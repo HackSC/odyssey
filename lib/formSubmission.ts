@@ -18,10 +18,14 @@ function getProfileFromFormData(
     gender: formRef.current["gender"].value,
     ethnicity: formRef.current["ethnicity"].value,
     over18: formRef.current["is-over-18"].checked,
-    needBus: formRef.current["need-bus"].checked,
+    needBus: formRef.current["need-bus"]
+      ? formRef.current["need-bus"].checked
+      : false,
     skillLevel: formRef.current["skill-level"].value,
     skills: formRef.current["skills"].value,
-    interests: formRef.current["interests"].value,
+    interests: formRef.current["interests"]
+      ? formRef.current["interests"].value
+      : "",
     links: formRef.current["links"].value,
     questionOne: formRef.current["question-one"].value,
     questionTwo: formRef.current["question-two"].value,
@@ -54,6 +58,17 @@ export async function syncProfile(
 
   if (response.status === 200) {
     setSuccess(true);
+
+    // Slack announcement
+    if (isSubmit) {
+      await fetch("/api/slack/appSubmit", {
+        method: "POST",
+        body: JSON.stringify(profile),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+    }
 
     if (isSubmit) {
       await Router.push("/results");

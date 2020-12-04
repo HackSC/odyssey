@@ -10,11 +10,11 @@ module.exports = (sequelize, DataTypes) => {
       isActive: DataTypes.BOOLEAN,
       sponsor: DataTypes.STRING,
       isPast: DataTypes.BOOLEAN,
-      name: DataTypes.STRING(100),
+      name: DataTypes.STRING(100)
     },
     {}
   );
-  Task.associate = function (models) {
+  Task.associate = function(models) {
     Task.hasMany(models.Contribution, { foreignKey: "taskId" });
     // associations can be defined here
   };

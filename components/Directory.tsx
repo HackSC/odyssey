@@ -1,7 +1,6 @@
 import styled from "styled-components";
 
 const Directory = ({ apis }) => {
-  console.log("apis:", apis);
   return (
     <Wrapper>
       {apis && apis.success && apis.success.length > 0

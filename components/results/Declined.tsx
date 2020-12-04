@@ -22,11 +22,11 @@ const Declined: React.FunctionComponent<Props> = (props) => {
   return (
     <Flex direction="column">
       <FormSection>
-        <h1>You have declined your spot for HackSC 2020</h1>
+        <h1>You have declined your spot for HackSC 2021</h1>
 
         <Flex align="center">
           <p>
-            We're sad we won't be seeing you at HackSC 2020! If you decide to
+            We're sad we won't be seeing you at HackSC 2021! If you decide to
             change your mind, click the following to un-decline.
           </p>
 

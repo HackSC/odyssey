@@ -54,27 +54,33 @@ const EditableCell = ({ event }) => {
         </Description>
         <Description>
           <b>Time: </b>
-          {moment(currEvent.startsAt, "YYYY-MM-DDTHH:mm:ss.SSSZ").format(
+          {moment(currEvent.startsAt, "YYYY-MM-DDTHH:mm:ss.SSSZ", "PST").format(
             "MM/DD/YYYY"
           ) ==
-          moment(currEvent.endsAt, "YYYY-MM-DDTHH:mm:ss.SSSZ").format(
+          moment(currEvent.endsAt, "YYYY-MM-DDTHH:mm:ss.SSSZ", "PST").format(
             "MM/DD/YYYY"
           ) ? (
             <span>
-              {moment(currEvent.startsAt, "YYYY-MM-DDTHH:mm:ss.SSSZ").format(
-                "MMM D"
-              )}
+              {moment(
+                currEvent.startsAt,
+                "YYYY-MM-DDTHH:mm:ss.SSSZ",
+                "PST"
+              ).format("MMM D")}
               , {startTime} - {endTime}
             </span>
           ) : (
             <span>
-              {moment(currEvent.startsAt, "YYYY-MM-DDTHH:mm:ss.SSSZ").format(
-                "MMM D hh:mm a"
-              )}{" "}
+              {moment(
+                currEvent.startsAt,
+                "YYYY-MM-DDTHH:mm:ss.SSSZ",
+                "PST"
+              ).format("MMM D hh:mm a")}{" "}
               -{" "}
-              {moment(currEvent.endsAt, "YYYY-MM-DDTHH:mm:ss.SSSZ").format(
-                "MMM D hh:mm a"
-              )}
+              {moment(
+                currEvent.endsAt,
+                "YYYY-MM-DDTHH:mm:ss.SSSZ",
+                "PST"
+              ).format("MMM D hh:mm a")}
             </span>
           )}
         </Description>
@@ -93,7 +99,7 @@ const TaskManager = ({ profile, currentEvents }) => {
     <>
       <Head title="HackSC Odyssey - Results" />
       <Navbar loggedIn admin activePage="/scheduleManager" />
-      <Background>
+      <Background padding="30px 0">
         <Container>
           {" "}
           <Task>
@@ -166,7 +172,7 @@ TaskManager.getInitialProps = async ({ req }) => {
   const currentEvents = await getCurrentEvents(req);
 
   // Null profile means user is not logged in
-  if (!profile) {
+  if (!profile || profile.role !== "admin") {
     handleLoginRedirect(req);
   }
 

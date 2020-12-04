@@ -5,7 +5,10 @@ import {
   handleAdminRedirect,
   handleVolunteerRedirect,
   handleSponsorRedirect,
+  handleDashboardRedirect,
 } from "../lib/authenticate";
+
+import constants from "../lib/hackathonConstants";
 
 import { generatePosts } from "../lib/referrerCode";
 
@@ -30,6 +33,10 @@ Dashboard.getInitialProps = async ({ req }) => {
     handleSponsorRedirect(req);
   }
 
+  if (!constants.showDash) {
+    handleDashboardRedirect(req);
+  }
+
   let socialPosts = {};
   if (profile) {
     socialPosts = generatePosts(profile);
@@ -38,7 +45,7 @@ Dashboard.getInitialProps = async ({ req }) => {
   return {
     houses,
     profile,
-    socialPosts,
+    socialPosts
   };
 };
 

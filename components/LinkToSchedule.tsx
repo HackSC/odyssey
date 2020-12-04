@@ -7,7 +7,7 @@ const LinkToSchedule = () => {
     <Wrapper>
       <Half
         style={{
-          textAlign: "center",
+          textAlign: "center"
         }}
       >
         <h2>Link to Schedule</h2>
@@ -18,7 +18,7 @@ const LinkToSchedule = () => {
 
       <Half
         style={{
-          textAlign: "center",
+          textAlign: "center"
         }}
       >
         <h2>See Battle Pass Progress</h2>

@@ -28,7 +28,7 @@ Sentry.init({
 });
 
 app.prepare().then(() => {
-  server.get("*", handle);
+  server.all("*", handle);
 
   const port_num = process.env.PORT || 3000;
   http.createServer(server).listen(port_num, () => {

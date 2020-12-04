@@ -1,4 +1,4 @@
-import Document, { Head, Main, NextScript } from "next/document";
+import Document, { Html, Head, Main, NextScript } from "next/document";
 import { ServerStyleSheet } from "styled-components";
 
 export default class MyDocument extends Document {
@@ -31,13 +31,21 @@ export default class MyDocument extends Document {
 
   render() {
     return (
-      <html>
-        <Head />
+      <Html>
+        <Head>
+          <script
+            src="https://betteruptime.com/widgets/announcement.js"
+            data-id="122813"
+            async
+            type="text/javascript"
+          ></script>
+          <script src="http://metabase.example.com/app/iframeResizer.js"></script>
+        </Head>
         <body>
           <Main />
           <NextScript />
         </body>
-      </html>
+      </Html>
     );
   }
 }

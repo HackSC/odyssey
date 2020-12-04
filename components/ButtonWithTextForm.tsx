@@ -6,7 +6,7 @@ import styled from "styled-components";
 const ButtonWithTextForm = ({ title, label, onSubmit, buttonText }) => {
   const [text, setText] = useState("");
 
-  const handleChange = (e) => {
+  const handleChange = e => {
     e.preventDefault();
     setText(e.target.value);
   };
@@ -25,7 +25,7 @@ const ButtonWithTextForm = ({ title, label, onSubmit, buttonText }) => {
             onChange={handleChange}
           />
           <Button
-            onClick={(e) => {
+            onClick={e => {
               e.preventDefault();
               onSubmit(text);
               setText("");

@@ -159,8 +159,8 @@ const Calendar: React.FunctionComponent<Props> = (props) => {
       groups={[
         {
           id: 1,
-          title: "HackSC-2020",
-          rightTitle: "HackSC-2020",
+          title: "HackSC-2021",
+          rightTitle: "HackSC-2021",
           bgColor: "#000000",
           height: 400,
         },
