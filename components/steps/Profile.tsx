@@ -48,9 +48,9 @@ const gradDateOptions = [
 
 /** TODO: Add Not Listed / custom input option */
 const genderOptions = [
-  { label: "Male", value: "male" },
-  { label: "Female", value: "female" },
-  { label: "Non-Binary", value: "non-binary" },
+  { label: "He/Him/His", value: "male" },
+  { label: "She/Her/Hers", value: "female" },
+  { label: "They/Them/Theirs", value: "non-binary" },
   { label: "Other", value: "other" },
   { label: "Prefer not to say", value: "no-say" }
 ];
@@ -316,10 +316,10 @@ const ProfileStep: React.FunctionComponent<Props> = props => {
           <h2>Demographics</h2>
 
           <FormGroup>
-            <label>To which gender identity do you most identify?</label>
+            <label>Preferred Pronouns</label>
 
             <Select
-              name="gender"
+              name="pronouns"
               options={genderOptions}
               defaultValue={profile.gender}
               required
