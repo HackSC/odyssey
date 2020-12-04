@@ -5,7 +5,7 @@ import { getReferrerCode } from "../lib/referrerCode";
 
 import styled from "styled-components";
 
-import ReactMarkdown from "react-markdown";
+//import ReactMarkdown from "react-markdown";
 import { Head, Navbar, Footer } from "../components";
 
 import { Background, Flex, Container } from "../styles";
@@ -29,21 +29,21 @@ const Admin = ({ profile }) => {
             <PaddedFlex direction="column">
               <PaddedFlex direction="row">
                 <PaddedSubTitle>hacksc.com: </PaddedSubTitle>
-                <ReactMarkdown>
-                  [![HackSC.com](https://betteruptime.com/status-badges/v1/monitor/50yh.svg)](https://betteruptime.com/?utm_source=status_badge)
-                </ReactMarkdown>
+                <a href="https://status.hacksc.com">
+                  <img src="https://betteruptime.com/status-badges/v1/monitor/50yh.svg"></img>
+                </a>
               </PaddedFlex>
               <PaddedFlex direction="row">
                 <PaddedSubTitle>staging.hacksc.com: </PaddedSubTitle>
-                <ReactMarkdown>
-                  [![Staging](https://betteruptime.com/status-badges/v1/monitor/518z.svg)](https://betteruptime.com/?utm_source=status_badge)
-                </ReactMarkdown>
+                <a href="https://status.hacksc.com">
+                  <img src="https://betteruptime.com/status-badges/v1/monitor/518z.svg"></img>
+                </a>
               </PaddedFlex>
               <PaddedFlex direction="row">
                 <PaddedSubTitle>dashboard.hacksc.com: </PaddedSubTitle>
-                <ReactMarkdown>
-                  [![Dashboard](https://betteruptime.com/status-badges/v1/monitor/50yp.svg)](https://betteruptime.com/?utm_source=status_badge)
-                </ReactMarkdown>
+                <a href="https://status.hacksc.com">
+                  <img src="https://betteruptime.com/status-badges/v1/monitor/50yp.svg"></img>
+                </a>
               </PaddedFlex>
             </PaddedFlex>
           </Flex>
