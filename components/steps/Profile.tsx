@@ -8,7 +8,7 @@ import {
   RadioChoiceLabel,
   Flex,
   Column,
-  Button
+  Button,
 } from "../../styles";
 
 import Select from "../Select";
@@ -31,7 +31,7 @@ const yearOptions = [
   { label: "Sophomore", value: "sophomore" },
   { label: "Junior", value: "junior" },
   { label: "Senior", value: "senior" },
-  { label: "Graduate", value: "graduate" }
+  { label: "Graduate", value: "graduate" },
 ];
 
 const gradDateOptions = [
@@ -43,7 +43,7 @@ const gradDateOptions = [
   { label: "Fall 2022", value: "fall-2022" },
   { label: "Spring 2023", value: "spring-2023" },
   { label: "Fall 2023", value: "fall-2023" },
-  { label: "Other", value: "other" }
+  { label: "Other", value: "other" },
 ];
 
 /** TODO: Add Not Listed / custom input option */
@@ -52,31 +52,31 @@ const genderOptions = [
   { label: "She/Her/Hers", value: "female" },
   { label: "They/Them/Theirs", value: "non-binary" },
   { label: "Other", value: "other" },
-  { label: "Prefer not to say", value: "no-say" }
+  { label: "Prefer not to say", value: "no-say" },
 ];
 
 const skillLevelOptions = [
   {
     label: "Beginner - First time hacker or still learning",
-    value: "beginner"
+    value: "beginner",
   },
   {
     label: "Intermediate - Not your first rodeo but still lots to learn",
-    value: "intermediate"
+    value: "intermediate",
   },
-  { label: "Advanced - Hacker who knows the game", value: "advanced" }
+  { label: "Advanced - Hacker who knows the game", value: "advanced" },
 ];
 
-const uploadResume = async resumeFile => {
+const uploadResume = async (resumeFile) => {
   var resumeForm = new FormData();
   resumeForm.append("file", resumeFile);
   await fetch("/api/profile/resume", {
     method: "POST",
-    body: resumeForm
+    body: resumeForm,
   });
 };
 
-const ProfileStep: React.FunctionComponent<Props> = props => {
+const ProfileStep: React.FunctionComponent<Props> = (props) => {
   const { profile } = props;
   const [hasChanged, setHasChanged] = useState(
     !!profile && !!profile.submittedAt
@@ -114,7 +114,7 @@ const ProfileStep: React.FunctionComponent<Props> = props => {
 
   if (process.browser) {
     if (hasChanged) {
-      window.onbeforeunload = function(event) {
+      window.onbeforeunload = function (event) {
         var message =
           "Important: Please click on 'Save' button to leave this page.";
         if (typeof event == "undefined") {
@@ -133,7 +133,7 @@ const ProfileStep: React.FunctionComponent<Props> = props => {
   return profile ? (
     <Flex direction="column">
       <Form
-        onSubmit={e => {
+        onSubmit={(e) => {
           if (userResume && userResume.files[0]) {
             uploadResume(userResume.files[0]);
           }
@@ -319,7 +319,7 @@ const ProfileStep: React.FunctionComponent<Props> = props => {
             <label>Preferred Pronouns</label>
 
             <Select
-              name="pronouns"
+              name="gender"
               options={genderOptions}
               defaultValue={profile.gender}
               required
@@ -488,8 +488,8 @@ const ProfileStep: React.FunctionComponent<Props> = props => {
               id="resume"
               accept="application/pdf"
               required={!!!profile.resume}
-              ref={ref => setUserResume(ref)}
-              onChange={e => setResumeUploaded(e.target.files[0])}
+              ref={(ref) => setUserResume(ref)}
+              onChange={(e) => setResumeUploaded(e.target.files[0])}
               disabled={submitted}
             />
             <ResumeUploadButton htmlFor="resume" disabled={submitted}>
@@ -702,7 +702,7 @@ const ProfileStep: React.FunctionComponent<Props> = props => {
                   <Flex>
                     <SaveButton
                       outline
-                      onClick={e => {
+                      onClick={(e) => {
                         syncProfile(e, formRef, setSaved, setError, false);
                         if (userResume && userResume.files[0]) {
                           uploadResume(userResume.files[0]);
