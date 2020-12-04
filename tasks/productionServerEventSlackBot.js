@@ -11,9 +11,8 @@ const productionServerSlackBot = async () => {
         /*
       try {
         let new_res = await res.json();
-        console.log(new_res.result)
       } catch (e) {
-        console.log("could not get json object from response.")
+        console.error("could not get json object from response.")
       }
       */
       }

@@ -44,7 +44,6 @@ Application.getInitialProps = async ({ req }) => {
   const profile = await getProfile(req);
   //const houses = await getHouses(req);
   const houses = [];
-  //console.log(req);
 
   // Null profile means user is not logged in
   if (!profile) {
@@ -59,7 +58,6 @@ Application.getInitialProps = async ({ req }) => {
 
   if (profile && profile.status == "checkedIn") {
     //const houseInfo = await getHouseInfo(req, 1);
-    //console.log(houseInfo);
   }
 
   /*
