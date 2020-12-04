@@ -1,13 +1,9 @@
 import React from "react";
+import styled from "styled-components";
 
 import { handleLoginRedirect, getProfile } from "../lib/authenticate";
 import { getReferrerCode } from "../lib/referrerCode";
-
-import styled from "styled-components";
-
-//import ReactMarkdown from "react-markdown";
 import { Head, Navbar, Footer } from "../components";
-
 import { Background, Flex, Container } from "../styles";
 
 const Admin = ({ profile }) => {
