@@ -32,6 +32,6 @@ app.prepare().then(() => {
 
   const port_num = process.env.PORT || 3000;
   http.createServer(server).listen(port_num, () => {
-    console.log(`listening on port ${port_num}`);
+    console.info(`listening on port ${port_num}`);
   });
 });

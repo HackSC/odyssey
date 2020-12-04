@@ -191,7 +191,6 @@ Cypress.Commands.add("goToAdmin", (overrides = {}) => {
         url: "http://localhost:3000/admin",
         followRedirect: false,
       }).then((res) => {
-        console.log(res);
         expect(res.redirectedToUrl).to.eq("http://localhost:3000/application");
       });
     });

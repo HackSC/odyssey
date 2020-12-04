@@ -25,13 +25,15 @@ const EditableCell = ({ event }) => {
   const [currEvent, setCurrEvent] = useState(event);
   const startTime = moment(
     currEvent.startsAt,
-    "YYYY-MM-DDTHH:mm:ss.SSSZ"
+    "YYYY-MM-DDTHH:mm:ss.SSSZ",
+    "UTC"
   ).format("hh:mm a");
-  const endTime = moment(currEvent.endsAt, "YYYY-MM-DDTHH:mm:ss.SSSZ").format(
-    "hh:mm a"
-  );
+  const endTime = moment(
+    currEvent.endsAt,
+    "YYYY-MM-DDTHH:mm:ss.SSSZ",
+    "UTC"
+  ).format("hh:mm a");
 
-  console.log(currEvent.startsAt);
   return (
     <Task>
       <TaskInfo>
@@ -63,20 +65,26 @@ const EditableCell = ({ event }) => {
             "MM/DD/YYYY"
           ) ? (
             <span>
-              {moment(currEvent.startsAt, "YYYY-MM-DDTHH:mm:ss.SSSZ").format(
-                "MMM D"
-              )}
+              {moment(
+                currEvent.startsAt,
+                "YYYY-MM-DDTHH:mm:ss.SSSZ",
+                "UTC"
+              ).format("MMM D")}
               , {startTime} - {endTime}
             </span>
           ) : (
             <span>
-              {moment(currEvent.startsAt, "YYYY-MM-DDTHH:mm:ss.SSSZ").format(
-                "MMM D hh:mm a"
-              )}{" "}
+              {moment(
+                currEvent.startsAt,
+                "YYYY-MM-DDTHH:mm:ss.SSSZ",
+                "UTC"
+              ).format("MMM D hh:mm a")}{" "}
               -{" "}
-              {moment(currEvent.endsAt, "YYYY-MM-DDTHH:mm:ss.SSSZ").format(
-                "MMM D hh:mm a"
-              )}
+              {moment(
+                currEvent.endsAt,
+                "YYYY-MM-DDTHH:mm:ss.SSSZ",
+                "UTC"
+              ).format("MMM D hh:mm a")}
             </span>
           )}
         </Description>

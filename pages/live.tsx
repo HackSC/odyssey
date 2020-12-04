@@ -43,8 +43,6 @@ const Live = ({ profile, houses, socialPosts }) => {
     defaultOnError: console.log,
   });
 
-  console.log(profile);
-
   // * Local Hooks
   const [alert, setAlert] = useState(false);
 
