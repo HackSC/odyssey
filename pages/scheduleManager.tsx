@@ -30,6 +30,8 @@ const EditableCell = ({ event }) => {
   const endTime = moment(currEvent.endsAt, "YYYY-MM-DDTHH:mm:ss.SSSZ").format(
     "hh:mm a"
   );
+
+  console.log(currEvent.startsAt);
   return (
     <Task>
       <TaskInfo>
@@ -54,33 +56,27 @@ const EditableCell = ({ event }) => {
         </Description>
         <Description>
           <b>Time: </b>
-          {moment(currEvent.startsAt, "YYYY-MM-DDTHH:mm:ss.SSSZ", "PST").format(
+          {moment(currEvent.startsAt, "YYYY-MM-DDTHH:mm:ss.SSSZ").format(
             "MM/DD/YYYY"
           ) ==
-          moment(currEvent.endsAt, "YYYY-MM-DDTHH:mm:ss.SSSZ", "PST").format(
+          moment(currEvent.endsAt, "YYYY-MM-DDTHH:mm:ss.SSSZ").format(
             "MM/DD/YYYY"
           ) ? (
             <span>
-              {moment(
-                currEvent.startsAt,
-                "YYYY-MM-DDTHH:mm:ss.SSSZ",
-                "PST"
-              ).format("MMM D")}
+              {moment(currEvent.startsAt, "YYYY-MM-DDTHH:mm:ss.SSSZ").format(
+                "MMM D"
+              )}
               , {startTime} - {endTime}
             </span>
           ) : (
             <span>
-              {moment(
-                currEvent.startsAt,
-                "YYYY-MM-DDTHH:mm:ss.SSSZ",
-                "PST"
-              ).format("MMM D hh:mm a")}{" "}
+              {moment(currEvent.startsAt, "YYYY-MM-DDTHH:mm:ss.SSSZ").format(
+                "MMM D hh:mm a"
+              )}{" "}
               -{" "}
-              {moment(
-                currEvent.endsAt,
-                "YYYY-MM-DDTHH:mm:ss.SSSZ",
-                "PST"
-              ).format("MMM D hh:mm a")}
+              {moment(currEvent.endsAt, "YYYY-MM-DDTHH:mm:ss.SSSZ").format(
+                "MMM D hh:mm a"
+              )}
             </span>
           )}
         </Description>
@@ -89,7 +85,7 @@ const EditableCell = ({ event }) => {
   );
 };
 
-const TaskManager = ({ profile, currentEvents }) => {
+const ScheduleManager = ({ profile, currentEvents }) => {
   const [newEvent, setNewEvent] = useState({});
 
   const taskBlocks = currentEvents.events.map((event) => {
@@ -167,7 +163,7 @@ const TaskManager = ({ profile, currentEvents }) => {
   );
 };
 
-TaskManager.getInitialProps = async ({ req }) => {
+ScheduleManager.getInitialProps = async ({ req }) => {
   const profile = await getProfile(req);
   const currentEvents = await getCurrentEvents(req);
 
@@ -182,4 +178,4 @@ TaskManager.getInitialProps = async ({ req }) => {
   };
 };
 
-export default TaskManager;
+export default ScheduleManager;
