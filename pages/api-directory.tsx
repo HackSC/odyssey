@@ -51,7 +51,6 @@ API.getInitialProps = async ({ req }) => {
 
   if (profile && profile.status == "checkedIn") {
     //const houseInfo = await getHouseInfo(req, 1);
-    //console.log(houseInfo);
   }
 
   if (typeof window !== "undefined") {

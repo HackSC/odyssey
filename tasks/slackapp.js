@@ -18,7 +18,7 @@ const CreateSlackApp = async () => {
         await SlackApp.start(port_num);
       })(SlackApp);
     } catch (e) {
-      console.log("App failed to bind to port");
+      console.error("App failed to bind to port");
     }
   }
 

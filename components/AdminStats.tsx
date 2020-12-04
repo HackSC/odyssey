@@ -12,7 +12,6 @@ const AdminStats = ({ profile, showtitle = true }) => {
     });
   }, []);
 
-  console.log(profiles);
   if (profile.role != "admin") return <></>;
   return (
     <Container>

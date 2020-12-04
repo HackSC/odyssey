@@ -31,7 +31,6 @@ const EditableCell = ({ event }) => {
     "hh:mm a"
   );
 
-  console.log(currEvent.startsAt);
   return (
     <Task>
       <TaskInfo>
