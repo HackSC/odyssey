@@ -1,12 +1,9 @@
 import React from "react";
+import styled from "styled-components";
 
 import { handleLoginRedirect, getProfile } from "../lib/authenticate";
 import { getReferrerCode } from "../lib/referrerCode";
-
-import styled from "styled-components";
-
-import { Head, Navbar, Footer, AdminStats } from "../components";
-
+import { Head, Navbar, Footer } from "../components";
 import { Background, Flex, Container } from "../styles";
 
 const Admin = ({ profile }) => {
@@ -24,6 +21,27 @@ const Admin = ({ profile }) => {
               or find any errors, hit up the engineers in{" "}
               <b>#{new Date().getFullYear()}-engineering</b>
             </p>
+
+            <PaddedFlex direction="column">
+              <PaddedFlex direction="row">
+                <PaddedSubTitle>hacksc.com: </PaddedSubTitle>
+                <a href="https://status.hacksc.com">
+                  <img src="https://betteruptime.com/status-badges/v1/monitor/50yh.svg"></img>
+                </a>
+              </PaddedFlex>
+              <PaddedFlex direction="row">
+                <PaddedSubTitle>staging.hacksc.com: </PaddedSubTitle>
+                <a href="https://status.hacksc.com">
+                  <img src="https://betteruptime.com/status-badges/v1/monitor/518z.svg"></img>
+                </a>
+              </PaddedFlex>
+              <PaddedFlex direction="row">
+                <PaddedSubTitle>dashboard.hacksc.com: </PaddedSubTitle>
+                <a href="https://status.hacksc.com">
+                  <img src="https://betteruptime.com/status-badges/v1/monitor/50yp.svg"></img>
+                </a>
+              </PaddedFlex>
+            </PaddedFlex>
           </Flex>
 
           <ActionsHeader>Actions</ActionsHeader>
@@ -98,8 +116,16 @@ Admin.getInitialProps = async (ctx) => {
   };
 };
 
+const PaddedSubTitle = styled.h3`
+  margin: 0 1rem 0 0;
+`;
+
+const PaddedFlex = styled(Flex)`
+  margin: 0.25rem 0 0 0;
+`;
+
 const ActionsHeader = styled.h2`
-  margin: 48px 0 16px;
+  margin: 2rem 0 1rem;
 `;
 
 const Actions = styled.div`

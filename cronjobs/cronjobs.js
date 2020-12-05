@@ -13,7 +13,7 @@ const stagingServerHeartbeat = require("../tasks/stagingServerHeartbeat");
 const productionDBHeartbeat = require("../tasks/productionDBHeartbeat");
 const stagingDBHeartbeat = require("../tasks/stagingDBHeartbeat");
 
-const scheduleCronJobs = () => {
+const scheduleCronJobs = async () => {
   /* Upsert to send grid once an hour */
   cron.schedule("0 * * * *", sendgridSync);
 
