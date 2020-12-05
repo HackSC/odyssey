@@ -1,16 +1,22 @@
 import React, { useState } from "react";
 
-import { handleLoginRedirect, getProfile } from "../lib/authenticate";
+import { handleLoginRedirect, getProfile } from "../../lib/authenticate";
 
 import {
   getCurrentUnlockables,
   saveUnlockable,
-  updateUnlockable
-} from "../lib/live";
+  updateUnlockable,
+} from "../../lib/live";
 
-import { Head, Navbar, Footer } from "../components";
+import { Head, Navbar, Footer } from "../../components";
 
-import { Background, Container, EditButton, Task, TaskInfo } from "../styles";
+import {
+  Background,
+  Container,
+  EditButton,
+  Task,
+  TaskInfo,
+} from "../../styles";
 
 const EditableCell = ({ unlockable }) => {
   const [currUnlockable, setCurrUnlockable] = useState(unlockable);
@@ -23,7 +29,7 @@ const EditableCell = ({ unlockable }) => {
           type="number"
           placeholder="tier"
           value={currUnlockable.tier}
-          onChange={e => {
+          onChange={(e) => {
             setCurrUnlockable({ ...currUnlockable, tier: e.target.value });
           }}
         />
@@ -31,19 +37,19 @@ const EditableCell = ({ unlockable }) => {
           type="number"
           placeholder="pointThreshold"
           value={currUnlockable.pointThreshold}
-          onChange={e => {
+          onChange={(e) => {
             setCurrUnlockable({
               ...currUnlockable,
-              pointThreshold: e.target.value
+              pointThreshold: e.target.value,
             });
           }}
         />
         <select
-          onChange={e => {
+          onChange={(e) => {
             const isPremium = e.target.value === "Premium";
             setCurrUnlockable({
               ...currUnlockable,
-              isPremium: isPremium
+              isPremium: isPremium,
             });
           }}
           value={currUnlockable.isPremium ? "Premium" : "Standard"}
@@ -72,7 +78,7 @@ const EditableCell = ({ unlockable }) => {
 const BattlepassManager = ({ profile, currentUnlockables }) => {
   const [newUnlockable, setNewUnlockable] = useState({});
 
-  const taskBlocks = currentUnlockables.unlockables.map(unlockable => {
+  const taskBlocks = currentUnlockables.unlockables.map((unlockable) => {
     return <EditableCell unlockable={unlockable} />;
   });
   return (
@@ -87,29 +93,29 @@ const BattlepassManager = ({ profile, currentUnlockables }) => {
               <input
                 type="number"
                 placeholder="tier"
-                onChange={e => {
+                onChange={(e) => {
                   setNewUnlockable({
                     ...newUnlockable,
-                    tier: e.target.value
+                    tier: e.target.value,
                   });
                 }}
               />
               <input
                 type="number"
                 placeholder="pointThreshold"
-                onChange={e => {
+                onChange={(e) => {
                   setNewUnlockable({
                     ...newUnlockable,
-                    pointThreshold: e.target.value
+                    pointThreshold: e.target.value,
                   });
                 }}
               />
               <select
-                onChange={e => {
+                onChange={(e) => {
                   const isPremium = e.target.value === "Premium";
                   setNewUnlockable({
                     ...newUnlockable,
-                    isPremium: isPremium
+                    isPremium: isPremium,
                   });
                 }}
                 //@ts-ignore
@@ -152,7 +158,7 @@ BattlepassManager.getInitialProps = async ({ req }) => {
 
   return {
     profile,
-    currentUnlockables
+    currentUnlockables,
   };
 };
 

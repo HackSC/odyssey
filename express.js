@@ -91,4 +91,27 @@ server.post("/api/scan", (req, res) => {
   return res.json({ message: "Received" });
 });
 
+server.use("/admin/auth", authRouter);
+server.use("/admin/api/profile", profileRouter);
+server.use("/admin/api/majorEvents", majorEventsRouter);
+server.use("/admin/api/apis", apiRouter);
+server.use("/admin/api/admin", adminRouter);
+server.use("/admin/api/task", taskRouter);
+server.use("/admin/api/points", pointRouter);
+server.use("/admin/api/team", teamRouter);
+server.use("/admin/api/person", personRouter);
+server.use("/admin/api/contribution", contributionRouter);
+server.use("/admin/api/live", liveRouter);
+server.use("/admin/api/projectTeam", projectTeamRouter);
+server.use("/admin/api/event", eventRouter);
+server.use("/admin/api/unlockable", battlepassRouter);
+server.use("/admin/api/hacker/live", hackerLiveRouter);
+server.use("/admin/api/prize", prizeRouter);
+server.use("/admin/api/public", publicRouter);
+
+server.post("/admin/api/scan", (req, res) => {
+  console.info("Scanned: ", req.body.code);
+  return res.json({ message: "Received" });
+});
+
 module.exports = server;

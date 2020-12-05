@@ -8,9 +8,9 @@ import {
   handleLoginRedirect,
   getProfile,
   getMajorEvents,
-} from "../lib/authenticate";
+} from "../../lib/authenticate";
 
-import { Head, Navbar, Footer, Select, Directory } from "../components";
+import { Head, Navbar, Footer, Select, Directory } from "../../components";
 
 import {
   Button,
@@ -20,12 +20,12 @@ import {
   Container,
   Form,
   FormGroup,
-} from "../styles";
+} from "../../styles";
 
 import {
   liveApiLookupFetch,
   liveAllApiLookupFetch,
-} from "../lib/api-sdk/liveHooks";
+} from "../../lib/api-sdk/liveHooks";
 
 const manageApiDirectory = ({ events }) => {
   const [action, setAction] = useState("all");

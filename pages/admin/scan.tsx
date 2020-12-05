@@ -3,16 +3,15 @@ import styled from "styled-components";
 
 import { useToasts } from "react-toast-notifications";
 
-import { handleLoginRedirect, getProfile } from "../lib/authenticate";
+import { handleLoginRedirect, getProfile, sendSlackMessage } from "../../lib";
 
-import Head from "../components/Head";
-import Scanner from "../components/Scanner";
-import Navbar from "../components/Navbar";
+import { Head, Scanner, Navbar, Select } from "../../components";
 
-import { Button, Form, Flex } from "../styles";
-import Select from "../components/Select";
-import { liveDispatchFetch, livePointFetch } from "../lib/api-sdk/liveHooks";
-import { getAllTasksFetch } from "../lib/api-sdk/taskHooks";
+import { Button, Form, Flex } from "../../styles";
+
+import { liveDispatchFetch, livePointFetch } from "../../lib/api-sdk/liveHooks";
+import { getAllTasksFetch } from "../../lib/api-sdk/taskHooks";
+
 // TO-DO -- pull this out, define elsewhere
 const ACTIONS = [
   // {
@@ -21,24 +20,24 @@ const ACTIONS = [
   // },
   {
     label: "Identify Hacker",
-    value: "action identify"
+    value: "action identify",
   },
   {
     label: "Check Points Total",
-    value: "action points"
+    value: "action points",
   },
   {
     label: "Confirm Project Submission",
-    value: "action judge"
-  }
+    value: "action judge",
+  },
 ];
 
 type Props = {
-  profile: Profile;
+  admin_profile: Profile;
   tasks: ActiveTask[];
 };
 
-const Scan = ({ profile, tasks }: Props) => {
+const Scan = ({ admin_profile, tasks }: Props) => {
   const [action, setAction] = useState(null);
   const [lastScannedCode, setLastScannedCode] = useState(null);
 
@@ -47,7 +46,7 @@ const Scan = ({ profile, tasks }: Props) => {
   // TOASTS
   const { addToast } = useToasts();
 
-  const handleActionChange = e => {
+  const handleActionChange = (e) => {
     setAction(e.target.value);
     setLastScannedCode(null);
   };
@@ -65,13 +64,13 @@ const Scan = ({ profile, tasks }: Props) => {
     if (!checkIfValidCode(code)) {
       addToast("Invalid QR Code", {
         appearance: "error",
-        autoDismiss: true
+        autoDismiss: true,
       });
       return;
     }
 
     const dispatchBody = {
-      qrCodeId: code
+      qrCodeId: code,
     };
 
     // Either an action (ex: checkin) or a task (ex: 1, 2, etc)
@@ -96,23 +95,42 @@ const Scan = ({ profile, tasks }: Props) => {
         ) {
           const pointTotal = pointResponse.success[0].totalPoints;
 
+          let firstName = admin_profile ? admin_profile.firstName : "";
+          let lastName = admin_profile ? admin_profile.lastName : "";
+          let user_email = admin_profile ? admin_profile.email : "";
+          let start_and_end_date =
+            new Date(new Date().getTime() - 480 * 1000 * 60).toISOString() + "";
+          let slack_result = await sendSlackMessage(
+            "Scan (/admin/scan) by " +
+              firstName +
+              ", " +
+              lastName +
+              ", " +
+              user_email,
+            "Scan Action: " +
+              dispatchBody["actionId"] +
+              "\nPoint Total: " +
+              pointTotal,
+            start_and_end_date,
+            start_and_end_date
+          );
           addToast(`User has ${pointTotal} points`, {
             appearance: "info",
-            autoDismiss: true
+            autoDismiss: true,
           });
         } else {
           addToast(
             "Couldn't find point total... user might not have scanned for any tasks",
             {
               appearance: "error",
-              autoDismiss: true
+              autoDismiss: true,
             }
           );
         }
       } else {
         addToast(pointResponse.error, {
           appearance: "error",
-          autoDismiss: true
+          autoDismiss: true,
         });
       }
 
@@ -126,8 +144,25 @@ const Scan = ({ profile, tasks }: Props) => {
       if (dispatchBody["actionId"] === "checkin") {
         addToast("Successfully checked in user", {
           appearance: "success",
-          autoDismiss: true
+          autoDismiss: true,
         });
+
+        let firstName = admin_profile ? admin_profile.firstName : "";
+        let lastName = admin_profile ? admin_profile.lastName : "";
+        let user_email = admin_profile ? admin_profile.email : "";
+        let start_and_end_date =
+          new Date(new Date().getTime() - 480 * 1000 * 60).toISOString() + "";
+        let slack_result = await sendSlackMessage(
+          "Scan Checkin (/admin/scan) by " +
+            firstName +
+            ", " +
+            lastName +
+            ", " +
+            user_email,
+          "Scan Action: " + dispatchBody["actionId"],
+          start_and_end_date,
+          start_and_end_date
+        );
       } else if (dispatchBody["actionId"] === "identify") {
         const profile: Profile = scanResponse.success as Profile;
         addToast(
@@ -136,17 +171,55 @@ const Scan = ({ profile, tasks }: Props) => {
           }) ${profile.isBattlepassComplete && " IS PREMIUM"}`,
           {
             appearance: "success",
-            autoDismiss: true
+            autoDismiss: true,
           }
+        );
+
+        let firstName = admin_profile ? admin_profile.firstName : "";
+        let lastName = admin_profile ? admin_profile.lastName : "";
+        let user_email = admin_profile ? admin_profile.email : "";
+        let start_and_end_date =
+          new Date(new Date().getTime() - 480 * 1000 * 60).toISOString() + "";
+        let slack_result = await sendSlackMessage(
+          "Scan Identification (/admin/scan) by " +
+            firstName +
+            ", " +
+            lastName +
+            ", " +
+            user_email,
+          "Scan Action: " +
+            dispatchBody["actionId"] +
+            "\n" +
+            `This code belongs to ${profile.firstName} ${profile.lastName} (${
+              profile.email
+            }) ${profile.isBattlepassComplete && " IS PREMIUM"}`,
+          start_and_end_date,
+          start_and_end_date
         );
       } else if (dispatchBody["actionId"] === "contrib") {
         addToast("Hacker has been credited points for finishing task", {
           appearance: "success",
-          autoDismiss: true
+          autoDismiss: true,
         });
+        let firstName = admin_profile ? admin_profile.firstName : "";
+        let lastName = admin_profile ? admin_profile.lastName : "";
+        let user_email = admin_profile ? admin_profile.email : "";
+        let start_and_end_date =
+          new Date(new Date().getTime() - 480 * 1000 * 60).toISOString() + "";
+        let slack_result = await sendSlackMessage(
+          "Scan Contribution Recored (/admin/scan) by " +
+            firstName +
+            ", " +
+            lastName +
+            ", " +
+            user_email,
+          "Scan Action: " + dispatchBody["actionId"],
+          start_and_end_date,
+          start_and_end_date
+        );
       } else if (dispatchBody["actionId"] === "judge") {
         const members: Array<Profile> = scanResponse.success as Array<Profile>;
-        const memberNames = members.map(p => {
+        const memberNames = members.map((p) => {
           return p.firstName + " " + p.lastName;
         });
         addToast(
@@ -155,8 +228,27 @@ const Scan = ({ profile, tasks }: Props) => {
           )}`,
           {
             appearance: "success",
-            autoDismiss: true
+            autoDismiss: true,
           }
+        );
+
+        let firstName = admin_profile ? admin_profile.firstName : "";
+        let lastName = admin_profile ? admin_profile.lastName : "";
+        let user_email = admin_profile ? admin_profile.email : "";
+        let start_and_end_date =
+          new Date(new Date().getTime() - 480 * 1000 * 60).toISOString() + "";
+        let slack_result = await sendSlackMessage(
+          "Scan Judgement (/admin/scan) by " +
+            firstName +
+            ", " +
+            lastName +
+            ", " +
+            user_email,
+          `Submission has been successfully confirmed for ${memberNames.join(
+            ", "
+          )}`,
+          start_and_end_date,
+          start_and_end_date
         );
       }
     } else {
@@ -166,7 +258,7 @@ const Scan = ({ profile, tasks }: Props) => {
 
   const handleScannedCode = useCallback(
     (code: string) => {
-      setLastScannedCode(prev => {
+      setLastScannedCode((prev) => {
         if (prev !== code) {
           sendScanRequest(code);
           return code;
@@ -178,7 +270,7 @@ const Scan = ({ profile, tasks }: Props) => {
     [action]
   );
 
-  const handleManualInput = e => {
+  const handleManualInput = (e) => {
     e.preventDefault();
 
     if (manualInputRef.current) {
@@ -195,9 +287,9 @@ const Scan = ({ profile, tasks }: Props) => {
 
   const tasksWithActionsOptions = useMemo(() => {
     const tasksAsSelectOptions = !!tasks
-      ? tasks.map(task => ({
+      ? tasks.map((task) => ({
           value: `task ${task.id}`,
-          label: task.name
+          label: task.name,
         }))
       : [];
 
@@ -257,7 +349,7 @@ const Scan = ({ profile, tasks }: Props) => {
   );
 };
 
-Scan.getInitialProps = async ctx => {
+Scan.getInitialProps = async (ctx) => {
   const { req } = ctx;
 
   const profile = await getProfile(req);
@@ -276,11 +368,11 @@ Scan.getInitialProps = async ctx => {
   }
 
   const { success: allTasks } = await getAllTasksFetch(req);
-  const activeTasks = allTasks.filter(t => t.isActive);
+  const activeTasks = allTasks.filter((t) => t.isActive);
 
   return {
-    profile,
-    tasks: activeTasks // TODO -- update this once we've standardized our server/client stuff
+    admin_profile: profile,
+    tasks: activeTasks, // TODO -- update this once we've standardized our server/client stuff
   };
 };
 

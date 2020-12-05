@@ -1,13 +1,9 @@
 import React from "react";
+import styled from "styled-components";
 
 import { handleLoginRedirect, getProfile } from "../lib/authenticate";
 import { getReferrerCode } from "../lib/referrerCode";
-
-import styled from "styled-components";
-
-import Head from "../components/Head";
-import Navbar from "../components/Navbar";
-import Footer from "../components/Footer";
+import { Head, Navbar, Footer } from "../components";
 import { Button, Background, Flex, Container } from "../styles";
 
 const Sponsor = ({ profile }) => {
@@ -28,18 +24,15 @@ const Sponsor = ({ profile }) => {
 
           <ActionsHeader>Actions</ActionsHeader>
           <Actions>
-            <Action id="scan-page" href="/scan">
+            <Action id="scan-page" href="/admin/scan">
               <ActionTitle>Scan In Hackers</ActionTitle>
             </Action>
-            <Action href="https://live.hacksc.com" target="_blank">
-              <ActionTitle>Live Dashboard</ActionTitle>
-            </Action>
-            <Action id="hacker-manager-page" href="/hackerManager">
+            <Action id="hacker-manager-page" href="/admin/hackerManager">
               <ActionTitle> Manage Hackers </ActionTitle>
             </Action>
             <Action
               id="metabase-page"
-              href="https://metabase-odyssey.herokuapp.com/"
+              href="https://metabase.hacksc.com/"
               target="_blank"
             >
               <ActionTitle>Access Metabase</ActionTitle>
@@ -52,7 +45,7 @@ const Sponsor = ({ profile }) => {
   );
 };
 
-Sponsor.getInitialProps = async ctx => {
+Sponsor.getInitialProps = async (ctx) => {
   const { req } = ctx;
 
   const profile = await getProfile(req);
@@ -67,7 +60,7 @@ Sponsor.getInitialProps = async ctx => {
   }
 
   return {
-    profile
+    profile,
   };
 };
 

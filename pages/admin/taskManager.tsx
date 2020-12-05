@@ -1,15 +1,25 @@
 import React, { useState } from "react";
 
-import { handleLoginRedirect, getProfile } from "../lib/authenticate";
-import { getCurrentTasks, saveTask, updateTask, deleteTask } from "../lib/live";
-import Head from "../components/Head";
-import Navbar from "../components/Navbar";
-import Footer from "../components/Footer";
+import {
+  handleLoginRedirect,
+  getProfile,
+  sendSlackMessage,
+  getCurrentTasks,
+  saveTask,
+  updateTask,
+  deleteTask,
+} from "../../lib";
+import { Head, Navbar, Footer } from "../../components";
 
-import { Background, Container, EditButton, Task, TaskInfo } from "../styles";
-import styled from "styled-components";
+import {
+  Background,
+  Container,
+  EditButton,
+  Task,
+  TaskInfo,
+} from "../../styles";
 
-const EditableCell = ({ task }) => {
+const EditableCell = ({ profile, task }) => {
   const [currTaskValue, setCurrTaskValue] = useState(task);
   return (
     <Task>
@@ -18,7 +28,7 @@ const EditableCell = ({ task }) => {
           type="text"
           placeholder="name"
           value={currTaskValue.name}
-          onChange={e => {
+          onChange={(e) => {
             setCurrTaskValue({ ...currTaskValue, name: e.target.value });
           }}
         />
@@ -26,7 +36,7 @@ const EditableCell = ({ task }) => {
           type="text"
           placeholder="type"
           value={currTaskValue.type}
-          onChange={e => {
+          onChange={(e) => {
             setCurrTaskValue({ ...currTaskValue, type: e.target.value });
           }}
         />
@@ -34,16 +44,16 @@ const EditableCell = ({ task }) => {
           type="number"
           placeholder="points"
           value={currTaskValue.points}
-          onChange={e => {
+          onChange={(e) => {
             setCurrTaskValue({ ...currTaskValue, points: e.target.value });
           }}
         />
         <select
-          onChange={e => {
+          onChange={(e) => {
             const isActive = e.target.value === "Active";
             setCurrTaskValue({
               ...currTaskValue,
-              isActive: isActive
+              isActive: isActive,
             });
           }}
           //@ts-ignore
@@ -57,6 +67,31 @@ const EditableCell = ({ task }) => {
         onClick={async () => {
           const result = await updateTask(currTaskValue);
           if (result) {
+            let firstName = profile ? profile.firstName : "";
+            let lastName = profile ? profile.lastName : "";
+            let user_email = profile ? profile.email : "";
+            let start_and_end_date =
+              new Date(new Date().getTime() - 480 * 1000 * 60).toISOString() +
+              "";
+            let slack_result = await sendSlackMessage(
+              "Task UPDATED (/admin/taskManager) executed by " +
+                firstName +
+                ", " +
+                lastName +
+                ", " +
+                user_email,
+              "Task Name: " +
+                currTaskValue.name +
+                "\nTask Type: " +
+                currTaskValue.type +
+                "\nTask points: " +
+                currTaskValue.points +
+                "\nTask isActive: " +
+                currTaskValue.isActive,
+              start_and_end_date,
+              start_and_end_date
+            );
+
             window.location.reload();
           } else {
             alert("failed to update task");
@@ -69,6 +104,31 @@ const EditableCell = ({ task }) => {
         onClick={async () => {
           const result = await deleteTask(currTaskValue);
           if (result) {
+            let firstName = profile ? profile.firstName : "";
+            let lastName = profile ? profile.lastName : "";
+            let user_email = profile ? profile.email : "";
+            let start_and_end_date =
+              new Date(new Date().getTime() - 480 * 1000 * 60).toISOString() +
+              "";
+            let slack_result = await sendSlackMessage(
+              "Task DELETED (/admin/taskManager) executed by " +
+                firstName +
+                ", " +
+                lastName +
+                ", " +
+                user_email,
+              "Task Name: " +
+                currTaskValue.name +
+                "\nTask Type: " +
+                currTaskValue.type +
+                "\nTask points: " +
+                currTaskValue.points +
+                "\nTask isActive: " +
+                currTaskValue.isActive,
+              start_and_end_date,
+              start_and_end_date
+            );
+
             window.location.reload();
           } else {
             alert("failed to delete task");
@@ -82,10 +142,15 @@ const EditableCell = ({ task }) => {
 };
 
 const TaskManager = ({ profile, currentTasks }) => {
-  const [newTask, setNewTask] = useState({});
+  const [newTask, setNewTask] = useState({
+    name: null,
+    type: null,
+    points: null,
+    isActive: null,
+  });
 
-  const taskBlocks = currentTasks.tasks.map(task => {
-    return <EditableCell task={task} />;
+  const taskBlocks = currentTasks.tasks.map((task) => {
+    return <EditableCell profile={profile} task={task} />;
   });
   return (
     <>
@@ -99,39 +164,39 @@ const TaskManager = ({ profile, currentTasks }) => {
               <input
                 type="text"
                 placeholder="name"
-                onChange={e => {
+                onChange={(e) => {
                   setNewTask({
                     ...newTask,
-                    name: e.target.value
+                    name: e.target.value,
                   });
                 }}
               />
               <input
                 type="text"
                 placeholder="type"
-                onChange={e => {
+                onChange={(e) => {
                   setNewTask({
                     ...newTask,
-                    type: e.target.value
+                    type: e.target.value,
                   });
                 }}
               />
               <input
                 type="number"
                 placeholder="points"
-                onChange={e => {
+                onChange={(e) => {
                   setNewTask({
                     ...newTask,
-                    points: e.target.value
+                    points: e.target.value,
                   });
                 }}
               />
               <select
-                onChange={e => {
+                onChange={(e) => {
                   const isActive = e.target.value === "Active";
                   setNewTask({
                     ...newTask,
-                    isActive: isActive
+                    isActive: isActive,
                   });
                 }}
                 //@ts-ignore
@@ -147,6 +212,32 @@ const TaskManager = ({ profile, currentTasks }) => {
               onClick={async () => {
                 const result = await saveTask(newTask);
                 if (result) {
+                  let firstName = profile ? profile.firstName : "";
+                  let lastName = profile ? profile.lastName : "";
+                  let user_email = profile ? profile.email : "";
+                  let start_and_end_date =
+                    new Date(
+                      new Date().getTime() - 480 * 1000 * 60
+                    ).toISOString() + "";
+                  let slack_result = await sendSlackMessage(
+                    "Task CREATED (/admin/taskManager) executed by " +
+                      firstName +
+                      ", " +
+                      lastName +
+                      ", " +
+                      user_email,
+                    "Task Name: " +
+                      newTask.name +
+                      "\nTask Type: " +
+                      newTask.type +
+                      "\nTask points: " +
+                      newTask.points +
+                      "\nTask isActive: " +
+                      newTask.isActive,
+                    start_and_end_date,
+                    start_and_end_date
+                  );
+
                   // In theory we do optimistic local state updating, in practice, fuck it it'll do
                   window.location.reload();
                 } else {
@@ -174,7 +265,7 @@ TaskManager.getInitialProps = async ({ req }) => {
 
   return {
     profile,
-    currentTasks
+    currentTasks,
   };
 };
 
