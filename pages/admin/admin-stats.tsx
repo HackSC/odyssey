@@ -15,7 +15,7 @@ const Metabase = ({ profile, metabaseIframeUrl }) => {
   return (
     <>
       <Head title="HackSC Odyssey - Application" />
-      <Navbar loggedIn admin activePage="/admin/admin-stats" />
+      <Navbar loggedIn admin activePage="admin-stats" />
       <Background>
         <Container>
           <PaddedFlex direction="column">

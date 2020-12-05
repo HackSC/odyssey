@@ -155,7 +155,7 @@ const Navbar: React.FunctionComponent<NavbarProps> = ({
                   href="/admin/admin-stats"
                   id="admin-stats-page"
                   style={style(
-                    activePage === "/admin-stats" ? "#FF8379" : "white"
+                    activePage === "admin-stats" ? "#FF8379" : "white"
                   )}
                 >
                   Statistics
