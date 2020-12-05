@@ -1,17 +1,15 @@
 import React, { useState } from "react";
 import { useToasts } from "react-toast-notifications";
-
-import { handleLoginRedirect, getProfile } from "../../lib/authenticate";
-
-import { getProfiles, updateProfileRole } from "../../lib/admin";
-
-import Head from "../../components/Head";
-import Navbar from "../../components/Navbar";
-import Footer from "../../components/Footer";
-import Select from "../../components/Select";
-
 import styled from "styled-components";
 
+import {
+  handleLoginRedirect,
+  getProfile,
+  getProfiles,
+  updateProfileRole,
+  sendSlackMessage,
+} from "../../lib";
+import { Head, Navbar, Footer, Select } from "../../components";
 import { Background, Container, Button, Flex } from "../../styles";
 
 const roleManager = ({ profile }) => {
@@ -27,21 +25,21 @@ const roleManager = ({ profile }) => {
     { label: "volunteer", value: "volunteer" },
   ];
 
-  const queryResultBlocks = queryResults.map((profile) => {
+  const queryResultBlocks = queryResults.map((userprofile) => {
     return (
-      <QueryResult key={profile.email}>
+      <QueryResult key={userprofile.email}>
         {"Name: " +
-          profile.firstName +
+          userprofile.firstName +
           " " +
-          profile.lastName +
+          userprofile.lastName +
           " | Email: " +
-          profile.email}
+          userprofile.email}
         <Select
           name="role"
           options={roleOptions}
-          defaultValue={profile.role}
+          defaultValue={userprofile.role}
           onChange={(e) => {
-            updateRole(profile.email, e.target.value);
+            updateRole(userprofile.email, e.target.value);
           }}
         />
       </QueryResult>
@@ -51,7 +49,22 @@ const roleManager = ({ profile }) => {
   const updateRole = async function (email, role) {
     const result = await updateProfileRole(email, role);
     if (result.status == 200) {
-      addToast("Updated role!", { appearance: "success" });
+      let firstName = profile ? profile.firstName : "";
+      let lastName = profile ? profile.lastName : "";
+      let user_email = profile ? profile.email : "";
+      let start_and_end_date = new Date().toISOString() + "";
+      let slack_result = await sendSlackMessage(
+        "Updated Profile role executed by " +
+          firstName +
+          ", " +
+          lastName +
+          ", " +
+          user_email,
+        "User: " + email + "role was updated to " + role,
+        start_and_end_date,
+        start_and_end_date
+      );
+      if (slack_result) addToast("Updated role!", { appearance: "success" });
     } else {
       addToast("Error: " + result.statusText, { appearance: "error" });
     }
