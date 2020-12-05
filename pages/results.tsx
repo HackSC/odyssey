@@ -1,9 +1,7 @@
 import React from "react";
 
 import { handleLoginRedirect, getProfile } from "../lib/authenticate";
-
 import { Head, Navbar, Footer, Results as ResultStep } from "../components";
-
 import { Background, Container } from "../styles";
 
 const Results = ({ profile }) => {

@@ -134,7 +134,7 @@ const Navbar: React.FunctionComponent<NavbarProps> = ({
               )}
               {(admin || sponsor || volunteer) && ( // * showLive - should be true always since admins, sponsors, volunteers, and judges need visibility
                 <Link
-                  href="/live"
+                  href="/admin/live"
                   id="live-page"
                   style={style(activePage === "live" ? "#FF8379" : "white")}
                 >
@@ -152,7 +152,7 @@ const Navbar: React.FunctionComponent<NavbarProps> = ({
               )}
               {admin && (
                 <Link
-                  href="/admin-stats"
+                  href="/admin/admin-stats"
                   id="admin-stats-page"
                   style={style(
                     activePage === "/admin-stats" ? "#FF8379" : "white"

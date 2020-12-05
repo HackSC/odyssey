@@ -4,15 +4,15 @@ import {
   handleLoginRedirect,
   getProfile,
   handleAdminRedirect,
-} from "../lib/authenticate";
-import { getReferrerCode } from "../lib/referrerCode";
+} from "../../lib/authenticate";
+import { getReferrerCode } from "../../lib/referrerCode";
 
 import styled from "styled-components";
 
-import Head from "../components/Head";
-import Navbar from "../components/Navbar";
-import Footer from "../components/Footer";
-import { Button, Background, Flex, Container } from "../styles";
+import Head from "../../components/Head";
+import Navbar from "../../components/Navbar";
+import Footer from "../../components/Footer";
+import { Button, Background, Flex, Container } from "../../styles";
 
 const TestConsole = ({ profile }) => {
   const [routeUrl, setRouteUrl] = useState("");
@@ -86,9 +86,9 @@ const TestConsole = ({ profile }) => {
 
 TestConsole.getInitialProps = async (ctx) => {
   const { req } = ctx;
-  if (process.env.NODE_ENV !== "development") {
-    handleAdminRedirect(req);
-  }
+  // if (process.env.NODE_ENV !== "development") {
+  //   handleAdminRedirect(req);
+  // }
   const profile = await getProfile(req);
 
   // Null profile means user is not logged in, and this is only relevant for admins

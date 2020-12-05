@@ -1,10 +1,10 @@
 import React, { useState } from "react";
 
-import { handleLoginRedirect, getProfile } from "../lib/authenticate";
-import { getCurrentEvents, saveEvent, deleteEvent } from "../lib/live";
-import Head from "../components/Head";
-import Navbar from "../components/Navbar";
-import Footer from "../components/Footer";
+import { handleLoginRedirect, getProfile } from "../../lib/authenticate";
+import { getCurrentEvents, saveEvent, deleteEvent } from "../../lib/live";
+import Head from "../../components/Head";
+import Navbar from "../../components/Navbar";
+import Footer from "../../components/Footer";
 
 import moment from "moment";
 
@@ -17,9 +17,9 @@ import {
   Description,
   EventTitle,
   TitleBox,
-} from "../styles";
+} from "../../styles";
 
-import Step from "../components/steps/Results";
+import Step from "../../components/steps/Results";
 
 const EditableCell = ({ event }) => {
   const [currEvent, setCurrEvent] = useState(event);

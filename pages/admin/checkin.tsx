@@ -1,11 +1,11 @@
 import React, { useRef, useState, useMemo, useCallback } from "react";
 import styled from "styled-components";
 
-import { handleLoginRedirect, getProfile } from "../lib/authenticate";
+import { handleLoginRedirect, getProfile } from "../../lib/authenticate";
 
-import Head from "../components/Head";
-import Navbar from "../components/Navbar";
-import Footer from "../components/Footer";
+import Head from "../../components/Head";
+import Navbar from "../../components/Navbar";
+import Footer from "../../components/Footer";
 import {
   Button,
   Background,
@@ -14,12 +14,12 @@ import {
   Container,
   Form,
   FormGroup,
-} from "../styles";
+} from "../../styles";
 import {
   liveAssignQRFetch,
   liveLookupFetch,
   liveDispatchFetch,
-} from "../lib/api-sdk/liveHooks";
+} from "../../lib/api-sdk/liveHooks";
 
 const CheckinResult = ({ result, resetResults }) => {
   const qrInput = useRef(null);

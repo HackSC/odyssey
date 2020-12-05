@@ -1,18 +1,18 @@
 import React, { useState } from "react";
 import { useToasts } from "react-toast-notifications";
 
-import { handleLoginRedirect, getProfile } from "../lib/authenticate";
+import { handleLoginRedirect, getProfile } from "../../lib/authenticate";
 
-import { getProfiles, updateProfileRole } from "../lib/admin";
+import { getProfiles, updateProfileRole } from "../../lib/admin";
 
-import Head from "../components/Head";
-import Navbar from "../components/Navbar";
-import Footer from "../components/Footer";
-import Select from "../components/Select";
+import Head from "../../components/Head";
+import Navbar from "../../components/Navbar";
+import Footer from "../../components/Footer";
+import Select from "../../components/Select";
 
 import styled from "styled-components";
 
-import { Background, Container, Button, Flex } from "../styles";
+import { Background, Container, Button, Flex } from "../../styles";
 
 const roleManager = ({ profile }) => {
   const [query, setQuery] = useState("");

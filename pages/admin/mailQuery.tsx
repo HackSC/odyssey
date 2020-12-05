@@ -4,9 +4,9 @@ import JSZip from "jszip";
 import stringify from "csv-stringify";
 import { saveAs } from "file-saver";
 
-import { handleLoginRedirect, getProfile } from "../lib/authenticate";
+import { handleLoginRedirect, getProfile } from "../../lib/authenticate";
 
-import { Head, Navbar, Footer } from "../components";
+import { Head, Navbar, Footer } from "../../components";
 
 import {
   Button,
@@ -16,12 +16,12 @@ import {
   Container,
   Form,
   FormGroup,
-} from "../styles";
+} from "../../styles";
 
 import {
   liveSignUpLookupFetch,
   liveLookupFetch,
-} from "../lib/api-sdk/liveHooks";
+} from "../../lib/api-sdk/liveHooks";
 
 const Hacker = ({ result }) => {
   return (
@@ -206,7 +206,7 @@ const mailQuery = () => {
     </>
   );
 };
-       
+
 mailQuery.getInitialProps = async (ctx) => {
   const { req } = ctx;
 

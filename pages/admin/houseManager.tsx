@@ -1,14 +1,25 @@
 import React, { useState } from "react";
 
-import { handleLoginRedirect, getProfile } from "../lib/authenticate";
-import { getHouses, createHouse, updateHouse, deleteHouse } from "../lib/live";
-import Head from "../components/Head";
-import Navbar from "../components/Navbar";
-import Footer from "../components/Footer";
+import { handleLoginRedirect, getProfile } from "../../lib/authenticate";
+import {
+  getHouses,
+  createHouse,
+  updateHouse,
+  deleteHouse,
+} from "../../lib/live";
+import Head from "../../components/Head";
+import Navbar from "../../components/Navbar";
+import Footer from "../../components/Footer";
 
 import styled from "styled-components";
 
-import { Background, Container, EditButton, Task, TaskInfo } from "../styles";
+import {
+  Background,
+  Container,
+  EditButton,
+  Task,
+  TaskInfo,
+} from "../../styles";
 
 const EditableCell = ({ house }) => {
   const [currHouse, setCurrHouse] = useState(house);
@@ -19,7 +30,7 @@ const EditableCell = ({ house }) => {
           type="text"
           placeholder="name"
           value={currHouse.name}
-          onChange={e => {
+          onChange={(e) => {
             setCurrHouse({ ...currHouse, name: e.target.value });
           }}
         />
@@ -27,7 +38,7 @@ const EditableCell = ({ house }) => {
           type="text"
           placeholder="color"
           value={currHouse.color}
-          onChange={e => {
+          onChange={(e) => {
             setCurrHouse({ ...currHouse, type: e.target.value });
           }}
         />
@@ -64,7 +75,7 @@ const EditableCell = ({ house }) => {
 const houseManager = ({ profile, currentHouses }) => {
   const [newHouse, setNewHouse] = useState({});
 
-  const taskBlocks = currentHouses.houses.map(house => {
+  const taskBlocks = currentHouses.houses.map((house) => {
     return <EditableCell house={house} />;
   });
   return (
@@ -79,20 +90,20 @@ const houseManager = ({ profile, currentHouses }) => {
               <input
                 type="text"
                 placeholder="name"
-                onChange={e => {
+                onChange={(e) => {
                   setNewHouse({
                     ...newHouse,
-                    name: e.target.value
+                    name: e.target.value,
                   });
                 }}
               />
               <input
                 type="text"
                 placeholder="color ex: #123456"
-                onChange={e => {
+                onChange={(e) => {
                   setNewHouse({
                     ...newHouse,
-                    color: e.target.value
+                    color: e.target.value,
                   });
                 }}
               />
@@ -130,7 +141,7 @@ houseManager.getInitialProps = async ({ req }) => {
 
   return {
     profile,
-    currentHouses
+    currentHouses,
   };
 };
 

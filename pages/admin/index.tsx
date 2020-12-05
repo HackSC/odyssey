@@ -1,10 +1,10 @@
 import React from "react";
 import styled from "styled-components";
 
-import { handleLoginRedirect, getProfile } from "../lib/authenticate";
-import { getReferrerCode } from "../lib/referrerCode";
-import { Head, Navbar, Footer } from "../components";
-import { Background, Flex, Container } from "../styles";
+import { handleLoginRedirect, getProfile } from "../../lib/authenticate";
+import { getReferrerCode } from "../../lib/referrerCode";
+import { Head, Navbar, Footer } from "../../components";
+import { Background, Flex, Container } from "../../styles";
 
 const Admin = ({ profile }) => {
   return (
@@ -46,40 +46,52 @@ const Admin = ({ profile }) => {
 
           <ActionsHeader>Actions</ActionsHeader>
           <Actions>
-            <Action id="scan-page" href="/scan">
+            <Action id="scan-page" href="/admin/scan">
               <ActionTitle>Scan In Hackers</ActionTitle>
             </Action>
-            <Action id="app-review-page" href="/appReview">
+            <Action id="app-review-page" href="/admin/appReview">
               <ActionTitle>App Review</ActionTitle>
             </Action>
-            <Action id="checkin-page" href="/checkin">
+            <Action id="checkin-page" href="/admin/checkin">
               <ActionTitle>Check In Hackers</ActionTitle>
             </Action>
-            <Action id="role-manager-page" href="/roleManager">
+            <Action id="role-manager-page" href="/admin/roleManager">
               <ActionTitle> Manage Roles </ActionTitle>
             </Action>
-            <Action id="task-manager-page" href="/taskManager">
+            <Action id="task-manager-page" href="/admin/taskManager">
               <ActionTitle> Manage Available Tasks </ActionTitle>
             </Action>
-            <Action id="house-manager-page" href="/houseManager">
+            <Action id="house-manager-page" href="/admin/houseManager">
               <ActionTitle> Manage Houses </ActionTitle>
             </Action>
-            <Action id="schedule-manager-page" href="/scheduleManager">
+            <Action id="schedule-manager-page" href="/admin/scheduleManager">
               <ActionTitle> Manage Event Schedule </ActionTitle>
             </Action>
-            <Action id="hacker-manager-page" href="/hackerManager">
+            <Action
+              id="helpful-link-manager-page"
+              href="/admin/helpfulLinkManager"
+            >
+              <ActionTitle> Manage Helpful Links </ActionTitle>
+            </Action>
+            <Action id="hacker-manager-page" href="/admin/hackerManager">
               <ActionTitle> Manage Hackers </ActionTitle>
             </Action>
-            <Action id="judging-manager-page" href="/judgingManager">
+            <Action id="judging-manager-page" href="/admin/judgingManager">
               <ActionTitle> Pass Judgement </ActionTitle>
             </Action>
-            <Action id="battlepass-manager-page" href="/battlepassManager">
+            <Action
+              id="battlepass-manager-page"
+              href="/admin/battlepassManager"
+            >
               <ActionTitle> Edit Battlepass </ActionTitle>
             </Action>
-            <Action id="mail-query-page" href="/mailQuery">
+            <Action id="mail-query-page" href="/admin/mailQuery">
               <ActionTitle> Mail Signups </ActionTitle>
             </Action>
-            <Action id="manage-api-directory-page" href="/manageApiDirectory">
+            <Action
+              id="manage-api-directory-page"
+              href="/admin/manageApiDirectory"
+            >
               <ActionTitle> Manage Api Directory </ActionTitle>
             </Action>
             <Action
