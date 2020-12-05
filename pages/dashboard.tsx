@@ -1,4 +1,4 @@
-import Live from "./live";
+import Live from "./admin/live";
 import {
   handleLoginRedirect,
   getProfile,

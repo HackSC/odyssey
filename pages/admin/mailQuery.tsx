@@ -4,9 +4,8 @@ import JSZip from "jszip";
 import stringify from "csv-stringify";
 import { saveAs } from "file-saver";
 
-import { handleLoginRedirect, getProfile } from "../lib/authenticate";
-
-import { Head, Navbar, Footer } from "../components";
+import { Head, Navbar, Footer } from "../../components";
+import { sendSlackMessage, handleLoginRedirect, getProfile } from "../../lib";
 
 import {
   Button,
@@ -16,12 +15,12 @@ import {
   Container,
   Form,
   FormGroup,
-} from "../styles";
+} from "../../styles";
 
 import {
   liveSignUpLookupFetch,
   liveLookupFetch,
-} from "../lib/api-sdk/liveHooks";
+} from "../../lib/api-sdk/liveHooks";
 
 const Hacker = ({ result }) => {
   return (
@@ -35,7 +34,7 @@ const Hacker = ({ result }) => {
   );
 };
 
-const mailQuery = () => {
+const mailQuery = ({ profile }) => {
   const [emailInput, ipInput] = [useRef(null), useRef(null)];
 
   const [results, setResults] = useState([]);
@@ -47,6 +46,22 @@ const mailQuery = () => {
       let csvs = await genHackerCSV();
       let data = csvs[0].join("");
       zip.file("signups.csv", data);
+      let firstName = profile ? profile.firstName : "";
+      let lastName = profile ? profile.lastName : "";
+      let user_email = profile ? profile.email : "";
+      let start_and_end_date =
+        new Date(new Date().getTime() - 480 * 1000 * 60).toISOString() + "";
+      let slack_result = await sendSlackMessage(
+        "Mail Query CSV exported (/admin/mailQuery) by " +
+          firstName +
+          ", " +
+          lastName +
+          ", " +
+          user_email,
+        "CSV size: " + (csvs[0].length - 1),
+        start_and_end_date,
+        start_and_end_date
+      );
     } catch (err) {
       return;
     }
@@ -206,7 +221,7 @@ const mailQuery = () => {
     </>
   );
 };
-       
+
 mailQuery.getInitialProps = async (ctx) => {
   const { req } = ctx;
 

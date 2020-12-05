@@ -1,24 +1,18 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-
-import Head from "../components/Head";
-import Navbar from "../components/Navbar";
-import Footer from "../components/Footer";
-import {
-  Background,
-  Container,
-  Flex,
-  Column,
-  Card,
-  Button,
-  TextCardDiv
-} from "../styles";
-import ButtonWithTextForm from "../components/ButtonWithTextForm";
 import { useToasts } from "react-toast-notifications";
-import MultiTextForm from "../components/MultiTextForm";
+
+import {
+  Head,
+  Navbar,
+  Footer,
+  ButtonWithTextForm,
+  MultiTextForm,
+} from "../components";
+import { Background, Container, Flex, Column, Card, Button } from "../styles";
 import {
   useProjectTeamSelf,
-  getProjectTeamSelfFetch
+  getProjectTeamSelfFetch,
 } from "../lib/api-sdk/projectTeamHooks";
 
 type Props = {
@@ -38,10 +32,10 @@ const ProjectTeam = (props: Props) => {
     removePrizeSelf,
     removeMemberSelf,
     addMemberProjectTeamSelf,
-    joinProjectTeamSelf
+    joinProjectTeamSelf,
   } = useProjectTeamSelf({
     defaultOnError: onError,
-    initialModel: props.projectTeam
+    initialModel: props.projectTeam,
   });
 
   const handleJoinProjectTeam = (name: string) => {
@@ -97,18 +91,18 @@ const ProjectTeam = (props: Props) => {
             {
               initialValue: projectTeam.name as string,
               label: "Team Name",
-              name: "name"
+              name: "name",
             },
             {
               initialValue: projectTeam.devpostLink,
               label: "Devpost Link",
-              name: "devpostLink"
+              name: "devpostLink",
             },
             {
               initialValue: projectTeam.githubLink,
               label: "Github Link",
-              name: "githubLink"
-            }
+              name: "githubLink",
+            },
           ]}
         />
         <VertFlex>
@@ -158,7 +152,7 @@ const AddMember = (props: {
       <TeamTextInput
         type="text"
         placeholder="Teammate's 4 character Code"
-        onChange={e => {
+        onChange={(e) => {
           setMemberId(e.target.value);
         }}
       />
@@ -174,13 +168,13 @@ const TeamMemberTable = (props: {
   return (
     <div>
       <h2>Team Members</h2>
-      {Members.map(p => (
+      {Members.map((p) => (
         <TeamCard>
           <span>{p.Profile.firstName} </span>
           <span>{p.Profile.lastName} | </span>
           <span>{p.Profile.email}</span>
 
-          <DelButton onClick={e => props.onRemove(p)}>Remove</DelButton>
+          <DelButton onClick={(e) => props.onRemove(p)}>Remove</DelButton>
         </TeamCard>
       ))}
     </div>
@@ -193,7 +187,7 @@ const PrizeElement = (props: {
   onRemovePrize: Function;
   onAddPrize: Function;
 }) => {
-  const claimedPrizeIds = props.projectTeam.Prizes.map(p => p.id);
+  const claimedPrizeIds = props.projectTeam.Prizes.map((p) => p.id);
   const { onAddPrize, onRemovePrize, prize } = props;
   let claimedPrize = claimedPrizeIds.includes(prize.id);
   return (
@@ -225,7 +219,7 @@ const PrizeTable = (props: {
   onAddPrize: Function;
   onRemovePrize: Function;
 }) => {
-  const claimedPrizeIds = props.projectTeam.Prizes.map(p => p.id);
+  const claimedPrizeIds = props.projectTeam.Prizes.map((p) => p.id);
   const { onAddPrize, onRemovePrize } = props;
   return (
     <PrizeContainer>
@@ -236,7 +230,7 @@ const PrizeTable = (props: {
         helps us make sure that you get judged for all the prizes that you want
         to be considered for!
       </PrizeTableDescription>
-      {props.allPrizes.map(p => {
+      {props.allPrizes.map((p) => {
         let claimedPrize = claimedPrizeIds.includes(p.id);
         return (
           <PrizeElement
@@ -284,7 +278,7 @@ ProjectTeam.getInitialProps = async ({ req, query }): Promise<Props> => {
   const { success } = await getProjectTeamSelfFetch(req);
 
   return {
-    projectTeam: success
+    projectTeam: success,
   };
 };
 
