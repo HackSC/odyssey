@@ -121,7 +121,12 @@ const EditableCell = ({ profile, event }) => {
 };
 
 const ScheduleManager = ({ profile, currentEvents }) => {
-  const [newEvent, setNewEvent] = useState({});
+  const [newEvent, setNewEvent] = useState({
+    name: null,
+    description: null,
+    startsAt: null,
+    endsAt: null,
+  });
 
   const taskBlocks = currentEvents.events.map((event) => {
     return <EditableCell profile={profile} event={event} />;

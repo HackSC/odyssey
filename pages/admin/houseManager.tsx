@@ -110,7 +110,7 @@ const EditableCell = ({ profile, house }) => {
 };
 
 const houseManager = ({ profile, currentHouses }) => {
-  const [newHouse, setNewHouse] = useState({});
+  const [newHouse, setNewHouse] = useState({ name: null, color: null });
 
   const taskBlocks = currentHouses.houses.map((house) => {
     return <EditableCell profile={profile} house={house} />;

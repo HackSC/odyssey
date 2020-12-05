@@ -142,7 +142,12 @@ const EditableCell = ({ profile, task }) => {
 };
 
 const TaskManager = ({ profile, currentTasks }) => {
-  const [newTask, setNewTask] = useState({});
+  const [newTask, setNewTask] = useState({
+    name: null,
+    type: null,
+    points: null,
+    isActive: null,
+  });
 
   const taskBlocks = currentTasks.tasks.map((task) => {
     return <EditableCell profile={profile} task={task} />;
