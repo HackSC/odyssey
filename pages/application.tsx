@@ -6,7 +6,7 @@ import {
   getProfile,
   handleAdminRedirect,
   handleVolunteerRedirect,
-  handleSponsorRedirect
+  handleSponsorRedirect,
 } from "../lib/authenticate";
 
 import { Head, Navbar, Footer, Steps } from "../components";
@@ -18,7 +18,7 @@ import { generatePosts } from "../lib/referrerCode";
 const Application = ({ profile, houses, socialPosts }) => {
   return (
     <>
-      <Head title="HackSC Odyssey - Application" />
+      <Head title="HackSC Dashboard - Application" />
       <Navbar
         showProjectTeam={profile ? profile.status === "checkedIn" : false}
         loggedIn
@@ -44,7 +44,6 @@ Application.getInitialProps = async ({ req }) => {
   const profile = await getProfile(req);
   //const houses = await getHouses(req);
   const houses = [];
-  //console.log(req);
 
   // Null profile means user is not logged in
   if (!profile) {
@@ -59,7 +58,6 @@ Application.getInitialProps = async ({ req }) => {
 
   if (profile && profile.status == "checkedIn") {
     //const houseInfo = await getHouseInfo(req, 1);
-    //console.log(houseInfo);
   }
 
   /*
@@ -79,7 +77,7 @@ Application.getInitialProps = async ({ req }) => {
   return {
     houses,
     profile,
-    socialPosts
+    socialPosts,
   };
 };
 

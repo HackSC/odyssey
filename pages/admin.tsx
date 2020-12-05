@@ -1,14 +1,10 @@
 import React from "react";
+import styled from "styled-components";
 
 import { handleLoginRedirect, getProfile } from "../lib/authenticate";
 import { getReferrerCode } from "../lib/referrerCode";
-
-import styled from "styled-components";
-
-import Head from "../components/Head";
-import Navbar from "../components/Navbar";
-import Footer from "../components/Footer";
-import { Button, Background, Flex, Container } from "../styles";
+import { Head, Navbar, Footer } from "../components";
+import { Background, Flex, Container } from "../styles";
 
 const Admin = ({ profile }) => {
   return (
@@ -25,45 +21,70 @@ const Admin = ({ profile }) => {
               or find any errors, hit up the engineers in{" "}
               <b>#{new Date().getFullYear()}-engineering</b>
             </p>
+
+            <PaddedFlex direction="column">
+              <PaddedFlex direction="row">
+                <PaddedSubTitle>hacksc.com: </PaddedSubTitle>
+                <a href="https://status.hacksc.com">
+                  <img src="https://betteruptime.com/status-badges/v1/monitor/50yh.svg"></img>
+                </a>
+              </PaddedFlex>
+              <PaddedFlex direction="row">
+                <PaddedSubTitle>staging.hacksc.com: </PaddedSubTitle>
+                <a href="https://status.hacksc.com">
+                  <img src="https://betteruptime.com/status-badges/v1/monitor/518z.svg"></img>
+                </a>
+              </PaddedFlex>
+              <PaddedFlex direction="row">
+                <PaddedSubTitle>dashboard.hacksc.com: </PaddedSubTitle>
+                <a href="https://status.hacksc.com">
+                  <img src="https://betteruptime.com/status-badges/v1/monitor/50yp.svg"></img>
+                </a>
+              </PaddedFlex>
+            </PaddedFlex>
           </Flex>
 
           <ActionsHeader>Actions</ActionsHeader>
           <Actions>
-            <Action href="/scan">
+            <Action id="scan-page" href="/scan">
               <ActionTitle>Scan In Hackers</ActionTitle>
             </Action>
-            {/* <Action href="/appReview">
-              <ActionTitle>Start App Review</ActionTitle>
-            </Action> */}
-            <Action href="/checkin">
+            <Action id="app-review-page" href="/appReview">
+              <ActionTitle>App Review</ActionTitle>
+            </Action>
+            <Action id="checkin-page" href="/checkin">
               <ActionTitle>Check In Hackers</ActionTitle>
             </Action>
-            <Action href="/roleManager">
+            <Action id="role-manager-page" href="/roleManager">
               <ActionTitle> Manage Roles </ActionTitle>
             </Action>
-            <Action href="/taskManager">
+            <Action id="task-manager-page" href="/taskManager">
               <ActionTitle> Manage Available Tasks </ActionTitle>
             </Action>
-            <Action href="/houseManager">
+            <Action id="house-manager-page" href="/houseManager">
               <ActionTitle> Manage Houses </ActionTitle>
             </Action>
-            <Action href="/scheduleManager">
+            <Action id="schedule-manager-page" href="/scheduleManager">
               <ActionTitle> Manage Event Schedule </ActionTitle>
             </Action>
-            <Action href="/hackerManager">
+            <Action id="hacker-manager-page" href="/hackerManager">
               <ActionTitle> Manage Hackers </ActionTitle>
             </Action>
-            <Action href="/judgingManager">
+            <Action id="judging-manager-page" href="/judgingManager">
               <ActionTitle> Pass Judgement </ActionTitle>
             </Action>
-            <Action href="/battlepassManager">
+            <Action id="battlepass-manager-page" href="/battlepassManager">
               <ActionTitle> Edit Battlepass </ActionTitle>
             </Action>
-            <Action href="/mailQuery">
+            <Action id="mail-query-page" href="/mailQuery">
               <ActionTitle> Mail Signups </ActionTitle>
             </Action>
+            <Action id="manage-api-directory-page" href="/manageApiDirectory">
+              <ActionTitle> Manage Api Directory </ActionTitle>
+            </Action>
             <Action
-              href="https://metabase-odyssey.herokuapp.com/"
+              id="metabase-page"
+              href="https://metabase.hacksc.com/"
               target="_blank"
             >
               <ActionTitle>Access Metabase</ActionTitle>
@@ -76,7 +97,7 @@ const Admin = ({ profile }) => {
   );
 };
 
-Admin.getInitialProps = async ctx => {
+Admin.getInitialProps = async (ctx) => {
   const { req } = ctx;
 
   const profile = await getProfile(req);
@@ -91,12 +112,20 @@ Admin.getInitialProps = async ctx => {
   }
 
   return {
-    profile
+    profile,
   };
 };
 
+const PaddedSubTitle = styled.h3`
+  margin: 0 1rem 0 0;
+`;
+
+const PaddedFlex = styled(Flex)`
+  margin: 0.25rem 0 0 0;
+`;
+
 const ActionsHeader = styled.h2`
-  margin: 48px 0 16px;
+  margin: 2rem 0 1rem;
 `;
 
 const Actions = styled.div`

@@ -34,7 +34,6 @@ const getStatusLabel = (profile: Profile): string => {
 
 const getStage = (profile: Profile): number => {
   const { status, submittedAt } = profile;
-
   if (status === "unverified") {
     return 1;
   } else if (status === "verified") {
@@ -70,11 +69,12 @@ const getCheck = (profile: Profile) => {
   }
 };
 
-const StatusStep: React.FunctionComponent<Props> = props => {
+const StatusStep: React.FunctionComponent<Props> = (props) => {
   const { profile, socialPosts } = props;
 
   const statusLabel = getStatusLabel(profile);
   const isMobile = useIsMobile();
+  const profileStage = getStage(profile);
 
   return (
     <Flex direction="column">
@@ -97,7 +97,7 @@ const StatusStep: React.FunctionComponent<Props> = props => {
 
         {profile && profile.status === "declined" && (
           <StatusMessage>
-            We're sad to hear that you will not be attending HackSC 2020.{" "}
+            We're sad to hear that you will not be attending HackSC 2021.{" "}
             <b>If you would like to un-decline</b>, please do so on{" "}
             <a href="/results">the results page.</a> If you have any additional
             questions or comments, please let us know at{" "}
@@ -107,7 +107,7 @@ const StatusStep: React.FunctionComponent<Props> = props => {
 
         {profile && profile.status === "confirmed" && (
           <StatusMessage>
-            We're excited to have you at HackSC 2020! Be on the lookout for
+            We're excited to have you at HackSC 2021! Be on the lookout for
             future updates and communications from us. If you have any updates
             or questions, please let us know at{" "}
             <a href="mailto:team@hacksc.com">team@hacksc.com</a>
@@ -125,7 +125,7 @@ const StatusStep: React.FunctionComponent<Props> = props => {
         {profile && profile.status === "rejected" && (
           <StatusMessage>
             Thank you for applying to HackSC. Unfortunately, we regret to inform
-            you that you have not been accepted to HackSC 2020. While we know
+            you that you have not been accepted to HackSC 2021. While we know
             this isn't the news you'd like to hear, we wish you the best going
             forward.
           </StatusMessage>
@@ -136,27 +136,28 @@ const StatusStep: React.FunctionComponent<Props> = props => {
         <Column flexBasis={63}>
           <h2>Next Steps</h2>
           <Steps>
-            <Step disabled={getStage(profile) > 1}>
+            <Step disabled={profileStage !== 1}>
               <h3>1. Verify your e-mail</h3>
               <p>
                 Make sure to check your e-mail and verify your account. If you
                 run into issues, log-out and log back in.
               </p>
             </Step>
-            <Step disabled={getStage(profile) > 2}>
+            <Step disabled={profileStage !== 2}>
               <h3>2. Fill out an application</h3>
               <p>
                 Answer a few questions to show why you want to be at HackSC
-                2020!
+                2021!
               </p>
 
-              {getStage(profile) === 2 && (
+              {profileStage == 2 && (
                 <StepButton onClick={() => navigateTo("appform")}>
                   Fill out application
                 </StepButton>
               )}
             </Step>
-            <Step disabled={getStage(profile) === 4}>
+            {/* 3 and 4 is awaiting results and received results, respectively*/}
+            <Step disabled={profileStage !== 3 && profileStage !== 4}>
               <h3>
                 {profile.status === "accepted"
                   ? "3) Confirm Attendance"
@@ -164,10 +165,10 @@ const StatusStep: React.FunctionComponent<Props> = props => {
               </h3>
               <p>
                 {profile.status === "accepted"
-                  ? "Congrats, you have been accepted to HackSC 2020. Please confirm/decline your attendance by January 1st"
+                  ? "Congrats, you have been accepted to HackSC 2021. Please confirm/decline your attendance by January 1st"
                   : "Come back soon and see your results."}
               </p>
-              {getStage(profile) === 3 && (
+              {profileStage === 3 && (
                 <StepButton onClick={() => navigateTo("results")}>
                   {profile.status === "accepted"
                     ? "Confirm Attendance"
@@ -184,17 +185,17 @@ const StatusStep: React.FunctionComponent<Props> = props => {
           <Dates>
             <DateText>
               <h3>Applications Open</h3>
-              <p>November 7th, 2019</p>
+              <p>December 1st, 2020</p>
             </DateText>
 
             <DateText>
               <h3>Applications Close</h3>
-              <p>December 8th, 2019</p>
+              <p>December 14th, 2020</p>
             </DateText>
 
             <DateText>
-              <h3>HackSC 2020</h3>
-              <p>January 31, 2020</p>
+              <h3>HackSC 2021</h3>
+              <p>February 19 - 21, 2021</p>
             </DateText>
           </Dates>
         </DatesColumn>

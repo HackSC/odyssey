@@ -11,13 +11,14 @@ import {
   getProfile,
   handleAdminRedirect,
   handleVolunteerRedirect,
-  handleSponsorRedirect
+  handleSponsorRedirect,
+  getAPIS,
 } from "../lib/authenticate";
 
-const API = ({ profile, houses, socialPosts }) => {
+const API = ({ apis, profile, houses, socialPosts }) => {
   return (
     <>
-      <Head title="HackSC Odyssey - API Directory" />
+      <Head title="HackSC Dashboard - API Directory" />
       <Navbar
         loggedIn
         showProjectTeam={profile ? profile.status === "checkedIn" : false}
@@ -25,7 +26,7 @@ const API = ({ profile, houses, socialPosts }) => {
       />
       <Container>
         <DirectoryIntro />
-        <Directory />
+        <Directory apis={apis ? apis : []} />
       </Container>
       <Footer />
     </>
@@ -34,9 +35,8 @@ const API = ({ profile, houses, socialPosts }) => {
 
 API.getInitialProps = async ({ req }) => {
   const profile = await getProfile(req);
-  //const houses = await getHouses(req);
   const houses = [];
-  //console.log(req);
+  const apis = await getAPIS(req);
 
   // Null profile means user is not logged in
   if (!profile) {
@@ -51,11 +51,10 @@ API.getInitialProps = async ({ req }) => {
 
   if (profile && profile.status == "checkedIn") {
     //const houseInfo = await getHouseInfo(req, 1);
-    //console.log(houseInfo);
   }
 
   if (typeof window !== "undefined") {
-    Sentry.configureScope(function(scope) {
+    Sentry.configureScope(function (scope) {
       scope.setExtra("profile", profile);
     });
   }
@@ -66,9 +65,10 @@ API.getInitialProps = async ({ req }) => {
   }
 
   return {
+    apis,
     houses,
     profile,
-    socialPosts
+    socialPosts,
   };
 };
 

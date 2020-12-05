@@ -2,13 +2,13 @@ const Sequelize = require("sequelize");
 const env = process.env.NODE_ENV || "test";
 
 import config from "../config";
-import { DBType } from './types';
+import { DBType } from "./types";
 
 let env_config = config[env];
 
 let db: DBType = {
   sequelize: null,
-  Sequelize: null
+  Sequelize: null,
 };
 
 let sequelize = new Sequelize(
@@ -22,7 +22,7 @@ let model;
 model = sequelize["import"]("./action");
 db[model.name] = model;
 
-Object.keys(db).forEach(modelName => {
+Object.keys(db).forEach((modelName) => {
   if (db[modelName].associate) {
     db[modelName].associate(db);
   }

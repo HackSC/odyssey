@@ -6,6 +6,8 @@ import HeaderLogo from "../assets/header_logo_21_transparent.png";
 
 import { Container, Link } from "../styles";
 
+import constants from "../lib/hackathonConstants";
+
 type NavbarProps = {
   loggedIn?: boolean;
   showLive?: boolean;
@@ -23,53 +25,45 @@ type NavbarProps = {
   sponsor?: boolean;
 };
 
-const style = background => {
+const style = (background) => {
   return {
     "&:hover": {
       backgroundColor: "#FF8379 !important",
-      color: "white !important"
+      color: "white !important",
     },
     padding: "10px",
     margin: "10px",
     color: background !== "white" ? "white" : "black",
     backgroundColor: background,
-    cursor: "pointer"
+    cursor: "pointer",
   };
 };
 
 const Navbar: React.FunctionComponent<NavbarProps> = ({
   loggedIn,
-  showLive = true,
-  showDash = true,
-  showApp = true,
-  showMaps = true,
-  showAPI = true,
-  showResults = true,
-  showTeam = true,
+  showLive = constants.showLive,
+  showDash = constants.showDash,
+  showApp = constants.showApp,
+  showMaps = constants.showMaps,
+  showAPI = constants.showAPI,
+  showResults = constants.showResults,
+  showTeam = constants.showTeam,
   showLogout = true,
-  showProjectTeam = true,
+  showProjectTeam = constants.showProjectTeam,
   activePage,
   admin,
   volunteer,
-  sponsor
+  sponsor,
 }: NavbarProps) => {
   return (
     <Wrapper>
       <NavbarContainer>
-        <a href={loggedIn ? "/live" : "/"}>
+        <a href={loggedIn && showLive ? "/live" : "/"}>
           <HeaderLogoImg src={HeaderLogo} />
         </a>
         <Links>
           {loggedIn ? (
             <>
-              {!admin && !volunteer && !sponsor && showLive && (
-                <Link
-                  href="/live"
-                  style={style(activePage === "live" ? "#FF8379" : "white")}
-                >
-                  Live
-                </Link>
-              )}
               {/*!admin && !volunteer && !sponsor && showDash && (
                 <Link
                   href="/dashboard"
@@ -83,6 +77,7 @@ const Navbar: React.FunctionComponent<NavbarProps> = ({
               {!admin && !volunteer && !sponsor && showApp && (
                 <Link
                   href="/application"
+                  id="application-page"
                   style={style(
                     activePage === "application" ? "#FF8379" : "white"
                   )}
@@ -93,6 +88,7 @@ const Navbar: React.FunctionComponent<NavbarProps> = ({
               {!admin && !volunteer && !sponsor && showResults && (
                 <Link
                   href="/results"
+                  id="results-page"
                   style={style(activePage === "results" ? "#FF8379" : "white")}
                 >
                   Results
@@ -101,6 +97,7 @@ const Navbar: React.FunctionComponent<NavbarProps> = ({
               {!admin && !volunteer && !sponsor && showTeam && (
                 <Link
                   href="/team"
+                  id="team-page"
                   style={style(activePage === "team" ? "#FF8379" : "white")}
                 >
                   Team
@@ -109,6 +106,7 @@ const Navbar: React.FunctionComponent<NavbarProps> = ({
               {!admin && !volunteer && !sponsor && showProjectTeam && (
                 <Link
                   href="/projectTeam"
+                  id="projectTeam-page"
                   style={style(
                     activePage === "projectTeam" ? "#FF8379" : "white"
                   )}
@@ -119,6 +117,7 @@ const Navbar: React.FunctionComponent<NavbarProps> = ({
               {!admin && !volunteer && !sponsor && showMaps && (
                 <Link
                   href="/maps"
+                  id="maps-page"
                   style={style(activePage === "maps" ? "#FF8379" : "white")}
                 >
                   Maps
@@ -127,14 +126,45 @@ const Navbar: React.FunctionComponent<NavbarProps> = ({
               {!admin && !volunteer && !sponsor && showAPI && (
                 <Link
                   href="/api-directory"
+                  id="api-directory-page"
                   style={style(activePage === "api" ? "#FF8379" : "white")}
                 >
                   APIs
                 </Link>
               )}
+              {(admin || sponsor || volunteer) && ( // * showLive - should be true always since admins, sponsors, volunteers, and judges need visibility
+                <Link
+                  href="/live"
+                  id="live-page"
+                  style={style(activePage === "live" ? "#FF8379" : "white")}
+                >
+                  Live
+                </Link>
+              )}
+              {(admin || sponsor || volunteer) && (
+                <Link
+                  href="/admin"
+                  id="admin-dashboard-page"
+                  style={style(activePage === "/" ? "#FF8379" : "white")}
+                >
+                  Admin Dashboard
+                </Link>
+              )}
+              {admin && (
+                <Link
+                  href="/admin-stats"
+                  id="admin-stats-page"
+                  style={style(
+                    activePage === "/admin-stats" ? "#FF8379" : "white"
+                  )}
+                >
+                  Statistics
+                </Link>
+              )}
               {showLogout && (
                 <Link
                   href="/auth/logout"
+                  id="auth-logout-page"
                   style={style(activePage === "logout" ? "#FF8379" : "white")}
                 >
                   Logout
@@ -145,12 +175,14 @@ const Navbar: React.FunctionComponent<NavbarProps> = ({
             <>
               <Link
                 href="/"
+                id="main-page"
                 style={style(activePage === "/" ? "#FF8379" : "white")}
               >
                 Home
               </Link>
               <Link
                 href="/auth/login"
+                id="auth-login-page"
                 style={style(activePage === "login" ? "#FF8379" : "white")}
               >
                 Login
@@ -180,11 +212,6 @@ const NavbarContainer = styled(Container)`
 
 const HeaderLogoImg = styled.img`
   width: 220px;
-
-  ${({ theme }) =>
-    theme.media.mobile`
-      width: 120px;
-    `}
 `;
 
 const Links = styled.div`

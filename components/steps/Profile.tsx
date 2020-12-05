@@ -8,7 +8,7 @@ import {
   RadioChoiceLabel,
   Flex,
   Column,
-  Button
+  Button,
 } from "../../styles";
 
 import Select from "../Select";
@@ -31,7 +31,7 @@ const yearOptions = [
   { label: "Sophomore", value: "sophomore" },
   { label: "Junior", value: "junior" },
   { label: "Senior", value: "senior" },
-  { label: "Graduate", value: "graduate" }
+  { label: "Graduate", value: "graduate" },
 ];
 
 const gradDateOptions = [
@@ -43,39 +43,40 @@ const gradDateOptions = [
   { label: "Fall 2022", value: "fall-2022" },
   { label: "Spring 2023", value: "spring-2023" },
   { label: "Fall 2023", value: "fall-2023" },
-  { label: "Other", value: "other" }
+  { label: "Other", value: "other" },
 ];
 
+/** TODO: Add Not Listed / custom input option */
 const genderOptions = [
-  { label: "Male", value: "male" },
-  { label: "Female", value: "female" },
-  { label: "Non-Binary", value: "non-binary" },
+  { label: "He/Him/His", value: "male" },
+  { label: "She/Her/Hers", value: "female" },
+  { label: "They/Them/Theirs", value: "non-binary" },
   { label: "Other", value: "other" },
-  { label: "Prefer not to say", value: "no-say" }
+  { label: "Prefer not to say", value: "no-say" },
 ];
 
 const skillLevelOptions = [
   {
     label: "Beginner - First time hacker or still learning",
-    value: "beginner"
+    value: "beginner",
   },
   {
     label: "Intermediate - Not your first rodeo but still lots to learn",
-    value: "intermediate"
+    value: "intermediate",
   },
-  { label: "Advanced - Hacker who knows the game", value: "advanced" }
+  { label: "Advanced - Hacker who knows the game", value: "advanced" },
 ];
 
-const uploadResume = async resumeFile => {
+const uploadResume = async (resumeFile) => {
   var resumeForm = new FormData();
   resumeForm.append("file", resumeFile);
   await fetch("/api/profile/resume", {
     method: "POST",
-    body: resumeForm
+    body: resumeForm,
   });
 };
 
-const ProfileStep: React.FunctionComponent<Props> = props => {
+const ProfileStep: React.FunctionComponent<Props> = (props) => {
   const { profile } = props;
   const [hasChanged, setHasChanged] = useState(
     !!profile && !!profile.submittedAt
@@ -113,7 +114,7 @@ const ProfileStep: React.FunctionComponent<Props> = props => {
 
   if (process.browser) {
     if (hasChanged) {
-      window.onbeforeunload = function(event) {
+      window.onbeforeunload = function (event) {
         var message =
           "Important: Please click on 'Save' button to leave this page.";
         if (typeof event == "undefined") {
@@ -132,7 +133,7 @@ const ProfileStep: React.FunctionComponent<Props> = props => {
   return profile ? (
     <Flex direction="column">
       <Form
-        onSubmit={e => {
+        onSubmit={(e) => {
           if (userResume && userResume.files[0]) {
             uploadResume(userResume.files[0]);
           }
@@ -147,7 +148,7 @@ const ProfileStep: React.FunctionComponent<Props> = props => {
         <FormSection>
           <h1>Your HackSC Application</h1>
           <p>
-            We're excited for HackSC 2020 and can't wait to meet you! Please
+            We're excited for HackSC 2021 and can't wait to meet you! Please
             fill out our HackSC application so we can know more about you, where
             you come from, and what you've been up to.
           </p>
@@ -315,7 +316,7 @@ const ProfileStep: React.FunctionComponent<Props> = props => {
           <h2>Demographics</h2>
 
           <FormGroup>
-            <label>Gender</label>
+            <label>Preferred Pronouns</label>
 
             <Select
               name="gender"
@@ -437,7 +438,7 @@ const ProfileStep: React.FunctionComponent<Props> = props => {
 
           <FormGroup>
             <label>
-              Will you be over the age of 18 by the time of HackSC 2020?
+              Will you be over the age of 18 by the time of HackSC 2021?
             </label>
 
             <RadioChoice>
@@ -450,7 +451,7 @@ const ProfileStep: React.FunctionComponent<Props> = props => {
                 disabled={submitted}
               />
               <RadioChoiceLabel htmlFor="is-over-18">
-                Yes, I will be 18+ by January 31, 2020
+                Yes, I will be 18+ by February 19, 2021
               </RadioChoiceLabel>
             </RadioChoice>
           </FormGroup>
@@ -459,7 +460,7 @@ const ProfileStep: React.FunctionComponent<Props> = props => {
         <FormSection>
           <h2>Additional Information</h2>
 
-          <FormGroup>
+          {/* <FormGroup>
             <label>
               Will you need bus transportation to/from your school to USC?
             </label>
@@ -476,7 +477,7 @@ const ProfileStep: React.FunctionComponent<Props> = props => {
                 Yes, I need bus transportation
               </RadioChoiceLabel>
             </RadioChoice>
-          </FormGroup>
+         </FormGroup>*/}
 
           <FormGroup>
             <label>Resume - Must be a PDF, 10MB Maximum</label>
@@ -487,8 +488,8 @@ const ProfileStep: React.FunctionComponent<Props> = props => {
               id="resume"
               accept="application/pdf"
               required={!!!profile.resume}
-              ref={ref => setUserResume(ref)}
-              onChange={e => setResumeUploaded(e.target.files[0])}
+              ref={(ref) => setUserResume(ref)}
+              onChange={(e) => setResumeUploaded(e.target.files[0])}
               disabled={submitted}
             />
             <ResumeUploadButton htmlFor="resume" disabled={submitted}>
@@ -514,7 +515,7 @@ const ProfileStep: React.FunctionComponent<Props> = props => {
           </FormGroup>
 
           <FormGroup>
-            <label>Skill Level - How experienced are you as a hacker?</label>
+            <label>Skill Level - How experienced are you as a hacker? </label>
 
             <Select
               name="skill-level"
@@ -523,11 +524,15 @@ const ProfileStep: React.FunctionComponent<Props> = props => {
               disabled={submitted}
               required
             />
+            <InputSubText>
+              HackSC welcomes all skill levels! Answering this allows us to
+              tailor the event to you.
+            </InputSubText>
           </FormGroup>
 
           <FormGroup>
             <label>
-              Skills (Optional) - List out your skills (comma separated)
+              Skills (optional) - List out your skills (comma separated)
             </label>
 
             <textarea
@@ -538,10 +543,11 @@ const ProfileStep: React.FunctionComponent<Props> = props => {
               disabled={submitted}
             />
           </FormGroup>
-
+          {/* TODO: Will belong in Dashboard */}
+          {/* 
           <FormGroup>
             <label>
-              Interests (Optional) - List out technology related topics that
+              Interests (optional) - List out technology related topics that
               interest you (comma separated)
             </label>
 
@@ -552,11 +558,11 @@ const ProfileStep: React.FunctionComponent<Props> = props => {
               defaultValue={profile.interests}
               disabled={submitted}
             />
-          </FormGroup>
+          </FormGroup> */}
 
           <FormGroup>
             <label>
-              Links (Optional) - Feel free to share your portfolio, GitHub,
+              Links (optional) - Feel free to share your portfolio, GitHub,
               LinkedIn, and more
             </label>
 
@@ -580,31 +586,29 @@ const ProfileStep: React.FunctionComponent<Props> = props => {
 
           <FormGroup>
             <label>
-              HackSC has four verticals, all of which center around social
-              justice: civil liberties, sustainability, equity, and mental
-              health. If you'd like, you can read more about them at{" "}
+              Which vertical are you interested in and why? If you'd like, you
+              can read more about them at{" "}
               <a href="https://hacksc.com" target="_blank">
                 hacksc.com
               </a>
-              . If you were admitted to HackSC 2020, which vertical would you
-              tackle and what would you build? (This does not bind your project
-              to this vertical. 1000 characters)
+              . This does not bind your project to this vertical.
             </label>
 
             <textarea
-              rows={5}
+              rows={4}
               name="question-one"
               maxLength={1000}
               defaultValue={profile.questionOne}
               required
               disabled={submitted}
             />
+            <InputSubText>Character limit: 1000</InputSubText>
           </FormGroup>
 
           <FormGroup>
             <label>
-              Tell us about a project you have finished in the past. (1000
-              characters)
+              Tell us about a project (technical or non-technical) you have
+              worked on in the past.
             </label>
 
             <textarea
@@ -615,10 +619,11 @@ const ProfileStep: React.FunctionComponent<Props> = props => {
               required
               disabled={submitted}
             />
+            <InputSubText>Character limit: 1000</InputSubText>
           </FormGroup>
 
           <FormGroup>
-            <label>What is your favorite beverage? (100 characters)</label>
+            <label>What is your favorite beverage?</label>
 
             <input
               type="text"
@@ -628,6 +633,7 @@ const ProfileStep: React.FunctionComponent<Props> = props => {
               required
               disabled={submitted}
             />
+            <InputSubText>Character limit: 100</InputSubText>
           </FormGroup>
 
           <FormGroup>
@@ -696,7 +702,7 @@ const ProfileStep: React.FunctionComponent<Props> = props => {
                   <Flex>
                     <SaveButton
                       outline
-                      onClick={e => {
+                      onClick={(e) => {
                         syncProfile(e, formRef, setSaved, setError, false);
                         if (userResume && userResume.files[0]) {
                           uploadResume(userResume.files[0]);
@@ -749,6 +755,11 @@ const FormSection = styled.div`
   &:last-child {
     margin-bottom: 0;
   }
+`;
+
+const InputSubText = styled.p`
+  margin-top: 8px;
+  color: ${({ theme }) => theme.colors.gray50};
 `;
 
 const ResumeUploadInput = styled.input`

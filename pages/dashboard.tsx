@@ -4,8 +4,11 @@ import {
   getProfile,
   handleAdminRedirect,
   handleVolunteerRedirect,
-  handleSponsorRedirect
+  handleSponsorRedirect,
+  handleDashboardRedirect,
 } from "../lib/authenticate";
+
+import constants from "../lib/hackathonConstants";
 
 import { generatePosts } from "../lib/referrerCode";
 
@@ -17,7 +20,6 @@ Dashboard.getInitialProps = async ({ req }) => {
   const profile = await getProfile(req);
   //const houses = await getHouses(req);
   const houses = [];
-  //console.log(req);
 
   // Null profile means user is not logged in
   if (!profile) {
@@ -30,6 +32,10 @@ Dashboard.getInitialProps = async ({ req }) => {
     handleSponsorRedirect(req);
   }
 
+  if (!constants.showDash) {
+    handleDashboardRedirect(req);
+  }
+
   let socialPosts = {};
   if (profile) {
     socialPosts = generatePosts(profile);
@@ -38,7 +44,7 @@ Dashboard.getInitialProps = async ({ req }) => {
   return {
     houses,
     profile,
-    socialPosts
+    socialPosts,
   };
 };
 

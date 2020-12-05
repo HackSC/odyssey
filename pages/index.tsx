@@ -8,7 +8,7 @@ import { Container } from "../styles";
 const Home = () => {
   return (
     <>
-      <Head title="HackSC Odyssey - Apply to HackSC 2020" />
+      <Head title="HackSC Dashboard - Apply to HackSC 2021" />
       <Navbar activePage="/" />
       <Container>
         <Hero />

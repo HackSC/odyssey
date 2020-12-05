@@ -56,6 +56,7 @@ typings/
 
 # dotenv environment variables file
 .env
+.env.prod
 
 # next.js build output
 .next
@@ -65,3 +66,5 @@ typings/
 
 # cypress config
 cypress.env.json
+cypress/videos/*
+cypress/screenshots/*

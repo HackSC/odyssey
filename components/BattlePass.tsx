@@ -28,7 +28,7 @@ const bpItem: React.SFC<ItemProps> = ({
   userPoints = 0,
   itemTier = 0,
   minimum,
-  projSubmitted
+  projSubmitted,
 }) => {
   let locked = !unlocked;
   let showOverlay = false;
@@ -62,13 +62,19 @@ const bpItem: React.SFC<ItemProps> = ({
 
 const useBattlepassItems = (bp: Battlepass, userPoints: number) => {
   return useMemo(() => {
-    const premiumItems = bp.filter(item => {
-      return item.isPremium;
-    });
+    const premiumItems =
+      bp && bp.length > 0
+        ? bp.filter((item) => {
+            return item.isPremium;
+          })
+        : [];
 
-    const basicItems = bp.filter(item => {
-      return !item.isPremium;
-    });
+    const basicItems =
+      bp && bp.length > 0
+        ? bp.filter((item) => {
+            return !item.isPremium;
+          })
+        : [];
 
     if (premiumItems && premiumItems.length > 0) {
       premiumItems.reduce(
@@ -120,14 +126,14 @@ const useBattlepassItems = (bp: Battlepass, userPoints: number) => {
       basicItems,
       premiumItems,
       currentTier,
-      pointsTillNextTier
+      pointsTillNextTier,
     };
   }, [bp, userPoints]);
 };
 const BattlePass = ({
   bp,
   userPoints,
-  projSubmitted
+  projSubmitted,
 }: {
   bp: Battlepass;
   userPoints: number;
@@ -137,7 +143,7 @@ const BattlePass = ({
     basicItems,
     premiumItems,
     currentTier,
-    pointsTillNextTier
+    pointsTillNextTier,
   } = useBattlepassItems(bp, userPoints || 0);
 
   const bptable = (
@@ -154,7 +160,7 @@ const BattlePass = ({
                       premium: false,
                       projSubmitted,
                       ...item,
-                      currentTier: index === currentTier
+                      currentTier: index === currentTier,
                     })
                   : "";
               })
@@ -173,7 +179,7 @@ const BattlePass = ({
                       premium: true,
                       projSubmitted,
                       ...item,
-                      currentTier: index === currentTier
+                      currentTier: index === currentTier,
                     })
                   : "";
               })

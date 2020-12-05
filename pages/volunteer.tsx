@@ -20,21 +20,24 @@ const Volunteer = ({ profile }) => {
           <Flex direction="column">
             <h1>Volunteer Dashboard</h1>
             <p>
-              Hello there -- welcome to the volunteer dashboard. Here you can access
-              actions to help organize and run HackSC. If you have any questions
-              or find any errors, hit up the organizers in{" "}
+              Hello there -- welcome to the volunteer dashboard. Here you can
+              access actions to help organize and run HackSC. If you have any
+              questions or find any errors, hit up the organizers in{" "}
               <b>#volunteers</b>
             </p>
           </Flex>
 
           <ActionsHeader>Actions</ActionsHeader>
           <Actions>
-            <Action href="/scan">
-              <ActionTitle>Scan Hackers</ActionTitle>
+            <Action id="scan-page" href="/scan">
+              <ActionTitle>Scan In Hackers</ActionTitle>
             </Action>
-            <Action href="/checkin">
+            <Action id="checkin-page" href="/checkin">
               <ActionTitle>Check In Hackers</ActionTitle>
-            </Action>    
+            </Action>
+            <Action id="judging-manager-page" href="/judgingManager">
+              <ActionTitle> Pass Judgement </ActionTitle>
+            </Action>
             <Action href="https://live.hacksc.com" target="_blank">
               <ActionTitle>Live Dashboard</ActionTitle>
             </Action>
@@ -46,7 +49,7 @@ const Volunteer = ({ profile }) => {
   );
 };
 
-Volunteer.getInitialProps = async ctx => {
+Volunteer.getInitialProps = async (ctx) => {
   const { req } = ctx;
 
   const profile = await getProfile(req);
@@ -61,7 +64,7 @@ Volunteer.getInitialProps = async ctx => {
   }
 
   return {
-    profile
+    profile,
   };
 };
 
