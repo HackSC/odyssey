@@ -1,4 +1,6 @@
 import Live from "./live";
+import Dash from "../components/hackerDashboard/dashboard";
+
 import {
   handleLoginRedirect,
   getProfile,
@@ -13,10 +15,10 @@ import constants from "../lib/hackathonConstants";
 import { generatePosts } from "../lib/referrerCode";
 
 const Dashboard = ({ profile, houses, socialPosts }) => {
-  return <Live profile={profile} houses={houses} socialPosts={socialPosts} />;
+  return <Dash />;
 };
 
-Dashboard.getInitialProps = async ({ req }) => {
+export async function getServerSideProps({ req }) {
   const profile = await getProfile(req);
   //const houses = await getHouses(req);
   const houses = [];
@@ -26,7 +28,7 @@ Dashboard.getInitialProps = async ({ req }) => {
   if (!profile) {
     handleLoginRedirect(req);
   } else if (profile.role == "admin") {
-    handleAdminRedirect(req);
+    // handleAdminRedirect(req);
   } else if (profile.role == "volunteer") {
     handleVolunteerRedirect(req);
   } else if (profile.role == "sponsor") {
@@ -43,10 +45,12 @@ Dashboard.getInitialProps = async ({ req }) => {
   }
 
   return {
-    houses,
-    profile,
-    socialPosts
+    props: {
+      houses,
+      profile,
+      socialPosts,
+    },
   };
-};
+}
 
 export default Dashboard;
