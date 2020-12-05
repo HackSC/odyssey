@@ -137,7 +137,7 @@ export function handleLoginRedirect(req) {
 
 export function handleDashboardRedirect(req) {
   if (constants.showLive) {
-    redirectToPath(req, "/live");
+    redirectToPath(req, "/admin/live");
   } else if (constants.showApp) {
     redirectToPath(req, "/application");
   } else {

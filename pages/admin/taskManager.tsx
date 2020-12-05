@@ -7,9 +7,7 @@ import {
   updateTask,
   deleteTask,
 } from "../../lib/live";
-import Head from "../../components/Head";
-import Navbar from "../../components/Navbar";
-import Footer from "../../components/Footer";
+import { Head, Navbar, Footer } from "../../components";
 
 import {
   Background,
@@ -18,7 +16,6 @@ import {
   Task,
   TaskInfo,
 } from "../../styles";
-import styled from "styled-components";
 
 const EditableCell = ({ task }) => {
   const [currTaskValue, setCurrTaskValue] = useState(task);

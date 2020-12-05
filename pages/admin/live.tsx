@@ -56,12 +56,12 @@ const Live = ({ profile, houses, socialPosts }) => {
     <>
       <Head title="HackSC Odyssey - Live Dashboard" />
       {profile && (profile.role == "admin" || profile.role == "volunteer") ? (
-        <Navbar loggedIn admin activePage="live" />
+        <Navbar loggedIn admin activePage="/admin/live" />
       ) : (
         <Navbar
           loggedIn
           showProjectTeam={profile ? profile.status === "checkedIn" : false}
-          activePage="live"
+          activePage="/admin/live"
         />
       )}
       <Background>
