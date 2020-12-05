@@ -15,31 +15,31 @@ router.get("/list", utils.requireNonHacker, async (req, res) => {
 
   if (req.user.role && req.user.role === "admin") {
     filter.push({
-      type: "admin"
+      type: "admin",
     });
     filter.push({
-      type: "volunteer"
+      type: "volunteer",
     });
     filter.push({
-      type: "sponsor"
+      type: "sponsor",
     });
   } else if (req.user.role && req.user.role === "volunteer") {
     filter.push({
-      type: "volunteer"
+      type: "volunteer",
     });
     filter.push({
-      type: "sponsor"
+      type: "sponsor",
     });
   } else if (req.user.role && req.user.role === "sponsor") {
     filter.push({
-      type: "sponsor"
+      type: "sponsor",
     });
   }
 
   const tasks = await models.Task.findAll({
     where: {
-      [Op.or]: filter
-    }
+      [Op.or]: filter,
+    },
   });
 
   return res.json({ success: tasks });
@@ -52,14 +52,14 @@ router.post("/create", utils.requireAdmin, async (req, res) => {
     "points",
     "name",
     "isGroupTask",
-    "isActive"
+    "isActive",
   ]);
   const formInput = req.body;
 
   for (let key of Object.keys(formInput)) {
     if (!allowedFields.has(key)) {
       return res.status(400).json({
-        error: `${key} is not a supported field`
+        error: `${key} is not a supported field`,
       });
     }
   }
@@ -79,8 +79,8 @@ router.delete("/:id", utils.requireAdmin, async (req, res) => {
   const id = req.params.id;
   await models.Task.destroy({
     where: {
-      id: id
-    }
+      id: id,
+    },
   });
   return res.json({ success: null });
 });

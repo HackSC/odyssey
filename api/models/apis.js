@@ -10,18 +10,18 @@ module.exports = (sequelize, DataTypes) => {
       id: {
         type: DataTypes.INTEGER,
         primaryKey: true,
-        allowNull: false
+        allowNull: false,
       },
       name: DataTypes.STRING,
       description: DataTypes.STRING,
-      major_event: DataTypes.INTEGER
+      major_event: DataTypes.INTEGER,
     },
     {
-      timestamps: false
+      timestamps: false,
     }
   );
 
-  Apis.associate = function(models) {
+  Apis.associate = function (models) {
     Apis.hasMany(models.ApiLinks, { as: "links", foreignKey: "api_id" });
   };
 

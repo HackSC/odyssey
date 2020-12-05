@@ -8,24 +8,24 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.INTEGER,
         autoIncrement: true,
         primaryKey: true,
-        allowNull: false
+        allowNull: false,
       },
       email: {
         type: DataTypes.STRING,
-        allowNull: false
+        allowNull: false,
       },
       ip: {
         type: DataTypes.STRING,
-        allowNull: false
+        allowNull: false,
       },
       created_at: {
         type: DataTypes.DATE,
-        allowNull: false
-      }
+        allowNull: false,
+      },
     },
     { timestamps: false }
   );
-  signups.prototype.getSignUps = function() {
+  signups.prototype.getSignUps = function () {
     return sequelize.models.signups.findAll({});
   };
   return signups;

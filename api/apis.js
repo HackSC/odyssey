@@ -10,9 +10,9 @@ router.get("/", async (req, res) => {
     include: [
       {
         model: models.ApiLinks,
-        as: "links"
-      }
-    ]
+        as: "links",
+      },
+    ],
   });
 
   return res.json({ success: apis });
@@ -22,14 +22,14 @@ router.get("/event", async (req, res) => {
   let id = parseInt(Object.keys(req.query)[0].split(",")[1]);
   const apis = await models.Apis.findAll({
     where: {
-      major_event: id
+      major_event: id,
     },
     include: [
       {
         model: models.ApiLinks,
-        as: "links"
-      }
-    ]
+        as: "links",
+      },
+    ],
   });
 
   return res.json({ success: apis });
