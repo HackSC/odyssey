@@ -1,18 +1,15 @@
 import React, { useState } from "react";
 
-import { handleLoginRedirect, getProfile } from "../../lib/authenticate";
+import { Head, Navbar, Footer } from "../../components";
 import {
   getHouses,
   createHouse,
   updateHouse,
   deleteHouse,
-} from "../../lib/live";
-import Head from "../../components/Head";
-import Navbar from "../../components/Navbar";
-import Footer from "../../components/Footer";
-
-import styled from "styled-components";
-
+  handleLoginRedirect,
+  getProfile,
+  sendSlackMessage,
+} from "../../lib";
 import {
   Background,
   Container,
@@ -21,7 +18,7 @@ import {
   TaskInfo,
 } from "../../styles";
 
-const EditableCell = ({ house }) => {
+const EditableCell = ({ profile, house }) => {
   const [currHouse, setCurrHouse] = useState(house);
   return (
     <Task>
@@ -47,6 +44,26 @@ const EditableCell = ({ house }) => {
         onClick={async () => {
           const result = await updateHouse(currHouse);
           if (result) {
+            let firstName = profile ? profile.firstName : "";
+            let lastName = profile ? profile.lastName : "";
+            let user_email = profile ? profile.email : "";
+            let start_and_end_date =
+              new Date(new Date().getTime() - 480 * 1000 * 60).toISOString() +
+              "";
+            let slack_result = await sendSlackMessage(
+              "House UPDATED (/admin/houseManager) by " +
+                firstName +
+                ", " +
+                lastName +
+                ", " +
+                user_email,
+              "House Name: " +
+                currHouse.name +
+                "\nHouse Color: " +
+                currHouse.color,
+              start_and_end_date,
+              start_and_end_date
+            );
             window.location.reload();
           } else {
             alert("failed to update house");
@@ -60,6 +77,26 @@ const EditableCell = ({ house }) => {
         onClick={async () => {
           const result = await deleteHouse(currHouse);
           if (result) {
+            let firstName = profile ? profile.firstName : "";
+            let lastName = profile ? profile.lastName : "";
+            let user_email = profile ? profile.email : "";
+            let start_and_end_date =
+              new Date(new Date().getTime() - 480 * 1000 * 60).toISOString() +
+              "";
+            let slack_result = await sendSlackMessage(
+              "House DELETED (/admin/houseManager) by " +
+                firstName +
+                ", " +
+                lastName +
+                ", " +
+                user_email,
+              "House Name: " +
+                currHouse.name +
+                "\nHouse Color: " +
+                currHouse.color,
+              start_and_end_date,
+              start_and_end_date
+            );
             window.location.reload();
           } else {
             alert("failed to delete house");
@@ -76,7 +113,7 @@ const houseManager = ({ profile, currentHouses }) => {
   const [newHouse, setNewHouse] = useState({});
 
   const taskBlocks = currentHouses.houses.map((house) => {
-    return <EditableCell house={house} />;
+    return <EditableCell profile={profile} house={house} />;
   });
   return (
     <>
@@ -114,6 +151,27 @@ const houseManager = ({ profile, currentHouses }) => {
               onClick={async () => {
                 const result = await createHouse(newHouse);
                 if (result) {
+                  let firstName = profile ? profile.firstName : "";
+                  let lastName = profile ? profile.lastName : "";
+                  let user_email = profile ? profile.email : "";
+                  let start_and_end_date =
+                    new Date(
+                      new Date().getTime() - 480 * 1000 * 60
+                    ).toISOString() + "";
+                  let slack_result = await sendSlackMessage(
+                    "New House Created (/admin/houseManager) by " +
+                      firstName +
+                      ", " +
+                      lastName +
+                      ", " +
+                      user_email,
+                    "House Name: " +
+                      newHouse.name +
+                      "\nHouse Color: " +
+                      newHouse.color,
+                    start_and_end_date,
+                    start_and_end_date
+                  );
                   // In theory we do optimistic local state updating, in practice, fuck it it'll do
                   window.location.reload();
                 } else {

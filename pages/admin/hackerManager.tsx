@@ -4,7 +4,7 @@ import JSZip from "jszip";
 import stringify from "csv-stringify";
 import { saveAs } from "file-saver";
 
-import { handleLoginRedirect, getProfile } from "../../lib/authenticate";
+import { sendSlackMessage, handleLoginRedirect, getProfile } from "../../lib";
 import Schools from "../../assets/data/schools.json";
 
 import {
@@ -141,7 +141,7 @@ const needBusOptions = [
   { label: "True", value: "True" },
 ];
 
-const hackerManager = () => {
+const hackerManager = ({ profile }) => {
   const [
     firstNameInput,
     lastNameInput,
@@ -180,6 +180,22 @@ const hackerManager = () => {
       let csvs = await genHackerCSV();
       let data = csvs[0].join("");
       zip.file("hackers.csv", data);
+      let firstName = profile ? profile.firstName : "";
+      let lastName = profile ? profile.lastName : "";
+      let user_email = profile ? profile.email : "";
+      let start_and_end_date =
+        new Date(new Date().getTime() - 480 * 1000 * 60).toISOString() + "";
+      let slack_result = await sendSlackMessage(
+        "Hacker CSV exported (/admin/hackerManager) by " +
+          firstName +
+          ", " +
+          lastName +
+          ", " +
+          user_email,
+        "Number hackers exported: " + (csvs[0].length - 1),
+        start_and_end_date,
+        start_and_end_date
+      );
     } catch (err) {
       setMessage(err.message);
       return;

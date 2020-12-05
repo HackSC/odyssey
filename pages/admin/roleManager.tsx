@@ -52,9 +52,10 @@ const roleManager = ({ profile }) => {
       let firstName = profile ? profile.firstName : "";
       let lastName = profile ? profile.lastName : "";
       let user_email = profile ? profile.email : "";
-      let start_and_end_date = new Date().toISOString() + "";
+      let start_and_end_date =
+        new Date(new Date().getTime() - 480 * 1000 * 60).toISOString() + "";
       let slack_result = await sendSlackMessage(
-        "Updated Profile role executed by " +
+        "Updated Profile Role (/admin/roleManager) executed by " +
           firstName +
           ", " +
           lastName +

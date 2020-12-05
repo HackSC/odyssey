@@ -1,11 +1,8 @@
 import React, { useRef, useState, useMemo, useCallback } from "react";
 import styled from "styled-components";
 
-import { handleLoginRedirect, getProfile } from "../../lib/authenticate";
-
-import Head from "../../components/Head";
-import Navbar from "../../components/Navbar";
-import Footer from "../../components/Footer";
+import { sendSlackMessage, handleLoginRedirect, getProfile } from "../../lib";
+import { Head, Navbar, Footer } from "../../components";
 import {
   Button,
   Background,
@@ -21,7 +18,7 @@ import {
   liveDispatchFetch,
 } from "../../lib/api-sdk/liveHooks";
 
-const CheckinResult = ({ result, resetResults }) => {
+const CheckinResult = ({ profile, result, resetResults }) => {
   const qrInput = useRef(null);
 
   const handleAssignment = async (e) => {
@@ -50,11 +47,42 @@ const CheckinResult = ({ result, resetResults }) => {
         });
 
         if (!checkinRequest.error) {
+          let firstName = profile ? profile.firstName : "";
+          let lastName = profile ? profile.lastName : "";
+          let user_email = profile ? profile.email : "";
+          let start_and_end_date =
+            new Date(new Date().getTime() - 480 * 1000 * 60).toISOString() + "";
+          let slack_result = await sendSlackMessage(
+            "Hacker Checkin (/admin/checkin) executed by " +
+              firstName +
+              ", " +
+              lastName +
+              ", " +
+              user_email,
+            "Hacker: " +
+              result.firstName +
+              ", " +
+              result.lastName +
+              ", " +
+              result.email +
+              " checked in with qr code: " +
+              qrInputValue +
+              "\nHacker Description: " +
+              result.school +
+              ", " +
+              result.ethnicity +
+              ", " +
+              result.gender +
+              ", " +
+              result.status,
+            start_and_end_date,
+            start_and_end_date
+          );
           alert("Successfully assigned hacker QR and checked them in");
           resetResults();
         } else {
           alert(
-            "Oh no, something went wrong! Flag down Wilhelm Willie and make him cry"
+            "Oh no, something went wrong! Flag down engineering and make them cry"
           );
         }
       }
@@ -110,7 +138,7 @@ const CheckinResult = ({ result, resetResults }) => {
   );
 };
 
-const Checkin = () => {
+const Checkin = ({ profile }) => {
   const [firstNameInput, lastNameInput, emailInput] = [
     useRef(null),
     useRef(null),
@@ -146,7 +174,11 @@ const Checkin = () => {
     return (
       <Results>
         {results.map((result) => (
-          <CheckinResult result={result} resetResults={resetResults} />
+          <CheckinResult
+            profile={profile}
+            result={result}
+            resetResults={resetResults}
+          />
         ))}
       </Results>
     );

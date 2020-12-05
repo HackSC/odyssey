@@ -13,6 +13,7 @@ import Head from "../../components/Head";
 import Navbar from "../../components/Navbar";
 import Footer from "../../components/Footer";
 import { Button, Background, Flex, Container } from "../../styles";
+import { sendSlackMessage } from "../../lib";
 
 const TestConsole = ({ profile }) => {
   const [routeUrl, setRouteUrl] = useState("");
@@ -70,6 +71,32 @@ const TestConsole = ({ profile }) => {
                 });
                 const result = await response.json();
                 setResponse(JSON.stringify(result));
+
+                if (result) {
+                  let firstName = profile ? profile.firstName : "";
+                  let lastName = profile ? profile.lastName : "";
+                  let user_email = profile ? profile.email : "";
+                  let start_and_end_date =
+                    new Date(
+                      new Date().getTime() - 480 * 1000 * 60
+                    ).toISOString() + "";
+                  let slack_result = await sendSlackMessage(
+                    "Experimental Console SQL (/admin/testconsole) executed by " +
+                      firstName +
+                      ", " +
+                      lastName +
+                      ", " +
+                      user_email,
+                    "Route: " +
+                      routeUrl +
+                      ", Type: " +
+                      reqType +
+                      ", Body: " +
+                      JSON.stringify(JSON.parse(body)),
+                    start_and_end_date,
+                    start_and_end_date
+                  );
+                }
               } catch (e) {
                 console.log(e.message);
               }

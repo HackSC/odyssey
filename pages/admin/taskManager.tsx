@@ -1,12 +1,14 @@
 import React, { useState } from "react";
 
-import { handleLoginRedirect, getProfile } from "../../lib/authenticate";
 import {
+  handleLoginRedirect,
+  getProfile,
+  sendSlackMessage,
   getCurrentTasks,
   saveTask,
   updateTask,
   deleteTask,
-} from "../../lib/live";
+} from "../../lib";
 import { Head, Navbar, Footer } from "../../components";
 
 import {
@@ -17,7 +19,7 @@ import {
   TaskInfo,
 } from "../../styles";
 
-const EditableCell = ({ task }) => {
+const EditableCell = ({ profile, task }) => {
   const [currTaskValue, setCurrTaskValue] = useState(task);
   return (
     <Task>
@@ -65,6 +67,31 @@ const EditableCell = ({ task }) => {
         onClick={async () => {
           const result = await updateTask(currTaskValue);
           if (result) {
+            let firstName = profile ? profile.firstName : "";
+            let lastName = profile ? profile.lastName : "";
+            let user_email = profile ? profile.email : "";
+            let start_and_end_date =
+              new Date(new Date().getTime() - 480 * 1000 * 60).toISOString() +
+              "";
+            let slack_result = await sendSlackMessage(
+              "Task UPDATED (/admin/taskManager) executed by " +
+                firstName +
+                ", " +
+                lastName +
+                ", " +
+                user_email,
+              "Task Name: " +
+                currTaskValue.name +
+                "\nTask Type: " +
+                currTaskValue.type +
+                "\nTask points: " +
+                currTaskValue.points +
+                "\nTask isActive: " +
+                currTaskValue.isActive,
+              start_and_end_date,
+              start_and_end_date
+            );
+
             window.location.reload();
           } else {
             alert("failed to update task");
@@ -77,6 +104,31 @@ const EditableCell = ({ task }) => {
         onClick={async () => {
           const result = await deleteTask(currTaskValue);
           if (result) {
+            let firstName = profile ? profile.firstName : "";
+            let lastName = profile ? profile.lastName : "";
+            let user_email = profile ? profile.email : "";
+            let start_and_end_date =
+              new Date(new Date().getTime() - 480 * 1000 * 60).toISOString() +
+              "";
+            let slack_result = await sendSlackMessage(
+              "Task DELETED (/admin/taskManager) executed by " +
+                firstName +
+                ", " +
+                lastName +
+                ", " +
+                user_email,
+              "Task Name: " +
+                currTaskValue.name +
+                "\nTask Type: " +
+                currTaskValue.type +
+                "\nTask points: " +
+                currTaskValue.points +
+                "\nTask isActive: " +
+                currTaskValue.isActive,
+              start_and_end_date,
+              start_and_end_date
+            );
+
             window.location.reload();
           } else {
             alert("failed to delete task");
@@ -93,7 +145,7 @@ const TaskManager = ({ profile, currentTasks }) => {
   const [newTask, setNewTask] = useState({});
 
   const taskBlocks = currentTasks.tasks.map((task) => {
-    return <EditableCell task={task} />;
+    return <EditableCell profile={profile} task={task} />;
   });
   return (
     <>
@@ -155,6 +207,32 @@ const TaskManager = ({ profile, currentTasks }) => {
               onClick={async () => {
                 const result = await saveTask(newTask);
                 if (result) {
+                  let firstName = profile ? profile.firstName : "";
+                  let lastName = profile ? profile.lastName : "";
+                  let user_email = profile ? profile.email : "";
+                  let start_and_end_date =
+                    new Date(
+                      new Date().getTime() - 480 * 1000 * 60
+                    ).toISOString() + "";
+                  let slack_result = await sendSlackMessage(
+                    "Task CREATED (/admin/taskManager) executed by " +
+                      firstName +
+                      ", " +
+                      lastName +
+                      ", " +
+                      user_email,
+                    "Task Name: " +
+                      newTask.name +
+                      "\nTask Type: " +
+                      newTask.type +
+                      "\nTask points: " +
+                      newTask.points +
+                      "\nTask isActive: " +
+                      newTask.isActive,
+                    start_and_end_date,
+                    start_and_end_date
+                  );
+
                   // In theory we do optimistic local state updating, in practice, fuck it it'll do
                   window.location.reload();
                 } else {

@@ -101,6 +101,9 @@ const Admin = ({ profile }) => {
             >
               <ActionTitle>Access Metabase</ActionTitle>
             </Action>
+            <Action id="test-console-page" href="/admin/testconsole">
+              <ActionTitle> Experimental Console </ActionTitle>
+            </Action>
           </Actions>
         </Container>
       </Background>
