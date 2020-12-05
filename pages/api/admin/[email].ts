@@ -1,4 +1,4 @@
-const db = require("../../lib/db");
+const db = require("../../../lib/db");
 const escape = require("sql-template-strings");
 const validator = require("email-validator");
 const models = require("../models");
@@ -17,8 +17,8 @@ const query = async (req, res, next) => {
   }
   const updatedhackerProfile = await models.HackerProfile.update(req.body, {
     where: {
-      email: req.params.email
-    }
+      email: req.params.email,
+    },
   });
   return res.json({ hackerProfile: updatedhackerProfile });
 };
