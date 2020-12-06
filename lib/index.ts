@@ -58,6 +58,7 @@ export {
   getCurrentUnlockables,
   saveUnlockable,
   updateUnlockable,
+  deleteUnlockable,
   getCurrentEvents,
   saveEvent,
   deleteEvent,

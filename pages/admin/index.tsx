@@ -1,12 +1,36 @@
 import React from "react";
 import styled from "styled-components";
 
-import { handleLoginRedirect, getProfile } from "../../lib/authenticate";
-import { getReferrerCode } from "../../lib/referrerCode";
 import { Head, Navbar, Footer } from "../../components";
 import { Background, Flex, Container } from "../../styles";
+import {
+  sendSlackMessage,
+  getReferrerCode,
+  handleLoginRedirect,
+  getProfile,
+} from "../../lib";
 
 const Admin = ({ profile }) => {
+  // * Logic to send slack message when metabase link is clicked
+  const send_slack_msg = async (e) => {
+    let firstName = profile ? profile.firstName : "";
+    let lastName = profile ? profile.lastName : "";
+    let user_email = profile ? profile.email : "";
+    let start_and_end_date =
+      new Date(new Date().getTime() - 480 * 1000 * 60).toISOString() + "";
+    let slack_result = await sendSlackMessage(
+      ":hot_pepper: Admin Metabase accessed by " +
+        firstName +
+        ", " +
+        lastName +
+        ", " +
+        user_email,
+      "",
+      start_and_end_date,
+      start_and_end_date
+    );
+  };
+
   return (
     <>
       <Head title="HackSC Odyssey - Application" />
@@ -98,6 +122,7 @@ const Admin = ({ profile }) => {
               id="metabase-page"
               href="https://metabase.hacksc.com/"
               target="_blank"
+              onClick={(e) => send_slack_msg(e)}
             >
               <ActionTitle>Access Metabase</ActionTitle>
             </Action>

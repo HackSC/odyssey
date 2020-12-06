@@ -156,6 +156,14 @@ async function updateUnlockable(updatedUnlockable) {
   return result.status === 200;
 }
 
+async function deleteUnlockable(deletedUnlockable) {
+  const urlRoute = "/api/unlockable/" + deletedUnlockable.id;
+  const result = await fetch(urlRoute, {
+    method: "DELETE",
+  });
+  return result.status === 200;
+}
+
 async function saveEvent(newEvent) {
   const urlRoute = "/api/event";
   const result = await fetch(urlRoute, {
@@ -187,6 +195,7 @@ export {
   getCurrentUnlockables,
   saveUnlockable,
   updateUnlockable,
+  deleteUnlockable,
   getCurrentEvents,
   saveEvent,
   deleteEvent,
