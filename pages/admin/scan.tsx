@@ -360,7 +360,7 @@ Scan.getInitialProps = async (ctx) => {
   const profile = await getProfile(req);
 
   // * Null profile means user is not logged in, and this is only relevant for admins and volunteers
-  if (!profile || profile.role == "admin" || profile.role == "volunteer") {
+  if (!profile || (profile.role !== "admin" && profile.role !== "volunteer")) {
     if (profile && profile.role == "sponsor") handleSponsorRedirect(req);
     else handleLoginRedirect(req);
   }

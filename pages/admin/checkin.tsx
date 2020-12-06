@@ -1,5 +1,7 @@
 import React, { useRef, useState, useMemo, useCallback } from "react";
 import styled from "styled-components";
+import { useToasts } from "react-toast-notifications";
+import PacmanLoader from "react-spinners/PacmanLoader";
 
 import { sendSlackMessage, handleLoginRedirect, getProfile } from "../../lib";
 import { Head, Navbar, Footer } from "../../components";
@@ -18,7 +20,7 @@ import {
   liveDispatchFetch,
 } from "../../lib/api-sdk/liveHooks";
 
-const CheckinResult = ({ profile, result, resetResults }) => {
+const CheckinResult = ({ addToast, profile, result, resetResults }) => {
   const qrInput = useRef(null);
 
   const handleAssignment = async (e) => {
@@ -78,11 +80,16 @@ const CheckinResult = ({ profile, result, resetResults }) => {
             start_and_end_date,
             start_and_end_date
           );
-          alert("Successfully assigned hacker QR and checked them in");
+          addToast("Successfully assigned hacker QR and checked them in!", {
+            appearance: "success",
+          });
           resetResults();
         } else {
-          alert(
-            "Oh no, something went wrong! Flag down engineering and make them cry"
+          addToast(
+            "Oh no, something went wrong! Flag down engineering and make them cry!",
+            {
+              appearance: "error",
+            }
           );
         }
       }
@@ -144,7 +151,9 @@ const Checkin = ({ profile }) => {
     useRef(null),
     useRef(null),
   ];
+  const [loading, setLoading] = useState(false);
   const [results, setResults] = useState([]);
+  const { addToast } = useToasts();
 
   const resetResults = () => {
     setResults([]);
@@ -155,7 +164,7 @@ const Checkin = ({ profile }) => {
 
   const lookupHackers = async (e) => {
     e.preventDefault();
-
+    setLoading(true);
     const firstName = firstNameInput.current.value;
     const lastName = lastNameInput.current.value;
     const email = emailInput.current.value;
@@ -167,6 +176,7 @@ const Checkin = ({ profile }) => {
     });
 
     const profiles = lookupResponse.success;
+    setLoading(false);
     setResults(profiles);
   };
 
@@ -175,6 +185,8 @@ const Checkin = ({ profile }) => {
       <Results>
         {results.map((result) => (
           <CheckinResult
+            addToast={addToast}
+            key={Object.entries(result).join()}
             profile={profile}
             result={result}
             resetResults={resetResults}
@@ -218,7 +230,13 @@ const Checkin = ({ profile }) => {
             </Form>
           </Flex>
 
-          {renderResults}
+          {loading ? (
+            <PaddedFlex>
+              <PacmanLoader size={20} color={"#FF8379"} />
+            </PaddedFlex>
+          ) : (
+            renderResults
+          )}
         </Container>
       </Background>
       <Footer />
@@ -240,6 +258,14 @@ Checkin.getInitialProps = async (ctx) => {
     profile,
   };
 };
+
+const PaddedFlex = styled(Flex)`
+  margin: auto;
+  display: flex;
+  min-height: 3rem;
+  justify-content: center;
+  padding: 3rem;
+`;
 
 const Results = styled.div`
   padding: 18px 0;

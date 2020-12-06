@@ -43,7 +43,7 @@ async function updateTask(updatedTask) {
     },
     body: JSON.stringify(updatedTask),
   });
-  const jsonBody = await result.json();
+  //const jsonBody = await result.json();
   return result.status === 200;
 }
 
@@ -146,6 +146,7 @@ async function saveUnlockable(newUnlockable) {
   const jsonResult = await result.json();
   return result.status === 200;
 }
+
 async function updateUnlockable(updatedUnlockable) {
   const urlRoute = "/api/unlockable";
   const result = await fetch(urlRoute, {

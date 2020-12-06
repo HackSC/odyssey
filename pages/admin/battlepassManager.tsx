@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import BeatLoader from "react-spinners/BeatLoader";
 import { useToasts } from "react-toast-notifications";
 
 import { Head, Navbar, Footer } from "../../components";
@@ -21,6 +22,9 @@ import {
 
 const EditableCell = ({ addToast, profile, unlockable }) => {
   const [currUnlockable, setCurrUnlockable] = useState(unlockable);
+  const [updating, setUpdating] = useState(false);
+  const [deleting, setDeleting] = useState(false);
+
   return (
     <Task
       id={`${currUnlockable.tier}-${currUnlockable.pointThreshold}-${currUnlockable.isPremium}`}
@@ -59,81 +63,93 @@ const EditableCell = ({ addToast, profile, unlockable }) => {
           <option value="Standard">Standard</option>
         </select>
       </TaskInfo>
-      <EditButton
-        onClick={async () => {
-          const result = await updateUnlockable(currUnlockable);
-          if (result) {
-            let firstName = profile ? profile.firstName : "";
-            let lastName = profile ? profile.lastName : "";
-            let user_email = profile ? profile.email : "";
-            let start_and_end_date =
-              new Date(new Date().getTime() - 480 * 1000 * 60).toISOString() +
-              "";
-            let slack_result = await sendSlackMessage(
-              ":ticket: :pencil: Battlepass Unlockable UPDATED (/admin/battlepassManager) executed by " +
-                firstName +
-                ", " +
-                lastName +
-                ", " +
-                user_email,
-              "Unlockable tier: " +
-                currUnlockable.tier +
-                "\nUnlockable point threshold: " +
-                currUnlockable.pointThreshold +
-                "\nUnlockable is premium: " +
-                currUnlockable.isPremium,
-              start_and_end_date,
-              start_and_end_date
-            );
-            addToast("Updated unlockable!", { appearance: "success" });
-            //window.location.reload();
-          } else {
-            addToast("Error: Failed to update unlockable", {
-              appearance: "error",
-            });
-          }
-        }}
-      >
-        {" "}
-        Update Unlockable{" "}
-      </EditButton>
-      <EditButton
-        onClick={async () => {
-          const delete_res = await deleteUnlockable(currUnlockable);
-          if (delete_res) {
-            let firstName = profile ? profile.firstName : "";
-            let lastName = profile ? profile.lastName : "";
-            let user_email = profile ? profile.email : "";
-            let start_and_end_date =
-              new Date(new Date().getTime() - 480 * 1000 * 60).toISOString() +
-              "";
-            let slack_result = await sendSlackMessage(
-              ":ticket: :red_circle: Unlockable DELETED (/admin/taskManager) executed by " +
-                firstName +
-                ", " +
-                lastName +
-                ", " +
-                user_email,
-              "Unlockable tier: " +
-                currUnlockable.tier +
-                "\nUnlockable point threshold: " +
-                currUnlockable.pointThreshold +
-                "\nUnlockable is premium: " +
-                currUnlockable.isPremium,
-              start_and_end_date,
-              start_and_end_date
-            );
-            addToast("Deleted Unlockable!", { appearance: "success" });
-            window.location.reload();
-          } else {
-            addToast("Error: Failed to delete unlockable", {
-              appearance: "error",
-            });
-          }
-        }}
-      >
-        Delete Unlockable
-      </EditButton>
+      {updating ? (
+        <BeatLoader size={5} color={"#FF8379"} />
+      ) : (
+        <EditButton
+          onClick={async () => {
+            setUpdating(true);
+            const result = await updateUnlockable(currUnlockable);
+            if (result) {
+              let firstName = profile ? profile.firstName : "";
+              let lastName = profile ? profile.lastName : "";
+              let user_email = profile ? profile.email : "";
+              let start_and_end_date =
+                new Date(new Date().getTime() - 480 * 1000 * 60).toISOString() +
+                "";
+              let slack_result = await sendSlackMessage(
+                ":ticket: :pencil: Battlepass Unlockable UPDATED (/admin/battlepassManager) executed by " +
+                  firstName +
+                  ", " +
+                  lastName +
+                  ", " +
+                  user_email,
+                "Unlockable tier: " +
+                  currUnlockable.tier +
+                  "\nUnlockable point threshold: " +
+                  currUnlockable.pointThreshold +
+                  "\nUnlockable is premium: " +
+                  currUnlockable.isPremium,
+                start_and_end_date,
+                start_and_end_date
+              );
+              addToast("Updated unlockable!", { appearance: "success" });
+              //window.location.reload();
+            } else {
+              addToast("Error: Failed to update unlockable!", {
+                appearance: "error",
+              });
+            }
+            setUpdating(false);
+          }}
+        >
+          {" "}
+          Update Unlockable{" "}
+        </EditButton>
+      )}
+      {deleting ? (
+        <BeatLoader size={5} color={"#FF8379"} />
+      ) : (
+        <EditButton
+          onClick={async () => {
+            setDeleting(true);
+            const delete_res = await deleteUnlockable(currUnlockable);
+            if (delete_res) {
+              let firstName = profile ? profile.firstName : "";
+              let lastName = profile ? profile.lastName : "";
+              let user_email = profile ? profile.email : "";
+              let start_and_end_date =
+                new Date(new Date().getTime() - 480 * 1000 * 60).toISOString() +
+                "";
+              let slack_result = await sendSlackMessage(
+                ":ticket: :red_circle: Unlockable DELETED (/admin/taskManager) executed by " +
+                  firstName +
+                  ", " +
+                  lastName +
+                  ", " +
+                  user_email,
+                "Unlockable tier: " +
+                  currUnlockable.tier +
+                  "\nUnlockable point threshold: " +
+                  currUnlockable.pointThreshold +
+                  "\nUnlockable is premium: " +
+                  currUnlockable.isPremium,
+                start_and_end_date,
+                start_and_end_date
+              );
+              addToast("Deleted Unlockable!", { appearance: "success" });
+              window.location.reload();
+            } else {
+              addToast("Error: Failed to delete unlockable", {
+                appearance: "error",
+              });
+            }
+            setDeleting(false);
+          }}
+        >
+          Delete Unlockable
+        </EditButton>
+      )}
     </Task>
   );
 };
