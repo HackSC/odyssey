@@ -39,6 +39,7 @@ export { default as TaskBreakdown } from "./TaskBreakdown";
 export { default as Team } from "./Team";
 export { default as TextCard } from "./TextCard";
 export { default as UserContext } from "./UserContext";
+export { default as ToggleSwitch } from "./ToggleSwitch";
 
 // * Steps Sub-Directory
 export { CheckedIn, Confirmed, Profile, Results, Status } from "./steps";
