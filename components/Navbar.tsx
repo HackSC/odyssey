@@ -150,7 +150,7 @@ const Navbar: React.FunctionComponent<NavbarProps> = ({
                   Admin Dashboard
                 </Link>
               )}
-              {admin && (
+              {(admin || sponsor) && (
                 <Link
                   href="/admin/admin-stats"
                   id="admin-stats-page"

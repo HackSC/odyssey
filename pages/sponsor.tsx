@@ -24,9 +24,6 @@ const Sponsor = ({ profile }) => {
 
           <ActionsHeader>Actions</ActionsHeader>
           <Actions>
-            <Action id="scan-page" href="/admin/scan">
-              <ActionTitle>Scan In Hackers</ActionTitle>
-            </Action>
             <Action id="hacker-manager-page" href="/admin/hackerManager">
               <ActionTitle> Manage Hackers </ActionTitle>
             </Action>
