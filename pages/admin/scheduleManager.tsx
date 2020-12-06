@@ -129,7 +129,13 @@ const ScheduleManager = ({ profile, currentEvents }) => {
   });
 
   const taskBlocks = currentEvents.events.map((event) => {
-    return <EditableCell profile={profile} event={event} />;
+    return (
+      <EditableCell
+        key={Object.entries(event).join()}
+        profile={profile}
+        event={event}
+      />
+    );
   });
   return (
     <>

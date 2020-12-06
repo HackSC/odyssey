@@ -150,7 +150,13 @@ const TaskManager = ({ profile, currentTasks }) => {
   });
 
   const taskBlocks = currentTasks.tasks.map((task) => {
-    return <EditableCell profile={profile} task={task} />;
+    return (
+      <EditableCell
+        key={Object.entries(task).join()}
+        profile={profile}
+        task={task}
+      />
+    );
   });
   return (
     <>

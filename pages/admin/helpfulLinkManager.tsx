@@ -93,7 +93,7 @@ const HelpfulLinkManager = ({ profile, currentTasks }) => {
   const [newTask, setNewTask] = useState({});
 
   const taskBlocks = currentTasks.tasks.map((task) => {
-    return <EditableCell task={task} />;
+    return <EditableCell key={Object.entries(task).join()} task={task} />;
   });
   return (
     <>

@@ -27,7 +27,7 @@ const roleManager = ({ profile }) => {
 
   const queryResultBlocks = queryResults.map((userprofile) => {
     return (
-      <QueryResult key={userprofile.email}>
+      <QueryResult key={Object.entries(userprofile).join()}>
         {"Name: " +
           userprofile.firstName +
           " " +
