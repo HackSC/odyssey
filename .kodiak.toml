@@ -1,0 +1,30 @@
+# .kodiak.toml
+# Minimal config. version is the only required field.
+version = 1
+
+[merge]
+require_automerge_label = true
+method = "squash"
+# once a PR is merged into master, delete the branch
+delete_branch_on_merge = true
+# label to use to enable Kodiak to merge a PR
+automerge_label = "automerge" # default: "automerge"
+# if a PR is passing all checks and is able to be merged, merge it without
+# placing it in the queue. This will introduce some unfairness where those
+# waiting in the queue the longest will not be served first.
+prioritize_ready_to_merge = true
+# immediately update a PR whenever the target updates. If enabled, Kodiak will
+# not be able to efficiently update PRs. Any time the target of a PR updates,
+# the PR will update.
+update_branch_immediately = true
+
+[merge.message]
+title = "pull_request_title"
+body = "github_default"
+include_pr_number = true
+strip_html_comments = true # remove html comments to auto remove PR templates
+
+
+[update]
+always = true
+
