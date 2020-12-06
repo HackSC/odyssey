@@ -3,7 +3,12 @@ import styled from "styled-components";
 
 import { useToasts } from "react-toast-notifications";
 
-import { handleLoginRedirect, getProfile, sendSlackMessage } from "../../lib";
+import {
+  handleLoginRedirect,
+  getProfile,
+  sendSlackMessage,
+  handleSponsorRedirect,
+} from "../../lib";
 
 import { Head, Scanner, Navbar, Select } from "../../components";
 
@@ -354,17 +359,10 @@ Scan.getInitialProps = async (ctx) => {
 
   const profile = await getProfile(req);
 
-  // Null profile means user is not logged in, and this is only relevant for admins
-  // TODO: Change profile.role == hacker to a more managable page permissions system
-  if (
-    !profile ||
-    !(
-      profile.role == "admin" ||
-      profile.role == "volunteer" ||
-      profile.role == "sponsor"
-    )
-  ) {
-    handleLoginRedirect(req);
+  // * Null profile means user is not logged in, and this is only relevant for admins and volunteers
+  if (!profile || (profile.role !== "admin" && profile.role !== "volunteer")) {
+    if (profile && profile.role == "sponsor") handleSponsorRedirect(req);
+    else handleLoginRedirect(req);
   }
 
   const { success: allTasks } = await getAllTasksFetch(req);

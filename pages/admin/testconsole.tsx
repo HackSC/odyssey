@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import styled from "styled-components";
+import PacmanLoader from "react-spinners/PacmanLoader";
 
 import {
   Button,
@@ -18,6 +19,7 @@ const TestConsole = ({ profile }) => {
   const [reqType, setReqType] = useState("GET");
   const [body, setBody] = useState("");
   const [response, setResponse] = useState("");
+  const [executing, setExecuting] = useState(false);
 
   const typeOptions = [
     { label: "Get", value: "GET" },
@@ -68,7 +70,7 @@ const TestConsole = ({ profile }) => {
                     rows={5}
                     name="input"
                     maxLength={1000}
-                    placeholder="{ message: 'hi' ...}"
+                    placeholder={'{ "message": "hi", ...}'}
                     onChange={(e) => {
                       setBody(e.target.value);
                     }}
@@ -76,56 +78,71 @@ const TestConsole = ({ profile }) => {
                   <InputSubText>Character limit: 1000</InputSubText>
                 </FormGroup>
                 <FormGroup>
-                  <SaveButton
-                    onClick={async (e) => {
-                      e.preventDefault();
-                      // send request
-                      const needsBody = reqType !== "GET";
-                      try {
-                        const response = await fetch(routeUrl, {
-                          method: reqType,
-                          body: needsBody
-                            ? JSON.stringify(JSON.parse(body))
-                            : null,
-                          headers: {
-                            "Content-Type": "application/json",
-                          },
-                        });
-                        const result = await response.json();
-                        setResponse(JSON.stringify(result));
+                  {executing ? (
+                    <PaddedFlex>
+                      <PacmanLoader size={20} color={"#FF8379"} />
+                    </PaddedFlex>
+                  ) : (
+                    <SaveButton
+                      onClick={async (e) => {
+                        e.preventDefault();
+                        setExecuting(true);
+                        let firstName = profile ? profile.firstName : "";
+                        let lastName = profile ? profile.lastName : "";
+                        let user_email = profile ? profile.email : "";
+                        let start_and_end_date =
+                          new Date(
+                            new Date().getTime() - 480 * 1000 * 60
+                          ).toISOString() + "";
 
-                        if (result) {
-                          let firstName = profile ? profile.firstName : "";
-                          let lastName = profile ? profile.lastName : "";
-                          let user_email = profile ? profile.email : "";
-                          let start_and_end_date =
-                            new Date(
-                              new Date().getTime() - 480 * 1000 * 60
-                            ).toISOString() + "";
-                          let slack_result = await sendSlackMessage(
-                            ":male-technologist: :red_circle: Experimental Console SQL (/admin/testconsole) executed by " +
-                              firstName +
-                              ", " +
-                              lastName +
-                              ", " +
-                              user_email,
-                            "Route: " +
-                              routeUrl +
-                              ", Type: " +
-                              reqType +
-                              ", Body: " +
-                              JSON.stringify(JSON.parse(body)),
-                            start_and_end_date,
-                            start_and_end_date
-                          );
+                        let json_body = "";
+                        try {
+                          json_body = JSON.stringify(JSON.parse(body));
+                        } catch (e) {
+                          console.error("Could not parse JSON body.");
                         }
-                      } catch (e) {
-                        console.error(e.message);
-                      }
-                    }}
-                  >
-                    Execute
-                  </SaveButton>
+                        let slack_result = await sendSlackMessage(
+                          ":male-technologist: :red_circle: Experimental Console SQL (/admin/testconsole) executed by " +
+                            firstName +
+                            ", " +
+                            lastName +
+                            ", " +
+                            user_email,
+                          "Route: " +
+                            routeUrl +
+                            ", Type: " +
+                            reqType +
+                            ", Body: " +
+                            json_body,
+                          start_and_end_date,
+                          start_and_end_date
+                        );
+
+                        // send request
+                        const needsBody = reqType !== "GET";
+                        try {
+                          const response = await fetch(routeUrl, {
+                            method: reqType,
+                            body: needsBody
+                              ? JSON.stringify(JSON.parse(body))
+                              : null,
+                            headers: {
+                              "Content-Type": "application/json",
+                            },
+                          });
+                          const result = await response.json();
+                          setResponse(JSON.stringify(result));
+                        } catch (e) {
+                          console.error(e.message);
+                        }
+
+                        // * Finished - Set Executing to false
+                        setExecuting(false);
+                      }}
+                    >
+                      Execute
+                    </SaveButton>
+                  )}
                   <SubmitWarningMessage>
                     This executes against the production database. Please be
                     careful!
@@ -169,6 +186,12 @@ TestConsole.getInitialProps = async (ctx) => {
 };
 
 export default TestConsole;
+
+const PaddedFlex = styled(Flex)`
+  margin: auto;
+  display: flex;
+  min-height: 3rem;
+`;
 
 const FormSection = styled.div`
   border-radius: 4px;

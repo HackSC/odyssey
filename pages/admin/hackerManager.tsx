@@ -3,6 +3,7 @@ import styled from "styled-components";
 import JSZip from "jszip";
 import stringify from "csv-stringify";
 import { saveAs } from "file-saver";
+import PacmanLoader from "react-spinners/PacmanLoader";
 
 import { sendSlackMessage, handleLoginRedirect, getProfile } from "../../lib";
 import Schools from "../../assets/data/schools.json";
@@ -168,6 +169,7 @@ const hackerManager = ({ profile }) => {
     useRef(null),
   ];
 
+  const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
   const [results, setResults] = useState([]);
 
@@ -277,6 +279,7 @@ const hackerManager = ({ profile }) => {
 
   const lookupHackers = async (e) => {
     e.preventDefault();
+    setLoading(true);
 
     const firstName = firstNameInput.current.value;
     const lastName = lastNameInput.current.value;
@@ -311,12 +314,13 @@ const hackerManager = ({ profile }) => {
     });
 
     const profiles = lookupResponse.success;
-
+    setLoading(false);
     setResults(profiles);
   };
 
   const showAllHackers = async (e) => {
     e.preventDefault();
+    setLoading(true);
 
     const firstName = "";
     const lastName = "";
@@ -329,6 +333,7 @@ const hackerManager = ({ profile }) => {
     });
 
     const profiles = lookupResponse.success;
+    setLoading(false);
     setResults(profiles);
   };
 
@@ -336,7 +341,11 @@ const hackerManager = ({ profile }) => {
     return (
       <Results>
         {results.map((result) => (
-          <Hacker result={result} resetResults={resetResults} />
+          <Hacker
+            key={Object.entries(result).join()}
+            result={result}
+            resetResults={resetResults}
+          />
         ))}
       </Results>
     );
@@ -505,7 +514,13 @@ const hackerManager = ({ profile }) => {
             )}
           </Flex>
 
-          {renderHackers}
+          {loading ? (
+            <PaddedFlex>
+              <PacmanLoader size={20} color={"#FF8379"} />
+            </PaddedFlex>
+          ) : (
+            renderHackers
+          )}
         </Container>
       </Background>
       <Footer />
@@ -527,6 +542,14 @@ hackerManager.getInitialProps = async (ctx) => {
     profile,
   };
 };
+
+const PaddedFlex = styled(Flex)`
+  margin: auto;
+  display: flex;
+  min-height: 3rem;
+  justify-content: center;
+  padding: 3rem;
+`;
 
 const FullButton = styled(Button)`
   width: -webkit-fill-available;

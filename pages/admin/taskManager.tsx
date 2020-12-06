@@ -1,4 +1,6 @@
 import React, { useState } from "react";
+import SyncLoader from "react-spinners/SyncLoader";
+import { useToasts } from "react-toast-notifications";
 
 import {
   handleLoginRedirect,
@@ -19,8 +21,11 @@ import {
   TaskInfo,
 } from "../../styles";
 
-const EditableCell = ({ profile, task }) => {
+const EditableCell = ({ addToast, profile, task }) => {
   const [currTaskValue, setCurrTaskValue] = useState(task);
+  const [updating, setUpdating] = useState(false);
+  const [deleting, setDeleting] = useState(false);
+
   return (
     <Task>
       <TaskInfo>
@@ -63,80 +68,100 @@ const EditableCell = ({ profile, task }) => {
           <option value="Inactive">Inactive</option>
         </select>
       </TaskInfo>
-      <EditButton
-        onClick={async () => {
-          const result = await updateTask(currTaskValue);
-          if (result) {
-            let firstName = profile ? profile.firstName : "";
-            let lastName = profile ? profile.lastName : "";
-            let user_email = profile ? profile.email : "";
-            let start_and_end_date =
-              new Date(new Date().getTime() - 480 * 1000 * 60).toISOString() +
-              "";
-            let slack_result = await sendSlackMessage(
-              ":hammer_and_wrench: Task UPDATED (/admin/taskManager) executed by " +
-                firstName +
-                ", " +
-                lastName +
-                ", " +
-                user_email,
-              "Task Name: " +
-                currTaskValue.name +
-                "\nTask Type: " +
-                currTaskValue.type +
-                "\nTask points: " +
-                currTaskValue.points +
-                "\nTask isActive: " +
-                currTaskValue.isActive,
-              start_and_end_date,
-              start_and_end_date
-            );
-
-            window.location.reload();
-          } else {
-            alert("failed to update task");
-          }
-        }}
-      >
-        Update Task
-      </EditButton>
-      <EditButton
-        onClick={async () => {
-          const result = await deleteTask(currTaskValue);
-          if (result) {
-            let firstName = profile ? profile.firstName : "";
-            let lastName = profile ? profile.lastName : "";
-            let user_email = profile ? profile.email : "";
-            let start_and_end_date =
-              new Date(new Date().getTime() - 480 * 1000 * 60).toISOString() +
-              "";
-            let slack_result = await sendSlackMessage(
-              ":red_circle: Task DELETED (/admin/taskManager) executed by " +
-                firstName +
-                ", " +
-                lastName +
-                ", " +
-                user_email,
-              "Task Name: " +
-                currTaskValue.name +
-                "\nTask Type: " +
-                currTaskValue.type +
-                "\nTask points: " +
-                currTaskValue.points +
-                "\nTask isActive: " +
-                currTaskValue.isActive,
-              start_and_end_date,
-              start_and_end_date
-            );
-
-            window.location.reload();
-          } else {
-            alert("failed to delete task");
-          }
-        }}
-      >
-        Delete Task
-      </EditButton>
+      {updating ? (
+        <SyncLoader size={5} color={"#FF8379"} />
+      ) : (
+        <EditButton
+          onClick={async () => {
+            setUpdating(true);
+            const result = await updateTask(currTaskValue);
+            if (result) {
+              let firstName = profile ? profile.firstName : "";
+              let lastName = profile ? profile.lastName : "";
+              let user_email = profile ? profile.email : "";
+              let start_and_end_date =
+                new Date(new Date().getTime() - 480 * 1000 * 60).toISOString() +
+                "";
+              let slack_result = await sendSlackMessage(
+                ":hammer_and_wrench: Task UPDATED (/admin/taskManager) executed by " +
+                  firstName +
+                  ", " +
+                  lastName +
+                  ", " +
+                  user_email,
+                "Task Name: " +
+                  currTaskValue.name +
+                  "\nTask Type: " +
+                  currTaskValue.type +
+                  "\nTask points: " +
+                  currTaskValue.points +
+                  "\nTask isActive: " +
+                  currTaskValue.isActive,
+                start_and_end_date,
+                start_and_end_date
+              );
+              addToast("Updated Task!", { appearance: "success" });
+              // window.location.reload();
+            } else {
+              addToast("Error: Failed to update task!", {
+                appearance: "error",
+              });
+            }
+            setUpdating(false);
+          }}
+        >
+          Update Task
+        </EditButton>
+      )}
+      {deleting ? (
+        <SyncLoader
+          size={5}
+          color={"#FF8379"}
+          css={"marin:0.5rem;padding:0.5rem;"}
+        />
+      ) : (
+        <EditButton
+          onClick={async () => {
+            setDeleting(true);
+            const result = await deleteTask(currTaskValue);
+            if (result) {
+              let firstName = profile ? profile.firstName : "";
+              let lastName = profile ? profile.lastName : "";
+              let user_email = profile ? profile.email : "";
+              let start_and_end_date =
+                new Date(new Date().getTime() - 480 * 1000 * 60).toISOString() +
+                "";
+              let slack_result = await sendSlackMessage(
+                ":red_circle: Task DELETED (/admin/taskManager) executed by " +
+                  firstName +
+                  ", " +
+                  lastName +
+                  ", " +
+                  user_email,
+                "Task Name: " +
+                  currTaskValue.name +
+                  "\nTask Type: " +
+                  currTaskValue.type +
+                  "\nTask points: " +
+                  currTaskValue.points +
+                  "\nTask isActive: " +
+                  currTaskValue.isActive,
+                start_and_end_date,
+                start_and_end_date
+              );
+              addToast("Deleted Task!", { appearance: "success" });
+              window.location.reload();
+            } else {
+              addToast("Error: Failed to delete task!", {
+                appearance: "error",
+              });
+            }
+            setDeleting(false);
+          }}
+        >
+          Delete Task
+        </EditButton>
+      )}
     </Task>
   );
 };
@@ -149,9 +174,12 @@ const TaskManager = ({ profile, currentTasks }) => {
     isActive: null,
   });
 
+  const { addToast } = useToasts();
+
   const taskBlocks = currentTasks.tasks.map((task) => {
     return (
       <EditableCell
+        addToast={addToast}
         key={Object.entries(task).join()}
         profile={profile}
         task={task}
@@ -243,11 +271,13 @@ const TaskManager = ({ profile, currentTasks }) => {
                     start_and_end_date,
                     start_and_end_date
                   );
-
+                  addToast("Created Task!", { appearance: "success" });
                   // In theory we do optimistic local state updating, in practice, fuck it it'll do
                   window.location.reload();
                 } else {
-                  alert("Failed to create task");
+                  addToast("Error: Failed to create task!", {
+                    appearance: "error",
+                  });
                 }
               }}
             />

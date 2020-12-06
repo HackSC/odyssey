@@ -24,7 +24,7 @@ import {
 
 const Hacker = ({ result }) => {
   return (
-    <Result key={result.userId}>
+    <Result key={Object.entries(result).join()}>
       <h2>{result.email}</h2>
       <p>
         <b>IP Address: </b>
@@ -140,7 +140,11 @@ const mailQuery = ({ profile }) => {
   const renderHackers = useMemo(() => {
     return (
       <Results>
-        {results ? results.map((result) => <Hacker result={result} />) : ""}
+        {results
+          ? results.map((result) => (
+              <Hacker key={Object.entries(result).join()} result={result} />
+            ))
+          : ""}
       </Results>
     );
   }, [results]);
