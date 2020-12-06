@@ -55,7 +55,7 @@ const roleManager = ({ profile }) => {
       let start_and_end_date =
         new Date(new Date().getTime() - 480 * 1000 * 60).toISOString() + "";
       let slack_result = await sendSlackMessage(
-        "Updated Profile Role (/admin/roleManager) executed by " +
+        ":red_circle: Updated Profile Role (/admin/roleManager) executed by " +
           firstName +
           ", " +
           lastName +

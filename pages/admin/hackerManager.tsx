@@ -186,7 +186,7 @@ const hackerManager = ({ profile }) => {
       let start_and_end_date =
         new Date(new Date().getTime() - 480 * 1000 * 60).toISOString() + "";
       let slack_result = await sendSlackMessage(
-        "Hacker CSV exported (/admin/hackerManager) by " +
+        ":file_folder: Hacker CSV exported (/admin/hackerManager) by " +
           firstName +
           ", " +
           lastName +
