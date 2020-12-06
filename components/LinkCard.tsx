@@ -11,17 +11,29 @@ type Props = {
   propText?: string;
   firstFlexBasis?: number;
   secondFlexBasis?: number;
+  dark?: boolean;
 };
 
 const LinkCard: React.FunctionComponent<Props> = ({
   propLink = "",
-  propTitle = "Title",
+  propTitle = "",
   propText = "Descriptive text...",
   firstFlexBasis = 50,
   secondFlexBasis = 50,
+  dark = false,
   ...props
 }: Props) => {
   const { propImg, propAlt } = props;
+
+  const MarginedCard = styled(Card)`
+    ${dark && "background: #2D4158;"}
+    ${dark && "color: #fff;"}
+    margin-top: 0.5rem;
+    text-align: center;
+    &:hover {
+      transform: translate3D(0, -1px, 0) scale(1.03);
+    }
+  `;
 
   return (
     <CardLink href={propLink} target="_blank">
@@ -31,7 +43,7 @@ const LinkCard: React.FunctionComponent<Props> = ({
             <SMImage src={propImg} alt={propAlt} />
           </MarginedColumn>
           <Column flexBasis={secondFlexBasis}>
-            <h3>{propTitle}</h3>
+            {propTitle && <h3>{propTitle}</h3>}
             <p>{propText}</p>
           </Column>
         </Flex>
@@ -42,14 +54,6 @@ const LinkCard: React.FunctionComponent<Props> = ({
 
 const MarginedColumn = styled(Column)`
   margin: auto;
-`;
-
-const MarginedCard = styled(Card)`
-  margin-top: 0.5rem;
-  text-align: center;
-  &:hover {
-    transform: translate3D(0, -1px, 0) scale(1.03);
-  }
 `;
 
 const CardLink = styled.a`

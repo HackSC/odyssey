@@ -1,12 +1,55 @@
 import styled from "styled-components";
 import WidgetFrame from "./WidgetFrame";
+import { Column } from "../../styles";
+import LinkCard from "../LinkCard";
+
+import Slack from "../../assets/socialmedia/slack.svg";
+import Devpost from "../../assets/socialmedia/devpost.svg";
+import MLH from "../../assets/socialmedia/mlh.svg";
+
+interface Card {
+  link: string;
+  img?: HTMLImageElement | string;
+  alt?: string;
+  text: string;
+}
+
+const cards: Card[] = [
+  {
+    link: "https://hacksc.com/join-slack",
+    img: Slack,
+    text: "Join our Slack to stay connected",
+  },
+  {
+    link: "https://hacksc-2021.devpost.com",
+    img: Devpost,
+    text: "Submit your final project to Devpost",
+  },
+  {
+    link: "https://mlh.io",
+    img: MLH,
+    text: "Read up on MLH guidelines and policies",
+  },
+];
+
+const CardWidget = ({ card }: { card: Card }) => {
+  return (
+    <LinkCard
+      dark={true}
+      propImg={card.img}
+      propAlt={card.text}
+      propText={card.text}
+    />
+  );
+};
 
 const Sidebar = () => {
+  const widgets = cards.map((e) => <CardWidget card={e} />);
   return (
     <SidebarContainer>
-      <WidgetFrame component={<h1> Test 1</h1>} />
-      <WidgetFrame component={<h1> Test 2</h1>} />
-      <WidgetFrame component={<h1> Test 3</h1>} />
+      {widgets.map((e, i) => (
+        <WidgetFrame component={e} />
+      ))}
     </SidebarContainer>
   );
 };

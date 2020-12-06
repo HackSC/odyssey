@@ -11,10 +11,9 @@ const Dashboard = () => {
     <Container>
       <Navbar />
       <Header />
-      <WidgetFrame widget="team" component={<h1>Test!</h1>} />
-      <WidgetFrame widget="one" component={<h1>Test!</h1>} />
-      <WidgetFrame widget="two" component={<h1>Test!</h1>} />
-      <WidgetFrame widget="three" component={<h1>Test!</h1>} />
+      <WidgetFrame widget="one" component={<h1>Your team</h1>} />
+      <WidgetFrame widget="two" component={<h1>Battlepass</h1>} />
+      <WidgetFrame widget="three" component={<h1>Updates</h1>} />
       <Sidebar />
       <Footer />
     </Container>
@@ -23,12 +22,11 @@ const Dashboard = () => {
 
 const Container = styled.div`
   display: grid;
-  grid-template-columns: 0.5fr 1.5fr 1.5fr 0.5fr;
-  grid-template-rows: 0.5fr 0.6fr 0.8fr 1.5fr 0.6fr;
-  gap: 15px;
+  grid-template-columns: 0.5fr 1.5fr 0.5fr;
+  grid-template-rows: 0.5fr 0.8fr 1.2fr 0.6fr;
+  gap: 0px;
   grid-template-areas:
     "Navbar Header Header Sidebar"
-    "Navbar Team Team Sidebar"
     "Navbar WidgetArea1 WidgetArea2 Sidebar"
     "Navbar BigWidget BigWidget Sidebar"
     "Footer Footer Footer Footer";
