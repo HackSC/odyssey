@@ -50,8 +50,8 @@ export async function getServerSideProps(ctx) {
 
   const profile = await getProfile(req);
 
-  // Null profile means user is not logged in, and this is only relevant for admins
-  if (!profile || profile.role !== "admin") {
+  // * Null profile means user is not logged in, and this is only relevant for admins and sponsors
+  if (!profile || !(profile.role === "admin" || profile.role === "sponsor")) {
     handleLoginRedirect(req);
   }
   if (profile) {

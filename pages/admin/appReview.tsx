@@ -1,19 +1,22 @@
 import React, { useState, useRef, useEffect, useCallback } from "react";
 import styled from "styled-components";
-
-import { handleLoginRedirect, getProfile } from "../../lib/authenticate";
+import { useToasts } from "react-toast-notifications";
 import Confetti from "react-confetti";
+import { useWindowSize } from "react-use";
+
 import {
   getHackerProfileForReview,
   submitReview,
   getReviewHistory,
   getTotalReviewHistory,
-} from "../../lib/admin";
+  sendSlackMessage,
+  handleLoginRedirect,
+  getProfile,
+} from "../../lib";
 import { Head, Navbar, Footer } from "../../components";
 import { Button, Container, Background, Flex, Column } from "../../styles";
-import { useWindowSize } from "react-use";
 
-const AppReview = ({ hackerProfile, reviewHistory, totalReviews }) => {
+const AppReview = ({ profile, hackerProfile, reviewHistory, totalReviews }) => {
   let total_review_len_initial = totalReviews.eligibleReviews
     ? totalReviews.eligibleReviews.length
     : 0;
@@ -29,6 +32,7 @@ const AppReview = ({ hackerProfile, reviewHistory, totalReviews }) => {
   const [submitting, setSubmitting] = useState(false);
   const [loadingNewProfile, setLoadingNewProfile] = useState(false);
 
+  const { addToast } = useToasts();
   const { width, height } = useWindowSize(3000, 3000);
 
   const [s1, setS1] = useState("");
@@ -130,6 +134,28 @@ const AppReview = ({ hackerProfile, reviewHistory, totalReviews }) => {
         setS3("");
         setReviewCount(reviewCount + 1);
         setTotalReviewHistory(totalReviews - 1);
+        if (totalReviewHistory <= 0) {
+          let firstName = profile ? profile.firstName : "";
+          let lastName = profile ? profile.lastName : "";
+          let user_email = profile ? profile.email : "";
+          let start_and_end_date =
+            new Date(new Date().getTime() - 480 * 1000 * 60).toISOString() + "";
+          let slack_result = await sendSlackMessage(
+            ":tada: :party_parrot: :white_check_mark: App Reviews Completed (/admin/appReview) by " +
+              firstName +
+              ", " +
+              lastName +
+              ", " +
+              user_email,
+            "Reviews Left: " +
+              totalReviews +
+              "\nReviews Complete: " +
+              reviewCount,
+            start_and_end_date,
+            start_and_end_date
+          );
+          addToast("Created Unlockable!", { appearance: "success" });
+        }
         scoreInputs[0].current.focus();
       }
     },
@@ -334,6 +360,7 @@ AppReview.getInitialProps = async (ctx) => {
   const reviewHistory = await getReviewHistory(req);
   const totalReviews = await getTotalReviewHistory(req);
   return {
+    profile,
     hackerProfile: profileReview,
     reviewHistory,
     totalReviews,

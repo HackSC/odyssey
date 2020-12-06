@@ -29,13 +29,13 @@ router.post("/tasks", async (req, res) => {
     "isGroupTask",
     "isActive",
     "type",
-    "isPast"
+    "isPast",
   ]);
   const formInput = req.body;
   for (let key of Object.keys(formInput)) {
     if (!allowedFields.has(key)) {
       return res.status(400).json({
-        error: `${key} is not a supported field`
+        error: `${key} is not a supported field`,
       });
     }
   }
@@ -56,7 +56,7 @@ router.put("/tasks", async (req, res) => {
     const taskId = updatedObj.id;
     delete updatedObj.id;
     await models.Task.update({ ...updatedObj }, { where: { id: taskId } });
-    return res.status(200);
+    return res.status(200).json({ success: true });
   } catch (e) {
     return res.status(500).json({ err: e.message });
   }
@@ -67,10 +67,10 @@ router.delete("/tasks/:id", async (req, res) => {
     const id = req.params.id;
     await models.Task.destroy({
       where: {
-        id: id
-      }
+        id: id,
+      },
     });
-    return res.status(200);
+    return res.status(200).json({ success: true });
   } catch (e) {
     return res.status(500).json({ err: e });
   }

@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import SyncLoader from "react-spinners/SyncLoader";
+import { useToasts } from "react-toast-notifications";
 
 import { Head, Navbar, Footer } from "../../components";
 import {
@@ -19,7 +20,7 @@ import {
   TaskInfo,
 } from "../../styles";
 
-const EditableCell = ({ updateCurrentHouses, profile, house }) => {
+const EditableCell = ({ addToast, updateCurrentHouses, profile, house }) => {
   const [currHouse, setCurrHouse] = useState(house);
   const [updating, setUpdating] = useState(false);
   const [deleting, setDeleting] = useState(false);
@@ -74,9 +75,12 @@ const EditableCell = ({ updateCurrentHouses, profile, house }) => {
               );
               let updated_houses = await getHouses(null);
               updateCurrentHouses(updated_houses);
-              window.location.reload();
+              addToast("Updated House!", { appearance: "success" });
+              //window.location.reload();
             } else {
-              alert("failed to update house");
+              addToast("Error: Failed to update house", {
+                appearance: "error",
+              });
             }
             setUpdating(false);
           }}
@@ -119,9 +123,12 @@ const EditableCell = ({ updateCurrentHouses, profile, house }) => {
               );
               let updated_houses = await getHouses(null);
               updateCurrentHouses(updated_houses);
+              addToast("Deleted House!", { appearance: "success" });
               window.location.reload();
             } else {
-              alert("failed to delete house");
+              addToast("Error: Failed to delete house", {
+                appearance: "error",
+              });
             }
             setDeleting(false);
           }}
@@ -136,9 +143,13 @@ const EditableCell = ({ updateCurrentHouses, profile, house }) => {
 const houseManager = ({ profile, currentHouses }) => {
   const [newHouse, setNewHouse] = useState({ name: null, color: null });
 
+  const { addToast } = useToasts();
+
   const taskBlocks = currentHouses.houses.map((house) => {
     return (
       <EditableCell
+        addToast={addToast}
+        key={Object.entries(house).join()}
         updateCurrentHouses={(newHouses) => (currentHouses = newHouses)}
         profile={profile}
         house={house}
@@ -202,10 +213,13 @@ const houseManager = ({ profile, currentHouses }) => {
                     start_and_end_date,
                     start_and_end_date
                   );
+                  addToast("Created House!", { appearance: "success" });
                   // In theory we do optimistic local state updating, in practice, fuck it it'll do
                   window.location.reload();
                 } else {
-                  alert("Failed to create house");
+                  addToast("Error: Failed to create house", {
+                    appearance: "error",
+                  });
                 }
               }}
             />

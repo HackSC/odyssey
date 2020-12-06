@@ -1,7 +1,11 @@
 import styled from "styled-components";
 
-const Container = styled.div`
-  width: 93.75%;
+type ContainerProps = {
+  width?: string;
+};
+
+const Container = styled.div<ContainerProps>`
+  ${({ width }) => (width ? `width: ${width}` : `93.75%`)};
   max-width: 960px;
   margin-left: auto;
   margin-right: auto;
