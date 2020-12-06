@@ -67,12 +67,12 @@ const Admin = ({ profile }) => {
             <Action id="schedule-manager-page" href="/admin/scheduleManager">
               <ActionTitle> Manage Event Schedule </ActionTitle>
             </Action>
-            <Action
+            {/* <Action
               id="helpful-link-manager-page"
               href="/admin/helpfulLinkManager"
             >
               <ActionTitle> Manage Helpful Links </ActionTitle>
-            </Action>
+            </Action> */}
             <Action id="hacker-manager-page" href="/admin/hackerManager">
               <ActionTitle> Manage Hackers </ActionTitle>
             </Action>

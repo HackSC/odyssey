@@ -17,6 +17,8 @@ import {
   TaskInfo,
 } from "../../styles";
 
+// TODO: IMPLEMENT THIS COMPONENT
+
 const EditableCell = ({ task }) => {
   const [currTaskValue, setCurrTaskValue] = useState(task);
   return (
