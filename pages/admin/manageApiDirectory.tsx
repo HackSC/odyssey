@@ -8,7 +8,8 @@ import {
   handleLoginRedirect,
   getProfile,
   getMajorEvents,
-} from "../../lib/authenticate";
+  sendSlackMessage,
+} from "../../lib";
 
 import { Head, Navbar, Footer, Select, Directory } from "../../components";
 
@@ -27,7 +28,7 @@ import {
   liveAllApiLookupFetch,
 } from "../../lib/api-sdk/liveHooks";
 
-const manageApiDirectory = ({ events }) => {
+const manageApiDirectory = ({ profile, events }) => {
   const [action, setAction] = useState("all");
   const [emailInput, ipInput] = [useRef(null), useRef(null)];
 
@@ -40,6 +41,22 @@ const manageApiDirectory = ({ events }) => {
       let csvs = await genApiCSV();
       let data = csvs[0].join("");
       zip.file("apis.csv", data);
+      let firstName = profile ? profile.firstName : "";
+      let lastName = profile ? profile.lastName : "";
+      let user_email = profile ? profile.email : "";
+      let start_and_end_date =
+        new Date(new Date().getTime() - 480 * 1000 * 60).toISOString() + "";
+      let slack_result = await sendSlackMessage(
+        ":email: Api Directory CSV exported (/admin/manageApiDirectory) by " +
+          firstName +
+          ", " +
+          lastName +
+          ", " +
+          user_email,
+        "CSV size: " + (csvs[0].length - 1),
+        start_and_end_date,
+        start_and_end_date
+      );
     } catch (err) {
       return;
     }
@@ -152,7 +169,6 @@ const manageApiDirectory = ({ events }) => {
                   options={eventYear}
                   defaultValue="all"
                   onChange={handleActionChange}
-                  required
                 />
               </Flex>
               <Flex

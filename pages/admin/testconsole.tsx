@@ -103,7 +103,7 @@ const TestConsole = ({ profile }) => {
                               new Date().getTime() - 480 * 1000 * 60
                             ).toISOString() + "";
                           let slack_result = await sendSlackMessage(
-                            "Experimental Console SQL (/admin/testconsole) executed by " +
+                            ":male-technologist: :red_circle: Experimental Console SQL (/admin/testconsole) executed by " +
                               firstName +
                               ", " +
                               lastName +

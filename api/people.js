@@ -56,9 +56,14 @@ router.put("/houses", async (req, res) => {
   }
 });
 
-router.delete("/houses/:id", async (req, res) => {
+router.delete("/houses/:id", utils.requireAdmin, async (req, res) => {
   try {
     const id = req.params.id;
+
+    // * Remove foreign key contraints :/
+    await models.Person.update({ houseId: null }, { where: { houseId: id } });
+
+    // * Destroy house
     await models.House.destroy({
       where: {
         id: id,

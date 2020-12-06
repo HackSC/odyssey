@@ -74,7 +74,7 @@ const EditableCell = ({ profile, task }) => {
               new Date(new Date().getTime() - 480 * 1000 * 60).toISOString() +
               "";
             let slack_result = await sendSlackMessage(
-              "Task UPDATED (/admin/taskManager) executed by " +
+              ":hammer_and_wrench: Task UPDATED (/admin/taskManager) executed by " +
                 firstName +
                 ", " +
                 lastName +
@@ -111,7 +111,7 @@ const EditableCell = ({ profile, task }) => {
               new Date(new Date().getTime() - 480 * 1000 * 60).toISOString() +
               "";
             let slack_result = await sendSlackMessage(
-              "Task DELETED (/admin/taskManager) executed by " +
+              ":red_circle: Task DELETED (/admin/taskManager) executed by " +
                 firstName +
                 ", " +
                 lastName +
@@ -150,7 +150,13 @@ const TaskManager = ({ profile, currentTasks }) => {
   });
 
   const taskBlocks = currentTasks.tasks.map((task) => {
-    return <EditableCell profile={profile} task={task} />;
+    return (
+      <EditableCell
+        key={Object.entries(task).join()}
+        profile={profile}
+        task={task}
+      />
+    );
   });
   return (
     <>
@@ -220,7 +226,7 @@ const TaskManager = ({ profile, currentTasks }) => {
                       new Date().getTime() - 480 * 1000 * 60
                     ).toISOString() + "";
                   let slack_result = await sendSlackMessage(
-                    "Task CREATED (/admin/taskManager) executed by " +
+                    ":white_check_mark: Task CREATED (/admin/taskManager) executed by " +
                       firstName +
                       ", " +
                       lastName +

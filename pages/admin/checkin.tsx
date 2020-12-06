@@ -53,7 +53,7 @@ const CheckinResult = ({ profile, result, resetResults }) => {
           let start_and_end_date =
             new Date(new Date().getTime() - 480 * 1000 * 60).toISOString() + "";
           let slack_result = await sendSlackMessage(
-            "Hacker Checkin (/admin/checkin) executed by " +
+            ":white_check_mark: Hacker Checkin (/admin/checkin) executed by " +
               firstName +
               ", " +
               lastName +

@@ -52,7 +52,7 @@ const EditableCell = ({ profile, event }) => {
                     new Date().getTime() - 480 * 1000 * 60
                   ).toISOString() + "";
                 let slack_result = await sendSlackMessage(
-                  "Schedule Event DELETED (/admin/scheduleManager) executed by " +
+                  ":red_circle: Schedule Event DELETED (/admin/scheduleManager) executed by " +
                     firstName +
                     ", " +
                     lastName +
@@ -129,7 +129,13 @@ const ScheduleManager = ({ profile, currentEvents }) => {
   });
 
   const taskBlocks = currentEvents.events.map((event) => {
-    return <EditableCell profile={profile} event={event} />;
+    return (
+      <EditableCell
+        key={Object.entries(event).join()}
+        profile={profile}
+        event={event}
+      />
+    );
   });
   return (
     <>
@@ -195,7 +201,7 @@ const ScheduleManager = ({ profile, currentEvents }) => {
                       new Date().getTime() - 480 * 1000 * 60
                     ).toISOString() + "";
                   let slack_result = await sendSlackMessage(
-                    "Schedule Event Created (/admin/scheduleManager) executed by " +
+                    ":white_check_mark: Schedule Event Created (/admin/scheduleManager) executed by " +
                       firstName +
                       ", " +
                       lastName +
