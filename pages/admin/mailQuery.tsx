@@ -52,7 +52,7 @@ const mailQuery = ({ profile }) => {
       let start_and_end_date =
         new Date(new Date().getTime() - 480 * 1000 * 60).toISOString() + "";
       let slack_result = await sendSlackMessage(
-        "Mail Query CSV exported (/admin/mailQuery) by " +
+        ":email: Mail Query CSV exported (/admin/mailQuery) by " +
           firstName +
           ", " +
           lastName +

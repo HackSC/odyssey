@@ -101,7 +101,7 @@ const Scan = ({ admin_profile, tasks }: Props) => {
           let start_and_end_date =
             new Date(new Date().getTime() - 480 * 1000 * 60).toISOString() + "";
           let slack_result = await sendSlackMessage(
-            "Scan (/admin/scan) by " +
+            ":100: Scan (/admin/scan) by " +
               firstName +
               ", " +
               lastName +
@@ -153,7 +153,7 @@ const Scan = ({ admin_profile, tasks }: Props) => {
         let start_and_end_date =
           new Date(new Date().getTime() - 480 * 1000 * 60).toISOString() + "";
         let slack_result = await sendSlackMessage(
-          "Scan Checkin (/admin/scan) by " +
+          ":white_check_mark: Scan Checkin (/admin/scan) by " +
             firstName +
             ", " +
             lastName +
@@ -181,7 +181,7 @@ const Scan = ({ admin_profile, tasks }: Props) => {
         let start_and_end_date =
           new Date(new Date().getTime() - 480 * 1000 * 60).toISOString() + "";
         let slack_result = await sendSlackMessage(
-          "Scan Identification (/admin/scan) by " +
+          ":id: Scan Identification (/admin/scan) by " +
             firstName +
             ", " +
             lastName +
@@ -207,7 +207,7 @@ const Scan = ({ admin_profile, tasks }: Props) => {
         let start_and_end_date =
           new Date(new Date().getTime() - 480 * 1000 * 60).toISOString() + "";
         let slack_result = await sendSlackMessage(
-          "Scan Contribution Recored (/admin/scan) by " +
+          ":goal_net: Scan Contribution Recored (/admin/scan) by " +
             firstName +
             ", " +
             lastName +
@@ -238,7 +238,7 @@ const Scan = ({ admin_profile, tasks }: Props) => {
         let start_and_end_date =
           new Date(new Date().getTime() - 480 * 1000 * 60).toISOString() + "";
         let slack_result = await sendSlackMessage(
-          "Scan Judgement (/admin/scan) by " +
+          ":male-judge: :female-judge: Scan Judgement (/admin/scan) by " +
             firstName +
             ", " +
             lastName +
