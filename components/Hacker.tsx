@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { Column, Flex } from "../styles";
 
 const Hacker = ({ hacker }) => {
-  return (
+  return hacker !== null ? (
     <Result key={Object.entries(hacker).join()}>
       <Flex direction="row">
         <Column flexBasis={65}>
@@ -55,7 +55,7 @@ const Hacker = ({ hacker }) => {
           </p>
         </Column>
         <Column flexBasis={35}>
-          {hacker && hacker.HackerReviews ? (
+          {hacker.HackerReviews ? (
             <>
               <p>
                 <b>
@@ -79,7 +79,7 @@ const Hacker = ({ hacker }) => {
           ) : (
             ""
           )}
-          {hacker && hacker.HackerReviews
+          {hacker.HackerReviews
             ? hacker.HackerReviews.map((review, index) => (
                 <p key={Object.entries(review).join()}>
                   <b>
@@ -92,6 +92,8 @@ const Hacker = ({ hacker }) => {
         </Column>
       </Flex>
     </Result>
+  ) : (
+    <></>
   );
 };
 
