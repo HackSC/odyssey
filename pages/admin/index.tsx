@@ -1,9 +1,9 @@
-import React, { useState } from "react";
+import React from "react";
 import styled from "styled-components";
 import { TwitterTimelineEmbed } from "react-twitter-embed";
 
 import { Head, Navbar, Footer } from "../../components";
-import { Background, Flex, Container, Column, Button } from "../../styles";
+import { Background, Flex, Container, Column } from "../../styles";
 import {
   sendSlackMessage,
   getReferrerCode,
@@ -31,8 +31,6 @@ const Admin = ({ profile }) => {
       start_and_end_date
     );
   };
-
-  const [checked, setChecked] = useState(false);
 
   return (
     <>
@@ -69,23 +67,6 @@ const Admin = ({ profile }) => {
               <Flex direction="column">
                 <TitleFlex direction="row">
                   <ZeroPaddedH1>Admin Dashboard</ZeroPaddedH1>
-                  <DevModeButton
-                    outline={checked ? true : false}
-                    onClick={() => setChecked(!checked)}
-                  >
-                    Dev Mode
-                  </DevModeButton>
-                  {checked ? (
-                    <style>{`
-                * {
-                  background: #000 !important;
-                  color: #0f0 !important;
-                  outline: solid #f00 1px !important;
-                }
-                `}</style>
-                  ) : (
-                    ""
-                  )}
                 </TitleFlex>
                 <p>
                   Hello there -- welcome to the admin dashboard. Here you can
@@ -211,20 +192,6 @@ Admin.getInitialProps = async (ctx) => {
     profile,
   };
 };
-
-const DevModeButton = styled(Button)`
-  max-width: 120px;
-  margin: 0 0 0 auto;
-  padding: 0;
-  color: black;
-  outline: none;
-  background-color: #f6f6f6;
-
-  &:hover {
-    background-color: #ff8379 !important;
-    color: white !important;
-  }
-`;
 
 const ZeroPaddedH1 = styled.h1`
   padding-bottom: 0px;
