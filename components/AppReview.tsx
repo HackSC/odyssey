@@ -30,40 +30,62 @@ const WordBreakP = styled.p`
   word-break: break-all;
 `;
 
-const AppReview = ({ review }) => {
+const AppReview = ({ review, index = 1 }) => {
   return (
     <Result key={review.id}>
-      <WordBreakH2>{review.hackerId}</WordBreakH2>
+      <WordBreakH2>
+        {index}. {review.ReviewedProfile.firstName}{" "}
+        {review.ReviewedProfile.lastName}
+      </WordBreakH2>
+      <WordBreakP>
+        <b>Hacker Email: {review.ReviewedProfile.email}</b>
+      </WordBreakP>
+      <WordBreakP>
+        <b>Reviewed By: {review.HackerProfile.email}</b>
+      </WordBreakP>
       <WordBreakP>
         <b>Total Score: </b>
-        {review.scoreOne + review.scoreTwo + review.scoreThree}
+        <TanColoredText>
+          {review.scoreOne + review.scoreTwo + review.scoreThree}
+        </TanColoredText>
       </WordBreakP>
       <WordBreakP>
         <b>Score 1: </b>
-        {review.scoreOne}
+        <TanColoredText>{review.scoreOne}</TanColoredText>
       </WordBreakP>
       <WordBreakP>
         <b>Score 2: </b>
-        {review.scoreTwo}
+        <TanColoredText>{review.scoreTwo}</TanColoredText>
       </WordBreakP>
       <WordBreakP>
         <b>Score 2: </b>
-        {review.scoreThree}
+        <TanColoredText>{review.scoreThree}</TanColoredText>
       </WordBreakP>
       <WordBreakP>
         <b>Last Updated: </b>
-        {review.updatedAt}
+        {new Date(review.updatedAt)
+          .toString()
+          .replace("GMT-0800 (Pacific Standard Time)", "PST")}
       </WordBreakP>
       <WordBreakP>
         <b>Created At: </b>
-        {review.createdAt}
-      </WordBreakP>
-      <WordBreakP>
-        <b>Created By: </b>
-        {review.createdBy}
+        {new Date(review.createdAt)
+          .toString()
+          .replace("GMT-0800 (Pacific Standard Time)", "PST")}
       </WordBreakP>
     </Result>
   );
 };
+
+const ColoredText = styled.span`
+  font-weight: 600;
+  font-style: italic;
+  padding: 2px;
+  padding-right: 4px;
+`;
+
+const TanColoredText = styled(ColoredText)`
+  background-color: #fadfad;
+`;
 
 export default AppReview;

@@ -4,9 +4,10 @@ import styled from "styled-components";
 
 import HeaderLogo from "../assets/header_logo_21_transparent.png";
 
-import { Container, Link } from "../styles";
+import { Button, Container, Link } from "../styles";
 
 import constants from "../lib/hackathonConstants";
+import { useState } from "react";
 
 type NavbarProps = {
   loggedIn?: boolean;
@@ -55,6 +56,8 @@ const Navbar: React.FunctionComponent<NavbarProps> = ({
   volunteer,
   sponsor,
 }: NavbarProps) => {
+  const [checked, setChecked] = useState(false);
+
   return (
     <Wrapper>
       <NavbarContainer>
@@ -132,6 +135,27 @@ const Navbar: React.FunctionComponent<NavbarProps> = ({
                   APIs
                 </Link>
               )}
+              {admin && (
+                <>
+                  <DevModeButton
+                    outline={checked ? true : false}
+                    onClick={() => setChecked(!checked)}
+                  >
+                    Dev Mode
+                  </DevModeButton>
+                  {checked ? (
+                    <style>{`
+                    * {
+                      background: #000 !important;
+                      color: #0f0 !important;
+                      outline: solid #f00 1px !important;
+                    }
+                    `}</style>
+                  ) : (
+                    ""
+                  )}
+                </>
+              )}
               {(admin || sponsor || volunteer) && ( // * showLive - should be true always since admins, sponsors, volunteers, and judges need visibility
                 <Link
                   href="/admin/live"
@@ -197,6 +221,24 @@ const Navbar: React.FunctionComponent<NavbarProps> = ({
 
 const Wrapper = styled.div`
   padding: 30px 0;
+`;
+
+const DevModeButton = styled(Button)`
+  max-width: 120px;
+  font: inherit;
+  font-size: 14px !important;
+  margin: 10px;
+  padding: 10px;
+  color: black;
+  font-weight: 600 !important;
+  outline: none;
+  background-color: white;
+  border-radius: 4px;
+
+  &:hover {
+    background-color: #ff8379 !important;
+    color: white !important;
+  }
 `;
 
 const NavbarContainer = styled(Container)`
