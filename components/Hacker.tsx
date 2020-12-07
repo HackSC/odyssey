@@ -81,6 +81,7 @@ const Hacker = ({
       <></>
     );
 
+
   return hacker !== null ? (
     <Result key={Object.entries(hacker).join()}>
       <Flex direction="row">
