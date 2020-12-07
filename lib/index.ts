@@ -2,6 +2,7 @@
 export {
   getProfiles,
   updateProfileRole,
+  updateProfileStatus,
   getReviewHistory,
   getTotalReviewHistory,
   getHackerProfileForReview,

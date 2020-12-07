@@ -78,10 +78,51 @@ router.post("/updateRole", async (req, res) => {
   }
 });
 
+router.post("/updateHackerStatus", async (req, res) => {
+  try {
+    const { email, status } = req.body;
+
+    // TODO: Check is status input is in enum, otherwise we have bad status update requests
+    const result = await models.HackerProfile.update(
+      {
+        status: status,
+      },
+      {
+        where: {
+          email: email,
+        },
+      }
+    );
+
+    return res.json({ success: result });
+  } catch (e) {
+    return res.status(500).json({ error: e.message });
+  }
+});
+
 router.get("/reviews", async (req, res) => {
   try {
-    const reviews = await models.HackerReview.findAll();
-    return res.json({ reviews: reviews });
+    const reviews = await models.HackerReview.findAll({
+      include: [
+        {
+          model: models.HackerProfile,
+        },
+      ],
+    });
+    var reviewedProfiles = [];
+    for (const review of reviews) {
+      let profile = await models.HackerProfile.findAll({
+        where: {
+          userId: review.dataValues.hackerId,
+        },
+      });
+      let ReviewedProfile = { ReviewedProfile: profile[0] };
+      reviewedProfiles.push(
+        Object.assign({}, review.dataValues, ReviewedProfile)
+      );
+    }
+
+    return res.json({ reviews: reviewedProfiles });
   } catch (e) {
     return res.status(500).json({ err: e });
   }

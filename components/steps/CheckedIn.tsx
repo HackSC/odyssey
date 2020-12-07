@@ -12,7 +12,7 @@ import {
   usePersonInfoSelf,
   useBattlepass,
   useAllHouseInfo,
-  useIncompleteTasks
+  useIncompleteTasks,
 } from "../../lib/api-sdk/hackerLiveHooks";
 import { useEventsList } from "../../lib/api-sdk/eventHooks";
 import { MdClose } from "react-icons/md";
@@ -25,7 +25,7 @@ interface Props {
   houses: any;
 }
 
-const CheckedIn: React.FunctionComponent<Props> = props => {
+const CheckedIn: React.FunctionComponent<Props> = (props) => {
   const { profile } = props;
   const [alert, setAlert] = useState(false);
   const { allHouses } = useAllHouseInfo({});
@@ -33,7 +33,7 @@ const CheckedIn: React.FunctionComponent<Props> = props => {
   const { personInfo } = usePersonInfoSelf({ defaultOnError: console.log });
   const { allEvents } = useEventsList({ defaultOnError: console.log });
   const { incompleteTasks } = useIncompleteTasks({
-    defaultOnError: console.log
+    defaultOnError: console.log,
   });
 
   const { width, height } = useWindowSize();
@@ -50,7 +50,7 @@ const CheckedIn: React.FunctionComponent<Props> = props => {
     />
   );
 
-  let HouseFoxColor = personInfo?.Home.color ?? "#E7862B";
+  let HouseFoxColor = personInfo?.Home?.color ?? "#E7862B";
 
   if (!personInfo) {
     return <span></span>;
