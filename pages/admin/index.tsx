@@ -39,7 +39,7 @@ const Admin = ({ profile }) => {
       <Head title="HackSC Odyssey - Application" />
       <Navbar loggedIn admin activePage="/" />
       <Background>
-        <Container width={"s96%"}>
+        <Container width={"96%"}>
           <Flex direction="row" style={{ flexWrap: "wrap" }}>
             <Column
               style={{ padding: "1rem", minWidth: "300px" }}
@@ -123,6 +123,9 @@ const Admin = ({ profile }) => {
                 </Action>
                 <Action id="app-review-page" href="/admin/appReview">
                   <ActionTitle>App Review</ActionTitle>
+                </Action>
+                <Action id="app-leaderboard-page" href="/admin/appLeaderboard">
+                  <ActionTitle>App Leaderboard</ActionTitle>
                 </Action>
                 <Action id="checkin-page" href="/admin/checkin">
                   <ActionTitle>Check In Hackers</ActionTitle>

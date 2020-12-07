@@ -1,6 +1,7 @@
 // * Main Components
 export { default as AdminStats } from "./AdminStats";
 export { default as Application } from "./Application";
+export { default as AppReview } from "./AppReview";
 export { default as AutocompleteInput } from "./AutocompleteInput";
 export { default as BattlePass } from "./BattlePass";
 export { default as Blob } from "./Blob";
@@ -14,6 +15,7 @@ export { default as Directory } from "./Directory";
 export { default as DirectoryIntro } from "./DirectoryIntro";
 export { default as Footer } from "./Footer";
 export { default as FormStepper } from "./FormStepper";
+export { default as Hacker } from "./Hacker";
 export { default as Head } from "./Head";
 export { default as HeaderComponent } from "./HeaderComponent";
 export { default as Hero } from "./Hero";
