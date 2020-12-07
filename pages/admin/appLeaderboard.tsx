@@ -10,6 +10,8 @@ import { handleLoginRedirect, getProfile } from "../../lib";
 const AppLeaderboard = ({ profile }) => {
   const [sortOrder, setSortOrder] = useState(-1); // * -1 is descending, 1 is ascending
   const [acceptedHackers, setAcceptedHackers] = useState([]);
+  const [rejectedHackers, setRejectedHackers] = useState([]);
+  const [waitlistedHackers, setWaitlistedHackers] = useState([]);
 
   let fetchUrl = process.env.URL_BASE
     ? process.env.URL_BASE + "api/admin/reviewedProfiles"
@@ -38,7 +40,15 @@ const AppLeaderboard = ({ profile }) => {
           temp_hacker.status === "accepted" ||
           temp_hacker.status === "checkedIn"
       );
+      let rejected_hackers = reviewProfileData.reviewedProfiles.filter(
+        (temp_hacker) => temp_hacker.status === "rejected"
+      );
+      let waitlisted_hackers = reviewProfileData.reviewedProfiles.filter(
+        (temp_hacker) => temp_hacker.status === "waitlisted"
+      );
 
+      setRejectedHackers(rejected_hackers);
+      setWaitlistedHackers(waitlisted_hackers);
       setAcceptedHackers(accepted_hackers);
     }
   }, [reviewProfileData, sortOrder]);
@@ -60,7 +70,7 @@ const AppLeaderboard = ({ profile }) => {
               <TitleFlex direction="row">
                 <OnePaddedH1>Recent Reviews</OnePaddedH1>
               </TitleFlex>
-              <PaddedBottomDiv>
+              <PaddedBottomDiv style={{ lineHeight: "18px" }}>
                 Welcome to the application leaderboard. Here you can view a list
                 of hacker applications to HackSC. If you have any questions or
                 find any errors, hit up the engineers in{" "}
@@ -106,6 +116,16 @@ const AppLeaderboard = ({ profile }) => {
                   # Accepted Hackers:{" "}
                   <GreenColoredText>{acceptedHackers.length}</GreenColoredText>
                 </p>
+                <p>
+                  # Waitlisted Hackers:{" "}
+                  <OrangeColoredText>
+                    {waitlistedHackers.length}
+                  </OrangeColoredText>
+                </p>
+                <p>
+                  # Rejected Hackers:{" "}
+                  <RedColoredText>{rejectedHackers.length}</RedColoredText>
+                </p>
               </PaddedBottomDiv>
               <CardContainer>
                 {reviewProfileData &&
@@ -116,6 +136,12 @@ const AppLeaderboard = ({ profile }) => {
                         acceptedHackers={acceptedHackers}
                         setAcceptedHackersCallback={setAcceptedHackers}
                         showAcceptButton={true}
+                        rejectedHackers={rejectedHackers}
+                        setRejectedHackersCallback={setRejectedHackers}
+                        showRejectButton={true}
+                        waitlistedHackers={waitlistedHackers}
+                        setWaitlistedHackersCallback={setWaitlistedHackers}
+                        showWaitlistButton={true}
                         profile={profile}
                         index={index + 1}
                         key={Object.entries(hacker).join()}
@@ -163,10 +189,18 @@ const GreenColoredText = styled(ColoredText)`
   background-color: #90ee90;
 `;
 
+const RedColoredText = styled(ColoredText)`
+  background-color: #ff9999;
+`;
+
+const OrangeColoredText = styled(ColoredText)`
+  background-color: #ffc87c;
+`;
+
 const MaxHeightColumn = styled(Column)`
   padding: 1rem;
   min-width: 300px;
-  max-height: 75vh;
+  max-height: 90vh;
   display: flex;
   flex-direction: column;
 `;

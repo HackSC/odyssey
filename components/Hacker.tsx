@@ -9,11 +9,20 @@ const Hacker = ({
   hacker,
   index = 1,
   showAcceptButton = false,
+  showRejectButton = false,
+  showWaitlistButton = false,
   profile = null,
   setAcceptedHackersCallback = null,
+  setRejectedHackersCallback = null,
+  setWaitlistedHackersCallback = null,
   acceptedHackers = [],
+  rejectedHackers = [],
+  waitlistedHackers = [],
 }) => {
   const [accepting, setAccepting] = useState(false);
+  const [rejecting, setRejecting] = useState(false);
+  const [waitlisting, setWaitlisting] = useState(false);
+
   const [disabled, setDisabled] = useState(
     hacker ? hacker.status !== "submitted" : true
   );
@@ -68,19 +77,116 @@ const Hacker = ({
     setAccepting(false);
   };
 
+  const handleRejectClicked = async () => {
+    setRejecting(true);
+    if (profile) {
+      let result = await updateProfileStatus(hacker.email, "rejected");
+      if (result.status == 200) {
+        hacker.status = "rejected";
+
+        // * Call accepted callback
+        if (setRejectedHackersCallback)
+          setRejectedHackersCallback([...rejectedHackers, hacker]);
+
+        // * Disable action buttons
+        setDisabled(true);
+
+        // * Send slack message
+        let firstName = profile ? profile.firstName : "";
+        let lastName = profile ? profile.lastName : "";
+        let user_email = profile ? profile.email : "";
+        let start_and_end_date =
+          new Date(new Date().getTime() - 480 * 1000 * 60).toISOString() + "";
+        let slack_result = await sendSlackMessage(
+          ":bangbang: :x: Rejected Hacker (/admin/appLeaderboard) executed by " +
+            firstName +
+            ", " +
+            lastName +
+            ", " +
+            user_email,
+          "Hacker: " +
+            hacker.firstName +
+            ", " +
+            hacker.lastName +
+            ", " +
+            hacker.email +
+            " was rejected",
+          start_and_end_date,
+          start_and_end_date
+        );
+
+        // * Add toast
+        addToast("Rejected Hacker!", { appearance: "success" });
+      } else {
+        addToast("Failed to reject hacker. Error: " + result.statusText, {
+          appearance: "error",
+        });
+      }
+    }
+    setRejecting(false);
+  };
+
+  const handleWaitlistClicked = async () => {
+    setWaitlisting(true);
+    if (profile) {
+      let result = await updateProfileStatus(hacker.email, "waitlisted");
+      if (result.status == 200) {
+        hacker.status = "waitlisted";
+
+        // * Call accepted callback
+        if (setWaitlistedHackersCallback)
+          setWaitlistedHackersCallback([...waitlistedHackers, hacker]);
+
+        // * Disable action buttons
+        setDisabled(true);
+
+        // * Send slack message
+        let firstName = profile ? profile.firstName : "";
+        let lastName = profile ? profile.lastName : "";
+        let user_email = profile ? profile.email : "";
+        let start_and_end_date =
+          new Date(new Date().getTime() - 480 * 1000 * 60).toISOString() + "";
+        let slack_result = await sendSlackMessage(
+          ":bangbang: :page_with_curl: Waitlisted Hacker (/admin/appLeaderboard) executed by " +
+            firstName +
+            ", " +
+            lastName +
+            ", " +
+            user_email,
+          "Hacker: " +
+            hacker.firstName +
+            ", " +
+            hacker.lastName +
+            ", " +
+            hacker.email +
+            " was waitlisted.",
+          start_and_end_date,
+          start_and_end_date
+        );
+
+        // * Add toast
+        addToast("Waitlisted Hacker!", { appearance: "success" });
+      } else {
+        addToast("Failed to waitlist hacker. Error: " + result.statusText, {
+          appearance: "error",
+        });
+      }
+    }
+    setWaitlisting(false);
+  };
+
   const showStatus = () =>
     hacker.status === "accepted" ||
     hacker.status === "checkedIn" ||
     hacker.status === "confirmed" ? (
-      <GreenColoredText>Accepted</GreenColoredText>
+      <GreenColoredText>accepted</GreenColoredText>
     ) : hacker.status === "rejected" || hacker.status === "declined" ? (
       <RedColoredText>{hacker.status}</RedColoredText>
     ) : hacker.status === "waitlisted" ? (
-      <OrangeColoredText>Waitlisted</OrangeColoredText>
+      <OrangeColoredText>waitlisted</OrangeColoredText>
     ) : (
-      <></>
+      <GreyColoredText>{hacker.status}</GreyColoredText>
     );
-
 
   return hacker !== null ? (
     <Result key={Object.entries(hacker).join()}>
@@ -119,7 +225,7 @@ const Hacker = ({
           </p>
           <p>
             <b>Status: </b>
-            {hacker.status}
+            <span style={{ width: "min-content" }}>{showStatus()}</span>
           </p>
           <p>
             <b>Role: </b>
@@ -190,6 +296,50 @@ const Hacker = ({
               <></>
             )}
           </CenteredDiv>
+          <CenteredDiv>
+            {showWaitlistButton ? (
+              !disabled ? (
+                waitlisting ? (
+                  <PaddedFlex>
+                    <PacmanLoader size={20} color={"#e97451"} />
+                  </PaddedFlex>
+                ) : (
+                  <WaitlistButton
+                    disabled={disabled}
+                    onClick={(e) => handleWaitlistClicked()}
+                  >
+                    Waitlist
+                  </WaitlistButton>
+                )
+              ) : (
+                <></>
+              )
+            ) : (
+              <></>
+            )}
+          </CenteredDiv>
+          <CenteredDiv>
+            {showRejectButton ? (
+              !disabled ? (
+                rejecting ? (
+                  <PaddedFlex>
+                    <PacmanLoader size={20} color={"#e97451"} />
+                  </PaddedFlex>
+                ) : (
+                  <RejectButton
+                    disabled={disabled}
+                    onClick={(e) => handleRejectClicked()}
+                  >
+                    Reject
+                  </RejectButton>
+                )
+              ) : (
+                <></>
+              )
+            ) : (
+              <></>
+            )}
+          </CenteredDiv>
         </Column>
       </Flex>
     </Result>
@@ -204,7 +354,7 @@ const CenteredDiv = styled.div`
   justify-content: center;
 `;
 
-const ColoredText = styled.div`
+const ColoredText = styled.span`
   font-weight: 600;
   font-style: italic;
   padding: 2px;
@@ -223,10 +373,50 @@ const GreenColoredText = styled(ColoredText)`
   background-color: #90ee90;
 `;
 
+const GreyColoredText = styled(ColoredText)`
+  background-color: #dcdcdc;
+`;
+
 const PaddedFlex = styled(Flex)`
   margin: auto;
   display: flex;
   min-height: 3rem;
+`;
+
+const RejectButton = styled(Button)`
+  max-width: 120px;
+  font: inherit;
+  font-size: 14px !important;
+  margin: 10px;
+  padding: 10px;
+  color: black;
+  font-weight: 600 !important;
+  outline: none;
+  background-color: #e97451;
+  border-radius: 4px;
+
+  &:hover {
+    background-color: #ff6e4a !important;
+    color: black !important;
+  }
+`;
+
+const WaitlistButton = styled(Button)`
+  max-width: 120px;
+  font: inherit;
+  font-size: 14px !important;
+  margin: 10px;
+  padding: 10px;
+  color: black;
+  font-weight: 600 !important;
+  outline: none;
+  background-color: #ffae42;
+  border-radius: 4px;
+
+  &:hover {
+    background-color: #ffb347 !important;
+    color: black !important;
+  }
 `;
 
 const AcceptButton = styled(Button)`
