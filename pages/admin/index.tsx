@@ -36,8 +36,8 @@ const Admin = ({ profile }) => {
     <>
       <Head title="HackSC Odyssey - Application" />
       <Navbar loggedIn admin activePage="/" />
-      <Background padding="3rem 0">
-        <Container width={"96%"}>
+      <Background padding="2rem">
+        <Container width={"100%"}>
           <SubContainerFlex direction="row">
             <TwitterColumn flexBasis={35}>
               <TwitterFlex>

@@ -63,8 +63,8 @@ const AppLeaderboard = ({ profile }) => {
     <>
       <Head title="HackSC Odyssey - Application" />
       <Navbar loggedIn admin activePage="/appLeaderboard" />
-      <Background padding={"3rem 0"}>
-        <Container width={"96%"}>
+      <Background padding="2rem">
+        <Container width={"100%"}>
           <Flex direction="row" style={{ flexWrap: "wrap" }}>
             <MaxHeightColumn flexBasis={35}>
               <TitleFlex direction="row">

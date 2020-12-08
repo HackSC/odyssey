@@ -32,7 +32,7 @@ const TestConsole = ({ profile }) => {
     <>
       <Head title="HackSC Odyssey - Application" />
       <Navbar loggedIn admin activePage="/" />
-      <Background>
+      <Background padding="2rem">
         <Container>
           <Flex direction="column">
             <Form>

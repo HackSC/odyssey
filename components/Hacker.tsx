@@ -192,7 +192,7 @@ const Hacker = ({
     <Result key={Object.entries(hacker).join()}>
       <Flex direction="row" style={{ flexWrap: "wrap" }}>
         <Column flexBasis={65}>
-          <h2>
+          <h2 style={{ wordBreak: "break-all" }}>
             {index}. {hacker.firstName} {hacker.lastName}
           </h2>
           <p>

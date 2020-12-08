@@ -6,7 +6,7 @@ import React, {
   useEffect,
 } from "react";
 import styled from "styled-components";
-import { Offline, Online } from "react-detect-offline";
+import { Detector } from "react-detect-offline";
 
 import { useToasts } from "react-toast-notifications";
 
@@ -51,8 +51,9 @@ type Props = {
 };
 
 const Scan = ({ admin_profile, tasks }: Props) => {
-  const [action, setAction] = useState(null);
+  const [action, setAction] = useState(ACTIONS[0].value);
   const [lastScannedCode, setLastScannedCode] = useState(null);
+  const [online, setOnline] = useState(true);
 
   const manualInputRef = useRef(null);
 
@@ -64,7 +65,7 @@ const Scan = ({ admin_profile, tasks }: Props) => {
   };
 
   useEffect(() => {
-    if (Online) {
+    if (online) {
       let codes_to_scan = localStorage.getItem("OfflineScannedCodes")
         ? JSON.parse(localStorage.getItem("OfflineScannedCodes"))
         : [];
@@ -73,10 +74,11 @@ const Scan = ({ admin_profile, tasks }: Props) => {
           sendScanRequest(code);
           setLastScannedCode(code);
         }
-        localStorage.setItem("OfflineScannedCodes", "");
       }
+      localStorage.setItem("OfflineScannedCodes", "");
     }
-  }, [Offline, Online]);
+  }, [online]);
+
   const checkIfValidCode = (code: string): boolean => {
     if (code.length === 4) {
       const uppercaseAlphanumericRegEx = /[A-Z,0-9]{4}/;
@@ -163,6 +165,7 @@ const Scan = ({ admin_profile, tasks }: Props) => {
       return;
     }
 
+    console.log(dispatchBody);
     const scanResponse = await liveDispatchFetch(dispatchBody);
 
     if (!scanResponse.error) {
@@ -286,17 +289,42 @@ const Scan = ({ admin_profile, tasks }: Props) => {
     (code: string) => {
       setLastScannedCode((prev) => {
         if (prev !== code) {
-          if (Offline)
+          let offline = false;
+          var condition = navigator.onLine ? "online" : "offline";
+          if (condition === "online") {
+            fetch("https://www.google.com/", {
+              // Check for internet connectivity
+              mode: "no-cors",
+            })
+              .then(() => {
+                sendScanRequest(code);
+              })
+              .catch(() => {
+                console.error("INTERNET CONNECTIVITY ISSUE");
+                offline = true;
+              });
+          } else offline = true;
+
+          if (offline) {
+            let offline_scanned = JSON.parse(
+              localStorage.getItem("OfflineScannedCodes")
+                ? localStorage.getItem("OfflineScannedCodes")
+                : "[]"
+            );
             localStorage.setItem(
               "OfflineScannedCodes",
-              localStorage.getItem("OfflineScannedCodes")
-                ? JSON.stringify(
-                    JSON.parse(localStorage.getItem("OfflineScannedCodes")) +
-                      [code]
-                  )
+              offline_scanned !== null && offline_scanned !== ""
+                ? JSON.stringify(Object.assign([], offline_scanned, [code]))
                 : JSON.stringify([code])
             );
-          else sendScanRequest(code);
+            addToast(
+              "Offline or Connectivity Issue: Storing code in LocalStorage until back online.",
+              {
+                appearance: "error",
+                autoDismiss: true,
+              }
+            );
+          }
           return code;
         } else {
           return prev;
@@ -342,7 +370,15 @@ const Scan = ({ admin_profile, tasks }: Props) => {
           <ScanContainer>
             <ActionBar>
               <h1>Scan Codes</h1>
-
+              <Detector
+                onChange={(e) => {
+                  setOnline(e);
+                }}
+                render={({ online: updated_online }) => {
+                  //setOnline(updated_online)
+                  return "";
+                }}
+              />
               <Form style={{ width: "100%" }}>
                 <Select
                   style={{ width: "100%" }}

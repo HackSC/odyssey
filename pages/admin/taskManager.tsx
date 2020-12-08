@@ -190,9 +190,9 @@ const TaskManager = ({ profile, currentTasks }) => {
     <>
       <Head title="HackSC Odyssey - Results" />
       <Navbar loggedIn admin activePage="/taskManager" />
-      <Background padding="30px 0">
+      <Background padding="2rem">
         <Container>
-          {" "}
+          <h1 style={{ margin: "1rem" }}>Manage Tasks</h1>
           <Task style={{ flexWrap: "wrap" }}>
             <TaskInfo>
               <input

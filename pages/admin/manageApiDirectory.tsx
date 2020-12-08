@@ -153,9 +153,9 @@ const manageApiDirectory = ({ profile, events }) => {
     <>
       <Head title="HackSC Odyssey - Filter Signups" />
       <Navbar loggedIn admin activePage="/manageApiDirectory" />
-      <Background padding="30px 0">
+      <Background padding="2rem">
         <Container>
-          <Flex direction="column" style={{ margin: "0 20px" }}>
+          <Flex direction="column">
             <h1>Manage Api Directory</h1>
             <Form>
               <Flex
@@ -173,7 +173,7 @@ const manageApiDirectory = ({ profile, events }) => {
               </Flex>
               <Flex
                 direction="row"
-                style={{ paddingTop: "1rem" }}
+                style={{ paddingTop: "1rem", flexWrap: "wrap" }}
                 justify="space-between"
               >
                 <Column flexBasis={49}>{/* Empty Column for spacing */}</Column>
@@ -188,11 +188,13 @@ const manageApiDirectory = ({ profile, events }) => {
           {results && results.length > 0 ? (
             <Flex
               direction="row"
-              style={{ paddingTop: "1rem" }}
+              style={{ paddingTop: "1rem", flexWrap: "wrap" }}
               justify="space-between"
             >
               <Column flexBasis={49}>
-                <h3 style={{ marginLeft: "2rem" }}>Count: {results.length}</h3>
+                <h3 style={{ margin: "1rem 0", wordBreak: "break-all" }}>
+                  Count: {results.length}
+                </h3>
               </Column>
               <Column flexBasis={49}>
                 <FullButton onClick={exportApiCSV}>Export to CSV</FullButton>

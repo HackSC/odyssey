@@ -14,6 +14,7 @@ import { Head, Navbar, Footer, Steps } from "../components";
 import { Background, Container } from "../styles";
 
 import { generatePosts } from "../lib/referrerCode";
+import { getHouses } from "../lib";
 
 const Application = ({ profile, houses, socialPosts }) => {
   return (
@@ -42,8 +43,7 @@ const Application = ({ profile, houses, socialPosts }) => {
 
 Application.getInitialProps = async ({ req }) => {
   const profile = await getProfile(req);
-  //const houses = await getHouses(req);
-  const houses = [];
+  let houses = await getHouses(req);
 
   // Null profile means user is not logged in
   if (!profile) {
@@ -57,7 +57,7 @@ Application.getInitialProps = async ({ req }) => {
   }
 
   if (profile && profile.status == "checkedIn") {
-    //const houseInfo = await getHouseInfo(req, 1);
+    //houses = await getHouseInfo(req, 1); getHouses
   }
 
   /*
