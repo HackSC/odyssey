@@ -193,7 +193,7 @@ const TaskManager = ({ profile, currentTasks }) => {
       <Background padding="30px 0">
         <Container>
           {" "}
-          <Task>
+          <Task style={{ flexWrap: "wrap" }}>
             <TaskInfo>
               <input
                 type="text"
@@ -241,6 +241,7 @@ const TaskManager = ({ profile, currentTasks }) => {
               </select>
             </TaskInfo>
             <input
+              style={{ margin: "1rem 0 0 0", padding: "5px" }}
               type="submit"
               value="Create new Task"
               onClick={async () => {

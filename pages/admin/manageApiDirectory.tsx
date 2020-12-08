@@ -155,7 +155,7 @@ const manageApiDirectory = ({ profile, events }) => {
       <Navbar loggedIn admin activePage="/manageApiDirectory" />
       <Background padding="30px 0">
         <Container>
-          <Flex direction="column">
+          <Flex direction="column" style={{ margin: "0 20px" }}>
             <h1>Manage Api Directory</h1>
             <Form>
               <Flex
