@@ -28,13 +28,14 @@ const roleManager = ({ profile }) => {
   const queryResultBlocks = queryResults.map((userprofile) => {
     return (
       <QueryResult key={Object.entries(userprofile).join()}>
-        {"Name: " +
-          userprofile.firstName +
-          " " +
-          userprofile.lastName +
-          " | Email: " +
-          userprofile.email}
+        <div style={{ wordBreak: "break-all" }}>
+          <p>
+            Name: {userprofile.firstName} {userprofile.lastName}
+          </p>
+          <p>Email: {userprofile.email}</p>
+        </div>
         <Select
+          style={{ margin: "auto" }}
           name="role"
           options={roleOptions}
           defaultValue={userprofile.role}
@@ -82,8 +83,8 @@ const roleManager = ({ profile }) => {
       <Navbar loggedIn admin activePage="/roleManager" />
       <Background padding="30px 0">
         <Container>
-          <h1 style={{ margin: "0 20px" }}>Manage Roles</h1>
-          <Flex direction="row" style={{ margin: "0 20px", flexWrap: "wrap" }}>
+          <h1 style={{ margin: "2rem 2rem 1rem 2rem" }}>Manage Roles</h1>
+          <Flex direction="row" style={{ flexWrap: "wrap" }}>
             <SearchBar>
               <Input
                 type="text"
@@ -123,7 +124,8 @@ roleManager.getInitialProps = async (ctx) => {
 
 const SearchBar = styled(Flex)`
   width: 100%;
-  margin-bottom: 10px;
+  margin: 1rem 2rem 2rem 2rem;
+  max-width: 740px;
 
   input {
     margin-right: 10px;
@@ -133,14 +135,20 @@ const SearchBar = styled(Flex)`
 const QueryResult = styled.div`
   padding: 10px 20px;
   background: #ffffff;
+  max-width: 300px;
   border-radius: 8px;
   font-size: 16px;
-  margin: 5px 0px;
+  margin: 2rem;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: center;
 
   div {
-    width: 120px;
+    width: 100%;
     display: inline-block;
     margin: 2px 10px;
+    margin: auto;
   }
 
   select {
