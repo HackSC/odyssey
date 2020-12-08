@@ -355,12 +355,16 @@ const hackerManager = ({ profile }) => {
     <>
       <Head title="HackSC Odyssey - Check in Hackers" />
       <Navbar loggedIn admin activePage="/hackerManager" />
-      <Background padding="30px 0">
+      <Background padding="2rem">
         <Container>
           <Flex direction="column">
             <h1>Filter Hackers and Export to CSV</h1>
             <Form>
-              <Flex direction="row" justify="space-between">
+              <Flex
+                direction="row"
+                style={{ flexWrap: "wrap" }}
+                justify="space-between"
+              >
                 <Column flexBasis={49}>
                   <FormGroup>
                     <label>First Name</label>
@@ -381,7 +385,11 @@ const hackerManager = ({ profile }) => {
                 <input type="email" ref={emailInput} />
               </FormGroup>
 
-              <Flex direction="row" justify="space-between">
+              <Flex
+                direction="row"
+                style={{ flexWrap: "wrap" }}
+                justify="space-between"
+              >
                 <Column flexBasis={49}>
                   <FormGroup>
                     <label>Status</label>
@@ -401,7 +409,11 @@ const hackerManager = ({ profile }) => {
                 </Column>
               </Flex>
 
-              <Flex direction="row" justify="space-between">
+              <Flex
+                direction="row"
+                style={{ flexWrap: "wrap" }}
+                justify="space-between"
+              >
                 <Column flexBasis={49}>
                   <FormGroup>
                     <label>School</label>
@@ -430,7 +442,11 @@ const hackerManager = ({ profile }) => {
                 </Column>
               </Flex>
 
-              <Flex direction="row" justify="space-between">
+              <Flex
+                direction="row"
+                style={{ flexWrap: "wrap" }}
+                justify="space-between"
+              >
                 <Column flexBasis={49}>
                   <FormGroup>
                     <label>Year</label>
@@ -456,7 +472,11 @@ const hackerManager = ({ profile }) => {
                 </Column>
               </Flex>
 
-              <Flex direction="row" justify="space-between">
+              <Flex
+                direction="row"
+                style={{ flexWrap: "wrap" }}
+                justify="space-between"
+              >
                 <Column flexBasis={49}>
                   <FormGroup>
                     <label>Gender</label>
@@ -482,16 +502,16 @@ const hackerManager = ({ profile }) => {
 
               <Flex
                 direction="row"
-                style={{ paddingTop: "1rem" }}
+                style={{ paddingTop: "1rem", flexWrap: "wrap" }}
                 justify="space-between"
               >
-                <Column flexBasis={49}>
+                <Column flexBasis={49} style={{ margin: "1rem 0" }}>
                   <FullButton onClick={lookupHackers}>
                     Filter Hackers
                   </FullButton>
                 </Column>
 
-                <Column flexBasis={49}>
+                <Column flexBasis={49} style={{ margin: "1rem 0" }}>
                   <FullButton onClick={showAllHackers}>
                     Show All Hackers
                   </FullButton>
@@ -502,7 +522,7 @@ const hackerManager = ({ profile }) => {
 
           <Flex
             direction="row"
-            style={{ paddingTop: "1rem" }}
+            style={{ paddingTop: "1rem", flexWrap: "wrap" }}
             justify="space-between"
           >
             {results && results.length > 0 ? (
