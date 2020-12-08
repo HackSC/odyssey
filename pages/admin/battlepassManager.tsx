@@ -27,6 +27,7 @@ const EditableCell = ({ addToast, profile, unlockable }) => {
 
   return (
     <Task
+      style={{ flexWrap: "wrap" }}
       id={`${currUnlockable.tier}-${currUnlockable.pointThreshold}-${currUnlockable.isPremium}`}
     >
       <TaskInfo>
@@ -67,6 +68,7 @@ const EditableCell = ({ addToast, profile, unlockable }) => {
         <BeatLoader size={5} color={"#FF8379"} />
       ) : (
         <EditButton
+          style={{ margin: "1rem 0 0 0", padding: "5px" }}
           onClick={async () => {
             setUpdating(true);
             const result = await updateUnlockable(currUnlockable);
@@ -111,6 +113,7 @@ const EditableCell = ({ addToast, profile, unlockable }) => {
         <BeatLoader size={5} color={"#FF8379"} />
       ) : (
         <EditButton
+          style={{ margin: "1rem 0 0 0", padding: "5px" }}
           onClick={async () => {
             setDeleting(true);
             const delete_res = await deleteUnlockable(currUnlockable);
@@ -180,7 +183,7 @@ const BattlepassManager = ({ profile, currentUnlockables }) => {
       <Background padding="30px 0">
         <Container>
           {" "}
-          <Task>
+          <Task style={{ flexWrap: "wrap" }}>
             <TaskInfo>
               <input
                 type="number"
@@ -218,6 +221,7 @@ const BattlepassManager = ({ profile, currentUnlockables }) => {
               </select>
             </TaskInfo>
             <input
+              style={{ margin: "1rem 0 0 0", padding: "5px" }}
               type="submit"
               value="Create new Unlockable"
               onClick={async () => {

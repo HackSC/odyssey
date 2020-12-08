@@ -82,22 +82,25 @@ const roleManager = ({ profile }) => {
       <Navbar loggedIn admin activePage="/roleManager" />
       <Background padding="30px 0">
         <Container>
-          <SearchBar>
-            <Input
-              type="text"
-              onChange={(e) => {
-                setQuery(e.target.value);
-              }}
-              onKeyPress={(e) => {
-                if (e.key === "Enter") {
-                  search();
-                }
-              }}
-              placeholder="Search"
-            />
-            <Button onClick={search}>Search</Button>
-          </SearchBar>
-          {queryResultBlocks}
+          <h1 style={{ margin: "0 20px" }}>Manage Roles</h1>
+          <Flex direction="row" style={{ margin: "0 20px", flexWrap: "wrap" }}>
+            <SearchBar>
+              <Input
+                type="text"
+                onChange={(e) => {
+                  setQuery(e.target.value);
+                }}
+                onKeyPress={(e) => {
+                  if (e.key === "Enter") {
+                    search();
+                  }
+                }}
+                placeholder="Search"
+              />
+              <Button onClick={search}>Search</Button>
+            </SearchBar>
+            {queryResultBlocks}
+          </Flex>
         </Container>
       </Background>
       <Footer />

@@ -155,7 +155,7 @@ const mailQuery = ({ profile }) => {
       <Navbar loggedIn admin activePage="/mailQuery" />
       <Background>
         <Container>
-          <Flex direction="column">
+          <Flex direction="column" style={{ margin: "0 20px" }}>
             <h1>Filter Signups and Export to CSV</h1>
             <Form>
               <Flex direction="row" justify="space-between">

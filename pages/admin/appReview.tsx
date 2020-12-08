@@ -222,7 +222,11 @@ const AppReview = ({ profile, hackerProfile, reviewHistory, totalReviews }) => {
             </p>
           </InfoPanel>
 
-          <Flex direction="row" justify="space-between">
+          <Flex
+            direction="row"
+            justify="space-between"
+            style={{ flexWrap: "wrap" }}
+          >
             <Column flexBasis={48}>
               <h1> Applicant Info </h1>
               <Panel>
