@@ -165,7 +165,6 @@ const Scan = ({ admin_profile, tasks }: Props) => {
       return;
     }
 
-    console.log(dispatchBody);
     const scanResponse = await liveDispatchFetch(dispatchBody);
 
     if (!scanResponse.error) {
