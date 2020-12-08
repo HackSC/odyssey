@@ -380,7 +380,6 @@ const Scan = ({ admin_profile, tasks }: Props) => {
               />
               <Form style={{ width: "100%" }}>
                 <Select
-                  style={{ width: "100%" }}
                   name="shirt-size"
                   placeholder={"Select Action..."}
                   options={tasksWithActionsOptions}

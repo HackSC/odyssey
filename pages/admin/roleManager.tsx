@@ -35,7 +35,6 @@ const roleManager = ({ profile }) => {
           <p>Email: {userprofile.email}</p>
         </div>
         <Select
-          style={{ margin: "auto" }}
           name="role"
           options={roleOptions}
           defaultValue={userprofile.role}
