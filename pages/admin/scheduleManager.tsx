@@ -144,7 +144,7 @@ const ScheduleManager = ({ profile, currentEvents }) => {
       <Background padding="30px 0">
         <Container>
           {" "}
-          <Task>
+          <Task style={{ flexWrap: "wrap" }}>
             <TaskInfo>
               <input
                 type="text"
@@ -190,6 +190,7 @@ const ScheduleManager = ({ profile, currentEvents }) => {
             <input
               type="submit"
               value="Create new Event"
+              style={{ margin: "1rem 0 0 0", padding: "5px" }}
               onClick={async () => {
                 const result = await saveEvent(newEvent);
                 if (result) {

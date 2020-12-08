@@ -65,7 +65,7 @@ const AppLeaderboard = ({ profile }) => {
       <Navbar loggedIn admin activePage="/appLeaderboard" />
       <Background padding={"3rem 0"}>
         <Container width={"96%"}>
-          <Flex direction="row">
+          <Flex direction="row" style={{ flexWrap: "wrap" }}>
             <MaxHeightColumn flexBasis={35}>
               <TitleFlex direction="row">
                 <OnePaddedH1>Recent Reviews</OnePaddedH1>
