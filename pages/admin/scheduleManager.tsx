@@ -141,9 +141,9 @@ const ScheduleManager = ({ profile, currentEvents }) => {
     <>
       <Head title="HackSC Odyssey - Results" />
       <Navbar loggedIn admin activePage="/scheduleManager" />
-      <Background padding="30px 0">
+      <Background padding="2rem">
         <Container>
-          {" "}
+          <h1 style={{ margin: "1rem" }}>Manage Event Schedule</h1>
           <Task style={{ flexWrap: "wrap" }}>
             <TaskInfo>
               <input

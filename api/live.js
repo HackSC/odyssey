@@ -93,7 +93,7 @@ async function handleGroupContrib(userId, req, res) {
     });
     const teammates = result.get("ProjectTeam").get("People");
     const taskId = req.body.taskId;
-    const taskMultiplier = getMultiplierForTask(taskId);
+    const taskMultiplier = await getMultiplierForTask(taskId);
     const teammateContribs = teammates.map((tm) => {
       const tmId = tm.dataValues.identityId;
       return models.Contribution.create({
@@ -119,7 +119,7 @@ async function handleContrib(userId, req, res) {
   if (!input.taskId) {
     return res.status(400).json({ error: "Invalid request" });
   }
-  const taskMultiplier = getMultiplierForTask(input.taskId);
+  const taskMultiplier = await getMultiplierForTask(input.taskId);
   const [result, isCreated] = await models.Contribution.findOrCreate({
     defaults: {
       multiplier: taskMultiplier,
@@ -182,7 +182,7 @@ async function handleEmailContrib(userEmail, req, res) {
       },
     });
     const userId = profile.get("userId");
-    const taskMultiplier = getMultiplierForTask(input.taskId);
+    const taskMultiplier = await getMultiplierForTask(input.taskId);
     const [result, isCreated] = await models.Contribution.findOrCreate({
       defaults: {
         multiplier: taskMultiplier,
