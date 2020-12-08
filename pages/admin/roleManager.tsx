@@ -81,10 +81,15 @@ const roleManager = ({ profile }) => {
     <>
       <Head title="HackSC Odyssey - Application" />
       <Navbar loggedIn admin activePage="/roleManager" />
-      <Background padding="30px 0">
+      <Background padding="2rem">
         <Container>
-          <h1 style={{ margin: "2rem 2rem 1rem 2rem" }}>Manage Roles</h1>
-          <Flex direction="row" style={{ flexWrap: "wrap" }}>
+          <h1 style={{ margin: "2rem auto 1rem auto", maxWidth: "740px" }}>
+            Manage Roles
+          </h1>
+          <Flex
+            direction="row"
+            style={{ flexWrap: "wrap", justifyContent: "center" }}
+          >
             <SearchBar>
               <Input
                 type="text"
@@ -124,7 +129,7 @@ roleManager.getInitialProps = async (ctx) => {
 
 const SearchBar = styled(Flex)`
   width: 100%;
-  margin: 1rem 2rem 2rem 2rem;
+  margin: 1rem 0 2rem 0;
   max-width: 740px;
 
   input {
