@@ -10083,6 +10083,11 @@ react-countdown@^2.2.1:
   dependencies:
     prop-types "^15.7.2"
 
+react-detect-offline@^2.4.0:
+  version "2.4.0"
+  resolved "https://registry.yarnpkg.com/react-detect-offline/-/react-detect-offline-2.4.0.tgz#e40f5a588ffb0680bcbcfa33e4d9d39ad805c3ff"
+  integrity sha512-OHglQ8bpbM4x8m23RhRCm1e1cYtuCoLQ7NKHsC0zzm1z2vQIrNTq7MvhZTQ7TsbgK1XapMewLxGW9QEW3DXC9A==
+
 react-dom@16.9.0:
   version "16.9.0"
   resolved "https://registry.yarnpkg.com/react-dom/-/react-dom-16.9.0.tgz#5e65527a5e26f22ae3701131bcccaee9fb0d3962"

@@ -1,5 +1,12 @@
-import React, { useState, useCallback, useRef, useMemo } from "react";
+import React, {
+  useState,
+  useCallback,
+  useRef,
+  useMemo,
+  useEffect,
+} from "react";
 import styled from "styled-components";
+import { Offline, Online } from "react-detect-offline";
 
 import { useToasts } from "react-toast-notifications";
 
@@ -19,10 +26,10 @@ import { getAllTasksFetch } from "../../lib/api-sdk/taskHooks";
 
 // TO-DO -- pull this out, define elsewhere
 const ACTIONS = [
-  // {
-  //   label: "HackSC Check In",
-  //   value: "action checkin"
-  // },
+  {
+    label: "HackSC Check In",
+    value: "action checkin",
+  },
   {
     label: "Identify Hacker",
     value: "action identify",
@@ -48,7 +55,6 @@ const Scan = ({ admin_profile, tasks }: Props) => {
 
   const manualInputRef = useRef(null);
 
-  // TOASTS
   const { addToast } = useToasts();
 
   const handleActionChange = (e) => {
@@ -56,6 +62,20 @@ const Scan = ({ admin_profile, tasks }: Props) => {
     setLastScannedCode(null);
   };
 
+  useEffect(() => {
+    if (Online) {
+      let codes_to_scan = JSON.parse(
+        localStorage.getItem("OfflineScannedCodes")
+      );
+      if (codes_to_scan && codes_to_scan.length > 0) {
+        for (const code of codes_to_scan) {
+          sendScanRequest(code);
+          setLastScannedCode(code);
+        }
+        localStorage.setItem("OfflineScannedCodes", null);
+      }
+    }
+  }, [Offline, Online]);
   const checkIfValidCode = (code: string): boolean => {
     if (code.length === 4) {
       const uppercaseAlphanumericRegEx = /[A-Z,0-9]{4}/;
@@ -265,7 +285,17 @@ const Scan = ({ admin_profile, tasks }: Props) => {
     (code: string) => {
       setLastScannedCode((prev) => {
         if (prev !== code) {
-          sendScanRequest(code);
+          if (Offline)
+            localStorage.setItem(
+              "OfflineScannedCodes",
+              localStorage.getItem("OfflineScannedCodes")
+                ? JSON.stringify(
+                    JSON.parse(localStorage.getItem("OfflineScannedCodes")) +
+                      [code]
+                  )
+                : JSON.stringify([code])
+            );
+          else sendScanRequest(code);
           return code;
         } else {
           return prev;
