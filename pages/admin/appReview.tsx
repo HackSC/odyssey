@@ -20,6 +20,7 @@ const AppReview = ({ profile, hackerProfile, reviewHistory, totalReviews }) => {
   let total_review_len_initial = totalReviews.eligibleReviews
     ? totalReviews.eligibleReviews.length
     : 0;
+
   const [currentProfile, setCurrentProfile] = useState(hackerProfile);
   const [reviewCount, setReviewCount] = useState(
     reviewHistory ? reviewHistory.length : 0
@@ -133,7 +134,7 @@ const AppReview = ({ profile, hackerProfile, reviewHistory, totalReviews }) => {
         setS2("");
         setS3("");
         setReviewCount(reviewCount + 1);
-        setTotalReviewHistory(totalReviews - 1);
+        setTotalReviewHistory(totalReviewHistory - 1);
         if (totalReviewHistory <= 0) {
           let firstName = profile ? profile.firstName : "";
           let lastName = profile ? profile.lastName : "";
@@ -148,7 +149,7 @@ const AppReview = ({ profile, hackerProfile, reviewHistory, totalReviews }) => {
               ", " +
               user_email,
             "Reviews Left: " +
-              totalReviews +
+              totalReviewHistory +
               "\nReviews Complete: " +
               reviewCount,
             start_and_end_date,

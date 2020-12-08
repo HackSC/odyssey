@@ -81,6 +81,7 @@
     "react-calendar-timeline": "^0.26.7",
     "react-confetti": "^5.0.1",
     "react-countdown": "^2.2.1",
+    "react-detect-offline": "^2.4.0",
     "react-dom": "16.9.0",
     "react-hotjar": "^2.0.2",
     "react-icons": "^3.8.0",
