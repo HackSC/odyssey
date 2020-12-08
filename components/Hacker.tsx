@@ -190,7 +190,7 @@ const Hacker = ({
 
   return hacker !== null ? (
     <Result key={Object.entries(hacker).join()}>
-      <Flex direction="row">
+      <Flex direction="row" style={{ flexWrap: "wrap" }}>
         <Column flexBasis={65}>
           <h2>
             {index}. {hacker.firstName} {hacker.lastName}

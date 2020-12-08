@@ -201,6 +201,7 @@ const MaxHeightColumn = styled(Column)`
   padding: 1rem;
   min-width: 300px;
   max-height: 90vh;
+  margin: auto;
   display: flex;
   flex-direction: column;
 `;
