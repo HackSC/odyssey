@@ -25,7 +25,7 @@ import {
 const Hacker = ({ result }) => {
   return (
     <Result key={Object.entries(result).join()}>
-      <h2>{result.email}</h2>
+      <h2 style={{ wordBreak: "break-all" }}>{result.email}</h2>
       <p>
         <b>IP Address: </b>
         {result.ip}
@@ -153,43 +153,39 @@ const mailQuery = ({ profile }) => {
     <>
       <Head title="HackSC Odyssey - Filter Signups" />
       <Navbar loggedIn admin activePage="/mailQuery" />
-      <Background>
+      <Background padding="2rem">
         <Container>
-          <Flex direction="column" style={{ margin: "0 20px" }}>
+          <Flex direction="column">
             <h1>Filter Signups and Export to CSV</h1>
             <Form>
-              <Flex direction="row" justify="space-between">
-                <Column flexBasis={49}>
-                  <FormGroup>
+              <WrappedFlex direction="row" justify="space-between">
+                <MarginColumn flexBasis={49}>
+                  <FormGroup style={{ padding: "0px" }}>
                     <label>Email</label>
                     <input type="text" ref={emailInput} />
                   </FormGroup>
-                </Column>
-                <Column flexBasis={49}>
-                  <FormGroup>
+                </MarginColumn>
+                <MarginColumn flexBasis={49}>
+                  <FormGroup style={{ padding: "0px" }}>
                     <label>IP</label>
                     <input type="text" ref={ipInput} />
                   </FormGroup>
-                </Column>
-              </Flex>
+                </MarginColumn>
+              </WrappedFlex>
 
-              <Flex
-                direction="row"
-                style={{ paddingTop: "1rem" }}
-                justify="space-between"
-              >
-                <Column flexBasis={49}>
+              <WrappedFlex direction="row" justify="space-between">
+                <MarginColumn flexBasis={49}>
                   <FullButton onClick={lookupHackers}>
                     Filter Signups
                   </FullButton>
-                </Column>
+                </MarginColumn>
 
-                <Column flexBasis={49}>
+                <MarginColumn flexBasis={49}>
                   <FullButton onClick={showAllHackers}>
                     Show All Signups
                   </FullButton>
-                </Column>
-              </Flex>
+                </MarginColumn>
+              </WrappedFlex>
             </Form>
           </Flex>
 
@@ -240,6 +236,14 @@ mailQuery.getInitialProps = async (ctx) => {
     profile,
   };
 };
+
+const WrappedFlex = styled(Flex)`
+  flex-wrap: wrap;
+`;
+
+const MarginColumn = styled(Column)`
+  margin: 1rem 0;
+`;
 
 const FullButton = styled(Button)`
   width: -webkit-fill-available;
