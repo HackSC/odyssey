@@ -460,10 +460,14 @@ const judgingManager = ({}) => {
     <>
       <Head title="HackSC Odyssey - Application" />
       <Navbar loggedIn admin activePage="/judgingManager" />
-      <Background padding="30px 0">
+      <Background padding="2rem">
         <Container>
-          <Flex direction="row" justify="space-between">
-            <Column flexBasis={48}>
+          <Flex
+            direction="row"
+            style={{ flexWrap: "wrap" }}
+            justify="space-between"
+          >
+            <MarginColumn flexBasis={48}>
               <FullButton>
                 <label htmlFor="devpost">Upload</label>
                 <InvisInput
@@ -473,22 +477,26 @@ const judgingManager = ({}) => {
                   onChange={handleUpload}
                 />
               </FullButton>
-            </Column>
-            <Column flexBasis={48}>
+            </MarginColumn>
+            <MarginColumn flexBasis={48}>
               <FullStyledButton
                 onClick={exportTableAssignments}
                 disabled={!uploaded}
               >
                 Export Table Assignments
               </FullStyledButton>
-            </Column>
+            </MarginColumn>
           </Flex>
           <br />
-          <Flex direction="row" justify="space-between">
-            <Column flexBasis={48}>
+          <Flex
+            direction="row"
+            style={{ flexWrap: "wrap" }}
+            justify="space-between"
+          >
+            <MarginColumn flexBasis={48}>
               <p>{message ? message : "Looking good!"}</p>
-            </Column>
-            <Column flexBasis={48}>
+            </MarginColumn>
+            <MarginColumn flexBasis={48}>
               <Cell>
                 <Column>
                   {"Special Tables (Key, Max): "}
@@ -523,11 +531,15 @@ const judgingManager = ({}) => {
                 </Column>
               </Cell>
               {tablesBlocks}
-            </Column>
+            </MarginColumn>
           </Flex>
           <br />
-          <Flex direction="row" justify="space-between">
-            <Column flexBasis={48}>
+          <Flex
+            direction="row"
+            style={{ flexWrap: "wrap" }}
+            justify="space-between"
+          >
+            <MarginColumn flexBasis={48}>
               <h1> Verticals </h1>
 
               <Panel>
@@ -541,9 +553,9 @@ const judgingManager = ({}) => {
 
                 <div id="judges-gen">{verticalsBlocks}</div>
               </Panel>
-            </Column>
+            </MarginColumn>
 
-            <Column flexBasis={48}>
+            <MarginColumn flexBasis={48}>
               <h1> Sponsors </h1>
 
               <Panel>
@@ -557,7 +569,7 @@ const judgingManager = ({}) => {
 
                 <div id="sponsors-gen">{sponsorsBlocks}</div>
               </Panel>
-            </Column>
+            </MarginColumn>
           </Flex>
         </Container>
       </Background>
@@ -578,6 +590,10 @@ judgingManager.getInitialProps = async (ctx) => {
 
   return {};
 };
+
+const MarginColumn = styled(Column)`
+  margin: 1rem 0;
+`;
 
 const Cell = styled.div`
   display: inline-block;
