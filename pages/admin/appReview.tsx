@@ -182,7 +182,7 @@ const AppReview = ({ profile, hackerProfile, reviewHistory, totalReviews }) => {
     <>
       <Head title="HackSC Odyssey - Application" />
       <Navbar loggedIn admin activePage="/appReview" />
-      <Background>
+      <Background padding="3rem 1rem">
         <Container>
           {totalReviewHistory <= 0 ? (
             <InfoPanel>
