@@ -200,12 +200,16 @@ const Checkin = ({ profile }) => {
     <>
       <Head title="HackSC Odyssey - Check in Hackers" />
       <Navbar loggedIn admin activePage="/checkin" />
-      <Background>
+      <Background padding="3rem 2rem">
         <Container>
           <Flex direction="column">
             <h1>Assign Hackers QR Codes for Check In</h1>
             <Form>
-              <Flex direction="row" justify="space-between">
+              <Flex
+                direction="row"
+                style={{ flexWrap: "wrap" }}
+                justify="space-between"
+              >
                 <Column flexBasis={49}>
                   <FormGroup>
                     <label>First Name</label>
