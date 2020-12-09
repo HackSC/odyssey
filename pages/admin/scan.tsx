@@ -70,9 +70,12 @@ const Scan = ({ admin_profile, tasks }: Props) => {
         ? JSON.parse(localStorage.getItem("OfflineScannedCodes"))
         : [];
       if (codes_to_scan && codes_to_scan.length > 0) {
-        for (const code of codes_to_scan) {
-          sendScanRequest(code);
-          setLastScannedCode(code);
+        for (const code_obj of codes_to_scan) {
+          for (let code_action in code_obj) {
+            setAction(code_action);
+            sendScanRequest(code_obj[code_action]);
+            setLastScannedCode(null);
+          }
         }
       }
       localStorage.setItem("OfflineScannedCodes", "");
@@ -310,12 +313,18 @@ const Scan = ({ admin_profile, tasks }: Props) => {
                 ? localStorage.getItem("OfflineScannedCodes")
                 : "[]"
             );
+
+            const [typeOfAction, value] = action.split(" ");
+
+            let obj_store = {};
+            obj_store[value] = code;
             localStorage.setItem(
               "OfflineScannedCodes",
               offline_scanned !== null && offline_scanned !== ""
-                ? JSON.stringify(Object.assign([], offline_scanned, [code]))
-                : JSON.stringify([code])
+                ? JSON.stringify([...offline_scanned, ...[obj_store]])
+                : JSON.stringify([obj_store])
             );
+
             addToast(
               "Offline or Connectivity Issue: Storing code in LocalStorage until back online.",
               {
@@ -398,14 +407,20 @@ const Scan = ({ admin_profile, tasks }: Props) => {
                 <ManualInputForm>
                   <Flex direction="column">
                     <ManualInputLabel>Manual Input</ManualInputLabel>
-                    <Flex direction="row">
+                    <Flex direction="row" style={{ flexWrap: "wrap" }}>
                       <ManualInputText
                         type="text"
                         placeholder={"4 character code"}
                         maxLength={4}
+                        style={{ margin: "1rem" }}
                         ref={manualInputRef}
                       />
-                      <Button onClick={handleManualInput}>Submit</Button>
+                      <Button
+                        style={{ margin: "1rem" }}
+                        onClick={handleManualInput}
+                      >
+                        Submit
+                      </Button>
                     </Flex>
                     <ManualInputInstructions>
                       If a code cannot be scanned for some reason, manually
@@ -452,17 +467,13 @@ const ScannerPadding = styled(Flex)`
 `;
 
 const ScanBackground = styled(Background)`
-  position: fixed;
   width: 100%;
   min-height: 80vh;
 `;
 
 const ActionBar = styled.div`
-  padding-bottom: 24px;
-  margin: auto;
-  max-width: 600px;
+  margin: 1rem;
   width: 100%;
-  min-width: 300px;
 `;
 
 const ScanContainer = styled.div`
@@ -490,7 +501,7 @@ const ManualInputForm = styled(Form)`
 `;
 
 const ManualInputLabel = styled.label`
-  margin: 1rem 0 1rem 0;
+  margin: 1rem;
   font-weight: 700;
 `;
 
@@ -501,7 +512,7 @@ const ManualInputText = styled.input`
 
 const ManualInputInstructions = styled.p`
   font-size: 12px;
-  margin-top: 12px;
+  margin: 1rem;
 `;
 
 export default Scan;
