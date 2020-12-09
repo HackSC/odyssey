@@ -4,6 +4,7 @@ import styled from "styled-components";
 import Head from "../components/Head";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
+import TeammateSuggestions from "../components/TeammateSuggestions";
 import {
   Background,
   Container,
@@ -82,6 +83,7 @@ const ProjectTeam = (props: Props) => {
             />
           </Column>
         </NoTeamFlex>
+        <TeammateSuggestions />
       </>
     );
   };
