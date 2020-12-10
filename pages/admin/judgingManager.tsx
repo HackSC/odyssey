@@ -463,6 +463,59 @@ const judgingManager = ({}) => {
       <Background padding="30px 0">
         <Container>
           <Flex direction="row" justify="space-between">
+            <Column flexBasis={20}>
+              <Flex direction="column">
+                <div>
+                  <div>Time</div>
+                  <h2>Team 1</h2>
+                  <p>List of team members</p>
+                  <a>Link to slack room or zoom call</a>
+                </div>
+                <div>
+                  <div>Time</div>
+                  <h2>Team 1</h2>
+                  <p>List of team members</p>
+                  <a>Link to slack room or zoom call</a>
+                </div>
+                <div>
+                  <div>Time</div>
+                  <h2>Team 1</h2>
+                  <p>List of team members</p>
+                  <a>Link to slack room or zoom call</a>
+                </div>
+                <div>
+                  <div>Time</div>
+                  <h2>Team 1</h2>
+                  <p>List of team members</p>
+                  <a>Link to slack room or zoom call</a>
+                </div>
+              </Flex>
+            </Column>
+            <Column flexBasis={70}>
+              <Cell>
+                <div style={{ marginBottom: "20px" }}>
+                  <label style={{ display: "block", marginBottom: "4px" }}>
+                    Vertical
+                  </label>
+                  <input type="select" placeholder="Vertical"></input>
+                </div>
+                <div style={{ marginBottom: "20px" }}>
+                  <label style={{ display: "block", marginBottom: "4px" }}>
+                    Vertical
+                  </label>
+                  <input type="select" placeholder="Vertical"></input>
+                </div>
+                <div style={{ marginBottom: "20px" }}>
+                  <label style={{ display: "block", marginBottom: "4px" }}>
+                    Vertical
+                  </label>
+                  <input type="select" placeholder="Vertical"></input>
+                </div>
+                <FullButton>Submit</FullButton>
+              </Cell>
+            </Column>
+          </Flex>
+          {/* <Flex direction="row" justify="space-between">
             <Column flexBasis={48}>
               <FullButton>
                 <label htmlFor="devpost">Upload</label>
@@ -558,7 +611,7 @@ const judgingManager = ({}) => {
                 <div id="sponsors-gen">{sponsorsBlocks}</div>
               </Panel>
             </Column>
-          </Flex>
+          </Flex> */}
         </Container>
       </Background>
       <Footer />
