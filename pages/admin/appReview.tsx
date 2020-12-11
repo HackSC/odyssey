@@ -1,24 +1,26 @@
 import React, { useState, useRef, useEffect, useCallback } from "react";
 import styled from "styled-components";
-
-import { handleLoginRedirect, getProfile } from "../lib/authenticate";
+import { useToasts } from "react-toast-notifications";
 import Confetti from "react-confetti";
+import { useWindowSize } from "react-use";
+
 import {
   getHackerProfileForReview,
   submitReview,
   getReviewHistory,
-  getTotalReviewHistory
-} from "../lib/admin";
-import Head from "../components/Head";
-import Navbar from "../components/Navbar";
-import Footer from "../components/Footer";
-import { Button, Container, Background, Flex, Column } from "../styles";
-import { useWindowSize } from "react-use";
+  getTotalReviewHistory,
+  sendSlackMessage,
+  handleLoginRedirect,
+  getProfile,
+} from "../../lib";
+import { Head, Navbar, Footer } from "../../components";
+import { Button, Container, Background, Flex, Column } from "../../styles";
 
-const AppReview = ({ hackerProfile, reviewHistory, totalReviews }) => {
+const AppReview = ({ profile, hackerProfile, reviewHistory, totalReviews }) => {
   let total_review_len_initial = totalReviews.eligibleReviews
     ? totalReviews.eligibleReviews.length
     : 0;
+
   const [currentProfile, setCurrentProfile] = useState(hackerProfile);
   const [reviewCount, setReviewCount] = useState(
     reviewHistory ? reviewHistory.length : 0
@@ -31,6 +33,7 @@ const AppReview = ({ hackerProfile, reviewHistory, totalReviews }) => {
   const [submitting, setSubmitting] = useState(false);
   const [loadingNewProfile, setLoadingNewProfile] = useState(false);
 
+  const { addToast } = useToasts();
   const { width, height } = useWindowSize(3000, 3000);
 
   const [s1, setS1] = useState("");
@@ -40,7 +43,7 @@ const AppReview = ({ hackerProfile, reviewHistory, totalReviews }) => {
   const scoreInputs = [useRef(null), useRef(null), useRef(null)];
 
   const switchInputsOnKeyDown = useCallback(
-    e => {
+    (e) => {
       const { key } = e;
 
       if (key === "Enter") {
@@ -64,7 +67,7 @@ const AppReview = ({ hackerProfile, reviewHistory, totalReviews }) => {
       window.scrollTo({
         left: 0,
         top: scoreInputs[i].current.offsetTop - 50,
-        behavior: "smooth"
+        behavior: "smooth",
       });
 
       e.preventDefault();
@@ -112,7 +115,7 @@ const AppReview = ({ hackerProfile, reviewHistory, totalReviews }) => {
         userId: currentProfile.userId,
         scoreOne: s1,
         scoreTwo: s2,
-        scoreThree: s3
+        scoreThree: s3,
       };
 
       setSubmitting(true);
@@ -131,7 +134,29 @@ const AppReview = ({ hackerProfile, reviewHistory, totalReviews }) => {
         setS2("");
         setS3("");
         setReviewCount(reviewCount + 1);
-        setTotalReviewHistory(totalReviews - 1);
+        setTotalReviewHistory(totalReviewHistory - 1);
+        if (totalReviewHistory <= 0) {
+          let firstName = profile ? profile.firstName : "";
+          let lastName = profile ? profile.lastName : "";
+          let user_email = profile ? profile.email : "";
+          let start_and_end_date =
+            new Date(new Date().getTime() - 480 * 1000 * 60).toISOString() + "";
+          let slack_result = await sendSlackMessage(
+            ":tada: :party_parrot: :white_check_mark: App Reviews Completed (/admin/appReview) by " +
+              firstName +
+              ", " +
+              lastName +
+              ", " +
+              user_email,
+            "Reviews Left: " +
+              totalReviewHistory +
+              "\nReviews Complete: " +
+              reviewCount,
+            start_and_end_date,
+            start_and_end_date
+          );
+          addToast("Created Unlockable!", { appearance: "success" });
+        }
         scoreInputs[0].current.focus();
       }
     },
@@ -157,7 +182,7 @@ const AppReview = ({ hackerProfile, reviewHistory, totalReviews }) => {
     <>
       <Head title="HackSC Odyssey - Application" />
       <Navbar loggedIn admin activePage="/appReview" />
-      <Background>
+      <Background padding="3rem 1rem">
         <Container>
           {totalReviewHistory <= 0 ? (
             <InfoPanel>
@@ -197,7 +222,11 @@ const AppReview = ({ hackerProfile, reviewHistory, totalReviews }) => {
             </p>
           </InfoPanel>
 
-          <Flex direction="row" justify="space-between">
+          <Flex
+            direction="row"
+            justify="space-between"
+            style={{ flexWrap: "wrap" }}
+          >
             <Column flexBasis={48}>
               <h1> Applicant Info </h1>
               <Panel>
@@ -250,7 +279,7 @@ const AppReview = ({ hackerProfile, reviewHistory, totalReviews }) => {
                   <Column flexGrow={1}>
                     <Input
                       type="number"
-                      onChange={e => {
+                      onChange={(e) => {
                         setS1(e.target.value);
                       }}
                       value={s1}
@@ -271,7 +300,7 @@ const AppReview = ({ hackerProfile, reviewHistory, totalReviews }) => {
                   <Column flexGrow={1}>
                     <Input
                       type="number"
-                      onChange={e => {
+                      onChange={(e) => {
                         setS2(e.target.value);
                       }}
                       value={s2}
@@ -292,10 +321,10 @@ const AppReview = ({ hackerProfile, reviewHistory, totalReviews }) => {
                   <Column flexGrow={1}>
                     <Input
                       type="number"
-                      onChange={e => {
+                      onChange={(e) => {
                         setS3(e.target.value);
                       }}
-                      onKeyUp={e => {
+                      onKeyUp={(e) => {
                         if (e.key === "e") {
                           e.preventDefault();
                         }
@@ -323,7 +352,7 @@ const AppReview = ({ hackerProfile, reviewHistory, totalReviews }) => {
   );
 };
 
-AppReview.getInitialProps = async ctx => {
+AppReview.getInitialProps = async (ctx) => {
   const { req } = ctx;
 
   const profile = await getProfile(req);
@@ -336,9 +365,10 @@ AppReview.getInitialProps = async ctx => {
   const reviewHistory = await getReviewHistory(req);
   const totalReviews = await getTotalReviewHistory(req);
   return {
+    profile,
     hackerProfile: profileReview,
     reviewHistory,
-    totalReviews
+    totalReviews,
   };
 };
 

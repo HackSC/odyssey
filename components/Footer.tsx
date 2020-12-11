@@ -131,7 +131,7 @@ const SocialLinks = styled.div`
   flex-direction: row;
   justify-content: space-around;
   align-items: center;
-  padding: 0 16px;
+  margin: 0 16px;
 
   a {
     display: inline-flex;

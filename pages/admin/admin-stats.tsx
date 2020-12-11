@@ -1,21 +1,21 @@
 import React from "react";
 
-import { handleLoginRedirect, getProfile } from "../lib/authenticate";
-import { getReferrerCode } from "../lib/referrerCode";
+import { handleLoginRedirect, getProfile } from "../../lib/authenticate";
+import { getReferrerCode } from "../../lib/referrerCode";
 
 import styled from "styled-components";
 
 import Iframe from "react-iframe";
-import { Head, Navbar, Footer, AdminStats } from "../components";
+import { Head, Navbar, Footer, AdminStats } from "../../components";
 
-import { Background, Flex, Container } from "../styles";
+import { Background, Flex, Container } from "../../styles";
 import jwt from "jsonwebtoken";
 
 const Metabase = ({ profile, metabaseIframeUrl }) => {
   return (
     <>
       <Head title="HackSC Odyssey - Application" />
-      <Navbar loggedIn admin activePage="/admin-stats" />
+      <Navbar loggedIn admin activePage="admin-stats" />
       <Background>
         <Container>
           <PaddedFlex direction="column">
@@ -50,8 +50,8 @@ export async function getServerSideProps(ctx) {
 
   const profile = await getProfile(req);
 
-  // Null profile means user is not logged in, and this is only relevant for admins
-  if (!profile || profile.role !== "admin") {
+  // * Null profile means user is not logged in, and this is only relevant for admins and sponsors
+  if (!profile || !(profile.role === "admin" || profile.role === "sponsor")) {
     handleLoginRedirect(req);
   }
   if (profile) {

@@ -1,18 +1,16 @@
 import React, { useState } from "react";
 import { useToasts } from "react-toast-notifications";
-
-import { handleLoginRedirect, getProfile } from "../lib/authenticate";
-
-import { getProfiles, updateProfileRole } from "../lib/admin";
-
-import Head from "../components/Head";
-import Navbar from "../components/Navbar";
-import Footer from "../components/Footer";
-import Select from "../components/Select";
-
 import styled from "styled-components";
 
-import { Background, Container, Button, Flex } from "../styles";
+import {
+  handleLoginRedirect,
+  getProfile,
+  getProfiles,
+  updateProfileRole,
+  sendSlackMessage,
+} from "../../lib";
+import { Head, Navbar, Footer, Select } from "../../components";
+import { Background, Container, Button, Flex } from "../../styles";
 
 const roleManager = ({ profile }) => {
   const [query, setQuery] = useState("");
@@ -27,21 +25,21 @@ const roleManager = ({ profile }) => {
     { label: "volunteer", value: "volunteer" },
   ];
 
-  const queryResultBlocks = queryResults.map((profile) => {
+  const queryResultBlocks = queryResults.map((userprofile) => {
     return (
-      <QueryResult key={profile.email}>
-        {"Name: " +
-          profile.firstName +
-          " " +
-          profile.lastName +
-          " | Email: " +
-          profile.email}
+      <QueryResult key={Object.entries(userprofile).join()}>
+        <div style={{ wordBreak: "break-all" }}>
+          <p>
+            Name: {userprofile.firstName} {userprofile.lastName}
+          </p>
+          <p>Email: {userprofile.email}</p>
+        </div>
         <Select
           name="role"
           options={roleOptions}
-          defaultValue={profile.role}
+          defaultValue={userprofile.role}
           onChange={(e) => {
-            updateRole(profile.email, e.target.value);
+            updateRole(userprofile.email, e.target.value);
           }}
         />
       </QueryResult>
@@ -51,7 +49,23 @@ const roleManager = ({ profile }) => {
   const updateRole = async function (email, role) {
     const result = await updateProfileRole(email, role);
     if (result.status == 200) {
-      addToast("Updated role!", { appearance: "success" });
+      let firstName = profile ? profile.firstName : "";
+      let lastName = profile ? profile.lastName : "";
+      let user_email = profile ? profile.email : "";
+      let start_and_end_date =
+        new Date(new Date().getTime() - 480 * 1000 * 60).toISOString() + "";
+      let slack_result = await sendSlackMessage(
+        ":red_circle: Updated Profile Role (/admin/roleManager) executed by " +
+          firstName +
+          ", " +
+          lastName +
+          ", " +
+          user_email,
+        "User: " + email + "role was updated to " + role,
+        start_and_end_date,
+        start_and_end_date
+      );
+      if (slack_result) addToast("Updated role!", { appearance: "success" });
     } else {
       addToast("Error: " + result.statusText, { appearance: "error" });
     }
@@ -66,24 +80,32 @@ const roleManager = ({ profile }) => {
     <>
       <Head title="HackSC Odyssey - Application" />
       <Navbar loggedIn admin activePage="/roleManager" />
-      <Background padding="30px 0">
+      <Background padding="2rem">
         <Container>
-          <SearchBar>
-            <Input
-              type="text"
-              onChange={(e) => {
-                setQuery(e.target.value);
-              }}
-              onKeyPress={(e) => {
-                if (e.key === "Enter") {
-                  search();
-                }
-              }}
-              placeholder="Search"
-            />
-            <Button onClick={search}>Search</Button>
-          </SearchBar>
-          {queryResultBlocks}
+          <h1 style={{ margin: "2rem auto 1rem auto", maxWidth: "740px" }}>
+            Manage Roles
+          </h1>
+          <Flex
+            direction="row"
+            style={{ flexWrap: "wrap", justifyContent: "center" }}
+          >
+            <SearchBar>
+              <Input
+                type="text"
+                onChange={(e) => {
+                  setQuery(e.target.value);
+                }}
+                onKeyPress={(e) => {
+                  if (e.key === "Enter") {
+                    search();
+                  }
+                }}
+                placeholder="Search"
+              />
+              <Button onClick={search}>Search</Button>
+            </SearchBar>
+            {queryResultBlocks}
+          </Flex>
         </Container>
       </Background>
       <Footer />
@@ -106,7 +128,8 @@ roleManager.getInitialProps = async (ctx) => {
 
 const SearchBar = styled(Flex)`
   width: 100%;
-  margin-bottom: 10px;
+  margin: 1rem 0 2rem 0;
+  max-width: 740px;
 
   input {
     margin-right: 10px;
@@ -116,14 +139,20 @@ const SearchBar = styled(Flex)`
 const QueryResult = styled.div`
   padding: 10px 20px;
   background: #ffffff;
+  max-width: 300px;
   border-radius: 8px;
   font-size: 16px;
-  margin: 5px 0px;
+  margin: 2rem;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: center;
 
   div {
-    width: 120px;
+    width: 100%;
     display: inline-block;
     margin: 2px 10px;
+    margin: auto;
   }
 
   select {
