@@ -32,9 +32,9 @@ const strategy = new Auth0Strategy(
     clientID: process.env.AUTH0_CLIENT_ID || "",
     clientSecret: process.env.AUTH0_CLIENT_SECRET || "",
     callbackURL:
-      process.env.AUTH0_CALLBACK_URL || "http://localhost:3000/auth/callback"
+      process.env.AUTH0_CALLBACK_URL || "http://localhost:3000/auth/callback",
   },
-  function(accessToken, refreshToken, extraParams, profile, done) {
+  function (accessToken, refreshToken, extraParams, profile, done) {
     // extraParams.id_token should contain the JWT
     return done(null, profile);
   }
@@ -46,15 +46,15 @@ const sessionConfig = {
   maxAge: 24 * 60 * 60 * 1000,
   cookie: {
     secure: true,
-    httpOnly: true
-  }
+    httpOnly: true,
+  },
 };
 
 passport.use(strategy);
-passport.serializeUser(function(user, done) {
+passport.serializeUser(function (user, done) {
   done(null, user);
 });
-passport.deserializeUser(function(user, done) {
+passport.deserializeUser(function (user, done) {
   done(null, user);
 });
 
@@ -87,7 +87,30 @@ server.use("/api/prize", prizeRouter);
 server.use("/api/public", publicRouter);
 
 server.post("/api/scan", (req, res) => {
-  console.log("Scanned: ", req.body.code);
+  console.info("Scanned: ", req.body.code);
+  return res.json({ message: "Received" });
+});
+
+server.use("/admin/auth", authRouter);
+server.use("/admin/api/profile", profileRouter);
+server.use("/admin/api/majorEvents", majorEventsRouter);
+server.use("/admin/api/apis", apiRouter);
+server.use("/admin/api/admin", adminRouter);
+server.use("/admin/api/task", taskRouter);
+server.use("/admin/api/points", pointRouter);
+server.use("/admin/api/team", teamRouter);
+server.use("/admin/api/person", personRouter);
+server.use("/admin/api/contribution", contributionRouter);
+server.use("/admin/api/live", liveRouter);
+server.use("/admin/api/projectTeam", projectTeamRouter);
+server.use("/admin/api/event", eventRouter);
+server.use("/admin/api/unlockable", battlepassRouter);
+server.use("/admin/api/hacker/live", hackerLiveRouter);
+server.use("/admin/api/prize", prizeRouter);
+server.use("/admin/api/public", publicRouter);
+
+server.post("/admin/api/scan", (req, res) => {
+  console.info("Scanned: ", req.body.code);
   return res.json({ message: "Received" });
 });
 

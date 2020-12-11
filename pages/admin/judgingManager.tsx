@@ -1,19 +1,19 @@
 import React, { useState } from "react";
 
-import { handleLoginRedirect, getProfile } from "../lib/authenticate";
+import { handleLoginRedirect, getProfile } from "../../lib/authenticate";
 
 import parse from "csv-parse";
 import stringify from "csv-stringify";
 import JSZip from "jszip";
 import { saveAs } from "file-saver";
 
-import Head from "../components/Head";
-import Navbar from "../components/Navbar";
-import Footer from "../components/Footer";
+import Head from "../../components/Head";
+import Navbar from "../../components/Navbar";
+import Footer from "../../components/Footer";
 
 import styled from "styled-components";
 
-import { Background, Container, Button, Flex, Column } from "../styles";
+import { Background, Container, Button, Flex, Column } from "../../styles";
 
 const judgingManager = ({}) => {
   const [uploaded, setUploaded] = useState(false);
@@ -27,14 +27,14 @@ const judgingManager = ({}) => {
   const [verticalJudges, setVerticalJudges] = useState({});
   const [verticalCount, setVerticalCount] = useState({});
 
-  const tablesBlocks = Object.keys(tables).map(table => {
+  const tablesBlocks = Object.keys(tables).map((table) => {
     return (
       <Cell>
         <Column>
           <SmallCell>{table}</SmallCell>
           <SmallCell>{tables[table]}</SmallCell>
           <Button
-            onClick={e => {
+            onClick={(e) => {
               delete tables[table];
               setTables(tables);
               // hacky but it refreshes
@@ -49,7 +49,7 @@ const judgingManager = ({}) => {
     );
   });
 
-  const verticalsBlocks = Object.keys(verticalJudges).map(vertical => {
+  const verticalsBlocks = Object.keys(verticalJudges).map((vertical) => {
     return (
       <Flex direction="row" justify="space-between" align="center">
         <Column flexBasis={50}>
@@ -59,7 +59,7 @@ const judgingManager = ({}) => {
         <Column flexBasis={50}>
           <Input
             type="number"
-            onChange={e => {
+            onChange={(e) => {
               let temp_verticalJudges = verticalJudges;
               temp_verticalJudges[vertical] = Number(e.target.value);
               setVerticalJudges(temp_verticalJudges);
@@ -71,11 +71,11 @@ const judgingManager = ({}) => {
     );
   });
 
-  const sponsorsBlocks = sponsors.map(sponsor => {
+  const sponsorsBlocks = sponsors.map((sponsor) => {
     return <p>{sponsor}</p>;
   });
 
-  const handleUpload = function(event) {
+  const handleUpload = function (event) {
     // Check null
     if (event.target.files.length < 1) {
       return;
@@ -94,7 +94,7 @@ const judgingManager = ({}) => {
     let working_projects: Array<Project>;
 
     // Read the file and attempt to upload
-    reader.onloadend = async function() {
+    reader.onloadend = async function () {
       // upload
       try {
         setMessage("");
@@ -132,7 +132,7 @@ const judgingManager = ({}) => {
       setUploaded(true);
     };
 
-    reader.onerror = function() {
+    reader.onerror = function () {
       setMessage("Error reading file. Please select a different file.");
     };
 
@@ -166,27 +166,27 @@ const judgingManager = ({}) => {
     table: String;
   }
 
-  const parseCSV = async function(data): Promise<Array<String>> {
-    return new Promise(function(resolve, reject) {
+  const parseCSV = async function (data): Promise<Array<String>> {
+    return new Promise(function (resolve, reject) {
       let output = [];
 
       let parser = parse({
         delimiter: ",",
-        relax_column_count: true
+        relax_column_count: true,
       });
 
-      parser.on("readable", function() {
+      parser.on("readable", function () {
         let record;
         while ((record = parser.read())) {
           output.push(record);
         }
       });
 
-      parser.on("error", function(err) {
+      parser.on("error", function (err) {
         reject(new Error(err.message));
       });
 
-      parser.on("end", function() {
+      parser.on("end", function () {
         resolve(output);
       });
 
@@ -196,7 +196,7 @@ const judgingManager = ({}) => {
     });
   };
 
-  const readCSV = async function(data): Promise<Array<Project>> {
+  const readCSV = async function (data): Promise<Array<Project>> {
     let working_projects = [];
     let output: Array<String>;
 
@@ -222,9 +222,9 @@ const judgingManager = ({}) => {
       p.fileUrl = val[7];
       p.desiredPrizes = val[8]
         .split(",")
-        .map(v => v.trim())
+        .map((v) => v.trim())
         .slice(0, 6);
-      p.builtWith = val[9].split(",").map(v => v.trim());
+      p.builtWith = val[9].split(",").map((v) => v.trim());
       p.vertical = val[10];
       p.videoDemo = val[11];
       p.phone = val[12];
@@ -233,9 +233,9 @@ const judgingManager = ({}) => {
         screenName: val[16],
         firstName: val[17],
         lastName: val[18],
-        email: val[19]
+        email: val[19],
       };
-      p.schools = val[20].split(",").map(v => v.trim());
+      p.schools = val[20].split(",").map((v) => v.trim());
       p.teammates = [];
       // add teammates
       let numTeammates = Number(val[21]);
@@ -245,7 +245,7 @@ const judgingManager = ({}) => {
           screenName: val[21 + index + 1],
           firstName: val[21 + index + 2],
           lastName: val[21 + index + 3],
-          email: val[21 + index + 4]
+          email: val[21 + index + 4],
         });
       }
       p.table = "";
@@ -256,33 +256,33 @@ const judgingManager = ({}) => {
     return working_projects;
   };
 
-  const genProjectsCSV = async function(
+  const genProjectsCSV = async function (
     header,
     values,
     filters = {},
     split = 1
   ): Promise<Array<Array<String>>> {
-    return new Promise(function(resolve, reject) {
+    return new Promise(function (resolve, reject) {
       let promises = [];
       split = split < 1 ? 1 : split;
       for (let splitCount = 0; splitCount < split; splitCount++) {
         promises.push(
-          new Promise(function(resolve, reject) {
+          new Promise(function (resolve, reject) {
             let data = [];
             let stringifier = stringify({
-              delimiter: ","
+              delimiter: ",",
             });
-            stringifier.on("readable", function() {
+            stringifier.on("readable", function () {
               let row;
               while ((row = stringifier.read())) {
                 data.push(row);
               }
             });
-            stringifier.on("error", function(err) {
+            stringifier.on("error", function (err) {
               reject(new Error(err.message));
             });
             stringifier.write(header);
-            stringifier.on("finish", function() {
+            stringifier.on("finish", function () {
               resolve(data);
             });
             // read projects sorry hella ugly
@@ -325,13 +325,11 @@ const judgingManager = ({}) => {
       }
 
       // return all csvs
-      Promise.all(promises)
-        .then(resolve)
-        .catch(reject);
+      Promise.all(promises).then(resolve).catch(reject);
     });
   };
 
-  const assignTables = function() {
+  const assignTables = function () {
     let working_tables = Object.assign({}, tables);
     let working_projects = [...projects];
     let count = 0;
@@ -358,7 +356,7 @@ const judgingManager = ({}) => {
     setProjects(working_projects);
   };
 
-  const exportTableAssignments = async function() {
+  const exportTableAssignments = async function () {
     setMessage("Generating Table Assignments CSV");
 
     // run table assignments
@@ -381,7 +379,7 @@ const judgingManager = ({}) => {
     setMessage("");
   };
 
-  const exportVerticalsCSV = async function() {
+  const exportVerticalsCSV = async function () {
     setMessage("Generating Vertical CSV");
     assignTables();
 
@@ -398,12 +396,12 @@ const judgingManager = ({}) => {
         "Passion",
         "Wow Factor",
         "Total",
-        "Comments"
+        "Comments",
       ];
       let values = ["submissionTitle", "table"];
       for (let vertical in verticalJudges) {
         let filters = {
-          vertical: vertical
+          vertical: vertical,
         };
         let split = verticalJudges.hasOwnProperty(vertical)
           ? verticalJudges[vertical]
@@ -423,13 +421,13 @@ const judgingManager = ({}) => {
     }
     // assign judges based on judges (can be teams, just print multiple times)
 
-    zip.generateAsync({ type: "blob" }).then(function(content) {
+    zip.generateAsync({ type: "blob" }).then(function (content) {
       saveAs(content, "verticals_data.zip");
       setMessage("");
     });
   };
 
-  const exportSponsorsCSV = async function() {
+  const exportSponsorsCSV = async function () {
     setMessage("Generating Sponsor CSVs");
     assignTables();
 
@@ -441,7 +439,7 @@ const judgingManager = ({}) => {
       for (let i = 0; i < sponsors.length; i++) {
         let sponsor = sponsors[i];
         let filters = {
-          desiredPrizes: sponsor
+          desiredPrizes: sponsor,
         };
         let csvs = await genProjectsCSV(headers, values, filters);
         let data = csvs[0].join("");
@@ -452,7 +450,7 @@ const judgingManager = ({}) => {
       return;
     }
 
-    zip.generateAsync({ type: "blob" }).then(function(content) {
+    zip.generateAsync({ type: "blob" }).then(function (content) {
       saveAs(content, "sponsors_data.zip");
       setMessage("");
     });
@@ -462,10 +460,14 @@ const judgingManager = ({}) => {
     <>
       <Head title="HackSC Odyssey - Application" />
       <Navbar loggedIn admin activePage="/judgingManager" />
-      <Background padding="30px 0">
+      <Background padding="2rem">
         <Container>
-          <Flex direction="row" justify="space-between">
-            <Column flexBasis={48}>
+          <Flex
+            direction="row"
+            style={{ flexWrap: "wrap" }}
+            justify="space-between"
+          >
+            <MarginColumn flexBasis={48}>
               <FullButton>
                 <label htmlFor="devpost">Upload</label>
                 <InvisInput
@@ -475,41 +477,45 @@ const judgingManager = ({}) => {
                   onChange={handleUpload}
                 />
               </FullButton>
-            </Column>
-            <Column flexBasis={48}>
+            </MarginColumn>
+            <MarginColumn flexBasis={48}>
               <FullStyledButton
                 onClick={exportTableAssignments}
                 disabled={!uploaded}
               >
                 Export Table Assignments
               </FullStyledButton>
-            </Column>
+            </MarginColumn>
           </Flex>
           <br />
-          <Flex direction="row" justify="space-between">
-            <Column flexBasis={48}>
+          <Flex
+            direction="row"
+            style={{ flexWrap: "wrap" }}
+            justify="space-between"
+          >
+            <MarginColumn flexBasis={48}>
               <p>{message ? message : "Looking good!"}</p>
-            </Column>
-            <Column flexBasis={48}>
+            </MarginColumn>
+            <MarginColumn flexBasis={48}>
               <Cell>
                 <Column>
                   {"Special Tables (Key, Max): "}
                   <TableInput
                     type="text"
-                    onChange={e => {
+                    onChange={(e) => {
                       setCurrTable([e.target.value, currTable[1]]);
                     }}
                     value={currTable[0]}
                   />
                   <TableInput
                     type="number"
-                    onChange={e => {
+                    onChange={(e) => {
                       setCurrTable([currTable[0], e.target.value]);
                     }}
                     value={currTable[1]}
                   />
                   <Button
-                    onClick={e => {
+                    onClick={(e) => {
                       let temp_tables = tables;
                       temp_tables[currTable[0]] = Math.round(
                         Number(currTable[1])
@@ -525,11 +531,15 @@ const judgingManager = ({}) => {
                 </Column>
               </Cell>
               {tablesBlocks}
-            </Column>
+            </MarginColumn>
           </Flex>
           <br />
-          <Flex direction="row" justify="space-between">
-            <Column flexBasis={48}>
+          <Flex
+            direction="row"
+            style={{ flexWrap: "wrap" }}
+            justify="space-between"
+          >
+            <MarginColumn flexBasis={48}>
               <h1> Verticals </h1>
 
               <Panel>
@@ -543,9 +553,9 @@ const judgingManager = ({}) => {
 
                 <div id="judges-gen">{verticalsBlocks}</div>
               </Panel>
-            </Column>
+            </MarginColumn>
 
-            <Column flexBasis={48}>
+            <MarginColumn flexBasis={48}>
               <h1> Sponsors </h1>
 
               <Panel>
@@ -559,7 +569,7 @@ const judgingManager = ({}) => {
 
                 <div id="sponsors-gen">{sponsorsBlocks}</div>
               </Panel>
-            </Column>
+            </MarginColumn>
           </Flex>
         </Container>
       </Background>
@@ -568,7 +578,7 @@ const judgingManager = ({}) => {
   );
 };
 
-judgingManager.getInitialProps = async ctx => {
+judgingManager.getInitialProps = async (ctx) => {
   const { req } = ctx;
 
   const profile = await getProfile(req);
@@ -580,6 +590,10 @@ judgingManager.getInitialProps = async ctx => {
 
   return {};
 };
+
+const MarginColumn = styled(Column)`
+  margin: 1rem 0;
+`;
 
 const Cell = styled.div`
   display: inline-block;

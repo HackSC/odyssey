@@ -12,7 +12,7 @@ import {
   usePersonInfoSelf,
   useBattlepass,
   useAllHouseInfo,
-  useIncompleteTasks
+  useIncompleteTasks,
 } from "../../lib/api-sdk/hackerLiveHooks";
 import { useEventsList } from "../../lib/api-sdk/eventHooks";
 import { MdClose } from "react-icons/md";
@@ -25,15 +25,15 @@ interface Props {
   houses: any;
 }
 
-const CheckedIn: React.FunctionComponent<Props> = props => {
-  const { profile } = props;
-  const [alert, setAlert] = useState(false);
+const CheckedIn: React.FunctionComponent<Props> = (props) => {
+  const { profile, houses } = props;
+  const [alert, setAlert] = useState("none");
   const { allHouses } = useAllHouseInfo({});
   const { battlepass } = useBattlepass({ defaultOnError: console.log });
   const { personInfo } = usePersonInfoSelf({ defaultOnError: console.log });
   const { allEvents } = useEventsList({ defaultOnError: console.log });
   const { incompleteTasks } = useIncompleteTasks({
-    defaultOnError: console.log
+    defaultOnError: console.log,
   });
 
   const { width, height } = useWindowSize();
@@ -50,7 +50,7 @@ const CheckedIn: React.FunctionComponent<Props> = props => {
     />
   );
 
-  let HouseFoxColor = personInfo?.Home.color ?? "#E7862B";
+  let HouseFoxColor = personInfo?.Home?.color ?? "#E7862B";
 
   if (!personInfo) {
     return <span></span>;
@@ -68,13 +68,13 @@ const CheckedIn: React.FunctionComponent<Props> = props => {
       >
         <MdClose
           color={"white"}
-          onClick={() => setAlert(false)}
+          onClick={() => setAlert("none")}
           style={{ position: "absolute", top: "5px", left: "5px" }}
         />
         <h2 style={{ padding: "0" }}>Keep it up! Your house is in the lead!</h2>
       </Alert>
       <PaddedFlex
-        style={!alert ? { paddingTop: "2em" } : {}}
+        style={alert === "none" ? { paddingTop: "2em" } : {}}
         justify="space-between"
         tabletVertical
       >

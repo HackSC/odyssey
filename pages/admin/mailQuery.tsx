@@ -4,9 +4,8 @@ import JSZip from "jszip";
 import stringify from "csv-stringify";
 import { saveAs } from "file-saver";
 
-import { handleLoginRedirect, getProfile } from "../lib/authenticate";
-
-import { Head, Navbar, Footer } from "../components";
+import { Head, Navbar, Footer } from "../../components";
+import { sendSlackMessage, handleLoginRedirect, getProfile } from "../../lib";
 
 import {
   Button,
@@ -16,17 +15,17 @@ import {
   Container,
   Form,
   FormGroup,
-} from "../styles";
+} from "../../styles";
 
 import {
   liveSignUpLookupFetch,
   liveLookupFetch,
-} from "../lib/api-sdk/liveHooks";
+} from "../../lib/api-sdk/liveHooks";
 
 const Hacker = ({ result }) => {
   return (
-    <Result key={result.userId}>
-      <h2>{result.email}</h2>
+    <Result key={Object.entries(result).join()}>
+      <h2 style={{ wordBreak: "break-all" }}>{result.email}</h2>
       <p>
         <b>IP Address: </b>
         {result.ip}
@@ -35,7 +34,7 @@ const Hacker = ({ result }) => {
   );
 };
 
-const mailQuery = () => {
+const mailQuery = ({ profile }) => {
   const [emailInput, ipInput] = [useRef(null), useRef(null)];
 
   const [results, setResults] = useState([]);
@@ -47,6 +46,22 @@ const mailQuery = () => {
       let csvs = await genHackerCSV();
       let data = csvs[0].join("");
       zip.file("signups.csv", data);
+      let firstName = profile ? profile.firstName : "";
+      let lastName = profile ? profile.lastName : "";
+      let user_email = profile ? profile.email : "";
+      let start_and_end_date =
+        new Date(new Date().getTime() - 480 * 1000 * 60).toISOString() + "";
+      let slack_result = await sendSlackMessage(
+        ":email: Mail Query CSV exported (/admin/mailQuery) by " +
+          firstName +
+          ", " +
+          lastName +
+          ", " +
+          user_email,
+        "CSV size: " + (csvs[0].length - 1),
+        start_and_end_date,
+        start_and_end_date
+      );
     } catch (err) {
       return;
     }
@@ -125,7 +140,11 @@ const mailQuery = () => {
   const renderHackers = useMemo(() => {
     return (
       <Results>
-        {results ? results.map((result) => <Hacker result={result} />) : ""}
+        {results
+          ? results.map((result) => (
+              <Hacker key={Object.entries(result).join()} result={result} />
+            ))
+          : ""}
       </Results>
     );
   }, [results]);
@@ -134,43 +153,39 @@ const mailQuery = () => {
     <>
       <Head title="HackSC Odyssey - Filter Signups" />
       <Navbar loggedIn admin activePage="/mailQuery" />
-      <Background>
+      <Background padding="2rem">
         <Container>
           <Flex direction="column">
             <h1>Filter Signups and Export to CSV</h1>
             <Form>
-              <Flex direction="row" justify="space-between">
-                <Column flexBasis={49}>
-                  <FormGroup>
+              <WrappedFlex direction="row" justify="space-between">
+                <MarginColumn flexBasis={49}>
+                  <FormGroup style={{ padding: "0px" }}>
                     <label>Email</label>
                     <input type="text" ref={emailInput} />
                   </FormGroup>
-                </Column>
-                <Column flexBasis={49}>
-                  <FormGroup>
+                </MarginColumn>
+                <MarginColumn flexBasis={49}>
+                  <FormGroup style={{ padding: "0px" }}>
                     <label>IP</label>
                     <input type="text" ref={ipInput} />
                   </FormGroup>
-                </Column>
-              </Flex>
+                </MarginColumn>
+              </WrappedFlex>
 
-              <Flex
-                direction="row"
-                style={{ paddingTop: "1rem" }}
-                justify="space-between"
-              >
-                <Column flexBasis={49}>
+              <WrappedFlex direction="row" justify="space-between">
+                <MarginColumn flexBasis={49}>
                   <FullButton onClick={lookupHackers}>
                     Filter Signups
                   </FullButton>
-                </Column>
+                </MarginColumn>
 
-                <Column flexBasis={49}>
+                <MarginColumn flexBasis={49}>
                   <FullButton onClick={showAllHackers}>
                     Show All Signups
                   </FullButton>
-                </Column>
-              </Flex>
+                </MarginColumn>
+              </WrappedFlex>
             </Form>
           </Flex>
 
@@ -206,7 +221,7 @@ const mailQuery = () => {
     </>
   );
 };
-       
+
 mailQuery.getInitialProps = async (ctx) => {
   const { req } = ctx;
 
@@ -221,6 +236,14 @@ mailQuery.getInitialProps = async (ctx) => {
     profile,
   };
 };
+
+const WrappedFlex = styled(Flex)`
+  flex-wrap: wrap;
+`;
+
+const MarginColumn = styled(Column)`
+  margin: 1rem 0;
+`;
 
 const FullButton = styled(Button)`
   width: -webkit-fill-available;
