@@ -16,7 +16,7 @@ const Metabase = ({ profile, metabaseIframeUrl }) => {
     <>
       <Head title="HackSC Odyssey - Application" />
       <Navbar loggedIn admin activePage="admin-stats" />
-      <Background>
+      <Background padding={"2rem"}>
         <Container>
           <PaddedFlex direction="column">
             <h1>Admin Statistics</h1>
@@ -27,7 +27,7 @@ const Metabase = ({ profile, metabaseIframeUrl }) => {
           <PaddedFlex>
             <h1>Metabase Statistics</h1>
           </PaddedFlex>
-          <PaddedFlex style={{ margin: "auto", width: "min-content" }}>
+          <PaddedFlex style={{ width: "100%", justifyContent: "center" }}>
             <Iframe
               src={metabaseIframeUrl}
               width="800"

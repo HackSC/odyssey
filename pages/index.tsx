@@ -4,8 +4,19 @@ import { getUser, handleDashboardRedirect } from "../lib/authenticate";
 import { Head, Hero, Footer, Navbar } from "../components";
 
 import { Container } from "../styles";
+import useSWR from "swr";
 
 const Home = () => {
+  let fetchUrl = process.env.URL_BASE
+    ? process.env.URL_BASE + "api/profile"
+    : "api/admin/reviewedProfiles";
+
+  let { data: hackerProfile, error: reviewProfileError } = useSWR(
+    fetchUrl,
+    fetch,
+    { refreshInterval: 1000 }
+  );
+
   return (
     <>
       <Head title="HackSC Dashboard - Apply to HackSC 2021" />

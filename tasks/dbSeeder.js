@@ -68,7 +68,6 @@ const seedDatabase = async () => {
 
   //await IteratePromises(5, i => prizeFactory());
 
-  console.log("persons: ", persons);
   const fullTeam = await projectTeamFactory({ name: "FullTeam" });
   fullTeam.addMember(persons.slice(1));
   return;
