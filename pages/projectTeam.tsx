@@ -302,16 +302,11 @@ const TeamCard = styled(Card)`
 `;
 
 ProjectTeam.getInitialProps = async ({ req, query }): Promise<Props> => {
-  const { success } = await getProjectTeamSelfFetch(req);
-
+  const { success } = await getProjectTeamSelfFetch(req);  
   const profile = await getProfile(req);
 
   // Fetch teammate suggestions
   const data = await getTeammateSuggestions(req);
-
-  console.log(data);
-
-  console.log("\n\n\n\n");
   return {
     projectTeam: success,
     teammateSuggestions: data,

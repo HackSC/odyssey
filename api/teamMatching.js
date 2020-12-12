@@ -22,22 +22,22 @@ router.get("/", async (req, res) => {
       status: "confirmed",
       role: "hacker",
     },
-    include: [
-      {
-        //   model: models.HackerProfile,
-        attributes: [
-          "firstName",
-          "lastName",
-          "status",
-          "email",
-          "userId",
-          "year",
-          "major",
-          "skills",
-          "school",
-        ],
-      },
-    ],
+    // include: [
+    //   {
+    //     model: models.HackerProfile,
+    //     attributes: [
+    //       "firstName",
+    //       "lastName",
+    //       "status",
+    //       "email",
+    //       "userId",
+    //       "year",
+    //       "major",
+    //       "skills",
+    //       "school",
+    //     ],
+    //   },
+    // ],
   });
 
   if (hackerProfiles) {
