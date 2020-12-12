@@ -15,8 +15,19 @@ import { Background, Container } from "../styles";
 
 import { generatePosts } from "../lib/referrerCode";
 import { getHouses } from "../lib";
+import useSWR from "swr";
 
 const Application = ({ profile, houses, socialPosts }) => {
+  let fetchUrl = process.env.URL_BASE
+    ? process.env.URL_BASE + "api/profile"
+    : "api/profile";
+
+  let { data: hackerProfile, error: reviewProfileError } = useSWR(
+    fetchUrl,
+    fetch,
+    { refreshInterval: 1000 }
+  );
+
   return (
     <>
       <Head title="HackSC Dashboard - Application" />
