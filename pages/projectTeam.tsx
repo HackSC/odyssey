@@ -12,18 +12,24 @@ import {
   Column,
   Card,
   Button,
-  TextCardDiv
+  TextCardDiv,
 } from "../styles";
 import ButtonWithTextForm from "../components/ButtonWithTextForm";
 import { useToasts } from "react-toast-notifications";
 import MultiTextForm from "../components/MultiTextForm";
 import {
   useProjectTeamSelf,
-  getProjectTeamSelfFetch
+  getProjectTeamSelfFetch,
 } from "../lib/api-sdk/projectTeamHooks";
+
+import { getProfile } from "../lib/authenticate";
+import { getTeammateSuggestions } from "../lib/matching";
+
+// import Router from "next/router";
 
 type Props = {
   projectTeam: ProjectTeam;
+  teammateSuggestions: Array<Object>;
 };
 
 const ProjectTeam = (props: Props) => {
@@ -39,10 +45,10 @@ const ProjectTeam = (props: Props) => {
     removePrizeSelf,
     removeMemberSelf,
     addMemberProjectTeamSelf,
-    joinProjectTeamSelf
+    joinProjectTeamSelf,
   } = useProjectTeamSelf({
     defaultOnError: onError,
-    initialModel: props.projectTeam
+    initialModel: props.projectTeam,
   });
 
   const handleJoinProjectTeam = (name: string) => {
@@ -54,7 +60,7 @@ const ProjectTeam = (props: Props) => {
     createProjectTeamSelf({ name: nameAsResource });
   };
 
-  const CreateTeamSection = () => {
+  const CreateTeamSection = ({ teammateSuggestions }) => {
     return (
       <>
         <h1>HackSC Project Team Setup</h1>
@@ -83,7 +89,14 @@ const ProjectTeam = (props: Props) => {
             />
           </Column>
         </NoTeamFlex>
-        <TeammateSuggestions />
+        {
+          // eventually switch these
+          props.projectTeam ? (
+            <div />
+          ) : (
+            <TeammateSuggestions teammateSuggestions={teammateSuggestions} />
+          )
+        }
       </>
     );
   };
@@ -99,18 +112,18 @@ const ProjectTeam = (props: Props) => {
             {
               initialValue: projectTeam.name as string,
               label: "Team Name",
-              name: "name"
+              name: "name",
             },
             {
               initialValue: projectTeam.devpostLink,
               label: "Devpost Link",
-              name: "devpostLink"
+              name: "devpostLink",
             },
             {
               initialValue: projectTeam.githubLink,
               label: "Github Link",
-              name: "githubLink"
-            }
+              name: "githubLink",
+            },
           ]}
         />
         <VertFlex>
@@ -133,7 +146,13 @@ const ProjectTeam = (props: Props) => {
       <Navbar loggedIn showProjectTeam={true} activePage="projectTeam" />
       <Background>
         <Container>
-          {projectTeam ? <TeamInfoSection /> : <CreateTeamSection />}
+          {projectTeam ? (
+            <TeamInfoSection />
+          ) : (
+            <CreateTeamSection
+              teammateSuggestions={props.teammateSuggestions}
+            />
+          )}
         </Container>
       </Background>
       <Footer />
@@ -160,7 +179,7 @@ const AddMember = (props: {
       <TeamTextInput
         type="text"
         placeholder="Teammate's 4 character Code"
-        onChange={e => {
+        onChange={(e) => {
           setMemberId(e.target.value);
         }}
       />
@@ -176,13 +195,13 @@ const TeamMemberTable = (props: {
   return (
     <div>
       <h2>Team Members</h2>
-      {Members.map(p => (
+      {Members.map((p) => (
         <TeamCard>
           <span>{p.Profile.firstName} </span>
           <span>{p.Profile.lastName} | </span>
           <span>{p.Profile.email}</span>
 
-          <DelButton onClick={e => props.onRemove(p)}>Remove</DelButton>
+          <DelButton onClick={(e) => props.onRemove(p)}>Remove</DelButton>
         </TeamCard>
       ))}
     </div>
@@ -195,7 +214,7 @@ const PrizeElement = (props: {
   onRemovePrize: Function;
   onAddPrize: Function;
 }) => {
-  const claimedPrizeIds = props.projectTeam.Prizes.map(p => p.id);
+  const claimedPrizeIds = props.projectTeam.Prizes.map((p) => p.id);
   const { onAddPrize, onRemovePrize, prize } = props;
   let claimedPrize = claimedPrizeIds.includes(prize.id);
   return (
@@ -227,7 +246,7 @@ const PrizeTable = (props: {
   onAddPrize: Function;
   onRemovePrize: Function;
 }) => {
-  const claimedPrizeIds = props.projectTeam.Prizes.map(p => p.id);
+  const claimedPrizeIds = props.projectTeam.Prizes.map((p) => p.id);
   const { onAddPrize, onRemovePrize } = props;
   return (
     <PrizeContainer>
@@ -238,7 +257,7 @@ const PrizeTable = (props: {
         helps us make sure that you get judged for all the prizes that you want
         to be considered for!
       </PrizeTableDescription>
-      {props.allPrizes.map(p => {
+      {props.allPrizes.map((p) => {
         let claimedPrize = claimedPrizeIds.includes(p.id);
         return (
           <PrizeElement
@@ -285,8 +304,17 @@ const TeamCard = styled(Card)`
 ProjectTeam.getInitialProps = async ({ req, query }): Promise<Props> => {
   const { success } = await getProjectTeamSelfFetch(req);
 
+  const profile = await getProfile(req);
+
+  // Fetch teammate suggestions
+  const data = await getTeammateSuggestions(req);
+
+  console.log(data);
+
+  console.log("\n\n\n\n");
   return {
-    projectTeam: success
+    projectTeam: success,
+    teammateSuggestions: data,
   };
 };
 

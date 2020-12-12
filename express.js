@@ -21,6 +21,7 @@ const battlepassRouter = require("./api/unlockable");
 const prizeRouter = require("./api/prizes");
 const hackerLiveRouter = require("./api/hackerLive");
 const publicRouter = require("./api/public");
+const matchingRouter = require("./api/teamMatching");
 const fileUpload = require("express-fileupload");
 const dotenv = require("dotenv");
 
@@ -32,9 +33,9 @@ const strategy = new Auth0Strategy(
     clientID: process.env.AUTH0_CLIENT_ID || "",
     clientSecret: process.env.AUTH0_CLIENT_SECRET || "",
     callbackURL:
-      process.env.AUTH0_CALLBACK_URL || "http://localhost:3000/auth/callback"
+      process.env.AUTH0_CALLBACK_URL || "http://localhost:3000/auth/callback",
   },
-  function(accessToken, refreshToken, extraParams, profile, done) {
+  function (accessToken, refreshToken, extraParams, profile, done) {
     // extraParams.id_token should contain the JWT
     return done(null, profile);
   }
@@ -46,15 +47,15 @@ const sessionConfig = {
   maxAge: 24 * 60 * 60 * 1000,
   cookie: {
     secure: true,
-    httpOnly: true
-  }
+    httpOnly: true,
+  },
 };
 
 passport.use(strategy);
-passport.serializeUser(function(user, done) {
+passport.serializeUser(function (user, done) {
   done(null, user);
 });
-passport.deserializeUser(function(user, done) {
+passport.deserializeUser(function (user, done) {
   done(null, user);
 });
 
@@ -85,6 +86,7 @@ server.use("/api/unlockable", battlepassRouter);
 server.use("/api/hacker/live", hackerLiveRouter);
 server.use("/api/prize", prizeRouter);
 server.use("/api/public", publicRouter);
+server.use("/api/teamMatching", matchingRouter);
 
 server.post("/api/scan", (req, res) => {
   console.log("Scanned: ", req.body.code);

@@ -2,32 +2,63 @@ import React, { useCallback, useState } from "react";
 import styled from "styled-components";
 
 // do a get request instead of example suggestions
+// is there more info on the hacker we want to add?
+// what's the difference between invite to team and request to join team? And how do they know which to select?
 const exampleSuggestions = [
-    {
-        name: "Max",
-    },
-    {
-        name: "Andreas",
-    },
-    {
-        name: "Katie",
-    },
-]
+  {
+    name: "Max",
+  },
+  {
+    name: "Andreas",
+  },
+  {
+    name: "Katie",
+  },
+];
 
-const TeammateSuggestions = () => (
+const TeammateSuggestions = ({ teammateSuggestions }) => {
+  console.log(teammateSuggestions);
+  return (
     <Suggestions>
       <Title>Teammate Suggestions</Title>
-      {exampleSuggestions.map(suggestion => (
-          <Suggestion>
-              <Name>{suggestion.name}</Name>
-              <Menu>
-                  <MenuOption>Invite to Team</MenuOption>
-                  <MenuOption>Request to Join Their Team</MenuOption>
-              </Menu>
-          </Suggestion>
+      {teammateSuggestions.hackerProfiles.map((suggestion) => (
+        <Suggestion>
+          <Name>
+            {suggestion.firstName} {suggestion.lastName}
+          </Name>
+          <Menu>
+            <MenuOption>Invite to Team</MenuOption>
+          </Menu>
+        </Suggestion>
       ))}
     </Suggestions>
-);
+  );
+};
+
+// TeammateSuggestions.getInitialProps = async ({ req }) => {
+//   console.log("called getInitial");
+//   const profile = await getProfile(req);
+
+//   console.log(profile);
+//   console.log("HERE");
+//   // Fetch teammate suggestions
+//   // const res = await fetch("/api/teamMatching", {
+//   //   method: "GET",
+//   //   body: JSON.stringify({
+//   //     user: profile,
+//   //   }),
+//   //   headers: {
+//   //     "Content-Type": "application/json"
+//   //   }
+//   // });
+
+//   // const data = await res.json();
+
+//   return {
+//     teammateSuggestions: [],
+//     profile: profile,
+//   };
+// };
 
 const Title = styled.h2`
   padding-bottom: 0;
@@ -50,8 +81,7 @@ const Suggestion = styled.div`
   border-color: black;
 `;
 
-const Name = styled.div`
-`;
+const Name = styled.div``;
 
 const Menu = styled.div`
   display: flex;
