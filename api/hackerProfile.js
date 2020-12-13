@@ -175,6 +175,82 @@ router.put("/referrerCode", async (req, res) => {
   return res.send();
 });
 
+router.get("/resume-check", utils.authMiddleware, async (req, res) => {
+  const user_id = req.query.userid;
+
+  const s3 = new AWS.S3({
+    accessKeyId: process.env.S3_ACCESS_KEY,
+    secretAccessKey: process.env.S3_SECRET,
+  });
+
+  const params = {
+    Bucket: "hacksc-odyssey",
+    Key: user_id,
+  };
+
+  await s3
+    .headObject(params)
+    .promise()
+    .then(
+      () => {
+        res.status(200).json({ message: "User has a resume." });
+      },
+      (err) => {
+        res.status(500).json({ message: "User has not uploaded a resume." });
+      }
+    );
+});
+
+router.get("/resume", utils.authMiddleware, async (req, res) => {
+  const user_id = req.query.userid;
+
+  console.log(req.query);
+  const s3 = new AWS.S3({
+    accessKeyId: process.env.S3_ACCESS_KEY,
+    secretAccessKey: process.env.S3_SECRET,
+  });
+
+  const params = {
+    Bucket: "hacksc-odyssey",
+    Key: user_id,
+  };
+
+  await s3
+    .headObject(params)
+    .promise()
+    .then(
+      () => {
+        try {
+          res.attachment(user_id);
+          var fileStream = s3.getObject(params).createReadStream();
+          fileStream.pipe(res);
+        } catch (e) {
+          res.status(500).json({ message: "User has not uploaded a resume." });
+        }
+      },
+      (err) => {
+        if (err.code === "NotFound") {
+          res.status(500).json({ message: "User has not uploaded a resume." });
+          return false;
+        }
+        throw err;
+      }
+    );
+
+  // s3.getObject(params, function(err, fileContents){
+  //   if (err) {
+  //     res.json(200, { message: "User has not uploaded a resume." });
+  //   } else {
+  //     // Read the file
+  //     var contents = fileContents.Body.toString();
+
+  //     console.log("File contents:", contents)
+  //     // Do something with file
+  //     res.status(200).sendFile(fileContents.Body);
+  //   }
+  // });
+});
+
 router.post("/resume", utils.authMiddleware, async (req, res) => {
   const user = req.user;
   if (req.files) {

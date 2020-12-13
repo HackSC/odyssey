@@ -1,4 +1,10 @@
-import React, { useRef, useState, useMemo, useCallback } from "react";
+import React, {
+  useRef,
+  useState,
+  useMemo,
+  useCallback,
+  useEffect,
+} from "react";
 import styled from "styled-components";
 import JSZip from "jszip";
 import stringify from "csv-stringify";
@@ -34,54 +40,115 @@ import {
 } from "../../lib/api-sdk/liveHooks";
 
 const Hacker = ({ result, resetResults }) => {
+  const [hasresume, setHasResume] = useState(true);
+  const [fetch_called, setFetchCalled] = useState(false);
+
+  const downloadResume = async () => {
+    let resume_result = await fetch(
+      "/api/profile/resume?userid=" + result.userId,
+      {
+        method: "GET",
+      }
+    );
+    if (resume_result.status === 500) {
+      console.log("User doesn't have a resume uploaded.");
+    } else {
+      console.log(resume_result);
+      resume_result.json().then((data) => {
+        console.log(data);
+      });
+      console.log(resume_result.body.getReader().read());
+      resume_result.body
+        .getReader()
+        .read()
+        .then((file) => {
+          //@ts-ignore
+          let blob = new Blob([file], { type: "video/mp4" });
+          let resume = URL.createObjectURL(blob);
+          saveAs(resume, result.userId);
+        });
+    }
+  };
+
+  const resumeCheck = async () => {
+    setFetchCalled(true);
+    let resume_result = await fetch(
+      "/api/profile/resume-check?userid=" + result.userId,
+      {
+        method: "GET",
+      }
+    );
+    if (resume_result.status === 200) setHasResume(true);
+    else setHasResume(false);
+  };
+
+  useEffect(() => {
+    if (!fetch_called) resumeCheck();
+  }, []);
+
   return (
     <Result key={result.userId}>
-      <h2>
-        {result.firstName} {result.lastName}
-      </h2>
-      <p>
-        <b>E-Mail: </b>
-        {result.email}
-      </p>
-      <p>
-        <b>School: </b>
-        {result.school}
-      </p>
-      <p>
-        <b>Year: </b>
-        {result.year}
-      </p>
-      <p>
-        <b>Graduation Date: </b>
-        {result.graduationDate}
-      </p>
-      <p>
-        <b>Needs Bus: </b>
-        {result.needBus ? "True" : "False"}
-      </p>
-      <p>
-        <b>Gender: </b>
-        {result.gender}
-      </p>
-      <p>
-        <b>Ethnicity: </b>
-        {result.ethnicity}
-      </p>
-      <p>
-        <b>Status: </b>
-        {result.status}
-      </p>
-      <p>
-        <b>Role: </b>
-        {result.role}
-      </p>
-      <p>
-        <b>
-          {result.qrCodeId === null
-            ? "No QR code"
-            : `Has a QR code (${result.qrCodeId})`}
-        </b>
-      </p>
+      <Flex
+        direction="row"
+        style={{ paddingTop: "1rem", flexWrap: "wrap" }}
+        justify="space-between"
+      >
+        <Column flexBasis={49} style={{ margin: "1rem 0" }}>
+          <h2>
+            {result.firstName} {result.lastName}
+          </h2>
+          <p>
+            <b>E-Mail: </b>
+            {result.email}
+          </p>
+          <p>
+            <b>School: </b>
+            {result.school}
+          </p>
+          <p>
+            <b>Year: </b>
+            {result.year}
+          </p>
+          <p>
+            <b>Graduation Date: </b>
+            {result.graduationDate}
+          </p>
+          <p>
+            <b>Needs Bus: </b>
+            {result.needBus ? "True" : "False"}
+          </p>
+          <p>
+            <b>Gender: </b>
+            {result.gender}
+          </p>
+          <p>
+            <b>Ethnicity: </b>
+            {result.ethnicity}
+          </p>
+          <p>
+            <b>Status: </b>
+            {result.status}
+          </p>
+          <p>
+            <b>Role: </b>
+            {result.role}
+          </p>
+          <p>
+            <b>
+              {result.qrCodeId === null
+                ? "No QR code"
+                : `Has a QR code (${result.qrCodeId})`}
+            </b>
+          </p>
+        </Column>
+        <Column flexBasis={49} style={{ margin: "1rem 0" }}>
+          {hasresume ? (
+            <FullButton onClick={downloadResume}>Download Resume</FullButton>
+          ) : (
+            <h2>User has not uploaded a resume</h2>
+          )}
+        </Column>
+      </Flex>
     </Result>
   );
 };
@@ -298,6 +365,20 @@ const hackerManager = ({ profile }) => {
     const school = schoolInput.current.value;
     const year = yearInput.current.value;
     const graduationDate = graduationDateInput.current.value;
+
+    console.log({
+      firstName,
+      lastName,
+      email,
+      gender,
+      ethnicity,
+      needBus,
+      status,
+      role,
+      school,
+      year,
+      graduationDate,
+    });
 
     const lookupResponse = await liveHackerLookupFetch({
       firstName,
