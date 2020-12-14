@@ -1,10 +1,5 @@
-import React, {
-  useRef,
-  useState,
-  useMemo,
-  useCallback,
-  useEffect,
-} from "react";
+import React, { useRef, useState, useMemo, useEffect } from "react";
+import Redirect from "next/router";
 import styled from "styled-components";
 import JSZip from "jszip";
 import stringify from "csv-stringify";
@@ -30,8 +25,6 @@ import {
   Container,
   Form,
   FormGroup,
-  RadioChoice,
-  RadioChoiceLabel,
 } from "../../styles";
 
 import {
@@ -39,51 +32,25 @@ import {
   liveLookupFetch,
 } from "../../lib/api-sdk/liveHooks";
 
-const Hacker = ({ result, resetResults }) => {
+const Hacker = ({ result, resumeList, resetResults }) => {
   const [hasresume, setHasResume] = useState(true);
-  const [fetch_called, setFetchCalled] = useState(false);
 
   const downloadResume = async () => {
-    let resume_result = await fetch(
-      "/api/profile/resume?userid=" + result.userId,
-      {
-        method: "GET",
-      }
+    Redirect.push(
+      `https://hacksc-odyssey.s3-us-west-1.amazonaws.com/${result.userId}`
     );
-    if (resume_result.status === 500) {
-      console.log("User doesn't have a resume uploaded.");
-    } else {
-      console.log(resume_result);
-      resume_result.json().then((data) => {
-        console.log(data);
-      });
-      console.log(resume_result.body.getReader().read());
-      resume_result.body
-        .getReader()
-        .read()
-        .then((file) => {
-          //@ts-ignore
-          let blob = new Blob([file], { type: "video/mp4" });
-          let resume = URL.createObjectURL(blob);
-          saveAs(resume, result.userId);
-        });
-    }
-  };
-
-  const resumeCheck = async () => {
-    setFetchCalled(true);
-    let resume_result = await fetch(
-      "/api/profile/resume-check?userid=" + result.userId,
-      {
-        method: "GET",
-      }
-    );
-    if (resume_result.status === 200) setHasResume(true);
-    else setHasResume(false);
   };
 
   useEffect(() => {
-    if (!fetch_called) resumeCheck();
+    const resume_reduce = resumeList.reduce((acc, val) => {
+      let item = val && val[1] ? val[1] : {};
+      if (item && item.Key)
+        return acc + item.Key.includes(result.userId) ? 1 : 0;
+      else return acc;
+    }, 0);
+
+    if (resume_reduce) setHasResume(true);
+    else setHasResume(false);
   }, []);
 
   return (
@@ -239,6 +206,24 @@ const hackerManager = ({ profile }) => {
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
   const [results, setResults] = useState([]);
+  const [resumeList, setResumeList] = useState([]);
+  const [fetch_called, setFetchCalled] = useState(false);
+
+  const getResumeList = async () => {
+    setFetchCalled(true);
+    let resume_result = await fetch("/api/profile/resume-list", {
+      method: "GET",
+    });
+
+    if (resume_result.status === 200) {
+      let resumes = await resume_result.json();
+      setResumeList(Object.entries(resumes.files));
+    } else setResumeList([]);
+  };
+
+  useEffect(() => {
+    if (!fetch_called) getResumeList();
+  }, []);
 
   const exportHackerCSV = async function () {
     setMessage("Generating Hacker CSVs");
@@ -366,20 +351,6 @@ const hackerManager = ({ profile }) => {
     const year = yearInput.current.value;
     const graduationDate = graduationDateInput.current.value;
 
-    console.log({
-      firstName,
-      lastName,
-      email,
-      gender,
-      ethnicity,
-      needBus,
-      status,
-      role,
-      school,
-      year,
-      graduationDate,
-    });
-
     const lookupResponse = await liveHackerLookupFetch({
       firstName,
       lastName,
@@ -425,6 +396,7 @@ const hackerManager = ({ profile }) => {
           <Hacker
             key={Object.entries(result).join()}
             result={result}
+            resumeList={resumeList}
             resetResults={resetResults}
           />
         ))}

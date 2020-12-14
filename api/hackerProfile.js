@@ -204,7 +204,6 @@ router.get("/resume-check", utils.authMiddleware, async (req, res) => {
 router.get("/resume", utils.authMiddleware, async (req, res) => {
   const user_id = req.query.userid;
 
-  console.log(req.query);
   const s3 = new AWS.S3({
     accessKeyId: process.env.S3_ACCESS_KEY,
     secretAccessKey: process.env.S3_SECRET,
@@ -223,32 +222,61 @@ router.get("/resume", utils.authMiddleware, async (req, res) => {
         try {
           res.attachment(user_id);
           var fileStream = s3.getObject(params).createReadStream();
-          fileStream.pipe(res);
+          res.setHeader("Content-Type", "application/pdf");
+          res.setHeader(
+            "Content-Disposition",
+            `attachment; filename=${user_id}.pdf`
+          );
+          fileStream.pipe(res, { autoClose: true });
         } catch (e) {
-          res.status(500).json({ message: "User has not uploaded a resume." });
+          res.status(204).json({ message: "User has not uploaded a resume." });
         }
       },
       (err) => {
-        if (err.code === "NotFound") {
-          res.status(500).json({ message: "User has not uploaded a resume." });
-          return false;
-        }
-        throw err;
+        res.status(204).json({ message: "User has not uploaded a resume." });
       }
     );
+});
 
-  // s3.getObject(params, function(err, fileContents){
-  //   if (err) {
-  //     res.json(200, { message: "User has not uploaded a resume." });
-  //   } else {
-  //     // Read the file
-  //     var contents = fileContents.Body.toString();
+router.get("/resume-list", utils.authMiddleware, async (req, res) => {
+  const s3 = new AWS.S3({
+    accessKeyId: process.env.S3_ACCESS_KEY,
+    secretAccessKey: process.env.S3_SECRET,
+  });
 
-  //     console.log("File contents:", contents)
-  //     // Do something with file
-  //     res.status(200).sendFile(fileContents.Body);
-  //   }
-  // });
+  let complete_object = {};
+  let error = null;
+
+  let params = {
+    Bucket: "hacksc-odyssey",
+    Prefix: "auth",
+    MaxKeys: 1000, // * Max is 1,000
+  };
+
+  s3.listObjectsV2(params, function (err, data) {
+    if (err) error = err;
+    complete_object = Object.assign({}, complete_object, data.Contents);
+
+    params = {
+      Bucket: "hacksc-odyssey",
+      Prefix: "google",
+      MaxKeys: 1000, // * Max is 1,000
+    };
+
+    s3.listObjectsV2(params, function (err, data) {
+      if (err) error = err;
+      complete_object = Object.assign({}, complete_object, data.Contents);
+
+      if (error)
+        res
+          .status(204)
+          .json({ message: "Issue listing bucket items from s3." });
+      res.status(200).json({
+        mesage: "Successfully listed bucket contents!",
+        files: complete_object,
+      });
+    });
+  });
 });
 
 router.post("/resume", utils.authMiddleware, async (req, res) => {
