@@ -45,7 +45,7 @@ const Hacker = ({ result, resumeList, resetResults }) => {
     const resume_reduce = resumeList.reduce((acc, val) => {
       let item = val && val[1] ? val[1] : {};
       if (item && item.Key)
-        return acc + item.Key.includes(result.userId) ? 1 : 0;
+        return acc + (item.Key.includes(result.userId) ? 1 : 0);
       else return acc;
     }, 0);
 
