@@ -5,7 +5,7 @@ type ContainerProps = {
 };
 
 const Container = styled.div<ContainerProps>`
-  ${({ width }) => (width ? `width: ${width}` : `93.75%`)};
+  ${({ width }) => (width ? `width: ${width}` : `width: 93.75%`)};
   max-width: 960px;
   margin-left: auto;
   margin-right: auto;
