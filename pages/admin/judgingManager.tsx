@@ -12,6 +12,7 @@ import Navbar from "../../components/Navbar";
 import Footer from "../../components/Footer";
 
 import styled from "styled-components";
+import {} from "styled-components/cssprop";
 
 import { Background, Container, Button, Flex, Column } from "../../styles";
 
@@ -465,7 +466,7 @@ const judgingManager = ({}) => {
           <Flex direction="row" justify="space-between">
             <Column flexBasis={20}>
               <Flex direction="column">
-                <TimeCard primary={true}>
+                <TimeCard primary>
                   <TimeCardLabel>Time</TimeCardLabel>
                   <TimeCardTeamName>Team 1</TimeCardTeamName>
                   <TimeCardTeamList>List of team members</TimeCardTeamList>
@@ -597,13 +598,18 @@ const FullButton = styled(Button)`
   text-align: center;
 `;
 
-const TimeCard = styled.div`
+type TimeCardType = {
+  primary?: boolean;
+};
+
+const TimeCard = styled.div<TimeCardType>`
   width: 100%;
   margin-bottom: 20px;
   padding: 20px;
   background-color: white;
   border-radius: 4px;
-  border-color: $(props => props.primary ? "#FF8379": "white");
+  border: 2px solid;
+  border-color: ${(props) => (props.primary ? "#FF8379" : "white")};
 `;
 
 const TimeCardLabel = styled.label`
