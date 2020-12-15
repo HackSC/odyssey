@@ -465,153 +465,81 @@ const judgingManager = ({}) => {
           <Flex direction="row" justify="space-between">
             <Column flexBasis={20}>
               <Flex direction="column">
-                <div>
-                  <div>Time</div>
-                  <h2>Team 1</h2>
-                  <p>List of team members</p>
-                  <a>Link to slack room or zoom call</a>
-                </div>
-                <div>
-                  <div>Time</div>
-                  <h2>Team 1</h2>
-                  <p>List of team members</p>
-                  <a>Link to slack room or zoom call</a>
-                </div>
-                <div>
-                  <div>Time</div>
-                  <h2>Team 1</h2>
-                  <p>List of team members</p>
-                  <a>Link to slack room or zoom call</a>
-                </div>
-                <div>
-                  <div>Time</div>
-                  <h2>Team 1</h2>
-                  <p>List of team members</p>
-                  <a>Link to slack room or zoom call</a>
-                </div>
+                <TimeCard primary={true}>
+                  <TimeCardLabel>Time</TimeCardLabel>
+                  <TimeCardTeamName>Team 1</TimeCardTeamName>
+                  <TimeCardTeamList>List of team members</TimeCardTeamList>
+                  <TimeCardLink>Link to slack room or zoom call</TimeCardLink>
+                </TimeCard>
+                <TimeCard>
+                  <TimeCardLabel>Time</TimeCardLabel>
+                  <TimeCardTeamName>Team 1</TimeCardTeamName>
+                  <TimeCardTeamList>List of team members</TimeCardTeamList>
+                  <TimeCardLink>Link to slack room or zoom call</TimeCardLink>
+                </TimeCard>
+                <TimeCard>
+                  <TimeCardLabel>Time</TimeCardLabel>
+                  <TimeCardTeamName>Team 1</TimeCardTeamName>
+                  <TimeCardTeamList>List of team members</TimeCardTeamList>
+                  <TimeCardLink>Link to slack room or zoom call</TimeCardLink>
+                </TimeCard>
+                <TimeCard>
+                  <TimeCardLabel>Time</TimeCardLabel>
+                  <TimeCardTeamName>Team 1</TimeCardTeamName>
+                  <TimeCardTeamList>List of team members</TimeCardTeamList>
+                  <TimeCardLink>Link to slack room or zoom call</TimeCardLink>
+                </TimeCard>
               </Flex>
             </Column>
             <Column flexBasis={70}>
-              <Cell>
-                <div style={{ marginBottom: "20px" }}>
-                  <label style={{ display: "block", marginBottom: "4px" }}>
-                    Vertical
-                  </label>
-                  <input type="select" placeholder="Vertical"></input>
-                </div>
-                <div style={{ marginBottom: "20px" }}>
-                  <label style={{ display: "block", marginBottom: "4px" }}>
-                    Vertical
-                  </label>
-                  <input type="select" placeholder="Vertical"></input>
-                </div>
-                <div style={{ marginBottom: "20px" }}>
-                  <label style={{ display: "block", marginBottom: "4px" }}>
-                    Vertical
-                  </label>
-                  <input type="select" placeholder="Vertical"></input>
-                </div>
+              <Cell style={{ width: "100%", padding: "20px" }}>
+                <JudgeField>
+                  <JudgeFieldLabel>Vertical</JudgeFieldLabel>
+                  <JudgeFieldSelectInput
+                    placeholder="Vertical"
+                    id="verticalSelect"
+                  >
+                    <option value="person">Person</option>
+                    <option value="team">Team</option>
+                    <option value="customer">Customer</option>
+                    <option value="device">Device</option>
+                  </JudgeFieldSelectInput>
+                </JudgeField>
+                <JudgeField>
+                  <JudgeFieldLabel>Sponsor</JudgeFieldLabel>
+                  <JudgeFieldSelectInput placeholder="Sponsor">
+                    <option value="sponsor1">Sponsor 1</option>
+                    <option value="sponsor2">Sponsor 2</option>
+                  </JudgeFieldSelectInput>
+                </JudgeField>
+                <JudgeField>
+                  <JudgeFieldLabel>Notes</JudgeFieldLabel>
+                  <JudgeFieldTextArea placeholder="Write notes here..."></JudgeFieldTextArea>
+                </JudgeField>
+                <JudgeField>
+                  <JudgeFieldLabel>Score</JudgeFieldLabel>
+                  <JudgeFieldSelectInput placeholder="Score" id="scoreSelect">
+                    <option value="0">0</option>
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                    <option value="6">6</option>
+                    <option value="7">7</option>
+                    <option value="8">8</option>
+                    <option value="9">9</option>
+                    <option value="10">10</option>
+                  </JudgeFieldSelectInput>
+                  <p style={{ marginTop: "4px", fontSize: "14px" }}>
+                    For unsubmitted projects and/or judging mishaps, enter a
+                    score of 0.
+                  </p>
+                </JudgeField>
                 <FullButton>Submit</FullButton>
               </Cell>
             </Column>
           </Flex>
-          {/* <Flex direction="row" justify="space-between">
-            <Column flexBasis={48}>
-              <FullButton>
-                <label htmlFor="devpost">Upload</label>
-                <InvisInput
-                  type="file"
-                  id="devpost"
-                  name="devpost"
-                  onChange={handleUpload}
-                />
-              </FullButton>
-            </Column>
-            <Column flexBasis={48}>
-              <FullStyledButton
-                onClick={exportTableAssignments}
-                disabled={!uploaded}
-              >
-                Export Table Assignments
-              </FullStyledButton>
-            </Column>
-          </Flex>
-          <br />
-          <Flex direction="row" justify="space-between">
-            <Column flexBasis={48}>
-              <p>{message ? message : "Looking good!"}</p>
-            </Column>
-            <Column flexBasis={48}>
-              <Cell>
-                <Column>
-                  {"Special Tables (Key, Max): "}
-                  <TableInput
-                    type="text"
-                    onChange={(e) => {
-                      setCurrTable([e.target.value, currTable[1]]);
-                    }}
-                    value={currTable[0]}
-                  />
-                  <TableInput
-                    type="number"
-                    onChange={(e) => {
-                      setCurrTable([currTable[0], e.target.value]);
-                    }}
-                    value={currTable[1]}
-                  />
-                  <Button
-                    onClick={(e) => {
-                      let temp_tables = tables;
-                      temp_tables[currTable[0]] = Math.round(
-                        Number(currTable[1])
-                      );
-                      setTables(temp_tables);
-                      // hacky but it refreshes
-                      setCurrTable([currTable[0], currTable[1]]);
-                      assignTables();
-                    }}
-                  >
-                    +
-                  </Button>
-                </Column>
-              </Cell>
-              {tablesBlocks}
-            </Column>
-          </Flex>
-          <br />
-          <Flex direction="row" justify="space-between">
-            <Column flexBasis={48}>
-              <h1> Verticals </h1>
-
-              <Panel>
-                <StyledButton onClick={exportVerticalsCSV} disabled={!uploaded}>
-                  Generate CSV
-                </StyledButton>
-              </Panel>
-
-              <Panel>
-                <h2>Number of Judges</h2>
-
-                <div id="judges-gen">{verticalsBlocks}</div>
-              </Panel>
-            </Column>
-
-            <Column flexBasis={48}>
-              <h1> Sponsors </h1>
-
-              <Panel>
-                <StyledButton onClick={exportSponsorsCSV} disabled={!uploaded}>
-                  Generate CSV
-                </StyledButton>
-              </Panel>
-
-              <Panel>
-                <h2> Sponsors </h2>
-
-                <div id="sponsors-gen">{sponsorsBlocks}</div>
-              </Panel>
-            </Column>
-          </Flex> */}
         </Container>
       </Background>
       <Footer />
@@ -653,13 +581,6 @@ const SmallCell = styled.div`
   font-size: 16px;
 `;
 
-const Panel = styled.div`
-  padding: 24px 36px;
-  margin: 0 0 16px;
-  background: #ffffff;
-  border-radius: 4px;
-`;
-
 const Input = styled.input`
   border-radius: 8px;
   border: 1px solid #b2b2b2;
@@ -671,33 +592,86 @@ const Input = styled.input`
   box-sizing: border-box;
 `;
 
-const InvisInput = styled.input`
-  display: none;
-`;
-
-const TableInput = styled.input`
-  display: inline-block;
-  width: 25px;
-  padding: 12px 8px;
-  margin-right: 1px;
-  border-radius: 8px;
-  border: 1px solid ${({ theme }) => theme.colors.gray5};
-  color: ${({ theme }) => theme.colors.gray50};
-`;
-
 const FullButton = styled(Button)`
   width: 100%;
   text-align: center;
 `;
 
-const FullStyledButton = styled(Button)`
+const TimeCard = styled.div`
   width: 100%;
-  text-align: center;
-  ${({ disabled }) => disabled && `opacity: 0.5`};
+  margin-bottom: 20px;
+  padding: 20px;
+  background-color: white;
+  border-radius: 4px;
+  border-color: $(props => props.primary ? "#FF8379": "white");
 `;
 
-const StyledButton = styled(Button)`
-  ${({ disabled }) => disabled && `opacity: 0.5`};
+const TimeCardLabel = styled.label`
+  margin-bottom: 20px;
+  color: #757575;
+  font-weight: 600;
+  font-size: 16px;
+  text-indent: 1em;
+  &::before {
+    content: "🕐 ";
+    padding-right: 4px;
+  }
+`;
+
+const TimeCardTeamName = styled.h2`
+  margin-bottom: 16px;
+  margin-top: 12px;
+  padding: 0;
+`;
+
+const TimeCardTeamList = styled.p`
+  margin-bottom: 8px;
+  font-size: 18px;
+`;
+
+const TimeCardLink = styled.a`
+  font-size: 16px;
+`;
+
+const JudgeField = styled.div`
+  margin-bottom: 20px;
+  width: 100%;
+`;
+
+const JudgeFieldLabel = styled.label`
+  display: block;
+  margin-bottom: 4px;
+`;
+
+const JudgeFieldTextInput = styled.input`
+  width: 100%;
+  padding: 10px 0px 10px 10px;
+  box-sizing: border-box;
+  background-color: #f8f8f8;
+  border: 2px solid #e5e5e5;
+  border-radius: 4px;
+  font-size: 16px;
+`;
+
+const JudgeFieldTextArea = styled.textarea`
+  width: 100%;
+  padding: 10px 0px 10px 10px;
+  box-sizing: border-box;
+  background-color: #f8f8f8;
+  border: 2px solid #e5e5e5;
+  border-radius: 4px;
+  height: 150px;
+  font-size: 16px;
+  font-family: Arial;
+`;
+
+const JudgeFieldSelectInput = styled.select`
+  width: 100%;
+  padding: 10px 0px 10px 10px;
+  background-color: #f8f8f8;
+  border: 2px solid #e5e5e5;
+  border-radius: 4px;
+  font-size: 16px;
 `;
 
 export default judgingManager;
