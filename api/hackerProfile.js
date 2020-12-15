@@ -255,7 +255,12 @@ router.get("/resume-list", utils.authMiddleware, async (req, res) => {
 
   s3.listObjectsV2(params, function (err, data) {
     if (err) error = err;
-    complete_object = Object.assign({}, complete_object, data.Contents);
+    else
+      complete_object = Object.assign(
+        {},
+        complete_object,
+        data && data.Contents ? data.Contents : {}
+      );
 
     params = {
       Bucket: "hacksc-odyssey",
@@ -263,9 +268,14 @@ router.get("/resume-list", utils.authMiddleware, async (req, res) => {
       MaxKeys: 1000, // * Max is 1,000
     };
 
-    s3.listObjectsV2(params, function (err, data) {
-      if (err) error = err;
-      complete_object = Object.assign({}, complete_object, data.Contents);
+    s3.listObjectsV2(params, function (new_err, new_data) {
+      if (new_err) error = new_err;
+      else
+        complete_object = Object.assign(
+          {},
+          complete_object,
+          new_data && new_data.Contents ? new_data.Contents : {}
+        );
 
       if (error)
         res
