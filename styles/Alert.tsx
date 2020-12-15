@@ -7,12 +7,12 @@ type AlertProps = {
   borderColor?: string;
   margin?: string;
   borderWidth?: string;
-  display?: boolean;
+  display?: string;
 };
 
 const Alert = styled.div<AlertProps>`
   position: relative;
-  ${({ display }) => `display: ${display ? "visible" : "none"};`}
+  ${({ display }) => `display: ${display ? display : "none"};`}
   ${({ margin }) => `margin: ${margin ? margin : "1em"};`}
   ${({ borderColor }) =>
     `border-color: ${borderColor ? borderColor : "white"};`}

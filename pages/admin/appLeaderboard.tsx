@@ -63,8 +63,8 @@ const AppLeaderboard = ({ profile }) => {
     <>
       <Head title="HackSC Odyssey - Application" />
       <Navbar loggedIn admin activePage="/appLeaderboard" />
-      <Background padding={"3rem 0"}>
-        <Container width={"96%"}>
+      <Background padding="2rem">
+        <Container width={"100%"}>
           <Flex direction="row" style={{ flexWrap: "wrap" }}>
             <MaxHeightColumn flexBasis={35}>
               <TitleFlex direction="row">
@@ -201,6 +201,7 @@ const MaxHeightColumn = styled(Column)`
   padding: 1rem;
   min-width: 300px;
   max-height: 90vh;
+  margin: auto;
   display: flex;
   flex-direction: column;
 `;

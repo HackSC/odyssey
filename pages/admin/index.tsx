@@ -36,20 +36,11 @@ const Admin = ({ profile }) => {
     <>
       <Head title="HackSC Odyssey - Application" />
       <Navbar loggedIn admin activePage="/" />
-      <Background>
-        <Container width={"96%"}>
-          <Flex direction="row" style={{ flexWrap: "wrap" }}>
-            <Column
-              style={{ padding: "1rem", minWidth: "300px" }}
-              flexBasis={35}
-            >
-              <Flex
-                style={{
-                  paddingBottom: "3rem",
-                  height: "93%",
-                  justifyContent: "center",
-                }}
-              >
+      <Background padding="2rem">
+        <Container width={"100%"}>
+          <SubContainerFlex direction="row">
+            <TwitterColumn flexBasis={35}>
+              <TwitterFlex>
                 <TwitterTimelineEmbed
                   sourceType="profile"
                   screenName="hackscofficial"
@@ -58,12 +49,9 @@ const Admin = ({ profile }) => {
                   autoHeight={true}
                   theme={false ? "dark" : "light"}
                 />
-              </Flex>
-            </Column>
-            <Column
-              style={{ padding: "1rem", minWidth: "300px" }}
-              flexBasis={65}
-            >
+              </TwitterFlex>
+            </TwitterColumn>
+            <ActionColumn flexBasis={65}>
               <Flex direction="column">
                 <TitleFlex direction="row">
                   <ZeroPaddedH1>Admin Dashboard</ZeroPaddedH1>
@@ -165,8 +153,8 @@ const Admin = ({ profile }) => {
                   <ActionTitle> Experimental Console </ActionTitle>
                 </Action>
               </Actions>
-            </Column>
-          </Flex>
+            </ActionColumn>
+          </SubContainerFlex>
         </Container>
       </Background>
       <Footer />
@@ -192,6 +180,33 @@ Admin.getInitialProps = async (ctx) => {
     profile,
   };
 };
+
+const ActionColumn = styled(Column)`
+  padding: 1rem;
+  min-width: 300px;
+  margin: auto;
+`;
+
+const SubContainerFlex = styled(Flex)`
+  flex-wrap: wrap;
+  margin: auto;
+`;
+
+const TwitterColumn = styled(Column)`
+  padding: 1rem;
+  min-width: 300px;
+  margin: 0 auto;
+
+  @media screen and (max-width: 900px) {
+    display: none;
+  }
+`;
+
+const TwitterFlex = styled(Flex)`
+  padding-bottom: 3rem;
+  height: 93%;
+  justify-content: center;
+`;
 
 const ZeroPaddedH1 = styled.h1`
   padding-bottom: 0px;
@@ -221,7 +236,7 @@ const Actions = styled.div`
   align-items: center;
   justify-content: space-between;
 `;
-//margin: 0 0 16px;
+
 const Action = styled.a`
   box-sizing: border-box;
   padding: 24px 36px;

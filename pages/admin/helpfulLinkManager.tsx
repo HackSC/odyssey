@@ -190,9 +190,9 @@ const HelpfulLinkManager = ({ profile, currentTasks }) => {
     <>
       <Head title="HackSC Odyssey - Results" />
       <Navbar loggedIn admin activePage="/HelpfulLinkManager" />
-      <Background padding="30px 0">
+      <Background padding="2rem">
         <Container>
-          {" "}
+          <h1 style={{ margin: "1rem" }}>Manage Helpful Links</h1>
           <Task>
             <TaskInfo>
               <input

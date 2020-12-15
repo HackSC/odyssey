@@ -160,9 +160,9 @@ const houseManager = ({ profile, currentHouses }) => {
     <>
       <Head title="HackSC Odyssey - Results" />
       <Navbar loggedIn admin activePage="/houseManager" />
-      <Background padding="30px 0">
+      <Background padding="2rem">
         <Container>
-          {" "}
+          <h1 style={{ margin: "1rem" }}>Manage Houses</h1>
           <Task>
             <TaskInfo>
               <input

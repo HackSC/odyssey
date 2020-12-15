@@ -26,8 +26,8 @@ interface Props {
 }
 
 const CheckedIn: React.FunctionComponent<Props> = (props) => {
-  const { profile } = props;
-  const [alert, setAlert] = useState(false);
+  const { profile, houses } = props;
+  const [alert, setAlert] = useState("none");
   const { allHouses } = useAllHouseInfo({});
   const { battlepass } = useBattlepass({ defaultOnError: console.log });
   const { personInfo } = usePersonInfoSelf({ defaultOnError: console.log });
@@ -68,13 +68,13 @@ const CheckedIn: React.FunctionComponent<Props> = (props) => {
       >
         <MdClose
           color={"white"}
-          onClick={() => setAlert(false)}
+          onClick={() => setAlert("none")}
           style={{ position: "absolute", top: "5px", left: "5px" }}
         />
         <h2 style={{ padding: "0" }}>Keep it up! Your house is in the lead!</h2>
       </Alert>
       <PaddedFlex
-        style={!alert ? { paddingTop: "2em" } : {}}
+        style={alert === "none" ? { paddingTop: "2em" } : {}}
         justify="space-between"
         tabletVertical
       >

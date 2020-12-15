@@ -461,7 +461,7 @@ const judgingManager = ({}) => {
     <>
       <Head title="HackSC Odyssey - Application" />
       <Navbar loggedIn admin activePage="/judgingManager" />
-      <Background padding="30px 0">
+      <Background padding="2rem">
         <Container>
           <Flex direction="row" justify="space-between">
             <Column flexBasis={20}>
@@ -560,6 +560,10 @@ judgingManager.getInitialProps = async (ctx) => {
 
   return {};
 };
+
+const MarginColumn = styled(Column)`
+  margin: 1rem 0;
+`;
 
 const Cell = styled.div`
   display: inline-block;

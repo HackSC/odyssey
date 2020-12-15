@@ -6,7 +6,7 @@ import React, {
   useEffect,
 } from "react";
 import styled from "styled-components";
-import { Offline, Online } from "react-detect-offline";
+import { Detector } from "react-detect-offline";
 
 import { useToasts } from "react-toast-notifications";
 
@@ -19,10 +19,11 @@ import {
 
 import { Head, Scanner, Navbar, Select } from "../../components";
 
-import { Button, Form, Flex } from "../../styles";
+import { Button, Form, Flex, Background } from "../../styles";
 
 import { liveDispatchFetch, livePointFetch } from "../../lib/api-sdk/liveHooks";
 import { getAllTasksFetch } from "../../lib/api-sdk/taskHooks";
+import { Container } from "next/app";
 
 // TO-DO -- pull this out, define elsewhere
 const ACTIONS = [
@@ -50,8 +51,9 @@ type Props = {
 };
 
 const Scan = ({ admin_profile, tasks }: Props) => {
-  const [action, setAction] = useState(null);
+  const [action, setAction] = useState(ACTIONS[0].value);
   const [lastScannedCode, setLastScannedCode] = useState(null);
+  const [online, setOnline] = useState(true);
 
   const manualInputRef = useRef(null);
 
@@ -63,19 +65,23 @@ const Scan = ({ admin_profile, tasks }: Props) => {
   };
 
   useEffect(() => {
-    if (Online) {
-      let codes_to_scan = JSON.parse(
-        localStorage.getItem("OfflineScannedCodes")
-      );
+    if (online) {
+      let codes_to_scan = localStorage.getItem("OfflineScannedCodes")
+        ? JSON.parse(localStorage.getItem("OfflineScannedCodes"))
+        : [];
       if (codes_to_scan && codes_to_scan.length > 0) {
-        for (const code of codes_to_scan) {
-          sendScanRequest(code);
-          setLastScannedCode(code);
+        for (const code_obj of codes_to_scan) {
+          for (let code_action in code_obj) {
+            setAction(code_action);
+            sendScanRequest(code_obj[code_action]);
+            setLastScannedCode(null);
+          }
         }
-        localStorage.setItem("OfflineScannedCodes", null);
       }
+      localStorage.setItem("OfflineScannedCodes", "");
     }
-  }, [Offline, Online]);
+  }, [online]);
+
   const checkIfValidCode = (code: string): boolean => {
     if (code.length === 4) {
       const uppercaseAlphanumericRegEx = /[A-Z,0-9]{4}/;
@@ -285,17 +291,48 @@ const Scan = ({ admin_profile, tasks }: Props) => {
     (code: string) => {
       setLastScannedCode((prev) => {
         if (prev !== code) {
-          if (Offline)
+          let offline = false;
+          var condition = navigator.onLine ? "online" : "offline";
+          if (condition === "online") {
+            fetch("https://www.google.com/", {
+              // Check for internet connectivity
+              mode: "no-cors",
+            })
+              .then(() => {
+                sendScanRequest(code);
+              })
+              .catch(() => {
+                console.error("INTERNET CONNECTIVITY ISSUE");
+                offline = true;
+              });
+          } else offline = true;
+
+          if (offline) {
+            let offline_scanned = JSON.parse(
+              localStorage.getItem("OfflineScannedCodes")
+                ? localStorage.getItem("OfflineScannedCodes")
+                : "[]"
+            );
+
+            const [typeOfAction, value] = action.split(" ");
+
+            let obj_store = {};
+            obj_store[value] = code;
             localStorage.setItem(
               "OfflineScannedCodes",
-              localStorage.getItem("OfflineScannedCodes")
-                ? JSON.stringify(
-                    JSON.parse(localStorage.getItem("OfflineScannedCodes")) +
-                      [code]
-                  )
-                : JSON.stringify([code])
+              offline_scanned !== null && offline_scanned !== ""
+                ? JSON.stringify([...offline_scanned, ...[obj_store]])
+                : JSON.stringify([obj_store])
             );
-          else sendScanRequest(code);
+
+            addToast(
+              "Offline or Connectivity Issue: Storing code in LocalStorage until back online.",
+              {
+                appearance: "error",
+                autoDismiss: true,
+              }
+            );
+          }
           return code;
         } else {
           return prev;
@@ -336,50 +373,70 @@ const Scan = ({ admin_profile, tasks }: Props) => {
     <>
       <Head title="HackSC Odyssey - Scan" />
       <Navbar loggedIn admin activePage="/scan" />
-      <PageContainer>
-        <ActionBar>
-          <h1>Scan Codes</h1>
-
-          <h2>Select Action</h2>
-          <Form>
-            <Select
-              name="shirt-size"
-              options={tasksWithActionsOptions}
-              onChange={handleActionChange}
-              required
-            />
-          </Form>
-        </ActionBar>
-
-        <ScanContainer>
-          {!!action ? (
-            <>
-              <Scanner handleScannedCode={handleScannedCode} action={action} />
-              <ManualInputForm>
-                <Flex direction="column">
-                  <ManualInputLabel>Manual Input</ManualInputLabel>
-                  <Flex direction="row">
-                    <ManualInputText
-                      type="text"
-                      maxLength={4}
-                      ref={manualInputRef}
-                    />
-                    <Button onClick={handleManualInput}>Submit</Button>
+      <ScanBackground padding="4vh 0">
+        <Container width={"96%"}>
+          <ScanContainer>
+            <ActionBar>
+              <h1>Scan Codes</h1>
+              <Detector
+                onChange={(e) => {
+                  setOnline(e);
+                }}
+                render={({ online: updated_online }) => {
+                  //setOnline(updated_online)
+                  return "";
+                }}
+              />
+              <Form style={{ width: "100%" }}>
+                <Select
+                  name="shirt-size"
+                  placeholder={"Select Action..."}
+                  options={tasksWithActionsOptions}
+                  onChange={handleActionChange}
+                />
+              </Form>
+            </ActionBar>
+            {!!action ? (
+              <>
+                <ScannerPadding>
+                  <Scanner
+                    handleScannedCode={handleScannedCode}
+                    action={action}
+                  />
+                </ScannerPadding>
+                <ManualInputForm>
+                  <Flex direction="column">
+                    <ManualInputLabel>Manual Input</ManualInputLabel>
+                    <Flex direction="row" style={{ flexWrap: "wrap" }}>
+                      <ManualInputText
+                        type="text"
+                        placeholder={"4 character code"}
+                        maxLength={4}
+                        style={{ margin: "1rem" }}
+                        ref={manualInputRef}
+                      />
+                      <Button
+                        style={{ margin: "1rem" }}
+                        onClick={handleManualInput}
+                      >
+                        Submit
+                      </Button>
+                    </Flex>
+                    <ManualInputInstructions>
+                      If a code cannot be scanned for some reason, manually
+                      input a hacker's 4 letter code and click submit
+                    </ManualInputInstructions>
                   </Flex>
-                  <ManualInputInstructions>
-                    If a code cannot be scanned for some reason, manually input
-                    a hacker's 4 letter code and click submit
-                  </ManualInputInstructions>
-                </Flex>
-              </ManualInputForm>
-            </>
-          ) : (
-            <SelectMessage>
-              Please select an action to scan hackers
-            </SelectMessage>
-          )}
-        </ScanContainer>
-      </PageContainer>
+                </ManualInputForm>
+              </>
+            ) : (
+              <SelectMessage>
+                Please select an action to scan hackers
+              </SelectMessage>
+            )}
+          </ScanContainer>
+        </Container>
+      </ScanBackground>
     </>
   );
 };
@@ -404,30 +461,33 @@ Scan.getInitialProps = async (ctx) => {
   };
 };
 
-const PageContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  position: fixed;
-  width: 100vw;
-  height: 100%;
+const ScannerPadding = styled(Flex)`
+  direction: row;
+  padding: 1rem;
+`;
+
+const ScanBackground = styled(Background)`
+  width: 100%;
+  min-height: 80vh;
 `;
 
 const ActionBar = styled.div`
-  background: ${({ theme }) => theme.colors.gray5};
-  padding: 24px;
+  margin: 1rem;
+  width: 100%;
 `;
 
 const ScanContainer = styled.div`
   flex-grow: 1;
-  background: #1d1d1d;
   display: flex;
+  padding: 0 2rem;
+  max-width: 600px;
+  margin: auto;
   align-items: center;
   justify-content: center;
   flex-direction: column;
 `;
 
 const SelectMessage = styled.p`
-  color: #ffffff;
   font-size: 24px;
   font-weight: 800;
   text-align: center;
@@ -436,12 +496,12 @@ const SelectMessage = styled.p`
 `;
 
 const ManualInputForm = styled(Form)`
-  padding: 0 18px;
+  padding: 0;
+  width: 100%;
 `;
 
 const ManualInputLabel = styled.label`
-  color: #ffffff;
-  margin: 12px 0;
+  margin: 1rem;
   font-weight: 700;
 `;
 
@@ -452,8 +512,7 @@ const ManualInputText = styled.input`
 
 const ManualInputInstructions = styled.p`
   font-size: 12px;
-  color: #ffffff;
-  margin-top: 12px;
+  margin: 1rem;
 `;
 
 export default Scan;
