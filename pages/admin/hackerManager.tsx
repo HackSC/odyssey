@@ -33,11 +33,12 @@ import {
 } from "../../lib/api-sdk/liveHooks";
 
 const Hacker = ({ result, resumeList, resetResults }) => {
-  const [hasresume, setHasResume] = useState(true);
+  const [hasresume, setHasResume] = useState(false);
 
   const downloadResume = async () => {
     Redirect.push(
-      `https://hacksc-odyssey.s3-us-west-1.amazonaws.com/${result.userId}`
+      `https://hacksc-odyssey.s3-us-west-1.amazonaws.com/${result.userId}`,
+      null
     );
   };
 

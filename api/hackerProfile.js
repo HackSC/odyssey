@@ -244,49 +244,50 @@ router.get("/resume-list", utils.authMiddleware, async (req, res) => {
     secretAccessKey: process.env.S3_SECRET,
   });
 
-  let complete_object = {};
+  let complete_object = [];
   let error = null;
 
-  let params = {
+  const googleParams = {
     Bucket: "hacksc-odyssey",
-    Prefix: "auth",
+    Prefix: "google",
     MaxKeys: 1000, // * Max is 1,000
   };
 
-  s3.listObjectsV2(params, function (err, data) {
-    if (err) error = err;
-    else
-      complete_object = Object.assign(
-        {},
-        complete_object,
-        data && data.Contents ? data.Contents : {}
-      );
+  const auth0Params = {
+    Bucket: "hacksc-odyssey",
+    Prefix: "auth0",
+    MaxKeys: 1000, // * Max is 1,000
+  };
 
-    params = {
-      Bucket: "hacksc-odyssey",
-      Prefix: "google",
-      MaxKeys: 1000, // * Max is 1,000
-    };
-
-    s3.listObjectsV2(params, function (new_err, new_data) {
-      if (new_err) error = new_err;
-      else
-        complete_object = Object.assign(
-          {},
-          complete_object,
-          new_data && new_data.Contents ? new_data.Contents : {}
-        );
-
-      if (error)
-        res
-          .status(204)
-          .json({ message: "Issue listing bucket items from s3." });
-      res.status(200).json({
-        mesage: "Successfully listed bucket contents!",
-        files: complete_object,
-      });
+  // https://stackoverflow.com/questions/42394429/aws-sdk-s3-best-way-to-list-all-keys-with-listobjectsv2
+  const listAllKeys = (params, out = []) =>
+    new Promise((resolve, reject) => {
+      s3.listObjectsV2(params)
+        .promise()
+        .then(({ Contents, IsTruncated, NextContinuationToken }) => {
+          out.push(...Contents);
+          !IsTruncated
+            ? resolve(out)
+            : resolve(
+                listAllKeys(
+                  Object.assign(params, {
+                    ContinuationToken: NextContinuationToken,
+                  }),
+                  out
+                )
+              );
+        })
+        .catch(reject);
     });
-  });
+
+  const googleKeys = await listAllKeys(googleParams);
+  const auth0Keys = await listAllKeys(auth0Params);
+
+  if (googleKeys && auth0Keys) {
+    res.status(200).json({ files: [...googleKeys, ...auth0Keys] });
+  } else {
+    res.status(400).json({ message: "problem fetching resumes from S3" });
+  }
 });
 
 router.post("/resume", utils.authMiddleware, async (req, res) => {
