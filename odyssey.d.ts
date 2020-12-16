@@ -198,3 +198,8 @@ declare type APIResponse<T> = {
   success?: T;
   error?: string;
 };
+
+declare type pendingTeammateRequests = {
+  hackerId: number;
+  teamId: number;
+}

@@ -143,6 +143,12 @@ module.exports = (sequelize, DataTypes) => {
       foreignKey: "teamId",
       constraints: false
     });
+    // junction table
+    HackerProfile.belongsToMany(models.Team, { 
+      through: 'PendingTeammateRequests', 
+      foreignKey: 'hackerProfileId',
+      otherKey: 'teamId',
+   });
   };
   return HackerProfile;
 };

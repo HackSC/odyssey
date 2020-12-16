@@ -5,6 +5,7 @@ import Head from "../components/Head";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import TeammateSuggestions from "../components/TeammateSuggestions";
+import TeamSuggestions from "../components/TeamSuggestions";
 import {
   Background,
   Container,
@@ -23,13 +24,16 @@ import {
 } from "../lib/api-sdk/projectTeamHooks";
 
 import { getProfile } from "../lib/authenticate";
-import { getTeammateSuggestions } from "../lib/matching";
+import { getPendingTeammateRequests, getTeammateSuggestions, getTeamSuggestions, getPendingTeamRequests } from "../lib/matching";
 
 // import Router from "next/router";
 
 type Props = {
   projectTeam: ProjectTeam;
   teammateSuggestions: Array<Object>;
+  teamSuggestions: Array<Object>;
+  pendingTeammateRequests: Array<Object>;
+  pendingTeamRequests: Array<Object>;
 };
 
 const ProjectTeam = (props: Props) => {
@@ -60,7 +64,7 @@ const ProjectTeam = (props: Props) => {
     createProjectTeamSelf({ name: nameAsResource });
   };
 
-  const CreateTeamSection = ({ teammateSuggestions }) => {
+  const CreateTeamSection = ({ teammateSuggestions, teamSuggestions, pendingTeammateRequests, pendingTeamRequests }) => {
     return (
       <>
         <h1>HackSC Project Team Setup</h1>
@@ -92,9 +96,12 @@ const ProjectTeam = (props: Props) => {
         {
           // eventually switch these
           props.projectTeam ? (
-            <div />
-          ) : (
             <TeammateSuggestions teammateSuggestions={teammateSuggestions} />
+          ) : (
+            <>
+              <TeamSuggestions type={"Team Suggestions"} teamSuggestions={teamSuggestions} />
+              <TeamSuggestions type={"Pending Team Requests"} teamSuggestions={pendingTeamRequests} />
+            </>
           )
         }
       </>
@@ -151,6 +158,9 @@ const ProjectTeam = (props: Props) => {
           ) : (
             <CreateTeamSection
               teammateSuggestions={props.teammateSuggestions}
+              teamSuggestions={props.teamSuggestions}
+              pendingTeammateRequests={props.pendingTeammateRequests}
+              pendingTeamRequests={props.pendingTeamRequests}
             />
           )}
         </Container>
@@ -306,10 +316,20 @@ ProjectTeam.getInitialProps = async ({ req, query }): Promise<Props> => {
   const profile = await getProfile(req);
 
   // Fetch teammate suggestions
-  const data = await getTeammateSuggestions(req);
+  const teammateSuggestions = await getTeammateSuggestions(req);
+  const teamSuggestions = await getTeamSuggestions(req);
+  const pendingTeammateRequests = await getPendingTeammateRequests(req);
+  const pendingTeamRequests = await getPendingTeamRequests(req);
+
+  console.log(pendingTeammateRequests);
+  console.log(pendingTeamRequests);
+
   return {
     projectTeam: success,
-    teammateSuggestions: data,
+    teammateSuggestions: teammateSuggestions,
+    teamSuggestions: teamSuggestions.teams,
+    pendingTeammateRequests: pendingTeammateRequests,
+    pendingTeamRequests: pendingTeamRequests.teamRequests,
   };
 };
 
