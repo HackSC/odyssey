@@ -66,4 +66,24 @@ async function getPendingTeamRequests(req) {
   return await result.json();
 }
 
-export { getTeammateSuggestions, getTeamSuggestions, getPendingTeammateRequests, getPendingTeamRequests };
+async function requestTeam(req) {
+  const urlRoute = "/api/teamMatching/request/" ;
+  const result = await fetch(
+    urlRoute,
+    req
+      ? {
+          headers: req.headers,
+          method: "POST",
+        }
+      : null
+  );
+  return result.status === 200;
+}
+
+export { 
+  getTeammateSuggestions, 
+  getTeamSuggestions, 
+  getPendingTeammateRequests, 
+  getPendingTeamRequests,
+  requestTeam
+};

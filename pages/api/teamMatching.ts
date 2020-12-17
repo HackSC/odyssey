@@ -102,4 +102,45 @@ router.get("/:type", async (req, res) => {
   }
 });
 
+router.post("/request/", async (req, res) => {
+  const hackerProfile = await models.HackerProfile.findOne({
+    where: { userId: req.user.id }
+  });
+
+  // Can't request a team if you're already on one!
+  let team = await hackerProfile.getTeam();
+  if (team) {
+    return res.status(400).json({ message: "User already belongs on a team" });
+  }
+
+  // Try to find a team with the provided code
+  team = await models.Team.findOne({
+    where: { id: req.body.teamId || "" }
+  });
+  if (!team) {
+    console.log("team dne?");
+    console.log(req.body.teamId);
+    return res
+      .status(400)
+      .json({ message: "Could not find a team with that code" });
+  }
+
+  // See if there is still space in the team
+  const teamMembers = await team.getHackerProfiles();
+
+  if (teamMembers.length + 1 > 4 || team.lookingForTeammates === false) {
+    return res.status(400).json({ message: "This team is not looking for teammates!" });
+  }
+
+  // request the team
+  await models.PendingTeammateRequests.create({
+    hackerProfileId: req.user.id,
+    teamId: team.id
+  });
+
+  return res.status(200).json({
+    message: "Successfully requested team"
+  });
+});
+
 export { router };

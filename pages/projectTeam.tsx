@@ -24,11 +24,15 @@ import {
 } from "../lib/api-sdk/projectTeamHooks";
 
 import { getProfile } from "../lib/authenticate";
-import { getPendingTeammateRequests, getTeammateSuggestions, getTeamSuggestions, getPendingTeamRequests } from "../lib/matching";
+import { getPendingTeammateRequests, 
+          getTeammateSuggestions, 
+          getTeamSuggestions, 
+          getPendingTeamRequests } from "../lib/matching";
 
 // import Router from "next/router";
 
 type Props = {
+  userId: String;
   projectTeam: ProjectTeam;
   teammateSuggestions: Array<Object>;
   teamSuggestions: Array<Object>;
@@ -63,6 +67,23 @@ const ProjectTeam = (props: Props) => {
     const nameAsResource = name as ResourceID;
     createProjectTeamSelf({ name: nameAsResource });
   };
+
+  async function handleRequestProjectTeam(teamId: number) {
+    const urlRoute = "/api/teamMatching/request/" ;
+    const result = await fetch(
+      urlRoute,
+      {
+        method: "POST",
+        headers: {
+          "content-type": "application/json",
+        },
+        body: JSON.stringify({
+          userId: props.userId,
+          teamId: teamId,
+        }),
+      });
+    return result.status === 200;
+  }
 
   const CreateTeamSection = ({ teammateSuggestions, teamSuggestions, pendingTeammateRequests, pendingTeamRequests }) => {
     return (
@@ -99,8 +120,8 @@ const ProjectTeam = (props: Props) => {
             <TeammateSuggestions teammateSuggestions={teammateSuggestions} />
           ) : (
             <>
-              <TeamSuggestions type={"Team Suggestions"} teamSuggestions={teamSuggestions} />
-              <TeamSuggestions type={"Pending Team Requests"} teamSuggestions={pendingTeamRequests} />
+              <TeamSuggestions type={"Pending Team Requests"} handleOnClick={handleJoinProjectTeam} teamSuggestions={pendingTeamRequests} />
+              <TeamSuggestions type={"Team Suggestions"} handleOnClick={handleRequestProjectTeam} teamSuggestions={teamSuggestions} />
             </>
           )
         }
@@ -321,10 +342,8 @@ ProjectTeam.getInitialProps = async ({ req, query }): Promise<Props> => {
   const pendingTeammateRequests = await getPendingTeammateRequests(req);
   const pendingTeamRequests = await getPendingTeamRequests(req);
 
-  console.log(pendingTeammateRequests);
-  console.log(pendingTeamRequests);
-
   return {
+    userId: req.user.id,
     projectTeam: success,
     teammateSuggestions: teammateSuggestions,
     teamSuggestions: teamSuggestions.teams,

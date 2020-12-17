@@ -1,13 +1,13 @@
 import React, { useCallback, useState } from "react";
 import styled from "styled-components";
 
-const TeamSuggestions = ({ type, teamSuggestions }) => {
+const TeamSuggestions = ({ type, handleOnClick, teamSuggestions }) => {
   return (
     <>
       <Title>{type}</Title>
       <Suggestions>
           {teamSuggestions.map((suggestion) => (
-              <Suggestion>
+              <Suggestion key={suggestion.id}>
                   <Name>
                       {suggestion.name}
                   </Name>
@@ -15,11 +15,13 @@ const TeamSuggestions = ({ type, teamSuggestions }) => {
                       {suggestion.description}
                   </Description>
                   <Menu>
-                    <MenuOption>{type === "Team Suggestions" ? "Request to Join" : "Join" }</MenuOption>
+                    {type === "Team Suggestions" ?
+                        (<MenuOption onClick={() => handleOnClick(suggestion.id)}>Request to Join</MenuOption>) :
+                        (<MenuOption onClick={() => handleOnClick(suggestion.name)}>Join</MenuOption>)
+                    }
                   </Menu>
               </Suggestion>
-          ))
-          }
+          ))}
       </Suggestions>
     </>
   )
