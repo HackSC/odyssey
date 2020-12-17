@@ -2,7 +2,6 @@ import * as React from "react";
 import styled from "styled-components";
 import Router from "next/router";
 import * as Sentry from "@sentry/browser";
-import Link from "next/link";
 
 import { useIsMobile } from "../../lib/layouts";
 
