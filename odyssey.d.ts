@@ -93,6 +93,8 @@ declare type Profile = {
   team: Team;
   qrCodeId: string;
   isBattlepassComplete?: boolean;
+  lookingForTeam: boolean;
+  portfolioUrl: string;
 };
 
 declare type Team = {
@@ -199,7 +201,7 @@ declare type APIResponse<T> = {
   error?: string;
 };
 
-declare type pendingTeammateRequests = {
-  hackerId: number;
-  teamId: number;
-}
+// declare type pendingTeammateRequests = {
+//   hackerId: number;
+//   teamId: number;
+// }

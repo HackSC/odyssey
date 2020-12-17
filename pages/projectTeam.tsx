@@ -78,7 +78,6 @@ const ProjectTeam = (props: Props) => {
           "content-type": "application/json",
         },
         body: JSON.stringify({
-          userId: props.userId,
           teamId: teamId,
         }),
       });
@@ -115,13 +114,13 @@ const ProjectTeam = (props: Props) => {
           </Column>
         </NoTeamFlex>
         {
-          // eventually switch these
           props.projectTeam ? (
             <TeammateSuggestions teammateSuggestions={teammateSuggestions} />
           ) : (
             <>
               <TeamSuggestions type={"Pending Team Requests"} handleOnClick={handleJoinProjectTeam} teamSuggestions={pendingTeamRequests} />
               <TeamSuggestions type={"Team Suggestions"} handleOnClick={handleRequestProjectTeam} teamSuggestions={teamSuggestions} />
+              <TeammateSuggestions teammateSuggestions={teammateSuggestions} />
             </>
           )
         }
@@ -341,6 +340,11 @@ ProjectTeam.getInitialProps = async ({ req, query }): Promise<Props> => {
   const teamSuggestions = await getTeamSuggestions(req);
   const pendingTeammateRequests = await getPendingTeammateRequests(req);
   const pendingTeamRequests = await getPendingTeamRequests(req);
+
+  console.log(teammateSuggestions);
+  console.log(teamSuggestions);
+  console.log(pendingTeammateRequests);
+  console.log(pendingTeamRequests);
 
   return {
     userId: req.user.id,

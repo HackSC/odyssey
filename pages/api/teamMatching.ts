@@ -1,7 +1,9 @@
 const express = require("express");
 const models = require("./models");
 const utils = require("./utils");
+const sequelize = require('sequelize');
 const router = express.Router();
+
 
 router.use(utils.authMiddleware);
 router.use(utils.preprocessRequest);
@@ -9,21 +11,45 @@ router.use(utils.preprocessRequest);
 // GET /api/matching
 // - If a hacker is on a team, get that team info
 router.get("/:type", async (req, res) => {
+
+  // finding teammate suggestions who haven't already been requested
   if (req.params.type === "teammate") {
     const curruser = await models.HackerProfile.findOne({
       where: {
         userId: req.user.id,
       },
     });
-
-    const hackerProfiles = await models.HackerProfile.findAll({
-      where: {
-        year: curruser.year,
-        teamId: null,
-        status: "confirmed",
-        role: "hacker",
-      },
-    });
+    
+    let hackerProfiles;
+    if (curruser.teamId) {
+      hackerProfiles = await models.HackerProfile.findAll({
+        where: {
+          year: curruser.year,
+          teamId: null,
+          status: "confirmed",
+          role: "hacker",
+        },
+        // include: [{
+        //   model: models.Team,
+        //   where: {
+        //     id: {
+        //       [sequelize.Op.not]: curruser.teamId,
+        //     }
+        //   },
+        //   required: true
+        // }]
+      });
+    }
+    else {
+      hackerProfiles = await models.HackerProfile.findAll({
+        where: {
+          year: curruser.year,
+          teamId: null,
+          status: "confirmed",
+          role: "hacker",
+        },
+      });
+    }
 
     if (hackerProfiles) {
       return res.json({ hackerProfiles });
@@ -34,12 +60,24 @@ router.get("/:type", async (req, res) => {
     }
   }
 
+  // finding team suggestions that haven't already been requested
   else if (req.params.type === "team") {
     const teams = await models.Team.findAll({
       where: {
         lookingForTeammates: true,
-      }
+      },
+      // include: [{
+      //   model: models.HackerProfile,
+      //   where: {
+      //     userId: {
+      //       [sequelize.Op.not]: req.user.id,
+      //     }
+      //   },
+      //   required: false
+      // }]
     });
+
+    console.log(teams);
 
     if (teams) {
       return res.json({ teams });
@@ -49,6 +87,8 @@ router.get("/:type", async (req, res) => {
       });
     }
   }
+
+  // getting all pending team requests
   else if (req.params.type === "pendingTeam") {
     const teamRequests = await models.Team.findAll({
       where: {
@@ -60,7 +100,13 @@ router.get("/:type", async (req, res) => {
           userId: req.user.id,
         },
         required: true
-      }]
+      }],
+      through: {
+        model: models.PendingTeammateRequests,
+        where: {
+          owner: "team",
+        }
+      }
     });
 
     if (teamRequests) {
@@ -71,6 +117,8 @@ router.get("/:type", async (req, res) => {
       });
     }
   }
+
+  // getting all pending teammate requests for the current user's team
   else if (req.params.type === "pendingTeammate") {
     const curruser = await models.HackerProfile.findOne({
       where: {
@@ -89,7 +137,13 @@ router.get("/:type", async (req, res) => {
           id: curruser.teamId,
         },
         required: true
-      }]
+      }],
+      through: {
+        model: models.PendingTeammateRequests,
+        where: {
+          owner: "hacker",
+        }
+      }
     });
 
     if (teammateRequests) {
@@ -118,8 +172,6 @@ router.post("/request/", async (req, res) => {
     where: { id: req.body.teamId || "" }
   });
   if (!team) {
-    console.log("team dne?");
-    console.log(req.body.teamId);
     return res
       .status(400)
       .json({ message: "Could not find a team with that code" });

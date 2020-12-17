@@ -125,7 +125,9 @@ module.exports = (sequelize, DataTypes) => {
       qrCodeId: {
         type: DataTypes.STRING,
         unique: true
-      }
+      },
+      lookingForTeam: DataTypes.BOOLEAN,
+      portfolioUrl: DataTypes.STRING(500),
     },
     {}
   );
@@ -143,12 +145,16 @@ module.exports = (sequelize, DataTypes) => {
       foreignKey: "teamId",
       constraints: false
     });
-    // junction table
+    // super m:n relationship
     HackerProfile.belongsToMany(models.Team, { 
-      through: 'PendingTeammateRequests', 
+      through: models.PendingTeammateRequests, 
+      // as: 'pendingTeammateRequests',
       foreignKey: 'hackerProfileId',
       otherKey: 'teamId',
-   });
+    });
+    // HackerProfile.hasMany(models.PendingTeammateRequests, {
+    //   as: 'pendingTeamRequests',
+    // });
   };
   return HackerProfile;
 };

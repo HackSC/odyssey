@@ -1,5 +1,5 @@
 'use strict';
-
+// PendingTeammateRequests: Team Invites Someone to the Team
 module.exports = {
   up: (queryInterface, Sequelize) => {
     return queryInterface.createTable('PendingTeammateRequests', {
@@ -22,6 +22,10 @@ module.exports = {
           model: "HackerProfiles",
           key: "userId",
         }
+      },
+      owner: {
+        type: Sequelize.ENUM,
+        values: ["team", "hacker"],
       },
       createdAt: {
         allowNull: false,

@@ -15,9 +15,19 @@ module.exports = (sequelize, DataTypes) => {
                 model: "Teams",
                 key: "id"
             }
+        },
+        owner: {
+            type: DataTypes.ENUM, 
+            values: ["team", "hacker"],
         }
       },
     );
+
+    // super m:n relationship
+    // PendingTeammateRequests.associate = function(models) {
+    //     PendingTeammateRequests.belongsTo(models.HackerProfile);
+    //     PendingTeammateRequests.belongsTo(models.Team);
+    // };
+
     return PendingTeammateRequests;
   };
-  
