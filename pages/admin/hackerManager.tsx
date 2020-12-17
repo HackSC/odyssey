@@ -122,9 +122,16 @@ const Hacker = ({ result, resumeList, resetResults }) => {
           </p>
         </Column>
         <Column flexBasis={49} style={{ margin: "1rem 0" }}>
-          <FullButton onClick={viewProfile}>View Full Profile</FullButton>
+          <FullButton style={{ margin: "0 0 0.5rem 0" }} onClick={viewProfile}>
+            View Full Profile
+          </FullButton>
           {hasResume ? (
-            <FullButton onClick={downloadResume}>Download Resume</FullButton>
+            <FullButton
+              style={{ margin: "0.5rem 0 0 0" }}
+              onClick={downloadResume}
+            >
+              Download Resume
+            </FullButton>
           ) : (
             <p>User has not uploaded a resume</p>
           )}
