@@ -156,9 +156,8 @@ async function APIGet<T>(
 ): Promise<APIResponse<T>> {
   let urlRoute = computeUrlRoute(route, opts?.req, param);
   if (opts?.queryParams) {
-    const urlParams = new URLSearchParams(
-      Object.entries(opts.queryParams) + ""
-    );
+    // @ts-ignore
+    const urlParams = new URLSearchParams(opts.queryParams);
     urlRoute += `?${urlParams}`;
   }
 
