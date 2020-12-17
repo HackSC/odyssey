@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, setState } from "react";
 import styled from "styled-components";
 
 import Head from "../components/Head";
@@ -24,15 +24,19 @@ import {
 } from "../lib/api-sdk/projectTeamHooks";
 
 import { getProfile } from "../lib/authenticate";
-import { getPendingTeammateRequests, 
-          getTeammateSuggestions, 
-          getTeamSuggestions, 
-          getPendingTeamRequests } from "../lib/matching";
+import {
+  getPendingTeammateRequests,
+  getTeammateSuggestions,
+  getTeamSuggestions,
+  getPendingTeamRequests,
+} from "../lib/matching";
 
 // import Router from "next/router";
 
 type Props = {
   userId: String;
+  lookingForTeam: Boolean;
+  portfolioUrl: String;
   projectTeam: ProjectTeam;
   teammateSuggestions: Array<Object>;
   teamSuggestions: Array<Object>;
@@ -69,22 +73,59 @@ const ProjectTeam = (props: Props) => {
   };
 
   async function handleRequestProjectTeam(teamId: number) {
-    const urlRoute = "/api/teamMatching/request/" ;
-    const result = await fetch(
-      urlRoute,
-      {
-        method: "POST",
-        headers: {
-          "content-type": "application/json",
-        },
-        body: JSON.stringify({
-          teamId: teamId,
-        }),
-      });
+    const urlRoute = "/api/teamMatching/request/";
+    const result = await fetch(urlRoute, {
+      method: "POST",
+      headers: {
+        "content-type": "application/json",
+      },
+      body: JSON.stringify({
+        teamId: teamId,
+      }),
+    });
     return result.status === 200;
   }
 
-  const CreateTeamSection = ({ teammateSuggestions, teamSuggestions, pendingTeammateRequests, pendingTeamRequests }) => {
+  async function updateVisibility() {
+    const urlRoute = "/api/profile/visibility/";
+    const result = await fetch(urlRoute, {
+      method: "PUT",
+      headers: {
+        "content-type": "application/json",
+      },
+    });
+    return result.status === 200;
+  }
+
+  async function handleAddPortfolio(url: string) {
+    const urlRoute = "/api/profile/portfolio/";
+
+    const result = await fetch(urlRoute, {
+      method: "PUT",
+      headers: {
+        "content-type": "application/json",
+      },
+      body: JSON.stringify({
+        portfolioUrl: url,
+      }),
+    });
+    return result.status === 200;
+  }
+
+  const CreateTeamSection = ({
+    lookingForTeam,
+    portfolioUrl,
+    teammateSuggestions,
+    teamSuggestions,
+    pendingTeammateRequests,
+    pendingTeamRequests,
+  }) => {
+    const [visible, setVisible] = useState(lookingForTeam);
+    const handleChangeVisibility = () => {
+      setVisible(!visible);
+      updateVisibility();
+    };
+
     return (
       <>
         <h1>HackSC Project Team Setup</h1>
@@ -101,6 +142,7 @@ const ProjectTeam = (props: Props) => {
               label="Enter your team name"
               buttonText="Join"
               onSubmit={handleJoinProjectTeam}
+              initial=""
             />
           </Column>
 
@@ -110,20 +152,55 @@ const ProjectTeam = (props: Props) => {
               label="Enter a team name"
               buttonText="Create"
               onSubmit={handleCreateProjectTeam}
+              initial=""
             />
           </Column>
         </NoTeamFlex>
-        {
-          props.projectTeam ? (
+        {props.projectTeam ? (
+          <TeammateSuggestions teammateSuggestions={teammateSuggestions} />
+        ) : (
+          <>
+            <NoTeamFlex direction="row" tabletVertical justify="space-between">
+              <Column flexBasis={48}>
+                <Title>Edit Profile</Title>
+                <ChangeProfileOption>
+                  <input
+                    name="visibility"
+                    type="checkbox"
+                    checked={visible}
+                    onChange={handleChangeVisibility}
+                  />
+                  <ShareProfileText>
+                    Share my profile with teams and other hackers for team
+                    matching! My name, major, year, school, and top skills will
+                    be shown to other hackers.
+                  </ShareProfileText>
+                </ChangeProfileOption>
+              </Column>
+              <Column flexBasis={48}>
+                <ButtonWithTextForm
+                  title="Add Portfolio"
+                  label="Enter your LinkedIn/Website url"
+                  buttonText="Add"
+                  onSubmit={handleAddPortfolio}
+                  initial={portfolioUrl}
+                />
+              </Column>
+            </NoTeamFlex>
+
+            <TeamSuggestions
+              type={"Pending Team Requests"}
+              handleOnClick={handleJoinProjectTeam}
+              teamSuggestions={pendingTeamRequests}
+            />
+            <TeamSuggestions
+              type={"Team Suggestions"}
+              handleOnClick={handleRequestProjectTeam}
+              teamSuggestions={teamSuggestions}
+            />
             <TeammateSuggestions teammateSuggestions={teammateSuggestions} />
-          ) : (
-            <>
-              <TeamSuggestions type={"Pending Team Requests"} handleOnClick={handleJoinProjectTeam} teamSuggestions={pendingTeamRequests} />
-              <TeamSuggestions type={"Team Suggestions"} handleOnClick={handleRequestProjectTeam} teamSuggestions={teamSuggestions} />
-              <TeammateSuggestions teammateSuggestions={teammateSuggestions} />
-            </>
-          )
-        }
+          </>
+        )}
       </>
     );
   };
@@ -177,10 +254,12 @@ const ProjectTeam = (props: Props) => {
             <TeamInfoSection />
           ) : (
             <CreateTeamSection
+              lookingForTeam={props.lookingForTeam}
               teammateSuggestions={props.teammateSuggestions}
               teamSuggestions={props.teamSuggestions}
               pendingTeammateRequests={props.pendingTeammateRequests}
               pendingTeamRequests={props.pendingTeamRequests}
+              portfolioUrl={props.portfolioUrl}
             />
           )}
         </Container>
@@ -332,7 +411,7 @@ const TeamCard = styled(Card)`
 `;
 
 ProjectTeam.getInitialProps = async ({ req, query }): Promise<Props> => {
-  const { success } = await getProjectTeamSelfFetch(req);  
+  const { success } = await getProjectTeamSelfFetch(req);
   const profile = await getProfile(req);
 
   // Fetch teammate suggestions
@@ -341,23 +420,26 @@ ProjectTeam.getInitialProps = async ({ req, query }): Promise<Props> => {
   const pendingTeammateRequests = await getPendingTeammateRequests(req);
   const pendingTeamRequests = await getPendingTeamRequests(req);
 
-  console.log(teammateSuggestions);
-  console.log(teamSuggestions);
-  console.log(pendingTeammateRequests);
-  console.log(pendingTeamRequests);
+  // console.log(teammateSuggestions);
+  // console.log(teamSuggestions);
+  // console.log(pendingTeammateRequests);
+  // console.log(pendingTeamRequests);
 
   return {
     userId: req.user.id,
+    lookingForTeam: profile.lookingForTeam,
     projectTeam: success,
     teammateSuggestions: teammateSuggestions,
     teamSuggestions: teamSuggestions.teams,
     pendingTeammateRequests: pendingTeammateRequests,
     pendingTeamRequests: pendingTeamRequests.teamRequests,
+    portfolioUrl: profile.portfolioUrl,
   };
 };
 
 const NoTeamFlex = styled(Flex)`
   margin-top: 48px;
+  align-items: flex-start;
 `;
 
 const PrizeTitle = styled.div`
@@ -391,6 +473,27 @@ const TeamTextInput = styled.input`
 
 const DelButton = styled(Button)`
   margin-left: 10px;
+`;
+
+const ChangeProfileOption = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  padding-top: 20px;
+  padding-bottom: 20px;
+`;
+
+const ShareProfileText = styled.div`
+  padding-left: 20px;
+  font-weight: 600;
+  font-size: 16px;
+  margin-bottom: 16px;
+  line-height: 22px;
+`;
+
+const Title = styled.h2`
+  padding-top: 0px;
+  padding-bottom: 0;
 `;
 
 export default ProjectTeam;

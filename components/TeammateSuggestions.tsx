@@ -8,9 +8,8 @@ const TeammateSuggestions = ({ teammateSuggestions }) => {
       <Suggestions>
         {teammateSuggestions.hackerProfiles.map((suggestion) => (
           <>
-          {
-            suggestion.firstName ? (
-              <Suggestion>
+            {suggestion.firstName ? (
+              <Suggestion key={suggestion.userId}>
                 <Name>
                   {suggestion.firstName} {suggestion.lastName}
                 </Name>
@@ -20,7 +19,7 @@ const TeammateSuggestions = ({ teammateSuggestions }) => {
                 <Subheading>
                   {suggestion.major ? suggestion.major : "major unavailable"}
                 </Subheading>
-                
+
                 <SkillHeading>Top Skills:</SkillHeading>
                 <Skills>
                   {suggestion.skills ? suggestion.skills : "not available"}
@@ -32,18 +31,19 @@ const TeammateSuggestions = ({ teammateSuggestions }) => {
                   <MenuOption>Send Request</MenuOption>
                 </Menu>
               </Suggestion>
-            ) : ( <div /> )
-          }
+            ) : (
+              <div />
+            )}
           </>
         ))}
       </Suggestions>
     </>
-  )
+  );
 };
 
 const Title = styled.h2`
-  padding-top: 30px;
   padding-bottom: 0;
+  padding-top: 30px;
 `;
 
 const Suggestions = styled.div`
@@ -60,9 +60,9 @@ const Suggestion = styled.div`
   flex-direction: column;
   justify-content: space-between;
   align-items: center;
-  border: 1px solid #B7B7B7;
+  border: 1px solid #b7b7b7;
   border-radius: 20px;
-  background: #FFFFFF;
+  background: #ffffff;
 `;
 
 const Name = styled.div`
