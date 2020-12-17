@@ -40,7 +40,6 @@ const Hacker = ({ result, resumeList, resetResults }) => {
   const profilePopupRef = useRef(null);
 
   const viewProfile = () => {
-    console.log("VIEW");
     setPopupVisible(true);
   };
 
