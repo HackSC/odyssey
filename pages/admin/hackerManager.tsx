@@ -1,11 +1,13 @@
 import React, { useRef, useState, useMemo, useEffect } from "react";
+import dynamic from "next/dynamic";
 import Redirect from "next/router";
 import styled from "styled-components";
 import JSZip from "jszip";
 import stringify from "csv-stringify";
 import { saveAs } from "file-saver";
 import PacmanLoader from "react-spinners/PacmanLoader";
-
+import Modal from "../../components/Modal";
+const ReactJson = dynamic(() => import("react-json-view"), { ssr: false });
 import { sendSlackMessage, handleLoginRedirect, getProfile } from "../../lib";
 import Schools from "../../assets/data/schools.json";
 
@@ -33,7 +35,14 @@ import {
 } from "../../lib/api-sdk/liveHooks";
 
 const Hacker = ({ result, resumeList, resetResults }) => {
-  const [hasresume, setHasResume] = useState(false);
+  const [hasResume, setHasResume] = useState(false);
+  const [popupVisible, setPopupVisible] = useState(false);
+  const profilePopupRef = useRef(null);
+
+  const viewProfile = () => {
+    console.log("VIEW");
+    setPopupVisible(true);
+  };
 
   const downloadResume = async () => {
     Redirect.push(
@@ -53,6 +62,10 @@ const Hacker = ({ result, resumeList, resetResults }) => {
     if (resume_reduce) setHasResume(true);
     else setHasResume(false);
   }, []);
+
+  const CloseButton = (
+    <FullButton onClick={() => setPopupVisible(false)}>Close</FullButton>
+  );
 
   return (
     <Result key={result.userId}>
@@ -110,13 +123,17 @@ const Hacker = ({ result, resumeList, resetResults }) => {
           </p>
         </Column>
         <Column flexBasis={49} style={{ margin: "1rem 0" }}>
-          {hasresume ? (
+          <FullButton onClick={viewProfile}>View Full Profile</FullButton>
+          {hasResume ? (
             <FullButton onClick={downloadResume}>Download Resume</FullButton>
           ) : (
-            <h2>User has not uploaded a resume</h2>
+            <p>User has not uploaded a resume</p>
           )}
         </Column>
       </Flex>
+      <Modal visible={popupVisible} header={CloseButton} footer={CloseButton}>
+        <ReactJson src={result} />
+      </Modal>
     </Result>
   );
 };
