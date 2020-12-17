@@ -204,7 +204,7 @@ const judgingManager = ({}) => {
     try {
       output = await parseCSV(data);
     } catch (err) {
-      throw err;
+      // * IGNORE
     }
 
     // remove first item the header
