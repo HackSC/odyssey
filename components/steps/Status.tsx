@@ -169,11 +169,20 @@ const StatusStep: React.FunctionComponent<Props> = (props) => {
                   : "Come back soon and see your results."}
               </p>
               {profileStage === 3 && (
-                <StepButton onClick={() => navigateTo("results")}>
-                  {profile.status === "accepted"
-                    ? "Confirm Attendance"
-                    : "View Results"}
-                </StepButton>
+                <>
+                  <div>
+                    <StepButton onClick={() => navigateTo("results")}>
+                      {profile.status === "accepted"
+                        ? "Confirm Attendance"
+                        : "View Results"}
+                    </StepButton>
+                  </div>
+                  <div>
+                    <StepButton onClick={() => navigateTo("appform")}>
+                      View Application
+                    </StepButton>
+                  </div>
+                </>
               )}
             </Step>
           </Steps>
