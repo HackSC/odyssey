@@ -1,5 +1,4 @@
-import React, { useRef, useState, useMemo, useEffect } from "react";
-import Redirect from "next/router";
+import React, { useRef, useState, useMemo, useCallback } from "react";
 import styled from "styled-components";
 import JSZip from "jszip";
 import stringify from "csv-stringify";
@@ -25,6 +24,8 @@ import {
   Container,
   Form,
   FormGroup,
+  RadioChoice,
+  RadioChoiceLabel,
 } from "../../styles";
 
 import {
@@ -32,91 +33,55 @@ import {
   liveLookupFetch,
 } from "../../lib/api-sdk/liveHooks";
 
-const Hacker = ({ result, resumeList, resetResults }) => {
-  const [hasresume, setHasResume] = useState(false);
-
-  const downloadResume = async () => {
-    Redirect.push(
-      `https://hacksc-odyssey.s3-us-west-1.amazonaws.com/${result.userId}`,
-      null
-    );
-  };
-
-  useEffect(() => {
-    const resume_reduce = resumeList.reduce((acc, val) => {
-      let item = val && val[1] ? val[1] : {};
-      if (item && item.Key)
-        return acc + (item.Key.includes(result.userId) ? 1 : 0);
-      else return acc;
-    }, 0);
-
-    if (resume_reduce) setHasResume(true);
-    else setHasResume(false);
-  }, []);
-
+const Hacker = ({ result, resetResults }) => {
   return (
     <Result key={result.userId}>
-      <Flex
-        direction="row"
-        style={{ paddingTop: "1rem", flexWrap: "wrap" }}
-        justify="space-between"
-      >
-        <Column flexBasis={49} style={{ margin: "1rem 0" }}>
-          <h2>
-            {result.firstName} {result.lastName}
-          </h2>
-          <p>
-            <b>E-Mail: </b>
-            {result.email}
-          </p>
-          <p>
-            <b>School: </b>
-            {result.school}
-          </p>
-          <p>
-            <b>Year: </b>
-            {result.year}
-          </p>
-          <p>
-            <b>Graduation Date: </b>
-            {result.graduationDate}
-          </p>
-          <p>
-            <b>Needs Bus: </b>
-            {result.needBus ? "True" : "False"}
-          </p>
-          <p>
-            <b>Gender: </b>
-            {result.gender}
-          </p>
-          <p>
-            <b>Ethnicity: </b>
-            {result.ethnicity}
-          </p>
-          <p>
-            <b>Status: </b>
-            {result.status}
-          </p>
-          <p>
-            <b>Role: </b>
-            {result.role}
-          </p>
-          <p>
-            <b>
-              {result.qrCodeId === null
-                ? "No QR code"
-                : `Has a QR code (${result.qrCodeId})`}
-            </b>
-          </p>
-        </Column>
-        <Column flexBasis={49} style={{ margin: "1rem 0" }}>
-          {hasresume ? (
-            <FullButton onClick={downloadResume}>Download Resume</FullButton>
-          ) : (
-            <h2>User has not uploaded a resume</h2>
-          )}
-        </Column>
-      </Flex>
+      <h2>
+        {result.firstName} {result.lastName}
+      </h2>
+      <p>
+        <b>E-Mail: </b>
+        {result.email}
+      </p>
+      <p>
+        <b>School: </b>
+        {result.school}
+      </p>
+      <p>
+        <b>Year: </b>
+        {result.year}
+      </p>
+      <p>
+        <b>Graduation Date: </b>
+        {result.graduationDate}
+      </p>
+      <p>
+        <b>Needs Bus: </b>
+        {result.needBus ? "True" : "False"}
+      </p>
+      <p>
+        <b>Gender: </b>
+        {result.gender}
+      </p>
+      <p>
+        <b>Ethnicity: </b>
+        {result.ethnicity}
+      </p>
+      <p>
+        <b>Status: </b>
+        {result.status}
+      </p>
+      <p>
+        <b>Role: </b>
+        {result.role}
+      </p>
+      <p>
+        <b>
+          {result.qrCodeId === null
+            ? "No QR code"
+            : `Has a QR code (${result.qrCodeId})`}
+        </b>
+      </p>
     </Result>
   );
 };
@@ -207,24 +172,6 @@ const hackerManager = ({ profile }) => {
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
   const [results, setResults] = useState([]);
-  const [resumeList, setResumeList] = useState([]);
-  const [fetch_called, setFetchCalled] = useState(false);
-
-  const getResumeList = async () => {
-    setFetchCalled(true);
-    let resume_result = await fetch("/api/profile/resume-list", {
-      method: "GET",
-    });
-
-    if (resume_result.status === 200) {
-      let resumes = await resume_result.json();
-      setResumeList(Object.entries(resumes.files));
-    } else setResumeList([]);
-  };
-
-  useEffect(() => {
-    if (!fetch_called) getResumeList();
-  }, []);
 
   const exportHackerCSV = async function () {
     setMessage("Generating Hacker CSVs");
@@ -397,7 +344,6 @@ const hackerManager = ({ profile }) => {
           <Hacker
             key={Object.entries(result).join()}
             result={result}
-            resumeList={resumeList}
             resetResults={resetResults}
           />
         ))}
@@ -557,19 +503,16 @@ const hackerManager = ({ profile }) => {
               <Flex
                 direction="row"
                 style={{ paddingTop: "1rem", flexWrap: "wrap" }}
-                justify="space-between"
+                justify="flex-end"
               >
-                <Column flexBasis={49} style={{ margin: "1rem 0" }}>
-                  <FullButton onClick={lookupHackers}>
-                    Filter Hackers
-                  </FullButton>
-                </Column>
+                <PaddedButton>
+                  <Button onClick={showAllHackers}>Show All Hackers</Button>
+                  &nbsp; &nbsp;
+                </PaddedButton>
 
-                <Column flexBasis={49} style={{ margin: "1rem 0" }}>
-                  <FullButton onClick={showAllHackers}>
-                    Show All Hackers
-                  </FullButton>
-                </Column>
+                <PaddedButton>
+                  <Button onClick={lookupHackers}>Filter Hackers</Button>
+                </PaddedButton>
               </Flex>
             </Form>
           </Flex>
@@ -623,6 +566,12 @@ const PaddedFlex = styled(Flex)`
   min-height: 3rem;
   justify-content: center;
   padding: 3rem;
+`;
+
+const PaddedButton = styled(Flex)`
+  padding: 18px 0;
+  padding-left: 5px;
+  justify-content: flex-end;
 `;
 
 const FullButton = styled(Button)`
