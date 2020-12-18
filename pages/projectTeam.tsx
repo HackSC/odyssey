@@ -81,6 +81,7 @@ const ProjectTeam = (props: Props) => {
       },
       body: JSON.stringify({
         teamId: teamId,
+        owner: "hacker",
       }),
     });
     return result.status === 200;
@@ -189,14 +190,22 @@ const ProjectTeam = (props: Props) => {
             </NoTeamFlex>
 
             <TeamSuggestions
-              type={"Pending Team Requests"}
+              type={"You've been invited!"}
               handleOnClick={handleJoinProjectTeam}
               teamSuggestions={pendingTeamRequests}
+              buttonLabel={"Join"}
+            />
+            <TeamSuggestions
+              type={"Your Pending Requests"}
+              handleOnClick={null}
+              teamSuggestions={pendingTeamRequests}
+              buttonLabel={""}
             />
             <TeamSuggestions
               type={"Team Suggestions"}
               handleOnClick={handleRequestProjectTeam}
               teamSuggestions={teamSuggestions}
+              buttonLabel={"Request to Join"}
             />
             <TeammateSuggestions teammateSuggestions={teammateSuggestions} />
           </>

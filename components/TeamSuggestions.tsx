@@ -1,7 +1,7 @@
 import React, { useCallback, useState } from "react";
 import styled from "styled-components";
 
-const TeamSuggestions = ({ type, handleOnClick, teamSuggestions }) => {
+const TeamSuggestions = ({ type, handleOnClick, teamSuggestions, buttonLabel }) => {
   return (
     <>
       <Title>{type}</Title>
@@ -11,15 +11,23 @@ const TeamSuggestions = ({ type, handleOnClick, teamSuggestions }) => {
                   <Name>
                       {suggestion.name}
                   </Name>
-                  <Description>
-                      {suggestion.description}
-                  </Description>
-                  <Menu>
-                    {type === "Team Suggestions" ?
-                        (<MenuOption onClick={() => handleOnClick(suggestion.id)}>Request to Join</MenuOption>) :
-                        (<MenuOption onClick={() => handleOnClick(suggestion.name)}>Join</MenuOption>)
-                    }
-                  </Menu>
+                  {type !== "Your Pending Requests" ? (
+                    <>
+                      <Description>
+                          {suggestion.description}
+                      </Description>
+                      <Menu>
+                      {type === "Team Suggestions" ?
+                          (<MenuOption onClick={() => handleOnClick(suggestion.id)}>{buttonLabel}</MenuOption>) :
+                          (<MenuOption onClick={() => handleOnClick(suggestion.name)}>{buttonLabel}</MenuOption>)
+                      }
+                      </Menu>
+                    </>
+                  ) : (
+                    <LongDescription>
+                          {suggestion.description}
+                    </LongDescription>
+                  )}
               </Suggestion>
           ))}
       </Suggestions>
@@ -61,6 +69,16 @@ const Description = styled.div`
   font-weight: 400;
   font-size: 16px;
   align-self: flex-start;
+  height: 115px;
+  overflow-y: scroll;
+`;
+
+const LongDescription = styled.div`
+  font-weight: 400;
+  font-size: 16px;
+  align-self: flex-start;
+  height: 150px;
+  overflow-y: scroll;
 `;
 
 const Menu = styled.div`

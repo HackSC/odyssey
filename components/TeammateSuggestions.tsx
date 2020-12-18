@@ -1,5 +1,6 @@
 import React, { useCallback, useState } from "react";
 import styled from "styled-components";
+import LinkedIn from "../assets/linkedin.svg";
 
 const TeammateSuggestions = ({ teammateSuggestions }) => {
   return (
@@ -10,12 +11,36 @@ const TeammateSuggestions = ({ teammateSuggestions }) => {
           <>
             {suggestion.firstName ? (
               <Suggestion key={suggestion.userId}>
-                <Name>
-                  {suggestion.firstName} {suggestion.lastName}
-                </Name>
-                <Subheading>
-                  {suggestion.year ? suggestion.year : "year unavailable"}
-                </Subheading>
+                {
+                  suggestion.portfolioUrl ? (
+                  <Header>
+                    <PortfolioLink>
+                      <a href={suggestion.portfolioUrl} target="_blank">
+                        <img src={LinkedIn} />
+                      </a>
+                    </PortfolioLink>
+                    <NameHeader>
+                      <Name>
+                        {suggestion.firstName} {suggestion.lastName}
+                      </Name>
+                      <Subheading>
+                        {suggestion.year ? suggestion.year : "year unavailable"}
+                      </Subheading>
+                    </NameHeader>
+                  </Header>
+                  ) : (
+                    <>
+                      <Name>
+                        {suggestion.firstName} {suggestion.lastName}
+                      </Name>
+                      <Subheading>
+                        {suggestion.year ? suggestion.year : "year unavailable"}
+                      </Subheading>
+                    </>
+                  )
+                }
+
+                
                 <Subheading>
                   {suggestion.major ? suggestion.major : "major unavailable"}
                 </Subheading>
@@ -63,6 +88,22 @@ const Suggestion = styled.div`
   border: 1px solid #b7b7b7;
   border-radius: 20px;
   background: #ffffff;
+`;
+
+const Header = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-content: center;
+`;
+
+const PortfolioLink = styled.div`
+  padding-right: 10px;
+`;
+
+const NameHeader = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 `;
 
 const Name = styled.div`
