@@ -56,18 +56,4 @@ router.put("/houses", async (req, res) => {
   }
 });
 
-router.delete("/houses/:id", async (req, res) => {
-  try {
-    const id = req.params.id;
-    await models.House.destroy({
-      where: {
-        id: id,
-      },
-    });
-    return res.status(200);
-  } catch (e) {
-    return res.status(500).json({ err: e });
-  }
-});
-
 module.exports = router;

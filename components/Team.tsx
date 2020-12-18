@@ -2,7 +2,7 @@ import React, { useCallback, useState } from "react";
 import styled from "styled-components";
 import Router from "next/router";
 
-import { Flex, Column, Button } from "../styles";
+import { Flex, Column, Button, Form, FormGroup } from "../styles";
 
 type Props = {
   team: Team;
@@ -11,6 +11,8 @@ type Props = {
 
 const Team = ({ team, profile }: Props) => {
   const [error, setError] = useState(null);
+  const [visible, setVisibility] = useState(team.lookingForTeammates);
+  const [text, setText] = useState(team.description);
 
   const handleLeaveTeam = useCallback(async () => {
     const confirm = window.confirm("Are you sure you want to leave this team?");
@@ -75,9 +77,44 @@ const Team = ({ team, profile }: Props) => {
     }
   }, []);
 
+  const handleChangeVisibility = useCallback(async () => {
+    setVisibility(!visible);
+    const urlRoute = "/api/team/visibility/";
+
+    const result = await fetch(urlRoute, {
+      method: "PUT",
+      headers: {
+        "content-type": "application/json",
+      },
+    });
+    return result.status === 200;
+  }, []);
+
+  const handleChange = (e) => {
+    e.preventDefault();
+    setText(e.target.value);
+  };
+
+  const onSubmit = useCallback(async (text: string) => {
+    const urlRoute = "/api/team/description/";
+
+    const result = await fetch(urlRoute, {
+      method: "PUT",
+      headers: {
+        "content-type": "application/json",
+      },
+      body: JSON.stringify({
+        text: text,
+        teamCode: team.teamCode,
+      }),
+    });
+    return result.status === 200;
+
+  }, []);
+
   return (
     <TeamSection>
-      <Flex direction="row" tabletVertical justify="space-between">
+      <Flex direction="row" tabletVertical justify="space-between" >
         <Column flexBasis={48}>
           <h1>{team.name}</h1>
 
@@ -130,6 +167,48 @@ const Team = ({ team, profile }: Props) => {
           )}
 
           {!!error && <ErrorMessage>{error}</ErrorMessage>}
+        </Column>
+      </Flex>
+      <Flex direction="row" tabletVertical justify="space-between">
+        <Column flexBasis={48}>
+          <Header>Edit Team Visibility</Header>
+          <ChangeProfileOption>
+            <input
+              name="visibility"
+              type="checkbox"
+              checked={visible}
+              onChange={handleChangeVisibility}
+            />
+            <ShareProfileText>
+              Share the team name and description with hackers looking for teams!
+            </ShareProfileText>
+          </ChangeProfileOption>
+        </Column>
+        <Column flexBasis={48}>
+          <Header>Edit Team Description</Header>
+          <Form>
+            <FormGroup>
+              <label>Displayed to potential hackers</label>
+              <InputFlex>
+                <input
+                  type="text"
+                  placeholder=""
+                  value={text}
+                  required
+                  onChange={handleChange}
+                />
+                <Button
+                  onClick={(e) => {
+                    e.preventDefault();
+                    onSubmit(text);
+                    setText(text);
+                  }}
+                >
+                  Save
+                </Button>
+              </InputFlex>
+            </FormGroup>
+          </Form>
         </Column>
       </Flex>
     </TeamSection>
@@ -211,6 +290,34 @@ const ErrorMessage = styled.p`
   margin-top: 24px;
   color: ${({ theme }) => theme.colors.peach};
   text-align: center;
+`;
+
+const Header = styled.h2`
+  padding-bottom: 8px;
+  padding-top: 40px;
+`;
+
+const ChangeProfileOption = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  padding-top: 20px;
+  padding-bottom: 20px;
+`;
+
+const ShareProfileText = styled.div`
+  padding-left: 20px;
+  font-weight: 600;
+  font-size: 16px;
+  margin-bottom: 16px;
+  line-height: 22px;
+`;
+
+const InputFlex = styled(Flex)`
+  input {
+    flex-basis: 70%;
+    margin-right: 16px;
+  }
 `;
 
 export default Team;

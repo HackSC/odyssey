@@ -68,75 +68,55 @@ router.get("/:type", async (req, res) => {
       where: {
         lookingForTeammates: true,
       },
-      // include: [{
-      //   model: models.PendingTeammateRequests,
-      //   as: "pendingTeammateRequests",
-      //   required: false, // do not generate INNER JOIN
-      //   attributes: [], // do not return any columns
-      //   where: {
-      //     [sequelize.Op.not]: [
-      //       {
-      //         hackerProfileId: req.user.id
-      //       }
-      //     ]
-      //   }
-      // }],
-      // where: sequelize.where(
-      //   sequelize.col('HackerProfile.userId'),
-      //   'IS',
-      //   null
-      // )
-      // where:
-      // // {
-      //   // [sequelize.Op.not]: [
-      //     { [sequelize.col('HackerProfile.userId')] : req.user.id }
-      //   // ]
-      // }
-      // where: sequelize.where(
-      //     sequelize.col('HackerProfile.userId'),
-      //     'NOT = :id',
-      //     // sequelize.literal(`${req.user.id}`)
-      //     { replacements: {id: req.user.id} }
-      //     // sequelize.escape(req.user.id)
-      // )
-      // this query is broken, since it only returns the stuff in
-      // include: [{
-      //   model: models.HackerProfile,
-      //   where: {
-      //     [sequelize.Op.not]: [
-      //       { userId: req.user.id }
-      //     ]
-      //   },
-      //   required: false,
-      //   // required: true,
-      // include: [{
-      //   model: models.PendingTeammateRequests,
-      //   as: 'pendingTeammateRequests',
-      //   where: {
-      //     [sequelize.Op.not]: [{
-      //       hackerProfileId: req.user.id,
-      //     }]
-      //   },
-      //   required: true,
-      // }]
-      //   // where: {
-      //   //   [sequelize.Op.not]: [{
-      //   //     userId: req.user.id,
-      //   //   }],
-      //   // },
-
-      //   // through: {
-      //   //   model: models.PendingTeammateRequests,
-      //   //   where: {
-      //   //     owner: "hacker",
-      //   //   },
-      //   //   required: true
-      //   // }
-      // }],
-      // required: true,
+      include: [{
+        model: models.HackerProfile,
+        through: {
+          model: models.PendingTeammateRequests,
+          // [sequelize.Op.not]: [{
+          //   where: {
+          //     hackerProfileId: req.user.id
+          //   }
+          // }],
+          //   where: {
+          //     // owner: "team",
+          //     [sequelize.Op.or]: [{
+          //       [sequelize.Op.not]: 
+          //       // [
+          //         { 
+          //           hackerProfileId: req.user.id
+          //         },
+          //       },
+          //       // ]
+          //       {
+                  
+          //       }
+          //     ]
+              
+          //   },
+          // // ]
+          
+          // required: true,
+        },
+        // where: {
+        //   [sequelize.Op.or]: [
+        //     {
+        //       [sequelize.Op.not]: { '$PendingTeammateRequests.hackerProfileId$': req.user.id }
+        //     },
+        //     {
+        //       hackerProfile: null,
+        //     }
+        //   ]
+        // },
+        // required: true,
+      }],
     });
+    // .then(() => {
 
-    // console.log(teams);
+    // });
+
+    console.log(teams);
+    // console.log(teams[0].HackerProfiles);
+    // console.log(teams[1].HackerProfiles);
 
     if (teams) {
       return res.json({ teams });

@@ -271,4 +271,46 @@ router.post("/leave", async (req, res) => {
   });
 });
 
+// Change visibility
+router.put("/visibility", async (req, res) => {
+  const hackerProfile = await models.HackerProfile.findOne({
+    where: { userId: req.user.id }
+  });
+
+  const team = await hackerProfile.getTeam({
+    include: [
+      {
+        model: models.HackerProfile,
+        attributes: ["firstName", "lastName", "status", "email", "userId"]
+      }
+    ]
+  });
+  const lookingForTeammates = team.lookingForTeammates;
+
+  await models.Team.update(
+    { lookingForTeammates: !lookingForTeammates },
+    {
+      where: {
+        id: team.id,
+      },
+    }
+  );
+
+  return res.send();
+});
+
+// Change description
+router.put("/description", async (req, res) => {
+  await models.Team.update(
+    { description: req.body.text },
+    {
+      where: {
+        teamCode: req.body.teamCode,
+      },
+    }
+  );
+
+  return res.send();
+});
+
 module.exports = router;
