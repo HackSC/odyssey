@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import styled from "styled-components";
+import dynamic from "next/dynamic";
 import PacmanLoader from "react-spinners/PacmanLoader";
+const ReactJson = dynamic(() => import("react-json-view"), { ssr: false });
 
 import {
   Button,
@@ -18,7 +20,7 @@ const TestConsole = ({ profile }) => {
   const [routeUrl, setRouteUrl] = useState("");
   const [reqType, setReqType] = useState("GET");
   const [body, setBody] = useState("");
-  const [response, setResponse] = useState("");
+  const [response, setResponse] = useState({});
   const [executing, setExecuting] = useState(false);
 
   const typeOptions = [
@@ -131,7 +133,7 @@ const TestConsole = ({ profile }) => {
                             },
                           });
                           const result = await response.json();
-                          setResponse(JSON.stringify(result));
+                          setResponse(result);
                         } catch (e) {
                           console.error(e.message);
                         }
@@ -150,13 +152,7 @@ const TestConsole = ({ profile }) => {
                 </FormGroup>
                 <FormGroup>
                   <label>Response</label>
-                  <textarea
-                    rows={10}
-                    name="response"
-                    placeholder="query result..."
-                    readOnly={true}
-                    value={response}
-                  />
+                  <ReactJson src={response} />
                 </FormGroup>
               </FormSection>
             </Form>
