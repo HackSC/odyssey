@@ -8,9 +8,10 @@ import {
   handleLoginRedirect,
   getProfile,
   getMajorEvents,
-} from "../lib/authenticate";
+  sendSlackMessage,
+} from "../../lib";
 
-import { Head, Navbar, Footer, Select, Directory } from "../components";
+import { Head, Navbar, Footer, Select, Directory } from "../../components";
 
 import {
   Button,
@@ -20,14 +21,14 @@ import {
   Container,
   Form,
   FormGroup,
-} from "../styles";
+} from "../../styles";
 
 import {
   liveApiLookupFetch,
   liveAllApiLookupFetch,
-} from "../lib/api-sdk/liveHooks";
+} from "../../lib/api-sdk/liveHooks";
 
-const manageApiDirectory = ({ events }) => {
+const manageApiDirectory = ({ profile, events }) => {
   const [action, setAction] = useState("all");
   const [emailInput, ipInput] = [useRef(null), useRef(null)];
 
@@ -40,6 +41,22 @@ const manageApiDirectory = ({ events }) => {
       let csvs = await genApiCSV();
       let data = csvs[0].join("");
       zip.file("apis.csv", data);
+      let firstName = profile ? profile.firstName : "";
+      let lastName = profile ? profile.lastName : "";
+      let user_email = profile ? profile.email : "";
+      let start_and_end_date =
+        new Date(new Date().getTime() - 480 * 1000 * 60).toISOString() + "";
+      let slack_result = await sendSlackMessage(
+        ":email: Api Directory CSV exported (/admin/manageApiDirectory) by " +
+          firstName +
+          ", " +
+          lastName +
+          ", " +
+          user_email,
+        "CSV size: " + (csvs[0].length - 1),
+        start_and_end_date,
+        start_and_end_date
+      );
     } catch (err) {
       return;
     }
@@ -136,7 +153,7 @@ const manageApiDirectory = ({ events }) => {
     <>
       <Head title="HackSC Odyssey - Filter Signups" />
       <Navbar loggedIn admin activePage="/manageApiDirectory" />
-      <Background padding="30px 0">
+      <Background padding="2rem">
         <Container>
           <Flex direction="column">
             <h1>Manage Api Directory</h1>
@@ -152,12 +169,11 @@ const manageApiDirectory = ({ events }) => {
                   options={eventYear}
                   defaultValue="all"
                   onChange={handleActionChange}
-                  required
                 />
               </Flex>
               <Flex
                 direction="row"
-                style={{ paddingTop: "1rem" }}
+                style={{ paddingTop: "1rem", flexWrap: "wrap" }}
                 justify="space-between"
               >
                 <Column flexBasis={49}>{/* Empty Column for spacing */}</Column>
@@ -172,11 +188,13 @@ const manageApiDirectory = ({ events }) => {
           {results && results.length > 0 ? (
             <Flex
               direction="row"
-              style={{ paddingTop: "1rem" }}
+              style={{ paddingTop: "1rem", flexWrap: "wrap" }}
               justify="space-between"
             >
               <Column flexBasis={49}>
-                <h3 style={{ marginLeft: "2rem" }}>Count: {results.length}</h3>
+                <h3 style={{ margin: "1rem 0", wordBreak: "break-all" }}>
+                  Count: {results.length}
+                </h3>
               </Column>
               <Column flexBasis={49}>
                 <FullButton onClick={exportApiCSV}>Export to CSV</FullButton>

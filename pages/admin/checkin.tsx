@@ -1,11 +1,10 @@
 import React, { useRef, useState, useMemo, useCallback } from "react";
 import styled from "styled-components";
+import { useToasts } from "react-toast-notifications";
+import PacmanLoader from "react-spinners/PacmanLoader";
 
-import { handleLoginRedirect, getProfile } from "../lib/authenticate";
-
-import Head from "../components/Head";
-import Navbar from "../components/Navbar";
-import Footer from "../components/Footer";
+import { sendSlackMessage, handleLoginRedirect, getProfile } from "../../lib";
+import { Head, Navbar, Footer } from "../../components";
 import {
   Button,
   Background,
@@ -14,14 +13,14 @@ import {
   Container,
   Form,
   FormGroup,
-} from "../styles";
+} from "../../styles";
 import {
   liveAssignQRFetch,
   liveLookupFetch,
   liveDispatchFetch,
-} from "../lib/api-sdk/liveHooks";
+} from "../../lib/api-sdk/liveHooks";
 
-const CheckinResult = ({ result, resetResults }) => {
+const CheckinResult = ({ addToast, profile, result, resetResults }) => {
   const qrInput = useRef(null);
 
   const handleAssignment = async (e) => {
@@ -50,11 +49,47 @@ const CheckinResult = ({ result, resetResults }) => {
         });
 
         if (!checkinRequest.error) {
-          alert("Successfully assigned hacker QR and checked them in");
+          let firstName = profile ? profile.firstName : "";
+          let lastName = profile ? profile.lastName : "";
+          let user_email = profile ? profile.email : "";
+          let start_and_end_date =
+            new Date(new Date().getTime() - 480 * 1000 * 60).toISOString() + "";
+          let slack_result = await sendSlackMessage(
+            ":white_check_mark: Hacker Checkin (/admin/checkin) executed by " +
+              firstName +
+              ", " +
+              lastName +
+              ", " +
+              user_email,
+            "Hacker: " +
+              result.firstName +
+              ", " +
+              result.lastName +
+              ", " +
+              result.email +
+              " checked in with qr code: " +
+              qrInputValue +
+              "\nHacker Description: " +
+              result.school +
+              ", " +
+              result.ethnicity +
+              ", " +
+              result.gender +
+              ", " +
+              result.status,
+            start_and_end_date,
+            start_and_end_date
+          );
+          addToast("Successfully assigned hacker QR and checked them in!", {
+            appearance: "success",
+          });
           resetResults();
         } else {
-          alert(
-            "Oh no, something went wrong! Flag down HackSC Engineering and make them all cry"
+          addToast(
+            "Oh no, something went wrong! Flag down engineering and make them cry!",
+            {
+              appearance: "error",
+            }
           );
         }
       }
@@ -110,13 +145,15 @@ const CheckinResult = ({ result, resetResults }) => {
   );
 };
 
-const Checkin = () => {
+const Checkin = ({ profile }) => {
   const [firstNameInput, lastNameInput, emailInput] = [
     useRef(null),
     useRef(null),
     useRef(null),
   ];
+  const [loading, setLoading] = useState(false);
   const [results, setResults] = useState([]);
+  const { addToast } = useToasts();
 
   const resetResults = () => {
     setResults([]);
@@ -127,7 +164,7 @@ const Checkin = () => {
 
   const lookupHackers = async (e) => {
     e.preventDefault();
-
+    setLoading(true);
     const firstName = firstNameInput.current.value;
     const lastName = lastNameInput.current.value;
     const email = emailInput.current.value;
@@ -139,6 +176,7 @@ const Checkin = () => {
     });
 
     const profiles = lookupResponse.success;
+    setLoading(false);
     setResults(profiles);
   };
 
@@ -146,7 +184,13 @@ const Checkin = () => {
     return (
       <Results>
         {results.map((result) => (
-          <CheckinResult result={result} resetResults={resetResults} />
+          <CheckinResult
+            addToast={addToast}
+            key={Object.entries(result).join()}
+            profile={profile}
+            result={result}
+            resetResults={resetResults}
+          />
         ))}
       </Results>
     );
@@ -156,12 +200,16 @@ const Checkin = () => {
     <>
       <Head title="HackSC Odyssey - Check in Hackers" />
       <Navbar loggedIn admin activePage="/checkin" />
-      <Background>
+      <Background padding="3rem 2rem">
         <Container>
           <Flex direction="column">
             <h1>Assign Hackers QR Codes for Check In</h1>
             <Form>
-              <Flex direction="row" justify="space-between">
+              <Flex
+                direction="row"
+                style={{ flexWrap: "wrap" }}
+                justify="space-between"
+              >
                 <Column flexBasis={49}>
                   <FormGroup>
                     <label>First Name</label>
@@ -186,7 +234,13 @@ const Checkin = () => {
             </Form>
           </Flex>
 
-          {renderResults}
+          {loading ? (
+            <PaddedFlex>
+              <PacmanLoader size={20} color={"#FF8379"} />
+            </PaddedFlex>
+          ) : (
+            renderResults
+          )}
         </Container>
       </Background>
       <Footer />
@@ -208,6 +262,14 @@ Checkin.getInitialProps = async (ctx) => {
     profile,
   };
 };
+
+const PaddedFlex = styled(Flex)`
+  margin: auto;
+  display: flex;
+  min-height: 3rem;
+  justify-content: center;
+  padding: 3rem;
+`;
 
 const Results = styled.div`
   padding: 18px 0;

@@ -14,6 +14,7 @@ const TeammateSuggestions = ({ title, hackers, owner, teamId }) => {
               <>
                 {suggestion.firstName ? (
                   <Suggestion
+                    key={suggestion.userId}
                     title={title}
                     suggestion={suggestion}
                     owner={owner}

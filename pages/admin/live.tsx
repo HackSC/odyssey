@@ -12,27 +12,33 @@ import {
   BattlePass,
   LinkScroll,
   IncompleteTasks,
-} from "../components";
+} from "../../components";
 
-import { Container, Flex, CenteredColumn, Column, Background } from "../styles";
-import { generatePosts } from "../lib/referrerCode";
+import {
+  Container,
+  Flex,
+  CenteredColumn,
+  Column,
+  Background,
+} from "../../styles";
+import { generatePosts } from "../../lib/referrerCode";
 
 import {
   useBattlepass,
   useAllHouseInfo,
   useAllTasks,
-} from "../lib/api-sdk/hackerLiveHooks";
+} from "../../lib/api-sdk/hackerLiveHooks";
 
 import {
   handleLoginRedirect,
   getProfile,
   handleApplicationRedirect,
-} from "../lib/authenticate";
+} from "../../lib/authenticate";
 
-import hackathonConstants from "../lib/hackathonConstants";
+import hackathonConstants from "../../lib/hackathonConstants";
 import styled from "styled-components";
-import Events from "../components/events/Events";
-import { useEventsList } from "../lib/api-sdk/eventHooks";
+import Events from "../../components/events/Events";
+import { useEventsList } from "../../lib/api-sdk/eventHooks";
 
 const Live = ({ profile, houses, socialPosts }) => {
   // * External Hooks
@@ -42,8 +48,6 @@ const Live = ({ profile, houses, socialPosts }) => {
   const { allTasks } = useAllTasks({
     defaultOnError: console.log,
   });
-
-  console.log(profile);
 
   // * Local Hooks
   const [alert, setAlert] = useState(false);

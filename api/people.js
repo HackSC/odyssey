@@ -56,4 +56,23 @@ router.put("/houses", async (req, res) => {
   }
 });
 
+router.delete("/houses/:id", utils.requireAdmin, async (req, res) => {
+  try {
+    const id = req.params.id;
+
+    // * Remove foreign key contraints :/
+    await models.Person.update({ houseId: null }, { where: { houseId: id } });
+
+    // * Destroy house
+    await models.House.destroy({
+      where: {
+        id: id,
+      },
+    });
+    return res.status(200).json({ result: "success" });
+  } catch (e) {
+    return res.status(400).json({ err: e.message });
+  }
+});
+
 module.exports = router;

@@ -1,5 +1,4 @@
 const cron = require("node-cron");
-const { CreateSlackApp } = require("../tasks/slackapp");
 
 const sendgridSync = require("../tasks/sendgridsync");
 
@@ -15,13 +14,11 @@ const productionDBHeartbeat = require("../tasks/productionDBHeartbeat");
 const stagingDBHeartbeat = require("../tasks/stagingDBHeartbeat");
 
 const scheduleCronJobs = async () => {
-  let app = await CreateSlackApp();
-
   /* Upsert to send grid once an hour */
   cron.schedule("0 * * * *", sendgridSync);
 
   // * Slackbot Event-based Cron Job
-  cron.schedule("0 * * * * *", () => productionServerEventSlackBot(app));
+  cron.schedule("0 * * * * *", productionServerEventSlackBot);
 
   // * Better Uptime Server Heartbeats
   cron.schedule("0 0 * * * *", productionServerHeartbeat);

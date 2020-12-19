@@ -39,7 +39,7 @@ export default class MyDocument extends Document {
             async
             type="text/javascript"
           ></script>
-          <script src="http://metabase.example.com/app/iframeResizer.js"></script>
+          <script src="https://metabase.hacksc.com/app/iframeResizer.js"></script>
         </Head>
         <body>
           <Main />

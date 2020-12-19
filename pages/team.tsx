@@ -3,17 +3,19 @@ import styled from "styled-components";
 
 import { handleLoginRedirect, getProfile } from "../lib/authenticate";
 
-import Head from "../components/Head";
-import Navbar from "../components/Navbar";
-import Footer from "../components/Footer";
-import CreateTeamForm from "../components/CreateTeamForm";
-import JoinTeamForm from "../components/JoinTeamForm";
-import Team from "../components/Team";
-
 import TeammateSuggestions from "../components/TeammateSuggestions";
 import TeamSuggestions from "../components/TeamSuggestions";
 import ButtonWithTextForm from "../components/ButtonWithTextForm";
 import Router from "next/router";
+
+import {
+  Head,
+  Navbar,
+  Footer,
+  CreateTeamForm,
+  JoinTeamForm,
+  Team,
+} from "../components";
 import { Background, Container, Flex, Column } from "../styles";
 
 import {
