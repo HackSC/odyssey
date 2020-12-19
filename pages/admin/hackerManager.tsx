@@ -648,6 +648,12 @@ const PaddedFlex = styled(Flex)`
   padding: 3rem;
 `;
 
+const PaddedButton = styled(Flex)`
+  padding: 18px 0;
+  padding-left: 5px;
+  justify-content: flex-end;
+`;
+
 const FullButton = styled(Button)`
   width: -webkit-fill-available;
 `;
