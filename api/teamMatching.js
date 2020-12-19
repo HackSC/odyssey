@@ -257,9 +257,6 @@ router.get("/hacker/:type", async (req, res) => {
       attributes: ["teamCode"],
     });
 
-    console.log(allTeams);
-    console.log(subtract);
-
     let subtractArray = [];
     subtract.forEach(function (item, index) {
       subtractArray.push(item.teamCode);

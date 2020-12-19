@@ -39,8 +39,6 @@ router.get("/", async (req, res) => {
     attributes: ["firstName", "lastName", "status", "email", "userId"],
   });
 
-  console.log(subtract);
-
   let subtractArray = [];
   subtract.forEach(function(item, index) {
     subtractArray.push(item.userId);
@@ -52,11 +50,7 @@ router.get("/", async (req, res) => {
       actualTeamMembers.push(item);
     }
   });
-  console.log(team);
   team.HackerProfiles = actualTeamMembers;
-
-  console.log(team);
-  // console.log(actualTeam);
 
   if (team) {
     return res.json({ team });
@@ -152,7 +146,6 @@ router.delete("/", async (req, res) => {
 // POST /api/team/join/:code
 // - If a hacker is not on a team, attempt to join a team
 router.post("/join/:code", async (req, res) => {
-  console.log(req.params.code);
 
   const hackerProfile = await models.HackerProfile.findOne({
     where: { userId: req.user.id },
@@ -180,8 +173,6 @@ router.post("/join/:code", async (req, res) => {
   if (teamMembers.length + 1 > 4) {
     return res.status(400).json({ message: "This team is full!" });
   }
-
-  console.log("reached");
 
   // If we're still here, we can join the team :)
   await hackerProfile.setTeam(team);

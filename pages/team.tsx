@@ -60,8 +60,6 @@ const Teams = ({ profile, team, status, teammateSuggestions, teamSuggestions, pe
   };
 
   const handleJoinProjectTeam = useCallback(async (code: string) => {
-    console.log("yeet");
-    console.log(code);
     const urlRoute = "/api/team/join/" + code;
     
     const res = await fetch(urlRoute, {
@@ -69,7 +67,6 @@ const Teams = ({ profile, team, status, teammateSuggestions, teamSuggestions, pe
       body: "",
       credentials: "include"
     });
-    console.log(res);
 
     if (res.status === 200) {
       await Router.push("/team?joined");
@@ -78,8 +75,6 @@ const Teams = ({ profile, team, status, teammateSuggestions, teamSuggestions, pe
   }, []);
 
   async function handleRequestProjectTeam(teamId: number) {
-    console.log("reached?");
-    console.log(teamId);
     const urlRoute = "/api/teamMatching/request/";
     const result = await fetch(urlRoute, {
       method: "POST",
@@ -90,7 +85,9 @@ const Teams = ({ profile, team, status, teammateSuggestions, teamSuggestions, pe
         teamId: teamId,
       }),
     });
-    return result.status === 200;
+    if (result.status === 200) {
+      await Router.push("/team");
+    }
   }
 
   async function updateVisibility() {
@@ -254,11 +251,6 @@ Teams.getInitialProps = async ({ req, query }) => {
   const pendingRequests = await getPendingRequests(req, team ? "team" : "hacker");
   const pendingInvites = await getPendingInvites(req, team ? "team" : "hacker");
   const teamSuggestions = await getTeamSuggestions(req);
-
-  console.log(teammateSuggestions);
-  console.log(teamSuggestions);
-  console.log(pendingRequests);
-  console.log(pendingInvites);
 
   return {
     profile,

@@ -1,6 +1,7 @@
 import React, { useCallback, useState } from "react";
 import styled from "styled-components";
 import LinkedIn from "../assets/linkedin.svg";
+import Router from "next/router";
 
 const TeammateSuggestions = ({ title, hackers, owner, teamId }) => {
   return (
@@ -8,22 +9,25 @@ const TeammateSuggestions = ({ title, hackers, owner, teamId }) => {
       <Title>{title}</Title>
       <Suggestions>
         {hackers.hackerProfiles.length ? (
-        <>
-          {hackers.hackerProfiles.map((suggestion) => (
-            <>
-              {suggestion.firstName ? (
-                <Suggestion title={title} suggestion={suggestion} owner={owner} teamId={teamId} />
-              ) : (
-                <div />
-              )}
-            </>
-          ))}
-        </>
+          <>
+            {hackers.hackerProfiles.map((suggestion) => (
+              <>
+                {suggestion.firstName ? (
+                  <Suggestion
+                    title={title}
+                    suggestion={suggestion}
+                    owner={owner}
+                    teamId={teamId}
+                  />
+                ) : (
+                  <div />
+                )}
+              </>
+            ))}
+          </>
         ) : (
           <ErrorMsg>No {title}. Check back later!</ErrorMsg>
-        )
-        }
-        
+        )}
       </Suggestions>
     </>
   );
@@ -44,68 +48,79 @@ const Suggestion = ({ title, suggestion, owner, teamId }) => {
         teamCode: teamId,
       }),
     });
-    return result.status === 200;
+    if (result.status === 200) {
+      await Router.push("/team");
+    }
   }, []);
 
   return (
     <>
-    {visible ? (
-      <Square key={suggestion.userId}>
-      {
-        suggestion.portfolioUrl ? (
-        <Header>
-          <PortfolioLink>
-            <a href={suggestion.portfolioUrl} target="_blank">
-              <img src={LinkedIn} />
-            </a>
-          </PortfolioLink>
-          <NameHeader>
-            <Name>
-              {suggestion.firstName} {suggestion.lastName}
-            </Name>
-            <Subheading>
-              {suggestion.year ? suggestion.year : "year unavailable"}
-            </Subheading>
-          </NameHeader>
-        </Header>
-        ) : (
-          <NameHeader>
-            <Name>
-              {suggestion.firstName} {suggestion.lastName}
-            </Name>
-            <Subheading>
-              {suggestion.year ? suggestion.year : "year unavailable"}
-            </Subheading>
-          </NameHeader>
-        )
-      }
+      {visible ? (
+        <Square key={suggestion.userId}>
+          {suggestion.portfolioUrl ? (
+            <Header>
+              <PortfolioLink>
+                <a href={suggestion.portfolioUrl} target="_blank">
+                  <img src={LinkedIn} />
+                </a>
+              </PortfolioLink>
+              <NameHeader>
+                <Name>
+                  {suggestion.firstName} {suggestion.lastName}
+                </Name>
+                <Subheading>
+                  {suggestion.year ? suggestion.year : "year unavailable"}
+                </Subheading>
+              </NameHeader>
+            </Header>
+          ) : (
+            <NameHeader>
+              <Name>
+                {suggestion.firstName} {suggestion.lastName}
+              </Name>
+              <Subheading>
+                {suggestion.year ? suggestion.year : "year unavailable"}
+              </Subheading>
+            </NameHeader>
+          )}
 
-      <Subheading>
-        {suggestion.major ? suggestion.major : "major unavailable"}
-      </Subheading>
+          <Subheading>
+            {suggestion.major ? suggestion.major : "major unavailable"}
+          </Subheading>
 
-      <SkillHeading>Top Skills:</SkillHeading>
-      <Skills>
-        {suggestion.skills ? suggestion.skills : "not available"}
-      </Skills>
-      <School>
-        {suggestion.school ? suggestion.school : "school unavailable"}
-      </School>
-      {title !== "Pending Teammate Invites" ? (
-        <Menu>
-        <Message href={"mailto:" + suggestion.email}>Message</Message>
-        {owner === "team" ? (<MenuOption onClick={() => {setVisible(!visible); handleInviteHackerToTeam(suggestion.userId, teamId)}}>Invite</MenuOption>) : ( <div/> )}
-      </Menu>
-      ) : (<div />)
-      }
-    </Square>
-    ) : (
-      <div />
-    )}
-    </>   
-  )
-}
-
+          <SkillHeading>Top Skills:</SkillHeading>
+          <Skills>
+            {suggestion.skills ? suggestion.skills : "not available"}
+          </Skills>
+          <School>
+            {suggestion.school ? suggestion.school : "school unavailable"}
+          </School>
+          {title !== "Pending Teammate Invites" ? (
+            <Menu>
+              <Message href={"mailto:" + suggestion.email}>Message</Message>
+              {owner === "team" ? (
+                <MenuOption
+                  onClick={() => {
+                    setVisible(!visible);
+                    handleInviteHackerToTeam(suggestion.userId, teamId);
+                  }}
+                >
+                  Invite
+                </MenuOption>
+              ) : (
+                <div />
+              )}
+            </Menu>
+          ) : (
+            <div />
+          )}
+        </Square>
+      ) : (
+        <div />
+      )}
+    </>
+  );
+};
 
 const Title = styled.h2`
   padding-bottom: 0;

@@ -1,11 +1,10 @@
-async function getTeammateSuggestions(req, owner : String) {
-  console.log("reached");
-
+async function getTeammateSuggestions(req, owner: String) {
   const urlRoute = req
-    ? /* Serverside */ process.env.URL_BASE + "api/teamMatching/" + owner + "/teammate"
+    ? /* Serverside */ process.env.URL_BASE +
+      "api/teamMatching/" +
+      owner +
+      "/teammate"
     : /* Client */ "api/teamMatching/" + owner + "/teammate";
-
-  console.log(urlRoute);
 
   const result = await fetch(
     urlRoute,
@@ -34,9 +33,12 @@ async function getTeamSuggestions(req) {
   return await result.json();
 }
 
-async function getPendingRequests(req, owner : String) {
+async function getPendingRequests(req, owner: String) {
   const urlRoute = req
-    ? /* Serverside */ process.env.URL_BASE + "api/teamMatching/" + owner + "/pendingRequests"
+    ? /* Serverside */ process.env.URL_BASE +
+      "api/teamMatching/" +
+      owner +
+      "/pendingRequests"
     : /* Client */ "/api/teamMatching/" + owner + "/pendingRequests";
 
   const result = await fetch(
@@ -51,10 +53,13 @@ async function getPendingRequests(req, owner : String) {
   return await result.json();
 }
 
-async function getPendingInvites(req, owner : String) {
+async function getPendingInvites(req, owner: String) {
   const urlRoute = req
-  ? /* Serverside */ process.env.URL_BASE + "api/teamMatching/" + owner + "/pendingInvites"
-  : /* Client */ "/api/teamMatching/" + owner + "/pendingInvites";
+    ? /* Serverside */ process.env.URL_BASE +
+      "api/teamMatching/" +
+      owner +
+      "/pendingInvites"
+    : /* Client */ "/api/teamMatching/" + owner + "/pendingInvites";
 
   const result = await fetch(
     urlRoute,
@@ -69,7 +74,7 @@ async function getPendingInvites(req, owner : String) {
 }
 
 async function requestTeam(req) {
-  const urlRoute = "/api/teamMatching/request/" ;
+  const urlRoute = "/api/teamMatching/request/";
   const result = await fetch(
     urlRoute,
     req
@@ -82,10 +87,10 @@ async function requestTeam(req) {
   return result.status === 200;
 }
 
-export { 
-  getTeammateSuggestions, 
-  getTeamSuggestions, 
-  getPendingRequests, 
+export {
+  getTeammateSuggestions,
+  getTeamSuggestions,
+  getPendingRequests,
   getPendingInvites,
-  requestTeam
+  requestTeam,
 };
