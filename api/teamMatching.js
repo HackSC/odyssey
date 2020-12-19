@@ -3,56 +3,105 @@ const models = require("./models");
 const utils = require("./utils");
 const sequelize = require("sequelize");
 const { transpileModule } = require("typescript");
+const { LexRuntime } = require("aws-sdk");
 const router = express.Router();
 
 router.use(utils.authMiddleware);
 router.use(utils.preprocessRequest);
 
-// GET /api/matching
-// - If a hacker is on a team, get that team info
-router.get("/:type", async (req, res) => {
-  // finding teammate suggestions who haven't already been requested
-  if (req.params.type === "teammate") {
-    // console.log("teammate");
+// GET /api/matching/team
+// - Get pending requests & suggestions
+// - Route for the team
+router.get("/team/:type", async (req, res) => {
+  const curruser = await models.HackerProfile.findOne({
+    where: {
+      userId: req.user.id,
+    },
+  });
+  if (curruser.teamId === null) {
+    return res.json({
+      message: "User has no team",
+    });
+  }
 
-    const curruser = await models.HackerProfile.findOne({
+  // finding teammate suggestions
+  if (req.params.type === "teammate") {
+    // if the team is searching, get the hackers who haven't been invited & haven't requested the team
+    const hackerProfiles = await models.HackerProfile.findAll({
       where: {
-        userId: req.user.id,
+        year: curruser.year,
+        teamId: null,
+        status: {
+          [sequelize.Op.in]: [
+            "submitted",
+            "accepted",
+            "waitlisted",
+            "confirmed",
+            "checkedIn",
+          ],
+        },
+        role: "hacker",
+        lookingForTeam: true,
       },
+      include: [
+        {
+          model: models.Team,
+          through: {
+            model: models.PendingTeammateRequests,
+          },
+          required: false,
+        },
+      ],
+      required: true,
     });
 
-    let hackerProfiles;
-    if (curruser.teamId) {
-      hackerProfiles = await models.HackerProfile.findAll({
-        where: {
-          year: curruser.year,
-          teamId: null,
-          status: "confirmed",
-          role: "hacker",
+    const subtract = await models.HackerProfile.findAll({
+      where: {
+        year: curruser.year,
+        teamId: null,
+        status: {
+          [sequelize.Op.in]: [
+            "submitted",
+            "accepted",
+            "waitlisted",
+            "confirmed",
+            "checkedIn",
+          ],
         },
-        // include: [{
-        //   model: models.Team,
-        //   where: {
-        //     [sequelize.Op.not]: [{
-        //       teamId: curruser.teamId,
-        //     }]
-        //   },
-        //   required: true
-        // }]
-      });
-    } else {
-      hackerProfiles = await models.HackerProfile.findAll({
-        where: {
-          year: curruser.year,
-          teamId: null,
-          status: "confirmed",
-          role: "hacker",
+        role: "hacker",
+        lookingForTeam: true,
+      },
+      include: [
+        {
+          model: models.Team,
+          through: {
+            model: models.PendingTeammateRequests,
+            where: {
+              teamId: curruser.teamId,
+            },
+            attributes: [],
+          },
+          required: true,
         },
-      });
-    }
+      ],
+      required: true,
+      attributes: ["userId"],
+    });
 
-    if (hackerProfiles) {
-      return res.json({ hackerProfiles });
+    let subtractArray = [];
+    subtract.forEach(function (item, index) {
+      subtractArray.push(item.userId);
+    });
+
+    let hackerSuggestionsForTeams = [];
+    hackerProfiles.forEach(function (item, index) {
+      if (!subtractArray.includes(item.userId)) {
+        hackerSuggestionsForTeams.push(item);
+      }
+    });
+
+    if (hackerSuggestionsForTeams) {
+      return res.json({ hackerProfiles: hackerSuggestionsForTeams });
     } else {
       return res.json({
         message: "No teammate suggestions",
@@ -60,117 +109,20 @@ router.get("/:type", async (req, res) => {
     }
   }
 
-  // finding team suggestions that haven't already been requested
-  else if (req.params.type === "team") {
-    // console.log("team");
-    // this query really, really does not work. :(
-    const teams = await models.Team.findAll({
-      where: {
-        lookingForTeammates: true,
-      },
-      include: [{
-        model: models.HackerProfile,
-        through: {
-          model: models.PendingTeammateRequests,
-          // [sequelize.Op.not]: [{
-          //   where: {
-          //     hackerProfileId: req.user.id
-          //   }
-          // }],
-          //   where: {
-          //     // owner: "team",
-          //     [sequelize.Op.or]: [{
-          //       [sequelize.Op.not]: 
-          //       // [
-          //         { 
-          //           hackerProfileId: req.user.id
-          //         },
-          //       },
-          //       // ]
-          //       {
-                  
-          //       }
-          //     ]
-              
-          //   },
-          // // ]
-          
-          // required: true,
-        },
-        // where: {
-        //   [sequelize.Op.or]: [
-        //     {
-        //       [sequelize.Op.not]: { '$PendingTeammateRequests.hackerProfileId$': req.user.id }
-        //     },
-        //     {
-        //       hackerProfile: null,
-        //     }
-        //   ]
-        // },
-        // required: true,
-      }],
-    });
-    // .then(() => {
-
-    // });
-
-    console.log(teams);
-    // console.log(teams[0].HackerProfiles);
-    // console.log(teams[1].HackerProfiles);
-
-    if (teams) {
-      return res.json({ teams });
-    } else {
-      return res.json({
-        message: "No team suggestions",
-      });
-    }
-  }
-
-  // getting all pending team requests
-  else if (req.params.type === "pendingTeam") {
-    // console.log("pendingTeam");
-    const teamRequests = await models.Team.findAll({
-      where: {
-        lookingForTeammates: true,
-      },
-      // include: [{
-      //   model: models.PendingTeammateRequests,
-      //   as: "pendingTeammateRequests",
-      //   where: {
-      //     owner: "team",
-      //   },
-      //   required: true,
-      // }],
-      // include: [{
-      //   model: models.HackerProfile,
-      //   where: {
-      //     userId: req.user.id,
-      //   },
-      //   through: {
-      //     model: models.PendingTeammateRequests,
-      //     as: "pendingTeammateRequests",
-      //   }
-      // }]
-      // include: [{
-      //   model: models.HackerProfile,
-      //   where: {
-      //     userId: req.user.id,
-      //   },
-      //   required: true,
-      // }]
+  // getting pending teammate requests (hackers who've requested to join)
+  else if (req.params.type === "pendingRequests") {
+    const teammateRequests = await models.HackerProfile.findAll({
       include: [
         {
-          model: models.HackerProfile,
+          model: models.Team,
           where: {
-            userId: req.user.id,
+            id: curruser.teamId,
           },
           required: true,
           through: {
             model: models.PendingTeammateRequests,
-            // as: "pendingTeammateRequests",
             where: {
-              owner: "team",
+              owner: "hacker",
             },
             required: true,
           },
@@ -178,31 +130,17 @@ router.get("/:type", async (req, res) => {
       ],
     });
 
-    // console.log(team);
-
-    if (teamRequests) {
-      return res.json({ teamRequests });
+    if (teammateRequests) {
+      return res.json({ hackerProfiles: teammateRequests });
     } else {
       return res.json({
-        message: "No pending team requests",
+        message: "No pending teammate requests",
       });
     }
   }
 
-  // getting all pending teammate requests for the current user's team
-  else if (req.params.type === "pendingTeammate") {
-    // console.log("pendingTeammate");
-
-    const curruser = await models.HackerProfile.findOne({
-      where: {
-        userId: req.user.id,
-      },
-    });
-    if (curruser.teamId === null) {
-      return res.json({
-        message: "User has no team",
-      });
-    }
+  // getting pending teammate invites (hackers whom you've invited)
+  else if (req.params.type === "pendingInvites") {
     const teammateRequests = await models.HackerProfile.findAll({
       include: [
         {
@@ -223,10 +161,188 @@ router.get("/:type", async (req, res) => {
     });
 
     if (teammateRequests) {
-      return res.json({ teammateRequests });
+      return res.json({ hackerProfiles: teammateRequests });
     } else {
       return res.json({
-        message: "No pending teammate requests",
+        message: "No pending teammate invites",
+      });
+    }
+  }
+});
+
+// GET /api/matching/hacker
+// - Get pending requests & suggestions
+// - Route for the hacker
+router.get("/hacker/:type", async (req, res) => {
+  // finding teammate suggestions who haven't already been requested
+  if (req.params.type === "teammate") {
+    const curruser = await models.HackerProfile.findOne({
+      where: {
+        userId: req.user.id,
+      },
+    });
+
+    const hackerProfiles = await models.HackerProfile.findAll({
+      where: {
+        year: curruser.year,
+        teamId: null,
+        status: {
+          [sequelize.Op.in]: [
+            "submitted",
+            "accepted",
+            "waitlisted",
+            "confirmed",
+            "checkedIn",
+          ],
+        },
+        role: "hacker",
+        lookingForTeam: true,
+      },
+      include: [
+        {
+          model: models.Team,
+          through: {
+            model: models.PendingTeammateRequests,
+          },
+          required: true,
+        },
+      ],
+      required: true,
+    });
+
+    if (hackerProfiles) {
+      return res.json({ hackerProfiles });
+    } else {
+      return res.json({
+        message: "No teammate suggestions",
+      });
+    }
+  }
+
+  // finding team suggestions that haven't already been requested and haven't invited the current user
+  // this query is atrocious but I could not for the life of me figure out an elegant way to use sequelize
+  else if (req.params.type === "team") {
+    const allTeams = await models.Team.findAll({
+      where: {
+        lookingForTeammates: true,
+      },
+      attributes: [
+        "id",
+        "name",
+        "teamCode",
+        "ownerId",
+        "lookingForTeammates",
+        "description",
+      ],
+    });
+
+    const subtract = await models.Team.findAll({
+      where: {
+        lookingForTeammates: true,
+      },
+      include: [
+        {
+          model: models.HackerProfile,
+          through: {
+            model: models.PendingTeammateRequests,
+            where: {
+              hackerProfileId: req.user.id,
+            },
+            attributes: [],
+          },
+          required: true,
+        },
+      ],
+      required: true,
+      attributes: ["teamCode"],
+    });
+
+    console.log(allTeams);
+    console.log(subtract);
+
+    let subtractArray = [];
+    subtract.forEach(function (item, index) {
+      subtractArray.push(item.teamCode);
+    });
+
+    let teams = [];
+    allTeams.forEach(function (item, index) {
+      if (!subtractArray.includes(item.teamCode)) {
+        teams.push(item);
+      }
+    });
+
+    if (teams) {
+      return res.json({ teams });
+    } else {
+      return res.json({
+        message: "No team suggestions",
+      });
+    }
+  }
+
+  // getting all of the user's pending team requests
+  else if (req.params.type === "pendingRequests") {
+    const teamRequests = await models.Team.findAll({
+      where: {
+        lookingForTeammates: true,
+      },
+      include: [
+        {
+          model: models.HackerProfile,
+          where: {
+            userId: req.user.id,
+          },
+          required: true,
+          through: {
+            model: models.PendingTeammateRequests,
+            where: {
+              owner: "hacker",
+            },
+            required: true,
+          },
+        },
+      ],
+    });
+
+    if (teamRequests) {
+      return res.json({ teams: teamRequests });
+    } else {
+      return res.json({
+        message: "No pending team requests",
+      });
+    }
+  }
+
+  // getting all of the user's pending team invites
+  else if (req.params.type === "pendingInvites") {
+    const teamRequests = await models.Team.findAll({
+      where: {
+        lookingForTeammates: true,
+      },
+      include: [
+        {
+          model: models.HackerProfile,
+          where: {
+            userId: req.user.id,
+          },
+          required: true,
+          through: {
+            model: models.PendingTeammateRequests,
+            where: {
+              owner: "team",
+            },
+            required: true,
+          },
+        },
+      ],
+    });
+
+    if (teamRequests) {
+      return res.json({ teams: teamRequests });
+    } else {
+      return res.json({
+        message: "No pending team invites",
       });
     }
   }
@@ -266,10 +382,49 @@ router.post("/request/", async (req, res) => {
   await models.PendingTeammateRequests.create({
     hackerProfileId: req.user.id,
     teamId: team.id,
+    owner: "hacker",
   });
 
   return res.status(200).json({
     message: "Successfully requested team",
+  });
+});
+
+router.post("/inviteToTeam/", async (req, res) => {
+  const hackerProfile = await models.HackerProfile.findOne({
+    where: { userId: req.body.hackerId },
+  });
+
+  if (!hackerProfile) {
+    return res.status(400).json({ message: "Could not find hacker" });
+  }
+
+  // Try to find a team with the provided code
+  const team = await models.Team.findOne({
+    where: { teamCode: req.body.teamCode || "" },
+  });
+  if (!team) {
+    return res
+      .status(400)
+      .json({ message: "Could not find a team with that code" });
+  }
+
+  // See if there is still space in the team
+  const teamMembers = await team.getHackerProfiles();
+
+  if (teamMembers.length + 1 > 4) {
+    return res.status(400).json({ message: "This team is full!" });
+  }
+
+  // request the team
+  await models.PendingTeammateRequests.create({
+    hackerProfileId: req.body.hackerId,
+    teamId: team.id,
+    owner: "team",
+  });
+
+  return res.status(200).json({
+    message: "Successfully invited hacker to team",
   });
 });
 

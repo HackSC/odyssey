@@ -2,69 +2,110 @@ import React, { useCallback, useState } from "react";
 import styled from "styled-components";
 import LinkedIn from "../assets/linkedin.svg";
 
-const TeammateSuggestions = ({ teammateSuggestions }) => {
+const TeammateSuggestions = ({ title, hackers, owner, teamId }) => {
   return (
     <>
-      <Title>Teammate Suggestions</Title>
+      <Title>{title}</Title>
       <Suggestions>
-        {teammateSuggestions.hackerProfiles.map((suggestion) => (
-          <>
-            {suggestion.firstName ? (
-              <Suggestion key={suggestion.userId}>
-                {
-                  suggestion.portfolioUrl ? (
-                  <Header>
-                    <PortfolioLink>
-                      <a href={suggestion.portfolioUrl} target="_blank">
-                        <img src={LinkedIn} />
-                      </a>
-                    </PortfolioLink>
-                    <NameHeader>
-                      <Name>
-                        {suggestion.firstName} {suggestion.lastName}
-                      </Name>
-                      <Subheading>
-                        {suggestion.year ? suggestion.year : "year unavailable"}
-                      </Subheading>
-                    </NameHeader>
-                  </Header>
-                  ) : (
-                    <>
-                      <Name>
-                        {suggestion.firstName} {suggestion.lastName}
-                      </Name>
-                      <Subheading>
-                        {suggestion.year ? suggestion.year : "year unavailable"}
-                      </Subheading>
-                    </>
-                  )
-                }
-
-                
-                <Subheading>
-                  {suggestion.major ? suggestion.major : "major unavailable"}
-                </Subheading>
-
-                <SkillHeading>Top Skills:</SkillHeading>
-                <Skills>
-                  {suggestion.skills ? suggestion.skills : "not available"}
-                </Skills>
-                <School>
-                  {suggestion.school ? suggestion.school : "school unavailable"}
-                </School>
-                <Menu>
-                  <MenuOption>Send Request</MenuOption>
-                </Menu>
-              </Suggestion>
-            ) : (
-              <div />
-            )}
-          </>
-        ))}
+        {hackers.hackerProfiles.length ? (
+        <>
+          {hackers.hackerProfiles.map((suggestion) => (
+            <>
+              {suggestion.firstName ? (
+                <Suggestion title={title} suggestion={suggestion} owner={owner} teamId={teamId} />
+              ) : (
+                <div />
+              )}
+            </>
+          ))}
+        </>
+        ) : (
+          <ErrorMsg>No {title}. Check back later!</ErrorMsg>
+        )
+        }
+        
       </Suggestions>
     </>
   );
 };
+
+const Suggestion = ({ title, suggestion, owner, teamId }) => {
+  const [visible, setVisible] = useState(true);
+
+  const handleInviteHackerToTeam = useCallback(async (hackerId, teamId) => {
+    const urlRoute = "/api/teamMatching/inviteToTeam/";
+    const result = await fetch(urlRoute, {
+      method: "POST",
+      headers: {
+        "content-type": "application/json",
+      },
+      body: JSON.stringify({
+        hackerId: hackerId,
+        teamCode: teamId,
+      }),
+    });
+    return result.status === 200;
+  }, []);
+
+  return (
+    <>
+    {visible ? (
+      <Square key={suggestion.userId}>
+      {
+        suggestion.portfolioUrl ? (
+        <Header>
+          <PortfolioLink>
+            <a href={suggestion.portfolioUrl} target="_blank">
+              <img src={LinkedIn} />
+            </a>
+          </PortfolioLink>
+          <NameHeader>
+            <Name>
+              {suggestion.firstName} {suggestion.lastName}
+            </Name>
+            <Subheading>
+              {suggestion.year ? suggestion.year : "year unavailable"}
+            </Subheading>
+          </NameHeader>
+        </Header>
+        ) : (
+          <NameHeader>
+            <Name>
+              {suggestion.firstName} {suggestion.lastName}
+            </Name>
+            <Subheading>
+              {suggestion.year ? suggestion.year : "year unavailable"}
+            </Subheading>
+          </NameHeader>
+        )
+      }
+
+      <Subheading>
+        {suggestion.major ? suggestion.major : "major unavailable"}
+      </Subheading>
+
+      <SkillHeading>Top Skills:</SkillHeading>
+      <Skills>
+        {suggestion.skills ? suggestion.skills : "not available"}
+      </Skills>
+      <School>
+        {suggestion.school ? suggestion.school : "school unavailable"}
+      </School>
+      {title !== "Pending Teammate Invites" ? (
+        <Menu>
+        <Message href={"mailto:" + suggestion.email}>Message</Message>
+        {owner === "team" ? (<MenuOption onClick={() => {setVisible(!visible); handleInviteHackerToTeam(suggestion.userId, teamId)}}>Invite</MenuOption>) : ( <div/> )}
+      </Menu>
+      ) : (<div />)
+      }
+    </Square>
+    ) : (
+      <div />
+    )}
+    </>   
+  )
+}
+
 
 const Title = styled.h2`
   padding-bottom: 0;
@@ -76,7 +117,7 @@ const Suggestions = styled.div`
   flex-wrap: wrap;
 `;
 
-const Suggestion = styled.div`
+const Square = styled.div`
   margin: 20px;
   width: 175px;
   height: 175px;
@@ -103,7 +144,6 @@ const PortfolioLink = styled.div`
 const NameHeader = styled.div`
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
 `;
 
 const Name = styled.div`
@@ -145,6 +185,7 @@ const School = styled.div`
 const Menu = styled.div`
   display: flex;
   flex-direction: row;
+  justify-content: center;
 `;
 
 const MenuOption = styled.button`
@@ -154,6 +195,21 @@ const MenuOption = styled.button`
   border: none;
   color: white;
   font-weight: 600;
+  margin-left: 20px;
+`;
+
+const Message = styled.a`
+  color: white;
+  padding: 6px 12px 6px 12px;
+  background: rgba(255, 131, 121, 0.85);
+  border-radius: 20px;
+  border: none;
+  color: white;
+  font-weight: 600;
+`;
+
+const ErrorMsg = styled.div`
+  padding-top: 10px;
 `;
 
 export default TeammateSuggestions;

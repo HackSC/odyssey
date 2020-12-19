@@ -10,10 +10,10 @@ router.use(utils.preprocessRequest);
 // - If a hacker is on a team, get that team info
 router.get("/", async (req, res) => {
   const hackerProfile = await models.HackerProfile.findOne({
-    where: { userId: req.user.id },
+    where: { userId: req.user.id }
   });
 
-  const team = await hackerProfile.getTeam({
+  let team = await hackerProfile.getTeam({
     include: [
       {
         model: models.HackerProfile,
@@ -22,11 +22,47 @@ router.get("/", async (req, res) => {
     ],
   });
 
+  const subtract = await models.HackerProfile.findAll({
+    include: [
+      {
+        model: models.Team,
+        where: {
+          id: hackerProfile.teamId,
+        },
+        required: true,
+        through: {
+          model: models.PendingTeammateRequests,
+          required: true,
+        },
+      },
+    ],
+    attributes: ["firstName", "lastName", "status", "email", "userId"],
+  });
+
+  console.log(subtract);
+
+  let subtractArray = [];
+  subtract.forEach(function(item, index) {
+    subtractArray.push(item.userId);
+  });
+
+  let actualTeamMembers = [];
+  team.HackerProfiles.forEach(function(item, index) {
+    if (!subtractArray.includes(item.userId)) {
+      actualTeamMembers.push(item);
+    }
+  });
+  console.log(team);
+  team.HackerProfiles = actualTeamMembers;
+
+  console.log(team);
+  // console.log(actualTeam);
+
   if (team) {
     return res.json({ team });
   } else {
     return res.json({
-      message: "User does not currently belong to a team",
+      message: "User does not currently belong to a team"
     });
   }
 });
@@ -116,6 +152,8 @@ router.delete("/", async (req, res) => {
 // POST /api/team/join/:code
 // - If a hacker is not on a team, attempt to join a team
 router.post("/join/:code", async (req, res) => {
+  console.log(req.params.code);
+
   const hackerProfile = await models.HackerProfile.findOne({
     where: { userId: req.user.id },
   });
@@ -142,6 +180,8 @@ router.post("/join/:code", async (req, res) => {
   if (teamMembers.length + 1 > 4) {
     return res.status(400).json({ message: "This team is full!" });
   }
+
+  console.log("reached");
 
   // If we're still here, we can join the team :)
   await hackerProfile.setTeam(team);
@@ -181,6 +221,48 @@ router.post("/leave", async (req, res) => {
   return res.status(200).json({
     message: "Successfully left team",
   });
+});
+
+// Change visibility
+router.put("/visibility", async (req, res) => {
+  const hackerProfile = await models.HackerProfile.findOne({
+    where: { userId: req.user.id }
+  });
+
+  const team = await hackerProfile.getTeam({
+    include: [
+      {
+        model: models.HackerProfile,
+        attributes: ["firstName", "lastName", "status", "email", "userId"]
+      }
+    ]
+  });
+  const lookingForTeammates = team.lookingForTeammates;
+
+  await models.Team.update(
+    { lookingForTeammates: !lookingForTeammates },
+    {
+      where: {
+        id: team.id,
+      },
+    }
+  );
+
+  return res.send();
+});
+
+// Change description
+router.put("/description", async (req, res) => {
+  await models.Team.update(
+    { description: req.body.text },
+    {
+      where: {
+        teamCode: req.body.teamCode,
+      },
+    }
+  );
+
+  return res.send();
 });
 
 export { router };

@@ -1,8 +1,11 @@
-async function getTeammateSuggestions(req) {
+async function getTeammateSuggestions(req, owner : String) {
+  console.log("reached");
 
   const urlRoute = req
-    ? /* Serverside */ process.env.URL_BASE + "api/teamMatching/teammate"
-    : /* Client */ "/api/teamMatching/teammate";
+    ? /* Serverside */ process.env.URL_BASE + "api/teamMatching/" + owner + "/teammate"
+    : /* Client */ "api/teamMatching/" + owner + "/teammate";
+
+  console.log(urlRoute);
 
   const result = await fetch(
     urlRoute,
@@ -16,10 +19,9 @@ async function getTeammateSuggestions(req) {
 }
 
 async function getTeamSuggestions(req) {
-
   const urlRoute = req
-    ? /* Serverside */ process.env.URL_BASE + "api/teamMatching/team"
-    : /* Client */ "/api/teamMatching/team";
+    ? /* Serverside */ process.env.URL_BASE + "api/teamMatching/hacker/team"
+    : /* Client */ "/api/teamMatching/hacker/team";
 
   const result = await fetch(
     urlRoute,
@@ -32,10 +34,10 @@ async function getTeamSuggestions(req) {
   return await result.json();
 }
 
-async function getPendingTeammateRequests(req) {
+async function getPendingRequests(req, owner : String) {
   const urlRoute = req
-    ? /* Serverside */ process.env.URL_BASE + "api/teamMatching/pendingTeammate"
-    : /* Client */ "/api/teamMatching/pendingTeammate";
+    ? /* Serverside */ process.env.URL_BASE + "api/teamMatching/" + owner + "/pendingRequests"
+    : /* Client */ "/api/teamMatching/" + owner + "/pendingRequests";
 
   const result = await fetch(
     urlRoute,
@@ -49,10 +51,10 @@ async function getPendingTeammateRequests(req) {
   return await result.json();
 }
 
-async function getPendingTeamRequests(req) {
+async function getPendingInvites(req, owner : String) {
   const urlRoute = req
-  ? /* Serverside */ process.env.URL_BASE + "api/teamMatching/pendingTeam"
-  : /* Client */ "/api/teamMatching/pendingTeam";
+  ? /* Serverside */ process.env.URL_BASE + "api/teamMatching/" + owner + "/pendingInvites"
+  : /* Client */ "/api/teamMatching/" + owner + "/pendingInvites";
 
   const result = await fetch(
     urlRoute,
@@ -83,7 +85,7 @@ async function requestTeam(req) {
 export { 
   getTeammateSuggestions, 
   getTeamSuggestions, 
-  getPendingTeammateRequests, 
-  getPendingTeamRequests,
+  getPendingRequests, 
+  getPendingInvites,
   requestTeam
 };

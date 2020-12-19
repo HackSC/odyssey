@@ -1,17 +1,21 @@
 import React, { useCallback, useState } from "react";
 import styled from "styled-components";
 import Router from "next/router";
+import TeammateSuggestions from "../components/TeammateSuggestions";
 
 import { Flex, Column, Button, Form, FormGroup } from "../styles";
 
 type Props = {
   team: Team;
   profile: Profile;
+  teammateSuggestions: Array<Object>;
+  pendingRequests: Array<Object>;
+  pendingInvites: Array<Object>;
 };
 
-const Team = ({ team, profile }: Props) => {
+const Team = ({ team, profile, teammateSuggestions, pendingRequests, pendingInvites }: Props) => {
   const [error, setError] = useState(null);
-  const [visible, setVisibility] = useState(team.lookingForTeammates);
+  const [teamVisibility, setTeamVisibility] = useState(team.lookingForTeammates);
   const [text, setText] = useState(team.description);
 
   const handleLeaveTeam = useCallback(async () => {
@@ -77,8 +81,8 @@ const Team = ({ team, profile }: Props) => {
     }
   }, []);
 
-  const handleChangeVisibility = useCallback(async () => {
-    setVisibility(!visible);
+  const handleChangeVisibility = useCallback(async (currentVisibility) => {
+    setTeamVisibility(!currentVisibility);
     const urlRoute = "/api/team/visibility/";
 
     const result = await fetch(urlRoute, {
@@ -176,11 +180,11 @@ const Team = ({ team, profile }: Props) => {
             <input
               name="visibility"
               type="checkbox"
-              checked={visible}
-              onChange={handleChangeVisibility}
+              checked={teamVisibility}
+              onChange={() => handleChangeVisibility(teamVisibility)}
             />
             <ShareProfileText>
-              Share the team name and description with hackers looking for teams!
+              Share the team name and description with hackers looking to join a team
             </ShareProfileText>
           </ChangeProfileOption>
         </Column>
@@ -188,7 +192,6 @@ const Team = ({ team, profile }: Props) => {
           <Header>Edit Team Description</Header>
           <Form>
             <FormGroup>
-              <label>Displayed to potential hackers</label>
               <InputFlex>
                 <input
                   type="text"
@@ -211,6 +214,9 @@ const Team = ({ team, profile }: Props) => {
           </Form>
         </Column>
       </Flex>
+      <TeammateSuggestions title={"Pending Teammate Requests"} hackers={pendingRequests} owner="team" teamId={team.teamCode} />
+      <TeammateSuggestions title={"Pending Teammate Invites"} hackers={pendingInvites} owner="team" teamId={team.teamCode} />
+      <TeammateSuggestions title={"Teammate Suggestions"} hackers={teammateSuggestions} owner="team" teamId={team.teamCode} />
     </TeamSection>
   );
 };
@@ -301,8 +307,8 @@ const ChangeProfileOption = styled.div`
   display: flex;
   flex-direction: row;
   align-items: flex-start;
-  padding-top: 20px;
-  padding-bottom: 20px;
+  padding-top: 10px;
+  padding-bottom: 10px;
 `;
 
 const ShareProfileText = styled.div`

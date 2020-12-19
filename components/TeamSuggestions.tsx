@@ -3,37 +3,50 @@ import styled from "styled-components";
 
 const TeamSuggestions = ({ type, handleOnClick, teamSuggestions, buttonLabel }) => {
   return (
-    <>
-      <Title>{type}</Title>
-      <Suggestions>
-          {teamSuggestions.map((suggestion) => (
-              <Suggestion key={suggestion.id}>
-                  <Name>
-                      {suggestion.name}
-                  </Name>
-                  {type !== "Your Pending Requests" ? (
-                    <>
-                      <Description>
-                          {suggestion.description}
-                      </Description>
-                      <Menu>
-                      {type === "Team Suggestions" ?
-                          (<MenuOption onClick={() => handleOnClick(suggestion.id)}>{buttonLabel}</MenuOption>) :
-                          (<MenuOption onClick={() => handleOnClick(suggestion.name)}>{buttonLabel}</MenuOption>)
-                      }
-                      </Menu>
-                    </>
-                  ) : (
-                    <LongDescription>
-                          {suggestion.description}
-                    </LongDescription>
-                  )}
-              </Suggestion>
-          ))}
-      </Suggestions>
-    </>
+      <>
+        <Title>{type}</Title>
+        <Suggestions>
+            {teamSuggestions.teams.map((suggestion) => (
+                <Suggestion key={suggestion.id} type={type} handleOnClick={handleOnClick} suggestion={suggestion} buttonLabel={buttonLabel} />
+            ))}
+        </Suggestions>
+        </>
   )
 };
+
+const Suggestion = ({ type, handleOnClick, suggestion, buttonLabel }) => {
+  const [visible, setVisible] = useState(true);
+  return (
+    <>
+    {visible ? (
+      <Square>
+      <Name>
+          {suggestion.name}
+      </Name>
+      {type !== "Your Pending Requests" ? (
+        <>
+          <Description>
+              {suggestion.description}
+          </Description>
+          <Menu>
+          {type === "Team Suggestions" ?
+              (<MenuOption onClick={() => {setVisible(false); handleOnClick(suggestion.id)}}>{buttonLabel}</MenuOption>) :
+              (<MenuOption onClick={() => {handleOnClick(suggestion.teamCode)}}>{buttonLabel}</MenuOption>)
+          }
+          </Menu>
+        </>
+      ) : (
+        <LongDescription>
+          {suggestion.description}
+        </LongDescription>
+      )}
+    </Square> 
+    ) : (
+      <div />
+    )}
+    </>   
+  )
+}
 
 const Title = styled.h2`
   padding-top: 30px;
@@ -45,7 +58,7 @@ const Suggestions = styled.div`
   flex-wrap: wrap;
 `;
 
-const Suggestion = styled.div`
+const Square = styled.div`
   margin: 20px;
   width: 175px;
   height: 175px;
