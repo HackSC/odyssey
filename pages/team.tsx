@@ -249,6 +249,9 @@ Teams.getInitialProps = async ({ req, query }) => {
     status = "created";
   }
 
+  console.log(profile);
+  console.log(team);
+
   const teammateSuggestions = await getTeammateSuggestions(req, team ? "team" : "hacker");
   const pendingRequests = await getPendingRequests(req, team ? "team" : "hacker");
   const pendingInvites = await getPendingInvites(req, team ? "team" : "hacker");

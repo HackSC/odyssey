@@ -9,6 +9,7 @@ router.use(utils.preprocessRequest);
 // GET /api/team
 // - If a hacker is on a team, get that team info
 router.get("/", async (req, res) => {
+  console.log("um rip");
   const hackerProfile = await models.HackerProfile.findOne({
     where: { userId: req.user.id },
   });
@@ -17,6 +18,7 @@ router.get("/", async (req, res) => {
     include: [
       {
         model: models.HackerProfile,
+        as: "member",
         attributes: ["firstName", "lastName", "status", "email", "userId"],
       },
     ],
@@ -78,6 +80,7 @@ router.post("/", async (req, res) => {
 
   await hackerProfile.update({
     teamId: team.id,
+    lookingForTeam: false,
   });
 
   return res.json({
@@ -104,6 +107,15 @@ router.delete("/", async (req, res) => {
       { teamId: null },
       { where: { teamId: team.id } }
     );
+
+    await models.PendingTeammateRequests.destroy({
+      where: {
+        hackerProfileId: req.body.hackerId,
+        teamId: team.id,
+      },
+      truncate: true,
+    });
+
     await team.destroy();
     return res.status(200).json({ message: "Team successfully deleted" });
   } else {
@@ -310,7 +322,6 @@ router.put("/description", async (req, res) => {
 // POST /api/team/accept/
 // - If a hacker is not on a team, attempt to join a team
 router.post("/accept/", async (req, res) => {
-
   const hackerProfile = await models.HackerProfile.findOne({
     where: { userId: req.body.hackerId },
   });
@@ -340,12 +351,16 @@ router.post("/accept/", async (req, res) => {
   // If we're still here, we can join the team :)
   await hackerProfile.setTeam(team);
 
-  models.PendingTeammateRequests.destroy({
+  await hackerProfile.update({
+    lookingForTeam: false,
+  });
+
+  await models.PendingTeammateRequests.destroy({
     where: {
       hackerProfileId: req.body.hackerId,
       teamId: team.id,
     },
-    truncate: true
+    truncate: true,
   });
 
   console.log("here");

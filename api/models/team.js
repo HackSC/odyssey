@@ -5,41 +5,42 @@ module.exports = (sequelize, DataTypes) => {
       name: DataTypes.STRING(150),
       teamCode: {
         type: DataTypes.STRING(4),
-        unique: true
+        unique: true,
       },
       ownerId: {
         type: DataTypes.STRING,
         references: {
           model: "HackerProfiles",
-          key: "userId"
-        }
+          key: "userId",
+        },
       },
       lookingForTeammates: {
         type: DataTypes.BOOLEAN,
-        defaultValue: false
+        defaultValue: false,
       },
       description: {
         type: DataTypes.TEXT,
-        defaultValue: false
+        defaultValue: false,
       },
     },
     {}
   );
-  Team.associate = function(models) {
+  Team.associate = function (models) {
     Team.belongsTo(models.HackerProfile, {
       as: "owner",
       foreignKey: "ownerId",
-      constraints: false
+      constraints: false,
     });
     Team.hasMany(models.HackerProfile, {
+      as: "member",
       foreignKey: "teamId",
-      constraints: false
+      constraints: false,
     });
     // m:n relationship
-    Team.belongsToMany(models.HackerProfile, { 
-      through: models.PendingTeammateRequests, 
-      foreignKey: 'teamId',
-      otherKey: 'hackerProfileId'
+    Team.belongsToMany(models.HackerProfile, {
+      through: models.PendingTeammateRequests,
+      foreignKey: "teamId",
+      otherKey: "hackerProfileId",
     });
   };
   return Team;

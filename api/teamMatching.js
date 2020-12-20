@@ -46,6 +46,7 @@ router.get("/team/:type", async (req, res) => {
       include: [
         {
           model: models.Team,
+          as: "requestTeam",
           through: {
             model: models.PendingTeammateRequests,
           },
@@ -74,6 +75,7 @@ router.get("/team/:type", async (req, res) => {
       include: [
         {
           model: models.Team,
+          as: "requestTeam",
           through: {
             model: models.PendingTeammateRequests,
             where: {
@@ -115,6 +117,7 @@ router.get("/team/:type", async (req, res) => {
       include: [
         {
           model: models.Team,
+          as: "requestTeam",
           where: {
             id: curruser.teamId,
           },
@@ -145,6 +148,7 @@ router.get("/team/:type", async (req, res) => {
       include: [
         {
           model: models.Team,
+          as: "requestTeam",
           where: {
             id: curruser.teamId,
           },
@@ -198,15 +202,16 @@ router.get("/hacker/:type", async (req, res) => {
         role: "hacker",
         lookingForTeam: true,
       },
-      include: [
-        {
-          model: models.Team,
-          through: {
-            model: models.PendingTeammateRequests,
-          },
-          required: true,
-        },
-      ],
+      // include: [
+      //   {
+      //     model: models.Team,
+      //     as: "team",
+      //     through: {
+      //       model: models.PendingTeammateRequests,
+      //     },
+      //     required: true,
+      //   },
+      // ],
       required: true,
     });
 
