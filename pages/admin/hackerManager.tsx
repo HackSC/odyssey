@@ -580,19 +580,16 @@ const hackerManager = ({ profile }) => {
               <Flex
                 direction="row"
                 style={{ paddingTop: "1rem", flexWrap: "wrap" }}
-                justify="space-between"
+                justify="flex-end"
               >
-                <Column flexBasis={49} style={{ margin: "1rem 0" }}>
-                  <FullButton onClick={lookupHackers}>
-                    Filter Hackers
-                  </FullButton>
-                </Column>
+                <PaddedButton>
+                  <Button onClick={showAllHackers}>Show All Hackers</Button>
+                  &nbsp; &nbsp;
+                </PaddedButton>
 
-                <Column flexBasis={49} style={{ margin: "1rem 0" }}>
-                  <FullButton onClick={showAllHackers}>
-                    Show All Hackers
-                  </FullButton>
-                </Column>
+                <PaddedButton>
+                  <Button onClick={lookupHackers}>Filter Hackers</Button>
+                </PaddedButton>
               </Flex>
             </Form>
           </Flex>
@@ -646,6 +643,12 @@ const PaddedFlex = styled(Flex)`
   min-height: 3rem;
   justify-content: center;
   padding: 3rem;
+`;
+
+const PaddedButton = styled(Flex)`
+  padding: 18px 0;
+  padding-left: 5px;
+  justify-content: flex-end;
 `;
 
 const FullButton = styled(Button)`
