@@ -55,7 +55,7 @@ async function getTeam(req): Promise<Team> {
 
 const Teams = ({ profile, team, status, teammateSuggestions, teamSuggestions, pendingRequests, pendingInvites }) => {
 
-  const [visible, setVisible] = useState(profile.lookingForTeam);
+  const [visible, setVisible] = useState(profile?.lookingForTeam);
   const handleChangeVisibility = () => {
     setVisible(!visible);
     updateVisibility();
