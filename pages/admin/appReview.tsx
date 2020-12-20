@@ -1,8 +1,18 @@
-import React, { useState, useRef, useEffect, useCallback } from "react";
+import React, {
+  Component,
+  useState,
+  useRef,
+  useEffect,
+  useCallback,
+} from "react";
 import styled from "styled-components";
 import { useToasts } from "react-toast-notifications";
 import Confetti from "react-confetti";
 import { useWindowSize } from "react-use";
+import { Document, Page, pdfjs } from "react-pdf";
+import pdfFile from "/Users/elissaperdue/Desktop/Hack/odyssey/public/hack.pdf";
+
+pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
 
 import {
   getHackerProfileForReview,
@@ -178,6 +188,13 @@ const AppReview = ({ profile, hackerProfile, reviewHistory, totalReviews }) => {
     };
   }, [s1, s2, s3, submitting, loadingNewProfile]);
 
+  const [numPages, setNumPages] = useState(null);
+  const [pageNumber, setPageNumber] = useState(1);
+
+  function onDocumentLoadSuccess({ numPages }) {
+    setNumPages(numPages);
+  }
+
   return (
     <>
       <Head title="HackSC Odyssey - Application" />
@@ -267,6 +284,19 @@ const AppReview = ({ profile, hackerProfile, reviewHistory, totalReviews }) => {
             </Column>
 
             <Column flexBasis={48}>
+              <h1>Resume</h1>
+              <a href={currentProfile.resume} target="_blank">
+                Download Pdf
+              </a>
+              <div>
+                <Document file={pdfFile}>
+                  <Page pageNumber={1} />
+                </Document>
+                <p>
+                  Page {pageNumber} of {numPages}
+                </p>
+              </div>
+
               <h1>Review</h1>
               <Panel>
                 <ScoreInputLabel>Score 1 (1-5)</ScoreInputLabel>
