@@ -145,16 +145,12 @@ module.exports = (sequelize, DataTypes) => {
       foreignKey: "teamId",
       constraints: false
     });
-    // super m:n relationship
+    // m:n relationship
     HackerProfile.belongsToMany(models.Team, { 
       through: models.PendingTeammateRequests, 
-      // as: 'pendingTeammateRequests',
       foreignKey: 'hackerProfileId',
-      otherKey: 'teamId',
+      otherKey: 'teamId'
     });
-    // HackerProfile.hasMany(models.PendingTeammateRequests, {
-    //   as: 'pendingTeamRequests',
-    // });
   };
   return HackerProfile;
 };

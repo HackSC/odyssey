@@ -18,10 +18,6 @@ router.get("/", async (req, res) => {
       {
         model: models.HackerProfile,
         attributes: ["firstName", "lastName", "status", "email", "userId"],
-        where: {
-          teamId: hackerProfile.teamId,
-        },
-        required: true,
       },
     ],
   });
@@ -309,6 +305,54 @@ router.put("/description", async (req, res) => {
   );
 
   return res.send();
+});
+
+// POST /api/team/accept/
+// - If a hacker is not on a team, attempt to join a team
+router.post("/accept/", async (req, res) => {
+
+  const hackerProfile = await models.HackerProfile.findOne({
+    where: { userId: req.body.hackerId },
+  });
+
+  // Can't join a team if you're already on one!
+  if (hackerProfile.teamId) {
+    return res.status(400).json({ message: "User already belongs on a team" });
+  }
+
+  // Try to find a team with the provided code
+  team = await models.Team.findOne({
+    where: { teamCode: req.body.teamCode || "" },
+  });
+  if (!team) {
+    return res
+      .status(400)
+      .json({ message: "Could not find a team with that code" });
+  }
+
+  // See if there is still space in the team
+  const teamMembers = await team.getHackerProfiles();
+
+  if (teamMembers.length + 1 > 4) {
+    return res.status(400).json({ message: "This team is full!" });
+  }
+
+  // If we're still here, we can join the team :)
+  await hackerProfile.setTeam(team);
+
+  models.PendingTeammateRequests.destroy({
+    where: {
+      hackerProfileId: req.body.hackerId,
+      teamId: team.id,
+    },
+    truncate: true
+  });
+
+  console.log("here");
+
+  return res.status(200).json({
+    message: "Successfully joined team",
+  });
 });
 
 module.exports = router;

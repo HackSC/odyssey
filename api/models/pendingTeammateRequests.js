@@ -23,11 +23,5 @@ module.exports = (sequelize, DataTypes) => {
       },
     );
 
-    // super m:n relationship
-    // PendingTeammateRequests.associate = function(models) {
-    //     PendingTeammateRequests.belongsTo(models.HackerProfile);
-    //     PendingTeammateRequests.belongsTo(models.Team);
-    // };
-
     return PendingTeammateRequests;
   };

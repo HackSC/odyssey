@@ -214,8 +214,8 @@ const Team = ({ team, profile, teammateSuggestions, pendingRequests, pendingInvi
           </Form>
         </Column>
       </Flex>
-      <TeammateSuggestions title={"Pending Teammate Requests"} hackers={pendingRequests} owner="team" teamId={team.teamCode} />
       <TeammateSuggestions title={"Pending Teammate Invites"} hackers={pendingInvites} owner="team" teamId={team.teamCode} />
+      <TeammateSuggestions title={"Pending Teammate Requests"} hackers={pendingRequests} owner="team" teamId={team.teamCode} />
       <TeammateSuggestions title={"Teammate Suggestions"} hackers={teammateSuggestions} owner="team" teamId={team.teamCode} />
     </TeamSection>
   );

@@ -22,36 +22,6 @@ router.get("/", async (req, res) => {
     ],
   });
 
-  const subtract = await models.HackerProfile.findAll({
-    include: [
-      {
-        model: models.Team,
-        where: {
-          id: hackerProfile.teamId,
-        },
-        required: true,
-        through: {
-          model: models.PendingTeammateRequests,
-          required: true,
-        },
-      },
-    ],
-    attributes: ["firstName", "lastName", "status", "email", "userId"],
-  });
-
-  let subtractArray = [];
-  subtract.forEach(function(item, index) {
-    subtractArray.push(item.userId);
-  });
-
-  let actualTeamMembers = [];
-  team.HackerProfiles.forEach(function(item, index) {
-    if (!subtractArray.includes(item.userId)) {
-      actualTeamMembers.push(item);
-    }
-  });
-  team.HackerProfiles = actualTeamMembers;
-
   if (team) {
     return res.json({ team });
   } else {

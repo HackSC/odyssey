@@ -54,6 +54,24 @@ const Suggestion = ({ title, suggestion, owner, teamId }) => {
     }
   }, []);
 
+  const handleAcceptHackerToTeam = useCallback(async (hackerId, teamId) => {
+    // POST /api/team/accept/
+    const urlRoute = "/api/team/accept/";
+    const result = await fetch(urlRoute, {
+      method: "POST",
+      headers: {
+        "content-type": "application/json",
+      },
+      body: JSON.stringify({
+        hackerId: hackerId,
+        teamCode: teamId,
+      }),
+    });
+    if (result.status === 200) {
+      await Router.push("/team");
+    }
+  }, []);
+
   return (
     <>
       {visible ? (
@@ -96,25 +114,40 @@ const Suggestion = ({ title, suggestion, owner, teamId }) => {
           <School>
             {suggestion.school ? suggestion.school : "school unavailable"}
           </School>
-          {title !== "Pending Teammate Invites" ? (
-            <Menu>
+          <Menu>
+            {owner === "hacker" && title === "Teammate Suggestions" ? (
               <Message href={"mailto:" + suggestion.email}>Message</Message>
-              {owner === "team" ? (
+            ) : ( <div/> )}
+
+            {owner === "team" && title === "Teammate Suggestions" ? (
+              <>
+                <Message href={"mailto:" + suggestion.email}>Message</Message>
                 <MenuOption
-                  onClick={() => {
-                    setVisible(!visible);
-                    handleInviteHackerToTeam(suggestion.userId, teamId);
-                  }}
-                >
+                    onClick={() => {
+                      setVisible(!visible);
+                      handleInviteHackerToTeam(suggestion.userId, teamId);
+                    }}
+                  >
                   Invite
                 </MenuOption>
-              ) : (
-                <div />
-              )}
-            </Menu>
-          ) : (
-            <div />
-          )}
+              </>
+            ) : ( <div/> )}
+
+            {owner === "team" && title === "Pending Teammate Requests" ? (
+              <>
+                <Message href={"mailto:" + suggestion.email}>Message</Message>
+                <MenuOption
+                    onClick={() => {
+                      setVisible(!visible);
+                      handleAcceptHackerToTeam(suggestion.userId, teamId);
+                    }}
+                  >
+                  Accept
+                </MenuOption>
+              </>
+            ) : ( <div/> )}
+
+          </Menu>
         </Square>
       ) : (
         <div />
@@ -211,7 +244,8 @@ const MenuOption = styled.button`
   border: none;
   color: white;
   font-weight: 600;
-  margin-left: 20px;
+  margin-left: 10px;
+  font-size: 14px;
 `;
 
 const Message = styled.a`
@@ -222,6 +256,7 @@ const Message = styled.a`
   border: none;
   color: white;
   font-weight: 600;
+  font-size: 14px;
 `;
 
 const ErrorMsg = styled.div`
