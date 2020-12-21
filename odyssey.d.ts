@@ -104,6 +104,7 @@ declare type Team = {
   HackerProfiles: Array<Object>;
   lookingForTeammates: boolean;
   description: string;
+  members: Array<Profile>;
 };
 
 declare type QueryParamValues = {

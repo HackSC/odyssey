@@ -195,24 +195,30 @@ const Teams = ({ profile, team, status, teammateSuggestions, teamSuggestions, pe
                   />
                 </Column>
               </NoTeamFlex>
-              <TeamSuggestions
-                type={"You've been invited!"}
-                handleOnClick={handleJoinProjectTeam}
-                teamSuggestions={pendingInvites}
-                buttonLabel={"Join"}
-              />
-              <TeamSuggestions
-                type={"Your Pending Requests"}
-                handleOnClick={null}
-                teamSuggestions={pendingRequests}
-                buttonLabel={""}
-              />
-              <TeamSuggestions
-                type={"Team Suggestions"}
-                handleOnClick={handleRequestProjectTeam}
-                teamSuggestions={teamSuggestions}
-                buttonLabel={"Request to Join"}
-              />
+              {pendingInvites?.teams.length ? 
+                (<TeamSuggestions
+                  type={"You've been invited!"}
+                  handleOnClick={handleJoinProjectTeam}
+                  teamSuggestions={pendingInvites}
+                  buttonLabel={"Join"}
+                />) : (<div/>)
+              }
+              {pendingRequests?.teams.length ? 
+                (<TeamSuggestions
+                  type={"Your Pending Requests"}
+                  handleOnClick={null}
+                  teamSuggestions={pendingRequests}
+                  buttonLabel={""}
+                />) : (<div/>)
+              }
+              {teamSuggestions?.teams.length ? 
+                (<TeamSuggestions
+                  type={"Team Suggestions"}
+                  handleOnClick={handleRequestProjectTeam}
+                  teamSuggestions={teamSuggestions}
+                  buttonLabel={"Request to Join"}
+                />) : (<div/>)
+              }
               <TeammateSuggestions title={"Teammate Suggestions"} hackers={teammateSuggestions} owner="hacker" teamId={null} />
             </>
           )}
@@ -248,9 +254,6 @@ Teams.getInitialProps = async ({ req, query }) => {
   if ("created" in query) {
     status = "created";
   }
-
-  console.log(profile);
-  console.log(team);
 
   const teammateSuggestions = await getTeammateSuggestions(req, team ? "team" : "hacker");
   const pendingRequests = await getPendingRequests(req, team ? "team" : "hacker");

@@ -7,7 +7,7 @@ const TeamSuggestions = ({ type, handleOnClick, teamSuggestions, buttonLabel }) 
         <Title>{type}</Title>
         <Suggestions>
             {teamSuggestions.teams.map((suggestion) => (
-                <Suggestion key={suggestion.id} type={type} handleOnClick={handleOnClick} suggestion={suggestion} buttonLabel={buttonLabel} />
+                <Suggestion key={type + suggestion.id} type={type} handleOnClick={handleOnClick} suggestion={suggestion} buttonLabel={buttonLabel} />
             ))}
         </Suggestions>
         </>

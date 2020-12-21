@@ -9,7 +9,6 @@ router.use(utils.preprocessRequest);
 // GET /api/team
 // - If a hacker is on a team, get that team info
 router.get("/", async (req, res) => {
-  console.log("um rip");
   const hackerProfile = await models.HackerProfile.findOne({
     where: { userId: req.user.id },
   });
@@ -18,7 +17,7 @@ router.get("/", async (req, res) => {
     include: [
       {
         model: models.HackerProfile,
-        as: "member",
+        as: "members",
         attributes: ["firstName", "lastName", "status", "email", "userId"],
       },
     ],
@@ -76,6 +75,7 @@ router.post("/", async (req, res) => {
     name: req.body.name,
     teamCode: generatedCode,
     ownerId: req.user.id,
+    description: "",
   });
 
   await hackerProfile.update({
@@ -110,10 +110,8 @@ router.delete("/", async (req, res) => {
 
     await models.PendingTeammateRequests.destroy({
       where: {
-        hackerProfileId: req.body.hackerId,
         teamId: team.id,
       },
-      truncate: true,
     });
 
     await team.destroy();
@@ -149,7 +147,7 @@ router.post("/join/:code", async (req, res) => {
   }
 
   // See if there is still space in the team
-  const teamMembers = await team.getHackerProfiles();
+  const teamMembers = await team.getMembers();
 
   if (teamMembers.length + 1 > 4) {
     return res.status(400).json({ message: "This team is full!" });
@@ -157,6 +155,25 @@ router.post("/join/:code", async (req, res) => {
 
   // If we're still here, we can join the team :)
   await hackerProfile.setTeam(team);
+
+  await models.PendingTeammateRequests.destroy({
+    where: {
+      hackerProfileId: req.user.id,
+    },
+  });
+
+  // if full, update
+  if (teamMembers.length == 3) {
+    await models.PendingTeammateRequests.destroy({
+      where: {
+        teamId: team.id,
+      },
+    });
+
+    await team.update({
+      lookingForTeammates: false,
+    })
+  }
 
   return res.status(200).json({
     message: "Successfully joined team",
@@ -332,7 +349,7 @@ router.post("/accept/", async (req, res) => {
   }
 
   // Try to find a team with the provided code
-  team = await models.Team.findOne({
+  const team = await models.Team.findOne({
     where: { teamCode: req.body.teamCode || "" },
   });
   if (!team) {
@@ -342,7 +359,7 @@ router.post("/accept/", async (req, res) => {
   }
 
   // See if there is still space in the team
-  const teamMembers = await team.getHackerProfiles();
+  const teamMembers = await team.getMembers();
 
   if (teamMembers.length + 1 > 4) {
     return res.status(400).json({ message: "This team is full!" });
@@ -358,12 +375,21 @@ router.post("/accept/", async (req, res) => {
   await models.PendingTeammateRequests.destroy({
     where: {
       hackerProfileId: req.body.hackerId,
-      teamId: team.id,
     },
-    truncate: true,
   });
 
-  console.log("here");
+  // if full, update
+  if (teamMembers.length == 3) {
+    await models.PendingTeammateRequests.destroy({
+      where: {
+        teamId: team.id,
+      },
+    });
+
+    await team.update({
+      lookingForTeammates: false,
+    })
+  }
 
   return res.status(200).json({
     message: "Successfully joined team",

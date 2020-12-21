@@ -32,7 +32,7 @@ module.exports = (sequelize, DataTypes) => {
       constraints: false,
     });
     Team.hasMany(models.HackerProfile, {
-      as: "member",
+      as: "members",
       foreignKey: "teamId",
       constraints: false,
     });

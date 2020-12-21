@@ -136,7 +136,7 @@ const Team = ({ team, profile, teammateSuggestions, pendingRequests, pendingInvi
         <Column flexBasis={48}>
           <MembersHeader>Team Members</MembersHeader>
           <Members>
-            {team.member.map((member: any) => (
+            {team.members.map((member: any) => (
               <Member key={member.email}>
                 <PaddedP>
                   <b>
@@ -173,50 +173,65 @@ const Team = ({ team, profile, teammateSuggestions, pendingRequests, pendingInvi
           {!!error && <ErrorMessage>{error}</ErrorMessage>}
         </Column>
       </Flex>
-      <Flex direction="row" tabletVertical justify="space-between">
-        <Column flexBasis={48}>
-          <Header>Edit Team Visibility</Header>
-          <ChangeProfileOption>
-            <input
-              name="visibility"
-              type="checkbox"
-              checked={teamVisibility}
-              onChange={() => handleChangeVisibility(teamVisibility)}
-            />
-            <ShareProfileText>
-              Share the team name and description with hackers looking to join a team
-            </ShareProfileText>
-          </ChangeProfileOption>
-        </Column>
-        <Column flexBasis={48}>
-          <Header>Edit Team Description</Header>
-          <Form>
-            <FormGroup>
-              <InputFlex>
-                <input
-                  type="text"
-                  placeholder=""
-                  value={text}
-                  required
-                  onChange={handleChange}
-                />
-                <Button
-                  onClick={(e) => {
-                    e.preventDefault();
-                    onSubmit(text);
-                    setText(text);
-                  }}
-                >
-                  Save
-                </Button>
-              </InputFlex>
-            </FormGroup>
-          </Form>
-        </Column>
-      </Flex>
-      <TeammateSuggestions title={"Pending Teammate Requests"} hackers={pendingRequests} owner="team" teamId={team.teamCode} />
-      <TeammateSuggestions title={"Pending Teammate Invites"} hackers={pendingInvites} owner="team" teamId={team.teamCode} />
-      <TeammateSuggestions title={"Teammate Suggestions"} hackers={teammateSuggestions} owner="team" teamId={team.teamCode} />
+      {team.members.length < 4 ? (
+        <>
+        <Flex direction="row" tabletVertical justify="space-between">
+          <Column flexBasis={48}>
+            <Header>Edit Team Visibility</Header>
+            <ChangeProfileOption>
+              <input
+                name="visibility"
+                type="checkbox"
+                checked={teamVisibility}
+                onChange={() => handleChangeVisibility(teamVisibility)}
+              />
+              <ShareProfileText>
+                Share the team name and description with hackers looking to join a team
+              </ShareProfileText>
+            </ChangeProfileOption>
+          </Column>
+          <Column flexBasis={48}>
+            <Header>Edit Team Description</Header>
+            <Form>
+              <FormGroup>
+                <InputFlex>
+                  <input
+                    type="text"
+                    placeholder=""
+                    value={text}
+                    required
+                    onChange={handleChange}
+                  />
+                  <Button
+                    onClick={(e) => {
+                      e.preventDefault();
+                      onSubmit(text);
+                      setText(text);
+                    }}
+                  >
+                    Save
+                  </Button>
+                </InputFlex>
+              </FormGroup>
+            </Form>
+          </Column>
+        </Flex>
+        {(pendingRequests?.hackerProfiles.length) ? 
+          (<TeammateSuggestions key={"Pending Teammate Requests"} title={"Pending Teammate Requests"} hackers={pendingRequests} owner="team" teamId={team.teamCode} />) 
+          : (<div/>)
+        }
+        {(pendingInvites?.hackerProfiles.length) ? 
+          (<TeammateSuggestions key={"Pending Teammate Invites"} title={"Pending Teammate Invites"} hackers={pendingInvites} owner="team" teamId={team.teamCode} />)
+          : (<div/>)
+        }
+        {(teammateSuggestions?.hackerProfiles.length) ? 
+          (<TeammateSuggestions key={"Teammate Suggestions"} title={"Teammate Suggestions"} hackers={teammateSuggestions} owner="team" teamId={team.teamCode} />)
+          : (<div/>)
+        }
+        </>
+        ) : (<div/>)
+      }
+      
     </TeamSection>
   );
 };

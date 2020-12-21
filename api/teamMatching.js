@@ -202,16 +202,6 @@ router.get("/hacker/:type", async (req, res) => {
         role: "hacker",
         lookingForTeam: true,
       },
-      // include: [
-      //   {
-      //     model: models.Team,
-      //     as: "team",
-      //     through: {
-      //       model: models.PendingTeammateRequests,
-      //     },
-      //     required: true,
-      //   },
-      // ],
       required: true,
     });
 
@@ -286,9 +276,6 @@ router.get("/hacker/:type", async (req, res) => {
   // getting all of the user's pending team requests
   else if (req.params.type === "pendingRequests") {
     const teamRequests = await models.Team.findAll({
-      where: {
-        lookingForTeammates: true,
-      },
       include: [
         {
           model: models.HackerProfile,
@@ -319,9 +306,6 @@ router.get("/hacker/:type", async (req, res) => {
   // getting all of the user's pending team invites
   else if (req.params.type === "pendingInvites") {
     const teamRequests = await models.Team.findAll({
-      where: {
-        lookingForTeammates: true,
-      },
       include: [
         {
           model: models.HackerProfile,
@@ -372,9 +356,9 @@ router.post("/request/", async (req, res) => {
   }
 
   // See if there is still space in the team
-  const teamMembers = await team.getHackerProfiles();
+  const teamMembers = await team.getMembers();
 
-  if (teamMembers.length + 1 > 4 || team.lookingForTeammates === false) {
+  if (teamMembers.length + 1 > 4) {
     return res
       .status(400)
       .json({ message: "This team is not looking for teammates!" });
@@ -412,7 +396,7 @@ router.post("/inviteToTeam/", async (req, res) => {
   }
 
   // See if there is still space in the team
-  const teamMembers = await team.getHackerProfiles();
+  const teamMembers = await team.getMembers();
 
   if (teamMembers.length + 1 > 4) {
     return res.status(400).json({ message: "This team is full!" });

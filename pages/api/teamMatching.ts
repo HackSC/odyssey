@@ -9,7 +9,7 @@ router.use(utils.preprocessRequest);
 
 // GET /api/matching/team
 // - Get pending requests & suggestions
-// - Route for the team 
+// - Route for the team
 router.get("/team/:type", async (req, res) => {
   const curruser = await models.HackerProfile.findOne({
     where: {
@@ -29,17 +29,28 @@ router.get("/team/:type", async (req, res) => {
       where: {
         year: curruser.year,
         teamId: null,
-        status: "submitted",
+        status: {
+          [sequelize.Op.in]: [
+            "submitted",
+            "accepted",
+            "waitlisted",
+            "confirmed",
+            "checkedIn",
+          ],
+        },
         role: "hacker",
         lookingForTeam: true,
       },
-      include: [{
-        model: models.Team,
-        through: {
-          model: models.PendingTeammateRequests,
+      include: [
+        {
+          model: models.Team,
+          as: "requestTeam",
+          through: {
+            model: models.PendingTeammateRequests,
+          },
+          required: false,
         },
-        required: true,
-      }],
+      ],
       required: true,
     });
 
@@ -47,39 +58,50 @@ router.get("/team/:type", async (req, res) => {
       where: {
         year: curruser.year,
         teamId: null,
-        status: "submitted",
+        status: {
+          [sequelize.Op.in]: [
+            "submitted",
+            "accepted",
+            "waitlisted",
+            "confirmed",
+            "checkedIn",
+          ],
+        },
         role: "hacker",
         lookingForTeam: true,
       },
-      include: [{
-        model: models.Team,
-        through: {
-          model: models.PendingTeammateRequests,
-          where: {
-            teamId: curruser.teamId,
+      include: [
+        {
+          model: models.Team,
+          as: "requestTeam",
+          through: {
+            model: models.PendingTeammateRequests,
+            where: {
+              teamId: curruser.teamId,
+            },
+            attributes: [],
           },
-          attributes: [],
+          required: true,
         },
-        required: true,
-      }],
+      ],
       required: true,
-      attributes: ["userId"]
+      attributes: ["userId"],
     });
+
     let subtractArray = [];
-    subtract.forEach(function(item, index) {
+    subtract.forEach(function (item, index) {
       subtractArray.push(item.userId);
     });
 
     let hackerSuggestionsForTeams = [];
-    hackerProfiles.forEach(function(item, index) {
+    hackerProfiles.forEach(function (item, index) {
       if (!subtractArray.includes(item.userId)) {
         hackerSuggestionsForTeams.push(item);
       }
     });
 
-
     if (hackerSuggestionsForTeams) {
-      return res.json({ hackerSuggestionsForTeams });
+      return res.json({ hackerProfiles: hackerSuggestionsForTeams });
     } else {
       return res.json({
         message: "No teammate suggestions",
@@ -93,6 +115,7 @@ router.get("/team/:type", async (req, res) => {
       include: [
         {
           model: models.Team,
+          as: "requestTeam",
           where: {
             id: curruser.teamId,
           },
@@ -109,7 +132,7 @@ router.get("/team/:type", async (req, res) => {
     });
 
     if (teammateRequests) {
-      return res.json({ teammateRequests });
+      return res.json({ hackerProfiles: teammateRequests });
     } else {
       return res.json({
         message: "No pending teammate requests",
@@ -123,6 +146,7 @@ router.get("/team/:type", async (req, res) => {
       include: [
         {
           model: models.Team,
+          as: "requestTeam",
           where: {
             id: curruser.teamId,
           },
@@ -139,7 +163,7 @@ router.get("/team/:type", async (req, res) => {
     });
 
     if (teammateRequests) {
-      return res.json({ teammateRequests });
+      return res.json({ hackerProfiles: teammateRequests });
     } else {
       return res.json({
         message: "No pending teammate invites",
@@ -150,7 +174,7 @@ router.get("/team/:type", async (req, res) => {
 
 // GET /api/matching/hacker
 // - Get pending requests & suggestions
-// - Route for the hacker 
+// - Route for the hacker
 router.get("/hacker/:type", async (req, res) => {
   // finding teammate suggestions who haven't already been requested
   if (req.params.type === "teammate") {
@@ -164,17 +188,18 @@ router.get("/hacker/:type", async (req, res) => {
       where: {
         year: curruser.year,
         teamId: null,
-        status: "submitted",
+        status: {
+          [sequelize.Op.in]: [
+            "submitted",
+            "accepted",
+            "waitlisted",
+            "confirmed",
+            "checkedIn",
+          ],
+        },
         role: "hacker",
         lookingForTeam: true,
       },
-      include: [{
-        model: models.Team,
-        through: {
-          model: models.PendingTeammateRequests,
-        },
-        required: true,
-      }],
       required: true,
     });
 
@@ -194,35 +219,44 @@ router.get("/hacker/:type", async (req, res) => {
       where: {
         lookingForTeammates: true,
       },
-      attributes: ["id", "name", "teamCode", "ownerId", "lookingForTeammates", "description"]
+      attributes: [
+        "id",
+        "name",
+        "teamCode",
+        "ownerId",
+        "lookingForTeammates",
+        "description",
+      ],
     });
 
     const subtract = await models.Team.findAll({
       where: {
         lookingForTeammates: true,
       },
-      include: [{
-        model: models.HackerProfile,
-        through: {
-          model: models.PendingTeammateRequests,
-          where: {
-            hackerProfileId: req.user.id,
+      include: [
+        {
+          model: models.HackerProfile,
+          through: {
+            model: models.PendingTeammateRequests,
+            where: {
+              hackerProfileId: req.user.id,
+            },
+            attributes: [],
           },
-          attributes: [],
+          required: true,
         },
-        required: true,
-      }],
+      ],
       required: true,
-      attributes: ["teamCode"]
+      attributes: ["teamCode"],
     });
 
     let subtractArray = [];
-    subtract.forEach(function(item, index) {
+    subtract.forEach(function (item, index) {
       subtractArray.push(item.teamCode);
     });
 
     let teams = [];
-    allTeams.forEach(function(item, index) {
+    allTeams.forEach(function (item, index) {
       if (!subtractArray.includes(item.teamCode)) {
         teams.push(item);
       }
@@ -240,9 +274,6 @@ router.get("/hacker/:type", async (req, res) => {
   // getting all of the user's pending team requests
   else if (req.params.type === "pendingRequests") {
     const teamRequests = await models.Team.findAll({
-      where: {
-        lookingForTeammates: true,
-      },
       include: [
         {
           model: models.HackerProfile,
@@ -262,7 +293,7 @@ router.get("/hacker/:type", async (req, res) => {
     });
 
     if (teamRequests) {
-      return res.json({ teamRequests });
+      return res.json({ teams: teamRequests });
     } else {
       return res.json({
         message: "No pending team requests",
@@ -273,9 +304,6 @@ router.get("/hacker/:type", async (req, res) => {
   // getting all of the user's pending team invites
   else if (req.params.type === "pendingInvites") {
     const teamRequests = await models.Team.findAll({
-      where: {
-        lookingForTeammates: true,
-      },
       include: [
         {
           model: models.HackerProfile,
@@ -295,7 +323,7 @@ router.get("/hacker/:type", async (req, res) => {
     });
 
     if (teamRequests) {
-      return res.json({ teamRequests });
+      return res.json({ teams: teamRequests });
     } else {
       return res.json({
         message: "No pending team invites",
@@ -326,9 +354,9 @@ router.post("/request/", async (req, res) => {
   }
 
   // See if there is still space in the team
-  const teamMembers = await team.getHackerProfiles();
+  const teamMembers = await team.getMembers();
 
-  if (teamMembers.length + 1 > 4 || team.lookingForTeammates === false) {
+  if (teamMembers.length + 1 > 4) {
     return res
       .status(400)
       .json({ message: "This team is not looking for teammates!" });
@@ -347,7 +375,6 @@ router.post("/request/", async (req, res) => {
 });
 
 router.post("/inviteToTeam/", async (req, res) => {
-
   const hackerProfile = await models.HackerProfile.findOne({
     where: { userId: req.body.hackerId },
   });
@@ -367,12 +394,10 @@ router.post("/inviteToTeam/", async (req, res) => {
   }
 
   // See if there is still space in the team
-  const teamMembers = await team.getHackerProfiles();
+  const teamMembers = await team.getMembers();
 
   if (teamMembers.length + 1 > 4) {
-    return res
-      .status(400)
-      .json({ message: "This team is full!" });
+    return res.status(400).json({ message: "This team is full!" });
   }
 
   // request the team
