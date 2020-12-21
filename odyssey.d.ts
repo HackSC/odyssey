@@ -204,7 +204,6 @@ declare type APIResponse<T> = {
   error?: string;
 };
 
-// declare type pendingTeammateRequests = {
-//   hackerId: number;
-//   teamId: number;
-// }
+declare type teamSuggestion = {
+  hackerProfiles: Array<Profile>;
+};

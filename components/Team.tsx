@@ -8,14 +8,22 @@ import { Flex, Column, Button, Form, FormGroup } from "../styles";
 type Props = {
   team: Team;
   profile: Profile;
-  teammateSuggestions: Array<Object>;
-  pendingRequests: Array<Object>;
-  pendingInvites: Array<Object>;
+  teammateSuggestions: TeamSuggestion;
+  pendingRequests: TeamSuggestion;
+  pendingInvites: TeamSuggestion;
 };
 
-const Team = ({ team, profile, teammateSuggestions, pendingRequests, pendingInvites }: Props) => {
+const Team = ({
+  team,
+  profile,
+  teammateSuggestions,
+  pendingRequests,
+  pendingInvites,
+}: Props) => {
   const [error, setError] = useState(null);
-  const [teamVisibility, setTeamVisibility] = useState(team.lookingForTeammates);
+  const [teamVisibility, setTeamVisibility] = useState(
+    team.lookingForTeammates
+  );
   const [text, setText] = useState(team.description);
 
   const handleLeaveTeam = useCallback(async () => {
@@ -58,7 +66,7 @@ const Team = ({ team, profile, teammateSuggestions, pendingRequests, pendingInvi
     }
   }, []);
 
-  const handleKick = useCallback(async member => {
+  const handleKick = useCallback(async (member) => {
     const confirm = window.confirm(
       `Are you sure you want to kick ${member.firstName} ${member.lastName}, ${member.email}?`
     );
@@ -68,7 +76,7 @@ const Team = ({ team, profile, teammateSuggestions, pendingRequests, pendingInvi
     }
 
     const res = await fetch("/api/team/kick/" + member.userId, {
-      method: "POST"
+      method: "POST",
     });
     const data = await res.json();
 
@@ -113,12 +121,11 @@ const Team = ({ team, profile, teammateSuggestions, pendingRequests, pendingInvi
       }),
     });
     return result.status === 200;
-
   }, []);
 
   return (
     <TeamSection>
-      <Flex direction="row" tabletVertical justify="space-between" >
+      <Flex direction="row" tabletVertical justify="space-between">
         <Column flexBasis={48}>
           <h1>{team.name}</h1>
 
@@ -175,63 +182,85 @@ const Team = ({ team, profile, teammateSuggestions, pendingRequests, pendingInvi
       </Flex>
       {team.members.length < 4 ? (
         <>
-        <Flex direction="row" tabletVertical justify="space-between">
-          <Column flexBasis={48}>
-            <Header>Edit Team Visibility</Header>
-            <ChangeProfileOption>
-              <input
-                name="visibility"
-                type="checkbox"
-                checked={teamVisibility}
-                onChange={() => handleChangeVisibility(teamVisibility)}
-              />
-              <ShareProfileText>
-                Share the team name and description with hackers looking to join a team
-              </ShareProfileText>
-            </ChangeProfileOption>
-          </Column>
-          <Column flexBasis={48}>
-            <Header>Edit Team Description</Header>
-            <Form>
-              <FormGroup>
-                <InputFlex>
-                  <input
-                    type="text"
-                    placeholder=""
-                    value={text}
-                    required
-                    onChange={handleChange}
-                  />
-                  <Button
-                    onClick={(e) => {
-                      e.preventDefault();
-                      onSubmit(text);
-                      setText(text);
-                    }}
-                  >
-                    Save
-                  </Button>
-                </InputFlex>
-              </FormGroup>
-            </Form>
-          </Column>
-        </Flex>
-        {(pendingRequests?.hackerProfiles.length) ? 
-          (<TeammateSuggestions key={"Pending Teammate Requests"} title={"Pending Teammate Requests"} hackers={pendingRequests} owner="team" teamId={team.teamCode} />) 
-          : (<div/>)
-        }
-        {(pendingInvites?.hackerProfiles.length) ? 
-          (<TeammateSuggestions key={"Pending Teammate Invites"} title={"Pending Teammate Invites"} hackers={pendingInvites} owner="team" teamId={team.teamCode} />)
-          : (<div/>)
-        }
-        {(teammateSuggestions?.hackerProfiles.length) ? 
-          (<TeammateSuggestions key={"Teammate Suggestions"} title={"Teammate Suggestions"} hackers={teammateSuggestions} owner="team" teamId={team.teamCode} />)
-          : (<div/>)
-        }
+          <Flex direction="row" tabletVertical justify="space-between">
+            <Column flexBasis={48}>
+              <Header>Edit Team Visibility</Header>
+              <ChangeProfileOption>
+                <input
+                  name="visibility"
+                  type="checkbox"
+                  checked={teamVisibility}
+                  onChange={() => handleChangeVisibility(teamVisibility)}
+                />
+                <ShareProfileText>
+                  Share the team name and description with hackers looking to
+                  join a team
+                </ShareProfileText>
+              </ChangeProfileOption>
+            </Column>
+            <Column flexBasis={48}>
+              <Header>Edit Team Description</Header>
+              <Form>
+                <FormGroup>
+                  <InputFlex>
+                    <input
+                      type="text"
+                      placeholder=""
+                      value={text}
+                      required
+                      onChange={handleChange}
+                    />
+                    <Button
+                      onClick={(e) => {
+                        e.preventDefault();
+                        onSubmit(text);
+                        setText(text);
+                      }}
+                    >
+                      Save
+                    </Button>
+                  </InputFlex>
+                </FormGroup>
+              </Form>
+            </Column>
+          </Flex>
+          {pendingRequests?.hackerProfiles.length ? (
+            <TeammateSuggestions
+              key={"Pending Teammate Requests"}
+              title={"Pending Teammate Requests"}
+              hackers={pendingRequests}
+              owner="team"
+              teamId={team.teamCode}
+            />
+          ) : (
+            <div />
+          )}
+          {pendingInvites?.hackerProfiles.length ? (
+            <TeammateSuggestions
+              key={"Pending Teammate Invites"}
+              title={"Pending Teammate Invites"}
+              hackers={pendingInvites}
+              owner="team"
+              teamId={team.teamCode}
+            />
+          ) : (
+            <div />
+          )}
+          {teammateSuggestions?.hackerProfiles.length ? (
+            <TeammateSuggestions
+              key={"Teammate Suggestions"}
+              title={"Teammate Suggestions"}
+              hackers={teammateSuggestions}
+              owner="team"
+              teamId={team.teamCode}
+            />
+          ) : (
+            <div />
+          )}
         </>
-        ) : (<div/>)
-      }
-      
+      ) : (
+        <div />
+      )}
     </TeamSection>
   );
 };

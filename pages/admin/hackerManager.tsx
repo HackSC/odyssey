@@ -580,21 +580,6 @@ const hackerManager = ({ profile }) => {
               <Flex
                 direction="row"
                 style={{ paddingTop: "1rem", flexWrap: "wrap" }}
-<<<<<<< HEAD:pages/admin/hackerManager.tsx
-                justify="space-between"
-              >
-                <Column flexBasis={49} style={{ margin: "1rem 0" }}>
-                  <FullButton onClick={lookupHackers}>
-                    Filter Hackers
-                  </FullButton>
-                </Column>
-
-                <Column flexBasis={49} style={{ margin: "1rem 0" }}>
-                  <FullButton onClick={showAllHackers}>
-                    Show All Hackers
-                  </FullButton>
-                </Column>
-=======
                 justify="flex-end"
               >
                 <PaddedButton>
@@ -605,7 +590,6 @@ const hackerManager = ({ profile }) => {
                 <PaddedButton>
                   <Button onClick={lookupHackers}>Filter Hackers</Button>
                 </PaddedButton>
->>>>>>> d6fe695b26f9382d50b836ffc700e41152d81233:pages/admin/hackerManager.tsx
               </Flex>
             </Form>
           </Flex>
@@ -661,15 +645,12 @@ const PaddedFlex = styled(Flex)`
   padding: 3rem;
 `;
 
-<<<<<<< HEAD:pages/admin/hackerManager.tsx
-=======
 const PaddedButton = styled(Flex)`
   padding: 18px 0;
   padding-left: 5px;
   justify-content: flex-end;
 `;
 
->>>>>>> d6fe695b26f9382d50b836ffc700e41152d81233:pages/admin/hackerManager.tsx
 const FullButton = styled(Button)`
   width: -webkit-fill-available;
 `;
