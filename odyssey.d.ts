@@ -204,6 +204,6 @@ declare type APIResponse<T> = {
   error?: string;
 };
 
-declare type teamSuggestion = {
+declare type TeamSuggestion = {
   hackerProfiles: Array<Profile>;
-};
+}
