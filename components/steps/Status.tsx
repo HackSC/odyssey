@@ -14,6 +14,7 @@ import RedCheck from "../../assets/red_check.svg";
 type Props = {
   profile: Profile;
   socialPosts: any;
+  appsOpen: boolean;
 };
 
 const getStatusLabel = (profile: Profile): string => {
@@ -69,7 +70,7 @@ const getCheck = (profile: Profile) => {
 };
 
 const StatusStep: React.FunctionComponent<Props> = (props) => {
-  const { profile, socialPosts } = props;
+  const { profile, socialPosts, appsOpen } = props;
 
   const statusLabel = getStatusLabel(profile);
   const isMobile = useIsMobile();
@@ -129,6 +130,18 @@ const StatusStep: React.FunctionComponent<Props> = (props) => {
             forward.
           </StatusMessage>
         )}
+
+        {!appsOpen && profile.status !== "submitted" && (
+          <StatusMessage>
+            Thanks for your interest in HackSC! Sadly, we are not currently
+            accepting applications. However, we may accept more closer to the
+            hackathon, so be sure to{" "}
+            <a href="https://twitter.com/hackscofficial" target="_blank">
+              follow us on Twitter
+            </a>{" "}
+            for updates.
+          </StatusMessage>
+        )}
       </Status>
 
       <Flex justify="space-between" tabletVertical>
@@ -142,14 +155,14 @@ const StatusStep: React.FunctionComponent<Props> = (props) => {
                 run into issues, log-out and log back in.
               </p>
             </Step>
-            <Step disabled={profileStage !== 2}>
+            <Step disabled={profileStage !== 2 || !appsOpen}>
               <h3>2. Fill out an application</h3>
               <p>
                 Answer a few questions to show why you want to be at HackSC
                 2021!
               </p>
 
-              {profileStage == 2 && (
+              {profileStage == 2 && appsOpen && (
                 <StepButton onClick={() => navigateTo("appform")}>
                   Fill out application
                 </StepButton>
