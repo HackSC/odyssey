@@ -10,8 +10,6 @@ import { useToasts } from "react-toast-notifications";
 import Confetti from "react-confetti";
 import { useWindowSize } from "react-use";
 import { Document, Page, pdfjs } from "react-pdf";
-import pdfFile from "/Users/elissaperdue/Desktop/Hack/odyssey/public/hack.pdf";
-
 pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
 
 import {
@@ -245,6 +243,31 @@ const AppReview = ({ profile, hackerProfile, reviewHistory, totalReviews }) => {
             style={{ flexWrap: "wrap" }}
           >
             <Column flexBasis={48}>
+              <h1>Resume</h1>
+              <a href={currentProfile.resume} target="_blank">
+                Download Pdf
+              </a>
+              <div style={{ padding: "2rem 0" }}>
+                {typeof window !== undefined ? (
+                  <div style={{ padding: "0 0 2rem 0" }}>
+                    <Document
+                      options={{ workerSrc: "pdf.worker.js" }}
+                      onLoadSuccess={onDocumentLoadSuccess}
+                      file={"../../hack.pdf"}
+                    >
+                      <Page height={600} pageNumber={pageNumber} />
+                    </Document>
+                  </div>
+                ) : (
+                  ""
+                )}
+                <p>
+                  Page {pageNumber} of {numPages}
+                </p>
+              </div>
+            </Column>
+
+            <Column flexBasis={48}>
               <h1> Applicant Info </h1>
               <Panel>
                 <h2>Question 1 - Vertical</h2>
@@ -281,21 +304,6 @@ const AppReview = ({ profile, hackerProfile, reviewHistory, totalReviews }) => {
                     : "(No response)"}{" "}
                 </p>
               </Panel>
-            </Column>
-
-            <Column flexBasis={48}>
-              <h1>Resume</h1>
-              <a href={currentProfile.resume} target="_blank">
-                Download Pdf
-              </a>
-              <div>
-                <Document file={pdfFile}>
-                  <Page pageNumber={1} />
-                </Document>
-                <p>
-                  Page {pageNumber} of {numPages}
-                </p>
-              </div>
 
               <h1>Review</h1>
               <Panel>
