@@ -16,19 +16,19 @@ const actions = {
   EMAIL_CONTRIB: "emailContrib",
   IDENTIFY: "identify",
   SUBMIT: "submit",
-  JUDGE: "judge"
+  JUDGE: "judge",
 };
 
 router.post("/dispatch", async (req, res) => {
   const { qrCodeId, actionId } = { ...req.body };
 
   const hackerProfile = await models.HackerProfile.findOne({
-    where: { qrCodeId: qrCodeId }
+    where: { qrCodeId: qrCodeId },
   });
 
   if (hackerProfile === null) {
     return res.status(404).json({
-      error: "No user has been assigned this QR code"
+      error: "No user has been assigned this QR code",
     });
   }
   const userId = hackerProfile.get("userId");
@@ -76,7 +76,7 @@ async function handleGroupContrib(userId, req, res) {
     }
     const result = await models.Person.findOne({
       where: {
-        identityId: userId
+        identityId: userId,
       },
       include: [
         {
@@ -85,22 +85,22 @@ async function handleGroupContrib(userId, req, res) {
           include: [
             {
               model: models.Person,
-              required: false
-            }
-          ]
-        }
-      ]
+              required: false,
+            },
+          ],
+        },
+      ],
     });
     const teammates = result.get("ProjectTeam").get("People");
     const taskId = req.body.taskId;
-    const taskMultiplier = getMultiplierForTask(taskId);
-    const teammateContribs = teammates.map(tm => {
+    const taskMultiplier = await getMultiplierForTask(taskId);
+    const teammateContribs = teammates.map((tm) => {
       const tmId = tm.dataValues.identityId;
       return models.Contribution.create({
         personId: tmId,
         multiplier: taskMultiplier,
         scannerId: req.user.id,
-        taskId: taskId
+        taskId: taskId,
       });
     });
 
@@ -119,27 +119,27 @@ async function handleContrib(userId, req, res) {
   if (!input.taskId) {
     return res.status(400).json({ error: "Invalid request" });
   }
-  const taskMultiplier = getMultiplierForTask(input.taskId);
+  const taskMultiplier = await getMultiplierForTask(input.taskId);
   const [result, isCreated] = await models.Contribution.findOrCreate({
     defaults: {
       multiplier: taskMultiplier,
-      scannerId: req.user.id
+      scannerId: req.user.id,
     },
     where: {
       personId: userId,
-      taskId: input.taskId
-    }
+      taskId: input.taskId,
+    },
   });
   if (!isCreated) {
     return res.status(400).json({
-      error: "User already has completed this task"
+      error: "User already has completed this task",
     });
   }
   return res.json({
     success: {
       contribution: result,
-      message: `Successfully created a task contribution for ${profile.firstName} ${profile.lastName}`
-    }
+      message: `Successfully created a task contribution for ${profile.firstName} ${profile.lastName}`,
+    },
   });
 }
 
@@ -147,7 +147,7 @@ async function getMultiplierForTask(taskId) {
   try {
     const result = await models.Task.findOne({
       where: {
-        id: taskId
+        id: taskId,
       },
 
       include: [
@@ -157,11 +157,11 @@ async function getMultiplierForTask(taskId) {
           include: [
             {
               model: models.Multiplier,
-              required: false
-            }
-          ]
-        }
-      ]
+              required: false,
+            },
+          ],
+        },
+      ],
     });
     const multipliers = result.get("Grouping").get("Multipliers");
     return multipliers.reduce((x, y) => x + y.dataValues.multiplierValue, 0);
@@ -178,24 +178,24 @@ async function handleEmailContrib(userEmail, req, res) {
     // Try to find a model by email
     const profile = await models.HackerProfile.findOne({
       where: {
-        email: userEmail
-      }
+        email: userEmail,
+      },
     });
     const userId = profile.get("userId");
-    const taskMultiplier = getMultiplierForTask(input.taskId);
+    const taskMultiplier = await getMultiplierForTask(input.taskId);
     const [result, isCreated] = await models.Contribution.findOrCreate({
       defaults: {
         multiplier: taskMultiplier,
-        scannerId: req.user.id
+        scannerId: req.user.id,
       },
       where: {
         personId: userId,
-        taskId: taskId
-      }
+        taskId: taskId,
+      },
     });
     if (!isCreated) {
       return res.status(400).json({
-        error: "User already has completed this task"
+        error: "User already has completed this task",
       });
     }
     return res.json({ success: result });
@@ -204,7 +204,7 @@ async function handleEmailContrib(userEmail, req, res) {
 
 async function handleCheckin(userId, req, res) {
   const profile = await models.HackerProfile.findOne({
-    where: { userId: userId }
+    where: { userId: userId },
   });
   // const profileStatus = profile.get("status");
 
@@ -221,7 +221,7 @@ async function handleCheckin(userId, req, res) {
 
   const [pointsProfile, isCreated] = await models.Person.findOrCreate({
     where: { identityId: userId },
-    defaults: { isBattlepassComplete: false }
+    defaults: { isBattlepassComplete: false },
   });
 
   if (!isCreated) {
@@ -238,10 +238,10 @@ async function handleCheckin(userId, req, res) {
         sequelize.literal(
           "(SELECT COUNT(*) FROM persons where persons.houseId = House.id)"
         ),
-        "personCount"
-      ]
+        "personCount",
+      ],
     ],
-    order: [[sequelize.literal("personCount"), "ASC"]]
+    order: [[sequelize.literal("personCount"), "ASC"]],
   });
 
   profile.status = "checkedIn";
@@ -255,7 +255,7 @@ async function handleCheckin(userId, req, res) {
 
 async function handleIdentify(userId, req, res) {
   const profile = await models.HackerProfile.findOne({
-    where: { userId: userId }
+    where: { userId: userId },
   });
 
   const person = await models.Person.findByPk(userId);
@@ -266,7 +266,7 @@ async function handleIdentify(userId, req, res) {
       firstName: profile.firstName,
       lastName: profile.lastName,
       email: profile.email,
-      isBattlepassComplete: person.isBattlepassComplete
+      isBattlepassComplete: person.isBattlepassComplete,
     };
 
     return res.json({ success: returnProfile });
@@ -279,7 +279,7 @@ async function handleJudge(userId, req, res) {
   const Op = sequelize.Op;
 
   const person = await models.Person.findByPk(userId, {
-    include: [{ model: models.ProjectTeam, required: false }]
+    include: [{ model: models.ProjectTeam, required: false }],
   });
   let memberIds = [];
   let memberProfiles = [];
@@ -304,15 +304,15 @@ async function handleJudge(userId, req, res) {
 
   if (memberIds.length < 1) {
     return res.status(400).json({
-      error: "User & Team has already been confirmed for submission"
+      error: "User & Team has already been confirmed for submission",
     });
   }
-  const contributionAdditions = memberIds.map(pId => {
+  const contributionAdditions = memberIds.map((pId) => {
     return models.Contribution.create({
       personId: pId,
       taskId: 53, //Hardcoded ID of the project submission task
       multiplier: 0,
-      scannerId: req.user.id
+      scannerId: req.user.id,
     });
   });
 
@@ -321,14 +321,14 @@ async function handleJudge(userId, req, res) {
 
   await models.Person.update(
     {
-      isBattlepassComplete: true
+      isBattlepassComplete: true,
     },
     {
       where: {
         identityId: {
-          [Op.in]: memberIds
-        }
-      }
+          [Op.in]: memberIds,
+        },
+      },
     }
   );
 
@@ -348,11 +348,11 @@ router.get("/signups", async (req, res) => {
   }
 
   const profiles = await models.signups.findAll({
-    where: lookupFilter
+    where: lookupFilter,
   });
 
   return res.json({
-    success: profiles
+    success: profiles,
   });
 });
 
@@ -370,7 +370,7 @@ router.get("/lookup", async (req, res) => {
     role,
     school,
     year,
-    graduationDate
+    graduationDate,
   } = req.query;
 
   if (!!firstName) {
@@ -418,11 +418,11 @@ router.get("/lookup", async (req, res) => {
   }
 
   const profiles = await models.HackerProfile.findAll({
-    where: lookupFilter
+    where: lookupFilter,
   });
 
   return res.json({
-    success: profiles
+    success: profiles,
   });
 });
 
@@ -432,23 +432,23 @@ router.post("/assign-qr", async (req, res) => {
   if (!!userId && !!qrCodeId) {
     await models.HackerProfile.update(
       {
-        qrCodeId: qrCodeId.trim().toUpperCase()
+        qrCodeId: qrCodeId.trim().toUpperCase(),
       },
       {
         where: {
-          userId
-        }
+          userId,
+        },
       }
     );
 
     return res.json({
       success: {
-        message: `Updated profile with user ID ${userId} to have the QR Code Id ${qrCodeId}`
-      }
+        message: `Updated profile with user ID ${userId} to have the QR Code Id ${qrCodeId}`,
+      },
     });
   } else {
     return res.status(400).json({
-      error: "Missing data, need both userId and qrCodeId"
+      error: "Missing data, need both userId and qrCodeId",
     });
   }
 });
@@ -457,7 +457,7 @@ router.get("/identity-check/:userId", async (req, res) => {
   if (req.params.userId) {
     const userId = req.params.userId;
     const profile = await models.HackerProfile.findOne({
-      where: { userId: userId }
+      where: { userId: userId },
     });
 
     if (profile) {
@@ -465,12 +465,12 @@ router.get("/identity-check/:userId", async (req, res) => {
         return res.json({
           success: {
             firstName: profile.firstName,
-            lastName: profile.lastName
-          }
+            lastName: profile.lastName,
+          },
         });
       } else {
         return res.status(400).json({
-          error: "user cannot be scanned! neither confirmed nor checkedIn"
+          error: "user cannot be scanned! neither confirmed nor checkedIn",
         });
       }
     } else {
@@ -487,8 +487,8 @@ router.get("/hacker/:qrCodeId", async (req, res) => {
   const qrCodeId = req.params.qrCodeId;
   const result = await models.HackerProfile.findOne({
     where: {
-      qrCodeId: qrCodeId
-    }
+      qrCodeId: qrCodeId,
+    },
   });
   if (!result) {
     return res.status(404).json({ error: "Hacker not Found" });
@@ -496,14 +496,14 @@ router.get("/hacker/:qrCodeId", async (req, res) => {
   const userId = result.get("userId");
   const contributions = await models.Contribution.findAll({
     where: {
-      personId: userId
+      personId: userId,
     },
     attributes: [
-      [sequelize.fn("SUM", sequelize.col("Task.points")), "totalPoints"]
+      [sequelize.fn("SUM", sequelize.col("Task.points")), "totalPoints"],
     ],
-    include: [{ model: models.Task, required: true }]
+    include: [{ model: models.Task, required: true }],
   });
-  return res.json({ success: contributions });
+  return res.status(200).json({ success: contributions });
 });
 
 module.exports = router;

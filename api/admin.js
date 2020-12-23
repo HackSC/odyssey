@@ -16,8 +16,8 @@ router.use(utils.requireAdmin);
 router.put("/:email", async (req, res) => {
   const updatedhackerProfile = await models.HackerProfile.update(req.body, {
     where: {
-      email: req.params.email
-    }
+      email: req.params.email,
+    },
   });
   return res.json({ hackerProfile: newHackerProfile });
 });
@@ -33,25 +33,25 @@ router.get("/profiles", async (req, res) => {
         [Op.or]: [
           {
             email: {
-              [Op.like]: flexQuery
-            }
+              [Op.like]: flexQuery,
+            },
           },
           {
             firstName: {
-              [Op.like]: flexQuery
-            }
+              [Op.like]: flexQuery,
+            },
           },
           {
             lastName: {
-              [Op.like]: flexQuery
-            }
-          }
-        ]
+              [Op.like]: flexQuery,
+            },
+          },
+        ],
       },
-      limit: 50
+      limit: 50,
     });
     return res.json({
-      profiles
+      profiles,
     });
   } catch (e) {
     return res.status(500).json({ error: e.message });
@@ -63,12 +63,34 @@ router.post("/updateRole", async (req, res) => {
     const { email, role } = req.body;
     const result = await models.HackerProfile.update(
       {
-        role: role
+        role: role,
       },
       {
         where: {
-          email: email
-        }
+          email: email,
+        },
+      }
+    );
+
+    return res.json({ success: result });
+  } catch (e) {
+    return res.status(500).json({ error: e.message });
+  }
+});
+
+router.post("/updateHackerStatus", async (req, res) => {
+  try {
+    const { email, status } = req.body;
+
+    // TODO: Check is status input is in enum, otherwise we have bad status update requests
+    const result = await models.HackerProfile.update(
+      {
+        status: status,
+      },
+      {
+        where: {
+          email: email,
+        },
       }
     );
 
@@ -80,8 +102,27 @@ router.post("/updateRole", async (req, res) => {
 
 router.get("/reviews", async (req, res) => {
   try {
-    const reviews = await models.HackerReview.findAll();
-    return res.json({ reviews: reviews });
+    const reviews = await models.HackerReview.findAll({
+      include: [
+        {
+          model: models.HackerProfile,
+        },
+      ],
+    });
+    var reviewedProfiles = [];
+    for (const review of reviews) {
+      let profile = await models.HackerProfile.findAll({
+        where: {
+          userId: review.dataValues.hackerId,
+        },
+      });
+      let ReviewedProfile = { ReviewedProfile: profile[0] };
+      reviewedProfiles.push(
+        Object.assign({}, review.dataValues, ReviewedProfile)
+      );
+    }
+
+    return res.json({ reviews: reviewedProfiles });
   } catch (e) {
     return res.status(500).json({ err: e });
   }
@@ -91,8 +132,8 @@ router.get("/reviewHistory", async (req, res) => {
   try {
     const reviews = await models.HackerReview.findAll({
       where: {
-        createdBy: req.user.id
-      }
+        createdBy: req.user.id,
+      },
     });
     return res.json({ reviews: reviews });
   } catch (e) {
@@ -106,14 +147,14 @@ router.put("/review/:id", async (req, res) => {
     "scoreOne",
     "scoreTwo",
     "scoreThree",
-    "comments"
+    "comments",
   ]);
   const formInput = req.body;
 
   for (let key of Object.keys(formInput)) {
     if (!allowedFields.has(key)) {
       return res.status(400).json({
-        error: `${key} is not a supported field`
+        error: `${key} is not a supported field`,
       });
     }
   }
@@ -121,14 +162,14 @@ router.put("/review/:id", async (req, res) => {
   try {
     const result = await models.HackerReview.update(req.body, {
       where: {
-        id: requestId
-      }
+        id: requestId,
+      },
     });
 
     return res.json({ update: result });
   } catch (e) {
     return res.status(500).json({
-      error: e
+      error: e,
     });
   }
 });
@@ -138,23 +179,50 @@ router.get("/eligibleProfiles", async (req, res) => {
     const allProfiles = await models.HackerProfile.findAll({
       where: {
         submittedAt: {
-          [sequelize.Op.not]: null
-        }
+          [sequelize.Op.not]: null,
+        },
       },
       include: [
         {
-          model: models.HackerReview
-        }
-      ]
+          model: models.HackerReview,
+        },
+      ],
     });
-    filteredProfiles = allProfiles.filter(profile => {
-      const reviewsByCurrUser = profile.HackerReviews.filter(review => {
+    filteredProfiles = allProfiles.filter((profile) => {
+      const reviewsByCurrUser = profile.HackerReviews.filter((review) => {
         return review.dataValues.createdBy === req.user.id;
       });
       return reviewsByCurrUser.length === 0 && profile.HackerReviews.length < 1;
     });
     return res.json({
-      eligibleReviews: filteredProfiles
+      eligibleReviews: filteredProfiles,
+    });
+  } catch (e) {
+    return res.status(500).json({ error: e.message });
+  }
+});
+
+router.get("/reviewedProfiles", async (req, res) => {
+  try {
+    const allProfiles = await models.HackerProfile.findAll({
+      where: {
+        submittedAt: {
+          [sequelize.Op.not]: null,
+        },
+      },
+      include: [
+        {
+          model: models.HackerReview,
+        },
+      ],
+    });
+
+    let filteredProfiles = allProfiles.filter((profile) => {
+      return profile.HackerReviews.length > 0;
+    });
+
+    return res.json({
+      reviewedProfiles: filteredProfiles,
     });
   } catch (e) {
     return res.status(500).json({ error: e.message });
@@ -170,7 +238,7 @@ router.post("/review", async (req, res) => {
       scoreOne: formBody.scoreOne,
       scoreTwo: formBody.scoreTwo,
       scoreThree: formBody.scoreThree,
-      comments: formBody.comments
+      comments: formBody.comments,
     });
 
     return res.json({ newReview: newReview });
@@ -186,31 +254,31 @@ router.get("/review", async (req, res) => {
         include: [
           [
             sequelize.fn("COUNT", sequelize.col("HackerReviews.id")),
-            "reviewCount"
-          ]
-        ]
+            "reviewCount",
+          ],
+        ],
       },
       include: [
         {
           model: models.HackerReview,
-          attributes: []
-        }
+          attributes: [],
+        },
       ],
-      group: ["HackerProfile.userId"]
+      group: ["HackerProfile.userId"],
     });
 
-    const acceptableProfile = profilesWCount.find(profile => {
+    const acceptableProfile = profilesWCount.find((profile) => {
       return profile.dataValues.reviewCount < 1;
     });
     if (acceptableProfile) {
       const newReview = await models.HackerReview.create({
         hackerId: acceptableProfile.dataValues.userId,
-        createdBy: req.user.id
+        createdBy: req.user.id,
       });
 
       return res.json({
         review: newReview,
-        profile: acceptableProfile
+        profile: acceptableProfile,
       });
     } else {
       return res.json({ review: null, profile: null }); // Returns empty when there are no more profiles

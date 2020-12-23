@@ -14,8 +14,20 @@ import { Head, Navbar, Footer, Steps } from "../components";
 import { Background, Container } from "../styles";
 
 import { generatePosts } from "../lib/referrerCode";
+import { getHouses } from "../lib";
+import useSWR from "swr";
 
 const Application = ({ profile, houses, socialPosts }) => {
+  let fetchUrl = process.env.URL_BASE
+    ? process.env.URL_BASE + "api/profile"
+    : "api/profile";
+
+  let { data: hackerProfile, error: reviewProfileError } = useSWR(
+    fetchUrl,
+    fetch,
+    { refreshInterval: 1000 }
+  );
+
   return (
     <>
       <Head title="HackSC Dashboard - Application" />
@@ -42,8 +54,7 @@ const Application = ({ profile, houses, socialPosts }) => {
 
 Application.getInitialProps = async ({ req }) => {
   const profile = await getProfile(req);
-  //const houses = await getHouses(req);
-  const houses = [];
+  let houses = await getHouses(req);
 
   // Null profile means user is not logged in
   if (!profile) {
@@ -57,7 +68,7 @@ Application.getInitialProps = async ({ req }) => {
   }
 
   if (profile && profile.status == "checkedIn") {
-    //const houseInfo = await getHouseInfo(req, 1);
+    //houses = await getHouseInfo(req, 1); getHouses
   }
 
   /*

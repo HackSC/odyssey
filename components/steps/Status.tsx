@@ -2,7 +2,6 @@ import * as React from "react";
 import styled from "styled-components";
 import Router from "next/router";
 import * as Sentry from "@sentry/browser";
-import Link from "next/link";
 
 import { useIsMobile } from "../../lib/layouts";
 
@@ -169,11 +168,20 @@ const StatusStep: React.FunctionComponent<Props> = (props) => {
                   : "Come back soon and see your results."}
               </p>
               {profileStage === 3 && (
-                <StepButton onClick={() => navigateTo("results")}>
-                  {profile.status === "accepted"
-                    ? "Confirm Attendance"
-                    : "View Results"}
-                </StepButton>
+                <>
+                  <div>
+                    <StepButton onClick={() => navigateTo("results")}>
+                      {profile.status === "accepted"
+                        ? "Confirm Attendance"
+                        : "View Results"}
+                    </StepButton>
+                  </div>
+                  <div>
+                    <StepButton onClick={() => navigateTo("appform")}>
+                      View Application
+                    </StepButton>
+                  </div>
+                </>
               )}
             </Step>
           </Steps>
@@ -190,7 +198,7 @@ const StatusStep: React.FunctionComponent<Props> = (props) => {
 
             <DateText>
               <h3>Applications Close</h3>
-              <p>December 14th, 2020</p>
+              <p>December 21st, 2020</p>
             </DateText>
 
             <DateText>

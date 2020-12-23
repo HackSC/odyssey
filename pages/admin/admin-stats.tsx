@@ -1,22 +1,22 @@
 import React from "react";
 
-import { handleLoginRedirect, getProfile } from "../lib/authenticate";
-import { getReferrerCode } from "../lib/referrerCode";
+import { handleLoginRedirect, getProfile } from "../../lib/authenticate";
+import { getReferrerCode } from "../../lib/referrerCode";
 
 import styled from "styled-components";
 
 import Iframe from "react-iframe";
-import { Head, Navbar, Footer, AdminStats } from "../components";
+import { Head, Navbar, Footer, AdminStats } from "../../components";
 
-import { Background, Flex, Container } from "../styles";
+import { Background, Flex, Container } from "../../styles";
 import jwt from "jsonwebtoken";
 
 const Metabase = ({ profile, metabaseIframeUrl }) => {
   return (
     <>
       <Head title="HackSC Odyssey - Application" />
-      <Navbar loggedIn admin activePage="/admin-stats" />
-      <Background>
+      <Navbar loggedIn admin activePage="admin-stats" />
+      <Background padding={"2rem"}>
         <Container>
           <PaddedFlex direction="column">
             <h1>Admin Statistics</h1>
@@ -27,7 +27,7 @@ const Metabase = ({ profile, metabaseIframeUrl }) => {
           <PaddedFlex>
             <h1>Metabase Statistics</h1>
           </PaddedFlex>
-          <PaddedFlex style={{ margin: "auto", width: "min-content" }}>
+          <PaddedFlex style={{ width: "100%", justifyContent: "center" }}>
             <Iframe
               src={metabaseIframeUrl}
               width="800"
@@ -50,8 +50,8 @@ export async function getServerSideProps(ctx) {
 
   const profile = await getProfile(req);
 
-  // Null profile means user is not logged in, and this is only relevant for admins
-  if (!profile || profile.role !== "admin") {
+  // * Null profile means user is not logged in, and this is only relevant for admins and sponsors
+  if (!profile || !(profile.role === "admin" || profile.role === "sponsor")) {
     handleLoginRedirect(req);
   }
   if (profile) {

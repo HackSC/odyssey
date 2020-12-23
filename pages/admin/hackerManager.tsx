@@ -1,13 +1,23 @@
-import React, { useRef, useState, useMemo, useCallback } from "react";
+import React, { useRef, useState, useMemo, useEffect } from "react";
+import dynamic from "next/dynamic";
+import Redirect from "next/router";
 import styled from "styled-components";
 import JSZip from "jszip";
 import stringify from "csv-stringify";
 import { saveAs } from "file-saver";
+import PacmanLoader from "react-spinners/PacmanLoader";
+import Modal from "../../components/Modal";
+const ReactJson = dynamic(() => import("react-json-view"), { ssr: false });
+import { sendSlackMessage, handleLoginRedirect, getProfile } from "../../lib";
+import Schools from "../../assets/data/schools.json";
 
-import { handleLoginRedirect, getProfile } from "../lib/authenticate";
-import Schools from "../assets/data/schools.json";
-
-import { Head, Navbar, Footer, Select, AutocompleteInput } from "../components";
+import {
+  Head,
+  Navbar,
+  Footer,
+  Select,
+  AutocompleteInput,
+} from "../../components";
 
 import {
   Button,
@@ -17,64 +27,119 @@ import {
   Container,
   Form,
   FormGroup,
-  RadioChoice,
-  RadioChoiceLabel
-} from "../styles";
+} from "../../styles";
 
 import {
   liveHackerLookupFetch,
-  liveLookupFetch
-} from "../lib/api-sdk/liveHooks";
+  liveLookupFetch,
+} from "../../lib/api-sdk/liveHooks";
 
-const Hacker = ({ result, resetResults }) => {
+const Hacker = ({ result, resumeList, resetResults }) => {
+  const [hasResume, setHasResume] = useState(false);
+  const [popupVisible, setPopupVisible] = useState(false);
+  const profilePopupRef = useRef(null);
+
+  const viewProfile = () => {
+    setPopupVisible(true);
+  };
+
+  const downloadResume = async () => {
+    Redirect.push(
+      `https://hacksc-odyssey.s3-us-west-1.amazonaws.com/${result.userId}`,
+      null
+    );
+  };
+
+  useEffect(() => {
+    const resume_reduce = resumeList.reduce((acc, val) => {
+      let item = val && val[1] ? val[1] : {};
+      if (item && item.Key)
+        return acc + (item.Key.includes(result.userId) ? 1 : 0);
+      else return acc;
+    }, 0);
+
+    if (resume_reduce) setHasResume(true);
+    else setHasResume(false);
+  }, []);
+
+  const CloseButton = (
+    <FullButton onClick={() => setPopupVisible(false)}>Close</FullButton>
+  );
+
   return (
     <Result key={result.userId}>
-      <h2>
-        {result.firstName} {result.lastName}
-      </h2>
-      <p>
-        <b>E-Mail: </b>
-        {result.email}
-      </p>
-      <p>
-        <b>School: </b>
-        {result.school}
-      </p>
-      <p>
-        <b>Year: </b>
-        {result.year}
-      </p>
-      <p>
-        <b>Graduation Date: </b>
-        {result.graduationDate}
-      </p>
-      <p>
-        <b>Needs Bus: </b>
-        {result.needBus ? "True" : "False"}
-      </p>
-      <p>
-        <b>Gender: </b>
-        {result.gender}
-      </p>
-      <p>
-        <b>Ethnicity: </b>
-        {result.ethnicity}
-      </p>
-      <p>
-        <b>Status: </b>
-        {result.status}
-      </p>
-      <p>
-        <b>Role: </b>
-        {result.role}
-      </p>
-      <p>
-        <b>
-          {result.qrCodeId === null
-            ? "No QR code"
-            : `Has a QR code (${result.qrCodeId})`}
-        </b>
-      </p>
+      <Flex
+        direction="row"
+        style={{ paddingTop: "1rem", flexWrap: "wrap" }}
+        justify="space-between"
+      >
+        <Column flexBasis={49} style={{ margin: "1rem 0" }}>
+          <h2>
+            {result.firstName} {result.lastName}
+          </h2>
+          <p>
+            <b>E-Mail: </b>
+            {result.email}
+          </p>
+          <p>
+            <b>School: </b>
+            {result.school}
+          </p>
+          <p>
+            <b>Year: </b>
+            {result.year}
+          </p>
+          <p>
+            <b>Graduation Date: </b>
+            {result.graduationDate}
+          </p>
+          <p>
+            <b>Needs Bus: </b>
+            {result.needBus ? "True" : "False"}
+          </p>
+          <p>
+            <b>Gender: </b>
+            {result.gender}
+          </p>
+          <p>
+            <b>Ethnicity: </b>
+            {result.ethnicity}
+          </p>
+          <p>
+            <b>Status: </b>
+            {result.status}
+          </p>
+          <p>
+            <b>Role: </b>
+            {result.role}
+          </p>
+          <p>
+            <b>
+              {result.qrCodeId === null
+                ? "No QR code"
+                : `Has a QR code (${result.qrCodeId})`}
+            </b>
+          </p>
+        </Column>
+        <Column flexBasis={49} style={{ margin: "1rem 0" }}>
+          <FullButton style={{ margin: "0 0 0.5rem 0" }} onClick={viewProfile}>
+            View Full Profile
+          </FullButton>
+          {hasResume ? (
+            <FullButton
+              style={{ margin: "0.5rem 0 0 0" }}
+              onClick={downloadResume}
+            >
+              Download Resume
+            </FullButton>
+          ) : (
+            <p>User has not uploaded a resume</p>
+          )}
+        </Column>
+      </Flex>
+      <Modal visible={popupVisible} header={CloseButton} footer={CloseButton}>
+        <ReactJson src={result} />
+      </Modal>
     </Result>
   );
 };
@@ -85,7 +150,7 @@ const genderOptions = [
   { label: "Female", value: "female" },
   { label: "Non-Binary", value: "non-binary" },
   { label: "Other", value: "other" },
-  { label: "Prefer not to say", value: "no-say" }
+  { label: "Prefer not to say", value: "no-say" },
 ];
 
 const ethnicityOptions = [
@@ -96,7 +161,7 @@ const ethnicityOptions = [
   { label: "Hispanic", value: "hispanic" },
   { label: "White / Caucasian", value: "caucasian" },
   { label: "Mixed / Other", value: "mixed-other" },
-  { label: "Prefer not to answer", value: "no-say" }
+  { label: "Prefer not to answer", value: "no-say" },
 ];
 
 const roleOptions = [
@@ -104,7 +169,7 @@ const roleOptions = [
   { label: "Hacker", value: "hacker" },
   { label: "Admin", value: "admin" },
   { label: "Sponsor", value: "sponsor" },
-  { label: "Volunteer", value: "volunteer" }
+  { label: "Volunteer", value: "volunteer" },
 ];
 
 const yearOptions = [
@@ -113,7 +178,7 @@ const yearOptions = [
   { label: "Sophomore", value: "sophomore" },
   { label: "Junior", value: "junior" },
   { label: "Senior", value: "senior" },
-  { label: "Graduate", value: "graduate" }
+  { label: "Graduate", value: "graduate" },
 ];
 
 const gradDateOptions = [
@@ -126,16 +191,16 @@ const gradDateOptions = [
   { label: "Fall 2022", value: "fall-2022" },
   { label: "Spring 2023", value: "spring-2023" },
   { label: "Fall 2023", value: "fall-2023" },
-  { label: "Other", value: "other" }
+  { label: "Other", value: "other" },
 ];
 
 const needBusOptions = [
   { label: "All", value: "all" },
   { label: "False", value: "False" },
-  { label: "True", value: "True" }
+  { label: "True", value: "True" },
 ];
 
-const hackerManager = () => {
+const hackerManager = ({ profile }) => {
   const [
     firstNameInput,
     lastNameInput,
@@ -147,7 +212,7 @@ const hackerManager = () => {
     needBusInput,
     schoolInput,
     yearInput,
-    graduationDateInput
+    graduationDateInput,
   ] = [
     useRef(null),
     useRef(null),
@@ -159,13 +224,32 @@ const hackerManager = () => {
     useRef(null),
     useRef(null),
     useRef(null),
-    useRef(null)
+    useRef(null),
   ];
 
+  const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
   const [results, setResults] = useState([]);
+  const [resumeList, setResumeList] = useState([]);
+  const [fetch_called, setFetchCalled] = useState(false);
 
-  const exportHackerCSV = async function() {
+  const getResumeList = async () => {
+    setFetchCalled(true);
+    let resume_result = await fetch("/api/profile/resume-list", {
+      method: "GET",
+    });
+
+    if (resume_result.status === 200) {
+      let resumes = await resume_result.json();
+      setResumeList(Object.entries(resumes.files));
+    } else setResumeList([]);
+  };
+
+  useEffect(() => {
+    if (!fetch_called) getResumeList();
+  }, []);
+
+  const exportHackerCSV = async function () {
     setMessage("Generating Hacker CSVs");
 
     let zip = new JSZip();
@@ -174,33 +258,49 @@ const hackerManager = () => {
       let csvs = await genHackerCSV();
       let data = csvs[0].join("");
       zip.file("hackers.csv", data);
+      let firstName = profile ? profile.firstName : "";
+      let lastName = profile ? profile.lastName : "";
+      let user_email = profile ? profile.email : "";
+      let start_and_end_date =
+        new Date(new Date().getTime() - 480 * 1000 * 60).toISOString() + "";
+      let slack_result = await sendSlackMessage(
+        ":file_folder: Hacker CSV exported (/admin/hackerManager) by " +
+          firstName +
+          ", " +
+          lastName +
+          ", " +
+          user_email,
+        "Number hackers exported: " + (csvs[0].length - 1),
+        start_and_end_date,
+        start_and_end_date
+      );
     } catch (err) {
       setMessage(err.message);
       return;
     }
 
-    zip.generateAsync({ type: "blob" }).then(function(content) {
+    zip.generateAsync({ type: "blob" }).then(function (content) {
       saveAs(content, "hacker_data.zip");
       setMessage("");
     });
   };
 
   const genHackerCSV = async (): Promise<Array<Array<String>>> => {
-    return new Promise(function(resolve, reject) {
+    return new Promise(function (resolve, reject) {
       let promises = [];
       promises.push(
-        new Promise(function(resolve, reject) {
+        new Promise(function (resolve, reject) {
           let data = [];
           let stringifier = stringify({
-            delimiter: ","
+            delimiter: ",",
           });
-          stringifier.on("readable", function() {
+          stringifier.on("readable", function () {
             let row;
             while ((row = stringifier.read())) {
               data.push(row);
             }
           });
-          stringifier.on("error", function(err) {
+          stringifier.on("error", function (err) {
             reject(new Error(err.message));
           });
           let headers = [
@@ -214,10 +314,10 @@ const hackerManager = () => {
             "role",
             "school",
             "year",
-            "graduationDate"
+            "graduationDate",
           ];
           stringifier.write(headers);
-          stringifier.on("finish", function() {
+          stringifier.on("finish", function () {
             resolve(data);
           });
 
@@ -234,9 +334,7 @@ const hackerManager = () => {
       );
 
       // return all csvs
-      Promise.all(promises)
-        .then(resolve)
-        .catch(reject);
+      Promise.all(promises).then(resolve).catch(reject);
     });
   };
 
@@ -255,8 +353,9 @@ const hackerManager = () => {
     graduationDateInput.current.value = "";
   };
 
-  const lookupHackers = async e => {
+  const lookupHackers = async (e) => {
     e.preventDefault();
+    setLoading(true);
 
     const firstName = firstNameInput.current.value;
     const lastName = lastNameInput.current.value;
@@ -287,16 +386,17 @@ const hackerManager = () => {
       role,
       school,
       year,
-      graduationDate
+      graduationDate,
     });
 
     const profiles = lookupResponse.success;
-
+    setLoading(false);
     setResults(profiles);
   };
 
-  const showAllHackers = async e => {
+  const showAllHackers = async (e) => {
     e.preventDefault();
+    setLoading(true);
 
     const firstName = "";
     const lastName = "";
@@ -305,18 +405,24 @@ const hackerManager = () => {
     const lookupResponse = await liveLookupFetch({
       firstName,
       lastName,
-      email
+      email,
     });
 
     const profiles = lookupResponse.success;
+    setLoading(false);
     setResults(profiles);
   };
 
   const renderHackers = useMemo(() => {
     return (
       <Results>
-        {results.map(result => (
-          <Hacker result={result} resetResults={resetResults} />
+        {results.map((result) => (
+          <Hacker
+            key={Object.entries(result).join()}
+            result={result}
+            resumeList={resumeList}
+            resetResults={resetResults}
+          />
         ))}
       </Results>
     );
@@ -326,12 +432,16 @@ const hackerManager = () => {
     <>
       <Head title="HackSC Odyssey - Check in Hackers" />
       <Navbar loggedIn admin activePage="/hackerManager" />
-      <Background padding="30px 0">
+      <Background padding="2rem">
         <Container>
           <Flex direction="column">
             <h1>Filter Hackers and Export to CSV</h1>
             <Form>
-              <Flex direction="row" justify="space-between">
+              <Flex
+                direction="row"
+                style={{ flexWrap: "wrap" }}
+                justify="space-between"
+              >
                 <Column flexBasis={49}>
                   <FormGroup>
                     <label>First Name</label>
@@ -352,7 +462,11 @@ const hackerManager = () => {
                 <input type="email" ref={emailInput} />
               </FormGroup>
 
-              <Flex direction="row" justify="space-between">
+              <Flex
+                direction="row"
+                style={{ flexWrap: "wrap" }}
+                justify="space-between"
+              >
                 <Column flexBasis={49}>
                   <FormGroup>
                     <label>Status</label>
@@ -372,7 +486,11 @@ const hackerManager = () => {
                 </Column>
               </Flex>
 
-              <Flex direction="row" justify="space-between">
+              <Flex
+                direction="row"
+                style={{ flexWrap: "wrap" }}
+                justify="space-between"
+              >
                 <Column flexBasis={49}>
                   <FormGroup>
                     <label>School</label>
@@ -401,7 +519,11 @@ const hackerManager = () => {
                 </Column>
               </Flex>
 
-              <Flex direction="row" justify="space-between">
+              <Flex
+                direction="row"
+                style={{ flexWrap: "wrap" }}
+                justify="space-between"
+              >
                 <Column flexBasis={49}>
                   <FormGroup>
                     <label>Year</label>
@@ -427,7 +549,11 @@ const hackerManager = () => {
                 </Column>
               </Flex>
 
-              <Flex direction="row" justify="space-between">
+              <Flex
+                direction="row"
+                style={{ flexWrap: "wrap" }}
+                justify="space-between"
+              >
                 <Column flexBasis={49}>
                   <FormGroup>
                     <label>Gender</label>
@@ -453,27 +579,24 @@ const hackerManager = () => {
 
               <Flex
                 direction="row"
-                style={{ paddingTop: "1rem" }}
-                justify="space-between"
+                style={{ paddingTop: "1rem", flexWrap: "wrap" }}
+                justify="flex-end"
               >
-                <Column flexBasis={49}>
-                  <FullButton onClick={lookupHackers}>
-                    Filter Hackers
-                  </FullButton>
-                </Column>
+                <PaddedButton>
+                  <Button onClick={showAllHackers}>Show All Hackers</Button>
+                  &nbsp; &nbsp;
+                </PaddedButton>
 
-                <Column flexBasis={49}>
-                  <FullButton onClick={showAllHackers}>
-                    Show All Hackers
-                  </FullButton>
-                </Column>
+                <PaddedButton>
+                  <Button onClick={lookupHackers}>Filter Hackers</Button>
+                </PaddedButton>
               </Flex>
             </Form>
           </Flex>
 
           <Flex
             direction="row"
-            style={{ paddingTop: "1rem" }}
+            style={{ paddingTop: "1rem", flexWrap: "wrap" }}
             justify="space-between"
           >
             {results && results.length > 0 ? (
@@ -485,7 +608,13 @@ const hackerManager = () => {
             )}
           </Flex>
 
-          {renderHackers}
+          {loading ? (
+            <PaddedFlex>
+              <PacmanLoader size={20} color={"#FF8379"} />
+            </PaddedFlex>
+          ) : (
+            renderHackers
+          )}
         </Container>
       </Background>
       <Footer />
@@ -493,7 +622,7 @@ const hackerManager = () => {
   );
 };
 
-hackerManager.getInitialProps = async ctx => {
+hackerManager.getInitialProps = async (ctx) => {
   const { req } = ctx;
 
   const profile = await getProfile(req);
@@ -504,9 +633,23 @@ hackerManager.getInitialProps = async ctx => {
   }
 
   return {
-    profile
+    profile,
   };
 };
+
+const PaddedFlex = styled(Flex)`
+  margin: auto;
+  display: flex;
+  min-height: 3rem;
+  justify-content: center;
+  padding: 3rem;
+`;
+
+const PaddedButton = styled(Flex)`
+  padding: 18px 0;
+  padding-left: 5px;
+  justify-content: flex-end;
+`;
 
 const FullButton = styled(Button)`
   width: -webkit-fill-available;

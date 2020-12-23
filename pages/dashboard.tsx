@@ -1,5 +1,5 @@
-import Live from "./live";
-import Dash from "../components/hackerDashboard/dashboard";
+import Live from "./admin/live";
+import Dash from "../components/hackerDashboard/Dashboard";
 
 import {
   handleLoginRedirect,

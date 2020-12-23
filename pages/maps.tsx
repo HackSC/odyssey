@@ -1,9 +1,7 @@
 import React from "react";
 
 import { Head, Navbar, Footer, Maps } from "../components";
-
 import { Background, Container } from "../styles";
-
 import { handleLoginRedirect, getProfile } from "../lib/authenticate";
 
 type Props = {
