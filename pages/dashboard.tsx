@@ -1,5 +1,6 @@
-import Live from "./admin/live";
+import { useState } from "react";
 import Dash from "../components/hackerDashboard/Dashboard";
+import AdminDashboard from "../components/hackerDashboard/AdminDashboard";
 
 import {
   handleLoginRedirect,
@@ -15,7 +16,36 @@ import constants from "../lib/hackathonConstants";
 import { generatePosts } from "../lib/referrerCode";
 
 const Dashboard = ({ profile, houses, socialPosts }) => {
-  return <Dash />;
+  const [view, setView] = useState("hacker");
+
+  const switchRole = () => {
+    if (view === "admin") {
+      setView("hacker");
+    } else {
+      setView("admin");
+    }
+  };
+
+  const getDashToRender = () => {
+    //@ts-ignore  - the NODE_ENV var doesnt support dev
+    if (view === "admin") {
+      return <AdminDashboard profile={profile} />;
+    } else {
+      return <Dash profile={profile} />;
+    }
+  };
+
+  return (
+    <>
+      <button
+        onClick={switchRole}
+        style={{ position: "absolute", top: 10, right: "50%" }}
+      >
+        Switch role
+      </button>
+      {getDashToRender()}
+    </>
+  );
 };
 
 export async function getServerSideProps({ req }) {

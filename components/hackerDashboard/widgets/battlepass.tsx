@@ -13,7 +13,7 @@ const BattlepassWidget = () => {
   const styles = {
     // Customize the root svg element
     root: {
-      filter: "drop-shadow(4px 8px 15px black)",
+      filter: "drop-shadow(2px 4px 4px black)",
     },
     // Customize the path, i.e. the "completed progress"
     path: {
@@ -39,7 +39,7 @@ const BattlepassWidget = () => {
       <Wrapper>
         <GraphWrapper>
           <CircularProgressbarWithChildren
-            strokeWidth={"24"}
+            strokeWidth={24}
             styles={styles}
             value={progress}
           >
@@ -89,7 +89,7 @@ const GraphWrapper = styled.div`
   width: 150px;
 `;
 
-const RewardWrapper = styled.p`
+const RewardWrapper = styled.span`
   font-size: 18px;
 `;
 

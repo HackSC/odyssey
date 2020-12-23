@@ -1,24 +1,29 @@
 import styled from "styled-components";
 
 // Layout
-import Navbar from "./Navbar";
-import Sidebar from "./Sidebar";
-import Footer from "./Footer";
-import Header from "./Header";
-import WidgetFrame from "./WidgetFrame";
+import Navbar from "./layout/Navbar";
+import Sidebar from "./layout/Sidebar";
+import Footer from "./layout/Footer";
+import Header from "./layout/Header";
+import WidgetFrame from "./HackerWidgetFrame";
 
 // Widgets
 import Battlepass from "./widgets/battlepass";
+import Updates from "./widgets/updates";
 
-const Dashboard = () => {
+type Props = {
+  profile: Profile;
+};
+
+const Dashboard = ({ profile }: Props) => {
   return (
     <Container>
       <Navbar />
       <Header />
       <WidgetFrame widget="one" component={<h2>Your team</h2>} />
       <WidgetFrame widget="two" component={<Battlepass />} />
-      <WidgetFrame widget="three" component={<h2>Updates</h2>} />
-      <Sidebar />
+      <WidgetFrame widget="three" component={<Updates />} />
+      <Sidebar view="hacker" />
       <Footer />
     </Container>
   );

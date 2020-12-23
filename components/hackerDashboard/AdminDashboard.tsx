@@ -1,20 +1,41 @@
-import Navbar from "./Navbar";
-import Sidebar from "./Sidebar";
-import Footer from "./Footer";
-import Header from "./Header";
-import WidgetFrame from "./WidgetFrame";
-
 import styled from "styled-components";
 
-const Dashboard = () => {
+// Layout
+import Navbar from "./layout/Navbar";
+import Sidebar from "./layout/Sidebar";
+import Footer from "./layout/Footer";
+import Header from "./layout/Header";
+import WidgetFrame from "./HackerWidgetFrame";
+
+// Widgets
+import ActionsWidget from "./widgets/admin/actions";
+
+type Props = {
+  profile: Profile;
+};
+
+const AdminDashboard = (props: Props) => {
+  const { profile } = props;
+
   return (
     <Container>
       <Navbar />
-      <Header />
-      <WidgetFrame widget="one" component={<h1>Your team</h1>} />
-      <WidgetFrame widget="two" component={<h1>Battlepass</h1>} />
-      <WidgetFrame widget="three" component={<h1>Updates</h1>} />
-      <Sidebar />
+      <Header text={"Admin Dashboard"} />
+      <WidgetFrame
+        widget="one"
+        component={
+          <>
+            <h3>Welcome to the Admin Dashboard!</h3>
+            <p>
+              Here you can access actions to help run HackSC. If you have any
+              questions or find any errors, hit up the engineers in{" "}
+              <b>#{new Date().getFullYear()}-engineering</b>
+            </p>
+          </>
+        }
+      />
+      <WidgetFrame widget="two" component={<ActionsWidget />} />
+      <Sidebar view={"admin"} />
       <Footer />
     </Container>
   );
@@ -23,15 +44,15 @@ const Dashboard = () => {
 const Container = styled.div`
   display: grid;
   grid-template-columns: 0.5fr 1.5fr 0.5fr;
-  grid-template-rows: 0.5fr 0.8fr 1.2fr 0.6fr;
+  grid-template-rows: 0.2fr 0.2fr 1.6fr 0.6fr;
   gap: 0px;
   grid-template-areas:
     "Navbar Header Header Sidebar"
-    "Navbar WidgetArea1 WidgetArea2 Sidebar"
-    "Navbar BigWidget BigWidget Sidebar"
+    "Navbar WidgetArea1 WidgetArea1 Sidebar"
+    "Navbar WidgetArea2 WidgetArea2 Sidebar"
     "Footer Footer Footer Footer";
   background-color: #1d2c3f;
   color: #fff;
 `;
 
-export default Dashboard;
+export default AdminDashboard;

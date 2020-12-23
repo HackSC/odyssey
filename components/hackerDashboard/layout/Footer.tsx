@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import FooterComp from "../Footer";
+import FooterComp from "../../Footer";
 
 const Footer = () => (
   <FooterContainer>

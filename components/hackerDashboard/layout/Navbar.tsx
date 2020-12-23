@@ -1,12 +1,13 @@
 import styled from "styled-components";
-import Logo from "../../assets/hackscFox.png";
+import Image from "next/image";
+import Logo from "../../../assets/hackscFox.png";
 
 const Sidebar = () => {
   return (
     <SidebarContainer>
       <SidebarMenu>
         <MenuLogo>
-          <img src={Logo} width="150%" height="150%" alt="" />
+          <Image src={Logo} width="75%" height="75%" alt="" />
         </MenuLogo>
         <SidebarMenuItem>
           <SidebarMenuItemLabel>Dashboard</SidebarMenuItemLabel>

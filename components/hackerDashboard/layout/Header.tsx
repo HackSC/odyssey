@@ -1,9 +1,13 @@
 import styled from "styled-components";
 
-const DashHeader = () => {
+type Props = {
+  text?: string;
+};
+
+const DashHeader = ({ text }: Props) => {
   return (
     <Header>
-      <Title> HackSC 2021 </Title>
+      <Title> {text || "HackSC 2021"} </Title>
     </Header>
   );
 };
