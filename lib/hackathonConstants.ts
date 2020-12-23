@@ -7,4 +7,5 @@ export default {
   showResults: true,
   showTeam: false, // * False until closer to event
   showProjectTeam: false, // * False until closer to event
+  hackathonDate: new Date("2/19/21"),
 };

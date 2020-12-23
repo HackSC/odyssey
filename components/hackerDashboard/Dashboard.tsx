@@ -1,19 +1,23 @@
+import styled from "styled-components";
+
+// Layout
 import Navbar from "./Navbar";
 import Sidebar from "./Sidebar";
 import Footer from "./Footer";
 import Header from "./Header";
 import WidgetFrame from "./WidgetFrame";
 
-import styled from "styled-components";
+// Widgets
+import Battlepass from "./widgets/battlepass";
 
 const Dashboard = () => {
   return (
     <Container>
       <Navbar />
       <Header />
-      <WidgetFrame widget="one" component={<h1>Your team</h1>} />
-      <WidgetFrame widget="two" component={<h1>Battlepass</h1>} />
-      <WidgetFrame widget="three" component={<h1>Updates</h1>} />
+      <WidgetFrame widget="one" component={<h2>Your team</h2>} />
+      <WidgetFrame widget="two" component={<Battlepass />} />
+      <WidgetFrame widget="three" component={<h2>Updates</h2>} />
       <Sidebar />
       <Footer />
     </Container>
@@ -22,8 +26,8 @@ const Dashboard = () => {
 
 const Container = styled.div`
   display: grid;
-  grid-template-columns: 0.5fr 1.5fr 0.5fr;
-  grid-template-rows: 0.5fr 0.8fr 1.2fr 0.6fr;
+  grid-template-columns: 0.5fr 1.3fr 0.7fr 0.5fr;
+  grid-template-rows: 0.4fr 1fr 1.4fr 0.6fr;
   gap: 0px;
   grid-template-areas:
     "Navbar Header Header Sidebar"

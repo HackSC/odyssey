@@ -38,7 +38,6 @@ const SidebarContainer = styled.div`
   display: flex;
   flex-direction: column;
   font-family: "Work Sans", sans-serif;
-  border-right: 1px solid white;
 `;
 
 const SidebarMenu = styled.ul`

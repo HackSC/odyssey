@@ -11,7 +11,6 @@ const DashHeader = () => {
 const Header = styled.div`
   display: grid;
   grid-area: Header;
-  border-bottom: 1px solid white;
   background: #1d2c3f;
 `;
 

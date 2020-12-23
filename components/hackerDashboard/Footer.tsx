@@ -11,7 +11,6 @@ const FooterContainer = styled.div`
   display: grid;
   grid-area: Footer;
   height: 100%;
-  border-top: 1px solid white;
   background: #1d2c3f;
 `;
 
