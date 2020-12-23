@@ -60,6 +60,9 @@ export const getServerSideProps: GetServerSideProps = async ({ req }) => {
   let houses = await getHouses(req);
   const { appsCloseDate } = hackathonConstants;
 
+  const threeDaysAfterClose = new Date(appsCloseDate);
+  threeDaysAfterClose.setDate(threeDaysAfterClose.getDate() + 3);
+
   // Null profile means user is not logged in
   if (!profile) {
     handleLoginRedirect(req);
@@ -94,7 +97,7 @@ export const getServerSideProps: GetServerSideProps = async ({ req }) => {
       houses,
       profile,
       socialPosts,
-      appsOpen: appsCloseDate.getTime() > Date.now(),
+      appsOpen: threeDaysAfterClose.getTime() > Date.now(),
     },
   };
 };
