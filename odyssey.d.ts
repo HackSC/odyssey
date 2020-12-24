@@ -38,6 +38,15 @@ declare type ApiLink = {
   api_id: number;
 };
 
+declare type PendingTeammateRequests = {
+  id: number;
+  teamId: number;
+  hackerProfileId: string;
+  ownder: "team" | "hacker";
+  createdAt: Date;
+  updatedAt: Date;
+};
+
 declare type Profile = {
   id: number;
   gender: "male" | "female" | "non-binary" | "other" | "no-say";
@@ -206,4 +215,4 @@ declare type APIResponse<T> = {
 
 declare type TeamSuggestion = {
   hackerProfiles: Array<Profile>;
-}
+};
