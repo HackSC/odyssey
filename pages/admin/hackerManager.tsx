@@ -263,17 +263,23 @@ const hackerManager = ({ profile }) => {
       let user_email = profile ? profile.email : "";
       let start_and_end_date =
         new Date(new Date().getTime() - 480 * 1000 * 60).toISOString() + "";
-      let slack_result = await sendSlackMessage(
-        ":file_folder: Hacker CSV exported (/admin/hackerManager) by " +
-          firstName +
-          ", " +
-          lastName +
-          ", " +
-          user_email,
-        "Number hackers exported: " + (csvs[0].length - 1),
-        start_and_end_date,
-        start_and_end_date
-      );
+      let slack_result: Response;
+
+      if (!firstName) {
+        slack_result = await sendSlackMessage(
+          `:file_folder: Hacker CSV exported (/admin/hackerManager) by ${user_email}`,
+          "Number hackers exported: " + (csvs[0].length - 1),
+          start_and_end_date,
+          start_and_end_date
+        );
+      } else {
+        slack_result = await sendSlackMessage(
+          `:file_folder: Hacker CSV exported (/admin/hackerManager) by ${firstName} ${lastName} (${user_email})`,
+          "Number hackers exported: " + (csvs[0].length - 1),
+          start_and_end_date,
+          start_and_end_date
+        );
+      }
     } catch (err) {
       setMessage(err.message);
       return;
@@ -580,19 +586,16 @@ const hackerManager = ({ profile }) => {
               <Flex
                 direction="row"
                 style={{ paddingTop: "1rem", flexWrap: "wrap" }}
-                justify="space-between"
+                justify="flex-end"
               >
-                <Column flexBasis={49} style={{ margin: "1rem 0" }}>
-                  <FullButton onClick={lookupHackers}>
-                    Filter Hackers
-                  </FullButton>
-                </Column>
+                <PaddedButton>
+                  <Button onClick={showAllHackers}>Show All Hackers</Button>
+                  &nbsp; &nbsp;
+                </PaddedButton>
 
-                <Column flexBasis={49} style={{ margin: "1rem 0" }}>
-                  <FullButton onClick={showAllHackers}>
-                    Show All Hackers
-                  </FullButton>
-                </Column>
+                <PaddedButton>
+                  <Button onClick={lookupHackers}>Filter Hackers</Button>
+                </PaddedButton>
               </Flex>
             </Form>
           </Flex>
@@ -646,6 +649,12 @@ const PaddedFlex = styled(Flex)`
   min-height: 3rem;
   justify-content: center;
   padding: 3rem;
+`;
+
+const PaddedButton = styled(Flex)`
+  padding: 18px 0;
+  padding-left: 5px;
+  justify-content: flex-end;
 `;
 
 const FullButton = styled(Button)`
