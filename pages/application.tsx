@@ -1,4 +1,5 @@
 import React from "react";
+import { GetServerSideProps } from "next";
 import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
 
 import {
@@ -16,8 +17,9 @@ import { Background, Container } from "../styles";
 import { generatePosts } from "../lib/referrerCode";
 import { getHouses } from "../lib";
 import useSWR from "swr";
+import hackathonConstants from "../lib/hackathonConstants";
 
-const Application = ({ profile, houses, socialPosts }) => {
+const Application = ({ profile, houses, socialPosts, appsOpen }) => {
   let fetchUrl = process.env.URL_BASE
     ? process.env.URL_BASE + "api/profile"
     : "api/profile";
@@ -43,6 +45,7 @@ const Application = ({ profile, houses, socialPosts }) => {
               houses={houses}
               profile={profile}
               socialPosts={socialPosts}
+              appsOpen={appsOpen}
             />
           </Container>
         )}
@@ -52,9 +55,13 @@ const Application = ({ profile, houses, socialPosts }) => {
   );
 };
 
-Application.getInitialProps = async ({ req }) => {
+export const getServerSideProps: GetServerSideProps = async ({ req }) => {
   const profile = await getProfile(req);
   let houses = await getHouses(req);
+  const { appsCloseDate } = hackathonConstants;
+
+  const threeDaysAfterClose = new Date(appsCloseDate);
+  threeDaysAfterClose.setDate(threeDaysAfterClose.getDate() + 3);
 
   // Null profile means user is not logged in
   if (!profile) {
@@ -86,9 +93,12 @@ Application.getInitialProps = async ({ req }) => {
   }
 
   return {
-    houses,
-    profile,
-    socialPosts,
+    props: {
+      houses,
+      profile,
+      socialPosts,
+      appsOpen: threeDaysAfterClose.getTime() > Date.now(),
+    },
   };
 };
 
