@@ -1,8 +1,16 @@
-import React, { useState, useRef, useEffect, useCallback } from "react";
+import React, {
+  Component,
+  useState,
+  useRef,
+  useEffect,
+  useCallback,
+} from "react";
 import styled from "styled-components";
 import { useToasts } from "react-toast-notifications";
 import Confetti from "react-confetti";
 import { useWindowSize } from "react-use";
+import { Document, Page, pdfjs } from "react-pdf";
+pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
 
 import {
   getHackerProfileForReview,
@@ -135,7 +143,7 @@ const AppReview = ({ profile, hackerProfile, reviewHistory, totalReviews }) => {
       }
 
       const review = {
-        userId: currentProfile.userId,
+        userId: currentProfile ? currentProfile.userId : "",
         scoreOne: s1,
         scoreTwo: s2,
         scoreThree: s3,
@@ -201,12 +209,19 @@ const AppReview = ({ profile, hackerProfile, reviewHistory, totalReviews }) => {
     };
   }, [s1, s2, s3, submitting, loadingNewProfile]);
 
+  const [numPages, setNumPages] = useState(null);
+  const [pageNumber, setPageNumber] = useState(1);
+
+  function onDocumentLoadSuccess({ numPages }) {
+    setNumPages(numPages);
+  }
+
   return (
     <>
       <Head title="HackSC Odyssey - Application" />
       <Navbar loggedIn admin activePage="/appReview" />
       <Background padding="3rem 1rem">
-        <Container>
+        <Container style={{ maxWidth: "1000px" }}>
           {totalReviewHistory <= 0 ? (
             <InfoPanel>
               <Confetti
@@ -250,56 +265,81 @@ const AppReview = ({ profile, hackerProfile, reviewHistory, totalReviews }) => {
             justify="space-between"
             style={{ flexWrap: "wrap" }}
           >
-            <Column flexBasis={48}>
+            <Column flexGrow={1} style={{ margin: "0 2rem 0 0" }}>
+              <h1>Resume</h1>
+              <a
+                href={currentProfile ? currentProfile.resume : "/"}
+                target="_blank"
+              >
+                Download Pdf
+              </a>
+              <div style={{ padding: "2rem 0" }}>
+                <iframe
+                  style={{
+                    width: "100%",
+                    minWidth: "320px",
+                    minHeight: "620px",
+                  }}
+                  src={`https://hacksc-odyssey.s3-us-west-1.amazonaws.com/${
+                    currentProfile ? currentProfile.userId : ""
+                  }#zoom=50`}
+                />
+              </div>
+            </Column>
+
+            <Column flexBasis={40}>
               <h1> Applicant Info </h1>
               <Panel>
                 <h2>Question 1 - Vertical</h2>
-                <p>
+                <BrokenP>
                   {" "}
                   {loadingNewProfile
                     ? "Loading..."
                     : currentProfile
                     ? currentProfile.questionOne
                     : "(No response)"}{" "}
-                </p>
+                </BrokenP>
               </Panel>
 
               <Panel>
                 <h2>Question 2 - Project</h2>
-                <p>
+                <BrokenP>
                   {" "}
                   {loadingNewProfile
                     ? "Loading..."
                     : currentProfile
                     ? currentProfile.questionTwo
                     : "(No response)"}{" "}
-                </p>
+                </BrokenP>
               </Panel>
 
               <Panel>
                 <h2>Question 3 - Beverage</h2>
-                <p>
+                <BrokenP>
                   {" "}
                   {loadingNewProfile
                     ? "Loading..."
                     : currentProfile
                     ? currentProfile.questionThree
                     : "(No response)"}{" "}
-                </p>
+                </BrokenP>
               </Panel>
-            </Column>
 
-            <Column flexBasis={48}>
               <h1>Review</h1>
               <Panel>
                 <ScoreInputLabel>Score 1 (1-5)</ScoreInputLabel>
 
-                <Flex direction="row" justify="space-between" align="center">
-                  <Column>
+                <Flex
+                  direction="row"
+                  justify="space-between"
+                  align="center"
+                  style={{ flexWrap: "wrap" }}
+                >
+                  <Column style={{ margin: "0 0 1rem 0" }}>
                     <ScoreKeyLabel>Q</ScoreKeyLabel>
                   </Column>
 
-                  <Column flexGrow={1}>
+                  <Column flexGrow={1} style={{ margin: "0 0 1rem 0" }}>
                     <Input
                       type="number"
                       onChange={(e) => {
@@ -315,12 +355,17 @@ const AppReview = ({ profile, hackerProfile, reviewHistory, totalReviews }) => {
               <Panel>
                 <ScoreInputLabel>Score 2 (1-5)</ScoreInputLabel>
 
-                <Flex direction="row" justify="space-between" align="center">
-                  <Column>
+                <Flex
+                  direction="row"
+                  justify="space-between"
+                  align="center"
+                  style={{ flexWrap: "wrap" }}
+                >
+                  <Column style={{ margin: "0 0 1rem 0" }}>
                     <ScoreKeyLabel>W</ScoreKeyLabel>
                   </Column>
 
-                  <Column flexGrow={1}>
+                  <Column flexGrow={1} style={{ margin: "0 0 1rem 0" }}>
                     <Input
                       type="number"
                       onChange={(e) => {
@@ -336,12 +381,17 @@ const AppReview = ({ profile, hackerProfile, reviewHistory, totalReviews }) => {
               <Panel>
                 <ScoreInputLabel>Score 3 (1-5)</ScoreInputLabel>
 
-                <Flex direction="row" justify="space-between" align="center">
-                  <Column>
+                <Flex
+                  direction="row"
+                  justify="space-between"
+                  align="center"
+                  style={{ flexWrap: "wrap" }}
+                >
+                  <Column style={{ margin: "0 0 1rem 0" }}>
                     <ScoreKeyLabel>E</ScoreKeyLabel>
                   </Column>
 
-                  <Column flexGrow={1}>
+                  <Column flexGrow={1} style={{ margin: "0 0 1rem 0" }}>
                     <Input
                       type="number"
                       onChange={(e) => {
@@ -394,6 +444,10 @@ AppReview.getInitialProps = async (ctx) => {
     totalReviews,
   };
 };
+
+const BrokenP = styled.p`
+  word-break: break-all;
+`;
 
 const Panel = styled.div`
   padding: 24px 36px;
