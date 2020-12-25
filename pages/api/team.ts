@@ -13,10 +13,11 @@ router.get("/", async (req, res) => {
     where: { userId: req.user.id },
   });
 
-  const team = await hackerProfile.getTeam({
+  let team = await hackerProfile.getTeam({
     include: [
       {
         model: models.HackerProfile,
+        as: "members",
         attributes: ["firstName", "lastName", "status", "email", "userId"],
       },
     ],
@@ -74,10 +75,12 @@ router.post("/", async (req, res) => {
     name: req.body.name,
     teamCode: generatedCode,
     ownerId: req.user.id,
+    description: "",
   });
 
   await hackerProfile.update({
     teamId: team.id,
+    lookingForTeam: false,
   });
 
   return res.json({
@@ -104,6 +107,13 @@ router.delete("/", async (req, res) => {
       { teamId: null },
       { where: { teamId: team.id } }
     );
+
+    await models.PendingTeammateRequests.destroy({
+      where: {
+        teamId: team.id,
+      },
+    });
+
     await team.destroy();
     return res.status(200).json({ message: "Team successfully deleted" });
   } else {
@@ -137,7 +147,7 @@ router.post("/join/:code", async (req, res) => {
   }
 
   // See if there is still space in the team
-  const teamMembers = await team.getHackerProfiles();
+  const teamMembers = await team.getMembers();
 
   if (teamMembers.length + 1 > 4) {
     return res.status(400).json({ message: "This team is full!" });
@@ -146,8 +156,109 @@ router.post("/join/:code", async (req, res) => {
   // If we're still here, we can join the team :)
   await hackerProfile.setTeam(team);
 
+  await models.PendingTeammateRequests.destroy({
+    where: {
+      hackerProfileId: req.user.id,
+    },
+  });
+
+  // if full, update
+  if (teamMembers.length == 3) {
+    await models.PendingTeammateRequests.destroy({
+      where: {
+        teamId: team.id,
+      },
+    });
+
+    await team.update({
+      lookingForTeammates: false,
+    })
+  }
+
   return res.status(200).json({
     message: "Successfully joined team",
+  });
+});
+
+// POST /api/team/kick/:userid
+// - If a hacker is not on a team, attempt to join a team
+router.post("/kick/:userid", async (req, res) => {
+  const hackerProfile = await models.HackerProfile.findOne({
+    where: { userId: req.user.id },
+  });
+
+  // Can't kick someone else from a team if you are not on a team!
+  let team = await hackerProfile.getTeam();
+  if (!team) {
+    return res.status(400).json({ message: "User does not belong on a team" });
+  }
+
+  if (team.ownerId === req.params.userid) {
+    return res.status(400).json({
+      message: `Not allowed to kick yourself. Delete the team instead.`,
+    });
+  }
+
+  if (team.ownerId === req.user.id) {
+    // Allow kicking
+    const kickProfile = await models.HackerProfile.findOne({
+      where: { userId: req.params.userid },
+    });
+
+    let kicked_team = await hackerProfile.getTeam();
+
+    if (kicked_team.teamCode == team.teamCode) {
+      // In the same team, we can kick
+      await kickProfile.setTeam(null);
+      return res
+        .status(200)
+        .json({ message: `User ${req.params.userid} successfully kicked.` });
+    }
+  }
+
+  return res.status(400).json({
+    message: `Could not kick member with userid ${req.params.userid}.`,
+  });
+});
+
+// POST /api/team/kick/:userid
+// - If a hacker is not on a team, attempt to join a team
+router.post("/kick/:userid", async (req, res) => {
+  const hackerProfile = await models.HackerProfile.findOne({
+    where: { userId: req.user.id },
+  });
+
+  // Can't kick someone else from a team if you are not on a team!
+  let team = await hackerProfile.getTeam();
+  if (!team) {
+    return res.status(400).json({ message: "User does not belong on a team" });
+  }
+
+  if (team.ownerId === req.params.userid) {
+    return res.status(400).json({
+      message: `Not allowed to kick yourself. Delete the team instead.`,
+    });
+  }
+
+  if (team.ownerId === req.user.id) {
+    // Allow kicking
+    const kickProfile = await models.HackerProfile.findOne({
+      where: { userId: req.params.userid },
+    });
+
+    let kicked_team = await hackerProfile.getTeam();
+
+    if (kicked_team.teamCode == team.teamCode) {
+      // In the same team, we can kick
+      await kickProfile.setTeam(null);
+      return res
+        .status(200)
+        .json({ message: `User ${req.params.userid} successfully kicked.` });
+    }
+  }
+
+  return res.status(400).json({
+    message: `Could not kick member with userid ${req.params.userid}.`,
   });
 });
 
@@ -182,5 +293,108 @@ router.post("/leave", async (req, res) => {
     message: "Successfully left team",
   });
 });
+
+// Change visibility
+router.put("/visibility", async (req, res) => {
+  const hackerProfile = await models.HackerProfile.findOne({
+    where: { userId: req.user.id },
+  });
+
+  const team = await hackerProfile.getTeam({
+    include: [
+      {
+        model: models.HackerProfile,
+        attributes: ["firstName", "lastName", "status", "email", "userId"],
+      },
+    ],
+  });
+  const lookingForTeammates = team.lookingForTeammates;
+
+  await models.Team.update(
+    { lookingForTeammates: !lookingForTeammates },
+    {
+      where: {
+        id: team.id,
+      },
+    }
+  );
+
+  return res.send();
+});
+
+// Change description
+router.put("/description", async (req, res) => {
+  await models.Team.update(
+    { description: req.body.text },
+    {
+      where: {
+        teamCode: req.body.teamCode,
+      },
+    }
+  );
+
+  return res.send();
+});
+
+// POST /api/team/accept/
+// - If a hacker is not on a team, attempt to join a team
+router.post("/accept/", async (req, res) => {
+  const hackerProfile = await models.HackerProfile.findOne({
+    where: { userId: req.body.hackerId },
+  });
+
+  // Can't join a team if you're already on one!
+  if (hackerProfile.teamId) {
+    return res.status(400).json({ message: "User already belongs on a team" });
+  }
+
+  // Try to find a team with the provided code
+  const team = await models.Team.findOne({
+    where: { teamCode: req.body.teamCode || "" },
+  });
+  if (!team) {
+    return res
+      .status(400)
+      .json({ message: "Could not find a team with that code" });
+  }
+
+  // See if there is still space in the team
+  const teamMembers = await team.getMembers();
+
+  if (teamMembers.length + 1 > 4) {
+    return res.status(400).json({ message: "This team is full!" });
+  }
+
+  // If we're still here, we can join the team :)
+  await hackerProfile.setTeam(team);
+
+  await hackerProfile.update({
+    lookingForTeam: false,
+  });
+
+  await models.PendingTeammateRequests.destroy({
+    where: {
+      hackerProfileId: req.body.hackerId,
+    },
+  });
+
+  // if full, update
+  if (teamMembers.length == 3) {
+    await models.PendingTeammateRequests.destroy({
+      where: {
+        teamId: team.id,
+      },
+    });
+
+    await team.update({
+      lookingForTeammates: false,
+    })
+  }
+
+  return res.status(200).json({
+    message: "Successfully joined team",
+  });
+});
+
 
 export { router };

@@ -235,12 +235,10 @@ const Status = styled.div`
   margin: 16px 0 32px;
   background: #ffffff;
   border-radius: 4px;
-
   h2 {
     padding: 0;
     margin-left: 16px;
   }
-
   ${({ theme }) =>
     theme.media.tablet`
       padding: 32px;
@@ -277,11 +275,9 @@ const Step = styled.div<StepProps>`
   margin-bottom: 24px;
   background: #ffffff;
   border-radius: 4px;
-
   &:last-child {
     margin-bottom: 0;
   }
-
   ${({ disabled }) => disabled && `opacity: 0.25;`}
 `;
 
@@ -298,11 +294,9 @@ const Dates = styled.div`
 
 const DateText = styled.div`
   margin-top: 36px;
-
   :first-child {
     margin-top: 0;
   }
-
   h3 {
     font-weight: 600;
     color: ${({ theme }) => theme.colors.peach};
