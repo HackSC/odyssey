@@ -149,7 +149,7 @@ function computeUrlRoute(route: string, req?: any, param?: ResourceID): string {
 async function APIGet<T>(
   route: GetRoute,
   opts: {
-    queryParams?: { [key: string]: string | number };
+    queryParams?: Object; // { key: string | number };
     req?: NextApiRequest;
   },
   param?: ResourceID

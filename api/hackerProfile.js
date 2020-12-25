@@ -470,4 +470,38 @@ router.get("/list", utils.requireDevelopmentEnv, async (req, res) => {
   }
 });
 
+// Change visibility
+router.put("/visibility", async (req, res) => {
+  const currentHackerProfile = await models.HackerProfile.findOne({
+    where: { userId: req.user.id },
+  });
+
+  const lookingForTeam = currentHackerProfile.lookingForTeam;
+
+  await models.HackerProfile.update(
+    { lookingForTeam: !lookingForTeam },
+    {
+      where: {
+        userId: req.user.id,
+      },
+    }
+  );
+
+  return res.send();
+});
+
+// Add portfolio url
+router.put("/portfolio", async (req, res) => {
+  await models.HackerProfile.update(
+    { portfolioUrl: req.body.portfolioUrl },
+    {
+      where: {
+        userId: req.user.id,
+      },
+    }
+  );
+
+  return res.send();
+});
+
 module.exports = router;
