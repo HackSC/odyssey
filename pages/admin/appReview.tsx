@@ -120,7 +120,7 @@ const AppReview = ({ profile, hackerProfile, reviewHistory, totalReviews }) => {
       }
 
       const review = {
-        userId: currentProfile.userId,
+        userId: currentProfile ? currentProfile.userId : "",
         scoreOne: s1,
         scoreTwo: s2,
         scoreThree: s3,
@@ -244,11 +244,14 @@ const AppReview = ({ profile, hackerProfile, reviewHistory, totalReviews }) => {
           >
             <Column flexBasis={48}>
               <h1>Resume</h1>
-              <a href={currentProfile.resume} target="_blank">
+              <a
+                href={currentProfile ? currentProfile.resume : "/"}
+                target="_blank"
+              >
                 Download Pdf
               </a>
               <div style={{ padding: "2rem 0" }}>
-                {typeof window !== undefined ? (
+                {typeof window !== "undefined" ? (
                   <div style={{ padding: "0 0 2rem 0" }}>
                     <Document
                       options={{ workerSrc: "pdf.worker.js" }}
