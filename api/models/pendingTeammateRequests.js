@@ -20,5 +20,14 @@ module.exports = (sequelize, DataTypes) => {
     },
   });
 
+  PendingTeammateRequests.associate = function (models) {
+    PendingTeammateRequests.belongsTo(models.Team, {
+      as: "team",
+      foreignKey: "teamId",
+      otherKey: "hackerProfileId",
+      constraints: false,
+    });
+  };
+
   return PendingTeammateRequests;
 };

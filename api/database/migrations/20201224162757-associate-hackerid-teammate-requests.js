@@ -1,55 +1,47 @@
-"use strict";
-
-module.exports = {
-  up: (queryInterface, Sequelize) => {
-    return;
-  },
-
-  down: (queryInterface, Sequelize) => {
-    return queryInterface.removeColumn(
-      "PendingTeammateRequests",
-      "hackerProfileId"
-    );
-  },
-};
-
 ("use strict");
 
 module.exports = {
   up: (queryInterface, Sequelize) => {
-    return Promise.all([
-      queryInterface.changeColumn("HackerProfiles", "userId", {
-        type: Sequelize.STRING,
-        allowNull: false,
-        unique: true,
-      }),
-      queryInterface.addColumn(
-        "PendingTeammateRequests",
-        "hackerProfileId",
-        {
+    return (
+      queryInterface
+        .changeColumn("HackerProfiles", "userId", {
+          type: Sequelize.STRING,
           allowNull: false,
           unique: true,
-          type: Sequelize.STRING,
-          references: {
-            model: "HackerProfiles",
-            key: "userId",
-          },
-        },
-        {
-          charset: "ascii",
-        }
-      ),
-    ]);
+        })
+        //.then(() => queryInterface.addIndex('HackerProfiles', ['userId']))
+        .then(() =>
+          queryInterface.addColumn(
+            "PendingTeammateRequests",
+            "hackerProfileId",
+            {
+              type: Sequelize.STRING,
+              references: {
+                model: "HackerProfiles",
+                key: "userId",
+              },
+            },
+            {
+              charset: "utf8mb4",
+              collate: "utf8mb4_bin",
+            }
+          )
+        )
+    );
   },
 
   down: (queryInterface, Sequelize) => {
-    return Promise.all([
-      queryInterface.changeColumn("HackerProfiles", "userId", {
+    return queryInterface
+      .changeColumn("HackerProfiles", "userId", {
         type: Sequelize.STRING,
         allowNull: false,
         unique: false,
-      }),
-      queryInterface.removeColumn("PendingTeammateRequests", "hackerProfileId"),
-    ]);
+      })
+      .then(() =>
+        queryInterface.removeColumn(
+          "PendingTeammateRequests",
+          "hackerProfileId"
+        )
+      );
   },
 };

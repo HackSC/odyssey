@@ -151,6 +151,7 @@ module.exports = (sequelize, DataTypes) => {
       foreignKey: "hackerProfileId",
       otherKey: "teamId",
       as: "requestTeam",
+      constraints: false,
     });
   };
   return HackerProfile;
