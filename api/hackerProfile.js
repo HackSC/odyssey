@@ -303,6 +303,8 @@ router.post("/resume", utils.authMiddleware, async (req, res) => {
       Bucket: "hacksc-odyssey",
       Key: user.id,
       Body: file.data,
+      ACL: "public-read",
+      ContentType: "application/pdf",
     };
 
     s3.upload(params, function (err, data) {
