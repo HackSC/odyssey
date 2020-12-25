@@ -10,17 +10,20 @@ type Props = {
   profile: Profile;
   socialPosts: any;
   houses: any;
+  appsOpen: boolean;
 };
 
-const LiveStep: React.FunctionComponent<Props> = props => {
-  const { profile, socialPosts, houses } = props;
+const LiveStep: React.FunctionComponent<Props> = (props) => {
+  const { profile, socialPosts, houses, appsOpen } = props;
 
   if (profile.status === "confirmed") {
     return <Confirmed profile={profile} />;
   } else if (profile.status === "checkedIn") {
     return <CheckedIn houses={houses} profile={profile} />;
   } else {
-    return <Step profile={profile} socialPosts={socialPosts} />;
+    return (
+      <Step profile={profile} appsOpen={appsOpen} socialPosts={socialPosts} />
+    );
   }
 };
 
