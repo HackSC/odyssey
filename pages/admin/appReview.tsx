@@ -198,7 +198,7 @@ const AppReview = ({ profile, hackerProfile, reviewHistory, totalReviews }) => {
       <Head title="HackSC Odyssey - Application" />
       <Navbar loggedIn admin activePage="/appReview" />
       <Background padding="3rem 1rem">
-        <Container>
+        <Container style={{ maxWidth: "1000px" }}>
           {totalReviewHistory <= 0 ? (
             <InfoPanel>
               <Confetti
@@ -242,7 +242,7 @@ const AppReview = ({ profile, hackerProfile, reviewHistory, totalReviews }) => {
             justify="space-between"
             style={{ flexWrap: "wrap" }}
           >
-            <Column flexBasis={48}>
+            <Column flexGrow={1} style={{ margin: "0 2rem 0 0" }}>
               <h1>Resume</h1>
               <a
                 href={currentProfile ? currentProfile.resume : "/"}
@@ -251,73 +251,72 @@ const AppReview = ({ profile, hackerProfile, reviewHistory, totalReviews }) => {
                 Download Pdf
               </a>
               <div style={{ padding: "2rem 0" }}>
-                {typeof window !== "undefined" ? (
-                  <div style={{ padding: "0 0 2rem 0" }}>
-                    <Document
-                      options={{ workerSrc: "pdf.worker.js" }}
-                      onLoadSuccess={onDocumentLoadSuccess}
-                      file={"../../hack.pdf"}
-                    >
-                      <Page height={600} pageNumber={pageNumber} />
-                    </Document>
-                  </div>
-                ) : (
-                  ""
-                )}
-                <p>
-                  Page {pageNumber} of {numPages}
-                </p>
+                <iframe
+                  style={{
+                    width: "100%",
+                    minWidth: "320px",
+                    minHeight: "620px",
+                  }}
+                  src={`https://hacksc-odyssey.s3-us-west-1.amazonaws.com/${
+                    currentProfile ? currentProfile.userId : ""
+                  }#zoom=50`}
+                />
               </div>
             </Column>
 
-            <Column flexBasis={48}>
+            <Column flexBasis={40}>
               <h1> Applicant Info </h1>
               <Panel>
                 <h2>Question 1 - Vertical</h2>
-                <p>
+                <BrokenP>
                   {" "}
                   {loadingNewProfile
                     ? "Loading..."
                     : currentProfile
                     ? currentProfile.questionOne
                     : "(No response)"}{" "}
-                </p>
+                </BrokenP>
               </Panel>
 
               <Panel>
                 <h2>Question 2 - Project</h2>
-                <p>
+                <BrokenP>
                   {" "}
                   {loadingNewProfile
                     ? "Loading..."
                     : currentProfile
                     ? currentProfile.questionTwo
                     : "(No response)"}{" "}
-                </p>
+                </BrokenP>
               </Panel>
 
               <Panel>
                 <h2>Question 3 - Beverage</h2>
-                <p>
+                <BrokenP>
                   {" "}
                   {loadingNewProfile
                     ? "Loading..."
                     : currentProfile
                     ? currentProfile.questionThree
                     : "(No response)"}{" "}
-                </p>
+                </BrokenP>
               </Panel>
 
               <h1>Review</h1>
               <Panel>
                 <ScoreInputLabel>Score 1 (1-5)</ScoreInputLabel>
 
-                <Flex direction="row" justify="space-between" align="center">
-                  <Column>
+                <Flex
+                  direction="row"
+                  justify="space-between"
+                  align="center"
+                  style={{ flexWrap: "wrap" }}
+                >
+                  <Column style={{ margin: "0 0 1rem 0" }}>
                     <ScoreKeyLabel>Q</ScoreKeyLabel>
                   </Column>
 
-                  <Column flexGrow={1}>
+                  <Column flexGrow={1} style={{ margin: "0 0 1rem 0" }}>
                     <Input
                       type="number"
                       onChange={(e) => {
@@ -333,12 +332,17 @@ const AppReview = ({ profile, hackerProfile, reviewHistory, totalReviews }) => {
               <Panel>
                 <ScoreInputLabel>Score 2 (1-5)</ScoreInputLabel>
 
-                <Flex direction="row" justify="space-between" align="center">
-                  <Column>
+                <Flex
+                  direction="row"
+                  justify="space-between"
+                  align="center"
+                  style={{ flexWrap: "wrap" }}
+                >
+                  <Column style={{ margin: "0 0 1rem 0" }}>
                     <ScoreKeyLabel>W</ScoreKeyLabel>
                   </Column>
 
-                  <Column flexGrow={1}>
+                  <Column flexGrow={1} style={{ margin: "0 0 1rem 0" }}>
                     <Input
                       type="number"
                       onChange={(e) => {
@@ -354,12 +358,17 @@ const AppReview = ({ profile, hackerProfile, reviewHistory, totalReviews }) => {
               <Panel>
                 <ScoreInputLabel>Score 3 (1-5)</ScoreInputLabel>
 
-                <Flex direction="row" justify="space-between" align="center">
-                  <Column>
+                <Flex
+                  direction="row"
+                  justify="space-between"
+                  align="center"
+                  style={{ flexWrap: "wrap" }}
+                >
+                  <Column style={{ margin: "0 0 1rem 0" }}>
                     <ScoreKeyLabel>E</ScoreKeyLabel>
                   </Column>
 
-                  <Column flexGrow={1}>
+                  <Column flexGrow={1} style={{ margin: "0 0 1rem 0" }}>
                     <Input
                       type="number"
                       onChange={(e) => {
@@ -412,6 +421,10 @@ AppReview.getInitialProps = async (ctx) => {
     totalReviews,
   };
 };
+
+const BrokenP = styled.p`
+  word-break: break-all;
+`;
 
 const Panel = styled.div`
   padding: 24px 36px;
