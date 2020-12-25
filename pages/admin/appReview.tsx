@@ -15,6 +15,7 @@ import {
 } from "../../lib";
 import { Head, Navbar, Footer } from "../../components";
 import { Button, Container, Background, Flex, Column } from "../../styles";
+import { liveLookupFetch } from "../../lib/api-sdk/liveHooks";
 
 const AppReview = ({ profile, hackerProfile, reviewHistory, totalReviews }) => {
   let total_review_len_initial = totalReviews.eligibleReviews
@@ -26,10 +27,32 @@ const AppReview = ({ profile, hackerProfile, reviewHistory, totalReviews }) => {
     reviewHistory ? reviewHistory.length : 0
   );
   const [totalReviewHistory, setTotalReviewHistory] = useState(
-    total_review_len_initial > 200
-      ? 200 - reviewCount
-      : total_review_len_initial - reviewCount
+    200 - reviewCount
   );
+  const [adminCount, setAdminCount] = useState(0);
+
+  useEffect(() => {
+    let [firstName, lastName, email] = ["", "", ""];
+    liveLookupFetch({ firstName, lastName, email }).then((res) => {
+      let profiles = res.success;
+      let new_admin_count =
+        profiles && profiles.length > 0
+          ? profiles.reduce((a, b) => a + (b.role == "admin" ? 1 : 0), 0)
+          : 0;
+
+      setAdminCount(new_admin_count);
+      setTotalReviewHistory(
+        Math.round(
+          new_admin_count > 0
+            ? total_review_len_initial > 200
+              ? (total_review_len_initial / new_admin_count) * 3 - reviewCount
+              : 200 - reviewCount
+            : 200 - reviewCount
+        )
+      );
+    });
+  }, []);
+
   const [submitting, setSubmitting] = useState(false);
   const [loadingNewProfile, setLoadingNewProfile] = useState(false);
 
