@@ -108,11 +108,9 @@ const Navbar: React.FunctionComponent<NavbarProps> = ({
               )}
               {!admin && !volunteer && !sponsor && showProjectTeam && (
                 <Link
-                  href="/projectTeam"
-                  id="projectTeam-page"
-                  style={style(
-                    activePage === "projectTeam" ? "#FF8379" : "white"
-                  )}
+                  href="/team"
+                  id="team-page"
+                  style={style(activePage === "team" ? "#FF8379" : "white")}
                 >
                   Manage Team
                 </Link>
