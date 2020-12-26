@@ -11,7 +11,7 @@ const TeammateSuggestions = ({ title, hackers, owner, teamId }) => {
         {hackers.hackerProfiles.length ? (
           <>
             {hackers.hackerProfiles.map((suggestion) => (
-              <>
+              <div key={Object.entries(suggestion).toString()}>
                 {suggestion.firstName ? (
                   <Suggestion
                     key={title + suggestion.suggestion}
@@ -19,11 +19,12 @@ const TeammateSuggestions = ({ title, hackers, owner, teamId }) => {
                     suggestion={suggestion}
                     owner={owner}
                     teamId={teamId}
+                    id={Object.entries(suggestion).toString()}
                   />
                 ) : (
                   <div />
                 )}
-              </>
+              </div>
             ))}
           </>
         ) : (
@@ -34,7 +35,7 @@ const TeammateSuggestions = ({ title, hackers, owner, teamId }) => {
   );
 };
 
-const Suggestion = ({ title, suggestion, owner, teamId }) => {
+const Suggestion = ({ title, suggestion, owner, teamId, id }) => {
   const [visible, setVisible] = useState(true);
 
   const handleInviteHackerToTeam = useCallback(async (hackerId, teamId) => {
@@ -73,7 +74,7 @@ const Suggestion = ({ title, suggestion, owner, teamId }) => {
   }, []);
 
   return (
-    <>
+    <div key={id}>
       {visible ? (
         <Square key={suggestion.userId}>
           {suggestion.portfolioUrl ? (
@@ -117,42 +118,47 @@ const Suggestion = ({ title, suggestion, owner, teamId }) => {
           <Menu>
             {owner === "hacker" && title === "Teammate Suggestions" ? (
               <Message href={"mailto:" + suggestion.email}>Message</Message>
-            ) : ( <div/> )}
+            ) : (
+              <div />
+            )}
 
             {owner === "team" && title === "Teammate Suggestions" ? (
               <>
                 <Message href={"mailto:" + suggestion.email}>Message</Message>
                 <MenuOption
-                    onClick={() => {
-                      setVisible(!visible);
-                      handleInviteHackerToTeam(suggestion.userId, teamId);
-                    }}
-                  >
+                  onClick={() => {
+                    setVisible(!visible);
+                    handleInviteHackerToTeam(suggestion.userId, teamId);
+                  }}
+                >
                   Invite
                 </MenuOption>
               </>
-            ) : ( <div/> )}
+            ) : (
+              <div />
+            )}
 
             {owner === "team" && title === "Pending Teammate Requests" ? (
               <>
                 <Message href={"mailto:" + suggestion.email}>Message</Message>
                 <MenuOption
-                    onClick={() => {
-                      setVisible(!visible);
-                      handleAcceptHackerToTeam(suggestion.userId, teamId);
-                    }}
-                  >
+                  onClick={() => {
+                    setVisible(!visible);
+                    handleAcceptHackerToTeam(suggestion.userId, teamId);
+                  }}
+                >
                   Accept
                 </MenuOption>
               </>
-            ) : ( <div/> )}
-
+            ) : (
+              <div />
+            )}
           </Menu>
         </Square>
       ) : (
         <div />
       )}
-    </>
+    </div>
   );
 };
 
