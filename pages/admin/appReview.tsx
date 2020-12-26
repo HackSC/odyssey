@@ -1,16 +1,8 @@
-import React, {
-  Component,
-  useState,
-  useRef,
-  useEffect,
-  useCallback,
-} from "react";
+import React, { useState, useRef, useEffect, useCallback } from "react";
 import styled from "styled-components";
 import { useToasts } from "react-toast-notifications";
 import Confetti from "react-confetti";
 import { useWindowSize } from "react-use";
-import { Document, Page, pdfjs } from "react-pdf";
-pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
 
 import {
   getHackerProfileForReview,
