@@ -4,6 +4,7 @@ import { sendSlackMessage, updateProfileStatus } from "../lib";
 import { Button, Column, Flex } from "../styles";
 import PacmanLoader from "react-spinners/PacmanLoader";
 import { useToasts } from "react-toast-notifications";
+import hackathonConstants from "../lib/hackathonConstants";
 
 const Hacker = ({
   hacker,
@@ -191,10 +192,10 @@ const Hacker = ({
   return hacker !== null ? (
     <Result key={Object.entries(hacker).join()}>
       <Flex direction="row" style={{ flexWrap: "wrap" }}>
+        <h2 style={{ wordBreak: "break-all" }}>
+          {index}. {hacker.firstName} {hacker.lastName}
+        </h2>
         <Column flexBasis={65}>
-          <h2 style={{ wordBreak: "break-all" }}>
-            {index}. {hacker.firstName} {hacker.lastName}
-          </h2>
           <p>
             <b>E-Mail: </b>
             {hacker.email}
@@ -211,10 +212,14 @@ const Hacker = ({
             <b>Graduation Date: </b>
             {hacker.graduationDate}
           </p>
-          <p>
-            <b>Needs Bus: </b>
-            {hacker.needBus ? "True" : "False"}
-          </p>
+          {hackathonConstants.needsBus ? (
+            <p>
+              <b>Needs Bus: </b>
+              {hacker.needBus ? "True" : "False"}
+            </p>
+          ) : (
+            ""
+          )}
           <p>
             <b>Gender: </b>
             {hacker.gender}
