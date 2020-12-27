@@ -1,22 +1,15 @@
 import React, { useState } from "react";
-
-import { handleLoginRedirect, getProfile } from "../../lib/authenticate";
-
+import styled from "styled-components";
 import parse from "csv-parse";
 import stringify from "csv-stringify";
 import JSZip from "jszip";
 import { saveAs } from "file-saver";
 
-import Head from "../../components/Head";
-import Navbar from "../../components/Navbar";
-import Footer from "../../components/Footer";
-
-import styled from "styled-components";
-import {} from "styled-components/cssprop";
-
+import { handleLoginRedirect, getProfile } from "../../lib/authenticate";
+import { Head, Navbar, Footer } from "../../components";
 import { Background, Container, Button, Flex, Column } from "../../styles";
 
-const judgingManager = ({}) => {
+const passJudgment = ({}) => {
   const [uploaded, setUploaded] = useState(false);
   const [message, setMessage] = useState("");
 
@@ -463,7 +456,7 @@ const judgingManager = ({}) => {
       <Navbar loggedIn admin activePage="/judgingManager" />
       <Background padding="2rem">
         <Container>
-          <PaddedTitle>Judging Manager</PaddedTitle>
+          <PaddedTitle>Pass Judgment</PaddedTitle>
           <Flex
             direction="row"
             justify="space-between"
@@ -554,13 +547,20 @@ const judgingManager = ({}) => {
   );
 };
 
-judgingManager.getInitialProps = async (ctx) => {
+passJudgment.getInitialProps = async (ctx) => {
   const { req } = ctx;
 
   const profile = await getProfile(req);
 
   // Null profile means user is not logged in or user does not have enough rights
-  if (!profile || !(profile.role == "admin" || profile.role == "superadmin")) {
+  if (
+    !profile ||
+    !(
+      profile.role == "admin" ||
+      profile.role == "judge" ||
+      profile.role == "superadmin"
+    )
+  ) {
     handleLoginRedirect(req);
   }
 
@@ -569,10 +569,6 @@ judgingManager.getInitialProps = async (ctx) => {
 
 const PaddedTitle = styled.h1`
   padding: 1rem 0 2rem 0;
-`;
-
-const MarginColumn = styled(Column)`
-  margin: 1rem 0;
 `;
 
 const Cell = styled.div`
@@ -693,4 +689,4 @@ const JudgeFieldSelectInput = styled.select`
   font-size: 16px;
 `;
 
-export default judgingManager;
+export default passJudgment;

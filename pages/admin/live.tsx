@@ -137,7 +137,9 @@ Live.getInitialProps = async ({ req }) => {
     let is_super_user =
       profile.role == "admin" ||
       profile.role == "volunteer" ||
-      profile.role == "sponsor";
+      profile.role == "sponsor" ||
+      profile.role == "superadmin" ||
+      profile.role == "judge";
 
     if (profile && !is_super_user && !hackathonConstants.showLive) {
       // Redirect user to dashboard if they are logged in

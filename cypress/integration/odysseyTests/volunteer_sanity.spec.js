@@ -166,46 +166,6 @@ describe("goCheckin", () => {
   // * Add in function to be able to navigate back to main /admin page
 });
 
-// * Judging Manager Page
-
-Cypress.Commands.add("goToJudgingManager", (overrides = {}) => {
-  cy.login()
-    .then((resp) => {
-      return resp.body;
-    })
-    .then((body) => {
-      const { access_token, expires_in, id_token } = body;
-      const auth0State = {
-        nonce: "",
-        state: "some-random-state",
-      };
-      const mainPage = `http://localhost:3000/auth/login`;
-      cy.visit(mainPage, {
-        onBeforeLoad(win) {
-          win.document.cookie =
-            "com.auth0.auth.some-random-state=" + JSON.stringify(auth0State);
-        },
-      });
-      cy.get("#username").type(Cypress.env("JUDGE_TEST_USERNAME"));
-      cy.get(":input[type=password]").type(
-        Cypress.env("JUDGE_TEST_PASSWORD").replace("{", "{{}")
-      );
-      cy.get("[name=action]").click();
-      cy.get("#judging-manager-page").click();
-      cy.location("pathname", { timeout: 10000 }).should(
-        "include",
-        "/judgingManager"
-      );
-    });
-});
-
-describe("goJudgingManager", () => {
-  it("should navigate to judging manager page", () => {
-    cy.goToJudgingManager();
-  });
-  // * Add in function to be able to navigate back to main /admin page
-});
-
 // ! Be sure to Logout so other sanity checks don't fail
 
 Cypress.Commands.add("goToLogout", (overrides = {}) => {

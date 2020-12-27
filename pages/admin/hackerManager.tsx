@@ -634,7 +634,14 @@ hackerManager.getInitialProps = async (ctx) => {
   const profile = await getProfile(req);
 
   // Null profile means user is not logged in, and this is only relevant for admins/sponsors
-  if (!profile || !(profile.role == "admin" || profile.role == "sponsor")) {
+  if (
+    !profile ||
+    !(
+      profile.role == "admin" ||
+      profile.role == "sponsor" ||
+      profile.role == "superadmin"
+    )
+  ) {
     handleLoginRedirect(req);
   }
 
