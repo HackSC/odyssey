@@ -9,7 +9,6 @@ afterAll(async (done) => {
 });
 
 describe("Auth Tests", () => {
-  const devLoginUrl = "/auth/devlogin";
   test("Dev Login Happy Flow", () => {
     const addedVals = {
       _json: { email: "", email_verified: true },
@@ -19,7 +18,7 @@ describe("Auth Tests", () => {
       role: "admin",
     };
     return request
-      .get(devLoginUrl)
+      .get("/auth/devlogin")
       .query({ id: "a", role: "admin" })
       .expect(200, { ...user, ...addedVals })
       .catch((e) => console.error(e));
