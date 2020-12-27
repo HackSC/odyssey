@@ -3,8 +3,9 @@ const server = require("../../express");
 
 request = supertest(server);
 
-afterAll((done) => {
+afterAll(async (done) => {
   done();
+  await new Promise((resolve) => setTimeout(() => resolve(), 10000)); // avoid jest open handle error
 });
 
 describe("Auth Tests", () => {
