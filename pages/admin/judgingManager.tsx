@@ -463,9 +463,14 @@ const judgingManager = ({}) => {
       <Navbar loggedIn admin activePage="/judgingManager" />
       <Background padding="2rem">
         <Container>
-          <Flex direction="row" justify="space-between">
-            <Column flexBasis={20}>
-              <Flex direction="column">
+          <PaddedTitle>Judging Manager</PaddedTitle>
+          <Flex
+            direction="row"
+            justify="space-between"
+            style={{ flexWrap: "wrap" }}
+          >
+            <Column flexBasis={30}>
+              <Flex direction="column" style={{ flexWrap: "wrap" }}>
                 <TimeCard primary>
                   <TimeCardLabel>Time</TimeCardLabel>
                   <TimeCardTeamName>Team 1</TimeCardTeamName>
@@ -492,8 +497,8 @@ const judgingManager = ({}) => {
                 </TimeCard>
               </Flex>
             </Column>
-            <Column flexBasis={70}>
-              <Cell style={{ width: "100%", padding: "20px" }}>
+            <Column flexBasis={65}>
+              <Cell style={{ padding: "20px" }}>
                 <JudgeField>
                   <JudgeFieldLabel>Vertical</JudgeFieldLabel>
                   <JudgeFieldSelectInput
@@ -534,7 +539,8 @@ const judgingManager = ({}) => {
                   </JudgeFieldSelectInput>
                   <p style={{ marginTop: "4px", fontSize: "14px" }}>
                     For unsubmitted projects and/or judging mishaps, enter a
-                    score of 0.
+                    score of 0 and hit up engineering slack channel:
+                    #2021-engineering.
                   </p>
                 </JudgeField>
                 <FullButton>Submit</FullButton>
@@ -560,6 +566,10 @@ judgingManager.getInitialProps = async (ctx) => {
 
   return {};
 };
+
+const PaddedTitle = styled.h1`
+  padding: 1rem 0 2rem 0;
+`;
 
 const MarginColumn = styled(Column)`
   margin: 1rem 0;
@@ -607,7 +617,6 @@ type TimeCardType = {
 };
 
 const TimeCard = styled.div<TimeCardType>`
-  width: 100%;
   margin-bottom: 20px;
   padding: 20px;
   background-color: white;
