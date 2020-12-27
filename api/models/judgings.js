@@ -2,8 +2,8 @@
 // 1) Generate a Sequelize migration that adds/removes columns as needed
 // 2) Update the Judgment type definition in odyssey.d.ts
 module.exports = (sequelize, DataTypes) => {
-  const Judgment = sequelize.define(
-    "Judgment",
+  const Judgings = sequelize.define(
+    "Judgings",
     {
       id: {
         type: DataTypes.INTEGER,
@@ -25,22 +25,24 @@ module.exports = (sequelize, DataTypes) => {
       startsAt: DataTypes.DATE,
       endsAt: DataTypes.DATE,
     },
-    {}
+    {
+      timestamps: false,
+    }
   );
 
   // * Associate
-  Judgment.associate = function (models) {
-    Judgment.belongsTo(models.HackerProfile, {
+  Judgings.associate = function (models) {
+    Judgings.belongsTo(models.HackerProfile, {
       as: "judge",
       foreignKey: "judgeId",
       constraints: false,
     });
-    Judgment.belongsTo(models.Team, {
+    Judgings.belongsTo(models.Team, {
       as: "team",
       foreignKey: "teamId",
       constraints: false,
     });
   };
 
-  return Judgment;
+  return Judgings;
 };

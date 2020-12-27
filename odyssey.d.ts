@@ -47,7 +47,7 @@ declare type PendingTeammateRequests = {
   updatedAt: Date;
 };
 
-declare type Judgment = {
+declare type Judging = {
   id: number;
   judgeId: string;
   teamId: number;
