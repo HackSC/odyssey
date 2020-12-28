@@ -13,8 +13,8 @@ Cypress.Commands.add("login", (overrides = {}) => {
     url: "https://odyssey-hacksc.auth0.com/oauth/token",
     body: {
       grant_type: "password",
-      username: Cypress.env("JUDGE_TEST_USERNAME"),
-      password: Cypress.env("JUDGE_TEST_PASSWORD"),
+      username: Cypress.env("VOLUNTEER_TEST_USERNAME"),
+      password: Cypress.env("VOLUNTEER_TEST_PASSWORD"),
       scope: "openid profile email",
       client_id: Cypress.env("AUTH0_CLIENT_ID"),
       client_secret: Cypress.env("AUTH0_CLIENT_SECRET"),
@@ -41,9 +41,9 @@ Cypress.Commands.add("goToVolunteer", (overrides = {}) => {
             "com.auth0.auth.some-random-state=" + JSON.stringify(auth0State);
         },
       });
-      cy.get("#username").type(Cypress.env("JUDGE_TEST_USERNAME"));
+      cy.get("#username").type(Cypress.env("VOLUNTEER_TEST_USERNAME"));
       cy.get(":input[type=password]").type(
-        Cypress.env("JUDGE_TEST_PASSWORD").replace("{", "{{}")
+        Cypress.env("VOLUNTEER_TEST_PASSWORD").replace("{", "{{}")
       );
       cy.get("[name=action]").click();
       cy.location("pathname", { timeout: 10000 }).should(
@@ -114,9 +114,9 @@ Cypress.Commands.add("goToScan", (overrides = {}) => {
             "com.auth0.auth.some-random-state=" + JSON.stringify(auth0State);
         },
       });
-      cy.get("#username").type(Cypress.env("JUDGE_TEST_USERNAME"));
+      cy.get("#username").type(Cypress.env("VOLUNTEER_TEST_USERNAME"));
       cy.get(":input[type=password]").type(
-        Cypress.env("JUDGE_TEST_PASSWORD").replace("{", "{{}")
+        Cypress.env("VOLUNTEER_TEST_PASSWORD").replace("{", "{{}")
       );
       cy.get("[name=action]").click();
       cy.get("#scan-page").click();
@@ -149,9 +149,9 @@ Cypress.Commands.add("goToCheckin", (overrides = {}) => {
             "com.auth0.auth.some-random-state=" + JSON.stringify(auth0State);
         },
       });
-      cy.get("#username").type(Cypress.env("JUDGE_TEST_USERNAME"));
+      cy.get("#username").type(Cypress.env("VOLUNTEER_TEST_USERNAME"));
       cy.get(":input[type=password]").type(
-        Cypress.env("JUDGE_TEST_PASSWORD").replace("{", "{{}")
+        Cypress.env("VOLUNTEER_TEST_PASSWORD").replace("{", "{{}")
       );
       cy.get("[name=action]").click();
       cy.get("#checkin-page").click();
@@ -187,9 +187,9 @@ Cypress.Commands.add("goToLogout", (overrides = {}) => {
         },
       });
       cy.location("pathname", { timeout: 10000 }).should("include", "/login");
-      cy.get("#username").type(Cypress.env("JUDGE_TEST_USERNAME"));
+      cy.get("#username").type(Cypress.env("VOLUNTEER_TEST_USERNAME"));
       cy.get(":input[type=password]").type(
-        Cypress.env("JUDGE_TEST_PASSWORD").replace("{", "{{}")
+        Cypress.env("VOLUNTEER_TEST_PASSWORD").replace("{", "{{}")
       );
       cy.get("[name=action]").click();
       cy.get("#auth-logout-page").click();
