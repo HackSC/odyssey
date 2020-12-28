@@ -33,6 +33,25 @@ router.get("/", async (req, res) => {
   return res.json({ result });
 });
 
+router.post("/", async (req, res) => {
+  const result = await models.Judgings.update(
+    {
+      notes: req.body.notes,
+      vertical: req.body.vertical,
+      sponsor: req.body.sponsor,
+      score: req.body.score,
+      judged: 1,
+    },
+    {
+      where: {
+        id: req.body.judgingId,
+      },
+    }
+  );
+
+  return res.json({ result });
+});
+
 router.get("/fullList", async (req, res) => {
   const result = await models.Judgings.findAll({});
 

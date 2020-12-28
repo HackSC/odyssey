@@ -23,3 +23,36 @@ export async function getJudgeList(req): Promise<Array<Judging>> {
     return null;
   }
 }
+
+export async function updateJudging(
+  score,
+  judgingId,
+  vertical,
+  notes,
+  sponsor
+) {
+  let fetchUrl = process.env.URL_BASE
+    ? /* Serverside */ process.env.URL_BASE + "api/judging"
+    : /* Client */ "/api/judging";
+
+  const response = await fetch(fetchUrl, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      score: score,
+      judgingId: judgingId,
+      vertical: vertical,
+      notes: notes,
+      sponsor: sponsor,
+    }),
+  });
+
+  try {
+    const data = await response.json();
+    return data.result;
+  } catch (e) {
+    return null;
+  }
+}
