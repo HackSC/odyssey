@@ -8,7 +8,8 @@ module.exports = (sequelize, DataTypes) => {
       id: {
         type: DataTypes.INTEGER,
         primaryKey: true,
-        allowNull: false,
+        autoIncrement: true,
+        allowNull: true,
       },
       judgeId: {
         type: DataTypes.STRING,
@@ -24,6 +25,8 @@ module.exports = (sequelize, DataTypes) => {
       score: DataTypes.INTEGER,
       startsAt: DataTypes.DATE,
       endsAt: DataTypes.DATE,
+      zoomLink: DataTypes.STRING,
+      sponsor: DataTypes.STRING,
     },
     {
       timestamps: false,
