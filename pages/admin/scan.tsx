@@ -451,6 +451,7 @@ Scan.getInitialProps = async (ctx) => {
     !profile ||
     (profile.role !== "admin" &&
       profile.role !== "volunteer" &&
+      profile.role !== "judge" &&
       profile.role !== "superadmin")
   ) {
     if (profile && profile.role == "sponsor") handleSponsorRedirect(req);
