@@ -6,10 +6,29 @@ import { Head, Navbar, Footer } from "../../components";
 import { Background, Container, Button, Flex, Column } from "../../styles";
 
 const passJudgment = ({ judgeList }) => {
-  useEffect(() => {
-    console.log(judgeList);
-  }, []);
+  const [closestTime, setClosestTime] = useState(null);
 
+  useEffect(() => {
+    // * Find current judging item
+    var closest = null;
+    judgeList.map((item) => {
+      let item_date = new Date(
+        new Date(Date.parse(item.startsAt)).getTime() + 8 * 60 * 60 * 1000
+      ).getTime();
+      if (item_date - new Date().getTime() > 0) {
+        if (closest === null) closest = item;
+        let closest_date = new Date(
+          new Date(Date.parse(closest.startsAt)).getTime() + 8 * 60 * 60 * 1000
+        ).getTime();
+        closest =
+          item_date - new Date().getTime() > 0 &&
+          item_date - new Date().getTime() < closest_date - new Date().getTime()
+            ? item
+            : closest;
+      }
+    });
+    setClosestTime(closest);
+  }, []);
   return (
     <>
       <Head title="HackSC Odyssey - Application" />
@@ -24,30 +43,55 @@ const passJudgment = ({ judgeList }) => {
           >
             <Column flexBasis={30}>
               <Flex direction="column" style={{ flexWrap: "wrap" }}>
-                <TimeCard primary>
-                  <TimeCardLabel>Time</TimeCardLabel>
-                  <TimeCardTeamName>Team 1</TimeCardTeamName>
-                  <TimeCardTeamList>List of team members</TimeCardTeamList>
-                  <TimeCardLink>Link to slack room or zoom call</TimeCardLink>
-                </TimeCard>
-                <TimeCard>
-                  <TimeCardLabel>Time</TimeCardLabel>
-                  <TimeCardTeamName>Team 1</TimeCardTeamName>
-                  <TimeCardTeamList>List of team members</TimeCardTeamList>
-                  <TimeCardLink>Link to slack room or zoom call</TimeCardLink>
-                </TimeCard>
-                <TimeCard>
-                  <TimeCardLabel>Time</TimeCardLabel>
-                  <TimeCardTeamName>Team 1</TimeCardTeamName>
-                  <TimeCardTeamList>List of team members</TimeCardTeamList>
-                  <TimeCardLink>Link to slack room or zoom call</TimeCardLink>
-                </TimeCard>
-                <TimeCard>
-                  <TimeCardLabel>Time</TimeCardLabel>
-                  <TimeCardTeamName>Team 1</TimeCardTeamName>
-                  <TimeCardTeamList>List of team members</TimeCardTeamList>
-                  <TimeCardLink>Link to slack room or zoom call</TimeCardLink>
-                </TimeCard>
+                {judgeList && judgeList.length > 0 ? (
+                  <>
+                    {judgeList.map((item) => (
+                      <TimeCard
+                        key={Object.entries(item).toString()}
+                        greyed={
+                          new Date(
+                            new Date(Date.parse(item.startsAt)).getTime() +
+                              8 * 60 * 60 * 1000
+                          ).getTime() -
+                            new Date().getTime() <
+                          0
+                        }
+                        primary={
+                          closestTime ? closestTime.id === item.id : false
+                        }
+                      >
+                        <TimeCardLabel>
+                          {new Date(
+                            new Date(Date.parse(item.startsAt)).getTime() +
+                              8 * 60 * 60 * 1000
+                          ).toLocaleString()}
+                        </TimeCardLabel>
+                        <TimeCardTeamName>{item.team.name}</TimeCardTeamName>
+                        <div style={{ padding: "0 0 1rem 0" }}>
+                          <p>Team Members:</p>
+                          <ul style={{ padding: "0 0 0 1rem" }}>
+                            {item.teammates.map((teammate) => (
+                              <li key={Object.entries(teammate).toString()}>
+                                - {teammate.firstName} {teammate.lastName}
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
+                        <TimeCardLink>
+                          {item.zoomLink
+                            ? item.zoomLink
+                            : "This team has not been assigned a zoom link. Please reach out to the organizers."}
+                          {/* 
+                          // TODO: Add Input for judge to enter link for zoom???
+                          // TODO: How do we assign judges zoom links?
+                          */}
+                        </TimeCardLink>
+                      </TimeCard>
+                    ))}
+                  </>
+                ) : (
+                  <PaddedTitle>No teams to judge now.</PaddedTitle>
+                )}
               </Flex>
             </Column>
             <Column flexBasis={65}>
@@ -168,6 +212,7 @@ const FullButton = styled(Button)`
 
 type TimeCardType = {
   primary?: boolean;
+  greyed?: boolean;
 };
 
 const TimeCard = styled.div<TimeCardType>`
@@ -176,6 +221,7 @@ const TimeCard = styled.div<TimeCardType>`
   background-color: white;
   border-radius: 4px;
   border: 2px solid;
+  opacity: ${(props) => (props.greyed ? "50%" : "100%")};
   border-color: ${(props) => (props.primary ? "#FF8379" : "white")};
 `;
 
@@ -198,8 +244,7 @@ const TimeCardTeamName = styled.h2`
 `;
 
 const TimeCardTeamList = styled.p`
-  margin-bottom: 8px;
-  font-size: 18px;
+  margin-bottom: 10px;
 `;
 
 const TimeCardLink = styled.a`
