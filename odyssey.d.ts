@@ -47,6 +47,18 @@ declare type PendingTeammateRequests = {
   updatedAt: Date;
 };
 
+declare type Judging = {
+  id: number;
+  judgeId: string;
+  teamId: number;
+  vertical: string;
+  notes: string;
+  judged: boolean;
+  score: number;
+  startsAt: Date;
+  endsAt: Date;
+};
+
 declare type Profile = {
   id: number;
   gender: "male" | "female" | "non-binary" | "other" | "no-say";
@@ -78,7 +90,7 @@ declare type Profile = {
   questionOne: string;
   questionTwo: string;
   questionThree: string;
-  role: "hacker" | "admin" | "sponsor" | "volunteer";
+  role: "hacker" | "admin" | "sponsor" | "volunteer" | "superadmin" | "judge";
   graduationDate:
     | "spring-2020"
     | "fall-2020"

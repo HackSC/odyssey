@@ -1,63 +1,39 @@
 import React from "react";
+
+import { handleLoginRedirect, getProfile } from "../lib/authenticate";
+import { getReferrerCode } from "../lib/referrerCode";
+
 import styled from "styled-components";
 
 import { Head, Navbar, Footer } from "../components";
 import { Button, Background, Flex, Container } from "../styles";
-import {
-  sendSlackMessage,
-  getReferrerCode,
-  handleLoginRedirect,
-  getProfile,
-} from "../lib";
 
-const Sponsor = ({ profile }) => {
-  // * Logic to send slack message when metabase link is clicked
-  const send_slack_msg = async (e) => {
-    let firstName = profile ? profile.firstName : "";
-    let lastName = profile ? profile.lastName : "";
-    let user_email = profile ? profile.email : "";
-    let start_and_end_date =
-      new Date(new Date().getTime() - 480 * 1000 * 60).toISOString() + "";
-    let slack_result = await sendSlackMessage(
-      ":bangbang: Sponsor Metabase accessed by " +
-        firstName +
-        ", " +
-        lastName +
-        ", " +
-        user_email,
-      "",
-      start_and_end_date,
-      start_and_end_date
-    );
-  };
-
+const Judge = ({ profile }) => {
   return (
     <>
       <Head title="HackSC Odyssey - Application" />
-      <Navbar loggedIn sponsor activePage="/" />
+      <Navbar loggedIn judge activePage="/" />
       <Background>
         <Container>
           <Flex direction="column">
-            <h1>Sponsor Dashboard</h1>
+            <h1>Judge Dashboard</h1>
             <p>
-              Hello there -- welcome to the sponsor dashboard. Here you can
-              access actions and data for HackSC. If you have any questions or
-              find any errors, let the organizers know in <b>#sponsors</b>
+              Hello there -- welcome to the judge dashboard. Here you can access
+              actions to help organize and run HackSC. If you have any questions
+              or find any errors, hit up the organizers in <b>#judges</b>
             </p>
           </Flex>
 
           <ActionsHeader>Actions</ActionsHeader>
           <Actions>
-            <Action id="hacker-manager-page" href="/admin/hackerManager">
-              <ActionTitle> Manage Hackers </ActionTitle>
+            <Action id="scan-page" href="/admin/scan">
+              <ActionTitle>Scan In Hackers</ActionTitle>
             </Action>
-            <Action
-              id="metabase-page"
-              href="https://metabase.hacksc.com/"
-              target="_blank"
-              onClick={(e) => send_slack_msg(e)}
-            >
-              <ActionTitle>Access Metabase</ActionTitle>
+            <Action id="checkin-page" href="/admin/checkin">
+              <ActionTitle>Check In Hackers</ActionTitle>
+            </Action>
+            <Action id="pass-judgment-page" href="/admin/passJudgment">
+              <ActionTitle> Pass Judgment </ActionTitle>
             </Action>
           </Actions>
         </Container>
@@ -67,7 +43,7 @@ const Sponsor = ({ profile }) => {
   );
 };
 
-Sponsor.getInitialProps = async (ctx) => {
+Judge.getInitialProps = async (ctx) => {
   const { req } = ctx;
 
   const profile = await getProfile(req);
@@ -77,7 +53,7 @@ Sponsor.getInitialProps = async (ctx) => {
     !profile ||
     !(
       profile.role == "admin" ||
-      profile.role == "sponsor" ||
+      profile.role == "judge" ||
       profile.role == "superadmin"
     )
   ) {
@@ -127,4 +103,4 @@ const ActionTitle = styled.h3`
   color: ${({ theme }) => theme.colors.gray50};
 `;
 
-export default Sponsor;
+export default Judge;

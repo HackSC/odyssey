@@ -296,7 +296,7 @@ TaskManager.getInitialProps = async ({ req }) => {
   const currentTasks = await getCurrentTasks(req);
 
   // Null profile means user is not logged in
-  if (!profile || profile.role !== "admin") {
+  if (!profile || !(profile.role == "admin" || profile.role == "superadmin")) {
     handleLoginRedirect(req);
   }
 

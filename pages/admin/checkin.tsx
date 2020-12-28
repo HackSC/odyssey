@@ -254,7 +254,15 @@ Checkin.getInitialProps = async (ctx) => {
   const profile = await getProfile(req);
 
   // Null profile means user is not logged in, and this is only relevant for admins
-  if (!profile || !(profile.role == "admin" || profile.role == "volunteer")) {
+  if (
+    !profile ||
+    !(
+      profile.role == "admin" ||
+      profile.role == "volunteer" ||
+      profile.role == "superadmin" ||
+      profile.role == "judge"
+    )
+  ) {
     handleLoginRedirect(req);
   }
 
