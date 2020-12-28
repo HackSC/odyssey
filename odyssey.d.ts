@@ -56,6 +56,8 @@ declare type Judging = {
   judged: boolean;
   score: number;
   startsAt: Date;
+  zoomLink: string;
+  sponsor: string;
   endsAt: Date;
 };
 
