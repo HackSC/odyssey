@@ -1,4 +1,5 @@
 // * Main Components
+export { default as AdminReview } from "./AdminReview";
 export { default as AdminStats } from "./AdminStats";
 export { default as Application } from "./Application";
 export { default as AppReview } from "./AppReview";

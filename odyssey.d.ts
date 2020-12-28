@@ -38,6 +38,15 @@ declare type ApiLink = {
   api_id: number;
 };
 
+declare type PendingTeammateRequests = {
+  id: number;
+  teamId: number;
+  hackerProfileId: string;
+  ownder: "team" | "hacker";
+  createdAt: Date;
+  updatedAt: Date;
+};
+
 declare type Profile = {
   id: number;
   gender: "male" | "female" | "non-binary" | "other" | "no-say";
@@ -93,6 +102,8 @@ declare type Profile = {
   team: Team;
   qrCodeId: string;
   isBattlepassComplete?: boolean;
+  lookingForTeam: boolean;
+  portfolioUrl: string;
 };
 
 declare type Team = {
@@ -100,6 +111,9 @@ declare type Team = {
   teamCode: string;
   ownerId: string;
   HackerProfiles: Array<Object>;
+  lookingForTeammates: boolean;
+  description: string;
+  members: Array<Profile>;
 };
 
 declare type QueryParamValues = {
@@ -197,4 +211,8 @@ declare type Route = GetRoute & PostRoute & PutRoute & DeleteRoute;
 declare type APIResponse<T> = {
   success?: T;
   error?: string;
+};
+
+declare type TeamSuggestion = {
+  hackerProfiles: Array<Profile>;
 };

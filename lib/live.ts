@@ -49,6 +49,7 @@ async function updateTask(updatedTask) {
 
 async function deleteTask(task) {
   const urlRoute = "/api/points/tasks/" + task.id;
+
   const result = await fetch(urlRoute, {
     method: "DELETE",
   });
