@@ -29,7 +29,7 @@ router.get("/team/:type", async (req, res) => {
     // if the team is searching, get the hackers who haven't been invited & haven't requested the team
     const hackerProfiles = await models.HackerProfile.findAll({
       where: {
-        year: curruser.year,
+        // year: curruser.year,
         teamId: null,
         status: {
           [sequelize.Op.in]: [
@@ -58,7 +58,7 @@ router.get("/team/:type", async (req, res) => {
 
     const subtract = await models.HackerProfile.findAll({
       where: {
-        year: curruser.year,
+        // year: curruser.year,
         teamId: null,
         status: {
           [sequelize.Op.in]: [
@@ -188,7 +188,7 @@ router.get("/hacker/:type", async (req, res) => {
 
     const hackerProfiles = await models.HackerProfile.findAll({
       where: {
-        year: curruser.year,
+        // year: curruser.year,
         teamId: null,
         status: {
           [sequelize.Op.in]: [
