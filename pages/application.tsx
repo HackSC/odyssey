@@ -8,6 +8,7 @@ import {
   handleAdminRedirect,
   handleVolunteerRedirect,
   handleSponsorRedirect,
+  handleJudgeRedirect,
 } from "../lib/authenticate";
 
 import { Head, Navbar, Footer, Steps } from "../components";
@@ -66,12 +67,14 @@ export const getServerSideProps: GetServerSideProps = async ({ req }) => {
   // Null profile means user is not logged in
   if (!profile) {
     handleLoginRedirect(req);
-  } else if (profile.role == "admin") {
+  } else if (profile.role == "admin" || profile.role == "superadmin") {
     handleAdminRedirect(req);
   } else if (profile.role == "volunteer") {
     handleVolunteerRedirect(req);
   } else if (profile.role == "sponsor") {
     handleSponsorRedirect(req);
+  } else if (profile.role == "judge") {
+    handleJudgeRedirect(req);
   }
 
   if (profile && profile.status == "checkedIn") {

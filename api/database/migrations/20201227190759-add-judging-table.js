@@ -1,15 +1,22 @@
 "use strict";
-// PendingTeammateRequests: Team Invites Someone to the Team
+
 module.exports = {
   up: (queryInterface, Sequelize) => {
     return queryInterface.createTable(
-      "PendingTeammateRequests",
+      "Judgings",
       {
         id: {
-          type: Sequelize.INTEGER,
-          autoIncrement: true,
           primaryKey: true,
           allowNull: false,
+          type: Sequelize.INTEGER,
+        },
+        judgeId: {
+          allowNull: false,
+          type: Sequelize.STRING,
+          references: {
+            model: "HackerProfiles",
+            key: "userId",
+          },
         },
         teamId: {
           type: Sequelize.INTEGER,
@@ -18,15 +25,23 @@ module.exports = {
             key: "id",
           },
         },
-        owner: {
-          type: Sequelize.ENUM,
-          values: ["team", "hacker"],
+        vertical: {
+          type: Sequelize.STRING,
         },
-        createdAt: {
+        notes: {
+          type: Sequelize.STRING,
+        },
+        judged: {
+          type: Sequelize.BOOLEAN,
+        },
+        score: {
+          type: Sequelize.INTEGER,
+        },
+        startsAt: {
           allowNull: false,
           type: Sequelize.DATE,
         },
-        updatedAt: {
+        endsAt: {
           allowNull: false,
           type: Sequelize.DATE,
         },
@@ -37,8 +52,7 @@ module.exports = {
       }
     );
   },
-
   down: (queryInterface, Sequelize) => {
-    return queryInterface.dropTable("PendingTeammateRequests");
+    return queryInterface.dropTable("Judgings");
   },
 };

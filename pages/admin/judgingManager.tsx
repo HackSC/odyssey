@@ -12,6 +12,7 @@ import Navbar from "../../components/Navbar";
 import Footer from "../../components/Footer";
 
 import styled from "styled-components";
+import {} from "styled-components/cssprop";
 
 import { Background, Container, Button, Flex, Column } from "../../styles";
 
@@ -462,114 +463,89 @@ const judgingManager = ({}) => {
       <Navbar loggedIn admin activePage="/judgingManager" />
       <Background padding="2rem">
         <Container>
+          <PaddedTitle>Judging Manager</PaddedTitle>
           <Flex
             direction="row"
-            style={{ flexWrap: "wrap" }}
             justify="space-between"
-          >
-            <MarginColumn flexBasis={48}>
-              <FullButton>
-                <label htmlFor="devpost">Upload</label>
-                <InvisInput
-                  type="file"
-                  id="devpost"
-                  name="devpost"
-                  onChange={handleUpload}
-                />
-              </FullButton>
-            </MarginColumn>
-            <MarginColumn flexBasis={48}>
-              <FullStyledButton
-                onClick={exportTableAssignments}
-                disabled={!uploaded}
-              >
-                Export Table Assignments
-              </FullStyledButton>
-            </MarginColumn>
-          </Flex>
-          <br />
-          <Flex
-            direction="row"
             style={{ flexWrap: "wrap" }}
-            justify="space-between"
           >
-            <MarginColumn flexBasis={48}>
-              <p>{message ? message : "Looking good!"}</p>
-            </MarginColumn>
-            <MarginColumn flexBasis={48}>
-              <Cell>
-                <Column>
-                  {"Special Tables (Key, Max): "}
-                  <TableInput
-                    type="text"
-                    onChange={(e) => {
-                      setCurrTable([e.target.value, currTable[1]]);
-                    }}
-                    value={currTable[0]}
-                  />
-                  <TableInput
-                    type="number"
-                    onChange={(e) => {
-                      setCurrTable([currTable[0], e.target.value]);
-                    }}
-                    value={currTable[1]}
-                  />
-                  <Button
-                    onClick={(e) => {
-                      let temp_tables = tables;
-                      temp_tables[currTable[0]] = Math.round(
-                        Number(currTable[1])
-                      );
-                      setTables(temp_tables);
-                      // hacky but it refreshes
-                      setCurrTable([currTable[0], currTable[1]]);
-                      assignTables();
-                    }}
+            <Column flexBasis={30}>
+              <Flex direction="column" style={{ flexWrap: "wrap" }}>
+                <TimeCard primary>
+                  <TimeCardLabel>Time</TimeCardLabel>
+                  <TimeCardTeamName>Team 1</TimeCardTeamName>
+                  <TimeCardTeamList>List of team members</TimeCardTeamList>
+                  <TimeCardLink>Link to slack room or zoom call</TimeCardLink>
+                </TimeCard>
+                <TimeCard>
+                  <TimeCardLabel>Time</TimeCardLabel>
+                  <TimeCardTeamName>Team 1</TimeCardTeamName>
+                  <TimeCardTeamList>List of team members</TimeCardTeamList>
+                  <TimeCardLink>Link to slack room or zoom call</TimeCardLink>
+                </TimeCard>
+                <TimeCard>
+                  <TimeCardLabel>Time</TimeCardLabel>
+                  <TimeCardTeamName>Team 1</TimeCardTeamName>
+                  <TimeCardTeamList>List of team members</TimeCardTeamList>
+                  <TimeCardLink>Link to slack room or zoom call</TimeCardLink>
+                </TimeCard>
+                <TimeCard>
+                  <TimeCardLabel>Time</TimeCardLabel>
+                  <TimeCardTeamName>Team 1</TimeCardTeamName>
+                  <TimeCardTeamList>List of team members</TimeCardTeamList>
+                  <TimeCardLink>Link to slack room or zoom call</TimeCardLink>
+                </TimeCard>
+              </Flex>
+            </Column>
+            <Column flexBasis={65}>
+              <Cell style={{ padding: "20px" }}>
+                <JudgeField>
+                  <JudgeFieldLabel>Vertical</JudgeFieldLabel>
+                  <JudgeFieldSelectInput
+                    placeholder="Vertical"
+                    id="verticalSelect"
                   >
-                    +
-                  </Button>
-                </Column>
+                    <option value="person">Person</option>
+                    <option value="team">Team</option>
+                    <option value="customer">Customer</option>
+                    <option value="device">Device</option>
+                  </JudgeFieldSelectInput>
+                </JudgeField>
+                <JudgeField>
+                  <JudgeFieldLabel>Sponsor</JudgeFieldLabel>
+                  <JudgeFieldSelectInput placeholder="Sponsor">
+                    <option value="sponsor1">Sponsor 1</option>
+                    <option value="sponsor2">Sponsor 2</option>
+                  </JudgeFieldSelectInput>
+                </JudgeField>
+                <JudgeField>
+                  <JudgeFieldLabel>Notes</JudgeFieldLabel>
+                  <JudgeFieldTextArea placeholder="Write notes here..."></JudgeFieldTextArea>
+                </JudgeField>
+                <JudgeField>
+                  <JudgeFieldLabel>Score</JudgeFieldLabel>
+                  <JudgeFieldSelectInput placeholder="Score" id="scoreSelect">
+                    <option value="0">0</option>
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                    <option value="6">6</option>
+                    <option value="7">7</option>
+                    <option value="8">8</option>
+                    <option value="9">9</option>
+                    <option value="10">10</option>
+                  </JudgeFieldSelectInput>
+                  <p style={{ marginTop: "4px", fontSize: "14px" }}>
+                    For unsubmitted projects and/or judging mishaps, enter a
+                    score of 0 and hit up engineering slack channel:
+                    #2021-engineering.
+                  </p>
+                </JudgeField>
+                <FullButton>Submit</FullButton>
               </Cell>
-              {tablesBlocks}
-            </MarginColumn>
-          </Flex>
-          <br />
-          <Flex
-            direction="row"
-            style={{ flexWrap: "wrap" }}
-            justify="space-between"
-          >
-            <MarginColumn flexBasis={48}>
-              <h1> Verticals </h1>
-
-              <Panel>
-                <StyledButton onClick={exportVerticalsCSV} disabled={!uploaded}>
-                  Generate CSV
-                </StyledButton>
-              </Panel>
-
-              <Panel>
-                <h2>Number of Judges</h2>
-
-                <div id="judges-gen">{verticalsBlocks}</div>
-              </Panel>
-            </MarginColumn>
-
-            <MarginColumn flexBasis={48}>
-              <h1> Sponsors </h1>
-
-              <Panel>
-                <StyledButton onClick={exportSponsorsCSV} disabled={!uploaded}>
-                  Generate CSV
-                </StyledButton>
-              </Panel>
-
-              <Panel>
-                <h2> Sponsors </h2>
-
-                <div id="sponsors-gen">{sponsorsBlocks}</div>
-              </Panel>
-            </MarginColumn>
+            </Column>
           </Flex>
         </Container>
       </Background>
@@ -584,12 +560,16 @@ judgingManager.getInitialProps = async (ctx) => {
   const profile = await getProfile(req);
 
   // Null profile means user is not logged in or user does not have enough rights
-  if (!profile || !(profile.role == "admin" || profile.role == "volunteer")) {
+  if (!profile || !(profile.role == "admin" || profile.role == "superadmin")) {
     handleLoginRedirect(req);
   }
 
   return {};
 };
+
+const PaddedTitle = styled.h1`
+  padding: 1rem 0 2rem 0;
+`;
 
 const MarginColumn = styled(Column)`
   margin: 1rem 0;
@@ -616,13 +596,6 @@ const SmallCell = styled.div`
   font-size: 16px;
 `;
 
-const Panel = styled.div`
-  padding: 24px 36px;
-  margin: 0 0 16px;
-  background: #ffffff;
-  border-radius: 4px;
-`;
-
 const Input = styled.input`
   border-radius: 8px;
   border: 1px solid #b2b2b2;
@@ -634,33 +607,90 @@ const Input = styled.input`
   box-sizing: border-box;
 `;
 
-const InvisInput = styled.input`
-  display: none;
-`;
-
-const TableInput = styled.input`
-  display: inline-block;
-  width: 25px;
-  padding: 12px 8px;
-  margin-right: 1px;
-  border-radius: 8px;
-  border: 1px solid ${({ theme }) => theme.colors.gray5};
-  color: ${({ theme }) => theme.colors.gray50};
-`;
-
 const FullButton = styled(Button)`
   width: 100%;
   text-align: center;
 `;
 
-const FullStyledButton = styled(Button)`
-  width: 100%;
-  text-align: center;
-  ${({ disabled }) => disabled && `opacity: 0.5`};
+type TimeCardType = {
+  primary?: boolean;
+};
+
+const TimeCard = styled.div<TimeCardType>`
+  margin-bottom: 20px;
+  padding: 20px;
+  background-color: white;
+  border-radius: 4px;
+  border: 2px solid;
+  border-color: ${(props) => (props.primary ? "#FF8379" : "white")};
 `;
 
-const StyledButton = styled(Button)`
-  ${({ disabled }) => disabled && `opacity: 0.5`};
+const TimeCardLabel = styled.label`
+  margin-bottom: 20px;
+  color: #757575;
+  font-weight: 600;
+  font-size: 16px;
+  text-indent: 1em;
+  &::before {
+    content: "🕐 ";
+    padding-right: 4px;
+  }
+`;
+
+const TimeCardTeamName = styled.h2`
+  margin-bottom: 16px;
+  margin-top: 12px;
+  padding: 0;
+`;
+
+const TimeCardTeamList = styled.p`
+  margin-bottom: 8px;
+  font-size: 18px;
+`;
+
+const TimeCardLink = styled.a`
+  font-size: 16px;
+`;
+
+const JudgeField = styled.div`
+  margin-bottom: 20px;
+  width: 100%;
+`;
+
+const JudgeFieldLabel = styled.label`
+  display: block;
+  margin-bottom: 4px;
+`;
+
+const JudgeFieldTextInput = styled.input`
+  width: 100%;
+  padding: 10px 0px 10px 10px;
+  box-sizing: border-box;
+  background-color: #f8f8f8;
+  border: 2px solid #e5e5e5;
+  border-radius: 4px;
+  font-size: 16px;
+`;
+
+const JudgeFieldTextArea = styled.textarea`
+  width: 100%;
+  padding: 10px 0px 10px 10px;
+  box-sizing: border-box;
+  background-color: #f8f8f8;
+  border: 2px solid #e5e5e5;
+  border-radius: 4px;
+  height: 150px;
+  font-size: 16px;
+  font-family: Arial;
+`;
+
+const JudgeFieldSelectInput = styled.select`
+  width: 100%;
+  padding: 10px 0px 10px 10px;
+  background-color: #f8f8f8;
+  border: 2px solid #e5e5e5;
+  border-radius: 4px;
+  font-size: 16px;
 `;
 
 export default judgingManager;
