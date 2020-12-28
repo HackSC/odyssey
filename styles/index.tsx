@@ -6,6 +6,7 @@ export { default as Footer } from "./Footer";
 
 // * Admin Sub-Directory
 export {
+  CreateButton,
   Description,
   EditButton,
   EventTitle,

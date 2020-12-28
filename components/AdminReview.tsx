@@ -49,10 +49,12 @@ const AdminReview = ({ admin, index = 1 }) => {
         <b>Average Score: </b>
         <TanColoredText>
           {admin.hacker_reviews && admin.hacker_reviews.length > 0
-            ? admin.hacker_reviews.reduce(
-                (a, b) => a + b.scoreOne + b.scoreTwo + b.scoreThree,
-                0
-              ) / admin.hacker_reviews.length
+            ? Math.round(
+                admin.hacker_reviews.reduce(
+                  (a, b) => a + b.scoreOne + b.scoreTwo + b.scoreThree,
+                  0
+                ) / admin.hacker_reviews.length
+              )
             : 0}
         </TanColoredText>
       </WordBreakP>

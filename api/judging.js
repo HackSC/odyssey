@@ -7,6 +7,7 @@ const Busboy = require("busboy");
 const AWS = require("aws-sdk");
 
 router.use(utils.authMiddleware);
+router.use(utils.requireNonHacker);
 
 router.get("/", async (req, res) => {
   const judgings = await models.Judgings.findAll({
@@ -33,6 +34,17 @@ router.get("/", async (req, res) => {
   return res.json({ result });
 });
 
+router.delete("/", utils.requireAdmin, async (req, res) => {
+  const id = req.body.id;
+  await models.Judgings.destroy({
+    where: {
+      id: id,
+    },
+  });
+
+  return res.json({ result: true });
+});
+
 router.post("/", async (req, res) => {
   const result = await models.Judgings.update(
     {
@@ -48,6 +60,54 @@ router.post("/", async (req, res) => {
       },
     }
   );
+
+  return res.json({ result });
+});
+
+router.post("/update", async (req, res) => {
+  const result = await models.Judgings.update(
+    {
+      teamId: req.body.teamId,
+      judgeId: req.body.judgeId,
+      startsAt: req.body.startsAt,
+      endsAt: req.body.endsAt,
+      zoomLink: req.body.zoomLink,
+    },
+    {
+      where: {
+        id: req.body.id,
+      },
+    }
+  );
+
+  return res.json({ result });
+});
+
+router.post("/new", async (req, res) => {
+  const result = await models.Judgings.create({
+    judgeId: req.body.judgeId,
+    teamId: req.body.teamId,
+    startsAt: req.body.startsAt,
+    endsAt: req.body.endsAt,
+    zoomLink: req.body.zoomLink,
+    judged: 0,
+  });
+
+  return res.json({ result });
+});
+
+router.get("/judgeList", async (req, res) => {
+  const result = await models.HackerProfile.findAll({
+    where: {
+      role: "judge",
+    },
+  });
+
+  return res.json({ result });
+});
+
+router.get("/teamList", async (req, res) => {
+  const result = await models.Team.findAll({});
 
   return res.json({ result });
 });
