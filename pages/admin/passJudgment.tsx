@@ -57,7 +57,7 @@ const passJudgment = ({ propJudgeList }) => {
         window.scrollTo({ top: 0 });
         setTimeout(() => window.scrollTo({ top: 0 }), 500);
       }
-    } else if (newJudgeList && newJudgeList.length > 0) {
+    } else if (newJudgeList.length > 0) {
       item_refs[newJudgeList.length - 1].current.scrollIntoView();
       if (typeof window !== "undefined") {
         window.scrollTo({ top: 0 });
