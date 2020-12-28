@@ -128,6 +128,36 @@ router.get("/reviews", async (req, res) => {
   }
 });
 
+router.get("/admin-reviews", async (req, res) => {
+  try {
+    const admins = await models.HackerProfile.findAll({
+      where: {
+        role: "admin",
+      },
+    });
+    var adminReviews = [];
+
+    for (const admin of admins) {
+      let reviews = await models.HackerReview.findAll({
+        where: {
+          createdBy: admin.userId,
+        },
+      });
+
+      let admin_obj = Object.assign(
+        {},
+        { hacker_reviews: reviews },
+        admin.dataValues
+      );
+      adminReviews.push(admin_obj);
+    }
+
+    return res.json({ reviews: adminReviews });
+  } catch (e) {
+    return res.status(500).json({ err: e });
+  }
+});
+
 router.get("/reviewHistory", async (req, res) => {
   try {
     const reviews = await models.HackerReview.findAll({

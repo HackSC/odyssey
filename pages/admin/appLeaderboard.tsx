@@ -3,12 +3,21 @@ import styled from "styled-components";
 import useSWR from "swr";
 
 import { FcNumericalSorting12, FcNumericalSorting21 } from "react-icons/fc";
-import { Head, Navbar, Footer, AppReview, Hacker } from "../../components";
+import {
+  Head,
+  Navbar,
+  Footer,
+  AppReview,
+  Hacker,
+  AdminReview,
+} from "../../components";
 import { Background, Flex, Container, Column, Button } from "../../styles";
 import { handleLoginRedirect, getProfile } from "../../lib";
 
 const AppLeaderboard = ({ profile }) => {
   const [sortOrder, setSortOrder] = useState(-1); // * -1 is descending, 1 is ascending
+  const [adminSortOrder, setAdminSortOrder] = useState(-1); // * -1 is descending, 1 is ascending
+  const [adminDataSorted, setAdminDataSorted] = useState(0);
   const [acceptedHackers, setAcceptedHackers] = useState([]);
   const [rejectedHackers, setRejectedHackers] = useState([]);
   const [waitlistedHackers, setWaitlistedHackers] = useState([]);
@@ -18,6 +27,12 @@ const AppLeaderboard = ({ profile }) => {
     : "api/admin/reviewedProfiles";
 
   let { data: reviewProfileData, error: reviewProfileError } = useSWR(fetchUrl);
+
+  fetchUrl = process.env.URL_BASE
+    ? process.env.URL_BASE + "api/admin/admin-reviews"
+    : "api/admin/admin-reviews";
+
+  let { data: adminReviewData, error: adminReviewError } = useSWR(fetchUrl);
 
   useEffect(() => {
     if (reviewProfileData && reviewProfileData.reviewedProfiles) {
@@ -53,6 +68,21 @@ const AppLeaderboard = ({ profile }) => {
     }
   }, [reviewProfileData, sortOrder]);
 
+  useEffect(() => {
+    console.log("sorting admin review data");
+    if (!adminDataSorted && adminReviewData && adminReviewData.reviews) {
+      setAdminDataSorted(1);
+      adminReviewData.reviews.sort((admin_a, admin_b) => {
+        let a_sum = admin_a.hacker_reviews ? admin_a.hacker_reviews.length : 0;
+        let b_sum = admin_b.hacker_reviews ? admin_b.hacker_reviews.length : 0;
+
+        return a_sum > b_sum ? adminSortOrder : adminSortOrder == 1 ? -1 : 1;
+      });
+    } else {
+      console.log("failed to sort admin review data");
+    }
+  }, [adminSortOrder, adminReviewData]);
+
   fetchUrl = process.env.URL_BASE
     ? process.env.URL_BASE + "api/admin/reviews"
     : "api/admin/reviews";
@@ -65,6 +95,36 @@ const AppLeaderboard = ({ profile }) => {
       <Navbar loggedIn admin activePage="/appLeaderboard" />
       <Background padding="2rem">
         <Container width={"100%"}>
+          <Flex direction="row" style={{ padding: "1rem 0", flexWrap: "wrap" }}>
+            <TitleFlex direction="row">
+              <OnePaddedH1>Admin Review Rankings</OnePaddedH1>
+              <DevModeButton
+                onClick={() => {
+                  setAdminDataSorted(0);
+                  setAdminSortOrder(adminSortOrder == 1 ? -1 : 1);
+                }}
+              >
+                {adminSortOrder == 1 ? (
+                  <FcNumericalSorting21 size={"2rem"} />
+                ) : (
+                  <FcNumericalSorting12 size={"2rem"} />
+                )}
+              </DevModeButton>
+            </TitleFlex>
+            <AdminCardContainer>
+              {adminReviewData &&
+              adminReviewData.reviews &&
+              adminReviewData.reviews.length > 0
+                ? adminReviewData.reviews.map((admin, index) => (
+                    <AdminReview
+                      index={index + 1}
+                      key={Object.entries(admin).join()}
+                      admin={admin}
+                    />
+                  ))
+                : ""}
+            </AdminCardContainer>
+          </Flex>
           <Flex direction="row" style={{ flexWrap: "wrap" }}>
             <MaxHeightColumn flexBasis={35}>
               <TitleFlex direction="row">
@@ -92,7 +152,7 @@ const AppLeaderboard = ({ profile }) => {
             </MaxHeightColumn>
             <MaxHeightColumn flexBasis={65}>
               <TitleFlex direction="row">
-                <OnePaddedH1>Leaderboard</OnePaddedH1>
+                <OnePaddedH1>Hacker Leaderboard</OnePaddedH1>
                 <DevModeButton
                   onClick={() => setSortOrder(sortOrder == 1 ? -1 : 1)}
                 >
@@ -201,7 +261,6 @@ const MaxHeightColumn = styled(Column)`
   padding: 1rem;
   min-width: 300px;
   max-height: 90vh;
-  margin: auto;
   display: flex;
   flex-direction: column;
 `;
@@ -234,6 +293,16 @@ const TitleFlex = styled(Flex)`
   width: 100%;
   min-height: 3rem;
   margin: 0 0 1rem 0;
+`;
+
+const AdminCardContainer = styled(Flex)`
+  width: 100%;
+  flex: 1 1 auto;
+  border: 1px solid #cfcfcf;
+  border-radius: 4px;
+  padding: 1rem;
+  box-sizing: border-box;
+  overflow-x: scroll;
 `;
 
 const CardContainer = styled.div`

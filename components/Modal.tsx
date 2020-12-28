@@ -6,17 +6,18 @@ type Props = {
   visible: boolean;
   header?: React.ReactNode;
   footer?: React.ReactNode;
+  style?: any;
 };
 
 const Modal: React.FunctionComponent<Props> = (props) => {
-  const { children, visible = false, footer, header } = props;
+  const { children, visible = false, footer, header, style } = props;
 
   if (!visible) {
     return null;
   }
 
   return (
-    <ModalWrapper>
+    <ModalWrapper style={style ? style : {}}>
       {header && (
         <div>
           {header}
