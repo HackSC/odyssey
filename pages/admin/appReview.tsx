@@ -255,31 +255,9 @@ const AppReview = ({ profile, hackerProfile, reviewHistory, totalReviews }) => {
           <Flex
             direction="row"
             justify="space-between"
-            style={{ flexWrap: "wrap" }}
+            style={{ flexWrap: "nowrap" }}
           >
-            <Column flexGrow={1} style={{ margin: "0 2rem 0 0" }}>
-              <h1>Resume</h1>
-              <a
-                href={currentProfile ? currentProfile.resume : "/"}
-                target="_blank"
-              >
-                Download Pdf
-              </a>
-              <div style={{ padding: "2rem 0" }}>
-                <iframe
-                  style={{
-                    width: "100%",
-                    minWidth: "320px",
-                    minHeight: "620px",
-                  }}
-                  src={`https://hacksc-odyssey.s3-us-west-1.amazonaws.com/${
-                    currentProfile ? currentProfile.userId : ""
-                  }#zoom=50`}
-                />
-              </div>
-            </Column>
-
-            <Column flexBasis={40}>
+            <Column flexGrow={2} style={{ margin: "0 2rem 0 0" }}>
               <h1> Applicant Info </h1>
               <Panel>
                 <h2>Question 1 - Vertical</h2>
@@ -317,6 +295,28 @@ const AppReview = ({ profile, hackerProfile, reviewHistory, totalReviews }) => {
                 </BrokenP>
               </Panel>
 
+              <h1>Resume</h1>
+              <a
+                href={currentProfile ? currentProfile.resume : "/"}
+                target="_blank"
+              >
+                Download Pdf
+              </a>
+              <div style={{ padding: "2rem 0" }}>
+                <iframe
+                  style={{
+                    width: "100%",
+                    minWidth: "320px",
+                    minHeight: "620px",
+                  }}
+                  src={`https://hacksc-odyssey.s3-us-west-1.amazonaws.com/${
+                    currentProfile ? currentProfile.userId : ""
+                  }#zoom=50`}
+                />
+              </div>
+            </Column>
+
+            <Column>
               <h1>Review</h1>
               <Panel>
                 <ScoreInputLabel>Score 1 (1-5)</ScoreInputLabel>
@@ -400,6 +400,7 @@ const AppReview = ({ profile, hackerProfile, reviewHistory, totalReviews }) => {
                   </Column>
                 </Flex>
               </Panel>
+
               <div>
                 <StyledButton onClick={handleSubmit} disabled={submitting}>
                   {" "}
