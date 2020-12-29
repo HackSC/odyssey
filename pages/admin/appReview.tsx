@@ -110,6 +110,7 @@ const AppReview = ({ profile, hackerProfile, reviewHistory, totalReviews }) => {
       }
 
       let invalid = false;
+      let warning = false;
       if (s1.trim() === "" || s2.trim() === "" || s3.trim() === "") {
         invalid = true;
       }
@@ -127,6 +128,20 @@ const AppReview = ({ profile, hackerProfile, reviewHistory, totalReviews }) => {
 
       if (parseInt(s3) < MIN_SCORE || parseInt(s3) > MAX_SCORE) {
         invalid = true;
+      }
+
+      if (parseInt(s3) == 5) {
+        warning = true;
+      }
+
+      if (warning) {
+        if (
+          !confirm(
+            "Are you sure you want to red flag this application? - a score of '5' on question 3 indicates a red flag"
+          )
+        ) {
+          return;
+        }
       }
 
       if (invalid) {
@@ -257,7 +272,7 @@ const AppReview = ({ profile, hackerProfile, reviewHistory, totalReviews }) => {
             justify="space-between"
             style={{ flexWrap: "nowrap" }}
           >
-            <Column flexGrow={2} style={{ margin: "0 2rem 0 0" }}>
+            <Column flexBasis={70} style={{ margin: "0 2rem 0 0" }}>
               <h1> Applicant Info </h1>
               <Panel>
                 <h2>Question 1 - Vertical</h2>
@@ -316,7 +331,7 @@ const AppReview = ({ profile, hackerProfile, reviewHistory, totalReviews }) => {
               </div>
             </Column>
 
-            <Column>
+            <Column flexBasis={40}>
               <h1>Review</h1>
               <Panel>
                 <ScoreInputLabel>Score 1 (1-5)</ScoreInputLabel>
