@@ -1,16 +1,30 @@
 import React, { useCallback, useState } from "react";
 import styled from "styled-components";
 import Router from "next/router";
+import TeammateSuggestions from "../components/TeammateSuggestions";
 
-import { Flex, Column, Button } from "../styles";
+import { Flex, Column, Button, Form, FormGroup } from "../styles";
 
 type Props = {
   team: Team;
   profile: Profile;
+  teammateSuggestions: TeamSuggestion;
+  pendingRequests: TeamSuggestion;
+  pendingInvites: TeamSuggestion;
 };
 
-const Team = ({ team, profile }: Props) => {
+const Team = ({
+  team,
+  profile,
+  teammateSuggestions,
+  pendingRequests,
+  pendingInvites,
+}: Props) => {
   const [error, setError] = useState(null);
+  const [teamVisibility, setTeamVisibility] = useState(
+    team.lookingForTeammates
+  );
+  const [text, setText] = useState(team.description);
 
   const handleLeaveTeam = useCallback(async () => {
     const confirm = window.confirm("Are you sure you want to leave this team?");
@@ -52,7 +66,7 @@ const Team = ({ team, profile }: Props) => {
     }
   }, []);
 
-  const handleKick = useCallback(async member => {
+  const handleKick = useCallback(async (member) => {
     const confirm = window.confirm(
       `Are you sure you want to kick ${member.firstName} ${member.lastName}, ${member.email}?`
     );
@@ -62,7 +76,7 @@ const Team = ({ team, profile }: Props) => {
     }
 
     const res = await fetch("/api/team/kick/" + member.userId, {
-      method: "POST"
+      method: "POST",
     });
     const data = await res.json();
 
@@ -73,6 +87,40 @@ const Team = ({ team, profile }: Props) => {
     } else {
       setError(data.message);
     }
+  }, []);
+
+  const handleChangeVisibility = useCallback(async (currentVisibility) => {
+    setTeamVisibility(!currentVisibility);
+    const urlRoute = "/api/team/visibility/";
+
+    const result = await fetch(urlRoute, {
+      method: "PUT",
+      headers: {
+        "content-type": "application/json",
+      },
+    });
+    return result.status === 200;
+  }, []);
+
+  const handleChange = (e) => {
+    e.preventDefault();
+    setText(e.target.value);
+  };
+
+  const onSubmit = useCallback(async (text: string) => {
+    const urlRoute = "/api/team/description/";
+
+    const result = await fetch(urlRoute, {
+      method: "PUT",
+      headers: {
+        "content-type": "application/json",
+      },
+      body: JSON.stringify({
+        text: text,
+        teamCode: team.teamCode,
+      }),
+    });
+    return result.status === 200;
   }, []);
 
   return (
@@ -95,7 +143,7 @@ const Team = ({ team, profile }: Props) => {
         <Column flexBasis={48}>
           <MembersHeader>Team Members</MembersHeader>
           <Members>
-            {team.HackerProfiles.map((member: any) => (
+            {team.members.map((member: any) => (
               <Member key={member.email}>
                 <PaddedP>
                   <b>
@@ -132,6 +180,87 @@ const Team = ({ team, profile }: Props) => {
           {!!error && <ErrorMessage>{error}</ErrorMessage>}
         </Column>
       </Flex>
+      {team.members.length < 4 ? (
+        <>
+          <Flex direction="row" tabletVertical justify="space-between">
+            <Column flexBasis={48}>
+              <Header>Edit Team Visibility</Header>
+              <ChangeProfileOption>
+                <input
+                  name="visibility"
+                  type="checkbox"
+                  checked={teamVisibility}
+                  onChange={() => handleChangeVisibility(teamVisibility)}
+                />
+                <ShareProfileText>
+                  Share the team name and description with hackers looking to
+                  join a team
+                </ShareProfileText>
+              </ChangeProfileOption>
+            </Column>
+            <Column flexBasis={48}>
+              <Header>Edit Team Description</Header>
+              <Form>
+                <FormGroup>
+                  <InputFlex>
+                    <input
+                      type="text"
+                      placeholder=""
+                      value={text}
+                      required
+                      onChange={handleChange}
+                    />
+                    <Button
+                      onClick={(e) => {
+                        e.preventDefault();
+                        onSubmit(text);
+                        setText(text);
+                      }}
+                    >
+                      Save
+                    </Button>
+                  </InputFlex>
+                </FormGroup>
+              </Form>
+            </Column>
+          </Flex>
+          {pendingRequests?.hackerProfiles.length ? (
+            <TeammateSuggestions
+              key={"Pending Teammate Requests"}
+              title={"Pending Teammate Requests"}
+              hackers={pendingRequests}
+              owner="team"
+              teamId={team.teamCode}
+            />
+          ) : (
+            <div />
+          )}
+          {pendingInvites?.hackerProfiles.length ? (
+            <TeammateSuggestions
+              key={"Pending Teammate Invites"}
+              title={"Pending Teammate Invites"}
+              hackers={pendingInvites}
+              owner="team"
+              teamId={team.teamCode}
+            />
+          ) : (
+            <div />
+          )}
+          {teammateSuggestions?.hackerProfiles.length ? (
+            <TeammateSuggestions
+              key={"Teammate Suggestions"}
+              title={"Teammate Suggestions"}
+              hackers={teammateSuggestions}
+              owner="team"
+              teamId={team.teamCode}
+            />
+          ) : (
+            <div />
+          )}
+        </>
+      ) : (
+        <div />
+      )}
     </TeamSection>
   );
 };
@@ -211,6 +340,34 @@ const ErrorMessage = styled.p`
   margin-top: 24px;
   color: ${({ theme }) => theme.colors.peach};
   text-align: center;
+`;
+
+const Header = styled.h2`
+  padding-bottom: 8px;
+  padding-top: 40px;
+`;
+
+const ChangeProfileOption = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  padding-top: 10px;
+  padding-bottom: 10px;
+`;
+
+const ShareProfileText = styled.div`
+  padding-left: 20px;
+  font-weight: 600;
+  font-size: 16px;
+  margin-bottom: 16px;
+  line-height: 22px;
+`;
+
+const InputFlex = styled(Flex)`
+  input {
+    flex-basis: 70%;
+    margin-right: 16px;
+  }
 `;
 
 export default Team;

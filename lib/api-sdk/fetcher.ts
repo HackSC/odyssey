@@ -149,16 +149,15 @@ function computeUrlRoute(route: string, req?: any, param?: ResourceID): string {
 async function APIGet<T>(
   route: GetRoute,
   opts: {
-    queryParams?: { [key: string]: string | number };
+    queryParams?: Object; // { key: string | number };
     req?: NextApiRequest;
   },
   param?: ResourceID
 ): Promise<APIResponse<T>> {
   let urlRoute = computeUrlRoute(route, opts?.req, param);
   if (opts?.queryParams) {
-    const urlParams = new URLSearchParams(
-      Object.entries(opts.queryParams) + ""
-    );
+    // @ts-ignore
+    const urlParams = new URLSearchParams(opts.queryParams);
     urlRoute += `?${urlParams}`;
   }
 

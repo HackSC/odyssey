@@ -35,6 +35,9 @@ export default async (req, res) => {
   }
 
   await app.start(3032);
+  const isProd = process.env.NODE_ENV === "production";
+
+  const notProdMsg = `[notice: NODE_ENV is ${process.env.NODE_ENV}] `;
   try {
     await app.client.chat.postMessage({
       token: process.env.SLACK_BOT_TOKEN,
@@ -45,7 +48,9 @@ export default async (req, res) => {
           type: "section",
           text: {
             type: "plain_text",
-            text: `${firstName} ${lastName} has submit their application!`,
+            text: `${
+              !isProd ? notProdMsg : ""
+            }${firstName} ${lastName} has submit their application!`,
             emoji: true,
           },
         },

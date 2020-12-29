@@ -175,6 +175,121 @@ router.put("/referrerCode", async (req, res) => {
   return res.send();
 });
 
+router.get("/resume-check", utils.authMiddleware, async (req, res) => {
+  const user_id = req.query.userid;
+
+  const s3 = new AWS.S3({
+    accessKeyId: process.env.S3_ACCESS_KEY,
+    secretAccessKey: process.env.S3_SECRET,
+  });
+
+  const params = {
+    Bucket: "hacksc-odyssey",
+    Key: user_id,
+  };
+
+  await s3
+    .headObject(params)
+    .promise()
+    .then(
+      () => {
+        res.status(200).json({ message: "User has a resume." });
+      },
+      (err) => {
+        res.status(500).json({ message: "User has not uploaded a resume." });
+      }
+    );
+});
+
+router.get("/resume", utils.authMiddleware, async (req, res) => {
+  const user_id = req.query.userid;
+
+  const s3 = new AWS.S3({
+    accessKeyId: process.env.S3_ACCESS_KEY,
+    secretAccessKey: process.env.S3_SECRET,
+  });
+
+  const params = {
+    Bucket: "hacksc-odyssey",
+    Key: user_id,
+  };
+
+  await s3
+    .headObject(params)
+    .promise()
+    .then(
+      () => {
+        try {
+          res.attachment(user_id);
+          var fileStream = s3.getObject(params).createReadStream();
+          res.setHeader("Content-Type", "application/pdf");
+          res.setHeader(
+            "Content-Disposition",
+            `attachment; filename=${user_id}.pdf`
+          );
+          fileStream.pipe(res, { autoClose: true });
+        } catch (e) {
+          res.status(204).json({ message: "User has not uploaded a resume." });
+        }
+      },
+      (err) => {
+        res.status(204).json({ message: "User has not uploaded a resume." });
+      }
+    );
+});
+
+router.get("/resume-list", utils.authMiddleware, async (req, res) => {
+  const s3 = new AWS.S3({
+    accessKeyId: process.env.S3_ACCESS_KEY,
+    secretAccessKey: process.env.S3_SECRET,
+  });
+
+  let complete_object = [];
+  let error = null;
+
+  const googleParams = {
+    Bucket: "hacksc-odyssey",
+    Prefix: "google",
+    MaxKeys: 1000, // * Max is 1,000
+  };
+
+  const auth0Params = {
+    Bucket: "hacksc-odyssey",
+    Prefix: "auth0",
+    MaxKeys: 1000, // * Max is 1,000
+  };
+
+  // https://stackoverflow.com/questions/42394429/aws-sdk-s3-best-way-to-list-all-keys-with-listobjectsv2
+  const listAllKeys = (params, out = []) =>
+    new Promise((resolve, reject) => {
+      s3.listObjectsV2(params)
+        .promise()
+        .then(({ Contents, IsTruncated, NextContinuationToken }) => {
+          out.push(...Contents);
+          !IsTruncated
+            ? resolve(out)
+            : resolve(
+                listAllKeys(
+                  Object.assign(params, {
+                    ContinuationToken: NextContinuationToken,
+                  }),
+                  out
+                )
+              );
+        })
+        .catch(reject);
+    });
+
+  const googleKeys = await listAllKeys(googleParams);
+  const auth0Keys = await listAllKeys(auth0Params);
+
+  if (googleKeys && auth0Keys) {
+    res.status(200).json({ files: [...googleKeys, ...auth0Keys] });
+  } else {
+    res.status(400).json({ message: "problem fetching resumes from S3" });
+  }
+});
+
 router.post("/resume", utils.authMiddleware, async (req, res) => {
   const user = req.user;
   if (req.files) {
@@ -188,6 +303,8 @@ router.post("/resume", utils.authMiddleware, async (req, res) => {
       Bucket: "hacksc-odyssey",
       Key: user.id,
       Body: file.data,
+      ACL: "public-read",
+      ContentType: "application/pdf",
     };
 
     s3.upload(params, function (err, data) {
@@ -353,6 +470,40 @@ router.get("/list", utils.requireDevelopmentEnv, async (req, res) => {
   } catch (e) {
     return res.status(500).json({ error: e });
   }
+});
+
+// Change visibility
+router.put("/visibility", async (req, res) => {
+  const currentHackerProfile = await models.HackerProfile.findOne({
+    where: { userId: req.user.id },
+  });
+
+  const lookingForTeam = currentHackerProfile.lookingForTeam;
+
+  await models.HackerProfile.update(
+    { lookingForTeam: !lookingForTeam },
+    {
+      where: {
+        userId: req.user.id,
+      },
+    }
+  );
+
+  return res.send();
+});
+
+// Add portfolio url
+router.put("/portfolio", async (req, res) => {
+  await models.HackerProfile.update(
+    { portfolioUrl: req.body.portfolioUrl },
+    {
+      where: {
+        userId: req.user.id,
+      },
+    }
+  );
+
+  return res.send();
 });
 
 module.exports = router;

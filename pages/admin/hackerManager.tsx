@@ -1,10 +1,13 @@
-import React, { useRef, useState, useMemo, useCallback } from "react";
+import React, { useRef, useState, useMemo, useEffect } from "react";
+import dynamic from "next/dynamic";
+import Redirect from "next/router";
 import styled from "styled-components";
 import JSZip from "jszip";
 import stringify from "csv-stringify";
 import { saveAs } from "file-saver";
 import PacmanLoader from "react-spinners/PacmanLoader";
-
+import Modal from "../../components/Modal";
+const ReactJson = dynamic(() => import("react-json-view"), { ssr: false });
 import { sendSlackMessage, handleLoginRedirect, getProfile } from "../../lib";
 import Schools from "../../assets/data/schools.json";
 
@@ -24,8 +27,6 @@ import {
   Container,
   Form,
   FormGroup,
-  RadioChoice,
-  RadioChoiceLabel,
 } from "../../styles";
 
 import {
@@ -33,55 +34,112 @@ import {
   liveLookupFetch,
 } from "../../lib/api-sdk/liveHooks";
 
-const Hacker = ({ result, resetResults }) => {
+const Hacker = ({ result, resumeList, resetResults }) => {
+  const [hasResume, setHasResume] = useState(false);
+  const [popupVisible, setPopupVisible] = useState(false);
+  const profilePopupRef = useRef(null);
+
+  const viewProfile = () => {
+    setPopupVisible(true);
+  };
+
+  const downloadResume = async () => {
+    Redirect.push(
+      `https://hacksc-odyssey.s3-us-west-1.amazonaws.com/${result.userId}`,
+      null
+    );
+  };
+
+  useEffect(() => {
+    const resume_reduce = resumeList.reduce((acc, val) => {
+      let item = val && val[1] ? val[1] : {};
+      if (item && item.Key)
+        return acc + (item.Key.includes(result.userId) ? 1 : 0);
+      else return acc;
+    }, 0);
+
+    if (resume_reduce) setHasResume(true);
+    else setHasResume(false);
+  }, []);
+
+  const CloseButton = (
+    <FullButton onClick={() => setPopupVisible(false)}>Close</FullButton>
+  );
+
   return (
     <Result key={result.userId}>
-      <h2>
-        {result.firstName} {result.lastName}
-      </h2>
-      <p>
-        <b>E-Mail: </b>
-        {result.email}
-      </p>
-      <p>
-        <b>School: </b>
-        {result.school}
-      </p>
-      <p>
-        <b>Year: </b>
-        {result.year}
-      </p>
-      <p>
-        <b>Graduation Date: </b>
-        {result.graduationDate}
-      </p>
-      <p>
-        <b>Needs Bus: </b>
-        {result.needBus ? "True" : "False"}
-      </p>
-      <p>
-        <b>Gender: </b>
-        {result.gender}
-      </p>
-      <p>
-        <b>Ethnicity: </b>
-        {result.ethnicity}
-      </p>
-      <p>
-        <b>Status: </b>
-        {result.status}
-      </p>
-      <p>
-        <b>Role: </b>
-        {result.role}
-      </p>
-      <p>
-        <b>
-          {result.qrCodeId === null
-            ? "No QR code"
-            : `Has a QR code (${result.qrCodeId})`}
-        </b>
-      </p>
+      <Flex
+        direction="row"
+        style={{ paddingTop: "1rem", flexWrap: "wrap" }}
+        justify="space-between"
+      >
+        <Column flexBasis={49} style={{ margin: "1rem 0" }}>
+          <h2>
+            {result.firstName} {result.lastName}
+          </h2>
+          <p>
+            <b>E-Mail: </b>
+            {result.email}
+          </p>
+          <p>
+            <b>School: </b>
+            {result.school}
+          </p>
+          <p>
+            <b>Year: </b>
+            {result.year}
+          </p>
+          <p>
+            <b>Graduation Date: </b>
+            {result.graduationDate}
+          </p>
+          <p>
+            <b>Needs Bus: </b>
+            {result.needBus ? "True" : "False"}
+          </p>
+          <p>
+            <b>Gender: </b>
+            {result.gender}
+          </p>
+          <p>
+            <b>Ethnicity: </b>
+            {result.ethnicity}
+          </p>
+          <p>
+            <b>Status: </b>
+            {result.status}
+          </p>
+          <p>
+            <b>Role: </b>
+            {result.role}
+          </p>
+          <p>
+            <b>
+              {result.qrCodeId === null
+                ? "No QR code"
+                : `Has a QR code (${result.qrCodeId})`}
+            </b>
+          </p>
+        </Column>
+        <Column flexBasis={49} style={{ margin: "1rem 0" }}>
+          <FullButton style={{ margin: "0 0 0.5rem 0" }} onClick={viewProfile}>
+            View Full Profile
+          </FullButton>
+          {hasResume ? (
+            <FullButton
+              style={{ margin: "0.5rem 0 0 0" }}
+              onClick={downloadResume}
+            >
+              Download Resume
+            </FullButton>
+          ) : (
+            <p>User has not uploaded a resume</p>
+          )}
+        </Column>
+      </Flex>
+      <Modal visible={popupVisible} header={CloseButton} footer={CloseButton}>
+        <ReactJson src={result} />
+      </Modal>
     </Result>
   );
 };
@@ -172,6 +230,24 @@ const hackerManager = ({ profile }) => {
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
   const [results, setResults] = useState([]);
+  const [resumeList, setResumeList] = useState([]);
+  const [fetch_called, setFetchCalled] = useState(false);
+
+  const getResumeList = async () => {
+    setFetchCalled(true);
+    let resume_result = await fetch("/api/profile/resume-list", {
+      method: "GET",
+    });
+
+    if (resume_result.status === 200) {
+      let resumes = await resume_result.json();
+      setResumeList(Object.entries(resumes.files));
+    } else setResumeList([]);
+  };
+
+  useEffect(() => {
+    if (!fetch_called) getResumeList();
+  }, []);
 
   const exportHackerCSV = async function () {
     setMessage("Generating Hacker CSVs");
@@ -187,17 +263,23 @@ const hackerManager = ({ profile }) => {
       let user_email = profile ? profile.email : "";
       let start_and_end_date =
         new Date(new Date().getTime() - 480 * 1000 * 60).toISOString() + "";
-      let slack_result = await sendSlackMessage(
-        ":file_folder: Hacker CSV exported (/admin/hackerManager) by " +
-          firstName +
-          ", " +
-          lastName +
-          ", " +
-          user_email,
-        "Number hackers exported: " + (csvs[0].length - 1),
-        start_and_end_date,
-        start_and_end_date
-      );
+      let slack_result: Response;
+
+      if (!firstName) {
+        slack_result = await sendSlackMessage(
+          `:file_folder: Hacker CSV exported (/admin/hackerManager) by ${user_email}`,
+          "Number hackers exported: " + (csvs[0].length - 1),
+          start_and_end_date,
+          start_and_end_date
+        );
+      } else {
+        slack_result = await sendSlackMessage(
+          `:file_folder: Hacker CSV exported (/admin/hackerManager) by ${firstName} ${lastName} (${user_email})`,
+          "Number hackers exported: " + (csvs[0].length - 1),
+          start_and_end_date,
+          start_and_end_date
+        );
+      }
     } catch (err) {
       setMessage(err.message);
       return;
@@ -344,6 +426,7 @@ const hackerManager = ({ profile }) => {
           <Hacker
             key={Object.entries(result).join()}
             result={result}
+            resumeList={resumeList}
             resetResults={resetResults}
           />
         ))}
@@ -503,19 +586,16 @@ const hackerManager = ({ profile }) => {
               <Flex
                 direction="row"
                 style={{ paddingTop: "1rem", flexWrap: "wrap" }}
-                justify="space-between"
+                justify="flex-end"
               >
-                <Column flexBasis={49} style={{ margin: "1rem 0" }}>
-                  <FullButton onClick={lookupHackers}>
-                    Filter Hackers
-                  </FullButton>
-                </Column>
+                <PaddedButton>
+                  <Button onClick={showAllHackers}>Show All Hackers</Button>
+                  &nbsp; &nbsp;
+                </PaddedButton>
 
-                <Column flexBasis={49} style={{ margin: "1rem 0" }}>
-                  <FullButton onClick={showAllHackers}>
-                    Show All Hackers
-                  </FullButton>
-                </Column>
+                <PaddedButton>
+                  <Button onClick={lookupHackers}>Filter Hackers</Button>
+                </PaddedButton>
               </Flex>
             </Form>
           </Flex>
@@ -554,7 +634,14 @@ hackerManager.getInitialProps = async (ctx) => {
   const profile = await getProfile(req);
 
   // Null profile means user is not logged in, and this is only relevant for admins/sponsors
-  if (!profile || !(profile.role == "admin" || profile.role == "sponsor")) {
+  if (
+    !profile ||
+    !(
+      profile.role == "admin" ||
+      profile.role == "sponsor" ||
+      profile.role == "superadmin"
+    )
+  ) {
     handleLoginRedirect(req);
   }
 
@@ -569,6 +656,12 @@ const PaddedFlex = styled(Flex)`
   min-height: 3rem;
   justify-content: center;
   padding: 3rem;
+`;
+
+const PaddedButton = styled(Flex)`
+  padding: 18px 0;
+  padding-left: 5px;
+  justify-content: flex-end;
 `;
 
 const FullButton = styled(Button)`

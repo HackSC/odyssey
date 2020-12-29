@@ -7,6 +7,7 @@ const bodyParser = require("body-parser");
 const authRouter = require("./api/login");
 const profileRouter = require("./api/hackerProfile");
 const majorEventsRouter = require("./api/majorEvents");
+const judgingRouter = require("./api/judging");
 const apiRouter = require("./api/apis");
 const adminRouter = require("./api/admin");
 const taskRouter = require("./api/tasks");
@@ -21,6 +22,7 @@ const battlepassRouter = require("./api/unlockable");
 const prizeRouter = require("./api/prizes");
 const hackerLiveRouter = require("./api/hackerLive");
 const publicRouter = require("./api/public");
+const matchingRouter = require("./api/teamMatching");
 const fileUpload = require("express-fileupload");
 const dotenv = require("dotenv");
 
@@ -71,6 +73,7 @@ server.use(fileUpload());
 server.use("/auth", authRouter);
 server.use("/api/profile", profileRouter);
 server.use("/api/majorEvents", majorEventsRouter);
+server.use("/api/judging", judgingRouter);
 server.use("/api/apis", apiRouter);
 server.use("/api/admin", adminRouter);
 server.use("/api/task", taskRouter);
@@ -85,6 +88,7 @@ server.use("/api/unlockable", battlepassRouter);
 server.use("/api/hacker/live", hackerLiveRouter);
 server.use("/api/prize", prizeRouter);
 server.use("/api/public", publicRouter);
+server.use("/api/teamMatching", matchingRouter);
 
 server.post("/api/scan", (req, res) => {
   console.info("Scanned: ", req.body.code);
@@ -94,6 +98,7 @@ server.post("/api/scan", (req, res) => {
 server.use("/admin/auth", authRouter);
 server.use("/admin/api/profile", profileRouter);
 server.use("/admin/api/majorEvents", majorEventsRouter);
+server.use("/admin/api/judging", judgingRouter);
 server.use("/admin/api/apis", apiRouter);
 server.use("/admin/api/admin", adminRouter);
 server.use("/admin/api/task", taskRouter);

@@ -60,6 +60,7 @@ const ProjectTeam = (props: Props) => {
         <NoTeamFlex direction="row" tabletVertical justify="space-between">
           <Column flexBasis={48}>
             <ButtonWithTextForm
+              initial=""
               title="Join Team"
               label="Enter your team name"
               buttonText="Join"
@@ -69,6 +70,7 @@ const ProjectTeam = (props: Props) => {
 
           <Column flexBasis={48}>
             <ButtonWithTextForm
+              initial=""
               title="Create Team"
               label="Enter a team name"
               buttonText="Create"
