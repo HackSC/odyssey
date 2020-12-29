@@ -1,5 +1,6 @@
 import { App, LogLevel } from "@slack/bolt";
 import dotenv from "dotenv";
+const { authMiddleware } = require("../utils");
 
 export const config = {
   api: {
@@ -15,6 +16,8 @@ const app = new App({
 });
 
 export default async (req, res) => {
+  // await authMiddleware();
+
   if (!process.env.SLACK_BOT_TOKEN || !process.env.SIGNING_SECRET) {
     res.json({
       status: "error",
