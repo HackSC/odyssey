@@ -4,7 +4,7 @@ import { useRaffleCount } from "../lib/api-sdk/hackerLiveHooks";
 import { Flex } from "../styles";
 
 const RaffleTicketCount = () => {
-  const { raffleCount } = useRaffleCount({ defaultOnError: console.log });
+  const { raffleCount } = useRaffleCount({ defaultOnError: console.error });
 
   return (
     <Info>

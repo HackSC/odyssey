@@ -1,15 +1,11 @@
-import React from "react";
-
+import React, { useState } from "react";
 import styled from "styled-components";
 
 import HeaderLogo from "../assets/header_logo_21_transparent.png";
-
+import { getHackathonConstants } from "../lib";
 import { Button, Container, Link } from "../styles";
 
-import constants from "../lib/hackathonConstants";
-import { useState } from "react";
-
-type NavbarProps = React.FC<any> & {
+type NavbarProps = {
   loggedIn?: boolean;
   showLive?: boolean;
   showDash?: boolean;
@@ -26,6 +22,7 @@ type NavbarProps = React.FC<any> & {
   superadmin?: boolean;
   judge?: boolean;
   sponsor?: boolean;
+  hackathonConstants?: Array<HackathonConstant>;
 };
 
 const style = (background) => {
@@ -43,16 +40,27 @@ const style = (background) => {
 };
 
 const Navbar: React.FunctionComponent<NavbarProps> = ({
+  hackathonConstants = [],
   loggedIn,
-  showLive = constants.showLive,
-  showDash = constants.showDash,
-  showApp = constants.showApp,
-  showMaps = constants.showMaps,
-  showAPI = constants.showAPI,
-  showResults = constants.showResults,
-  showTeam = constants.showTeam,
+  showLive = hackathonConstants.find((constant) => constant.name === "showLive")
+    ?.boolean,
+  showDash = hackathonConstants.find((constant) => constant.name === "showDash")
+    ?.boolean,
+  showApp = hackathonConstants.find((constant) => constant.name === "showApp")
+    ?.boolean,
+  showMaps = hackathonConstants.find((constant) => constant.name === "showMaps")
+    ?.boolean,
+  showAPI = hackathonConstants.find((constant) => constant.name === "showAPI")
+    ?.boolean,
+  showResults = hackathonConstants.find(
+    (constant) => constant.name === "showResults"
+  )?.boolean,
+  showTeam = hackathonConstants.find((constant) => constant.name === "showTeam")
+    ?.boolean,
   showLogout = true,
-  showProjectTeam = constants.showProjectTeam,
+  showProjectTeam = hackathonConstants.find(
+    (constant) => constant.name === "showProjectTeam"
+  )?.boolean,
   activePage,
   admin,
   superadmin,
@@ -255,13 +263,13 @@ const Navbar: React.FunctionComponent<NavbarProps> = ({
   );
 };
 
-Navbar.getInitialProps = async ({ req }) => {
+export async function getStaticProps() {
   const hackathonConstants = await getHackathonConstants();
 
   return {
     hackathonConstants,
   };
-};
+}
 
 const Wrapper = styled.div`
   padding: 30px 0;

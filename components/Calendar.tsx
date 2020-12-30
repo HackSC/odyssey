@@ -32,7 +32,7 @@ let defaultTimeEnd = moment()
 //.valueOf();
 
 const Calendar: React.FunctionComponent<Props> = (props) => {
-  const { allEvents } = useEventsList({ defaultOnError: console.log });
+  const { allEvents } = useEventsList({ defaultOnError: console.error });
   const [eventVisibility, setEventVisibility] = useState({
     visible: false,
     e: {},

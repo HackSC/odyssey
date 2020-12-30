@@ -179,7 +179,12 @@ const BattlepassManager = ({ profile, currentUnlockables }) => {
   return (
     <>
       <Head title="HackSC Odyssey - Results" />
-      <Navbar loggedIn admin activePage="/battlepassManager" />
+      <Navbar
+        loggedIn
+        admin
+        superadmin={profile.role === "superadmin"}
+        activePage="/battlepassManager"
+      />
       <Background padding="2rem">
         <Container>
           <h1 style={{ margin: "2rem 1rem 1rem 1rem" }}>Manage Battlepass</h1>{" "}

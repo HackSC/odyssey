@@ -65,7 +65,7 @@ export async function deleteHackathonConstant({ id }) {
   }
 }
 
-export async function createHackathonConstant({ id, name, boolean, date }) {
+export async function createHackathonConstant({ name, boolean, date }) {
   let fetchUrl = process.env.URL_BASE
     ? /* Serverside */ process.env.URL_BASE + "api/constants/new"
     : /* Client */ "/api/constants/new";
@@ -75,7 +75,7 @@ export async function createHackathonConstant({ id, name, boolean, date }) {
     headers: {
       "Content-Type": "application/json",
     },
-    body: JSON.stringify({ id: id, name: name, boolean: boolean, date: date }),
+    body: JSON.stringify({ name: name, boolean: boolean, date: date }),
   });
 
   try {

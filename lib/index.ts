@@ -22,6 +22,7 @@ export {
   handleDashboardRedirect,
   handleApplicationRedirect,
   handleAdminRedirect,
+  handleJudgeRedirect,
   handleVolunteerRedirect,
   handleSponsorRedirect,
 } from "./authenticate";

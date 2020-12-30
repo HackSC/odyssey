@@ -3,12 +3,9 @@ const models = require("./models");
 const utils = require("./utils");
 const router = express.Router();
 
-router.use(utils.authMiddleware);
-router.use(utils.requireNonHacker);
-
 router.get("/", async (req, res) => {
   const result = await models.HackathonConstants.findAll({});
-  return res.json({ result });
+  return res.status(200).json({ result });
 });
 
 router.delete("/delete", utils.requireAdmin, async (req, res) => {
@@ -22,7 +19,7 @@ router.delete("/delete", utils.requireAdmin, async (req, res) => {
   return res.json({ result: true });
 });
 
-router.post("/update", async (req, res) => {
+router.post("/update", utils.requireAdmin, async (req, res) => {
   const result = await models.HackathonConstants.update(
     {
       name: req.body.name,
@@ -39,7 +36,7 @@ router.post("/update", async (req, res) => {
   return res.json({ result });
 });
 
-router.post("/new", async (req, res) => {
+router.post("/new", utils.requireAdmin, async (req, res) => {
   const result = await models.HackathonConstants.create({
     name: req.body.name,
     boolean: req.body.boolean,
