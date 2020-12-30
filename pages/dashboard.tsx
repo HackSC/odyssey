@@ -31,9 +31,10 @@ Dashboard.getInitialProps = async ({ req }) => {
   }
 
   if (
-    hackathonConstants.find((constant) => constant.name === "showDash")?.boolean
+    !hackathonConstants.find((constant) => constant.name === "showDash")
+      ?.boolean
   ) {
-    handleDashboardRedirect(req);
+    await handleDashboardRedirect(req);
   }
 
   let socialPosts = {};
