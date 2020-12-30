@@ -44,6 +44,17 @@ export { default as constants } from "./hackathonConstants";
 // * jsonToFormData.ts
 export { default as jsonToFormData } from "./jsonToFormData";
 
+// * judging.ts
+export {
+  getJudgeList,
+  getFullJudgeList,
+  updateJudging,
+  deleteJudging,
+  getListOfJudges,
+  getListOfTeamsToJudge,
+  updateJudgingEntry,
+} from "./judging";
+
 // * layouts.ts
 export { useIsMobile } from "./layouts";
 

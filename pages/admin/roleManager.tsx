@@ -119,7 +119,7 @@ roleManager.getInitialProps = async (ctx) => {
   const profile = await getProfile(req);
 
   // Null profile means user is not logged in or user does not have enough rights
-  if (!profile || profile.role != "admin") {
+  if (!profile || !(profile.role == "admin" || profile.role == "superadmin")) {
     handleLoginRedirect(req);
   }
 

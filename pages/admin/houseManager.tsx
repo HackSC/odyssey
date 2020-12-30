@@ -237,7 +237,7 @@ houseManager.getInitialProps = async ({ req }) => {
   const currentHouses = await getHouses(req);
 
   // Null profile means user is not logged in
-  if (!profile || profile.role !== "admin") {
+  if (!profile || !(profile.role == "admin" || profile.role == "superadmin")) {
     handleLoginRedirect(req);
   }
 
