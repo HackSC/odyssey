@@ -9,7 +9,7 @@ import { Button, Container, Link } from "../styles";
 import constants from "../lib/hackathonConstants";
 import { useState } from "react";
 
-type NavbarProps = {
+type NavbarProps = React.FC<any> & {
   loggedIn?: boolean;
   showLive?: boolean;
   showDash?: boolean;
@@ -253,6 +253,14 @@ const Navbar: React.FunctionComponent<NavbarProps> = ({
       </NavbarContainer>
     </Wrapper>
   );
+};
+
+Navbar.getInitialProps = async ({ req }) => {
+  const hackathonConstants = await getHackathonConstants();
+
+  return {
+    hackathonConstants,
+  };
 };
 
 const Wrapper = styled.div`

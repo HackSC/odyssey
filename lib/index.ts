@@ -39,7 +39,13 @@ export { syncProfile } from "./formSubmission";
 export { default as getSchoolFromEmail } from "./getSchoolFromEmail";
 
 // * hackathonConstants.ts
-export { default as constants } from "./hackathonConstants";
+export {
+  default as constants,
+  getHackathonConstants,
+  createHackathonConstant,
+  updateHackathonConstant,
+  deleteHackathonConstant,
+} from "./hackathonConstants";
 
 // * jsonToFormData.ts
 export { default as jsonToFormData } from "./jsonToFormData";

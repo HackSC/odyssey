@@ -1,10 +1,14 @@
 import React, { useRef, useState } from "react";
 import styled from "styled-components";
-import { sendSlackMessage, updateProfileStatus } from "../lib";
+import {
+  sendSlackMessage,
+  updateProfileStatus,
+  getHackathonConstants,
+} from "../lib";
 import { Button, Column, Flex, Form, FormGroup, TitleBox } from "../styles";
 import PacmanLoader from "react-spinners/PacmanLoader";
 import { useToasts } from "react-toast-notifications";
-import hackathonConstants from "../lib/hackathonConstants";
+// import hackathonConstants from "../lib/hackathonConstants";
 import Modal from "./Modal";
 import { AiOutlineCloseCircle } from "react-icons/ai";
 
@@ -21,6 +25,7 @@ const Hacker = ({
   acceptedHackers = [],
   rejectedHackers = [],
   waitlistedHackers = [],
+  hackathonConstants = [],
 }) => {
   const [accepting, setAccepting] = useState(false);
   const [rejecting, setRejecting] = useState(false);
@@ -283,7 +288,8 @@ const Hacker = ({
             <b>Graduation Date: </b>
             {hacker.graduationDate}
           </p>
-          {hackathonConstants.needsBus ? (
+          {hackathonConstants.find((constant) => constant.name === "needsBus")
+            .boolean ? (
             <p>
               <b>Needs Bus: </b>
               {hacker.needBus ? "True" : "False"}
@@ -422,6 +428,14 @@ const Hacker = ({
   ) : (
     <></>
   );
+};
+
+Hacker.getInitialProps = async ({ req }) => {
+  const hackathonConstants = await getHackathonConstants();
+
+  return {
+    hackathonConstants,
+  };
 };
 
 const OnePaddedH1 = styled.h2`
