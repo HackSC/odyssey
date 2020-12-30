@@ -29,11 +29,11 @@ const CheckedIn: React.FunctionComponent<Props> = (props) => {
   const { profile, houses } = props;
   const [alert, setAlert] = useState("none");
   const { allHouses } = useAllHouseInfo({});
-  const { battlepass } = useBattlepass({ defaultOnError: console.log });
-  const { personInfo } = usePersonInfoSelf({ defaultOnError: console.log });
-  const { allEvents } = useEventsList({ defaultOnError: console.log });
+  const { battlepass } = useBattlepass({ defaultOnError: console.error });
+  const { personInfo } = usePersonInfoSelf({ defaultOnError: console.error });
+  const { allEvents } = useEventsList({ defaultOnError: console.error });
   const { incompleteTasks } = useIncompleteTasks({
-    defaultOnError: console.log,
+    defaultOnError: console.error,
   });
 
   const { width, height } = useWindowSize();

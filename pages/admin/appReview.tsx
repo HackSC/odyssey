@@ -226,7 +226,12 @@ const AppReview = ({ profile, hackerProfile, reviewHistory, totalReviews }) => {
   return (
     <>
       <Head title="HackSC Odyssey - Application" />
-      <Navbar loggedIn admin activePage="/appReview" />
+      <Navbar
+        loggedIn
+        admin
+        superadmin={profile.role === "superadmin"}
+        activePage="/appReview"
+      />
       <Background padding="3rem 1rem">
         <Container style={{ maxWidth: "1000px" }}>
           {totalReviewHistory <= 0 ? (
