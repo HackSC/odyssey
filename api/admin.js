@@ -130,9 +130,12 @@ router.get("/reviews", async (req, res) => {
 
 router.get("/admin-reviews", async (req, res) => {
   try {
+    const Op = sequelize.Op;
     const admins = await models.HackerProfile.findAll({
       where: {
-        role: "admin",
+        role: {
+          [Op.or]: ["admin", "superadmin"],
+        },
       },
     });
     var adminReviews = [];
