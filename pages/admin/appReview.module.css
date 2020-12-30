@@ -1,0 +1,12 @@
+.changeFont {
+  color: black;
+  font-weight: 680;
+  font-size: 32px;
+  line-height: 60px;
+}
+
+@media only screen and (max-width: 770px) {
+  .changeFont {
+    display: none;
+  }
+}
