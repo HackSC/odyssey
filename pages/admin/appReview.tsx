@@ -3,7 +3,6 @@ import styled from "styled-components";
 import { useToasts } from "react-toast-notifications";
 import Confetti from "react-confetti";
 import { useWindowSize } from "react-use";
-import styles from "./appReview.module.css";
 
 import {
   getHackerProfileForReview,
@@ -277,7 +276,7 @@ const AppReview = ({ profile, hackerProfile, reviewHistory, totalReviews }) => {
               <Flex direction="row" align="center" style={{ flexWrap: "wrap" }}>
                 <Column flexBasis={60} style={{ margin: "0 2rem 0 0" }}>
                   <Column>
-                    <div className={styles.changeFont}>Applicant Info</div>
+                    <ChangingText>Applicant Info</ChangingText>
                   </Column>
 
                   <Panel>
@@ -295,7 +294,7 @@ const AppReview = ({ profile, hackerProfile, reviewHistory, totalReviews }) => {
 
                 <Column flexBasis={35} style={{ margin: "0 0rem 0 0" }}>
                   <Column>
-                    <div className={styles.changeFont}>Review</div>
+                    <ChangingText>Review</ChangingText>
                   </Column>
 
                   <Panel>
@@ -517,6 +516,17 @@ const StyledButton = styled(Button)`
 
 const SubmittingText = styled.p`
   margin-top: 8px;
+`;
+
+const ChangingText = styled.div`
+  color: black;
+  font-weight: 680;
+  font-size: 32px;
+  line-height: 60px;
+
+  @media only screen and (max-width: 770px) {
+    display: none;
+  }
 `;
 
 export default AppReview;
