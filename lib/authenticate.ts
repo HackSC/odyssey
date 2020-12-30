@@ -158,6 +158,10 @@ export function handleVolunteerRedirect(req) {
   redirectToPath(req, "/volunteer");
 }
 
+export function handleJudgeRedirect(req) {
+  redirectToPath(req, "/judge");
+}
+
 export function handleSponsorRedirect(req) {
   redirectToPath(req, "/sponsor");
 }
