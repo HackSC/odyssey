@@ -47,6 +47,13 @@ declare type PendingTeammateRequests = {
   updatedAt: Date;
 };
 
+declare type HackathonConstant = {
+  id: number;
+  name: string;
+  boolean: boolean;
+  date: Date;
+};
+
 declare type Judging = {
   id: number;
   judgeId: string;

@@ -14,7 +14,7 @@ import {
 } from "../../styles";
 import { updateJudging } from "../../lib/judging";
 
-const passJudgment = ({ propJudgeList }) => {
+const passJudgment = ({ profile, propJudgeList }) => {
   const [closestTime, setClosestTime] = useState(null);
   const [judgeList, setJudgeList] = useState(propJudgeList);
   const [item_refs, setItemRefs] = useState(
@@ -92,7 +92,12 @@ const passJudgment = ({ propJudgeList }) => {
   return (
     <>
       <Head title="HackSC Odyssey - Application" />
-      <Navbar loggedIn admin activePage="/judgingManager" />
+      <Navbar
+        loggedIn
+        admin
+        superadmin={profile.role === "superadmin"}
+        activePage="/judgingManager"
+      />
       <Background padding="2rem">
         <Container>
           <PaddedTitle>Pass Judgment</PaddedTitle>
@@ -247,7 +252,7 @@ passJudgment.getInitialProps = async (ctx) => {
     handleLoginRedirect(req);
   }
 
-  return { propJudgeList };
+  return { profile, propJudgeList };
 };
 
 const CardContainer = styled.div`

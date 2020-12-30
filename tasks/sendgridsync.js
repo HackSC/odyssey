@@ -36,10 +36,7 @@ const sendgridSync = async () => {
     },
   };
 
-  sgClient.request(updateListRequest).then(([response, body]) => {
-    console.log("Sendgrid Sync Started");
-    console.log(body);
-  });
+  sgClient.request(updateListRequest).then(([response, body]) => {});
 };
 
 module.exports = sendgridSync;

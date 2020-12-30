@@ -69,7 +69,6 @@ const AppLeaderboard = ({ profile }) => {
   }, [reviewProfileData, sortOrder]);
 
   useEffect(() => {
-    console.log("sorting admin review data");
     if (!adminDataSorted && adminReviewData && adminReviewData.reviews) {
       setAdminDataSorted(1);
       adminReviewData.reviews.sort((admin_a, admin_b) => {
@@ -78,8 +77,6 @@ const AppLeaderboard = ({ profile }) => {
 
         return a_sum > b_sum ? adminSortOrder : adminSortOrder == 1 ? -1 : 1;
       });
-    } else {
-      console.log("failed to sort admin review data");
     }
   }, [adminSortOrder, adminReviewData]);
 
@@ -92,7 +89,12 @@ const AppLeaderboard = ({ profile }) => {
   return (
     <>
       <Head title="HackSC Odyssey - Application" />
-      <Navbar loggedIn admin activePage="/appLeaderboard" />
+      <Navbar
+        loggedIn
+        admin
+        superadmin={profile.role === "superadmin"}
+        activePage="/appLeaderboard"
+      />
       <Background padding="2rem">
         <Container width={"100%"}>
           <Flex direction="row" style={{ padding: "1rem 0", flexWrap: "wrap" }}>

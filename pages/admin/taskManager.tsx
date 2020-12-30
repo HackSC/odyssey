@@ -189,7 +189,12 @@ const TaskManager = ({ profile, currentTasks }) => {
   return (
     <>
       <Head title="HackSC Odyssey - Results" />
-      <Navbar loggedIn admin activePage="/taskManager" />
+      <Navbar
+        loggedIn
+        admin
+        superadmin={profile.role === "superadmin"}
+        activePage="/taskManager"
+      />
       <Background padding="2rem">
         <Container>
           <h1 style={{ margin: "1rem" }}>Manage Tasks</h1>
