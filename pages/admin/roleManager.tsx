@@ -21,8 +21,10 @@ const roleManager = ({ profile }) => {
   const roleOptions = [
     { label: "hacker", value: "hacker" },
     { label: "admin", value: "admin" },
+    { label: "superadmin", value: "superadmin" },
     { label: "sponsor", value: "sponsor" },
     { label: "volunteer", value: "volunteer" },
+    { label: "judge", value: "judge" },
   ];
 
   const queryResultBlocks = queryResults.map((userprofile) => {
