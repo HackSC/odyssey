@@ -234,6 +234,7 @@ const AppReview = ({ profile, hackerProfile, reviewHistory, totalReviews }) => {
       />
       <Background padding="3rem 1rem">
         <Container style={{ maxWidth: "1000px" }}>
+          <OnePaddedH1>App Review</OnePaddedH1>
           {totalReviewHistory <= 0 ? (
             <InfoPanel>
               <Confetti
@@ -273,160 +274,160 @@ const AppReview = ({ profile, hackerProfile, reviewHistory, totalReviews }) => {
           </InfoPanel>
 
           <Flex
-            direction="column"
+            direction="row"
             justify="space-between"
-            // style={{ flexWrap: "wrap" }}
+            style={{ flexWrap: "wrap" }}
           >
-            <Column>
-              <Flex direction="row" align="center" style={{ flexWrap: "wrap" }}>
-                <Column flexBasis={60} style={{ margin: "0 2rem 0 0" }}>
-                  <Column>
-                    <ChangingText>Applicant Info</ChangingText>
+            <Column style={{ padding: "1rem 0" }} flexBasis={60}>
+              <Column>
+                <ChangingText>Applicant Info</ChangingText>
+              </Column>
+              <Panel>
+                <h2>Question 1 - Vertical</h2>
+                <BrokenP>
+                  {" "}
+                  {loadingNewProfile
+                    ? "Loading..."
+                    : currentProfile
+                    ? currentProfile.questionOne
+                    : "(No response)"}{" "}
+                </BrokenP>
+              </Panel>
+              <Panel>
+                <h2>Question 2 - Project</h2>
+                <BrokenP>
+                  {" "}
+                  {loadingNewProfile
+                    ? "Loading..."
+                    : currentProfile
+                    ? currentProfile.questionTwo
+                    : "(No response)"}{" "}
+                </BrokenP>
+              </Panel>
+              <Panel>
+                <h2>Question 3 - Beverage</h2>
+                <BrokenP>
+                  {" "}
+                  {loadingNewProfile
+                    ? "Loading..."
+                    : currentProfile
+                    ? currentProfile.questionThree
+                    : "(No response)"}{" "}
+                </BrokenP>
+              </Panel>
+            </Column>
+
+            <Column style={{ padding: "1rem 0" }} flexBasis={35}>
+              <Column>
+                <ChangingText>Review</ChangingText>
+              </Column>
+              <Panel>
+                <ScoreInputLabel>Score 1 (1-5)</ScoreInputLabel>
+                <Flex direction="row" align="center">
+                  <Column
+                    style={{
+                      flexBasis: "auto",
+                      width: "fit-content",
+                      margin: "0 0 1rem 0",
+                    }}
+                  >
+                    <ScoreKeyLabel>Q</ScoreKeyLabel>
                   </Column>
 
-                  <Panel>
-                    <h2>Question 1 - Vertical</h2>
-                    <BrokenP>
-                      {" "}
-                      {loadingNewProfile
-                        ? "Loading..."
-                        : currentProfile
-                        ? currentProfile.questionOne
-                        : "(No response)"}{" "}
-                    </BrokenP>
-                  </Panel>
-                </Column>
-
-                <Column flexBasis={35} style={{ margin: "0 0rem 0 0" }}>
-                  <Column>
-                    <ChangingText>Review</ChangingText>
+                  <Column flexGrow={1} style={{ margin: "0 0 1rem 0" }}>
+                    <Input
+                      type="number"
+                      onChange={(e) => {
+                        setS1(e.target.value);
+                      }}
+                      value={s1}
+                      ref={scoreInputs[0]}
+                    />
+                  </Column>
+                </Flex>
+              </Panel>
+              <Panel>
+                <ScoreInputLabel>Score 2 (1-5)</ScoreInputLabel>
+                <Flex direction="row" align="center">
+                  <Column
+                    style={{
+                      flexBasis: "auto",
+                      width: "fit-content",
+                      margin: "0 0 1rem 0",
+                    }}
+                  >
+                    <ScoreKeyLabel>W</ScoreKeyLabel>
                   </Column>
 
-                  <Panel>
-                    <ScoreInputLabel>Score 1 (1-5)</ScoreInputLabel>
+                  <Column flexGrow={1} style={{ margin: "0 0 1rem 0" }}>
+                    <Input
+                      type="number"
+                      onChange={(e) => {
+                        setS2(e.target.value);
+                      }}
+                      value={s2}
+                      ref={scoreInputs[1]}
+                    />
+                  </Column>
+                </Flex>
+              </Panel>
+              <Panel>
+                <ScoreInputLabel>Score 3 (1-5)</ScoreInputLabel>
+                <Flex direction="row" align="center">
+                  <Column
+                    style={{
+                      flexBasis: "auto",
+                      width: "fit-content",
+                      margin: "0 0 1rem 0",
+                    }}
+                  >
+                    <ScoreKeyLabel>E</ScoreKeyLabel>
+                  </Column>
 
-                    <Flex
-                      direction="row"
-                      justify="space-between"
-                      align="center"
-                      style={{ flexWrap: "wrap" }}
+                  <Column flexGrow={1} style={{ margin: "0 0 1rem 0" }}>
+                    <Input
+                      type="number"
+                      onChange={(e) => {
+                        setS3(e.target.value);
+                      }}
+                      onKeyUp={(e) => {
+                        if (e.key === "e") {
+                          e.preventDefault();
+                        }
+                      }}
+                      value={s3}
+                      ref={scoreInputs[2]}
+                    />
+                  </Column>
+                </Flex>
+              </Panel>
+              <Panel>
+                <ScoreInputLabel>Submit</ScoreInputLabel>
+                <Flex direction="row" align="center">
+                  <Column
+                    style={{
+                      flexBasis: "auto",
+                      width: "fit-content",
+                      margin: "0 0 1rem 0",
+                    }}
+                  >
+                    <ScoreKeyLabel>Enter</ScoreKeyLabel>
+                  </Column>
+                  <Column flexGrow={1} style={{ margin: "0 0 1rem 0" }}>
+                    <Button
+                      onClick={(e) => {
+                        e.preventDefault();
+                        handleSubmit();
+                      }}
                     >
-                      <Column style={{ margin: "0 0 1rem 0" }}>
-                        <ScoreKeyLabel>Q</ScoreKeyLabel>
-                      </Column>
-
-                      <Column flexGrow={1} style={{ margin: "0 0 1rem 0" }}>
-                        <Input
-                          type="number"
-                          onChange={(e) => {
-                            setS1(e.target.value);
-                          }}
-                          value={s1}
-                          ref={scoreInputs[0]}
-                        />
-                      </Column>
-                    </Flex>
-                  </Panel>
-                </Column>
-              </Flex>
+                      Submit
+                    </Button>
+                  </Column>
+                </Flex>
+              </Panel>
             </Column>
 
-            <Column>
-              <Flex direction="row" align="center" style={{ flexWrap: "wrap" }}>
-                <Column flexBasis={60} style={{ margin: "0 2rem 0 0" }}>
-                  <Panel>
-                    <h2>Question 2 - Project</h2>
-                    <BrokenP>
-                      {" "}
-                      {loadingNewProfile
-                        ? "Loading..."
-                        : currentProfile
-                        ? currentProfile.questionTwo
-                        : "(No response)"}{" "}
-                    </BrokenP>
-                  </Panel>
-                </Column>
-
-                <Column flexBasis={35}>
-                  <Panel>
-                    <ScoreInputLabel>Score 2 (1-5)</ScoreInputLabel>
-                    <Flex
-                      direction="row"
-                      justify="space-between"
-                      align="center"
-                      style={{ flexWrap: "wrap" }}
-                    >
-                      <Column style={{ margin: "0 0 1rem 0" }}>
-                        <ScoreKeyLabel>W</ScoreKeyLabel>
-                      </Column>
-
-                      <Column flexGrow={1} style={{ margin: "0 0 1rem 0" }}>
-                        <Input
-                          type="number"
-                          onChange={(e) => {
-                            setS2(e.target.value);
-                          }}
-                          value={s2}
-                          ref={scoreInputs[1]}
-                        />
-                      </Column>
-                    </Flex>
-                  </Panel>
-                </Column>
-              </Flex>
-            </Column>
-
-            <Column>
-              <Flex direction="row" align="center" style={{ flexWrap: "wrap" }}>
-                <Column flexBasis={60} style={{ margin: "0 2rem 0 0" }}>
-                  <Panel>
-                    <h2>Question 3 - Beverage</h2>
-                    <BrokenP>
-                      {" "}
-                      {loadingNewProfile
-                        ? "Loading..."
-                        : currentProfile
-                        ? currentProfile.questionThree
-                        : "(No response)"}{" "}
-                    </BrokenP>
-                  </Panel>
-                </Column>
-
-                <Column flexBasis={35}>
-                  <Panel>
-                    <ScoreInputLabel>Score 3 (1-5)</ScoreInputLabel>
-                    <Flex
-                      direction="row"
-                      justify="space-between"
-                      align="center"
-                      style={{ flexWrap: "wrap" }}
-                    >
-                      <Column style={{ margin: "0 0 1rem 0" }}>
-                        <ScoreKeyLabel>E</ScoreKeyLabel>
-                      </Column>
-
-                      <Column flexGrow={1} style={{ margin: "0 0 1rem 0" }}>
-                        <Input
-                          type="number"
-                          onChange={(e) => {
-                            setS3(e.target.value);
-                          }}
-                          onKeyUp={(e) => {
-                            if (e.key === "e") {
-                              e.preventDefault();
-                            }
-                          }}
-                          value={s3}
-                          ref={scoreInputs[2]}
-                        />
-                      </Column>
-                    </Flex>
-                  </Panel>
-                </Column>
-              </Flex>
-            </Column>
-
-            <Column>
+            <Column style={{ padding: "1rem 0" }}>
               <h1>Resume</h1>
               <a
                 href={currentProfile ? currentProfile.resume : "/"}
@@ -474,6 +475,11 @@ AppReview.getInitialProps = async (ctx) => {
     totalReviews,
   };
 };
+
+const OnePaddedH1 = styled.h1`
+  margin: auto 0;
+  padding: 0 0 1rem 0;
+`;
 
 const BrokenP = styled.p`
   word-break: break-all;
@@ -529,9 +535,9 @@ const ChangingText = styled.div`
   font-size: 32px;
   line-height: 60px;
 
-  @media only screen and (max-width: 770px) {
-    display: none;
-  }
+  // @media only screen and (max-width: 770px) {
+  //   display: none;
+  // }
 `;
 
 export default AppReview;

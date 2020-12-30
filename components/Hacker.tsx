@@ -289,7 +289,7 @@ const Hacker = ({
             {hacker.graduationDate}
           </p>
           {hackathonConstants.find((constant) => constant.name === "needsBus")
-            .boolean ? (
+            ?.boolean ? (
             <p>
               <b>Needs Bus: </b>
               {hacker.needBus ? "True" : "False"}
