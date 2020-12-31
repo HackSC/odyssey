@@ -7,6 +7,7 @@ export {
   getTotalReviewHistory,
   getHackerProfileForReview,
   getEligibleHackerProfiles,
+  getNumberSubmittedApps,
   submitReview,
 } from "./admin";
 

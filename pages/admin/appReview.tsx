@@ -9,6 +9,7 @@ import {
   submitReview,
   getReviewHistory,
   getTotalReviewHistory,
+  getNumberSubmittedApps,
   sendSlackMessage,
   handleLoginRedirect,
   getProfile,
@@ -17,10 +18,18 @@ import { Head, Navbar, Footer } from "../../components";
 import { Button, Container, Background, Flex, Column } from "../../styles";
 import { liveLookupFetch } from "../../lib/api-sdk/liveHooks";
 
-const AppReview = ({ profile, hackerProfile, reviewHistory, totalReviews }) => {
+const AppReview = ({
+  profile,
+  hackerProfile,
+  reviewHistory,
+  totalReviews,
+  numberSubmittedApps,
+}) => {
   let total_review_len_initial = totalReviews.eligibleReviews
     ? totalReviews.eligibleReviews.length
     : 0;
+
+  let num_submitted_apps = numberSubmittedApps ? numberSubmittedApps.length : 1;
 
   const [currentProfile, setCurrentProfile] = useState(hackerProfile);
   const [reviewCount, setReviewCount] = useState(
@@ -37,15 +46,20 @@ const AppReview = ({ profile, hackerProfile, reviewHistory, totalReviews }) => {
       let profiles = res.success;
       let new_admin_count =
         profiles && profiles.length > 0
-          ? profiles.reduce((a, b) => a + (b.role == "admin" ? 1 : 0), 0)
+          ? profiles.reduce(
+              (a, b) =>
+                a + (b.role === "admin" || b.role === "superadmin" ? 1 : 0),
+              0
+            )
           : 0;
 
       setAdminCount(new_admin_count);
+      // TODO: this calculation needs to be set to the total # submitted apps / admins because as eligible profiles dwindle, this # gets smaller :(
       setTotalReviewHistory(
         Math.round(
           new_admin_count > 0
             ? total_review_len_initial > 200
-              ? (total_review_len_initial / new_admin_count) * 3 - reviewCount
+              ? (num_submitted_apps / new_admin_count) * 3 - reviewCount
               : 200 - reviewCount
             : 200 - reviewCount
         )
@@ -172,8 +186,9 @@ const AppReview = ({ profile, hackerProfile, reviewHistory, totalReviews }) => {
         setS2("");
         setS3("");
         setReviewCount(reviewCount + 1);
-        setTotalReviewHistory(totalReviewHistory - 1);
-        if (totalReviewHistory <= 0) {
+        let new_rev_history = totalReviewHistory - 1;
+        setTotalReviewHistory(new_rev_history);
+        if (new_rev_history === 0) {
           let firstName = profile ? profile.firstName : "";
           let lastName = profile ? profile.lastName : "";
           let user_email = profile ? profile.email : "";
@@ -193,7 +208,7 @@ const AppReview = ({ profile, hackerProfile, reviewHistory, totalReviews }) => {
             start_and_end_date,
             start_and_end_date
           );
-          addToast("Created Unlockable!", { appearance: "success" });
+          addToast("Finished Reviews!", { appearance: "success" });
         }
         scoreInputs[0].current.focus();
       }
@@ -235,7 +250,7 @@ const AppReview = ({ profile, hackerProfile, reviewHistory, totalReviews }) => {
       <Background padding="3rem 1rem">
         <Container style={{ maxWidth: "1000px" }}>
           <OnePaddedH1>App Review</OnePaddedH1>
-          {totalReviewHistory <= 0 ? (
+          {totalReviewHistory === 0 ? (
             <InfoPanel>
               <Confetti
                 recycle={false}
@@ -244,7 +259,7 @@ const AppReview = ({ profile, hackerProfile, reviewHistory, totalReviews }) => {
                 height={height}
               />
               <h2 style={{ textAlign: "center", padding: "0" }}>
-                Thank you for your reviews! Enjoy the confetti!
+                Thank you for completing your app reviews!
               </h2>
             </InfoPanel>
           ) : (
@@ -265,7 +280,7 @@ const AppReview = ({ profile, hackerProfile, reviewHistory, totalReviews }) => {
             <br />
 
             <p>
-              You have reviewed <b>{reviewCount}</b> applications.
+              You've reviewed <b>{reviewCount}</b> applications.
             </p>
 
             <p>
@@ -468,11 +483,13 @@ AppReview.getInitialProps = async (ctx) => {
   const profileReview = await getHackerProfileForReview(req);
   const reviewHistory = await getReviewHistory(req);
   const totalReviews = await getTotalReviewHistory(req);
+  const numberSubmittedApps = await getNumberSubmittedApps(req);
   return {
     profile,
     hackerProfile: profileReview,
     reviewHistory,
     totalReviews,
+    numberSubmittedApps,
   };
 };
 
