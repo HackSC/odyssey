@@ -9,6 +9,7 @@ import {
   submitReview,
   getReviewHistory,
   getTotalReviewHistory,
+  getNumberSubmittedApps,
   sendSlackMessage,
   handleLoginRedirect,
   getProfile,
@@ -17,10 +18,18 @@ import { Head, Navbar, Footer } from "../../components";
 import { Button, Container, Background, Flex, Column } from "../../styles";
 import { liveLookupFetch } from "../../lib/api-sdk/liveHooks";
 
-const AppReview = ({ profile, hackerProfile, reviewHistory, totalReviews }) => {
+const AppReview = ({
+  profile,
+  hackerProfile,
+  reviewHistory,
+  totalReviews,
+  numberSubmittedApps,
+}) => {
   let total_review_len_initial = totalReviews.eligibleReviews
     ? totalReviews.eligibleReviews.length
     : 0;
+
+  let num_submitted_apps = numberSubmittedApps ? numberSubmittedApps.length : 1;
 
   const [currentProfile, setCurrentProfile] = useState(hackerProfile);
   const [reviewCount, setReviewCount] = useState(
@@ -50,7 +59,7 @@ const AppReview = ({ profile, hackerProfile, reviewHistory, totalReviews }) => {
         Math.round(
           new_admin_count > 0
             ? total_review_len_initial > 200
-              ? (total_review_len_initial / new_admin_count) * 3 - reviewCount
+              ? (num_submitted_apps / new_admin_count) * 3 - reviewCount
               : 200 - reviewCount
             : 200 - reviewCount
         )
@@ -474,11 +483,13 @@ AppReview.getInitialProps = async (ctx) => {
   const profileReview = await getHackerProfileForReview(req);
   const reviewHistory = await getReviewHistory(req);
   const totalReviews = await getTotalReviewHistory(req);
+  const numberSubmittedApps = await getNumberSubmittedApps(req);
   return {
     profile,
     hackerProfile: profileReview,
     reviewHistory,
     totalReviews,
+    numberSubmittedApps,
   };
 };
 
