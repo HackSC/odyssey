@@ -207,6 +207,28 @@ router.put("/review/:id", async (req, res) => {
   }
 });
 
+router.get("/numberSubmittedApps", async (req, res) => {
+  try {
+    const allProfiles = await models.HackerProfile.findAll({
+      where: {
+        submittedAt: {
+          [sequelize.Op.not]: null,
+        },
+      },
+      include: [
+        {
+          model: models.HackerReview,
+        },
+      ],
+    });
+    return res.json({
+      numberSubmittedApps: allProfiles,
+    });
+  } catch (e) {
+    return res.status(500).json({ error: e.message });
+  }
+});
+
 router.get("/eligibleProfiles", async (req, res) => {
   try {
     const allProfiles = await models.HackerProfile.findAll({
