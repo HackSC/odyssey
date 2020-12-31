@@ -172,8 +172,9 @@ const AppReview = ({ profile, hackerProfile, reviewHistory, totalReviews }) => {
         setS2("");
         setS3("");
         setReviewCount(reviewCount + 1);
-        setTotalReviewHistory(totalReviewHistory - 1);
-        if (totalReviewHistory <= 0) {
+        let new_rev_history = totalReviewHistory - 1;
+        setTotalReviewHistory(new_rev_history);
+        if (new_rev_history === 0) {
           let firstName = profile ? profile.firstName : "";
           let lastName = profile ? profile.lastName : "";
           let user_email = profile ? profile.email : "";
@@ -193,7 +194,7 @@ const AppReview = ({ profile, hackerProfile, reviewHistory, totalReviews }) => {
             start_and_end_date,
             start_and_end_date
           );
-          addToast("Created Unlockable!", { appearance: "success" });
+          addToast("Finished Reviews!", { appearance: "success" });
         }
         scoreInputs[0].current.focus();
       }
@@ -235,7 +236,7 @@ const AppReview = ({ profile, hackerProfile, reviewHistory, totalReviews }) => {
       <Background padding="3rem 1rem">
         <Container style={{ maxWidth: "1000px" }}>
           <OnePaddedH1>App Review</OnePaddedH1>
-          {totalReviewHistory <= 0 ? (
+          {totalReviewHistory === 0 ? (
             <InfoPanel>
               <Confetti
                 recycle={false}
@@ -244,7 +245,7 @@ const AppReview = ({ profile, hackerProfile, reviewHistory, totalReviews }) => {
                 height={height}
               />
               <h2 style={{ textAlign: "center", padding: "0" }}>
-                Thank you for your reviews! Enjoy the confetti!
+                Thank you for completing your app reviews!
               </h2>
             </InfoPanel>
           ) : (
@@ -265,7 +266,7 @@ const AppReview = ({ profile, hackerProfile, reviewHistory, totalReviews }) => {
             <br />
 
             <p>
-              You have reviewed <b>{reviewCount}</b> applications.
+              You've reviewed <b>{reviewCount}</b> applications.
             </p>
 
             <p>
