@@ -12,7 +12,7 @@ const AdminStats = ({ profile, showtitle = true }) => {
     });
   }, []);
 
-  if (profile.role != "admin") return <></>;
+  if (profile.role !== "admin" || profile.role !== "superadmin") return <></>;
   return (
     <Container>
       {showtitle ? <h2>Statistics</h2> : ""}
