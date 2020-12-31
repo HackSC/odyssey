@@ -21,8 +21,10 @@ const roleManager = ({ profile }) => {
   const roleOptions = [
     { label: "hacker", value: "hacker" },
     { label: "admin", value: "admin" },
+    { label: "superadmin", value: "superadmin" },
     { label: "sponsor", value: "sponsor" },
     { label: "volunteer", value: "volunteer" },
+    { label: "judge", value: "judge" },
   ];
 
   const queryResultBlocks = queryResults.map((userprofile) => {
@@ -79,7 +81,12 @@ const roleManager = ({ profile }) => {
   return (
     <>
       <Head title="HackSC Odyssey - Application" />
-      <Navbar loggedIn admin activePage="/roleManager" />
+      <Navbar
+        loggedIn
+        admin
+        superadmin={profile.role === "superadmin"}
+        activePage="/roleManager"
+      />
       <Background padding="2rem">
         <Container>
           <h1 style={{ margin: "2rem auto 1rem auto", maxWidth: "740px" }}>

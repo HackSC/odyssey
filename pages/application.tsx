@@ -1,4 +1,5 @@
 import React from "react";
+import useSWR from "swr";
 import { GetServerSideProps } from "next";
 import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
 
@@ -9,16 +10,14 @@ import {
   handleVolunteerRedirect,
   handleSponsorRedirect,
   handleJudgeRedirect,
-} from "../lib/authenticate";
+  getHackathonConstants,
+  generatePosts,
+  getHouses,
+} from "../lib";
 
 import { Head, Navbar, Footer, Steps } from "../components";
 
 import { Background, Container } from "../styles";
-
-import { generatePosts } from "../lib/referrerCode";
-import { getHouses } from "../lib";
-import useSWR from "swr";
-import hackathonConstants from "../lib/hackathonConstants";
 
 const Application = ({ profile, houses, socialPosts, appsOpen }) => {
   let fetchUrl = process.env.URL_BASE
@@ -59,7 +58,10 @@ const Application = ({ profile, houses, socialPosts, appsOpen }) => {
 export const getServerSideProps: GetServerSideProps = async ({ req }) => {
   const profile = await getProfile(req);
   let houses = await getHouses(req);
-  const { appsCloseDate } = hackathonConstants;
+  const hackathonConstants = await getHackathonConstants();
+  const appsCloseDate = hackathonConstants.find(
+    (constant) => constant.name === "appsCloseDate"
+  )?.date;
 
   const threeDaysAfterClose = new Date(appsCloseDate);
   threeDaysAfterClose.setDate(threeDaysAfterClose.getDate() + 3);
