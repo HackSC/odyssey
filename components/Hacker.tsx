@@ -350,8 +350,8 @@ const Hacker = ({
             ? hacker.HackerReviews.map((review, index) => (
                 <p key={Object.entries(review).join()}>
                   <b>
-                    Review #{index} scores: {review.scoreOne}, {review.scoreTwo}
-                    , {review.scoreThree}
+                    Review #{index + 1} scores: {review.scoreOne},{" "}
+                    {review.scoreTwo}, {review.scoreThree}
                   </b>
                 </p>
               ))
