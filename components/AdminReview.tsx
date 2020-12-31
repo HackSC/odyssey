@@ -34,12 +34,20 @@ const WordBreakP = styled.p`
 const AdminReview = ({ admin, index = 1 }) => {
   return (
     <Result key={admin.id}>
-      <WordBreakH2>
-        {index}. {admin.firstName} {admin.lastName}
-      </WordBreakH2>
-      <WordBreakP>
-        <b>Email: {admin.email}</b>
-      </WordBreakP>
+      {admin.firstName ? (
+        <>
+          <WordBreakH2>
+            {index}. {admin.firstName} {admin.lastName}
+          </WordBreakH2>
+          <WordBreakP>
+            <b>Email: {admin.email}</b>
+          </WordBreakP>
+        </>
+      ) : (
+        <WordBreakH2 style={{ wordBreak: "break-all" }}>
+          {index}. {admin.email}
+        </WordBreakH2>
+      )}
       <WordBreakP>
         <b>
           Review Count: {admin.hacker_reviews ? admin.hacker_reviews.length : 0}
