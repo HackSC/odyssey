@@ -37,10 +37,15 @@ const AppReview = ({ profile, hackerProfile, reviewHistory, totalReviews }) => {
       let profiles = res.success;
       let new_admin_count =
         profiles && profiles.length > 0
-          ? profiles.reduce((a, b) => a + (b.role == "admin" ? 1 : 0), 0)
+          ? profiles.reduce(
+              (a, b) =>
+                a + (b.role === "admin" || b.role === "superadmin" ? 1 : 0),
+              0
+            )
           : 0;
 
       setAdminCount(new_admin_count);
+      // TODO: this calculation needs to be set to the total # submitted apps / admins because as eligible profiles dwindle, this # gets smaller :(
       setTotalReviewHistory(
         Math.round(
           new_admin_count > 0
