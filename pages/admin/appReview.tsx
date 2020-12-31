@@ -22,15 +22,9 @@ const AppReview = ({
   profile,
   hackerProfile,
   reviewHistory,
-  totalReviews,
   numberSubmittedApps,
 }) => {
-  let total_review_len_initial = totalReviews.eligibleReviews
-    ? totalReviews.eligibleReviews.length
-    : 0;
-
   let num_submitted_apps = numberSubmittedApps ? numberSubmittedApps.length : 1;
-
   const [currentProfile, setCurrentProfile] = useState(hackerProfile);
   const [reviewCount, setReviewCount] = useState(
     reviewHistory ? reviewHistory.length : 0
@@ -52,15 +46,11 @@ const AppReview = ({
               0
             )
           : 0;
-
       setAdminCount(new_admin_count);
-      // TODO: this calculation needs to be set to the total # submitted apps / admins because as eligible profiles dwindle, this # gets smaller :(
       setTotalReviewHistory(
         Math.round(
           new_admin_count > 0
-            ? total_review_len_initial > 200
-              ? (num_submitted_apps / new_admin_count) * 3 - reviewCount
-              : 200 - reviewCount
+            ? (num_submitted_apps / new_admin_count) * 3 - reviewCount
             : 200 - reviewCount
         )
       );
