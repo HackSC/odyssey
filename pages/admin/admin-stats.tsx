@@ -15,7 +15,12 @@ const Metabase = ({ profile, metabaseIframeUrl }) => {
   return (
     <>
       <Head title="HackSC Odyssey - Application" />
-      <Navbar loggedIn admin activePage="admin-stats" />
+      <Navbar
+        loggedIn
+        admin
+        superadmin={profile.role === "superadmin"}
+        activePage="admin-stats"
+      />
       <Background padding={"2rem"}>
         <Container>
           <PaddedFlex direction="column">

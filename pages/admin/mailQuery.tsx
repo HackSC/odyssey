@@ -152,7 +152,12 @@ const mailQuery = ({ profile }) => {
   return (
     <>
       <Head title="HackSC Odyssey - Filter Signups" />
-      <Navbar loggedIn admin activePage="/mailQuery" />
+      <Navbar
+        loggedIn
+        admin
+        superadmin={profile.role === "superadmin"}
+        activePage="/mailQuery"
+      />
       <Background padding="2rem">
         <Container>
           <Flex direction="column">
