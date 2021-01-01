@@ -100,7 +100,7 @@ router.post("/updateHackerStatus", async (req, res) => {
   }
 });
 
-router.get("/reviews", async (req, res) => {
+router.get("/all-reviews", async (req, res) => {
   try {
     const reviews = await models.HackerReview.findAll({
       include: [
@@ -111,6 +111,45 @@ router.get("/reviews", async (req, res) => {
     });
     var reviewedProfiles = [];
     for (const review of reviews) {
+      let profile = await models.HackerProfile.findAll({
+        where: {
+          userId: review.dataValues.hackerId,
+        },
+      });
+      let ReviewedProfile = { ReviewedProfile: profile[0] };
+      reviewedProfiles.push(
+        Object.assign({}, review.dataValues, ReviewedProfile)
+      );
+    }
+
+    return res.json({ reviews: reviewedProfiles });
+  } catch (e) {
+    return res.status(500).json({ err: e });
+  }
+});
+
+router.get("/reviews", async (req, res) => {
+  try {
+    var { count } = req.query;
+    if (!(count >= 0)) count = 10;
+
+    const reviews = await models.HackerReview.findAll({
+      include: [
+        {
+          model: models.HackerProfile,
+        },
+      ],
+    });
+
+    reviews.sort((review_a, review_b) => {
+      return new Date(review_a.createdAt).getTime() >
+        new Date(review_b.createdAt).getTime()
+        ? -1
+        : 1;
+    });
+
+    var reviewedProfiles = [];
+    for (const review of reviews.slice(0, count)) {
       let profile = await models.HackerProfile.findAll({
         where: {
           userId: review.dataValues.hackerId,
@@ -259,6 +298,8 @@ router.get("/eligibleProfiles", async (req, res) => {
 
 router.get("/reviewedProfiles", async (req, res) => {
   try {
+    var { count } = req.query;
+    if (!(count >= 0)) count = 10;
     const allProfiles = await models.HackerProfile.findAll({
       where: {
         submittedAt: {
@@ -272,9 +313,11 @@ router.get("/reviewedProfiles", async (req, res) => {
       ],
     });
 
-    let filteredProfiles = allProfiles.filter((profile) => {
-      return profile.HackerReviews.length > 0;
-    });
+    let filteredProfiles = allProfiles
+      .filter((profile) => {
+        return profile.HackerReviews.length > 0;
+      })
+      .slice(0, count);
 
     return res.json({
       reviewedProfiles: filteredProfiles,
