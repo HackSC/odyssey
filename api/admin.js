@@ -130,7 +130,7 @@ router.get("/all-reviews", async (req, res) => {
 
 router.get("/reviews", async (req, res) => {
   try {
-    const { count } = req.query;
+    var { count } = req.query;
     if (!(count >= 0)) count = 10;
 
     const reviews = await models.HackerReview.findAll({
@@ -298,7 +298,7 @@ router.get("/eligibleProfiles", async (req, res) => {
 
 router.get("/reviewedProfiles", async (req, res) => {
   try {
-    const { count } = req.query;
+    var { count } = req.query;
     if (!(count >= 0)) count = 10;
     const allProfiles = await models.HackerProfile.findAll({
       where: {
