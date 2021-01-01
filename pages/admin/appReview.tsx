@@ -47,6 +47,7 @@ const AppReview = ({
             )
           : 0;
       setAdminCount(new_admin_count);
+      // TODO: this calculation needs to be set to the total # submitted apps / admins because as eligible profiles dwindle, this # gets smaller :(
       setTotalReviewHistory(
         Math.round(
           new_admin_count > 0
