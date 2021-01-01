@@ -137,3 +137,16 @@ Implemented
 
 TODO
 The rest of the database and `api/` directory
+
+### Retired Hackathon Constants
+
+showLive: false // _ False until event or soon before
+showDash: false
+showApp: true // _ True until Dec. 14ish
+showMaps: false // _ False because HackSC 2021 is virtual :( big sad
+showAPI: false // _ False until event
+showResults: true
+needsBus: false // _ False because HackSC 2021 is virtual :( big sad
+showTeam: false // _ False until closer to event
+showProjectTeam: false // \* False until closer to event
+appsCloseDate: new Date("12/21/20")

@@ -42,7 +42,6 @@ export { default as getSchoolFromEmail } from "./getSchoolFromEmail";
 
 // * hackathonConstants.ts
 export {
-  default as constants,
   getHackathonConstants,
   createHackathonConstant,
   updateHackathonConstant,
