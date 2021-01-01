@@ -431,29 +431,28 @@ const AppReview = ({
                 </Flex>
               </Panel>
             </Column>
-
-            <Column style={{ padding: "1rem 0" }}>
-              <h1>Resume</h1>
-              <a
-                href={currentProfile ? currentProfile.resume : "/"}
-                target="_blank"
-              >
-                Download Pdf
-              </a>
-              <div style={{ padding: "2rem 0" }}>
-                <iframe
-                  style={{
-                    width: "100%",
-                    minWidth: "320px",
-                    minHeight: "620px",
-                  }}
-                  src={`https://hacksc-odyssey.s3-us-west-1.amazonaws.com/${
-                    currentProfile ? currentProfile.userId : ""
-                  }#zoom=50`}
-                />
-              </div>
-            </Column>
           </Flex>
+          <Column style={{ padding: "1rem 0" }}>
+            <h1>Resume</h1>
+            <a
+              href={currentProfile ? currentProfile.resume : "/"}
+              target="_blank"
+            >
+              Download Pdf
+            </a>
+            <div style={{ padding: "2rem 0" }}>
+              <iframe
+                style={{
+                  width: "100%",
+                  minWidth: "320px",
+                  minHeight: "620px",
+                }}
+                src={`https://hacksc-odyssey.s3-us-west-1.amazonaws.com/${
+                  currentProfile ? currentProfile.userId : ""
+                }#zoom=50`}
+              />
+            </div>
+          </Column>
         </Container>
       </Background>
       <Footer />
