@@ -1,6 +1,4 @@
-import Router from "next/router";
 import fetch from "isomorphic-unfetch";
-import constants from "./hackathonConstants";
 
 export async function getJudgeList(req): Promise<Array<Judging>> {
   let url_route = req

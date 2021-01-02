@@ -1155,13 +1155,13 @@
 
         function info(msg) {
           if (verbosity >= VerbosityLevel.INFOS) {
-            console.log(`Info: ${msg}`);
+            console.info(`Info: ${msg}`);
           }
         }
 
         function warn(msg) {
           if (verbosity >= VerbosityLevel.WARNINGS) {
-            console.log(`Warning: ${msg}`);
+            console.warn(`Warning: ${msg}`);
           }
         }
 

@@ -1,13 +1,9 @@
-import React from "react";
-
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 
 import HeaderLogo from "../assets/header_logo_21_transparent.png";
-
+import { getHackathonConstants } from "../lib";
 import { Button, Container, Link } from "../styles";
-
-import constants from "../lib/hackathonConstants";
-import { useState } from "react";
 
 type NavbarProps = {
   loggedIn?: boolean;
@@ -26,6 +22,7 @@ type NavbarProps = {
   superadmin?: boolean;
   judge?: boolean;
   sponsor?: boolean;
+  hackathonConstants?: Array<HackathonConstant>;
 };
 
 const style = (background) => {
@@ -43,16 +40,17 @@ const style = (background) => {
 };
 
 const Navbar: React.FunctionComponent<NavbarProps> = ({
+  hackathonConstants = [],
   loggedIn,
-  showLive = constants.showLive,
-  showDash = constants.showDash,
-  showApp = constants.showApp,
-  showMaps = constants.showMaps,
-  showAPI = constants.showAPI,
-  showResults = constants.showResults,
-  showTeam = constants.showTeam,
+  showLive = false,
+  showDash = false,
+  showApp = false,
+  showMaps = false,
+  showAPI = false,
+  showResults = false,
+  showTeam = false,
   showLogout = true,
-  showProjectTeam = constants.showProjectTeam,
+  showProjectTeam = false,
   activePage,
   admin,
   superadmin,
@@ -61,6 +59,55 @@ const Navbar: React.FunctionComponent<NavbarProps> = ({
   sponsor,
 }: NavbarProps) => {
   const [checked, setChecked] = useState(false);
+  const [ShowAppplication, setShowApplication] = useState(showApp);
+  const [ShowLive, setShowLive] = useState(showLive);
+  const [ShowDash, setShowDash] = useState(showDash);
+  const [ShowMaps, setShowMaps] = useState(showMaps);
+  const [ShowAPI, setShowAPI] = useState(showAPI);
+  const [ShowResults, setShowResults] = useState(showResults);
+  const [ShowTeam, setShowTeam] = useState(showTeam);
+  const [ShowProjectTeam, setShowProjectTeam] = useState(showProjectTeam);
+
+  useEffect(() => {
+    const getConstants = async () => {
+      let hackathonConstants = await getHackathonConstants();
+
+      setShowLive(
+        hackathonConstants.find((constant) => constant.name === "showLive")
+          ?.boolean
+      );
+      setShowDash(
+        hackathonConstants.find((constant) => constant.name === "showDash")
+          ?.boolean
+      );
+      setShowApplication(
+        hackathonConstants.find((constant) => constant.name === "showApp")
+          ?.boolean
+      );
+      setShowMaps(
+        hackathonConstants.find((constant) => constant.name === "showMaps")
+          ?.boolean
+      );
+      setShowAPI(
+        hackathonConstants.find((constant) => constant.name === "showAPI")
+          ?.boolean
+      );
+      setShowResults(
+        hackathonConstants.find((constant) => constant.name === "showResults")
+          ?.boolean
+      );
+      setShowTeam(
+        hackathonConstants.find((constant) => constant.name === "showTeam")
+          ?.boolean
+      );
+      setShowProjectTeam(
+        hackathonConstants.find(
+          (constant) => constant.name === "showProjectTeam"
+        )?.boolean
+      );
+    };
+    getConstants();
+  }, []);
 
   return (
     <Wrapper>
@@ -86,7 +133,7 @@ const Navbar: React.FunctionComponent<NavbarProps> = ({
                 !volunteer &&
                 !sponsor &&
                 !judge &&
-                showApp && (
+                ShowAppplication && (
                   <Link
                     href="/application"
                     id="application-page"
@@ -102,7 +149,7 @@ const Navbar: React.FunctionComponent<NavbarProps> = ({
                 !volunteer &&
                 !sponsor &&
                 !judge &&
-                showResults && (
+                ShowResults && (
                   <Link
                     href="/results"
                     id="results-page"
@@ -118,7 +165,7 @@ const Navbar: React.FunctionComponent<NavbarProps> = ({
                 !volunteer &&
                 !sponsor &&
                 !judge &&
-                showTeam && (
+                ShowTeam && (
                   <Link
                     href="/team"
                     id="team-page"
@@ -132,7 +179,7 @@ const Navbar: React.FunctionComponent<NavbarProps> = ({
                 !volunteer &&
                 !sponsor &&
                 !judge &&
-                showProjectTeam && (
+                ShowProjectTeam && (
                   <Link
                     href="/projectTeam"
                     id="projectTeam-page"
@@ -148,7 +195,7 @@ const Navbar: React.FunctionComponent<NavbarProps> = ({
                 !volunteer &&
                 !sponsor &&
                 !judge &&
-                showMaps && (
+                ShowMaps && (
                   <Link
                     href="/maps"
                     id="maps-page"
@@ -162,7 +209,7 @@ const Navbar: React.FunctionComponent<NavbarProps> = ({
                 !volunteer &&
                 !sponsor &&
                 !judge &&
-                showAPI && (
+                ShowAPI && (
                   <Link
                     href="/api-directory"
                     id="api-directory-page"

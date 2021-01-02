@@ -372,7 +372,12 @@ const Scan = ({ admin_profile, tasks }: Props) => {
   return (
     <>
       <Head title="HackSC Odyssey - Scan" />
-      <Navbar loggedIn admin activePage="/scan" />
+      <Navbar
+        loggedIn
+        admin
+        superadmin={admin_profile.role === "superadmin"}
+        activePage="/scan"
+      />
       <ScanBackground padding="4vh 0">
         <Container width={"96%"}>
           <ScanContainer>

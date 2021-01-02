@@ -33,7 +33,12 @@ const TestConsole = ({ profile }) => {
   return (
     <>
       <Head title="HackSC Odyssey - Application" />
-      <Navbar loggedIn admin activePage="/" />
+      <Navbar
+        loggedIn
+        admin
+        superadmin={profile.role === "superadmin"}
+        activePage="/"
+      />
       <Background padding="2rem">
         <Container>
           <Flex direction="column">

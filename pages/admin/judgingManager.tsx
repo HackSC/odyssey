@@ -251,7 +251,12 @@ const JudgingManager = ({ profile, propJudgeList, listOfJudges, teamList }) => {
   return (
     <>
       <Head title="HackSC Odyssey - Results" />
-      <Navbar loggedIn admin activePage="/JudgingManager" />
+      <Navbar
+        loggedIn
+        admin
+        superadmin={profile.role === "superadmin"}
+        activePage="/JudgingManager"
+      />
       <Background padding="2rem">
         <Container>
           <h1 style={{ margin: "1rem" }}>Manage Judging Schedule</h1>

@@ -199,7 +199,12 @@ const Checkin = ({ profile }) => {
   return (
     <>
       <Head title="HackSC Odyssey - Check in Hackers" />
-      <Navbar loggedIn admin activePage="/checkin" />
+      <Navbar
+        loggedIn
+        admin
+        superadmin={profile.role === "superadmin"}
+        activePage="/checkin"
+      />
       <Background padding="3rem 2rem">
         <Container>
           <Flex direction="column">

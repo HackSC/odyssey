@@ -82,6 +82,19 @@ export async function getTotalReviewHistory(req) {
   return payload;
 }
 
+export async function getNumberSubmittedApps(req) {
+  const fetchUrl = process.env.URL_BASE
+    ? process.env.URL_BASE + "api/admin/numberSubmittedApps"
+    : "api/admin/numberSubmittedApps";
+
+  const response = await fetch(fetchUrl, req ? { headers: req.headers } : null);
+
+  const profilePayload = await response.json();
+  const { numberSubmittedApps } = profilePayload;
+
+  return numberSubmittedApps;
+}
+
 export async function getEligibleHackerProfiles(req) {
   const fetchUrl = process.env.URL_BASE
     ? process.env.URL_BASE + "api/admin/eligibleProfiles"
