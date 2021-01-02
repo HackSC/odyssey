@@ -472,13 +472,12 @@ AppReview.getInitialProps = async (ctx) => {
   }
   const profileReview = await getHackerProfileForReview(req);
   const reviewHistory = await getReviewHistory(req);
-  const totalReviews = await getTotalReviewHistory(req);
+  //const totalReviews = await getTotalReviewHistory(req);
   const numberSubmittedApps = await getNumberSubmittedApps(req);
   return {
     profile,
     hackerProfile: profileReview,
     reviewHistory,
-    totalReviews,
     numberSubmittedApps,
   };
 };
