@@ -1,6 +1,23 @@
 import { App, LogLevel } from "@slack/bolt";
 import dotenv from "dotenv";
-const { authMiddleware } = require("../utils");
+
+function runMiddleware(req, res, fn) {
+  return new Promise((resolve, reject) => {
+    fn(req, res, (result) => {
+      if (result instanceof Error) {
+        return reject(result);
+      }
+      return resolve(result);
+    });
+  });
+}
+
+const authMiddleware = function (req, res, next) {
+  if (req.user) {
+    return next();
+  }
+  res.status(400).send("Unauthorized");
+};
 
 export const config = {
   api: {
@@ -16,7 +33,7 @@ const app = new App({
 });
 
 export default async (req, res) => {
-  // await authMiddleware();
+  await runMiddleware(req, res, authMiddleware);
 
   if (!process.env.SLACK_BOT_TOKEN || !process.env.SIGNING_SECRET) {
     res.json({
