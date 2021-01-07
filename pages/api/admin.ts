@@ -220,4 +220,96 @@ router.get("/review", async (req, res) => {
   }
 });
 
+router.get("/hackerStatusStats", async (req, res) => {
+  try {
+    const checkedIn = await models.HackerProfile.findAll({
+      where: {
+        status: "checkedIn",
+      }
+    })
+    const accepted = await models.HackerProfile.findAll({
+      where: {
+        status: "accepted",
+      },
+    });
+    const waitlisted = await models.HackerProfile.findAll({
+      where: {
+        status: "waitlisted",
+      }
+    });
+    const rejected = await models.HackerProfile.findAll({
+      where: {
+        status: "rejected",
+      }
+    });
+
+    return res.json({ checkedIn: checkedIn.length, 
+                      accepted: accepted.length, 
+                      waitlisted: waitlisted.length, 
+                      rejected: rejected.length });
+  } catch (e) {
+    return res.status(500).json({ err: e });
+  }
+});
+
+
+router.post("/batchCheckIn", async (req, res) => {
+  const input = req.body.qrCodes;
+  if (input.length % 2 === 1) {
+    return res.status(500).json({ error: ["invalid input: len(QR_Codes) !== len(hacker_emails)"], success: [] });
+  }
+  let errorMsg = [];
+  let successMsg = [];
+  let updatedRequestBody = "";
+  for (let i = 0; i < input.length; i+=2) {
+    if (input[i].length != 4) {
+      errorMsg.push(input[i] + " is an invalid QR Code");
+      updatedRequestBody += input[i] + " " + input[i+1] + "\n";
+    }
+    else {
+      const body = {
+        qrCodeId: input[i].toUpperCase(),
+        status: "checkedIn",
+      };
+      const hackerProfiles = await models.HackerProfile.findAll({
+        where: {
+          email: input[i+1],
+        }
+      });
+      const withQRCode = await models.HackerProfile.findAll({
+        where: {
+          qrCodeId: input[i].toUpperCase(),
+        }
+      });
+      if (withQRCode.length > 0) {
+        errorMsg.push(input[i] + " must be unique to the hacker");
+        updatedRequestBody += input[i] + " " + input[i+1] + "\n";
+      }
+      else if (hackerProfiles.length == 0) {
+        errorMsg.push(input[i+1] + " does not belong to a hacker");
+        updatedRequestBody += input[i] + " " + input[i+1] + "\n";
+      }
+      else if (hackerProfiles.length > 1) {
+        errorMsg.push(input[i+1] + " belongs to multiple hackers. Please use the Check In tool to select the correct hacker");
+        updatedRequestBody += input[i] + " " + input[i+1] + "\n";
+      }
+      else {
+        try {
+          await models.HackerProfile.update(body, {
+            where: {
+              email: input[i+1],
+            }
+          });
+          successMsg.push(input[i+1] + " successfully checked in");
+        }
+        catch (e) {
+          errorMsg.push("Error checking in " + input[i+1]);
+          updatedRequestBody += input[i] + " " + input[i+1] + "\n";
+        }
+
+      }
+    }
+  }
+  return res.json({error: errorMsg, success: successMsg, updatedRequestBody: updatedRequestBody });
+});
 export { router };
