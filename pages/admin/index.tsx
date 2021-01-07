@@ -35,7 +35,12 @@ const Admin = ({ profile }) => {
   return (
     <>
       <Head title="HackSC Odyssey - Application" />
-      <Navbar loggedIn admin activePage="/" />
+      <Navbar
+        loggedIn
+        admin
+        superadmin={profile.role === "superadmin"}
+        activePage="/"
+      />
       <Background padding="2rem">
         <Container width={"100%"}>
           <SubContainerFlex direction="row">
@@ -155,6 +160,16 @@ const Admin = ({ profile }) => {
                 {profile.role === "superadmin" ? (
                   <Action id="test-console-page" href="/admin/testconsole">
                     <ActionTitle> Experimental Console </ActionTitle>
+                  </Action>
+                ) : (
+                  ""
+                )}
+                {profile.role === "superadmin" ? (
+                  <Action
+                    id="constants-page"
+                    href="/admin/hackathonConstantsManager"
+                  >
+                    <ActionTitle> Manage Constants </ActionTitle>
                   </Action>
                 ) : (
                   ""

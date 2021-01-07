@@ -189,7 +189,12 @@ const HelpfulLinkManager = ({ profile, currentTasks }) => {
   return (
     <>
       <Head title="HackSC Odyssey - Results" />
-      <Navbar loggedIn admin activePage="/HelpfulLinkManager" />
+      <Navbar
+        loggedIn
+        admin
+        superadmin={profile.role === "superadmin"}
+        activePage="/HelpfulLinkManager"
+      />
       <Background padding="2rem">
         <Container>
           <h1 style={{ margin: "1rem" }}>Manage Helpful Links</h1>

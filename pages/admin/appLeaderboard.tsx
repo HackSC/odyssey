@@ -21,10 +21,12 @@ const AppLeaderboard = ({ profile }) => {
   const [acceptedHackers, setAcceptedHackers] = useState([]);
   const [rejectedHackers, setRejectedHackers] = useState([]);
   const [waitlistedHackers, setWaitlistedHackers] = useState([]);
+  const [recentReviewCount, setRecentReviewCount] = useState(10);
+  const [hackerCount, setHackerCount] = useState(10);
 
   let fetchUrl = process.env.URL_BASE
-    ? process.env.URL_BASE + "api/admin/reviewedProfiles"
-    : "api/admin/reviewedProfiles";
+    ? process.env.URL_BASE + "api/admin/reviewedProfiles?count=" + hackerCount
+    : "api/admin/reviewedProfiles?count=" + hackerCount;
 
   let { data: reviewProfileData, error: reviewProfileError } = useSWR(fetchUrl);
 
@@ -69,7 +71,6 @@ const AppLeaderboard = ({ profile }) => {
   }, [reviewProfileData, sortOrder]);
 
   useEffect(() => {
-    console.log("sorting admin review data");
     if (!adminDataSorted && adminReviewData && adminReviewData.reviews) {
       setAdminDataSorted(1);
       adminReviewData.reviews.sort((admin_a, admin_b) => {
@@ -78,21 +79,24 @@ const AppLeaderboard = ({ profile }) => {
 
         return a_sum > b_sum ? adminSortOrder : adminSortOrder == 1 ? -1 : 1;
       });
-    } else {
-      console.log("failed to sort admin review data");
     }
   }, [adminSortOrder, adminReviewData]);
 
   fetchUrl = process.env.URL_BASE
-    ? process.env.URL_BASE + "api/admin/reviews"
-    : "api/admin/reviews";
+    ? process.env.URL_BASE + "api/admin/reviews?count=" + recentReviewCount
+    : "api/admin/reviews?count=" + recentReviewCount;
 
   let { data: reviewData, error: reviewError } = useSWR(fetchUrl);
 
   return (
     <>
       <Head title="HackSC Odyssey - Application" />
-      <Navbar loggedIn admin activePage="/appLeaderboard" />
+      <Navbar
+        loggedIn
+        admin
+        superadmin={profile.role === "superadmin"}
+        activePage="/appLeaderboard"
+      />
       <Background padding="2rem">
         <Container width={"100%"}>
           <Flex direction="row" style={{ padding: "1rem 0", flexWrap: "wrap" }}>
@@ -135,6 +139,29 @@ const AppLeaderboard = ({ profile }) => {
                 of hacker applications to HackSC. If you have any questions or
                 find any errors, hit up the engineers in{" "}
                 <b>#{new Date().getFullYear()}-engineering</b>
+              </PaddedBottomDiv>
+              <PaddedBottomDiv style={{ lineHeight: "18px" }}>
+                <Flex direction="row" align="center">
+                  <Column
+                    style={{
+                      flexBasis: "auto",
+                      width: "fit-content",
+                      margin: "0 0 1rem 0",
+                    }}
+                  >
+                    <ScoreKeyLabel>Count</ScoreKeyLabel>
+                  </Column>
+
+                  <Column flexGrow={1} style={{ margin: "0 0 1rem 0" }}>
+                    <Input
+                      type="number"
+                      onChange={(e) =>
+                        setRecentReviewCount(parseInt(e.target.value))
+                      }
+                      value={recentReviewCount}
+                    />
+                  </Column>
+                </Flex>
               </PaddedBottomDiv>
               <CardContainer>
                 {reviewData &&
@@ -186,6 +213,27 @@ const AppLeaderboard = ({ profile }) => {
                   # Rejected Hackers:{" "}
                   <RedColoredText>{rejectedHackers.length}</RedColoredText>
                 </p>
+              </PaddedBottomDiv>
+              <PaddedBottomDiv style={{ lineHeight: "18px" }}>
+                <Flex direction="row" align="center">
+                  <Column
+                    style={{
+                      flexBasis: "auto",
+                      width: "fit-content",
+                      margin: "0 0 1rem 0",
+                    }}
+                  >
+                    <ScoreKeyLabel>Count</ScoreKeyLabel>
+                  </Column>
+
+                  <Column flexGrow={1} style={{ margin: "0 0 1rem 0" }}>
+                    <Input
+                      type="number"
+                      onChange={(e) => setHackerCount(parseInt(e.target.value))}
+                      value={hackerCount}
+                    />
+                  </Column>
+                </Flex>
               </PaddedBottomDiv>
               <CardContainer>
                 {reviewProfileData &&
@@ -313,6 +361,26 @@ const CardContainer = styled.div`
   padding: 32px;
   box-sizing: border-box;
   overflow-y: scroll;
+`;
+
+const ScoreKeyLabel = styled.p`
+  display: inline-block;
+  padding: 10px 16px;
+  margin-right: 16px;
+  border-radius: 8px;
+  border: 1px solid ${({ theme }) => theme.colors.gray5};
+  color: ${({ theme }) => theme.colors.gray50};
+`;
+
+const Input = styled.input`
+  border-radius: 8px;
+  border: 1px solid #b2b2b2;
+  padding: 12px 16px;
+  font-weight: 300;
+  color: ${({ theme }) => theme.colors.black};
+  font-size: 16px;
+  width: 100%;
+  box-sizing: border-box;
 `;
 
 export default AppLeaderboard;

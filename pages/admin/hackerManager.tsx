@@ -437,7 +437,12 @@ const hackerManager = ({ profile }) => {
   return (
     <>
       <Head title="HackSC Odyssey - Check in Hackers" />
-      <Navbar loggedIn admin activePage="/hackerManager" />
+      <Navbar
+        loggedIn
+        admin
+        superadmin={profile.role === "superadmin"}
+        activePage="/hackerManager"
+      />
       <Background padding="2rem">
         <Container>
           <Flex direction="column">

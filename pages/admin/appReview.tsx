@@ -9,6 +9,7 @@ import {
   submitReview,
   getReviewHistory,
   getTotalReviewHistory,
+  getNumberSubmittedApps,
   sendSlackMessage,
   handleLoginRedirect,
   getProfile,
@@ -17,11 +18,13 @@ import { Head, Navbar, Footer } from "../../components";
 import { Button, Container, Background, Flex, Column } from "../../styles";
 import { liveLookupFetch } from "../../lib/api-sdk/liveHooks";
 
-const AppReview = ({ profile, hackerProfile, reviewHistory, totalReviews }) => {
-  let total_review_len_initial = totalReviews.eligibleReviews
-    ? totalReviews.eligibleReviews.length
-    : 0;
-
+const AppReview = ({
+  profile,
+  hackerProfile,
+  reviewHistory,
+  numberSubmittedApps,
+}) => {
+  let num_submitted_apps = numberSubmittedApps ? numberSubmittedApps.length : 1;
   const [currentProfile, setCurrentProfile] = useState(hackerProfile);
   const [reviewCount, setReviewCount] = useState(
     reviewHistory ? reviewHistory.length : 0
@@ -37,16 +40,18 @@ const AppReview = ({ profile, hackerProfile, reviewHistory, totalReviews }) => {
       let profiles = res.success;
       let new_admin_count =
         profiles && profiles.length > 0
-          ? profiles.reduce((a, b) => a + (b.role == "admin" ? 1 : 0), 0)
+          ? profiles.reduce(
+              (a, b) =>
+                a + (b.role === "admin" || b.role === "superadmin" ? 1 : 0),
+              0
+            )
           : 0;
-
       setAdminCount(new_admin_count);
+      // TODO: this calculation needs to be set to the total # submitted apps / admins because as eligible profiles dwindle, this # gets smaller :(
       setTotalReviewHistory(
         Math.round(
           new_admin_count > 0
-            ? total_review_len_initial > 200
-              ? (total_review_len_initial / new_admin_count) * 3 - reviewCount
-              : 200 - reviewCount
+            ? (num_submitted_apps / new_admin_count) * 3 - reviewCount
             : 200 - reviewCount
         )
       );
@@ -110,6 +115,7 @@ const AppReview = ({ profile, hackerProfile, reviewHistory, totalReviews }) => {
       }
 
       let invalid = false;
+      let warning = false;
       if (s1.trim() === "" || s2.trim() === "" || s3.trim() === "") {
         invalid = true;
       }
@@ -127,6 +133,20 @@ const AppReview = ({ profile, hackerProfile, reviewHistory, totalReviews }) => {
 
       if (parseInt(s3) < MIN_SCORE || parseInt(s3) > MAX_SCORE) {
         invalid = true;
+      }
+
+      if (parseInt(s3) == 5) {
+        warning = true;
+      }
+
+      if (warning) {
+        if (
+          !confirm(
+            "Are you sure you want to red flag this application? - a score of '5' on question 3 indicates a red flag"
+          )
+        ) {
+          return;
+        }
       }
 
       if (invalid) {
@@ -157,8 +177,9 @@ const AppReview = ({ profile, hackerProfile, reviewHistory, totalReviews }) => {
         setS2("");
         setS3("");
         setReviewCount(reviewCount + 1);
-        setTotalReviewHistory(totalReviewHistory - 1);
-        if (totalReviewHistory <= 0) {
+        let new_rev_history = totalReviewHistory - 1;
+        setTotalReviewHistory(new_rev_history);
+        if (new_rev_history === 0) {
           let firstName = profile ? profile.firstName : "";
           let lastName = profile ? profile.lastName : "";
           let user_email = profile ? profile.email : "";
@@ -178,7 +199,7 @@ const AppReview = ({ profile, hackerProfile, reviewHistory, totalReviews }) => {
             start_and_end_date,
             start_and_end_date
           );
-          addToast("Created Unlockable!", { appearance: "success" });
+          addToast("Finished Reviews!", { appearance: "success" });
         }
         scoreInputs[0].current.focus();
       }
@@ -211,10 +232,16 @@ const AppReview = ({ profile, hackerProfile, reviewHistory, totalReviews }) => {
   return (
     <>
       <Head title="HackSC Odyssey - Application" />
-      <Navbar loggedIn admin activePage="/appReview" />
+      <Navbar
+        loggedIn
+        admin
+        superadmin={profile.role === "superadmin"}
+        activePage="/appReview"
+      />
       <Background padding="3rem 1rem">
         <Container style={{ maxWidth: "1000px" }}>
-          {totalReviewHistory <= 0 ? (
+          <OnePaddedH1>App Review</OnePaddedH1>
+          {totalReviewHistory === 0 ? (
             <InfoPanel>
               <Confetti
                 recycle={false}
@@ -223,7 +250,7 @@ const AppReview = ({ profile, hackerProfile, reviewHistory, totalReviews }) => {
                 height={height}
               />
               <h2 style={{ textAlign: "center", padding: "0" }}>
-                Thank you for your reviews! Enjoy the confetti!
+                Thank you for completing your app reviews!
               </h2>
             </InfoPanel>
           ) : (
@@ -244,7 +271,7 @@ const AppReview = ({ profile, hackerProfile, reviewHistory, totalReviews }) => {
             <br />
 
             <p>
-              You have reviewed <b>{reviewCount}</b> applications.
+              You've reviewed <b>{reviewCount}</b> applications.
             </p>
 
             <p>
@@ -257,30 +284,10 @@ const AppReview = ({ profile, hackerProfile, reviewHistory, totalReviews }) => {
             justify="space-between"
             style={{ flexWrap: "wrap" }}
           >
-            <Column flexGrow={1} style={{ margin: "0 2rem 0 0" }}>
-              <h1>Resume</h1>
-              <a
-                href={currentProfile ? currentProfile.resume : "/"}
-                target="_blank"
-              >
-                Download Pdf
-              </a>
-              <div style={{ padding: "2rem 0" }}>
-                <iframe
-                  style={{
-                    width: "100%",
-                    minWidth: "320px",
-                    minHeight: "620px",
-                  }}
-                  src={`https://hacksc-odyssey.s3-us-west-1.amazonaws.com/${
-                    currentProfile ? currentProfile.userId : ""
-                  }#zoom=50`}
-                />
-              </div>
-            </Column>
-
-            <Column flexBasis={40}>
-              <h1> Applicant Info </h1>
+            <Column style={{ padding: "1rem 0" }} flexBasis={60}>
+              <Column>
+                <ChangingText>Applicant Info</ChangingText>
+              </Column>
               <Panel>
                 <h2>Question 1 - Vertical</h2>
                 <BrokenP>
@@ -292,7 +299,6 @@ const AppReview = ({ profile, hackerProfile, reviewHistory, totalReviews }) => {
                     : "(No response)"}{" "}
                 </BrokenP>
               </Panel>
-
               <Panel>
                 <h2>Question 2 - Project</h2>
                 <BrokenP>
@@ -304,7 +310,6 @@ const AppReview = ({ profile, hackerProfile, reviewHistory, totalReviews }) => {
                     : "(No response)"}{" "}
                 </BrokenP>
               </Panel>
-
               <Panel>
                 <h2>Question 3 - Beverage</h2>
                 <BrokenP>
@@ -316,18 +321,22 @@ const AppReview = ({ profile, hackerProfile, reviewHistory, totalReviews }) => {
                     : "(No response)"}{" "}
                 </BrokenP>
               </Panel>
+            </Column>
 
-              <h1>Review</h1>
+            <Column style={{ padding: "1rem 0" }} flexBasis={35}>
+              <Column>
+                <ChangingText>Review</ChangingText>
+              </Column>
               <Panel>
                 <ScoreInputLabel>Score 1 (1-5)</ScoreInputLabel>
-
-                <Flex
-                  direction="row"
-                  justify="space-between"
-                  align="center"
-                  style={{ flexWrap: "wrap" }}
-                >
-                  <Column style={{ margin: "0 0 1rem 0" }}>
+                <Flex direction="row" align="center">
+                  <Column
+                    style={{
+                      flexBasis: "auto",
+                      width: "fit-content",
+                      margin: "0 0 1rem 0",
+                    }}
+                  >
                     <ScoreKeyLabel>Q</ScoreKeyLabel>
                   </Column>
 
@@ -343,17 +352,16 @@ const AppReview = ({ profile, hackerProfile, reviewHistory, totalReviews }) => {
                   </Column>
                 </Flex>
               </Panel>
-
               <Panel>
                 <ScoreInputLabel>Score 2 (1-5)</ScoreInputLabel>
-
-                <Flex
-                  direction="row"
-                  justify="space-between"
-                  align="center"
-                  style={{ flexWrap: "wrap" }}
-                >
-                  <Column style={{ margin: "0 0 1rem 0" }}>
+                <Flex direction="row" align="center">
+                  <Column
+                    style={{
+                      flexBasis: "auto",
+                      width: "fit-content",
+                      margin: "0 0 1rem 0",
+                    }}
+                  >
                     <ScoreKeyLabel>W</ScoreKeyLabel>
                   </Column>
 
@@ -369,17 +377,16 @@ const AppReview = ({ profile, hackerProfile, reviewHistory, totalReviews }) => {
                   </Column>
                 </Flex>
               </Panel>
-
               <Panel>
                 <ScoreInputLabel>Score 3 (1-5)</ScoreInputLabel>
-
-                <Flex
-                  direction="row"
-                  justify="space-between"
-                  align="center"
-                  style={{ flexWrap: "wrap" }}
-                >
-                  <Column style={{ margin: "0 0 1rem 0" }}>
+                <Flex direction="row" align="center">
+                  <Column
+                    style={{
+                      flexBasis: "auto",
+                      width: "fit-content",
+                      margin: "0 0 1rem 0",
+                    }}
+                  >
                     <ScoreKeyLabel>E</ScoreKeyLabel>
                   </Column>
 
@@ -400,16 +407,53 @@ const AppReview = ({ profile, hackerProfile, reviewHistory, totalReviews }) => {
                   </Column>
                 </Flex>
               </Panel>
-              <div>
-                <StyledButton onClick={handleSubmit} disabled={submitting}>
-                  {" "}
-                  Submit Review (↵){" "}
-                </StyledButton>
-
-                {submitting && <SubmittingText>Submitting...</SubmittingText>}
-              </div>
+              <Panel>
+                <ScoreInputLabel>Submit</ScoreInputLabel>
+                <Flex direction="row" align="center">
+                  <Column
+                    style={{
+                      flexBasis: "auto",
+                      width: "fit-content",
+                      margin: "0 0 1rem 0",
+                    }}
+                  >
+                    <ScoreKeyLabel>Enter</ScoreKeyLabel>
+                  </Column>
+                  <Column flexGrow={1} style={{ margin: "0 0 1rem 0" }}>
+                    <Button
+                      onClick={(e) => {
+                        e.preventDefault();
+                        handleSubmit();
+                      }}
+                    >
+                      Submit
+                    </Button>
+                  </Column>
+                </Flex>
+              </Panel>
             </Column>
           </Flex>
+          <Column style={{ padding: "1rem 0" }}>
+            <h1>Resume</h1>
+            <a
+              href={currentProfile ? currentProfile.resume : "/"}
+              target="_blank"
+            >
+              Download Pdf
+            </a>
+            <div style={{ padding: "2rem 0" }}>
+              <iframe
+                style={{
+                  width: "100%",
+                  minWidth: "320px",
+                  minHeight: "620px",
+                }}
+                src={`https://hacksc-odyssey.s3-us-west-1.amazonaws.com/${
+                  currentProfile ? currentProfile.userId : ""
+                }#zoom=50`}
+              />
+            </div>
+          </Column>
         </Container>
       </Background>
       <Footer />
@@ -428,14 +472,20 @@ AppReview.getInitialProps = async (ctx) => {
   }
   const profileReview = await getHackerProfileForReview(req);
   const reviewHistory = await getReviewHistory(req);
-  const totalReviews = await getTotalReviewHistory(req);
+  //const totalReviews = await getTotalReviewHistory(req);
+  const numberSubmittedApps = await getNumberSubmittedApps(req);
   return {
     profile,
     hackerProfile: profileReview,
     reviewHistory,
-    totalReviews,
+    numberSubmittedApps,
   };
 };
+
+const OnePaddedH1 = styled.h1`
+  margin: auto 0;
+  padding: 0 0 1rem 0;
+`;
 
 const BrokenP = styled.p`
   word-break: break-all;
@@ -483,6 +533,17 @@ const StyledButton = styled(Button)`
 
 const SubmittingText = styled.p`
   margin-top: 8px;
+`;
+
+const ChangingText = styled.div`
+  color: black;
+  font-weight: 680;
+  font-size: 32px;
+  line-height: 60px;
+
+  // @media only screen and (max-width: 770px) {
+  //   display: none;
+  // }
 `;
 
 export default AppReview;

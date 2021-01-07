@@ -5,6 +5,7 @@ import { Head, Hero, Footer, Navbar } from "../components";
 
 import { Container } from "../styles";
 import useSWR from "swr";
+import { getHackathonConstants } from "../lib";
 
 const Home = () => {
   let fetchUrl = process.env.URL_BASE
