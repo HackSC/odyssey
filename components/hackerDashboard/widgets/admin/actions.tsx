@@ -65,6 +65,9 @@ const ActionsWidget = () => {
         <Action id="test-console-page" href="/admin/testconsole">
           <ActionTitle> Experimental Console </ActionTitle>
         </Action>
+        <Action id="test-slack-page" href="/admin/slack">
+          <ActionTitle> Slack Command Center </ActionTitle>
+        </Action>
       </Actions>
     </Wrapper>
   );
