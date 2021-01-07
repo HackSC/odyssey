@@ -11,9 +11,7 @@ const QRCode: React.FunctionComponent<Props> = (props) => {
 
   return (
     <QRCodeWrapper>
-      <QrCode
-        value={profile.qrCodeId ? profile.qrCodeId : new String(profile.userId)}
-      />
+      <QrCode value={profile.qrCodeId ? profile.qrCodeId : profile.userId} />
 
       {profile.qrCodeId && <Code>{profile.qrCodeId}</Code>}
     </QRCodeWrapper>
