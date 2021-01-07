@@ -4,6 +4,8 @@ import { useToasts } from "react-toast-notifications";
 import PacmanLoader from "react-spinners/PacmanLoader";
 
 import { sendSlackMessage, handleLoginRedirect, getProfile } from "../../lib";
+import { getHackerStatusStats, batchCheckIn } from "../../lib/admin";
+
 import { Head, Navbar, Footer } from "../../components";
 import {
   Button,
@@ -145,12 +147,16 @@ const CheckinResult = ({ addToast, profile, result, resetResults }) => {
   );
 };
 
-const Checkin = ({ profile }) => {
-  const [firstNameInput, lastNameInput, emailInput] = [
+const Checkin = ({ profile, hackerStatusStats }) => {
+  const [firstNameInput, lastNameInput, emailInput, batchEmails] = [
+    useRef(null),
     useRef(null),
     useRef(null),
     useRef(null),
   ];
+
+  const [batchError, setBatchError] = useState([]);
+  const [batchSuccess, setBatchSuccess] = useState([]);
   const [loading, setLoading] = useState(false);
   const [results, setResults] = useState([]);
   const { addToast } = useToasts();
@@ -160,6 +166,7 @@ const Checkin = ({ profile }) => {
     firstNameInput.current.value = "";
     lastNameInput.current.value = "";
     emailInput.current.value = "";
+    batchEmails.current.value = "";
   };
 
   const lookupHackers = async (e) => {
@@ -179,6 +186,19 @@ const Checkin = ({ profile }) => {
     setLoading(false);
     setResults(profiles);
   };
+
+  const handleBatchCheckIn = useCallback(async (e) => {
+    e.preventDefault();
+    const input = batchEmails.current.value.split(/(?:,| |\n)+/).filter( (l:string) => l != "");
+
+    const response = await batchCheckIn(input);
+
+    setBatchError(response.error);
+    if (response.error[0] !== "invalid input: len(QR_Codes) !== len(hacker_emails)") {
+      setBatchSuccess(response.success);
+      batchEmails.current.value = response.updatedRequestBody;
+    }
+  }, []);
 
   const renderResults = useMemo(() => {
     return (
@@ -207,6 +227,33 @@ const Checkin = ({ profile }) => {
       />
       <Background padding="3rem 2rem">
         <Container>
+          <FlexSection direction="column">
+            <h1>Stats: Hacker Status</h1>
+            <Stats>
+              <div>checked in: {hackerStatusStats.checkedIn}</div>
+              <div>accepted: {hackerStatusStats.accepted}</div>
+              <div>waitlisted: {hackerStatusStats.waitlisted}</div>
+              <div>rejected: {hackerStatusStats.rejected}</div>
+            </Stats>
+          </FlexSection>
+
+          <FlexSection direction="column">
+            <h1>Batch Check In</h1>
+            <Form>
+              <div>Enter valid 4-letter QR Codes and hacker email addresses separated by new lines, commas, or spaces</div>
+              <div>Example: "ABCD test@gmail.com"</div>
+              {batchSuccess.map((msg) => (
+                <Green>{msg}</Green>
+              ))}
+              {batchError.map((msg) => (
+                <Red>{msg}</Red>
+              ))}
+
+              <BatchEnter ref={batchEmails} />
+              <Button onClick={handleBatchCheckIn}>Check In!</Button>
+            </Form>
+          </FlexSection>
+
           <Flex direction="column">
             <h1>Assign Hackers QR Codes for Check In</h1>
             <Form>
@@ -271,8 +318,11 @@ Checkin.getInitialProps = async (ctx) => {
     handleLoginRedirect(req);
   }
 
+  const hackerStatusStats = await getHackerStatusStats(req);
+
   return {
     profile,
+    hackerStatusStats,
   };
 };
 
@@ -282,6 +332,10 @@ const PaddedFlex = styled(Flex)`
   min-height: 3rem;
   justify-content: center;
   padding: 3rem;
+`;
+
+const FlexSection = styled(Flex)`
+  padding-bottom: 70px;
 `;
 
 const Results = styled.div`
@@ -311,6 +365,35 @@ const Result = styled.div`
     margin-right: 16px;
     text-transform: uppercase;
   }
+`;
+
+const Stats = styled.div`
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  padding-top: 10px;
+  font-size: 18px;
+`;
+
+const BatchEnter = styled.textarea`
+  margin-bottom: 20px;
+  margin-top: 20px;
+  font-family: Arial;
+  min-width: 85vw;
+  height: 100px;
+`;
+
+const Red = styled.div`
+  padding-top: 10px;
+  color: red;
+  weight: 700;
+`;
+
+const Green = styled.div`
+  padding-top: 10px;
+  color: green;
+  weight: 700;
 `;
 
 export default Checkin;
