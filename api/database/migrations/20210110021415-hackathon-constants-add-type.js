@@ -5,6 +5,10 @@ module.exports = {
     return queryInterface.addColumn("HackathonConstants", "type", {
       type: Sequelize.ENUM,
       values: ["date", "boolean", "string"],
+    },
+    {
+      charset: "utf8mb4",
+      collate: "utf8mb4_bin", // * New Databases: utf8mb4_0900_ai_ci
     });
   },
 

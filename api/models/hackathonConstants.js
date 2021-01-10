@@ -24,7 +24,7 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.DATE,
       },
       type: {
-        allowNull: false,
+        allowNull: true,
         type: DataTypes.ENUM,
         values: [
           "date",
