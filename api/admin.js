@@ -100,7 +100,7 @@ router.post("/updateHackerStatus", async (req, res) => {
   }
 });
 
-router.get("/reviews", async (req, res) => {
+router.get("/all-reviews", async (req, res) => {
   try {
     const reviews = await models.HackerReview.findAll({
       include: [
@@ -123,6 +123,78 @@ router.get("/reviews", async (req, res) => {
     }
 
     return res.json({ reviews: reviewedProfiles });
+  } catch (e) {
+    return res.status(500).json({ err: e });
+  }
+});
+
+router.get("/reviews", async (req, res) => {
+  try {
+    var { count } = req.query;
+    if (!(count >= 0)) count = 10;
+
+    const reviews = await models.HackerReview.findAll({
+      include: [
+        {
+          model: models.HackerProfile,
+        },
+      ],
+    });
+
+    reviews.sort((review_a, review_b) => {
+      return new Date(review_a.createdAt).getTime() >
+        new Date(review_b.createdAt).getTime()
+        ? -1
+        : 1;
+    });
+
+    var reviewedProfiles = [];
+    for (const review of reviews.slice(0, count)) {
+      let profile = await models.HackerProfile.findAll({
+        where: {
+          userId: review.dataValues.hackerId,
+        },
+      });
+      let ReviewedProfile = { ReviewedProfile: profile[0] };
+      reviewedProfiles.push(
+        Object.assign({}, review.dataValues, ReviewedProfile)
+      );
+    }
+
+    return res.json({ reviews: reviewedProfiles });
+  } catch (e) {
+    return res.status(500).json({ err: e });
+  }
+});
+
+router.get("/admin-reviews", async (req, res) => {
+  try {
+    const Op = sequelize.Op;
+    const admins = await models.HackerProfile.findAll({
+      where: {
+        role: {
+          [Op.or]: ["admin", "superadmin"],
+        },
+      },
+    });
+    var adminReviews = [];
+
+    for (const admin of admins) {
+      let reviews = await models.HackerReview.findAll({
+        where: {
+          createdBy: admin.userId,
+        },
+      });
+
+      let admin_obj = Object.assign(
+        {},
+        { hacker_reviews: reviews },
+        admin.dataValues
+      );
+      adminReviews.push(admin_obj);
+    }
+
+    return res.json({ reviews: adminReviews });
   } catch (e) {
     return res.status(500).json({ err: e });
   }
@@ -174,6 +246,28 @@ router.put("/review/:id", async (req, res) => {
   }
 });
 
+router.get("/numberSubmittedApps", async (req, res) => {
+  try {
+    const allProfiles = await models.HackerProfile.findAll({
+      where: {
+        submittedAt: {
+          [sequelize.Op.not]: null,
+        },
+      },
+      include: [
+        {
+          model: models.HackerReview,
+        },
+      ],
+    });
+    return res.json({
+      numberSubmittedApps: allProfiles,
+    });
+  } catch (e) {
+    return res.status(500).json({ error: e.message });
+  }
+});
+
 router.get("/eligibleProfiles", async (req, res) => {
   try {
     const allProfiles = await models.HackerProfile.findAll({
@@ -192,7 +286,7 @@ router.get("/eligibleProfiles", async (req, res) => {
       const reviewsByCurrUser = profile.HackerReviews.filter((review) => {
         return review.dataValues.createdBy === req.user.id;
       });
-      return reviewsByCurrUser.length === 0 && profile.HackerReviews.length < 1;
+      return reviewsByCurrUser.length === 0;
     });
     return res.json({
       eligibleReviews: filteredProfiles,
@@ -204,6 +298,8 @@ router.get("/eligibleProfiles", async (req, res) => {
 
 router.get("/reviewedProfiles", async (req, res) => {
   try {
+    var { count } = req.query;
+    if (!(count >= 0)) count = 10;
     const allProfiles = await models.HackerProfile.findAll({
       where: {
         submittedAt: {
@@ -217,9 +313,11 @@ router.get("/reviewedProfiles", async (req, res) => {
       ],
     });
 
-    let filteredProfiles = allProfiles.filter((profile) => {
-      return profile.HackerReviews.length > 0;
-    });
+    let filteredProfiles = allProfiles
+      .filter((profile) => {
+        return profile.HackerReviews.length > 0;
+      })
+      .slice(0, count);
 
     return res.json({
       reviewedProfiles: filteredProfiles,
@@ -287,5 +385,98 @@ router.get("/review", async (req, res) => {
     return res.status(500).json({ err: e });
   }
 });
+
+router.get("/hackerStatusStats", async (req, res) => {
+  try {
+    const checkedIn = await models.HackerProfile.findAll({
+      where: {
+        status: "checkedIn",
+      }
+    })
+    const accepted = await models.HackerProfile.findAll({
+      where: {
+        status: "accepted",
+      },
+    });
+    const waitlisted = await models.HackerProfile.findAll({
+      where: {
+        status: "waitlisted",
+      }
+    });
+    const rejected = await models.HackerProfile.findAll({
+      where: {
+        status: "rejected",
+      }
+    });
+
+    return res.json({ checkedIn: checkedIn.length, 
+                      accepted: accepted.length, 
+                      waitlisted: waitlisted.length, 
+                      rejected: rejected.length });
+  } catch (e) {
+    return res.status(500).json({ err: e });
+  }
+});
+
+router.post("/batchCheckIn", async (req, res) => {
+  const input = req.body.qrCodes;
+  if (input.length % 2 === 1) {
+    return res.status(500).json({ error: ["invalid input: len(QR_Codes) !== len(hacker_emails)"], success: [] });
+  }
+  let errorMsg = [];
+  let successMsg = [];
+  let updatedRequestBody = "";
+  for (let i = 0; i < input.length; i+=2) {
+    if (input[i].length != 4) {
+      errorMsg.push(input[i] + " is an invalid QR Code");
+      updatedRequestBody += input[i] + " " + input[i+1] + "\n";
+    }
+    else {
+      const body = {
+        qrCodeId: input[i].toUpperCase(),
+        status: "checkedIn",
+      };
+      const hackerProfiles = await models.HackerProfile.findAll({
+        where: {
+          email: input[i+1],
+        }
+      });
+      const withQRCode = await models.HackerProfile.findAll({
+        where: {
+          qrCodeId: input[i].toUpperCase(),
+        }
+      });
+      if (withQRCode.length > 0) {
+        errorMsg.push(input[i] + " must be unique to the hacker");
+        updatedRequestBody += input[i] + " " + input[i+1] + "\n";
+      }
+      else if (hackerProfiles.length == 0) {
+        errorMsg.push(input[i+1] + " does not belong to a hacker");
+        updatedRequestBody += input[i] + " " + input[i+1] + "\n";
+      }
+      else if (hackerProfiles.length > 1) {
+        errorMsg.push(input[i+1] + " belongs to multiple hackers. Please use the Check In tool to select the correct hacker");
+        updatedRequestBody += input[i] + " " + input[i+1] + "\n";
+      }
+      else {
+        try {
+          await models.HackerProfile.update(body, {
+            where: {
+              email: input[i+1],
+            }
+          });
+          successMsg.push(input[i+1] + " successfully checked in");
+        }
+        catch (e) {
+          errorMsg.push("Error checking in " + input[i+1]);
+          updatedRequestBody += input[i] + " " + input[i+1] + "\n";
+        }
+
+      }
+    }
+  }
+  return res.json({error: errorMsg, success: successMsg, updatedRequestBody: updatedRequestBody });
+});
+
 
 module.exports = router;

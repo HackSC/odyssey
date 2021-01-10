@@ -15,7 +15,7 @@ const tasks = [
   {
     name: "Dummy Task",
     value: () => {
-      console.log("You ran the dummy task in:", process.env.NODE_ENV);
+      console.info("You ran the dummy task in:", process.env.NODE_ENV);
     },
   },
 ];

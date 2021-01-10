@@ -10,6 +10,7 @@ const Theme = {
     gray25: "#B2B2B2",
     gray5: "#e5e5e5",
     white: "#FFFFFF",
+    green: "#90ee90",
   },
   fontSizes: {
     large: "48px",

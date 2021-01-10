@@ -1,3 +1,4 @@
+export { default as CreateButton } from "./CreateButton";
 export { default as Description } from "./Description";
 export { default as EditButton } from "./EditButton";
 export { default as EventTitle } from "./EventTitle";

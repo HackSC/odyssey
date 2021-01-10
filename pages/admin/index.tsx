@@ -35,7 +35,12 @@ const Admin = ({ profile }) => {
   return (
     <>
       <Head title="HackSC Odyssey - Application" />
-      <Navbar loggedIn admin activePage="/" />
+      <Navbar
+        loggedIn
+        admin
+        superadmin={profile.role === "superadmin"}
+        activePage="/"
+      />
       <Background padding="2rem">
         <Container width={"100%"}>
           <SubContainerFlex direction="row">
@@ -124,7 +129,10 @@ const Admin = ({ profile }) => {
                   <ActionTitle> Manage Hackers </ActionTitle>
                 </Action>
                 <Action id="judging-manager-page" href="/admin/judgingManager">
-                  <ActionTitle> Pass Judgement </ActionTitle>
+                  <ActionTitle> Judging Manager </ActionTitle>
+                </Action>
+                <Action id="pass-judgment-page" href="/admin/passJudgment">
+                  <ActionTitle> Pass Judgment </ActionTitle>
                 </Action>
                 <Action
                   id="battlepass-manager-page"
@@ -149,9 +157,23 @@ const Admin = ({ profile }) => {
                 >
                   <ActionTitle>Access Metabase</ActionTitle>
                 </Action>
-                <Action id="test-console-page" href="/admin/testconsole">
-                  <ActionTitle> Experimental Console </ActionTitle>
-                </Action>
+                {profile.role === "superadmin" ? (
+                  <Action id="test-console-page" href="/admin/testconsole">
+                    <ActionTitle> Experimental Console </ActionTitle>
+                  </Action>
+                ) : (
+                  ""
+                )}
+                {profile.role === "superadmin" ? (
+                  <Action
+                    id="constants-page"
+                    href="/admin/hackathonConstantsManager"
+                  >
+                    <ActionTitle> Manage Constants </ActionTitle>
+                  </Action>
+                ) : (
+                  ""
+                )}
               </Actions>
             </ActionColumn>
           </SubContainerFlex>
@@ -168,7 +190,7 @@ Admin.getInitialProps = async (ctx) => {
   const profile = await getProfile(req);
 
   // Null profile means user is not logged in, and this is only relevant for admins
-  if (!profile || profile.role !== "admin") {
+  if (!profile || !(profile.role == "admin" || profile.role == "superadmin")) {
     handleLoginRedirect(req);
   }
   if (profile) {
