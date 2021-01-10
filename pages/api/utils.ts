@@ -1,6 +1,18 @@
 const models = require("./models");
 const Sentry = require("@sentry/node");
 
+// To be used in Next.js API routes not running express router
+function runMiddleware(req, res, fn) {
+  return new Promise((resolve, reject) => {
+    fn(req, res, (result) => {
+      if (result instanceof Error) {
+        return reject(result);
+      }
+      return resolve(result);
+    });
+  });
+}
+
 const authMiddleware = function (req, res, next) {
   if (req.user) {
     return next();
@@ -122,6 +134,7 @@ const requireDevelopmentEnv = function (req, res, next) {
 };
 
 export {
+  runMiddleware,
   authMiddleware,
   preprocessRequest,
   requireAdmin,
