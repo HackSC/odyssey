@@ -33,9 +33,9 @@ import {
   handleLoginRedirect,
   getProfile,
   handleApplicationRedirect,
-} from "../../lib/authenticate";
+  getHackathonConstants,
+} from "../../lib";
 
-import hackathonConstants from "../../lib/hackathonConstants";
 import styled from "styled-components";
 import Events from "../../components/events/Events";
 import { useEventsList } from "../../lib/api-sdk/eventHooks";
@@ -43,10 +43,10 @@ import { useEventsList } from "../../lib/api-sdk/eventHooks";
 const Live = ({ profile, houses, socialPosts }) => {
   // * External Hooks
   const { allHouses } = useAllHouseInfo({});
-  const { battlepass } = useBattlepass({ defaultOnError: console.log });
-  const { allEvents } = useEventsList({ defaultOnError: console.log });
+  const { battlepass } = useBattlepass({ defaultOnError: console.error });
+  const { allEvents } = useEventsList({ defaultOnError: console.error });
   const { allTasks } = useAllTasks({
-    defaultOnError: console.log,
+    defaultOnError: console.error,
   });
 
   // * Local Hooks
@@ -55,8 +55,18 @@ const Live = ({ profile, houses, socialPosts }) => {
   return (
     <>
       <Head title="HackSC Odyssey - Live Dashboard" />
-      {profile && (profile.role == "admin" || profile.role == "volunteer") ? (
-        <Navbar loggedIn admin activePage="live" />
+      {profile &&
+      (profile.role == "admin" ||
+        profile.role === "superadmin" ||
+        profile.role === "judge" ||
+        profile.role === "sponsor" ||
+        profile.role == "volunteer") ? (
+        <Navbar
+          loggedIn
+          admin
+          superadmin={profile.role === "superadmin"}
+          activePage="live"
+        />
       ) : (
         <Navbar
           loggedIn
@@ -128,6 +138,7 @@ const Live = ({ profile, houses, socialPosts }) => {
 
 Live.getInitialProps = async ({ req }) => {
   const profile = await getProfile(req);
+  const hackathonConstants = await getHackathonConstants();
   const houses = [];
 
   // Null profile means user is not logged in
@@ -137,9 +148,16 @@ Live.getInitialProps = async ({ req }) => {
     let is_super_user =
       profile.role == "admin" ||
       profile.role == "volunteer" ||
-      profile.role == "sponsor";
+      profile.role == "sponsor" ||
+      profile.role == "superadmin" ||
+      profile.role == "judge";
 
-    if (profile && !is_super_user && !hackathonConstants.showLive) {
+    if (
+      profile &&
+      !is_super_user &&
+      !hackathonConstants.find((constant) => constant.name === "showLive")
+        ?.boolean
+    ) {
       // Redirect user to dashboard if they are logged in
       handleApplicationRedirect(req);
     }

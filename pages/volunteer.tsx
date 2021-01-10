@@ -33,9 +33,6 @@ const Volunteer = ({ profile }) => {
             <Action id="checkin-page" href="/admin/checkin">
               <ActionTitle>Check In Hackers</ActionTitle>
             </Action>
-            <Action id="judging-manager-page" href="/admin/judgingManager">
-              <ActionTitle> Pass Judgement </ActionTitle>
-            </Action>
           </Actions>
         </Container>
       </Background>
@@ -50,7 +47,14 @@ Volunteer.getInitialProps = async (ctx) => {
   const profile = await getProfile(req);
 
   // Null profile means user is not logged in, and this is only relevant for admins
-  if (!profile || !(profile.role == "admin" || profile.role == "volunteer")) {
+  if (
+    !profile ||
+    !(
+      profile.role == "admin" ||
+      profile.role == "volunteer" ||
+      profile.role == "superadmin"
+    )
+  ) {
     handleLoginRedirect(req);
   }
   if (profile) {

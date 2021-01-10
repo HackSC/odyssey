@@ -1,4 +1,6 @@
 import React from "react";
+import useSWR from "swr";
+import { GetServerSideProps } from "next";
 import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
 
 import {
@@ -7,17 +9,17 @@ import {
   handleAdminRedirect,
   handleVolunteerRedirect,
   handleSponsorRedirect,
-} from "../lib/authenticate";
+  handleJudgeRedirect,
+  getHackathonConstants,
+  generatePosts,
+  getHouses,
+} from "../lib";
 
 import { Head, Navbar, Footer, Steps } from "../components";
 
 import { Background, Container } from "../styles";
 
-import { generatePosts } from "../lib/referrerCode";
-import { getHouses } from "../lib";
-import useSWR from "swr";
-
-const Application = ({ profile, houses, socialPosts }) => {
+const Application = ({ profile, houses, socialPosts, appsOpen }) => {
   let fetchUrl = process.env.URL_BASE
     ? process.env.URL_BASE + "api/profile"
     : "api/profile";
@@ -43,6 +45,7 @@ const Application = ({ profile, houses, socialPosts }) => {
               houses={houses}
               profile={profile}
               socialPosts={socialPosts}
+              appsOpen={appsOpen}
             />
           </Container>
         )}
@@ -52,19 +55,28 @@ const Application = ({ profile, houses, socialPosts }) => {
   );
 };
 
-Application.getInitialProps = async ({ req }) => {
+export const getServerSideProps: GetServerSideProps = async ({ req }) => {
   const profile = await getProfile(req);
   let houses = await getHouses(req);
+  const hackathonConstants = await getHackathonConstants();
+  const appsCloseDate = hackathonConstants.find(
+    (constant) => constant.name === "appsCloseDate"
+  )?.date;
+
+  const threeDaysAfterClose = new Date(appsCloseDate);
+  threeDaysAfterClose.setDate(threeDaysAfterClose.getDate() + 3);
 
   // Null profile means user is not logged in
   if (!profile) {
     handleLoginRedirect(req);
-  } else if (profile.role == "admin") {
+  } else if (profile.role == "admin" || profile.role == "superadmin") {
     handleAdminRedirect(req);
   } else if (profile.role == "volunteer") {
     handleVolunteerRedirect(req);
   } else if (profile.role == "sponsor") {
     handleSponsorRedirect(req);
+  } else if (profile.role == "judge") {
+    handleJudgeRedirect(req);
   }
 
   if (profile && profile.status == "checkedIn") {
@@ -86,9 +98,12 @@ Application.getInitialProps = async ({ req }) => {
   }
 
   return {
-    houses,
-    profile,
-    socialPosts,
+    props: {
+      houses,
+      profile,
+      socialPosts,
+      appsOpen: threeDaysAfterClose.getTime() > Date.now(),
+    },
   };
 };
 

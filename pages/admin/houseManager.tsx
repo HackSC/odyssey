@@ -159,7 +159,12 @@ const houseManager = ({ profile, currentHouses }) => {
   return (
     <>
       <Head title="HackSC Odyssey - Results" />
-      <Navbar loggedIn admin activePage="/houseManager" />
+      <Navbar
+        loggedIn
+        admin
+        superadmin={profile.role === "superadmin"}
+        activePage="/houseManager"
+      />
       <Background padding="2rem">
         <Container>
           <h1 style={{ margin: "1rem" }}>Manage Houses</h1>
@@ -237,7 +242,7 @@ houseManager.getInitialProps = async ({ req }) => {
   const currentHouses = await getHouses(req);
 
   // Null profile means user is not logged in
-  if (!profile || profile.role !== "admin") {
+  if (!profile || !(profile.role == "admin" || profile.role == "superadmin")) {
     handleLoginRedirect(req);
   }
 

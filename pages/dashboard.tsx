@@ -11,7 +11,9 @@ import {
   handleDashboardRedirect,
 } from "../lib/authenticate";
 
-import constants from "../lib/hackathonConstants";
+import {
+  getHackathonConstants
+} from "../lib";
 
 import { generatePosts } from "../lib/referrerCode";
 
@@ -64,7 +66,9 @@ export async function getServerSideProps({ req }) {
     handleSponsorRedirect(req);
   }
 
-  if (!constants.showDash) {
+  const hackathonConstants = await getHackathonConstants();
+
+  if (!hackathonConstants.find((constant) => constant.name === "showDash")?.boolean) {
     handleDashboardRedirect(req);
   }
 

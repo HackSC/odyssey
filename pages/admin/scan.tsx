@@ -372,7 +372,12 @@ const Scan = ({ admin_profile, tasks }: Props) => {
   return (
     <>
       <Head title="HackSC Odyssey - Scan" />
-      <Navbar loggedIn admin activePage="/scan" />
+      <Navbar
+        loggedIn
+        admin
+        superadmin={admin_profile.role === "superadmin"}
+        activePage="/scan"
+      />
       <ScanBackground padding="4vh 0">
         <Container width={"96%"}>
           <ScanContainer>
@@ -447,7 +452,13 @@ Scan.getInitialProps = async (ctx) => {
   const profile = await getProfile(req);
 
   // * Null profile means user is not logged in, and this is only relevant for admins and volunteers
-  if (!profile || (profile.role !== "admin" && profile.role !== "volunteer")) {
+  if (
+    !profile ||
+    (profile.role !== "admin" &&
+      profile.role !== "volunteer" &&
+      profile.role !== "judge" &&
+      profile.role !== "superadmin")
+  ) {
     if (profile && profile.role == "sponsor") handleSponsorRedirect(req);
     else handleLoginRedirect(req);
   }

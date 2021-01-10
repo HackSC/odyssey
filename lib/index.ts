@@ -7,6 +7,7 @@ export {
   getTotalReviewHistory,
   getHackerProfileForReview,
   getEligibleHackerProfiles,
+  getNumberSubmittedApps,
   submitReview,
 } from "./admin";
 
@@ -22,6 +23,7 @@ export {
   handleDashboardRedirect,
   handleApplicationRedirect,
   handleAdminRedirect,
+  handleJudgeRedirect,
   handleVolunteerRedirect,
   handleSponsorRedirect,
 } from "./authenticate";
@@ -39,10 +41,26 @@ export { syncProfile } from "./formSubmission";
 export { default as getSchoolFromEmail } from "./getSchoolFromEmail";
 
 // * hackathonConstants.ts
-export { default as constants } from "./hackathonConstants";
+export {
+  getHackathonConstants,
+  createHackathonConstant,
+  updateHackathonConstant,
+  deleteHackathonConstant,
+} from "./hackathonConstants";
 
 // * jsonToFormData.ts
 export { default as jsonToFormData } from "./jsonToFormData";
+
+// * judging.ts
+export {
+  getJudgeList,
+  getFullJudgeList,
+  updateJudging,
+  deleteJudging,
+  getListOfJudges,
+  getListOfTeamsToJudge,
+  updateJudgingEntry,
+} from "./judging";
 
 // * layouts.ts
 export { useIsMobile } from "./layouts";

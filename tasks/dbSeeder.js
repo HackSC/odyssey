@@ -19,13 +19,12 @@ const seedDatabase = async () => {
     await Promise.all[
       Object.values(db).map(function (model) {
         if (model.destroy) {
-          console.log("Destroying", model);
           return model.destroy({ truncate: { cascade: true } });
         }
       })
     ];
   } catch (e) {
-    console.log("Failed to destroy all models: ", e);
+    console.error("Failed to destroy all models: ", e);
   }
 
   // Generate 5 Test Persons & Hacker Profiles
@@ -34,28 +33,25 @@ const seedDatabase = async () => {
 
     prizeFactory();
 
-    console.log("hpFactory");
     const hp = await hpFactory({
       userId: i.toString(),
       status: "checkedIn",
-    }).catch(console.log);
+    }).catch(console.info);
 
-    console.log("house factory");
     const house = await houseFactory();
 
     const projTeam = await projectTeamFactory({ name: "TestProjectTeam" });
-    console.log("project team: ", projTeam);
 
     const person =
       hp !== undefined
         ? await personFactory({
             identityId: hp.userId,
             ProjectTeamId: projTeam.id,
-          }).catch(console.log)
+          }).catch(console.info)
         : await personFactory({
             identityId: i.toString(),
             ProjectTeamId: projTeam.id,
-          }).catch(console.log);
+          }).catch(console.info);
     await person.setHome(house);
     return person;
   });
