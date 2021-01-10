@@ -23,6 +23,15 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false,
         type: DataTypes.DATE,
       },
+      type: {
+        allowNull: false,
+        type: DataTypes.ENUM,
+        values: [
+          "date",
+          "boolean",
+          "string",
+        ],
+      },
     },
     {
       timestamps: false,
