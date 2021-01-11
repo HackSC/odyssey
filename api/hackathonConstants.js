@@ -25,6 +25,7 @@ router.post("/update", utils.requireAdmin, async (req, res) => {
       name: req.body.name,
       boolean: req.body.boolean,
       date: req.body.date,
+      type: req.body.type,
     },
     {
       where: {
@@ -41,6 +42,7 @@ router.post("/new", utils.requireAdmin, async (req, res) => {
     name: req.body.name,
     boolean: req.body.boolean,
     date: req.body.date,
+    type: req.body.type,
   });
 
   return res.json({ result });
