@@ -380,7 +380,9 @@ const BatchEnter = styled.textarea`
   margin-bottom: 20px;
   margin-top: 20px;
   font-family: Arial;
-  min-width: 85vw;
+  min-width: 50vw;
+  max-width: 70vw;
+  display: block;
   height: 100px;
 `;
 

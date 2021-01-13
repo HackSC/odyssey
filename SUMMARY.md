@@ -7,24 +7,23 @@
   - [Some other child page](docs/docs-2.md)
 - [Team](docs/README.md)
   - [Some child page](docs/page2-1.md)
-  - [Some other child page](docs/page2-2.md)
 
 ## Frontend
 
-- [Specifications](another-page.md)
+- [Frontend](docs/frontend/README.md)
 
-## API/Backend
+## Backend
 
-- [Specifications](another-page.md)
+- [API/Backend](docs/backend/Backend/README.md)
 
 ## Testing
 
-- [Specifications](another-page.md)
+- [Testing](docs/testing/README.md)
 
 ## Infrastructure
 
-- [Specifications](another-page.md)
+- [Infrastructure](docs/infrastructure/README.md)
 
 ## Future Directions
 
-- [Specifications](another-page.md)
+- [Future Directions](docs/future/README.md)

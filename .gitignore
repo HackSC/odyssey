@@ -57,6 +57,12 @@ typings/
 # dotenv environment variables file
 .env
 .env.prod
+prod.env
+aws.env
+aws_secrets.env
+
+# * Ignore package lock in favor of yarn lock
+package-lock.json
 
 # next.js build output
 .next
