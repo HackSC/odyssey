@@ -115,12 +115,16 @@ Implemented E2E tests:
   - Tests to visit each admin page on the /admin dashboard for an admin profile
 - `hacker_sanity.spec.js`
   - Tests to visit each pach in the navbar for a hacker profile
+- `volunteer_sanity.spec.js`
+  - Tests to visit each volunteer page on the /volunteer dashboard for an volunteer profile
+- `sponsor_sanity.spec.js`
+  - Tests to visit each sponsor page on the /sponsor dashboard for an sponsor profile
+- `judge_sanity.spec.js`
+  - Tests to visit each judge page on the /judge dashboard for an judge profile
 
 Need to implement:
 
-- `volunteer_sanity.spec.js`
-- `sponsor_sanity.spec.js`
-- `judge_sanity.spec.js`
+- `superadmin_sanity.spec.js`
 
 ## How To: Create Unit Tests with Jest
 

@@ -53,8 +53,15 @@ async function getTeam(req): Promise<Team> {
   }
 }
 
-const Teams = ({ profile, team, status, teammateSuggestions, teamSuggestions, pendingRequests, pendingInvites }) => {
-
+const Teams = ({
+  profile,
+  team,
+  status,
+  teammateSuggestions,
+  teamSuggestions,
+  pendingRequests,
+  pendingInvites,
+}) => {
   const [visible, setVisible] = useState(profile?.lookingForTeam);
   const handleChangeVisibility = () => {
     setVisible(!visible);
@@ -63,11 +70,11 @@ const Teams = ({ profile, team, status, teammateSuggestions, teamSuggestions, pe
 
   const handleJoinProjectTeam = useCallback(async (code: string) => {
     const urlRoute = "/api/team/join/" + code;
-    
+
     const res = await fetch(urlRoute, {
-      method: "POST", 
+      method: "POST",
       body: "",
-      credentials: "include"
+      credentials: "include",
     });
 
     if (res.status === 200) {
@@ -156,10 +163,20 @@ const Teams = ({ profile, team, status, teammateSuggestions, teamSuggestions, pe
           ) : null}
 
           {team ? (
-            <Team team={team} profile={profile} teammateSuggestions={teammateSuggestions} pendingInvites={pendingInvites} pendingRequests={pendingRequests} />
+            <Team
+              team={team}
+              profile={profile}
+              teammateSuggestions={teammateSuggestions}
+              pendingInvites={pendingInvites}
+              pendingRequests={pendingRequests}
+            />
           ) : (
             <>
-              <NoTeamFlex direction="row" tabletVertical justify="space-between">
+              <NoTeamFlex
+                direction="row"
+                tabletVertical
+                justify="space-between"
+              >
                 <Column flexBasis={48}>
                   <JoinTeamForm />
                 </Column>
@@ -168,7 +185,11 @@ const Teams = ({ profile, team, status, teammateSuggestions, teamSuggestions, pe
                   <CreateTeamForm />
                 </Column>
               </NoTeamFlex>
-              <NoTeamFlex direction="row" tabletVertical justify="space-between">
+              <NoTeamFlex
+                direction="row"
+                tabletVertical
+                justify="space-between"
+              >
                 <Column flexBasis={48}>
                   <Title>Edit Profile</Title>
                   <ChangeProfileOption>
@@ -180,8 +201,8 @@ const Teams = ({ profile, team, status, teammateSuggestions, teamSuggestions, pe
                     />
                     <ShareProfileText>
                       Share my profile with teams and other hackers for team
-                      matching! My name, major, year, school, and top skills will
-                      be shown to other hackers.
+                      matching! My name, major, year, school, and top skills
+                      will be shown to other hackers.
                     </ShareProfileText>
                   </ChangeProfileOption>
                 </Column>
@@ -195,31 +216,42 @@ const Teams = ({ profile, team, status, teammateSuggestions, teamSuggestions, pe
                   />
                 </Column>
               </NoTeamFlex>
-              {pendingInvites?.teams.length ? 
-                (<TeamSuggestions
+              {pendingInvites?.teams.length ? (
+                <TeamSuggestions
                   type={"You've been invited!"}
                   handleOnClick={handleJoinProjectTeam}
                   teamSuggestions={pendingInvites}
                   buttonLabel={"Join"}
-                />) : (<div/>)
-              }
-              {pendingRequests?.teams.length ? 
-                (<TeamSuggestions
+                />
+              ) : (
+                <div />
+              )}
+              {pendingRequests?.teams.length ? (
+                <TeamSuggestions
                   type={"Your Pending Requests"}
                   handleOnClick={null}
                   teamSuggestions={pendingRequests}
                   buttonLabel={""}
-                />) : (<div/>)
-              }
-              {teamSuggestions?.teams.length ? 
-                (<TeamSuggestions
+                />
+              ) : (
+                <div />
+              )}
+              {teamSuggestions?.teams.length ? (
+                <TeamSuggestions
                   type={"Team Suggestions"}
                   handleOnClick={handleRequestProjectTeam}
                   teamSuggestions={teamSuggestions}
                   buttonLabel={"Request to Join"}
-                />) : (<div/>)
-              }
-              <TeammateSuggestions title={"Teammate Suggestions"} hackers={teammateSuggestions} owner="hacker" teamId={null} />
+                />
+              ) : (
+                <div />
+              )}
+              <TeammateSuggestions
+                title={"Teammate Suggestions"}
+                hackers={teammateSuggestions}
+                owner="hacker"
+                teamId={null}
+              />
             </>
           )}
         </Container>
@@ -255,8 +287,14 @@ Teams.getInitialProps = async ({ req, query }) => {
     status = "created";
   }
 
-  const teammateSuggestions = await getTeammateSuggestions(req, team ? "team" : "hacker");
-  const pendingRequests = await getPendingRequests(req, team ? "team" : "hacker");
+  const teammateSuggestions = await getTeammateSuggestions(
+    req,
+    team ? "team" : "hacker"
+  );
+  const pendingRequests = await getPendingRequests(
+    req,
+    team ? "team" : "hacker"
+  );
   const pendingInvites = await getPendingInvites(req, team ? "team" : "hacker");
   const teamSuggestions = await getTeamSuggestions(req);
 
@@ -306,6 +344,5 @@ const ShareProfileText = styled.div`
   margin-bottom: 16px;
   line-height: 22px;
 `;
-
 
 export default Teams;
