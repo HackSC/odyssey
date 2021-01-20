@@ -124,10 +124,9 @@ export async function getHackerProfileForReview(req) {
 
   const profilePayload = await response.json();
 
-  // Randomly select an eligible review
   const { eligibleReviews } = profilePayload;
 
-  return eligibleReviews[Math.floor(Math.random() * eligibleReviews.length)];
+  return eligibleReviews.length > 0 ? eligibleReviews[0] : {};
 }
 
 export async function submitReview(review) {
@@ -146,8 +145,8 @@ export async function submitReview(review) {
 
 export async function getHackerStatusStats(req) {
   const fetchUrl = process.env.URL_BASE
-  ? process.env.URL_BASE + "api/admin/hackerStatusStats"
-  : "api/admin/hackerStatusStats";
+    ? process.env.URL_BASE + "api/admin/hackerStatusStats"
+    : "api/admin/hackerStatusStats";
   const response = await fetch(
     fetchUrl,
     req
@@ -164,8 +163,8 @@ export async function getHackerStatusStats(req) {
 
 export async function batchCheckIn(input) {
   const fetchUrl = process.env.URL_BASE
-  ? process.env.URL_BASE + "api/admin/batchCheckIn"
-  : "api/admin/batchCheckIn";
+    ? process.env.URL_BASE + "api/admin/batchCheckIn"
+    : "api/admin/batchCheckIn";
   const response = await fetch(fetchUrl, {
     method: "POST",
     headers: {

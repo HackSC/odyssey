@@ -288,6 +288,13 @@ router.get("/eligibleProfiles", async (req, res) => {
       });
       return reviewsByCurrUser.length === 0;
     });
+
+    filteredProfiles.sort((profile_a, profile_b) => {
+      return profile_a.HackerReviews.length > profile_b.HackerReviews.length
+        ? -1
+        : 1;
+    });
+
     return res.json({
       eligibleReviews: filteredProfiles,
     });
