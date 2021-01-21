@@ -152,7 +152,12 @@ const mailQuery = ({ profile }) => {
   return (
     <>
       <Head title="HackSC Odyssey - Filter Signups" />
-      <Navbar loggedIn admin activePage="/mailQuery" />
+      <Navbar
+        loggedIn
+        admin
+        superadmin={profile.role === "superadmin"}
+        activePage="/mailQuery"
+      />
       <Background padding="2rem">
         <Container>
           <Flex direction="column">
@@ -228,7 +233,7 @@ mailQuery.getInitialProps = async (ctx) => {
   const profile = await getProfile(req);
 
   // Null profile means user is not logged in, and this is only relevant for admins
-  if (!profile || !(profile.role == "admin")) {
+  if (!profile || !(profile.role == "admin" || profile.role == "superadmin")) {
     handleLoginRedirect(req);
   }
 

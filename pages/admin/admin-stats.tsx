@@ -15,7 +15,12 @@ const Metabase = ({ profile, metabaseIframeUrl }) => {
   return (
     <>
       <Head title="HackSC Odyssey - Application" />
-      <Navbar loggedIn admin activePage="admin-stats" />
+      <Navbar
+        loggedIn
+        admin
+        superadmin={profile.role === "superadmin"}
+        activePage="admin-stats"
+      />
       <Background padding={"2rem"}>
         <Container>
           <PaddedFlex direction="column">
@@ -51,7 +56,14 @@ export async function getServerSideProps(ctx) {
   const profile = await getProfile(req);
 
   // * Null profile means user is not logged in, and this is only relevant for admins and sponsors
-  if (!profile || !(profile.role === "admin" || profile.role === "sponsor")) {
+  if (
+    !profile ||
+    !(
+      profile.role === "admin" ||
+      profile.role === "sponsor" ||
+      profile.role == "superadmin"
+    )
+  ) {
     handleLoginRedirect(req);
   }
   if (profile) {

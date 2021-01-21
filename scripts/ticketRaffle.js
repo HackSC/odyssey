@@ -90,8 +90,6 @@ async function getTickets(profiles) {
       for (let i = 0; i < ticketCount; i++) {
         tickets.push(profile.userId);
       }
-
-      console.log({ userId: profile.userId, count: ticketCount });
     })
   );
 
@@ -114,13 +112,6 @@ async function getWinner() {
       where: {
         userId: tickets[i],
       },
-    });
-
-    console.log({
-      firstname: winner.firstName,
-      lastName: winner.lastName,
-      email: winner.email,
-      userId: winner.userId,
     });
   }
 }

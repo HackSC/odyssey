@@ -140,7 +140,12 @@ const ScheduleManager = ({ profile, currentEvents }) => {
   return (
     <>
       <Head title="HackSC Odyssey - Results" />
-      <Navbar loggedIn admin activePage="/scheduleManager" />
+      <Navbar
+        loggedIn
+        admin
+        superadmin={profile.role === "superadmin"}
+        activePage="/scheduleManager"
+      />
       <Background padding="2rem">
         <Container>
           <h1 style={{ margin: "1rem" }}>Manage Event Schedule</h1>
@@ -241,7 +246,7 @@ ScheduleManager.getInitialProps = async ({ req }) => {
   const currentEvents = await getCurrentEvents(req);
 
   // Null profile means user is not logged in
-  if (!profile || profile.role !== "admin") {
+  if (!profile || !(profile.role == "admin" || profile.role == "superadmin")) {
     handleLoginRedirect(req);
   }
 

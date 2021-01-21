@@ -23,7 +23,7 @@ Cypress.Commands.add("login", (overrides = {}) => {
   cy.request(options);
 });
 
-Cypress.Commands.add("goToVolunteer", (overrides = {}) => {
+Cypress.Commands.add("goToJudge", (overrides = {}) => {
   cy.login()
     .then((resp) => {
       return resp.body;
@@ -46,16 +46,13 @@ Cypress.Commands.add("goToVolunteer", (overrides = {}) => {
         Cypress.env("JUDGE_TEST_PASSWORD").replace("{", "{{}")
       );
       cy.get("[name=action]").click();
-      cy.location("pathname", { timeout: 10000 }).should(
-        "include",
-        "/volunteer"
-      );
+      cy.location("pathname", { timeout: 10000 }).should("include", "/judge");
     });
 });
 
-describe("goVolunteer", () => {
-  it("should land on the volunteer main page", () => {
-    cy.goToVolunteer();
+describe("goJudge", () => {
+  it("should land on the judge main page", () => {
+    cy.goToJudge();
   });
 });
 
@@ -165,7 +162,7 @@ describe("goCheckin", () => {
 
 // * Judging Manager Page
 
-Cypress.Commands.add("goToJudgingManager", (overrides = {}) => {
+Cypress.Commands.add("goToPassJudgment", (overrides = {}) => {
   cy.login()
     .then((resp) => {
       return resp.body;
@@ -188,17 +185,17 @@ Cypress.Commands.add("goToJudgingManager", (overrides = {}) => {
         Cypress.env("JUDGE_TEST_PASSWORD").replace("{", "{{}")
       );
       cy.get("[name=action]").click();
-      cy.get("#judging-manager-page").click();
+      cy.get("#pass-judgment-page").click();
       cy.location("pathname", { timeout: 10000 }).should(
         "include",
-        "/judgingManager"
+        "/passJudgment"
       );
     });
 });
 
-describe("goJudgingManager", () => {
-  it("should navigate to judging manager page", () => {
-    cy.goToJudgingManager();
+describe("goPassJudgment", () => {
+  it("should navigate to pass judgment page", () => {
+    cy.goToPassJudgment();
   });
   // * Add in function to be able to navigate back to main /admin page
 });
