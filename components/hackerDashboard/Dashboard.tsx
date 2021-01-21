@@ -13,16 +13,20 @@ import Updates from "./widgets/updates";
 
 type Props = {
   profile: Profile;
+  announcements: Announcement[];
 };
 
-const Dashboard = ({ profile }: Props) => {
+const Dashboard = ({ profile, announcements }: Props) => {
   return (
     <Container>
       <Navbar />
       <Header />
       <WidgetFrame widget="one" component={<h2>Your team</h2>} />
       <WidgetFrame widget="two" component={<Battlepass />} />
-      <WidgetFrame widget="three" component={<Updates />} />
+      <WidgetFrame
+        widget="three"
+        component={<Updates profile={profile} announcements={announcements} />}
+      />
       <Sidebar view="hacker" />
       <Footer />
     </Container>

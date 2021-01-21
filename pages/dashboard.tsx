@@ -11,13 +11,13 @@ import {
   handleDashboardRedirect,
 } from "../lib/authenticate";
 
-import {
-  getHackathonConstants
-} from "../lib";
+import { getHackathonConstants } from "../lib";
+
+import { getAnnouncements } from "../lib/getAnnouncements";
 
 import { generatePosts } from "../lib/referrerCode";
 
-const Dashboard = ({ profile, houses, socialPosts }) => {
+const Dashboard = ({ profile, houses, socialPosts, announcements }) => {
   const [view, setView] = useState("hacker");
 
   const switchRole = () => {
@@ -33,7 +33,7 @@ const Dashboard = ({ profile, houses, socialPosts }) => {
     if (view === "admin") {
       return <AdminDashboard profile={profile} />;
     } else {
-      return <Dash profile={profile} />;
+      return <Dash profile={profile} announcements={announcements} />;
     }
   };
 
@@ -53,6 +53,7 @@ const Dashboard = ({ profile, houses, socialPosts }) => {
 export async function getServerSideProps({ req }) {
   const profile = await getProfile(req);
   //const houses = await getHouses(req);
+  const announcements = await getAnnouncements(req);
   const houses = [];
 
   // Null profile means user is not logged in
@@ -68,7 +69,10 @@ export async function getServerSideProps({ req }) {
 
   const hackathonConstants = await getHackathonConstants();
 
-  if (!hackathonConstants.find((constant) => constant.name === "showDash")?.boolean) {
+  if (
+    !hackathonConstants.find((constant) => constant.name === "showDash")
+      ?.boolean
+  ) {
     handleDashboardRedirect(req);
   }
 
@@ -82,6 +86,7 @@ export async function getServerSideProps({ req }) {
       houses,
       profile,
       socialPosts,
+      announcements,
     },
   };
 }
