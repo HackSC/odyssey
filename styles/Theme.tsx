@@ -4,7 +4,7 @@ const Theme = {
     red: "#FF414D",
     peach: "#FF8379",
     yellow: "#FEDA22",
-    blue: "#86DCEA",
+    blue: "#4A96F0",
     black: "#1C1C1C",
     gray50: "#757575",
     gray25: "#B2B2B2",
@@ -19,7 +19,7 @@ const Theme = {
     subheader: "18px",
     regular: "16px",
   },
-  fontFamily: "AktivGrotesk, sans-serif",
+  fontFamily: "Work Sans, sans-serif",
   media: {
     desktop: (style) => `
       @media screen and (max-width: 960px) {

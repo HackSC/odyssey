@@ -10,17 +10,19 @@ import WidgetFrame from "./HackerWidgetFrame";
 // Widgets
 import Battlepass from "./widgets/battlepass";
 import Updates from "./widgets/updates";
+import Team from "./widgets/team";
 
 type Props = {
   profile: Profile;
+  team: Team;
 };
 
-const Dashboard = ({ profile }: Props) => {
+const Dashboard = ({ profile, team }: Props) => {
   return (
     <Container>
       <Navbar />
       <Header />
-      <WidgetFrame widget="one" component={<h2>Your team</h2>} />
+      <WidgetFrame widget="one" component={<Team team={team} />} />
       <WidgetFrame widget="two" component={<Battlepass />} />
       <WidgetFrame widget="three" component={<Updates />} />
       <Sidebar view="hacker" />

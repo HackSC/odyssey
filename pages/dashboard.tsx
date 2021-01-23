@@ -1,6 +1,7 @@
 import { useState } from "react";
 import Dash from "../components/hackerDashboard/Dashboard";
 import AdminDashboard from "../components/hackerDashboard/AdminDashboard";
+import getTeam from "../lib/api-sdk/getTeam";
 
 import {
   handleLoginRedirect,
@@ -11,13 +12,11 @@ import {
   handleDashboardRedirect,
 } from "../lib/authenticate";
 
-import {
-  getHackathonConstants
-} from "../lib";
+import { getHackathonConstants } from "../lib";
 
 import { generatePosts } from "../lib/referrerCode";
 
-const Dashboard = ({ profile, houses, socialPosts }) => {
+const Dashboard = ({ profile, team, houses, socialPosts }) => {
   const [view, setView] = useState("hacker");
 
   const switchRole = () => {
@@ -33,7 +32,7 @@ const Dashboard = ({ profile, houses, socialPosts }) => {
     if (view === "admin") {
       return <AdminDashboard profile={profile} />;
     } else {
-      return <Dash profile={profile} />;
+      return <Dash team={team} profile={profile} />;
     }
   };
 
@@ -52,6 +51,7 @@ const Dashboard = ({ profile, houses, socialPosts }) => {
 
 export async function getServerSideProps({ req }) {
   const profile = await getProfile(req);
+  const team = await getTeam(req);
   //const houses = await getHouses(req);
   const houses = [];
 
@@ -68,7 +68,10 @@ export async function getServerSideProps({ req }) {
 
   const hackathonConstants = await getHackathonConstants();
 
-  if (!hackathonConstants.find((constant) => constant.name === "showDash")?.boolean) {
+  if (
+    !hackathonConstants.find((constant) => constant.name === "showDash")
+      ?.boolean
+  ) {
     handleDashboardRedirect(req);
   }
 
@@ -82,6 +85,7 @@ export async function getServerSideProps({ req }) {
       houses,
       profile,
       socialPosts,
+      team,
     },
   };
 }
