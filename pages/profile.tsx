@@ -1,4 +1,4 @@
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect } from "react";
 import styled from "styled-components";
 
 import { handleLoginRedirect, getProfile } from "../lib/authenticate";
@@ -6,7 +6,43 @@ import { handleLoginRedirect, getProfile } from "../lib/authenticate";
 import { Form } from "../styles";
 import Select from "../components/Select";
 
-const Profile = ({ profile }) => {
+import SuggestedHackers from "../components/suggestedHackers";
+
+import {
+  getProfileSuggestions,
+} from "../lib/matching";
+
+const SuggestionSlide = ({ color, type }) => {
+  const [suggestions, setSuggestions] = useState(null);
+
+  useEffect(() => {
+    async function getSuggestions() {
+      const profileSuggestions = getProfileSuggestions(type);
+      return profileSuggestions;
+    }
+    getSuggestions().then((result) => {
+      setSuggestions(result);
+      console.log(suggestions);
+    });
+  }, []);
+
+  return (
+    <Instructions>
+      <Header2>
+        <Heading style={{color: color}} >
+          3 <Name>View your matches</Name>
+        </Heading>
+        <Subheading>
+          view your potential matches and connect with any of your matches
+        </Subheading>
+        <SuggestedHackers hackers={suggestions} type={color} />
+      </Header2>
+      <NextButton style={{backgroundColor: color}}>done</NextButton>
+    </Instructions>
+  );
+}
+
+const Profile = ({ profile, req }) => {
   const [step, setStep] = useState(1);
   const [firstName, setFirstName] = useState(profile.firstName);
   const [lastName, setLastName] = useState(profile.lastName);
@@ -18,6 +54,9 @@ const Profile = ({ profile }) => {
   const [liUrl, setLiUrl] = useState(profile.portfolioUrl);
   const [bio, setBio] = useState("");
   // const [bio, setBio] = useState(profile.bio);
+
+  const [type, setType] = useState("");
+  const [color, setColor] = useState("");
 
   const next = () => {
     if (step < 3) {
@@ -234,7 +273,7 @@ const Profile = ({ profile }) => {
               <MatchDescription>
                 Some description about finding love at a hackathon.
               </MatchDescription>
-              <RomanticButton>find me love</RomanticButton>
+              <RomanticButton onClick={() => {setColor("#FF8379"); setType("romantic"); next();}}>find me love</RomanticButton>
             </MatchDetails>
           </MatchChoice>
           <MatchChoice>
@@ -243,7 +282,7 @@ const Profile = ({ profile }) => {
               <MatchDescription>
                 Some description about finding friends.
               </MatchDescription>
-              <FriendButton>find me a friend</FriendButton>
+              <FriendButton onClick={() => {setColor("#94c5ff"); setType("friend"); next();}}>find me a friend</FriendButton>
             </MatchDetails>
           </MatchChoice>
           <MatchChoice>
@@ -252,28 +291,18 @@ const Profile = ({ profile }) => {
               <MatchDescription>
                 Some description about finding industry people.
               </MatchDescription>
-              <IndustryConnectionButton>
+              <IndustryConnectionButton onClick={() => {setColor("rgba(77, 180, 100, 0.56)"); setType("industry"); next();}}>
                 find me a cool connection
               </IndustryConnectionButton>
             </MatchDetails>
           </MatchChoice>
-          <NextButton onClick={next}>next</NextButton>
+          {/* <NextButton onClick={next}>next</NextButton> */}
         </Instructions>
       ) : (
         <div />
       )}
       {step === 3 ? (
-        <Instructions>
-          <Header2>
-            <Heading>
-              3 <Name>View your matches</Name>
-            </Heading>
-            <Subheading>
-              view your potential matches and connect with any of your matches
-            </Subheading>
-          </Header2>
-          <NextButton onClick={next}>done</NextButton>
-        </Instructions>
+        <SuggestionSlide type={type} color={color} />
       ) : (
         <div />
       )}
