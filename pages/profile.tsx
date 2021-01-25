@@ -6,7 +6,7 @@ import { handleLoginRedirect, getProfile } from "../lib/authenticate";
 import { Form } from "../styles";
 import Select from "../components/Select";
 
-import SuggestedHackers from "../components/suggestedHackers";
+import SuggestedHackers from "../components/SuggestedHackers";
 
 import {
   getProfileSuggestions,
@@ -22,7 +22,6 @@ const SuggestionSlide = ({ color, type }) => {
     }
     getSuggestions().then((result) => {
       setSuggestions(result);
-      console.log(suggestions);
     });
   }, []);
 
@@ -43,17 +42,15 @@ const SuggestionSlide = ({ color, type }) => {
 }
 
 const Profile = ({ profile, req }) => {
-  const [step, setStep] = useState(1);
+  const [step, setStep] = useState(0);
   const [firstName, setFirstName] = useState(profile.firstName);
   const [lastName, setLastName] = useState(profile.lastName);
   const [school, setSchool] = useState(profile.school);
   const [major, setMajor] = useState(profile.major);
   const [year, setYear] = useState(profile.year);
-  const [igUrl, setIgUrl] = useState("");
-  // const [igUrl, setIgUrl] = useState(profile.instagram);
-  const [liUrl, setLiUrl] = useState(profile.portfolioUrl);
-  const [bio, setBio] = useState("");
-  // const [bio, setBio] = useState(profile.bio);
+  const [igUrl, setIgUrl] = useState(profile.instagram ? profile.instagram : "");
+  const [liUrl, setLiUrl] = useState(profile.portfolioUrl ? profile.portfolioUrl : "");
+  const [bio, setBio] = useState(profile.bio ? profile.bio : "");
 
   const [type, setType] = useState("");
   const [color, setColor] = useState("");
@@ -92,8 +89,8 @@ const Profile = ({ profile, req }) => {
   ];
 
   const updateProfile = useCallback(
-    async (fName: string, lName: string, s: string, m: string, y: any) => {
-      const response = await fetch("/api/profile", {
+    async (fName: string, lName: string, s: string, m: string, y: any, ig: string, li: string, bio: string) => {
+      const response = await fetch("/api/profile/updateProfile", {
         method: "PUT",
         headers: {
           "content-type": "application/json",
@@ -104,10 +101,11 @@ const Profile = ({ profile, req }) => {
           school: s,
           major: m,
           year: y,
+          instagram: ig,
+          portfolioUrl: li,
+          bio: bio,
         }),
       });
-      next();
-
       return response.status === 200;
     },
     []
@@ -247,7 +245,10 @@ const Profile = ({ profile, req }) => {
           </ProfileCard>
           <NextButton
             onClick={() =>
-              updateProfile(firstName, lastName, school, major, year)
+              {
+                next();
+                updateProfile(firstName, lastName, school, major, year, igUrl, liUrl, bio);
+              }
             }
           >
             next

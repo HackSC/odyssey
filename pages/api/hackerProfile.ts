@@ -382,4 +382,23 @@ router.put("/portfolio", async (req, res) => {
 
   return res.send();
 });
+
+router.put("/updateProfile", async (req, res) => {
+
+  const formInput = req.body;
+
+  const updatedProfileFields = {
+    ...formInput,
+  };
+
+  // Update, then re-retrieve the updated hacker profile
+  await models.HackerProfile.update(updatedProfileFields, {
+    where: {
+      userId: req.user.id,
+    },
+  });
+
+  return res.send();
+});
+
 export { router };
