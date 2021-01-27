@@ -414,4 +414,92 @@ router.post("/inviteToTeam/", async (req, res) => {
   });
 });
 
+
+// GET /api/matching/profile
+// - Get suggestions
+// - Route for the hacker
+router.get("/profile/:type", async (req, res) => {
+
+  const curruser = await models.HackerProfile.findOne({
+    where: {
+      userId: req.user.id,
+    },
+  });
+
+  if (req.params.type === "romantic") {
+    const hackerProfiles = await models.HackerProfile.findAll({
+      where: {
+        year: curruser.year,
+        over18: true,
+        status: {
+          [sequelize.Op.in]: [
+            "accepted",
+            "confirmed",
+            "checkedIn",
+          ],
+        },
+        role: "hacker",
+      },
+      required: true,
+    });
+
+    if (hackerProfiles) {
+      return res.json({ hackerProfiles });
+    } else {
+      return res.json({
+        message: "No romantic suggestions",
+      });
+    }
+  }
+
+  if (req.params.type === "industry") {
+    const hackerProfiles = await models.HackerProfile.findAll({
+      where: {
+        major: curruser.major,
+        status: {
+          [sequelize.Op.in]: [
+            "accepted",
+            "confirmed",
+            "checkedIn",
+          ],
+        },
+      },
+      required: true,
+    });
+
+    if (hackerProfiles) {
+      return res.json({ hackerProfiles });
+    } else {
+      return res.json({
+        message: "No industry suggestions",
+      });
+    }
+  }
+
+  if (req.params.type === "friend") {
+    const hackerProfiles = await models.HackerProfile.findAll({
+      where: {
+        year: curruser.year,
+        major: curruser.major,
+        status: {
+          [sequelize.Op.in]: [
+            "accepted",
+            "confirmed",
+            "checkedIn",
+          ],
+        },
+      },
+      required: true,
+    });
+
+    if (hackerProfiles) {
+      return res.json({ hackerProfiles });
+    } else {
+      return res.json({
+        message: "No friend suggestions",
+      });
+    }
+  }
+});
+
 module.exports = router;

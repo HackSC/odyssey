@@ -5,19 +5,19 @@ const Uptime = () => {
     <>
       <h3>Website Status</h3>
       <UptimeWrapper>
-        <UptimeItem direction="row">
+        <UptimeItem>
           <UptimeSubtitle>hacksc.com </UptimeSubtitle>
           <a href="https://status.hacksc.com">
             <img src="https://betteruptime.com/status-badges/v1/monitor/50yh.svg"></img>
           </a>
         </UptimeItem>
-        <UptimeItem direction="row">
+        <UptimeItem>
           <UptimeSubtitle>staging.hacksc.com </UptimeSubtitle>
           <a href="https://status.hacksc.com">
             <img src="https://betteruptime.com/status-badges/v1/monitor/518z.svg"></img>
           </a>
         </UptimeItem>
-        <UptimeItem direction="row">
+        <UptimeItem>
           <UptimeSubtitle>dashboard.hacksc.com </UptimeSubtitle>
           <a href="https://status.hacksc.com">
             <img src="https://betteruptime.com/status-badges/v1/monitor/50yp.svg"></img>
