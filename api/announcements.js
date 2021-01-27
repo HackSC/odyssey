@@ -8,8 +8,18 @@ const AWS = require("aws-sdk");
 
 router.use(utils.authMiddleware);
 
-router.get("/", async (req, res) => {
-  const announcements = await models.Announcement.findAll({});
+router.get("/:role", async (req, res) => {
+  const role = req.params.role;
+  let announcements = null;
+  if (role != null && role != "") {
+    announcements = await models.Announcement.findAll({
+      where: {
+        target: role,
+      },
+    });
+  } else {
+    announcements = await models.Announcement.findAll({});
+  }
   return res.json({ announcements });
 });
 

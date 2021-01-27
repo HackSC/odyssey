@@ -4,15 +4,15 @@ import styled from "styled-components";
 import Logo from "../../../assets/hackscFox.png";
 
 const Updates = ({ profile, announcements }) => {
-  var items = [];
+  const items = [];
   if (announcements != null) {
     for (let i = 0; i < announcements.length; i++) {
-      var target = announcements[i].target;
+      const target = announcements[i].target;
       if (target != profile.role) {
         continue;
       }
-      var text = announcements[i].text;
-      var from = announcements[i].from;
+      const text = announcements[i].text;
+      const from = announcements[i].from;
       items.push(
         <UpdateEntry img={Logo} from={from} text={text} target={target} />
       );

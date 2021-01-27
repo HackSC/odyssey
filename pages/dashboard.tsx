@@ -53,7 +53,7 @@ const Dashboard = ({ profile, houses, socialPosts, announcements }) => {
 export async function getServerSideProps({ req }) {
   const profile = await getProfile(req);
   //const houses = await getHouses(req);
-  const announcements = await getAnnouncements(req);
+  const announcements = await getAnnouncements(req, profile);
   const houses = [];
 
   // Null profile means user is not logged in
