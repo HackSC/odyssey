@@ -5,6 +5,8 @@ import { handleLoginRedirect, getProfile } from "../lib/authenticate";
 
 import { Form } from "../styles";
 import Select from "../components/Select";
+import Router from "next/router";
+import ChevronGraphic from "../assets/chevron-left.png";
 
 import SuggestedHackers from "../components/SuggestedHackers";
 
@@ -12,7 +14,7 @@ import {
   getProfileSuggestions,
 } from "../lib/matching";
 
-const SuggestionSlide = ({ color, type }) => {
+const SuggestionSlide = ({ color, type, prev }) => {
   const [suggestions, setSuggestions] = useState(null);
 
   useEffect(() => {
@@ -27,8 +29,9 @@ const SuggestionSlide = ({ color, type }) => {
 
   return (
     <Instructions>
+      <Back onClick={prev}><img src={ChevronGraphic} style={{width: "20px"}} /></Back> 
       <Header2>
-        <Heading style={{color: color}} >
+        <Heading>
           3 <Name>View your matches</Name>
         </Heading>
         <Subheading>
@@ -36,7 +39,7 @@ const SuggestionSlide = ({ color, type }) => {
         </Subheading>
         <SuggestedHackers hackers={suggestions} type={color} />
       </Header2>
-      <NextButton style={{backgroundColor: color}}>done</NextButton>
+      <NextButton onClick={() => Router.push("/dashboard")}>done</NextButton>
     </Instructions>
   );
 }
@@ -58,6 +61,12 @@ const Profile = ({ profile, req }) => {
   const next = () => {
     if (step < 3) {
       setStep(step + 1);
+    }
+  };
+
+  const prev = () => {
+    if (step > 0) {
+      setStep(step - 1);
     }
   };
 
@@ -112,7 +121,7 @@ const Profile = ({ profile, req }) => {
   );
 
   return (
-    <>
+    <Container>
       {step === 0 ? (
         <Instructions>
           <Header>
@@ -137,6 +146,7 @@ const Profile = ({ profile, req }) => {
       )}
       {step === 1 ? (
         <Instructions>
+          <Back onClick={prev}><img src={ChevronGraphic} style={{width: "20px"}} /></Back> 
           <Header2>
             <Heading>
               1 <Name> Complete your profile</Name>
@@ -259,6 +269,7 @@ const Profile = ({ profile, req }) => {
       )}
       {step === 2 ? (
         <Instructions>
+          <Back onClick={prev}><img src={ChevronGraphic} style={{width: "20px"}} /></Back> 
           <Header2>
             <Heading>
               2 <Name>Choose your match</Name>
@@ -269,45 +280,44 @@ const Profile = ({ profile, req }) => {
             </Subheading>
           </Header2>
           <MatchChoice>
-            <Romantic>romantic</Romantic>
+            <MatchTitle style={{color: "#FF8379"}}>romantic</MatchTitle>
             <MatchDetails>
               <MatchDescription>
                 Some description about finding love at a hackathon.
               </MatchDescription>
-              <RomanticButton onClick={() => {setColor("#FF8379"); setType("romantic"); next();}}>find me love</RomanticButton>
+              <MatchButton style={{background: "#FF8379"}} onClick={() => {setColor("#FF8379"); setType("romantic"); next();}}>find me love</MatchButton>
             </MatchDetails>
           </MatchChoice>
           <MatchChoice>
-            <Friend>friend</Friend>
+            <MatchTitle style={{color: "#94c5ff"}}>friend</MatchTitle>
             <MatchDetails>
               <MatchDescription>
                 Some description about finding friends.
               </MatchDescription>
-              <FriendButton onClick={() => {setColor("#94c5ff"); setType("friend"); next();}}>find me a friend</FriendButton>
+              <MatchButton style={{background: "#94c5ff"}} onClick={() => {setColor("#94c5ff"); setType("friend"); next();}}>find me a friend</MatchButton>
             </MatchDetails>
           </MatchChoice>
           <MatchChoice>
-            <IndustryConnection>industry connection</IndustryConnection>
+            <MatchTitle style={{color: "rgba(77, 180, 100, 0.56)"}}>industry connection</MatchTitle>
             <MatchDetails>
               <MatchDescription>
                 Some description about finding industry people.
               </MatchDescription>
-              <IndustryConnectionButton onClick={() => {setColor("rgba(77, 180, 100, 0.56)"); setType("industry"); next();}}>
+              <MatchButton style={{background: "rgba(77, 180, 100, 0.56)"}} onClick={() => {setColor("rgba(77, 180, 100, 0.56)"); setType("industry"); next();}}>
                 find me a cool connection
-              </IndustryConnectionButton>
+              </MatchButton>
             </MatchDetails>
           </MatchChoice>
-          {/* <NextButton onClick={next}>next</NextButton> */}
         </Instructions>
       ) : (
         <div />
       )}
       {step === 3 ? (
-        <SuggestionSlide type={type} color={color} />
+        <SuggestionSlide type={type} color={color} prev={prev} />
       ) : (
         <div />
       )}
-    </>
+    </Container>
   );
 };
 
@@ -325,6 +335,19 @@ export async function getServerSideProps({ req }) {
     },
   };
 }
+
+const Container = styled.div`
+  background-color: #1d2c3f;
+`;
+
+const Back = styled.button`
+  position: absolute;
+  top: 60px;
+  left: 5vw;
+  background: none;
+  border: none;
+  outline: none;
+`;
 
 const Instructions = styled.div`
   display: flex;
@@ -344,7 +367,8 @@ const Header = styled.div`
 
 const Heading = styled.p`
   font-weight: 500;
-  color: ${({ theme }) => theme.colors.peach};
+  // color: ${({ theme }) => theme.colors.peach};
+  color: white;
   font-size: 44px;
   line-height: 52px;
   display: flex;
@@ -354,7 +378,8 @@ const Heading = styled.p`
 
 const Name = styled.p`
   font-weight: 500;
-  color: ${({ theme }) => theme.colors.black};
+  // color: ${({ theme }) => theme.colors.peach};
+  color: #4A96F0;
   font-size: 44px;
   line-height: 52px;
   padding-left: 10px;
@@ -376,7 +401,8 @@ const Step = styled.div`
 `;
 
 const Number = styled.p`
-  color: ${({ theme }) => theme.colors.peach};
+  // color: ${({ theme }) => theme.colors.peach};
+  color: #4A96F0;
   font-weight: 500;
   font-size: 60px;
   line-height: 80px;
@@ -384,7 +410,8 @@ const Number = styled.p`
 `;
 
 const StepInfo = styled.div`
-  background: white;
+  // background: white;
+  background: #28303A;
   box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.25),
     inset 0px 4px 4px rgba(255, 255, 255, 0.25);
   border-radius: 10px;
@@ -400,7 +427,8 @@ const StepHeading = styled.p`
   font-size: 22px;
   line-height: 26px;
   letter-spacing: 1px;
-  color: #656f7b;
+  // color: #656f7b;
+  color: white;
   padding-bottom: 10px;
 `;
 
@@ -409,12 +437,14 @@ const StepDetails = styled.p`
   font-size: 16px;
   line-height: 19px;
   letter-spacing: 1px;
-  color: #656f7b;
+  // color: #656f7b;
+  color: #828282;
 `;
 
 const NextButton = styled.button`
   margin: 50px 0px 50px 0px;
-  background: ${({ theme }) => theme.colors.peach};
+  // background: ${({ theme }) => theme.colors.peach};
+  background: #4A96F0;
   color: white;
   border-radius: 10px;
   width: 20vw;
@@ -425,7 +455,6 @@ const NextButton = styled.button`
   font-size: 16px;
   line-height: 19px;
   letter-spacing: 1px;
-  color: white;
   border: none;
 `;
 
@@ -439,70 +468,21 @@ const Header2 = styled.div`
 
 const MatchChoice = styled.div`
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   width: 70vw;
   justify-content: space-between;
-  padding-bottom: 20px;
+  padding-bottom: 30px;
   align-items: center;
 `;
 
-const Romantic = styled.div`
-  font-weight: 500;
-  font-size: 44px;
+const MatchTitle = styled.div`
+  font-weight: 600;
+  font-size: 24px;
   line-height: 52px;
   letter-spacing: 1px;
-  color: ${({ theme }) => theme.colors.peach};
 `;
 
-const Friend = styled.div`
-  font-weight: 500;
-  font-size: 44px;
-  line-height: 52px;
-  letter-spacing: 1px;
-  color: #94c5ff;
-`;
-
-const IndustryConnection = styled.div`
-  font-weight: 500;
-  font-size: 44px;
-  line-height: 52px;
-  letter-spacing: 1px;
-  color: rgba(77, 180, 100, 0.56);
-  max-width: 100px;
-`;
-
-const RomanticButton = styled.button`
-  background: ${({ theme }) => theme.colors.peach};
-  color: white;
-  border-radius: 10px;
-  padding: 10px;
-  font-weight: 500;
-  font-size: 16px;
-  line-height: 19px;
-  letter-spacing: 1px;
-  color: white;
-  border: none;
-  align-self: center;
-  margin-top: 15px;
-`;
-
-const FriendButton = styled.button`
-  background: #94c5ff;
-  color: white;
-  border-radius: 10px;
-  padding: 10px;
-  font-weight: 500;
-  font-size: 16px;
-  line-height: 19px;
-  letter-spacing: 1px;
-  color: white;
-  border: none;
-  align-self: center;
-  margin-top: 15px;
-`;
-
-const IndustryConnectionButton = styled.button`
-  background: rgba(77, 180, 100, 0.56);
+const MatchButton = styled.button`
   color: white;
   border-radius: 10px;
   padding: 10px;
@@ -532,12 +512,12 @@ const MatchDescription = styled.p`
   font-size: 22px;
   line-height: 26px;
   letter-spacing: 1px;
-  color: #656f7b;
+  // color: #656f7b;
+  color: white;
 `;
 
 const ProfileCard = styled.div`
-  border: 1px solid #c4c4c4;
-  width: 60vw;
+  width: 55vw;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
@@ -545,19 +525,21 @@ const ProfileCard = styled.div`
 `;
 
 const LineInput = styled.input`
+  background: #1d2c3f;
   border: none;
   border-bottom: 1px solid #c4c4c4;
   font-weight: 500;
   font-size: 16px;
   line-height: 19px;
   letter-spacing: 1px;
-  color: #656f7b;
+  color: white;
   width: 50vw;
   padding: 30px 10px 10px 10px;
 
   &:focus {
     outline: none;
-    border-bottom: 1px solid ${({ theme }) => theme.colors.peach};
+    // border-bottom: 1px solid ${({ theme }) => theme.colors.peach};
+    border-bottom: 1px solid #4A96F0;
   }
 `;
 
@@ -572,7 +554,8 @@ const BioTitle = styled.div`
   font-size: 16px;
   line-height: 19px;
   letter-spacing: 1px;
-  color: #656f78;
+  // color: #656f78;
+  color: #828282;
   width: 60px;
   padding-right: 20px;
 `;
@@ -599,7 +582,8 @@ const CustomForm = styled(Form)`
   align-self: flex-start;
 
   select {
-    background-color: ${({ theme }) => theme.colors.peach};
+    // background-color: ${({ theme }) => theme.colors.peach};
+    background-color: #4A96F0;
     color: white;
   }
 `;

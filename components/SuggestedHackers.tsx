@@ -31,29 +31,16 @@ const SuggestedHackers = ({ hackers, type }) => {
 };
 
 const Suggestion = ({ suggestion, id, type }) => {
-  const [visible, setVisible] = useState(true);
-
   return (
     <div key={id}>
-      {visible ? (
-        <Square key={suggestion.userId}>
-          {suggestion.portfolioUrl ? (
-            <Header>
-              <PortfolioLink>
-                <a href={suggestion.portfolioUrl} target="_blank">
-                  <img src={LinkedIn} />
-                </a>
-              </PortfolioLink>
-              <NameHeader>
-                <Name>
-                  {suggestion.firstName} {suggestion.lastName}
-                </Name>
-                <Subheading>
-                  {suggestion.year ? suggestion.year : "year unavailable"}
-                </Subheading>
-              </NameHeader>
-            </Header>
-          ) : (
+      <Square key={suggestion.userId}>
+        {suggestion.portfolioUrl ? (
+          <Header>
+            <PortfolioLink>
+              <a href={suggestion.portfolioUrl} target="_blank">
+                <img src={LinkedIn} />
+              </a>
+            </PortfolioLink>
             <NameHeader>
               <Name>
                 {suggestion.firstName} {suggestion.lastName}
@@ -62,26 +49,33 @@ const Suggestion = ({ suggestion, id, type }) => {
                 {suggestion.year ? suggestion.year : "year unavailable"}
               </Subheading>
             </NameHeader>
-          )}
+          </Header>
+        ) : (
+          <NameHeader>
+            <Name>
+              {suggestion.firstName} {suggestion.lastName}
+            </Name>
+            <Subheading>
+              {suggestion.year ? suggestion.year : "year unavailable"}
+            </Subheading>
+          </NameHeader>
+        )}
 
-          <Subheading>
-            {suggestion.major ? suggestion.major : "major unavailable"}
-          </Subheading>
+        <Subheading>
+          {suggestion.major ? suggestion.major : "major unavailable"}
+        </Subheading>
 
-          <SkillHeading>Top Skills:</SkillHeading>
-          <Skills>
-            {suggestion.skills ? suggestion.skills : "not available"}
-          </Skills>
-          <School>
-            {suggestion.school ? suggestion.school : "school unavailable"}
-          </School>
-          <Menu>
-            <Message style={{backgroundColor: type}} href={"mailto:" + suggestion.email}>Message</Message>
-          </Menu>
-        </Square>
-      ) : (
-        <div />
-      )}
+        <SkillHeading>Top Skills:</SkillHeading>
+        <Skills>
+          {suggestion.skills ? suggestion.skills : "not available"}
+        </Skills>
+        <School>
+          {suggestion.school ? suggestion.school : "school unavailable"}
+        </School>
+        <Menu>
+          <Message style={{backgroundColor: type}} href={"mailto:" + suggestion.email}>Message</Message>
+        </Menu>
+      </Square>
     </div>
   );
 };
@@ -186,6 +180,7 @@ const Message = styled.a`
 
 const ErrorMsg = styled.div`
   padding-top: 10px;
+  color: white;
 `;
 
 export default SuggestedHackers;
