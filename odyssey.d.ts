@@ -125,7 +125,7 @@ declare type Profile = {
   isBattlepassComplete?: boolean;
   lookingForTeam: boolean;
   portfolioUrl: string;
-  instagram: string; 
+  instagram: string;
   bio: string;
 };
 

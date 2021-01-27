@@ -41,7 +41,9 @@ const data = (props = {}) => {
     confirmCodeOfConduct: true,
     noBusCheck: true,
     confirmedAt: faker.date.recent(20),
-    declinedAt: faker.date.past(1)
+    declinedAt: faker.date.past(1),
+    instagram: "",
+    bio: "",
   };
   return { ...defaultProps, ...props };
 };

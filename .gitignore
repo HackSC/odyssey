@@ -57,6 +57,8 @@ typings/
 # dotenv environment variables file
 .env
 .env.prod
+aws.env
+aws_secrets.env
 
 # next.js build output
 .next
