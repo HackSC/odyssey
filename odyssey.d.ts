@@ -52,6 +52,7 @@ declare type HackathonConstant = {
   name: string;
   boolean: boolean;
   date: Date;
+  type: "string" | "boolean" | "date";
 };
 
 declare type Judging = {

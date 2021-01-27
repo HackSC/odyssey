@@ -9,13 +9,9 @@ import {
   handleVolunteerRedirect,
   handleSponsorRedirect,
   handleDashboardRedirect,
-} from "../lib/authenticate";
-
-import {
-  getHackathonConstants
-} from "../lib";
-
-import { generatePosts } from "../lib/referrerCode";
+  getHackathonConstants,
+  generatePosts,
+} from "@/lib";
 
 const Dashboard = ({ profile, houses, socialPosts }) => {
   const [view, setView] = useState("hacker");
@@ -52,7 +48,7 @@ const Dashboard = ({ profile, houses, socialPosts }) => {
 
 export async function getServerSideProps({ req }) {
   const profile = await getProfile(req);
-  //const houses = await getHouses(req);
+  const hackathonConstants = await getHackathonConstants();
   const houses = [];
 
   // Null profile means user is not logged in
@@ -66,10 +62,11 @@ export async function getServerSideProps({ req }) {
     handleSponsorRedirect(req);
   }
 
-  const hackathonConstants = await getHackathonConstants();
-
-  if (!hackathonConstants.find((constant) => constant.name === "showDash")?.boolean) {
-    handleDashboardRedirect(req);
+  if (
+    !hackathonConstants.find((constant) => constant.name === "showDash")
+      ?.boolean
+  ) {
+    await handleDashboardRedirect(req);
   }
 
   let socialPosts = {};

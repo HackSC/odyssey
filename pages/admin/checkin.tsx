@@ -189,12 +189,17 @@ const Checkin = ({ profile, hackerStatusStats }) => {
 
   const handleBatchCheckIn = useCallback(async (e) => {
     e.preventDefault();
-    const input = batchEmails.current.value.split(/(?:,| |\n)+/).filter( (l:string) => l != "");
+    const input = batchEmails.current.value
+      .split(/(?:,| |\n)+/)
+      .filter((l: string) => l != "");
 
     const response = await batchCheckIn(input);
 
     setBatchError(response.error);
-    if (response.error[0] !== "invalid input: len(QR_Codes) !== len(hacker_emails)") {
+    if (
+      response.error[0] !==
+      "invalid input: len(QR_Codes) !== len(hacker_emails)"
+    ) {
       setBatchSuccess(response.success);
       batchEmails.current.value = response.updatedRequestBody;
     }
@@ -240,7 +245,10 @@ const Checkin = ({ profile, hackerStatusStats }) => {
           <FlexSection direction="column">
             <h1>Batch Check In</h1>
             <Form>
-              <div>Enter valid 4-letter QR Codes and hacker email addresses separated by new lines, commas, or spaces</div>
+              <div>
+                Enter valid 4-letter QR Codes and hacker email addresses
+                separated by new lines, commas, or spaces
+              </div>
               <div>Example: "ABCD test@gmail.com"</div>
               {batchSuccess.map((msg) => (
                 <Green>{msg}</Green>
@@ -380,7 +388,9 @@ const BatchEnter = styled.textarea`
   margin-bottom: 20px;
   margin-top: 20px;
   font-family: Arial;
-  min-width: 85vw;
+  min-width: 50vw;
+  max-width: 70vw;
+  display: block;
   height: 100px;
 `;
 
