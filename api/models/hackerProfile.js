@@ -135,6 +135,8 @@ module.exports = (sequelize, DataTypes) => {
       },
       lookingForTeam: DataTypes.BOOLEAN,
       portfolioUrl: DataTypes.STRING(500),
+      instagram: DataTypes.STRING(500),
+      bio: DataTypes.STRING(1000),
     },
     {}
   );

@@ -172,7 +172,7 @@ router.post("/join/:code", async (req, res) => {
 
     await team.update({
       lookingForTeammates: false,
-    })
+    });
   }
 
   return res.status(200).json({
@@ -388,13 +388,12 @@ router.post("/accept/", async (req, res) => {
 
     await team.update({
       lookingForTeammates: false,
-    })
+    });
   }
 
   return res.status(200).json({
     message: "Successfully joined team",
   });
 });
-
 
 export { router };

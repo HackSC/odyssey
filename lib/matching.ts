@@ -87,10 +87,21 @@ async function requestTeam(req) {
   return result.status === 200;
 }
 
+async function getProfileSuggestions(type: string) {
+  console.log("reached matching.ts");
+
+  const urlRoute = "api/teamMatching/profile/" + type;
+  const result = await fetch(urlRoute, {
+    method: "GET",
+  });
+  return await result.json();
+}
+
 export {
   getTeammateSuggestions,
   getTeamSuggestions,
   getPendingRequests,
   getPendingInvites,
   requestTeam,
+  getProfileSuggestions,
 };

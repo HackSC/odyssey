@@ -18,15 +18,16 @@ const AppLeaderboard = ({ profile }) => {
   const [sortOrder, setSortOrder] = useState(-1); // * -1 is descending, 1 is ascending
   const [adminSortOrder, setAdminSortOrder] = useState(-1); // * -1 is descending, 1 is ascending
   const [adminDataSorted, setAdminDataSorted] = useState(0);
-  const [acceptedHackers, setAcceptedHackers] = useState([]);
-  const [rejectedHackers, setRejectedHackers] = useState([]);
-  const [waitlistedHackers, setWaitlistedHackers] = useState([]);
   const [recentReviewCount, setRecentReviewCount] = useState(10);
   const [hackerCount, setHackerCount] = useState(10);
+  const [refreshHackerCount, setRefreshHackerCount] = useState(10);
+  const [refreshRecentReviewCount, setRefreshRecentReviewCount] = useState(10);
 
   let fetchUrl = process.env.URL_BASE
-    ? process.env.URL_BASE + "api/admin/reviewedProfiles?count=" + hackerCount
-    : "api/admin/reviewedProfiles?count=" + hackerCount;
+    ? process.env.URL_BASE +
+      "api/admin/reviewedProfiles?count=" +
+      refreshHackerCount
+    : "api/admin/reviewedProfiles?count=" + refreshHackerCount;
 
   let { data: reviewProfileData, error: reviewProfileError } = useSWR(fetchUrl);
 
@@ -51,22 +52,6 @@ const AppLeaderboard = ({ profile }) => {
 
         return a_sum > b_sum ? sortOrder : sortOrder == 1 ? -1 : 1;
       });
-
-      let accepted_hackers = reviewProfileData.reviewedProfiles.filter(
-        (temp_hacker) =>
-          temp_hacker.status === "accepted" ||
-          temp_hacker.status === "checkedIn"
-      );
-      let rejected_hackers = reviewProfileData.reviewedProfiles.filter(
-        (temp_hacker) => temp_hacker.status === "rejected"
-      );
-      let waitlisted_hackers = reviewProfileData.reviewedProfiles.filter(
-        (temp_hacker) => temp_hacker.status === "waitlisted"
-      );
-
-      setRejectedHackers(rejected_hackers);
-      setWaitlistedHackers(waitlisted_hackers);
-      setAcceptedHackers(accepted_hackers);
     }
   }, [reviewProfileData, sortOrder]);
 
@@ -83,8 +68,10 @@ const AppLeaderboard = ({ profile }) => {
   }, [adminSortOrder, adminReviewData]);
 
   fetchUrl = process.env.URL_BASE
-    ? process.env.URL_BASE + "api/admin/reviews?count=" + recentReviewCount
-    : "api/admin/reviews?count=" + recentReviewCount;
+    ? process.env.URL_BASE +
+      "api/admin/reviews?count=" +
+      refreshRecentReviewCount
+    : "api/admin/reviews?count=" + refreshRecentReviewCount;
 
   let { data: reviewData, error: reviewError } = useSWR(fetchUrl);
 
@@ -134,10 +121,11 @@ const AppLeaderboard = ({ profile }) => {
               <TitleFlex direction="row">
                 <OnePaddedH1>Recent Reviews</OnePaddedH1>
               </TitleFlex>
-              <PaddedBottomDiv style={{ lineHeight: "18px" }}>
-                Welcome to the application leaderboard. Here you can view a list
-                of hacker applications to HackSC. If you have any questions or
-                find any errors, hit up the engineers in{" "}
+              <PaddedBottomDiv style={{ fontSize: "16px", lineHeight: "22px" }}>
+                Welcome to the app leaderboard. Here you can view hacker
+                applications, recent reviews, and a leaderboard of admins based
+                on their reviews. If you have any questions or find any errors,
+                hit up the engineers in{" "}
                 <b>#{new Date().getFullYear()}-engineering</b>
               </PaddedBottomDiv>
               <PaddedBottomDiv style={{ lineHeight: "18px" }}>
@@ -149,7 +137,13 @@ const AppLeaderboard = ({ profile }) => {
                       margin: "0 0 1rem 0",
                     }}
                   >
-                    <ScoreKeyLabel>Count</ScoreKeyLabel>
+                    <ScoreKeyLabel
+                      onClick={() =>
+                        setRefreshRecentReviewCount(recentReviewCount)
+                      }
+                    >
+                      Count
+                    </ScoreKeyLabel>
                   </Column>
 
                   <Column flexGrow={1} style={{ margin: "0 0 1rem 0" }}>
@@ -157,6 +151,11 @@ const AppLeaderboard = ({ profile }) => {
                       type="number"
                       onChange={(e) =>
                         setRecentReviewCount(parseInt(e.target.value))
+                      }
+                      onKeyPress={(e) =>
+                        e.key === "Enter"
+                          ? setRefreshRecentReviewCount(recentReviewCount)
+                          : ""
                       }
                       value={recentReviewCount}
                     />
@@ -192,26 +191,48 @@ const AppLeaderboard = ({ profile }) => {
               </TitleFlex>
               <PaddedBottomDiv>
                 <p>
+                  # Hackers:{" "}
+                  <GoldColoredText>
+                    {reviewProfileData ? reviewProfileData.numHackers : 0}
+                  </GoldColoredText>
+                </p>
+                <p>
+                  # Reviews:{" "}
+                  <GoldColoredText>
+                    {reviewProfileData ? reviewProfileData.numHackerReviews : 0}
+                  </GoldColoredText>
+                </p>
+                <p>
                   # Reviewed Hackers:{" "}
                   <GoldColoredText>
                     {reviewProfileData
-                      ? reviewProfileData.reviewedProfiles.length
+                      ? reviewProfileData.numReviewedProfiles
                       : 0}
                   </GoldColoredText>
                 </p>
                 <p>
                   # Accepted Hackers:{" "}
-                  <GreenColoredText>{acceptedHackers.length}</GreenColoredText>
+                  <GreenColoredText>
+                    {reviewProfileData
+                      ? reviewProfileData.numAcceptedHackers
+                      : 0}
+                  </GreenColoredText>
                 </p>
                 <p>
                   # Waitlisted Hackers:{" "}
                   <OrangeColoredText>
-                    {waitlistedHackers.length}
+                    {reviewProfileData
+                      ? reviewProfileData.numWaitlistedHackers
+                      : 0}
                   </OrangeColoredText>
                 </p>
                 <p>
                   # Rejected Hackers:{" "}
-                  <RedColoredText>{rejectedHackers.length}</RedColoredText>
+                  <RedColoredText>
+                    {reviewProfileData
+                      ? reviewProfileData.numRejectedHackers
+                      : 0}
+                  </RedColoredText>
                 </p>
               </PaddedBottomDiv>
               <PaddedBottomDiv style={{ lineHeight: "18px" }}>
@@ -223,13 +244,22 @@ const AppLeaderboard = ({ profile }) => {
                       margin: "0 0 1rem 0",
                     }}
                   >
-                    <ScoreKeyLabel>Count</ScoreKeyLabel>
+                    <ScoreKeyLabel
+                      onClick={() => setRefreshHackerCount(hackerCount)}
+                    >
+                      Count
+                    </ScoreKeyLabel>
                   </Column>
 
                   <Column flexGrow={1} style={{ margin: "0 0 1rem 0" }}>
                     <Input
                       type="number"
                       onChange={(e) => setHackerCount(parseInt(e.target.value))}
+                      onKeyPress={(e) =>
+                        e.key === "Enter"
+                          ? setRefreshHackerCount(hackerCount)
+                          : ""
+                      }
                       value={hackerCount}
                     />
                   </Column>
@@ -241,14 +271,10 @@ const AppLeaderboard = ({ profile }) => {
                 reviewProfileData.reviewedProfiles.length > 0
                   ? reviewProfileData.reviewedProfiles.map((hacker, index) => (
                       <Hacker
-                        acceptedHackers={acceptedHackers}
-                        setAcceptedHackersCallback={setAcceptedHackers}
+                        hackerCount={hackerCount}
+                        setHackerCount={setHackerCount}
                         showAcceptButton={true}
-                        rejectedHackers={rejectedHackers}
-                        setRejectedHackersCallback={setRejectedHackers}
                         showRejectButton={true}
-                        waitlistedHackers={waitlistedHackers}
-                        setWaitlistedHackersCallback={setWaitlistedHackers}
                         showWaitlistButton={true}
                         profile={profile}
                         index={index + 1}
@@ -363,13 +389,13 @@ const CardContainer = styled.div`
   overflow-y: scroll;
 `;
 
-const ScoreKeyLabel = styled.p`
+const ScoreKeyLabel = styled(Button)`
   display: inline-block;
   padding: 10px 16px;
   margin-right: 16px;
   border-radius: 8px;
   border: 1px solid ${({ theme }) => theme.colors.gray5};
-  color: ${({ theme }) => theme.colors.gray50};
+  // color: ${({ theme }) => theme.colors.gray50};
 `;
 
 const Input = styled.input`

@@ -71,6 +71,15 @@ const EditableCell = ({
             });
           }}
         />
+        <input
+          type="text"
+          placeholder="enter type"
+          value={currConstant.type}
+          style={{ width: "-webkit-fill-available" }}
+          onChange={(e) => {
+            setCurrConstant({ ...currConstant, type: e.target.value });
+          }}
+        />
       </ConstantInfo>
       {updating ? (
         <SyncLoader size={5} color={"#FF8379"} />
@@ -100,7 +109,9 @@ const EditableCell = ({
                   "\nConstant Boolean: " +
                   currConstant.boolean +
                   "\nConstant Date: " +
-                  currConstant.date,
+                  currConstant.date +
+                  "\nConstant Type: " +
+                  currConstant.type,
                 start_and_end_date,
                 start_and_end_date
               );
@@ -154,7 +165,9 @@ const EditableCell = ({
                   "\nConstant Boolean: " +
                   currConstant.boolean +
                   "\nConstant Date: " +
-                  currConstant.date,
+                  currConstant.date +
+                  "\nConstant Type: " +
+                  currConstant.type,
                 start_and_end_date,
                 start_and_end_date
               );
@@ -184,6 +197,7 @@ const HackathonConstantsManager = ({ profile, hackathonConstants }) => {
     name: null,
     boolean: null,
     date: null,
+    type: null,
   });
 
   const { addToast } = useToasts();
@@ -240,6 +254,17 @@ const HackathonConstantsManager = ({ profile, hackathonConstants }) => {
                   });
                 }}
               />
+              <input
+                type="text"
+                placeholder="enter type"
+                style={{ width: "-webkit-fill-available" }}
+                onChange={(e) => {
+                  setNewConstant({
+                    ...newConstant,
+                    type: e.target.value,
+                  });
+                }}
+              />
             </ConstantInfo>
             <ConstantCreate
               type="submit"
@@ -266,7 +291,9 @@ const HackathonConstantsManager = ({ profile, hackathonConstants }) => {
                       "\nConstant Boolean: " +
                       newConstant.boolean +
                       "\nConstant Date: " +
-                      newConstant.date,
+                      newConstant.date +
+                      "\nConstant Type: " +
+                      newConstant.type,
                     start_and_end_date,
                     start_and_end_date
                   );
