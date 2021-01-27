@@ -11,6 +11,12 @@ let db: DBType = {
   Sequelize: null,
 };
 
+console.log(env_config.database);
+console.log(env_config.username);
+
+console.log(env_config.password);
+console.log(env_config);
+
 let sequelize = new Sequelize(
   env_config.database,
   env_config.username,
@@ -19,7 +25,8 @@ let sequelize = new Sequelize(
 );
 
 let model;
-model = sequelize["import"]("./action");
+model = sequelize.import("./action");
+console.log(model);
 db[model.name] = model;
 
 Object.keys(db).forEach((modelName) => {

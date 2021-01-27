@@ -12,13 +12,4 @@ router.get("/events/list", cors(), async (req, res) => {
   }
 });
 
-router.get("/tasks/list", cors(), async (req, res) => {
-  try {
-    const events = await models.Task.findAll();
-    return res.json({ events });
-  } catch (e) {
-    return res.json({ err: e });
-  }
-});
-
 module.exports = router;
