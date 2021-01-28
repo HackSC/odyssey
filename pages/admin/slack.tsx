@@ -24,7 +24,8 @@ const adminSlack = ({}) => {
   const [selectedConversations, setSelectedConversations] = useState([]);
   const [announcement, setAnnouncement] = useState("");
 
-  const fetcher = (...args) => fetch(...args).then((res) => res.json());
+  const fetcher = (input: RequestInfo, init?: RequestInit) =>
+    fetch(input, init).then((res) => res.json());
   const { data: users } = useSWR("/api/slack/getUsers", fetcher, {
     refreshInterval: 60000,
   });

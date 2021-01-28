@@ -1,4 +1,4 @@
-module.exports = (sequelize, DataTypes) => {
+const LinkedSlack = (sequelize, DataTypes) => {
   const LinkedSlack = sequelize.define(
     "LinkedSlack",
     {
@@ -18,3 +18,5 @@ module.exports = (sequelize, DataTypes) => {
 
   return LinkedSlack;
 };
+
+export { LinkedSlack };
