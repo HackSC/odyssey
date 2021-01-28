@@ -19,7 +19,7 @@ const AdminDashboard = (props: Props) => {
 
   return (
     <Container>
-      <Navbar />
+      <Navbar activePage="dashboard" />
       <Header text={"Admin Dashboard"} />
       <WidgetFrame
         widget="one"

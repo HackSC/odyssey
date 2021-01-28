@@ -88,15 +88,12 @@ async function requestTeam(req) {
 }
 
 async function getProfileSuggestions(type: string) {
-
-  console.log('reached matching.ts');
+  console.log("reached matching.ts");
 
   const urlRoute = "api/teamMatching/profile/" + type;
-  const result = await fetch(
-    urlRoute, {
-      method: "GET",
-    }
-  );
+  const result = await fetch(urlRoute, {
+    method: "GET",
+  });
   return await result.json();
 }
 
@@ -106,5 +103,5 @@ export {
   getPendingRequests,
   getPendingInvites,
   requestTeam,
-  getProfileSuggestions
+  getProfileSuggestions,
 };

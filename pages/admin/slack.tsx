@@ -11,12 +11,19 @@ import Navbar from "../../components/hackerDashboard/layout/Navbar";
 import Footer from "../../components/hackerDashboard/layout/Footer";
 import Header from "../../components/hackerDashboard/layout/Header";
 import WidgetFrame from "../../components/hackerDashboard/HackerWidgetFrame";
+import SlackModal from "../../components/slack/SlackModal";
 
 const booleanValue = (accessor) => {
   return (val) => (val[accessor] === true ? "✅" : "❌");
 };
 
-const adminSlack = () => {
+const adminSlack = ({}) => {
+  const [popupVisible, setPopupVisible] = useState(false);
+  const [showSlackModal, setShowSlackModal] = useState(false);
+  const [openedConversation, setOpenedConversation] = useState(null);
+  const [selectedConversations, setSelectedConversations] = useState([]);
+  const [announcement, setAnnouncement] = useState("");
+
   const fetcher = (input: RequestInfo, init?: RequestInit) =>
     fetch(input, init).then((res) => res.json());
   const { data: users } = useSWR("/api/slack/getUsers", fetcher, {
@@ -26,12 +33,72 @@ const adminSlack = () => {
     refreshInterval: 60000,
   });
 
+  const sendAnnouncement = async () => {
+    console.log("send announcement");
+    console.log(announcement);
+    // const response = await fetch(
+    //   "/api/slack/sendAnnouncement",
+    //   {
+    //     method: "POST",
+    //     headers: {
+    //       "Content-Type": "application/json",
+    //     },
+    //     body: JSON.stringify({
+    //       message: announcement,
+    //       conversationIds: selectedConversations
+    //     }),
+    //   }
+    // );
+  };
+
+  const toggleUsersModal = (conversationId) => {
+    setShowSlackModal(!showSlackModal);
+    setOpenedConversation(conversationId);
+    console.log(conversationId);
+  };
+
+  const handleCheckboxChange = (event) => {
+    console.log(event.target.id);
+    let newArray = [...selectedConversations];
+    console.log("new array");
+    console.log(newArray);
+    let id = event.target.id;
+    const idx = newArray.findIndex((item) => item === id);
+    if (idx > -1) {
+      newArray = [...newArray.slice(0, idx), ...newArray.slice(idx + 1)];
+      console.log("remove");
+    } else {
+      newArray.push(id);
+      console.log("push");
+      console.log(newArray);
+    }
+    setSelectedConversations(newArray);
+    console.log(selectedConversations);
+  };
+
+  const CloseButton = (
+    <FullButton onClick={() => setPopupVisible(false)}>Close</FullButton>
+  );
+
   const channelColumns = useMemo(
     () => [
       {
+        Header: "Select",
+        accessor: (d) => (
+          <input
+            type="checkbox"
+            id={d["id"]}
+            onChange={handleCheckboxChange}
+          ></input>
+        ),
+      },
+      {
         Header: "ID",
         accessor: (d) => (
-          <span style={{ cursor: "pointer", textDecoration: "underline" }}>
+          <span
+            onClick={() => toggleUsersModal(d["id"])}
+            style={{ cursor: "pointer", textDecoration: "underline" }}
+          >
             {d["id"]}
           </span>
         ),
@@ -90,6 +157,18 @@ const adminSlack = () => {
 
   return (
     <Container>
+      {/* <Modal visible={popupVisible} header={CloseButton} footer={CloseButton}>
+        <h1>true</h1>
+      </Modal> */}
+      {showSlackModal && (
+        <SlackModal
+          visible={showSlackModal}
+          header={CloseButton}
+          conversationId={openedConversation}
+        >
+          <h1>test</h1>
+        </SlackModal>
+      )}
       <Head title="HackSC Odyssey - Slack Command Center" />
       <Header text={"Slack Command Center"} />
       <ChannelList>
@@ -182,6 +261,13 @@ const adminSlack = () => {
               ))}
         </UserList>
       </Sidebar>
+      <input
+        type="text"
+        placeholder="Message to send"
+        value={announcement}
+        onChange={(e) => setAnnouncement(e.target.value)}
+      ></input>
+      <button onClick={() => sendAnnouncement()}>Send announcement</button>
       <Footer />
     </Container>
   );
@@ -260,6 +346,10 @@ const TableCell = styled.td`
   padding: 0.5rem;
   border-bottom: 1px solid black;
   border-right: 1px solid black;
+`;
+
+const FullButton = styled.button`
+  width: -webkit-fill-available;
 `;
 
 export default adminSlack;

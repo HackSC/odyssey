@@ -27,8 +27,8 @@ export default WidgetFrame;
 
 const Container = styled.div<{ widget?: boolean }>`
   background: #2d4158;
-  margin: 16px;
-  padding: 12px;
+  margin: 1rem;
+  padding: 1rem;
   border-radius: 15px;
   box-shadow: 8px 4px 4px rgba(0, 0, 0, 0.2);
 `;

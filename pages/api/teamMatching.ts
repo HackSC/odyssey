@@ -1,7 +1,7 @@
 const express = require("express");
 const models = require("./models");
 const utils = require("./utils");
-const sequelize = require('sequelize');
+const sequelize = require("sequelize");
 const router = express.Router();
 
 router.use(utils.authMiddleware);
@@ -416,7 +416,6 @@ router.post("/inviteToTeam/", async (req, res) => {
 // - Get suggestions
 // - Route for the hacker
 router.get("/profile/:type", async (req, res) => {
-
   const curruser = await models.HackerProfile.findOne({
     where: {
       userId: req.user.id,
@@ -429,11 +428,7 @@ router.get("/profile/:type", async (req, res) => {
         year: curruser.year,
         over18: true,
         status: {
-          [sequelize.Op.in]: [
-            "accepted",
-            "confirmed",
-            "checkedIn",
-          ],
+          [sequelize.Op.in]: ["accepted", "confirmed", "checkedIn"],
         },
         role: "hacker",
       },
@@ -454,11 +449,7 @@ router.get("/profile/:type", async (req, res) => {
       where: {
         major: curruser.major,
         status: {
-          [sequelize.Op.in]: [
-            "accepted",
-            "confirmed",
-            "checkedIn",
-          ],
+          [sequelize.Op.in]: ["accepted", "confirmed", "checkedIn"],
         },
       },
       required: true,
@@ -479,11 +470,7 @@ router.get("/profile/:type", async (req, res) => {
         year: curruser.year,
         major: curruser.major,
         status: {
-          [sequelize.Op.in]: [
-            "accepted",
-            "confirmed",
-            "checkedIn",
-          ],
+          [sequelize.Op.in]: ["accepted", "confirmed", "checkedIn"],
         },
       },
       required: true,
