@@ -25,7 +25,6 @@ const TeamWidget = (props: Props) => {
     defaultOnError: onError,
     initialModel: props.projectTeam,
   });
-  console.log(projectTeam);
   return <></>;
 };
 

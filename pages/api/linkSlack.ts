@@ -12,7 +12,6 @@ router.post("/", async (req, res) => {
   // This endpoint will be hit by the slack bot
   const slackId = req.body.user_id;
   const email = req.body.text;
-  console.log(email);
 
   if (!validateEmail(email)) {
     return res.json({ text: "Please enter a valid email address!" });
@@ -31,8 +30,6 @@ router.post("/", async (req, res) => {
       });
     }
   });
-
-  console.log(hackers);
 
   return res.json({ text: "Thanks for checking in! You're ready to go." });
 });

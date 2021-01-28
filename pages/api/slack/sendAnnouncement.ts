@@ -16,7 +16,6 @@ async function sendAnnouncement(conversationId, announcement) {
       channel: conversationId,
       text: announcement,
     });
-    console.log(res);
   } catch (error) {
     console.error(error);
   }

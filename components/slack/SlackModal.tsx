@@ -13,28 +13,18 @@ const SlackModal: React.FunctionComponent<Props> = (props) => {
   const { children, conversationId, visible = false, style } = props;
   const [users, setUsers] = React.useState([]);
 
-  console.log("modal");
-  console.log(conversationId);
-
   React.useEffect(() => {
     const channelUsers = fetch("/api/slack/getUsersByConversation", {
       method: "POST",
       body: JSON.stringify({ conversationId: conversationId }),
     })
       .then((response) => response.json())
-      .then((response) => {
-        console.log(response);
-      })
+      .then((response) => {})
       // .then((res) => {
-      //     console.log("finished");
-      //     console.log(res.json());
       //     const users = res.json().users;
-      //     console.log(users);
       //     setUsers(users);
       // })
-      .catch((err) => {
-        console.log(err);
-      });
+      .catch((err) => {});
   }, []);
 
   if (!visible || !conversationId) {

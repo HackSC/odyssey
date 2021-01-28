@@ -34,8 +34,6 @@ const adminSlack = ({}) => {
   });
 
   const sendAnnouncement = async () => {
-    console.log("send announcement");
-    console.log(announcement);
     // const response = await fetch(
     //   "/api/slack/sendAnnouncement",
     //   {
@@ -54,26 +52,18 @@ const adminSlack = ({}) => {
   const toggleUsersModal = (conversationId) => {
     setShowSlackModal(!showSlackModal);
     setOpenedConversation(conversationId);
-    console.log(conversationId);
   };
 
   const handleCheckboxChange = (event) => {
-    console.log(event.target.id);
     let newArray = [...selectedConversations];
-    console.log("new array");
-    console.log(newArray);
     let id = event.target.id;
     const idx = newArray.findIndex((item) => item === id);
     if (idx > -1) {
       newArray = [...newArray.slice(0, idx), ...newArray.slice(idx + 1)];
-      console.log("remove");
     } else {
       newArray.push(id);
-      console.log("push");
-      console.log(newArray);
     }
     setSelectedConversations(newArray);
-    console.log(selectedConversations);
   };
 
   const CloseButton = (
