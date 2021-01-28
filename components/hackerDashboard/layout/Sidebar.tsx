@@ -28,6 +28,7 @@ const Sidebar = (props: Props) => {
   const widgets = view === "admin" ? adminWidgets : hackerWidgets;
   return (
     <SidebarContainer>
+      <div></div>
       {widgets.map((e, i) => (
         <WidgetFrame key={i} component={e} />
       ))}
@@ -43,7 +44,7 @@ const SidebarContainer = styled.div`
   display: flex;
   flex-direction: column;
   font-family: "Work Sans", sans-serif;
-  margin-top: 80px;
 `;
+// margin-top: 80px;
 
 export default Sidebar;

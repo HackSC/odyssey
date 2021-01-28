@@ -1,6 +1,6 @@
 import { useToasts } from "react-toast-notifications";
 
-import { useProjectTeamSelf } from "../../../lib/api-sdk/projectTeamHooks";
+import { useProjectTeamSelf } from "@/lib/api-sdk/projectTeamHooks";
 
 type Props = {
   projectTeam: ProjectTeam;

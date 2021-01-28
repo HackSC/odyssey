@@ -35,12 +35,16 @@ const Dashboard = ({ profile, houses, socialPosts }) => {
 
   return (
     <>
-      <button
-        onClick={switchRole}
-        style={{ position: "absolute", top: 10, right: "50%" }}
-      >
-        Switch role
-      </button>
+      {process.env.NODE_ENV === "development" ? (
+        <button
+          onClick={switchRole}
+          style={{ position: "absolute", top: 20, right: 20 }}
+        >
+          Switch role
+        </button>
+      ) : (
+        ""
+      )}
       {getDashToRender()}
     </>
   );
