@@ -26,7 +26,7 @@ export default async (req, res) => {
   const conversationIds = req.body.conversationIds;
   const announcement = req.body.announcement;
 
-  for (var i = 0; i < conversationIds; i++) {
+  for (var i = 0; i < conversationIds.length; i++) {
     var conversationId = conversationIds[i];
     await sendAnnouncement(conversationId, announcement);
   }
