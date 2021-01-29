@@ -1,18 +1,16 @@
 import { useState, useEffect } from "react";
 import styled from "styled-components";
 import hackathonConstants from "../../../../lib/hackathonConstants";
+import moment from "moment-timezone";
 
 const HackathonCountdown = () => {
-  const hackathonStart = new Date(hackathonConstants.hackathonDate);
-  const hackathonEndDate = new Date(hackathonStart);
-  hackathonEndDate.setDate(hackathonEndDate.getDate() + 2);
-  const hasHackathonStarted =
-    new Date(hackathonConstants.hackathonDate).getTime() < Date.now();
+  const hackathonStart = hackathonConstants.hackathonDate;
+  const hackathonEnd = hackathonConstants.hackathonEndDate;
+
+  const hasHackathonStarted = hackathonStart.isSame(new Date(), "day");
 
   const [countdownDate, setCountdownDate] = useState(
-    hasHackathonStarted
-      ? new Date(hackathonEndDate).getTime()
-      : new Date(hackathonStart).getTime()
+    hasHackathonStarted ? hackathonEnd.toDate() : hackathonStart.toDate()
   );
 
   const [state, setState] = useState({
@@ -33,7 +31,7 @@ const HackathonCountdown = () => {
       const currentTime = new Date().getTime();
 
       // Get the time remaining until the countdown date
-      const distanceToDate = countdownDate - currentTime;
+      const distanceToDate = countdownDate.getTime() - currentTime;
 
       // Calculate days, hours, minutes and seconds remaining
       let days = Math.floor(distanceToDate / (1000 * 60 * 60 * 24));

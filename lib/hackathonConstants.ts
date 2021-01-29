@@ -1,5 +1,10 @@
+import moment from "moment-timezone";
+
+// TODO: make moment/dates work from web UI.
 export default {
-  hackathonDate: new Date("2/19/21"),
+  // epoch time in GMT to account for timezones.
+  hackathonDate: moment("2021-02-19 17:00:00", false),
+  hackathonEndDate: moment("2021-02-21 9:00:00", false),
 };
 
 export async function getHackathonConstants(): Promise<
