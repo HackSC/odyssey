@@ -13,6 +13,7 @@ const MenuItem = ({ activePage, title, route }) => (
   <BoxShadowWrapper>
     <SidebarMenuItem
       href={"/" + route}
+      id={route + "-page"}
       active={activePage === route || activePage === title}
     >
       <SidebarMenuItemLabel>{title}</SidebarMenuItemLabel>
