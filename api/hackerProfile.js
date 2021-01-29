@@ -5,6 +5,7 @@ const router = express.Router();
 const Sentry = require("@sentry/node");
 const Busboy = require("busboy");
 const AWS = require("aws-sdk");
+const scrapedin = require('scrapedin');
 
 router.use(utils.authMiddleware);
 router.use(utils.preprocessRequest);
@@ -494,8 +495,22 @@ router.put("/visibility", async (req, res) => {
 
 // Add portfolio url
 router.put("/portfolio", async (req, res) => {
+
+  let imageUrl;
+  if (req.body.portfolioUrl.includes("https://www.linkedin.com/in/")) {
+    const profileScraper = await scrapedin({ email: process.env.LINKEDIN, password: process.env.LINKEDINPASS });
+    const profile = await profileScraper(formInput.portfolioUrl);
+    imageUrl = profile.profile.imageurl;
+  }
+  if (!imageUrl) {
+    imageUrl = "https://t4.ftcdn.net/jpg/00/64/67/63/360_F_64676383_LdbmhiNM6Ypzb3FM4PPuFP9rHe7ri8Ju.jpg";
+  }
+
   await models.HackerProfile.update(
-    { portfolioUrl: req.body.portfolioUrl },
+    { 
+      portfolioUrl: req.body.portfolioUrl,
+      profilePic: imageUrl,
+    },
     {
       where: {
         userId: req.user.id,
@@ -509,8 +524,19 @@ router.put("/portfolio", async (req, res) => {
 router.put("/updateProfile", async (req, res) => {
   const formInput = req.body;
 
+  let imageUrl;
+  if (formInput.portfolioUrl.includes("https://www.linkedin.com/in/")) {
+    const profileScraper = await scrapedin({ email: process.env.LINKEDIN, password: process.env.LINKEDINPASS });
+    const profile = await profileScraper(formInput.portfolioUrl);
+    imageUrl = profile.profile.imageurl;
+  }
+  if (!imageUrl) {
+    imageUrl = "https://t4.ftcdn.net/jpg/00/64/67/63/360_F_64676383_LdbmhiNM6Ypzb3FM4PPuFP9rHe7ri8Ju.jpg";
+  }
+
   const updatedProfileFields = {
     ...formInput,
+    profilePic: imageUrl,
   };
 
   // Update, then re-retrieve the updated hacker profile
