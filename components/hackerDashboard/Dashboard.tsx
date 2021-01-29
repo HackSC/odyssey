@@ -10,10 +10,18 @@ import WidgetFrame from "./HackerWidgetFrame";
 // Widgets
 import { BattlepassWidget, UpdatesWidget } from "./widgets";
 
+type HackathonConstant = {
+  id: number;
+  name: string;
+  boolean: boolean;
+  date: string;
+  type: any;
+};
+
 type Props = {
   profile: Profile;
   events: Array<any>;
-  hackathonConstants: any;
+  hackathonConstants: Array<HackathonConstant>;
 };
 
 const Dashboard = ({ profile, events, hackathonConstants }: Props) => {

@@ -9,7 +9,32 @@ const MenuItems = [
   { title: "Resources", route: "resources", constant: "showAPI" },
 ];
 
-const MenuItem = ({ activePage, item, hackathonConstants }) => {
+type Item = {
+  title: string;
+  route: string;
+  constant: string;
+};
+
+type HackathonConstant = {
+  id: number;
+  name: string;
+  boolean: boolean;
+  date: string;
+  type: any;
+};
+
+type NavbarProps = {
+  activePage: string;
+  hackathonConstants: Array<HackathonConstant>;
+};
+
+type MenuItemProps = {
+  activePage: string;
+  item: Item;
+  hackathonConstants: Array<HackathonConstant>;
+};
+
+const MenuItem = ({ activePage, item, hackathonConstants }: MenuItemProps) => {
   let show = true;
   hackathonConstants.forEach((c) => {
     if (item.constant == c.name) show = c.boolean;
@@ -29,7 +54,7 @@ const MenuItem = ({ activePage, item, hackathonConstants }) => {
   );
 };
 
-const Navbar = ({ activePage, hackathonConstants }) => {
+const Navbar = ({ activePage, hackathonConstants }: NavbarProps) => {
   return (
     <NavbarContainer>
       <NavbarMenu>
