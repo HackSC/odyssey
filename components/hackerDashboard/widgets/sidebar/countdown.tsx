@@ -7,7 +7,7 @@ const HackathonCountdown = () => {
   const hackathonStart = hackathonConstants.hackathonDate;
   const hackathonEnd = hackathonConstants.hackathonEndDate;
 
-  const hasHackathonStarted = hackathonStart.isSame(new Date(), "day");
+  const hasHackathonStarted = moment().diff(hackathonStart, "seconds") > 0;
 
   const [countdownDate, setCountdownDate] = useState(
     hasHackathonStarted ? hackathonEnd.toDate() : hackathonStart.toDate()

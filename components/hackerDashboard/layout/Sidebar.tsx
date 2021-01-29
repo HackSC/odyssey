@@ -1,5 +1,8 @@
 import styled from "styled-components";
 import WidgetFrame from "../HackerWidgetFrame";
+import moment from "moment-timezone";
+
+import hackathonConstants from "@/lib/hackathonConstants";
 
 import {
   HackathonCountdown,
@@ -25,9 +28,13 @@ const Sidebar = (props: Props) => {
 
   const hackerWidgets = [
     <HackathonCountdown />,
-    <HackathonDates />,
-    <HackathonEvents events={events} />,
+    moment().diff(hackathonConstants.hackathonDate, "seconds") > 0 ? (
+      <HackathonEvents events={events} />
+    ) : (
+      <HackathonDates />
+    ),
   ];
+
   const adminWidgets = [
     <HackathonCountdown />,
     <Stats />,
