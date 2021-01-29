@@ -12,10 +12,11 @@ import ActionsWidget from "./widgets/admin/actions";
 
 type Props = {
   profile: Profile;
+  events: Array<any>;
 };
 
 const AdminDashboard = (props: Props) => {
-  const { profile } = props;
+  const { profile, events } = props;
 
   return (
     <Container>
@@ -35,7 +36,7 @@ const AdminDashboard = (props: Props) => {
         }
       />
       <WidgetFrame widget="two" component={<ActionsWidget />} />
-      <Sidebar view={"admin"} />
+      <Sidebar view={"admin"} events={events} />
       <Footer />
     </Container>
   );
