@@ -15,7 +15,7 @@ const DashHeader = ({ text }: Props) => {
         <Title>HackSC 2021</Title>
       ) : (
         <LogoWrapper>
-          <Image src={Logo} width="100%" height="100%" alt="" />
+          <Image src={Logo} width="220%" height="100%" alt="" />
         </LogoWrapper>
       )}
     </Header>

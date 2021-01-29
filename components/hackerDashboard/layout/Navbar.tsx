@@ -1,38 +1,47 @@
 import styled from "styled-components";
 
 const MenuItems = [
-  { title: "Dashboard", route: "dashboard" },
-  { title: "Application", route: "application" },
-  { title: "Results", route: "results" },
-  { title: "Team", route: "team" },
-  { title: "Maps", route: "maps" },
-  { title: "Resources", route: "resources" },
+  { title: "Dashboard", route: "dashboard", constant: "showDash" },
+  { title: "Application", route: "application", constant: "showApp" },
+  { title: "Results", route: "results", constant: "showResults" },
+  { title: "Team", route: "team", constant: "showTeam" },
+  { title: "Maps", route: "maps", constant: "showMaps" },
+  { title: "Resources", route: "resources", constant: "showAPI" },
 ];
 
-const MenuItem = ({ activePage, title, route }) => (
-  <BoxShadowWrapper>
-    <SidebarMenuItem
-      href={"/" + route}
-      active={activePage === route || activePage === title}
-    >
-      <SidebarMenuItemLabel>{title}</SidebarMenuItemLabel>
-    </SidebarMenuItem>
-  </BoxShadowWrapper>
-);
+const MenuItem = ({ activePage, item, hackathonConstants }) => {
+  let show = true;
+  hackathonConstants.forEach((c) => {
+    if (item.constant == c.name) show = c.boolean;
+  });
 
-const Sidebar = ({ activePage }) => {
-  return (
-    <SidebarContainer>
-      <SidebarMenu>
-        {MenuItems.map((item) =>
-          MenuItem({ activePage, title: item.title, route: item.route })
-        )}
-      </SidebarMenu>
-    </SidebarContainer>
+  return show ? (
+    <BoxShadowWrapper>
+      <NavbarMenuItem
+        href={"/" + item.route}
+        active={activePage === item.route || activePage === item.title}
+      >
+        <NavbarMenuItemLabel>{item.title}</NavbarMenuItemLabel>
+      </NavbarMenuItem>
+    </BoxShadowWrapper>
+  ) : (
+    ""
   );
 };
 
-const SidebarContainer = styled.div`
+const Navbar = ({ activePage, hackathonConstants }) => {
+  return (
+    <NavbarContainer>
+      <NavbarMenu>
+        {MenuItems.map((item) =>
+          MenuItem({ activePage, item: item, hackathonConstants })
+        )}
+      </NavbarMenu>
+    </NavbarContainer>
+  );
+};
+
+const NavbarContainer = styled.div`
   grid-area: Navbar;
   background-color: #1d2c3f;
   color: #fff;
@@ -41,7 +50,7 @@ const SidebarContainer = styled.div`
   font-family: "Work Sans", sans-serif;
 `;
 
-const SidebarMenu = styled.ul`
+const NavbarMenu = styled.ul`
   display: flex;
   align-items: left;
   flex-direction: column;
@@ -61,7 +70,7 @@ type AProps = {
   active: boolean;
 };
 
-const SidebarMenuItem = styled.a<AProps>`
+const NavbarMenuItem = styled.a<AProps>`
   display: flex;
   height: 60px;
   width: auto;
@@ -78,7 +87,7 @@ const SidebarMenuItem = styled.a<AProps>`
     active ? "rgba(255, 255, 255, 0.03)" : "#2d4158"};
 `;
 
-const SidebarMenuItemLabel = styled.p`
+const NavbarMenuItemLabel = styled.p`
   font-family: "Work Sans", sans-serif;
   font-size: 24px;
   font-weight: 600;
@@ -88,4 +97,4 @@ const SidebarMenuItemLabel = styled.p`
   margin-left: 8px;
 `;
 
-export default Sidebar;
+export default Navbar;

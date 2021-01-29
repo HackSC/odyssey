@@ -4,32 +4,27 @@ import Image from "next/image";
 import Logo from "@/assets/hackscFox.png";
 
 // Layout
-import Navbar from "./layout/Navbar";
-import Sidebar from "./layout/Sidebar";
-import Footer from "./layout/Footer";
-import Header from "./layout/Header";
+import { Navbar, Sidebar, Footer, Header } from "./layout";
 import WidgetFrame from "./HackerWidgetFrame";
 
 // Widgets
-import Battlepass from "./widgets/battlepass";
-import Updates from "./widgets/updates";
-import { getHackathonConstants, getProfile, getPublicEvents } from "@/lib";
+import { BattlepassWidget, UpdatesWidget } from "./widgets";
 
 type Props = {
   profile: Profile;
   events: Array<any>;
+  hackathonConstants: any;
 };
 
-const Dashboard = ({ profile, events }: Props) => {
-  console.log(events);
+const Dashboard = ({ profile, events, hackathonConstants }: Props) => {
   return (
     <Container>
       <FoxLogo />
-      <Navbar activePage="dashboard" />
+      <Navbar hackathonConstants={hackathonConstants} activePage="dashboard" />
       <Header />
       <WidgetFrame widget="one" component={<h2>Your team</h2>} />
-      <WidgetFrame widget="two" component={<Battlepass />} />
-      <WidgetFrame widget="three" component={<Updates />} />
+      <WidgetFrame widget="two" component={<BattlepassWidget />} />
+      <WidgetFrame widget="three" component={<UpdatesWidget />} />
       <Empty />
       <Sidebar view="hacker" events={events} />
       <Footer />
