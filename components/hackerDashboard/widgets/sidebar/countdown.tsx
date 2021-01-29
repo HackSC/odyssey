@@ -3,9 +3,18 @@ import styled from "styled-components";
 import hackathonConstants from "../../../../lib/hackathonConstants";
 
 const HackathonCountdown = () => {
+  const hackathonStart = new Date(hackathonConstants.hackathonDate);
+  const hackathonEndDate = new Date(hackathonStart);
+  hackathonEndDate.setDate(hackathonEndDate.getDate() + 2);
+  const hasHackathonStarted =
+    new Date(hackathonConstants.hackathonDate).getTime() < Date.now();
+
   const [countdownDate, setCountdownDate] = useState(
-    new Date(hackathonConstants.hackathonDate).getTime()
+    hasHackathonStarted
+      ? new Date(hackathonEndDate).getTime()
+      : new Date(hackathonStart).getTime()
   );
+
   const [state, setState] = useState({
     days: 0,
     hours: 0,
@@ -47,7 +56,11 @@ const HackathonCountdown = () => {
 
   return (
     <div>
-      <h3>Hacking starts in</h3>
+      {hasHackathonStarted ? (
+        <h3>Hacking ends in</h3>
+      ) : (
+        <h3>Hacking starts in</h3>
+      )}
       <CountdownWrapper>
         <TimeSection>
           <Time>{state.days || "0"}</Time>
