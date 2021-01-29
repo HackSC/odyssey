@@ -498,9 +498,14 @@ router.put("/portfolio", async (req, res) => {
 
   let imageUrl;
   if (req.body.portfolioUrl.includes("https://www.linkedin.com/in/")) {
-    const profileScraper = await scrapedin({ email: process.env.LINKEDIN, password: process.env.LINKEDINPASS });
-    const profile = await profileScraper(formInput.portfolioUrl);
-    imageUrl = profile.profile.imageurl;
+    try {
+      const profileScraper = await scrapedin({ email: process.env.LINKEDIN, password: process.env.LINKEDINPASS });
+      const profile = await profileScraper(formInput.portfolioUrl);
+      imageUrl = profile.profile.imageurl;
+    }
+    catch (err) {
+      imageUrl = null;
+    }
   }
   if (!imageUrl) {
     imageUrl = "https://t4.ftcdn.net/jpg/00/64/67/63/360_F_64676383_LdbmhiNM6Ypzb3FM4PPuFP9rHe7ri8Ju.jpg";
@@ -526,9 +531,15 @@ router.put("/updateProfile", async (req, res) => {
 
   let imageUrl;
   if (formInput.portfolioUrl.includes("https://www.linkedin.com/in/")) {
-    const profileScraper = await scrapedin({ email: process.env.LINKEDIN, password: process.env.LINKEDINPASS });
-    const profile = await profileScraper(formInput.portfolioUrl);
-    imageUrl = profile.profile.imageurl;
+    try {
+      const profileScraper = await scrapedin({ email: process.env.LINKEDIN, password: process.env.LINKEDINPASS });
+      const profile = await profileScraper(formInput.portfolioUrl);
+      imageUrl = profile.profile.imageurl;
+    }
+    catch (err) {
+      imageUrl = null;
+    }
+    
   }
   if (!imageUrl) {
     imageUrl = "https://t4.ftcdn.net/jpg/00/64/67/63/360_F_64676383_LdbmhiNM6Ypzb3FM4PPuFP9rHe7ri8Ju.jpg";
