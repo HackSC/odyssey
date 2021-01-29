@@ -13,6 +13,9 @@ const SlackModal: React.FunctionComponent<Props> = (props) => {
   const { children, conversationId, visible = false, style } = props;
   const [users, setUsers] = React.useState([]);
 
+  console.log("modal");
+  console.log(conversationId);
+
   React.useEffect(() => {
     const channelUsers = fetch("/api/slack/getUsersByConversation", {
       method: "POST",

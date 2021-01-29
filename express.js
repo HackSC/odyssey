@@ -95,6 +95,7 @@ server.use("/api/public", publicRouter);
 server.use("/api/teamMatching", matchingRouter);
 server.use("/api/linkSlack", linkSlackRouter);
 
+
 server.post("/api/scan", (req, res) => {
   console.info("Scanned: ", req.body.code);
   return res.json({ message: "Received" });
