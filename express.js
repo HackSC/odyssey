@@ -25,7 +25,7 @@ const prizeRouter = require("./api/prizes");
 const hackerLiveRouter = require("./api/hackerLive");
 const publicRouter = require("./api/public");
 const matchingRouter = require("./api/teamMatching");
-// const linkSlackRouter = require("./api/");
+const linkSlackRouter = require("./api/linkSlack");
 const fileUpload = require("express-fileupload");
 const dotenv = require("dotenv");
 
@@ -93,7 +93,7 @@ server.use("/api/hacker/live", hackerLiveRouter);
 server.use("/api/prize", prizeRouter);
 server.use("/api/public", publicRouter);
 server.use("/api/teamMatching", matchingRouter);
-// server.use("/api/linkSlack", linkSlackRouter);
+server.use("/api/linkSlack", linkSlackRouter);
 
 server.post("/api/scan", (req, res) => {
   console.info("Scanned: ", req.body.code);
@@ -119,6 +119,7 @@ server.use("/admin/api/unlockable", battlepassRouter);
 server.use("/admin/api/hacker/live", hackerLiveRouter);
 server.use("/admin/api/prize", prizeRouter);
 server.use("/admin/api/public", publicRouter);
+server.use("/admin/api/linkSlack", linkSlackRouter);
 
 server.post("/admin/api/scan", (req, res) => {
   console.info("Scanned: ", req.body.code);
