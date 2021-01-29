@@ -13,12 +13,15 @@ import WidgetFrame from "./HackerWidgetFrame";
 // Widgets
 import Battlepass from "./widgets/battlepass";
 import Updates from "./widgets/updates";
+import { getHackathonConstants, getProfile, getPublicEvents } from "@/lib";
 
 type Props = {
   profile: Profile;
+  events: Array<any>;
 };
 
-const Dashboard = ({ profile }: Props) => {
+const Dashboard = ({ profile, events }: Props) => {
+  console.log(events);
   return (
     <Container>
       <FoxLogo />
@@ -28,7 +31,7 @@ const Dashboard = ({ profile }: Props) => {
       <WidgetFrame widget="two" component={<Battlepass />} />
       <WidgetFrame widget="three" component={<Updates />} />
       <Empty />
-      <Sidebar view="hacker" />
+      <Sidebar view="hacker" events={events} />
       <Footer />
     </Container>
   );
