@@ -73,7 +73,12 @@ const Suggestion = ({ suggestion, id, type }) => {
           {suggestion.school ? suggestion.school : "school unavailable"}
         </School>
         <Menu>
-          <Message style={{backgroundColor: type}} href={"mailto:" + suggestion.email}>Message</Message>
+          <Message
+            style={{ backgroundColor: type }}
+            href={"mailto:" + suggestion.email}
+          >
+            Message
+          </Message>
         </Menu>
       </Square>
     </div>

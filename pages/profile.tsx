@@ -10,9 +10,7 @@ import ChevronGraphic from "../assets/chevron-left.png";
 
 import SuggestedHackers from "../components/SuggestedHackers";
 
-import {
-  getProfileSuggestions,
-} from "../lib/matching";
+import { getProfileSuggestions } from "../lib/matching";
 
 const SuggestionSlide = ({ color, type, prev }) => {
   const [suggestions, setSuggestions] = useState(null);
@@ -29,7 +27,9 @@ const SuggestionSlide = ({ color, type, prev }) => {
 
   return (
     <Instructions>
-      <Back onClick={prev}><img src={ChevronGraphic} style={{width: "20px"}} /></Back> 
+      <Back onClick={prev}>
+        <img src={ChevronGraphic} style={{ width: "20px" }} />
+      </Back>
       <Header2>
         <Heading>
           3 <Name>View your matches</Name>
@@ -42,7 +42,7 @@ const SuggestionSlide = ({ color, type, prev }) => {
       <NextButton onClick={() => Router.push("/dashboard")}>done</NextButton>
     </Instructions>
   );
-}
+};
 
 const Profile = ({ profile, req }) => {
   const [step, setStep] = useState(0);
@@ -51,8 +51,12 @@ const Profile = ({ profile, req }) => {
   const [school, setSchool] = useState(profile.school);
   const [major, setMajor] = useState(profile.major);
   const [year, setYear] = useState(profile.year);
-  const [igUrl, setIgUrl] = useState(profile.instagram ? profile.instagram : "");
-  const [liUrl, setLiUrl] = useState(profile.portfolioUrl ? profile.portfolioUrl : "");
+  const [igUrl, setIgUrl] = useState(
+    profile.instagram ? profile.instagram : ""
+  );
+  const [liUrl, setLiUrl] = useState(
+    profile.portfolioUrl ? profile.portfolioUrl : ""
+  );
   const [bio, setBio] = useState(profile.bio ? profile.bio : "");
 
   const [type, setType] = useState("");
@@ -98,7 +102,16 @@ const Profile = ({ profile, req }) => {
   ];
 
   const updateProfile = useCallback(
-    async (fName: string, lName: string, s: string, m: string, y: any, ig: string, li: string, bio: string) => {
+    async (
+      fName: string,
+      lName: string,
+      s: string,
+      m: string,
+      y: any,
+      ig: string,
+      li: string,
+      bio: string
+    ) => {
       const response = await fetch("/api/profile/updateProfile", {
         method: "PUT",
         headers: {
@@ -146,7 +159,9 @@ const Profile = ({ profile, req }) => {
       )}
       {step === 1 ? (
         <Instructions>
-          <Back onClick={prev}><img src={ChevronGraphic} style={{width: "20px"}} /></Back> 
+          <Back onClick={prev}>
+            <img src={ChevronGraphic} style={{ width: "20px" }} />
+          </Back>
           <Header2>
             <Heading>
               1 <Name> Complete your profile</Name>
@@ -254,12 +269,19 @@ const Profile = ({ profile, req }) => {
             </Bio>
           </ProfileCard>
           <NextButton
-            onClick={() =>
-              {
-                next();
-                updateProfile(firstName, lastName, school, major, year, igUrl, liUrl, bio);
-              }
-            }
+            onClick={() => {
+              next();
+              updateProfile(
+                firstName,
+                lastName,
+                school,
+                major,
+                year,
+                igUrl,
+                liUrl,
+                bio
+              );
+            }}
           >
             next
           </NextButton>
@@ -269,7 +291,9 @@ const Profile = ({ profile, req }) => {
       )}
       {step === 2 ? (
         <Instructions>
-          <Back onClick={prev}><img src={ChevronGraphic} style={{width: "20px"}} /></Back> 
+          <Back onClick={prev}>
+            <img src={ChevronGraphic} style={{ width: "20px" }} />
+          </Back>
           <Header2>
             <Heading>
               2 <Name>Choose your match</Name>
@@ -280,30 +304,57 @@ const Profile = ({ profile, req }) => {
             </Subheading>
           </Header2>
           <MatchChoice>
-            <MatchTitle style={{color: "#FF8379"}}>romantic</MatchTitle>
+            <MatchTitle style={{ color: "#FF8379" }}>romantic</MatchTitle>
             <MatchDetails>
               <MatchDescription>
                 Some description about finding love at a hackathon.
               </MatchDescription>
-              <MatchButton style={{background: "#FF8379"}} onClick={() => {setColor("#FF8379"); setType("romantic"); next();}}>find me love</MatchButton>
+              <MatchButton
+                style={{ background: "#FF8379" }}
+                onClick={() => {
+                  setColor("#FF8379");
+                  setType("romantic");
+                  next();
+                }}
+              >
+                find me love
+              </MatchButton>
             </MatchDetails>
           </MatchChoice>
           <MatchChoice>
-            <MatchTitle style={{color: "#94c5ff"}}>friend</MatchTitle>
+            <MatchTitle style={{ color: "#94c5ff" }}>friend</MatchTitle>
             <MatchDetails>
               <MatchDescription>
                 Some description about finding friends.
               </MatchDescription>
-              <MatchButton style={{background: "#94c5ff"}} onClick={() => {setColor("#94c5ff"); setType("friend"); next();}}>find me a friend</MatchButton>
+              <MatchButton
+                style={{ background: "#94c5ff" }}
+                onClick={() => {
+                  setColor("#94c5ff");
+                  setType("friend");
+                  next();
+                }}
+              >
+                find me a friend
+              </MatchButton>
             </MatchDetails>
           </MatchChoice>
           <MatchChoice>
-            <MatchTitle style={{color: "rgba(77, 180, 100, 0.56)"}}>industry connection</MatchTitle>
+            <MatchTitle style={{ color: "rgba(77, 180, 100, 0.56)" }}>
+              industry connection
+            </MatchTitle>
             <MatchDetails>
               <MatchDescription>
                 Some description about finding industry people.
               </MatchDescription>
-              <MatchButton style={{background: "rgba(77, 180, 100, 0.56)"}} onClick={() => {setColor("rgba(77, 180, 100, 0.56)"); setType("industry"); next();}}>
+              <MatchButton
+                style={{ background: "rgba(77, 180, 100, 0.56)" }}
+                onClick={() => {
+                  setColor("rgba(77, 180, 100, 0.56)");
+                  setType("industry");
+                  next();
+                }}
+              >
                 find me a cool connection
               </MatchButton>
             </MatchDetails>
@@ -379,7 +430,7 @@ const Heading = styled.p`
 const Name = styled.p`
   font-weight: 500;
   // color: ${({ theme }) => theme.colors.peach};
-  color: #4A96F0;
+  color: #4a96f0;
   font-size: 44px;
   line-height: 52px;
   padding-left: 10px;
@@ -402,7 +453,7 @@ const Step = styled.div`
 
 const Number = styled.p`
   // color: ${({ theme }) => theme.colors.peach};
-  color: #4A96F0;
+  color: #4a96f0;
   font-weight: 500;
   font-size: 60px;
   line-height: 80px;
@@ -411,7 +462,7 @@ const Number = styled.p`
 
 const StepInfo = styled.div`
   // background: white;
-  background: #28303A;
+  background: #28303a;
   box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.25),
     inset 0px 4px 4px rgba(255, 255, 255, 0.25);
   border-radius: 10px;
@@ -444,7 +495,7 @@ const StepDetails = styled.p`
 const NextButton = styled.button`
   margin: 50px 0px 50px 0px;
   // background: ${({ theme }) => theme.colors.peach};
-  background: #4A96F0;
+  background: #4a96f0;
   color: white;
   border-radius: 10px;
   width: 20vw;
@@ -539,7 +590,7 @@ const LineInput = styled.input`
   &:focus {
     outline: none;
     // border-bottom: 1px solid ${({ theme }) => theme.colors.peach};
-    border-bottom: 1px solid #4A96F0;
+    border-bottom: 1px solid #4a96f0;
   }
 `;
 
@@ -583,7 +634,7 @@ const CustomForm = styled(Form)`
 
   select {
     // background-color: ${({ theme }) => theme.colors.peach};
-    background-color: #4A96F0;
+    background-color: #4a96f0;
     color: white;
   }
 `;

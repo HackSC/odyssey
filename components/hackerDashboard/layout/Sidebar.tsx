@@ -1,12 +1,12 @@
-import { useState, useEffect } from "react";
 import styled from "styled-components";
 import WidgetFrame from "../HackerWidgetFrame";
-import { Column } from "../../../styles";
 
-import HackathonCountdown from "../widgets/sidebar/countdown";
-import HackathonDates from "../widgets/sidebar/dates";
-import Uptime from "../widgets/sidebar/uptime";
-import Stats from "../widgets/sidebar/stats";
+import {
+  HackathonCountdown,
+  HackathonDates,
+  HackathonEvents,
+  Stats,
+} from "../widgets";
 
 interface Card {
   link: string;
@@ -17,13 +17,22 @@ interface Card {
 
 type Props = {
   view?: "hacker" | "admin" | "sponsor" | "judge";
+  events: Array<any>;
 };
 
 const Sidebar = (props: Props) => {
-  const { view } = props;
+  const { view, events } = props;
 
-  const hackerWidgets = [<HackathonCountdown />, <HackathonDates />];
-  const adminWidgets = [<HackathonCountdown />, <Stats />];
+  const hackerWidgets = [
+    <HackathonCountdown />,
+    <HackathonDates />,
+    <HackathonEvents events={events} />,
+  ];
+  const adminWidgets = [
+    <HackathonCountdown />,
+    <Stats />,
+    <HackathonEvents events={events} />,
+  ];
   // TODO: Generalize
   const widgets = view === "admin" ? adminWidgets : hackerWidgets;
   return (
@@ -43,7 +52,7 @@ const SidebarContainer = styled.div`
   display: flex;
   flex-direction: column;
   font-family: "Work Sans", sans-serif;
-  margin-top: 80px;
 `;
+// margin-top: 80px;
 
 export default Sidebar;

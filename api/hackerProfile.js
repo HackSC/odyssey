@@ -507,7 +507,6 @@ router.put("/portfolio", async (req, res) => {
 });
 
 router.put("/updateProfile", async (req, res) => {
-
   const formInput = req.body;
 
   const updatedProfileFields = {
