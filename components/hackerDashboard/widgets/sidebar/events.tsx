@@ -4,6 +4,7 @@ const HackathonEvents = ({ events }) => {
   return (
     <div>
       <h3>Upcoming Events</h3>
+      <h4>All in Pacific Standard Time</h4>
       <EventList>
         {events.map((e) => (
           <Event>
@@ -26,6 +27,7 @@ const HackathonEvents = ({ events }) => {
 
 const EventList = styled.div`
   border-radius: 4px;
+  margin-top: 8px;
   max-height: 400px;
   overflow: scroll;
 `;
@@ -33,10 +35,7 @@ const EventList = styled.div`
 const Event = styled.div`
   margin-top: 24px;
 
-  :first-child {
-    margin-top: 0;
-  }
-
+  h4,
   h3 {
     font-weight: 600;
     color: ${({ theme }) => theme.colors.peach};
