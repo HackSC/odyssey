@@ -1,129 +1,263 @@
 import React, { useRef, useState, useMemo, useCallback } from "react";
 import styled from "styled-components";
-import { GetStaticProps, GetStaticPaths, GetServerSideProps } from 'next'
-import { useTable, useSortBy } from "react-table"
-import useSWR from 'swr'
+import { GetStaticProps, GetStaticPaths, GetServerSideProps } from "next";
+import { useTable, useSortBy } from "react-table";
+import useSWR from "swr";
 import { Head } from "../../components";
 import Modal from "../../components/Modal";
-import Skeleton from 'react-loading-skeleton';
+import Skeleton from "react-loading-skeleton";
 // Layout
 import Navbar from "../../components/hackerDashboard/layout/Navbar";
 import Footer from "../../components/hackerDashboard/layout/Footer";
 import Header from "../../components/hackerDashboard/layout/Header";
 import WidgetFrame from "../../components/hackerDashboard/HackerWidgetFrame";
+import SlackModal from "../../components/slack/SlackModal";
 
 const booleanValue = (accessor) => {
-  return (val) => val[accessor] === true ? "✅" : '❌'
-}
+  return (val) => (val[accessor] === true ? "✅" : "❌");
+};
 
-const adminSlack = ({  }) => {
-  const fetcher = (...args) => fetch(...args).then(res => res.json())
-  const { data: users } = useSWR('/api/slack/getUsers', fetcher, { refreshInterval: 60000 })
-  const { data: convos } = useSWR('/api/slack/getConversations', fetcher, { refreshInterval: 60000 })
+const adminSlack = ({}) => {
+  const [popupVisible, setPopupVisible] = useState(false);
+  const [showSlackModal, setShowSlackModal] = useState(false);
+  const [openedConversation, setOpenedConversation] = useState(null);
+  const [selectedConversations, setSelectedConversations] = useState([]);
+  const [announcement, setAnnouncement] = useState("");
+
+  const fetcher = (input: RequestInfo, init?: RequestInit) =>
+    fetch(input, init).then((res) => res.json());
+  const { data: users } = useSWR("/api/slack/getUsers", fetcher, {
+    refreshInterval: 60000,
+  });
+  const { data: convos } = useSWR("/api/slack/getConversations", fetcher, {
+    refreshInterval: 60000,
+  });
+
+  const sendAnnouncement = async () => {
+    // const response = await fetch(
+    //   "/api/slack/sendAnnouncement",
+    //   {
+    //     method: "POST",
+    //     headers: {
+    //       "Content-Type": "application/json",
+    //     },
+    //     body: JSON.stringify({
+    //       message: announcement,
+    //       conversationIds: selectedConversations
+    //     }),
+    //   }
+    // );
+  };
+
+  const toggleUsersModal = (conversationId) => {
+    setShowSlackModal(!showSlackModal);
+    setOpenedConversation(conversationId);
+  };
+
+  const handleCheckboxChange = (event) => {
+    let newArray = [...selectedConversations];
+    let id = event.target.id;
+    const idx = newArray.findIndex((item) => item === id);
+    if (idx > -1) {
+      newArray = [...newArray.slice(0, idx), ...newArray.slice(idx + 1)];
+    } else {
+      newArray.push(id);
+    }
+    setSelectedConversations(newArray);
+  };
+
+  const CloseButton = (
+    <FullButton onClick={() => setPopupVisible(false)}>Close</FullButton>
+  );
 
   const channelColumns = useMemo(
     () => [
-        {
-            Header: 'ID',
-            accessor: (d) => (<span style={{cursor: 'pointer', textDecoration: 'underline'}}>{d['id']}</span>)
-        },
-        {
-            Header: 'Name',
-            accessor: 'name'
-        },
-        {
-            Header: 'Public',
-            accessor: booleanValue('is_channel')
-        },
-        {
-            Header: 'Archived',
-            accessor: booleanValue('is_archived')
-        },
-        {
-            Header: 'Created',
-            accessor: (val) => new Date(val['created']).toLocaleDateString('en-US')
-        },
-        {
-            Header: 'members',
-            accessor: 'num_members'
-        },
-    ], []
-)
-const tableColumns = useMemo(
-  () =>
-    !convos
-      ? channelColumns.map((column) => ({
-          ...column,
-          Cell: <Skeleton style={{minWidth: 80}} />,
-        }))
-      : channelColumns,
-  [convos, channelColumns]
-);
-const tableData = useMemo(() => convos ? Object.keys(convos).map(i => convos[i]) : Array(30).fill({}), [convos])
+      {
+        Header: "Select",
+        accessor: (d) => (
+          <input
+            type="checkbox"
+            id={d["id"]}
+            onChange={handleCheckboxChange}
+          ></input>
+        ),
+      },
+      {
+        Header: "ID",
+        accessor: (d) => (
+          <span
+            onClick={() => toggleUsersModal(d["id"])}
+            style={{ cursor: "pointer", textDecoration: "underline" }}
+          >
+            {d["id"]}
+          </span>
+        ),
+      },
+      {
+        Header: "Name",
+        accessor: "name",
+      },
+      {
+        Header: "Public",
+        accessor: booleanValue("is_channel"),
+      },
+      {
+        Header: "Archived",
+        accessor: booleanValue("is_archived"),
+      },
+      {
+        Header: "Created",
+        accessor: (val) => new Date(val["created"]).toLocaleDateString("en-US"),
+      },
+      {
+        Header: "members",
+        accessor: "num_members",
+      },
+    ],
+    []
+  );
+  const tableColumns = useMemo(
+    () =>
+      !convos
+        ? channelColumns.map((column) => ({
+            ...column,
+            Cell: <Skeleton style={{ minWidth: 80 }} />,
+          }))
+        : channelColumns,
+    [convos, channelColumns]
+  );
+  const tableData = useMemo(
+    () =>
+      convos ? Object.keys(convos).map((i) => convos[i]) : Array(30).fill({}),
+    [convos]
+  );
 
-const tableInstance = useTable({ columns: tableColumns, data: tableData }, useSortBy)
+  const tableInstance = useTable(
+    { columns: tableColumns, data: tableData },
+    useSortBy
+  );
 
-const {
-  getTableProps,
-  getTableBodyProps,
-  headerGroups,
-  rows,
-  prepareRow,
-} = tableInstance
+  const {
+    getTableProps,
+    getTableBodyProps,
+    headerGroups,
+    rows,
+    prepareRow,
+  } = tableInstance;
 
   return (
     <Container>
+      {/* <Modal visible={popupVisible} header={CloseButton} footer={CloseButton}>
+        <h1>true</h1>
+      </Modal> */}
+      {showSlackModal && (
+        <SlackModal
+          visible={showSlackModal}
+          header={CloseButton}
+          conversationId={openedConversation}
+        >
+          <h1>test</h1>
+        </SlackModal>
+      )}
       <Head title="HackSC Odyssey - Slack Command Center" />
       <Header text={"Slack Command Center"} />
       <ChannelList>
         <Table {...getTableProps()}>
-        <thead>
-            {headerGroups.map(headerGroup => (
+          <thead>
+            {headerGroups.map((headerGroup) => (
               <tr {...headerGroup.getHeaderGroupProps()}>
-                {headerGroup.headers.map(column => (
+                {headerGroup.headers.map((column) => (
                   <th {...column.getHeaderProps(column.getSortByToggleProps())}>
-                    {column.render('Header')}
+                    {column.render("Header")}
                     <span>
-                        {column.isSorted
-                        ? column.isSortedDesc
-                            ? ' 🔽'
-                            : ' 🔼'
-                        : <span style={{opacity: '.5'}}> 🔽</span>}
+                      {column.isSorted ? (
+                        column.isSortedDesc ? (
+                          " 🔽"
+                        ) : (
+                          " 🔼"
+                        )
+                      ) : (
+                        <span style={{ opacity: ".5" }}> 🔽</span>
+                      )}
                     </span>
-                    </th>
+                  </th>
                 ))}
-                </tr>
+              </tr>
             ))}
-            </thead>
-            <tbody {...getTableBodyProps()}>
-            {rows.map(row => {
-                prepareRow(row)
-                return (
+          </thead>
+          <tbody {...getTableBodyProps()}>
+            {rows.map((row) => {
+              prepareRow(row);
+              return (
                 <tr {...row.getRowProps()}>
-                    {row.cells.map(cell => {
+                  {row.cells.map((cell) => {
                     return (
-                        <TableCell {...cell.getCellProps()}>
-                        {cell.render('Cell')}
-                        </TableCell>
-                    )
-                    })}
+                      <TableCell {...cell.getCellProps()}>
+                        {cell.render("Cell")}
+                      </TableCell>
+                    );
+                  })}
                 </tr>
-                )
+              );
             })}
-            </tbody>
+          </tbody>
         </Table>
       </ChannelList>
       <Sidebar>
-            <p>{users ? `Total members: ${Object.values(users).length}` : <>Total members: <Skeleton width={25} height={32} /></>}</p>
-            <UserList>
-                {users ? (Object.values(users).map((e: any) => {
-                    if (e.is_admin) {
-                        return (<LoadedUser key={e.id}><img src={e.profile.image_32} height={30} width={30}  style={{marginRight: 4}}/><strong>{e.name} - {e.real_name}</strong></LoadedUser>)
-                    }
-                    return (<LoadedUser key={e.id}><img src={e.profile.image_32} height={30} width={30} style={{marginRight: 4}}/>{e.name} - {e.real_name}</LoadedUser>)
-                })) : ([...Array(40)].map((e, i) => <User key={i} ><Skeleton width={32} height={32} style={{marginRight: 4}}/><Skeleton height={32} width={'80%'} /></User>))}
-            </UserList>
+        <p>
+          {users ? (
+            `Total members: ${Object.values(users).length}`
+          ) : (
+            <>
+              Total members: <Skeleton width={25} height={32} />
+            </>
+          )}
+        </p>
+        <UserList>
+          {users
+            ? Object.values(users).map((e: any) => {
+                if (e.is_admin) {
+                  return (
+                    <LoadedUser key={e.id}>
+                      <img
+                        src={e.profile.image_32}
+                        height={30}
+                        width={30}
+                        style={{ marginRight: 4 }}
+                      />
+                      <strong>
+                        {e.name} - {e.real_name}
+                      </strong>
+                    </LoadedUser>
+                  );
+                }
+                return (
+                  <LoadedUser key={e.id}>
+                    <img
+                      src={e.profile.image_32}
+                      height={30}
+                      width={30}
+                      style={{ marginRight: 4 }}
+                    />
+                    {e.name} - {e.real_name}
+                  </LoadedUser>
+                );
+              })
+            : [...Array(40)].map((e, i) => (
+                <User key={i}>
+                  <Skeleton width={32} height={32} style={{ marginRight: 4 }} />
+                  <Skeleton height={32} width={"80%"} />
+                </User>
+              ))}
+        </UserList>
       </Sidebar>
+      <input
+        type="text"
+        placeholder="Message to send"
+        value={announcement}
+        onChange={(e) => setAnnouncement(e.target.value)}
+      ></input>
+      <button onClick={() => sendAnnouncement()}>Send announcement</button>
       <Footer />
     </Container>
   );
@@ -164,18 +298,18 @@ const UserList = styled.ul`
   list-style-type: none;
   padding: 0; /* Remove padding */
   margin: 0; /* Remove margins */
-`
+`;
 const User = styled.li`
   margin-top: 3px;
   margin-bottom: 3px;
-`
+`;
 
 const LoadedUser = styled.li`
   margin-top: 3px;
   margin-bottom: 3px;
   display: flex;
   align-items: center;
-`
+`;
 const Container = styled.div`
   height: 100vh;
   display: grid;
@@ -190,18 +324,22 @@ const Container = styled.div`
   background-color: #1d2c3f;
   color: #fff;
 `;
- 
+
 const Table = styled.table`
   width: 100%;
   border-collapse: collapse;
   border-style: hidden;
-`
+`;
 
 const TableCell = styled.td`
   margin: 0;
   padding: 0.5rem;
   border-bottom: 1px solid black;
   border-right: 1px solid black;
-`
+`;
+
+const FullButton = styled.button`
+  width: -webkit-fill-available;
+`;
 
 export default adminSlack;

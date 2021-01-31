@@ -1,9 +1,10 @@
 import Image from "next/image";
 import styled from "styled-components";
 
-import Logo from "../../../assets/hackscFox.png";
+import Logo from "@/assets/hackscFox.png";
 
-const Updates = ({ profile, announcements }) => {
+
+const UpdatesWidget = ({ profile, announcements }) => {
   const items = [];
   if (announcements != null) {
     for (let i = 0; i < announcements.length; i++) {
@@ -18,7 +19,6 @@ const Updates = ({ profile, announcements }) => {
       );
     }
   }
-
   return (
     <div>
       <Header>Announcements</Header>
@@ -95,4 +95,4 @@ const UpdateText = styled.div`
   letter-spacing: 1px;
 `;
 
-export default Updates;
+export default UpdatesWidget;

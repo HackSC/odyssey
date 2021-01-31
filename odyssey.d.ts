@@ -52,6 +52,7 @@ declare type HackathonConstant = {
   name: string;
   boolean: boolean;
   date: Date;
+  type: "string" | "boolean" | "date";
 };
 
 declare type Judging = {
@@ -125,6 +126,8 @@ declare type Profile = {
   isBattlepassComplete?: boolean;
   lookingForTeam: boolean;
   portfolioUrl: string;
+  instagram: string;
+  bio: string;
 };
 
 declare type Team = {

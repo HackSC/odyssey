@@ -1,38 +1,72 @@
 import styled from "styled-components";
-import Image from "next/image";
-import Logo from "../../../assets/hackscFox.png";
 
-const Sidebar = () => {
-  return (
-    <SidebarContainer>
-      <SidebarMenu>
-        <MenuLogo>
-          <Image src={Logo} width="75%" height="75%" alt="" />
-        </MenuLogo>
-        <SidebarMenuItem>
-          <SidebarMenuItemLabel>Dashboard</SidebarMenuItemLabel>
-        </SidebarMenuItem>
-        <SidebarMenuItem>
-          <SidebarMenuItemLabel>Application</SidebarMenuItemLabel>
-        </SidebarMenuItem>
-        <SidebarMenuItem>
-          <SidebarMenuItemLabel>Results</SidebarMenuItemLabel>
-        </SidebarMenuItem>
-        <SidebarMenuItem>
-          <SidebarMenuItemLabel>Team</SidebarMenuItemLabel>
-        </SidebarMenuItem>
-        <SidebarMenuItem>
-          <SidebarMenuItemLabel>Maps</SidebarMenuItemLabel>
-        </SidebarMenuItem>
-        <SidebarMenuItem>
-          <SidebarMenuItemLabel>Resources</SidebarMenuItemLabel>
-        </SidebarMenuItem>
-      </SidebarMenu>
-    </SidebarContainer>
+const MenuItems = [
+  { title: "Dashboard", route: "dashboard", constant: "showDash" },
+  { title: "Application", route: "application", constant: "showApp" },
+  { title: "Results", route: "results", constant: "showResults" },
+  { title: "Team", route: "team", constant: "showTeam" },
+  { title: "Maps", route: "maps", constant: "showMaps" },
+  { title: "Resources", route: "resources", constant: "showAPI" },
+];
+
+type Item = {
+  title: string;
+  route: string;
+  constant: string;
+};
+
+type HackathonConstant = {
+  id: number;
+  name: string;
+  boolean: boolean;
+  date: string;
+  type: any;
+};
+
+type NavbarProps = {
+  activePage: string;
+  hackathonConstants: Array<HackathonConstant>;
+};
+
+type MenuItemProps = {
+  activePage: string;
+  item: Item;
+  hackathonConstants: Array<HackathonConstant>;
+};
+
+const MenuItem = ({ activePage, item, hackathonConstants }: MenuItemProps) => {
+  let show = true;
+  hackathonConstants.forEach((c) => {
+    if (item.constant == c.name) show = c.boolean;
+  });
+
+  return show ? (
+    <BoxShadowWrapper>
+      <NavbarMenuItem
+        href={"/" + item.route}
+        active={activePage === item.route || activePage === item.title}
+      >
+        <NavbarMenuItemLabel>{item.title}</NavbarMenuItemLabel>
+      </NavbarMenuItem>
+    </BoxShadowWrapper>
+  ) : (
+    ""
   );
 };
 
-const SidebarContainer = styled.div`
+const Navbar = ({ activePage, hackathonConstants }: NavbarProps) => {
+  return (
+    <NavbarContainer>
+      <NavbarMenu>
+        {MenuItems.map((item) =>
+          MenuItem({ activePage, item: item, hackathonConstants })
+        )}
+      </NavbarMenu>
+    </NavbarContainer>
+  );
+};
+
+const NavbarContainer = styled.div`
   grid-area: Navbar;
   background-color: #1d2c3f;
   color: #fff;
@@ -41,72 +75,51 @@ const SidebarContainer = styled.div`
   font-family: "Work Sans", sans-serif;
 `;
 
-const SidebarMenu = styled.ul`
+const NavbarMenu = styled.ul`
   display: flex;
-
   align-items: left;
-
   flex-direction: column;
-
   list-style: none;
-
   width: 100%;
+  margin: 0.5rem 0 0 0;
 `;
 
-const MenuLogo = styled.div`
-  display: flex;
-
-  align-items: center;
-
-  justify-content: center;
-
-  height: 50px;
-
-  color: #fff;
-
-  margin: 20px auto;
-
-  padding-bottom: 20px;
+const BoxShadowWrapper = styled.div`
+  padding: 0.1rem;
+  margin: 0.5rem;
+  box-shadow: 8px 8px 0 0 #132235;
+  border-radius: 4px 10px 10px 4px;
 `;
 
-const SidebarMenuItem = styled.li`
-  display: flex;
+type AProps = {
+  active: boolean;
+};
 
+const NavbarMenuItem = styled.a<AProps>`
+  display: flex;
   height: 60px;
-
-  width: 100%;
-
+  width: auto;
+  padding: 0.5rem;
   align-items: center;
-
+  border-radius: 4px 10px 10px 4px;
+  box-shadow: inset 3px 0 0 0 #4a96f0;
   &:hover {
-    background: rgba(255, 255, 255, 0.05);
-
+    background: rgba(255, 255, 255, 0.03);
     box-shadow: inset 3px 0 0 0 #4a96f0;
-
     cursor: pointer;
   }
+  background-color: ${({ active }) =>
+    active ? "rgba(255, 255, 255, 0.03)" : "#2d4158"};
 `;
 
-const Icon = styled.svg`
-  width: 20px;
-
-  height: 20px;
-`;
-
-const SidebarMenuItemLabel = styled.p`
+const NavbarMenuItemLabel = styled.p`
   font-family: "Work Sans", sans-serif;
-
   font-size: 24px;
-
   font-weight: 600;
-
   line-height: 1.3;
-
   text-align: left;
-
   color: #ffffff;
-
-  margin-left: 20px;
+  margin-left: 8px;
 `;
 
-export default Sidebar;
+export default Navbar;
