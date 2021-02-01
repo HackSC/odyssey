@@ -89,6 +89,7 @@
     "react-toast-notifications": "^2.4.0",
     "react-twitter-embed": "^3.0.3",
     "react-use": "^13.8.1",
+    "scrapedin": "^1.0.21",
     "sequelize": "^5.21.1",
     "serverless-mysql": "^1.5.4",
     "simplex-noise": "^2.4.0",
