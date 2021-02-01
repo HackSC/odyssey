@@ -7,7 +7,7 @@ const HackathonEvents = ({ events }) => {
   let nextEvent;
   for (let i = 0; i < events.length; i++) {
     nextEvent = events[i].id;
-    if (moment(events[i].startsAt) > currentDate) {
+    if (moment(events[i].endsAt) > currentDate || moment(events[i].startsAt) > currentDate) {
       break;
     }
   }
