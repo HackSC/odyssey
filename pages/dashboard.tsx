@@ -1,6 +1,5 @@
 import { useState } from "react";
-import Dash from "../components/hackerDashboard/Dashboard";
-import AdminDashboard from "../components/hackerDashboard/AdminDashboard";
+import { Dash, AdminDashboard } from "@/components/hackerDashboard";
 
 import {
   handleLoginRedirect,
@@ -13,7 +12,7 @@ import {
   getPublicEvents,
 } from "@/lib";
 
-const Dashboard = ({ profile, events }) => {
+const Dashboard = ({ profile, events, hackathonConstants }) => {
   const [view, setView] = useState("hacker");
 
   const switchRole = () => {
@@ -25,11 +24,22 @@ const Dashboard = ({ profile, events }) => {
   };
 
   const getDashToRender = () => {
-    //@ts-ignore  - the NODE_ENV var doesnt support dev
     if (view === "admin") {
-      return <AdminDashboard profile={profile} events={events} />;
+      return (
+        <AdminDashboard
+          profile={profile}
+          events={events}
+          hackathonConstants={hackathonConstants}
+        />
+      );
     } else {
-      return <Dash profile={profile} events={events} />;
+      return (
+        <Dash
+          profile={profile}
+          events={events}
+          hackathonConstants={hackathonConstants}
+        />
+      );
     }
   };
 
@@ -86,6 +96,7 @@ export async function getServerSideProps({ req }) {
       profile,
       socialPosts,
       events,
+      hackathonConstants,
     },
   };
 }

@@ -2,34 +2,69 @@ import styled from "styled-components";
 import React, { useState } from "react";
 
 const MenuItems = [
-  { title: "Dashboard", route: "dashboard" },
-  { title: "Application", route: "application" },
-  { title: "Results", route: "results" },
-  { title: "Team", route: "team" },
-  { title: "Maps", route: "maps" },
-  { title: "Resources", route: "resources" },
+  { title: "Dashboard", route: "dashboard", constant: "showDash" },
+  { title: "Application", route: "application", constant: "showApp" },
+  { title: "Results", route: "results", constant: "showResults" },
+  { title: "Team", route: "team", constant: "showTeam" },
+  { title: "Maps", route: "maps", constant: "showMaps" },
+  { title: "Resources", route: "resources", constant: "showAPI" },
 ];
 
-const MenuItem = ({ activePage, title, route }) => (
-  <BoxShadowWrapper>
-    <SidebarMenuItem
-      href={"/" + route}
-      active={activePage === route || activePage === title}
-    >
-      <SidebarMenuItemLabel>{title}</SidebarMenuItemLabel>
-    </SidebarMenuItem>
-  </BoxShadowWrapper>
-);
+type Item = {
+  title: string;
+  route: string;
+  constant: string;
+};
 
-const Sidebar = ({ activePage, profile }) => {
+type HackathonConstant = {
+  id: number;
+  name: string;
+  boolean: boolean;
+  date: string;
+  type: any;
+};
+
+type NavbarProps = {
+  activePage: string;
+  hackathonConstants: Array<HackathonConstant>;
+  profile: Profile;
+};
+
+type MenuItemProps = {
+  activePage: string;
+  item: Item;
+  hackathonConstants: Array<HackathonConstant>;
+};
+
+const MenuItem = ({ activePage, item, hackathonConstants }: MenuItemProps) => {
+  let show = true;
+  hackathonConstants.forEach((c) => {
+    if (item.constant == c.name) show = c.boolean;
+  });
+
+  return show ? (
+    <BoxShadowWrapper>
+      <NavbarMenuItem
+        href={"/" + item.route}
+        active={activePage === item.route || activePage === item.title}
+      >
+        <NavbarMenuItemLabel>{item.title}</NavbarMenuItemLabel>
+      </NavbarMenuItem>
+    </BoxShadowWrapper>
+  ) : (
+    ""
+  );
+};
+
+const Navbar = ({ activePage, profile, hackathonConstants }: NavbarProps) => {
   const [showMenu, setShowMenu] = useState(false);
   return (
-    <SidebarContainer>
-      <SidebarMenu>
+    <NavbarContainer>
+      <NavbarMenu>
         {MenuItems.map((item) =>
-          MenuItem({ activePage, title: item.title, route: item.route })
+          MenuItem({ activePage, item: item, hackathonConstants })
         )}
-      </SidebarMenu>
+      </NavbarMenu>
       <BoxShadowWrapper>
         <Profile onClick={() => setShowMenu(!showMenu)}>
           <ProfilePic src={profile.profilePic ? profile.profilePic : "https://t4.ftcdn.net/jpg/00/64/67/63/360_F_64676383_LdbmhiNM6Ypzb3FM4PPuFP9rHe7ri8Ju.jpg"} />
@@ -45,11 +80,11 @@ const Sidebar = ({ activePage, profile }) => {
           ) : (<div/>)
         }
       </BoxShadowWrapper>
-    </SidebarContainer>
+    </NavbarContainer>
   );
 };
 
-const SidebarContainer = styled.div`
+const NavbarContainer = styled.div`
   grid-area: Navbar;
   background-color: #1d2c3f;
   color: #fff;
@@ -58,7 +93,7 @@ const SidebarContainer = styled.div`
   font-family: "Work Sans", sans-serif;
 `;
 
-const SidebarMenu = styled.ul`
+const NavbarMenu = styled.ul`
   display: flex;
   align-items: left;
   flex-direction: column;
@@ -78,7 +113,7 @@ type AProps = {
   active: boolean;
 };
 
-const SidebarMenuItem = styled.a<AProps>`
+const NavbarMenuItem = styled.a<AProps>`
   display: flex;
   height: 60px;
   width: auto;
@@ -95,7 +130,7 @@ const SidebarMenuItem = styled.a<AProps>`
     active ? "rgba(255, 255, 255, 0.03)" : "#2d4158"};
 `;
 
-const SidebarMenuItemLabel = styled.p`
+const NavbarMenuItemLabel = styled.p`
   font-family: "Work Sans", sans-serif;
   font-size: 24px;
   font-weight: 600;
@@ -166,4 +201,4 @@ const ProfileMenuItem = styled.a`
   text-decoration: none;
 `;
 
-export default Sidebar;
+export default Navbar;

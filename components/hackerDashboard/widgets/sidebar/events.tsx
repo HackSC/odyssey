@@ -26,6 +26,8 @@ const HackathonEvents = ({ events }) => {
 
 const EventList = styled.div`
   border-radius: 4px;
+  max-height: 400px;
+  overflow: scroll;
 `;
 
 const Event = styled.div`
