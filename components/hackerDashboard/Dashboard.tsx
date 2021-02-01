@@ -25,7 +25,7 @@ const Dashboard = ({ profile, events }: Props) => {
   return (
     <Container>
       <FoxLogo />
-      <Navbar activePage="dashboard" />
+      <Navbar activePage="dashboard" profile={profile} />
       <Header />
       <WidgetFrame widget="one" component={<h2>Your team</h2>} />
       <WidgetFrame widget="two" component={<Battlepass />} />
