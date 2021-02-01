@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import Image from "next/image";
 
 // Layout
 import Navbar from "./layout/SponsorNavbar";
@@ -6,6 +7,7 @@ import Sidebar from "./layout/Sidebar";
 import Footer from "./layout/Footer";
 import Header from "./layout/Header";
 import WidgetFrame from "./HackerWidgetFrame";
+import Logo from "@/assets/hackscFox.png";
 
 // Widgets
 import SponsorActionsWidget from "./widgets/admin/sponsor";
@@ -21,6 +23,7 @@ const SponsorDashboard = (props: Props) => {
 
   return (
     <Container>
+      <FoxLogo />
       <Navbar hackathonConstants={hackathonConstants} activePage="dashboard" />
       <Header text={"Sponsor Dashboard"} />
       <WidgetFrame
@@ -42,15 +45,30 @@ const SponsorDashboard = (props: Props) => {
   );
 };
 
+const FoxLogo = () => (
+  <MenuLogo>
+    <Image src={Logo} width="75%" height="75%" alt="" />
+  </MenuLogo>
+);  
+
+const MenuLogo = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  margin: 20px auto;
+`;
+
 const Container = styled.div`
   display: grid;
   grid-template-columns: 0.5fr 1.5fr 0.5fr;
-  grid-template-rows: 0.2fr 0.2fr 0.67fr 0.6fr;
+  grid-template-rows: 0.2fr 0.2fr 0.6fr 1fr 0.6fr;
   gap: 0px;
   grid-template-areas:
-    "Navbar Header Header Sidebar"
+    "FoxLogo Header Header Empty"
     "Navbar WidgetArea1 WidgetArea1 Sidebar"
     "Navbar WidgetArea2 WidgetArea2 Sidebar"
+    "Navbar BigWidget BigWidget Sidebar"
     "Footer Footer Footer Footer";
   background-color: #1d2c3f;
   color: #fff;
