@@ -21,7 +21,7 @@ const AdminDashboard = (props: Props) => {
 
   return (
     <Container>
-      <Navbar hackathonConstants={hackathonConstants} activePage="dashboard" />
+      <Navbar hackathonConstants={hackathonConstants} activePage="dashboard" profile={profile}/>
       <Header text={"Admin Dashboard"} />
       <WidgetFrame
         widget="one"
