@@ -11,6 +11,7 @@ import Logo from "@/assets/hackscFox.png";
 
 // Widgets
 import SponsorActionsWidget from "./widgets/admin/sponsor";
+import UpdatesWidget from "./widgets/updates";
 
 type Props = {
   profile: Profile;
@@ -39,6 +40,7 @@ const SponsorDashboard = (props: Props) => {
         }
       />
       <WidgetFrame widget="two" component={<SponsorActionsWidget />} />
+      <WidgetFrame widget="three" component={<UpdatesWidget />} />
       <Sidebar view={"sponsor"} events={events} />
       <Footer />
     </Container>
@@ -62,7 +64,7 @@ const MenuLogo = styled.div`
 const Container = styled.div`
   display: grid;
   grid-template-columns: 0.5fr 1.5fr 0.5fr;
-  grid-template-rows: 0.2fr 0.2fr 0.6fr 1fr 0.6fr;
+  grid-template-rows: 0.2fr 0.2fr 0.5fr 1fr 0.6fr;
   gap: 0px;
   grid-template-areas:
     "FoxLogo Header Header Empty"
