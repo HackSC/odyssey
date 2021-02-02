@@ -6,16 +6,10 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.INTEGER,
         primaryKey: true,
         allowNull: false,
+        autoIncrement: true,
       },
       slackId: {
         type: DataTypes.STRING,
-      },
-      userId: {
-        type: DataTypes.STRING,
-        references: {
-          model: "HackerProfiles",
-          key: "userId",
-        },
       },
     },
     {

@@ -70,6 +70,7 @@ server.use(cookieSession(sessionConfig));
 server.use(passport.initialize());
 server.use(passport.session());
 
+server.use(bodyParser.urlencoded({ extended: true }));
 server.use(bodyParser.json());
 server.use(fileUpload());
 
@@ -94,7 +95,6 @@ server.use("/api/prize", prizeRouter);
 server.use("/api/public", publicRouter);
 server.use("/api/teamMatching", matchingRouter);
 server.use("/api/linkSlack", linkSlackRouter);
-
 
 server.post("/api/scan", (req, res) => {
   console.info("Scanned: ", req.body.code);

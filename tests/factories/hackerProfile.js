@@ -44,6 +44,7 @@ const data = (props = {}) => {
     declinedAt: faker.date.past(1),
     instagram: "",
     bio: "",
+    slackProfile: "",
   };
   return { ...defaultProps, ...props };
 };
