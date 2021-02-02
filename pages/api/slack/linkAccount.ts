@@ -27,7 +27,6 @@ export default async (req, res) => {
     // This endpoint will be hit by the slack bot
     const userId = req.body.user_id;
     const email = req.body.text;
-    console.log(email);
 
     if (!validateEmail(email)) {
       return res.json({ text: "Please enter a valid email address!" });
@@ -38,7 +37,6 @@ export default async (req, res) => {
         email: email,
       },
     });
-    console.log(hackers);
 
     return res.json({ text: "Thanks for checking in! You're ready to go." });
   }

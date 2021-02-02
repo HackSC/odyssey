@@ -88,8 +88,6 @@ async function requestTeam(req) {
 }
 
 async function getProfileSuggestions(type: string) {
-  console.log("reached matching.ts");
-
   const urlRoute = "api/teamMatching/profile/" + type;
   const result = await fetch(urlRoute, {
     method: "GET",

@@ -22,19 +22,12 @@ const SlackModal: React.FunctionComponent<Props> = (props) => {
       body: JSON.stringify({ conversationId: conversationId }),
     })
       .then((response) => response.json())
-      .then((response) => {
-        console.log(response);
-      })
+      .then((response) => {})
       // .then((res) => {
-      //     console.log("finished");
-      //     console.log(res.json());
       //     const users = res.json().users;
-      //     console.log(users);
       //     setUsers(users);
       // })
-      .catch((err) => {
-        console.log(err);
-      });
+      .catch((err) => {});
   }, []);
 
   if (!visible || !conversationId) {

@@ -5,15 +5,15 @@ import AdminDashboard from "../components/hackerDashboard/AdminDashboard";
 import {
   handleLoginRedirect,
   getProfile,
-  handleAdminRedirect,
   handleVolunteerRedirect,
   handleSponsorRedirect,
   handleDashboardRedirect,
   getHackathonConstants,
   generatePosts,
+  getPublicEvents,
 } from "@/lib";
 
-const Dashboard = ({ profile, houses, socialPosts }) => {
+const Dashboard = ({ profile, events }) => {
   const [view, setView] = useState("hacker");
 
   const switchRole = () => {
@@ -27,20 +27,24 @@ const Dashboard = ({ profile, houses, socialPosts }) => {
   const getDashToRender = () => {
     //@ts-ignore  - the NODE_ENV var doesnt support dev
     if (view === "admin") {
-      return <AdminDashboard profile={profile} />;
+      return <AdminDashboard profile={profile} events={events} />;
     } else {
-      return <Dash profile={profile} />;
+      return <Dash profile={profile} events={events} />;
     }
   };
 
   return (
     <>
-      <button
-        onClick={switchRole}
-        style={{ position: "absolute", top: 10, right: "50%" }}
-      >
-        Switch role
-      </button>
+      {process.env.NODE_ENV === "development" ? (
+        <button
+          onClick={switchRole}
+          style={{ position: "absolute", top: 20, right: 20 }}
+        >
+          Switch role
+        </button>
+      ) : (
+        ""
+      )}
       {getDashToRender()}
     </>
   );
@@ -49,6 +53,8 @@ const Dashboard = ({ profile, houses, socialPosts }) => {
 export async function getServerSideProps({ req }) {
   const profile = await getProfile(req);
   const hackathonConstants = await getHackathonConstants();
+  const currentEvents = await getPublicEvents(req);
+  const events = currentEvents ? currentEvents["events"] : [];
   const houses = [];
 
   // Null profile means user is not logged in
@@ -79,6 +85,7 @@ export async function getServerSideProps({ req }) {
       houses,
       profile,
       socialPosts,
+      events,
     },
   };
 }
