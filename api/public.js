@@ -5,7 +5,12 @@ const router = express.Router();
 
 router.get("/events/list", cors(), async (req, res) => {
   try {
-    const events = await models.Event.findAll();
+    const events = await models.Event.findAll({
+      order: [
+        ['startsAt', 'ASC'],
+        ['endsAt', 'ASC']
+      ]
+    });
     return res.json({ events });
   } catch (e) {
     return res.json({ err: e });
