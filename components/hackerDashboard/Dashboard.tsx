@@ -28,7 +28,7 @@ const Dashboard = ({ profile, events, hackathonConstants }: Props) => {
   return (
     <Container>
       <FoxLogo />
-      <Navbar hackathonConstants={hackathonConstants} activePage="dashboard" />
+      <Navbar hackathonConstants={hackathonConstants} activePage="dashboard" profile={profile} />
       <Header />
       <WidgetFrame widget="one" component={<h2>Your team</h2>} />
       <WidgetFrame widget="two" component={<BattlepassWidget />} />
