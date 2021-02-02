@@ -57,7 +57,6 @@ const MenuItem = ({ activePage, item, hackathonConstants }: MenuItemProps) => {
 };
 
 const Navbar = ({ activePage, profile, hackathonConstants }: NavbarProps) => {
-  const [showMenu, setShowMenu] = useState(false);
   return (
     <NavbarContainer>
       <NavbarMenu>
@@ -66,19 +65,24 @@ const Navbar = ({ activePage, profile, hackathonConstants }: NavbarProps) => {
         )}
       </NavbarMenu>
       <BoxShadowWrapper>
-        <Profile onClick={() => setShowMenu(!showMenu)}>
-          <ProfilePic src={profile.profilePic ? profile.profilePic : "https://t4.ftcdn.net/jpg/00/64/67/63/360_F_64676383_LdbmhiNM6Ypzb3FM4PPuFP9rHe7ri8Ju.jpg"} />
+        <Profile>
+          <ProfilePic
+            src={
+              profile.profilePic
+                ? profile.profilePic
+                : "https://t4.ftcdn.net/jpg/00/64/67/63/360_F_64676383_LdbmhiNM6Ypzb3FM4PPuFP9rHe7ri8Ju.jpg"
+            }
+          />
           <ProfileDetails>
-            <Name>{profile.firstName} {profile.lastName}</Name>
+            <Name>
+              {profile.firstName} {profile.lastName}
+            </Name>
             <Email>{profile.email}</Email>
           </ProfileDetails>
         </Profile>
-        {showMenu ? (
-          <ProfileMenu>
-            <ProfileMenuItem href="/auth/logout">logout</ProfileMenuItem>
-          </ProfileMenu>
-          ) : (<div/>)
-        }
+        <ProfileMenu>
+          <ProfileMenuItem href="/auth/logout">logout</ProfileMenuItem>
+        </ProfileMenu>
       </BoxShadowWrapper>
     </NavbarContainer>
   );
@@ -140,6 +144,16 @@ const NavbarMenuItemLabel = styled.p`
   margin-left: 8px;
 `;
 
+const ProfileMenu = styled.div`
+  display: none;
+  flex-direction: column;
+  align-content: center;
+
+  &:hover {
+    display: flex;
+  }
+`;
+
 const Profile = styled.a`
   display: flex;
   height: auto;
@@ -156,6 +170,10 @@ const Profile = styled.a`
   }
   background-color: #2d4158;
   color: white;
+
+  &:hover + ${ProfileMenu} {
+    display: flex;
+  }
 `;
 
 const ProfilePic = styled.img`
@@ -183,12 +201,6 @@ const Email = styled.p`
   font-size: 15px;
   font-weight: 300;
   padding-top: 5px;
-`;
-
-const ProfileMenu = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-content: center;
 `;
 
 const ProfileMenuItem = styled.a`
