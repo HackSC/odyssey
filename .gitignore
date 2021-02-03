@@ -62,7 +62,6 @@ aws.env
 aws_secrets.env
 andreas.env
 
-
 # * Ignore package lock in favor of yarn lock
 package-lock.json
 
