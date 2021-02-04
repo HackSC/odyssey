@@ -18,8 +18,14 @@ import { getAnnouncements } from "../lib/getAnnouncements";
 
 import { generatePosts } from "../lib/referrerCode";
 
-const Dashboard = ({ profile, houses, events, socialPosts, hackathonConstants, announcements }) => {
-
+const Dashboard = ({
+  profile,
+  houses,
+  events,
+  socialPosts,
+  hackathonConstants,
+  announcements,
+}) => {
   const [view, setView] = useState("hacker");
 
   const switchRole = () => {
@@ -87,12 +93,12 @@ export async function getServerSideProps({ req }) {
   } else if (profile.role == "sponsor") {
     handleSponsorRedirect(req);
   }
-  
+
   if (
     !hackathonConstants.find((constant) => constant.name === "showDash")
       ?.boolean
   ) {
-    await handleDashboardRedirect(req);
+    //await handleDashboardRedirect(req);
   }
 
   let socialPosts = {};
@@ -108,7 +114,6 @@ export async function getServerSideProps({ req }) {
       announcements,
       events,
       hackathonConstants,
-
     },
   };
 }
