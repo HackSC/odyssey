@@ -4,10 +4,7 @@ import Image from "next/image";
 import Logo from "@/assets/hackscFox.png";
 
 // Layout
-import Navbar from "./layout/Navbar";
-import Sidebar from "./layout/Sidebar";
-import Footer from "./layout/Footer";
-import Header from "./layout/Header";
+import { Navbar, Sidebar, Footer, Header } from "./layout";
 import WidgetFrame from "./HackerWidgetFrame";
 
 // Widgets

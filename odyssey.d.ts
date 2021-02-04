@@ -128,6 +128,7 @@ declare type Profile = {
   portfolioUrl: string;
   instagram: string;
   bio: string;
+  profilePic: string;
 };
 
 declare type Team = {

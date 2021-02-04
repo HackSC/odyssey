@@ -32,7 +32,7 @@ const Sidebar = ({ activePage }) => {
   );
 };
 
-const SidebarContainer = styled.div`
+const NavbarContainer = styled.div`
   grid-area: Navbar;
   background-color: #1d2c3f;
   color: #fff;
@@ -41,7 +41,7 @@ const SidebarContainer = styled.div`
   font-family: "Work Sans", sans-serif;
 `;
 
-const SidebarMenu = styled.ul`
+const NavbarMenu = styled.ul`
   display: flex;
   align-items: left;
   flex-direction: column;
@@ -78,7 +78,7 @@ const SidebarMenuItem = styled.a<AProps>`
     active ? "rgba(255, 255, 255, 0.03)" : "#2d4158"};
 `;
 
-const SidebarMenuItemLabel = styled.p`
+const Name = styled.p`
   font-family: "Work Sans", sans-serif;
   font-size: 24px;
   font-weight: 600;
@@ -88,4 +88,4 @@ const SidebarMenuItemLabel = styled.p`
   margin-left: 8px;
 `;
 
-export default Sidebar;
+export default Navbar;

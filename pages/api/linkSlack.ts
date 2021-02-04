@@ -25,7 +25,6 @@ router.post("/", async (req, res) => {
     },
   }).on("success", function (hacker) {
     if (hacker) {
-      console.log(hacker);
       hacker.update({
         slackProfile: link.id,
       });

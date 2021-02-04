@@ -1,6 +1,5 @@
 import { useState } from "react";
-import Dash from "../components/hackerDashboard/Dashboard";
-import AdminDashboard from "../components/hackerDashboard/AdminDashboard";
+import { Dash, AdminDashboard } from "@/components/hackerDashboard";
 
 import {
   handleLoginRedirect,
@@ -25,7 +24,6 @@ const Dashboard = ({ profile, events }) => {
   };
 
   const getDashToRender = () => {
-    //@ts-ignore  - the NODE_ENV var doesnt support dev
     if (view === "admin") {
       return <AdminDashboard profile={profile} events={events} />;
     } else {

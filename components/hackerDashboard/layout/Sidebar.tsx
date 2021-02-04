@@ -1,6 +1,5 @@
 import styled from "styled-components";
 import WidgetFrame from "../HackerWidgetFrame";
-
 import {
   HackathonCountdown,
   HackathonDates,

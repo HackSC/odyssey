@@ -144,6 +144,7 @@ module.exports = (sequelize, DataTypes) => {
           key: "id",
         },
       },
+      profilePic: DataTypes.STRING(500),
     },
     {}
   );
