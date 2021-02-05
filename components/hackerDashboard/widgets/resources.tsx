@@ -95,9 +95,7 @@ const ResourceImageWrapper = styled.div`
 `;
 
 const ResourceImage = styled.img`
-    // height: auto;
     max-height: 120px;
-    // min-height: 100px;
     max-width: 250px;
 `;
 
