@@ -6,4 +6,5 @@ export * from "./widgets";
 export { default as AdminDashboard } from "./AdminDashboard";
 export { default as Application } from "./Application";
 export { default as Dash } from "./Dashboard";
+export { default as ResourcesDash } from "./Resources";
 export { default as HackerWidgetFrame } from "./HackerWidgetFrame";
