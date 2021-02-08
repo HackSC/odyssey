@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Dash, AdminDashboard } from "@/components/hackerDashboard";
+import { Dash, AdminDashboard, SponsorDashboard } from "@/components/hackerDashboard";
 
 import {
   handleLoginRedirect,
@@ -18,7 +18,11 @@ const Dashboard = ({ profile, events, hackathonConstants }) => {
   const switchRole = () => {
     if (view === "admin") {
       setView("hacker");
-    } else {
+    } 
+    else if (view === "hacker") {
+      setView("sponsor");
+    }
+    else if (view === "sponsor") {
       setView("admin");
     }
   };
@@ -32,7 +36,16 @@ const Dashboard = ({ profile, events, hackathonConstants }) => {
           hackathonConstants={hackathonConstants}
         />
       );
-    } else {
+    } 
+    else if (view === "sponsor") {
+      return (
+        <SponsorDashboard
+          profile={profile}
+          events={events}
+          hackathonConstants={hackathonConstants} />
+      );
+    }
+    else {
       return (
         <Dash
           profile={profile}
