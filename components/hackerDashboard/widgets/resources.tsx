@@ -1,62 +1,20 @@
 import styled from "styled-components";
 
-const resources = [
-    {
-        title: "Vercel", 
-        imageUrl: "https://logovtor.com/wp-content/uploads/2020/10/vercel-inc-logo-vector.png",
-        description: "Vercel combines the best development experience with obsessive focus on end-user performance. our platform enables frontend teams to do their best work.",
-        slackChannel: "https://www.hacksc.com/",
-    },
-    {
-        title: "Microsoft", 
-        imageUrl: "http://assets.stickpng.com/images/58480fd7cef1014c0b5e4943.png",
-        description: "Vercel combines the best development experience with obsessive focus on end-user performance. our platform enables frontend teams to do their best work.",
-        slackChannel: "https://www.hacksc.com/",
-    },
-    {
-        title: "Vercel", 
-        imageUrl: "https://logovtor.com/wp-content/uploads/2020/10/vercel-inc-logo-vector.png",
-        description: "Vercel combines the best development experience with obsessive focus on end-user performance. our platform enables frontend teams to do their best work.",
-        slackChannel: "https://www.hacksc.com/",
-    },
-    {
-        title: "Microsoft", 
-        imageUrl: "http://assets.stickpng.com/images/58480fd7cef1014c0b5e4943.png",
-        description: "Vercel combines the best development experience with obsessive focus on end-user performance. our platform enables frontend teams to do their best work.",
-        slackChannel: "https://www.hacksc.com/",
-    },
-    {
-        title: "Vercel", 
-        imageUrl: "https://logovtor.com/wp-content/uploads/2020/10/vercel-inc-logo-vector.png",
-        description: "Vercel combines the best development experience with obsessive focus on end-user performance. our platform enables frontend teams to do their best work.",
-        slackChannel: "https://www.hacksc.com/",
-    },
-    {
-        title: "Microsoft", 
-        imageUrl: "http://assets.stickpng.com/images/58480fd7cef1014c0b5e4943.png",
-        description: "Vercel combines the best development experience with obsessive focus on end-user performance. our platform enables frontend teams to do their best work.",
-        slackChannel: "https://www.hacksc.com/",
-    },
-    {
-        title: "Vercel", 
-        imageUrl: "https://logovtor.com/wp-content/uploads/2020/10/vercel-inc-logo-vector.png",
-        description: "Vercel combines the best development experience with obsessive focus on end-user performance. our platform enables frontend teams to do their best work.",
-        slackChannel: "https://www.hacksc.com/",
-    },
-]
-
-const ResourcesWidget = () => {
+const ResourcesWidget = ({ resources }) => {
   return (
     <Wrapper>
       {resources.map((resource) => 
         <ResourceWrapper>
             <ResourceImageWrapper>
-                <ResourceImage src={resource.imageUrl} />
+                <ResourceImage src={resource.image_url} />
             </ResourceImageWrapper>
             <ResourceBlurb>
-                <ResourceTitle>{resource.title}</ResourceTitle>
+                <ResourceTitle>{resource.name}</ResourceTitle>
                 <ResourceDescription>{resource.description}</ResourceDescription>
-                <Button href={resource.slackChannel}>Join Channel</Button>
+                {resource.links.map((link) => 
+                    <Button href={link.link}>{link.name}</Button>
+                )}
+                <Button href={resource.slack_channel}>Join Slack Channel</Button>
             </ResourceBlurb>
         </ResourceWrapper>
     )}
@@ -65,11 +23,11 @@ const ResourcesWidget = () => {
 };
 
 const Wrapper = styled.div`
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  max-height: 600px;
-  overflow: scroll;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    max-height: 600px;
+    overflow: scroll;
 `;
 
 const ResourceWrapper = styled.div`
@@ -105,9 +63,7 @@ const ResourceBlurb = styled.div`
     align-items: flex-start;
     background-color: #28303A;
     border-radius: 15px;
-    height: 14.25vh
-    min-height: 200px;
-    max-height: 250px;
+    height: 225px;
     width: calc(20vw - 30px);
     min-width: 270px;
     max-width: 320px;

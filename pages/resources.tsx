@@ -6,15 +6,17 @@ import {
   handleDashboardRedirect,
   getHackathonConstants,
   getPublicEvents,
+  getAPIS,
 } from "@/lib";
 
-const Resources = ({ profile, events, hackathonConstants }) => {
+const Resources = ({ profile, events, hackathonConstants, resources }) => {
   return (
     <>
       <ResourcesDash
           profile={profile}
           events={events}
           hackathonConstants={hackathonConstants}
+          resources={resources}
       />
     </>
   );
@@ -38,11 +40,15 @@ export async function getServerSideProps({ req }) {
     await handleDashboardRedirect(req);
   }
 
+  const apis = await getAPIS(req);
+  const resources = apis.success;
+
   return {
     props: {
       profile,
       events,
       hackathonConstants,
+      resources,
     },
   };
 }

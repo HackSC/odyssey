@@ -14,7 +14,9 @@ module.exports = (sequelize, DataTypes) => {
       },
       name: DataTypes.STRING,
       description: DataTypes.STRING,
-      major_event: DataTypes.INTEGER
+      major_event: DataTypes.INTEGER, 
+      image_url: DataTypes.STRING,
+      slack_channel: DataTypes.STRING,
     },
     {
       timestamps: false
