@@ -6,8 +6,6 @@ const Sentry = require("@sentry/node");
 const Busboy = require("busboy");
 const AWS = require("aws-sdk");
 
-router.use(utils.authMiddleware);
-
 router.get("/:role", async (req, res) => {
   const role = req.params.role;
   let announcements = null;
@@ -21,6 +19,21 @@ router.get("/:role", async (req, res) => {
     announcements = await models.Announcement.findAll({});
   }
   return res.json({ announcements });
+});
+
+router.post("/", async (req, res) => {
+  try {
+    const { target, text, from, img } = { ...req.body };
+    const newAnnouncement = await models.Announcement.create({
+      target: target,
+      text: text,
+      from: from,
+      img: img,
+    });
+    return res.json({ newAnnouncement });
+  } catch (e) {
+    return res.json({ err: e });
+  }
 });
 
 module.exports = router;
