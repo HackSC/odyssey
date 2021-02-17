@@ -10,7 +10,7 @@ import "react-circular-progressbar/dist/styles.css";
 
 const BattlepassWidget = () => {
   const [progress, setProgress] = useState(Math.floor(Math.random() * 100));
-  const styles = {
+  const styles: any = {
     // Customize the root svg element
     root: {
       filter: "drop-shadow(2px 4px 4px black)",

@@ -1,4 +1,16 @@
+import { sendSlackMessage } from "@/lib";
 import styled from "styled-components";
+
+const send_slack_msg = async (e) => {
+  let start_and_end_date =
+    new Date(new Date().getTime() - 480 * 1000 * 60).toISOString() + "";
+  await sendSlackMessage(
+    ":hot_pepper: Admin Metabase accessed!",
+    "",
+    start_and_end_date,
+    start_and_end_date
+  );
+};
 
 const ActionsWidget = () => {
   return (

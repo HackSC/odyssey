@@ -1,49 +1,76 @@
 import { useState } from "react";
-import Dash from "../components/hackerDashboard/Dashboard";
-import AdminDashboard from "../components/hackerDashboard/AdminDashboard";
+import {
+  Dash,
+  AdminDashboard,
+  SponsorDashboard,
+} from "@/components/hackerDashboard";
 import getTeam from "../lib/api-sdk/getTeam";
 
 import {
   handleLoginRedirect,
   getProfile,
-  handleAdminRedirect,
   handleVolunteerRedirect,
   handleSponsorRedirect,
   handleDashboardRedirect,
-} from "../lib/authenticate";
+  getHackathonConstants,
+  generatePosts,
+  getPublicEvents,
+} from "@/lib";
 
-import { getHackathonConstants } from "../lib";
-
-import { generatePosts } from "../lib/referrerCode";
-
-const Dashboard = ({ profile, team, houses, socialPosts }) => {
+const Dashboard = ({ profile, events, hackathonConstants, team }) => {
   const [view, setView] = useState("hacker");
 
   const switchRole = () => {
     if (view === "admin") {
       setView("hacker");
-    } else {
+    } else if (view === "hacker") {
+      setView("sponsor");
+    } else if (view === "sponsor") {
       setView("admin");
     }
   };
 
   const getDashToRender = () => {
-    //@ts-ignore  - the NODE_ENV var doesnt support dev
     if (view === "admin") {
-      return <AdminDashboard profile={profile} />;
+      return (
+        <AdminDashboard
+          profile={profile}
+          events={events}
+          hackathonConstants={hackathonConstants}
+        />
+      );
+    } else if (view === "sponsor") {
+      return (
+        <SponsorDashboard
+          profile={profile}
+          events={events}
+          hackathonConstants={hackathonConstants}
+        />
+      );
     } else {
-      return <Dash team={team} profile={profile} />;
+      return (
+        <Dash
+          team={team}
+          profile={profile}
+          events={events}
+          hackathonConstants={hackathonConstants}
+        />
+      );
     }
   };
 
   return (
     <>
-      <button
-        onClick={switchRole}
-        style={{ position: "absolute", top: 10, right: "50%" }}
-      >
-        Switch role
-      </button>
+      {process.env.NODE_ENV === "development" ? (
+        <button
+          onClick={switchRole}
+          style={{ position: "absolute", top: 20, right: 20 }}
+        >
+          Switch role
+        </button>
+      ) : (
+        ""
+      )}
       {getDashToRender()}
     </>
   );
@@ -51,8 +78,12 @@ const Dashboard = ({ profile, team, houses, socialPosts }) => {
 
 export async function getServerSideProps({ req }) {
   const profile = await getProfile(req);
+  const hackathonConstants = await getHackathonConstants();
+  const currentEvents = await getPublicEvents(req);
   const team = await getTeam(req);
-  //const houses = await getHouses(req);
+
+  const events = currentEvents ? currentEvents["events"] : [];
+
   const houses = [];
 
   // Null profile means user is not logged in
@@ -66,13 +97,11 @@ export async function getServerSideProps({ req }) {
     handleSponsorRedirect(req);
   }
 
-  const hackathonConstants = await getHackathonConstants();
-
   if (
     !hackathonConstants.find((constant) => constant.name === "showDash")
       ?.boolean
   ) {
-    handleDashboardRedirect(req);
+    await handleDashboardRedirect(req);
   }
 
   let socialPosts = {};
@@ -86,6 +115,8 @@ export async function getServerSideProps({ req }) {
       profile,
       socialPosts,
       team,
+      events,
+      hackathonConstants,
     },
   };
 }

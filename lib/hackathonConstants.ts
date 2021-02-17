@@ -1,5 +1,8 @@
+import moment from "moment-timezone";
+
 export default {
-  hackathonDate: new Date("2/19/21"),
+  hackathonDate: moment(1613754000000, false).tz(moment.tz.guess()),
+  hackathonEndDate: moment(1613898000000, false).tz(moment.tz.guess()),
 };
 
 export async function getHackathonConstants(): Promise<
@@ -17,7 +20,13 @@ export async function getHackathonConstants(): Promise<
   return data.result;
 }
 
-export async function updateHackathonConstant({ id, name, boolean, date }) {
+export async function updateHackathonConstant({
+  id,
+  name,
+  boolean,
+  date,
+  type,
+}) {
   const fetchUrl = process.env.URL_BASE
     ? process.env.URL_BASE + "api/constants/update"
     : "api/constants/update";
@@ -27,7 +36,13 @@ export async function updateHackathonConstant({ id, name, boolean, date }) {
     headers: {
       "Content-Type": "application/json",
     },
-    body: JSON.stringify({ id: id, name: name, boolean: boolean, date: date }),
+    body: JSON.stringify({
+      id: id,
+      name: name,
+      boolean: boolean,
+      date: date,
+      type: type,
+    }),
   });
 
   return response;
@@ -56,7 +71,7 @@ export async function deleteHackathonConstant({ id }) {
   }
 }
 
-export async function createHackathonConstant({ name, boolean, date }) {
+export async function createHackathonConstant({ name, boolean, date, type }) {
   let fetchUrl = process.env.URL_BASE
     ? /* Serverside */ process.env.URL_BASE + "api/constants/new"
     : /* Client */ "/api/constants/new";
@@ -66,7 +81,12 @@ export async function createHackathonConstant({ name, boolean, date }) {
     headers: {
       "Content-Type": "application/json",
     },
-    body: JSON.stringify({ name: name, boolean: boolean, date: date }),
+    body: JSON.stringify({
+      name: name,
+      boolean: boolean,
+      date: date,
+      type: type,
+    }),
   });
 
   try {

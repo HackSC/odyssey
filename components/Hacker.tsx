@@ -8,6 +8,7 @@ import {
 import { Button, Column, Flex, Form, FormGroup, TitleBox } from "../styles";
 import PacmanLoader from "react-spinners/PacmanLoader";
 import { useToasts } from "react-toast-notifications";
+// import hackathonConstants from "../lib/hackathonConstants";
 import Modal from "./Modal";
 import { AiOutlineCloseCircle } from "react-icons/ai";
 
@@ -18,12 +19,8 @@ const Hacker = ({
   showRejectButton = false,
   showWaitlistButton = false,
   profile = null,
-  setAcceptedHackersCallback = null,
-  setRejectedHackersCallback = null,
-  setWaitlistedHackersCallback = null,
-  acceptedHackers = [],
-  rejectedHackers = [],
-  waitlistedHackers = [],
+  setHackerCount = null,
+  hackerCount = 0,
   hackathonConstants = [],
 }) => {
   const [accepting, setAccepting] = useState(false);
@@ -57,8 +54,7 @@ const Hacker = ({
           hacker.status = "accepted";
 
           // * Call accepted callback
-          if (setAcceptedHackersCallback)
-            setAcceptedHackersCallback([...acceptedHackers, hacker]);
+          if (setHackerCount) setHackerCount(hackerCount + 1);
 
           // * Disable accept button
           setDisabled(true);
@@ -110,9 +106,7 @@ const Hacker = ({
         if (result.status == 200) {
           hacker.status = "rejected";
 
-          // * Call accepted callback
-          if (setRejectedHackersCallback)
-            setRejectedHackersCallback([...rejectedHackers, hacker]);
+          if (setHackerCount) setHackerCount(hackerCount + 1);
 
           // * Disable action buttons
           setDisabled(true);
@@ -165,8 +159,7 @@ const Hacker = ({
           hacker.status = "waitlisted";
 
           // * Call accepted callback
-          if (setWaitlistedHackersCallback)
-            setWaitlistedHackersCallback([...waitlistedHackers, hacker]);
+          if (setHackerCount) setHackerCount(hackerCount + 1);
 
           // * Disable action buttons
           setDisabled(true);
