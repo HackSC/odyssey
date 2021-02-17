@@ -12,7 +12,7 @@ const ResourcesWidget = ({ resources }) => {
                 <ResourceTitle>{resource.name}</ResourceTitle>
                 <ResourceDescription>{resource.description}</ResourceDescription>
                 {resource.links.map((link) => 
-                    <Button href={link.link}>{link.name}</Button>
+                    <Button href={link.linke}>{link.name}</Button>
                 )}
                 <Button href={resource.slack_channel}>Join Slack Channel</Button>
             </ResourceBlurb>
