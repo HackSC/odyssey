@@ -99,7 +99,6 @@ const Dashboard = ({
 export async function getServerSideProps({ req }) {
   const profile = await getProfile(req);
   //const houses = await getHouses(req);
-  console.log(profile);
   const announcements = await getAnnouncements(req, profile);
   const hackathonConstants = await getHackathonConstants();
   const currentEvents = await getPublicEvents(req);
