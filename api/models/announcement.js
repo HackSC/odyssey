@@ -8,7 +8,7 @@ module.exports = (sequelize, DataTypes) => {
       text: DataTypes.STRING,
       target: DataTypes.STRING,
     },
-    {}
+    { timestamps: false }
   );
   Announcement.associate = function (models) {
     // associations can be defined here

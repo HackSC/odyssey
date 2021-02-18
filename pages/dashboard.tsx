@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Dash, AdminDashboard, SponsorDashboard } from "@/components/hackerDashboard";
 
 import {
@@ -12,11 +12,11 @@ import {
   getPublicEvents,
 } from "@/lib";
 
-import { getHackathonConstants } from "../lib";
+// import { getHackathonConstants } from "../lib";
 
 import { getAnnouncements } from "../lib/getAnnouncements";
 
-import { generatePosts } from "../lib/referrerCode";
+// import { generatePosts } from "../lib/referrerCode";
 
 const Dashboard = ({
   profile,
@@ -27,6 +27,15 @@ const Dashboard = ({
   announcements,
 }) => {
   const [view, setView] = useState("hacker");
+
+
+  useEffect(() => {
+    if(!profile.slackProfile) {
+      setTimeout(function() { 
+        alert("Welcome to HackSC 2021! Please check in by using the /checkin [your hacksc.com email login] command in any Slack channel."); 
+      }, 500);
+    }
+  }, [])
 
   const switchRole = () => {
     if (view === "admin") {
@@ -90,6 +99,7 @@ const Dashboard = ({
 export async function getServerSideProps({ req }) {
   const profile = await getProfile(req);
   //const houses = await getHouses(req);
+  console.log(profile);
   const announcements = await getAnnouncements(req, profile);
   const hackathonConstants = await getHackathonConstants();
   const currentEvents = await getPublicEvents(req);
