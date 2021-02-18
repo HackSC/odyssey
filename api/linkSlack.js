@@ -30,6 +30,14 @@ router.post("/", async (req, res) => {
     }
 
     const link = await models.LinkedSlack.create({ slackId: slackId });
+    if(link) {
+      link.update({
+        checkInTime: new Date()
+      })
+      .then((updatedLink) => {
+        console.log(updatedLink.checkInTime);
+      })
+    }
 
     const hacker = await models.HackerProfile.findOne({
       where: {
@@ -40,7 +48,7 @@ router.post("/", async (req, res) => {
     if (hacker) {
       hacker
         .update({
-          slackProfile: slackId,
+          slackProfile: slackId
         })
         .then((updatedHacker) => {
           console.log("hacker updated");

@@ -14,10 +14,13 @@ module.exports = (sequelize, DataTypes) => {
       devPostSubmission: {
         type: DataTypes.STRING,
       },
+      checkInTime: {
+        type: DataTypes.DATE
+      }
     },
     {
       timestamps: false,
-    }
+    },
   );
 
   return LinkedSlack;
