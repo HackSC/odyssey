@@ -11,13 +11,6 @@ module.exports = (sequelize, DataTypes) => {
       slackId: {
         type: DataTypes.STRING,
       },
-      userId: {
-        type: DataTypes.STRING,
-        references: {
-          model: "HackerProfiles",
-          key: "userId",
-        },
-      },
       devPostSubmission: {
         type: DataTypes.STRING,
       },
