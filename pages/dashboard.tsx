@@ -12,7 +12,20 @@ import {
   getPublicEvents,
 } from "@/lib";
 
-const Dashboard = ({ profile, events, hackathonConstants }) => {
+import { getHackathonConstants } from "../lib";
+
+import { getAnnouncements } from "../lib/getAnnouncements";
+
+import { generatePosts } from "../lib/referrerCode";
+
+const Dashboard = ({
+  profile,
+  houses,
+  events,
+  socialPosts,
+  hackathonConstants,
+  announcements,
+}) => {
   const [view, setView] = useState("hacker");
 
   const switchRole = () => {
@@ -51,6 +64,7 @@ const Dashboard = ({ profile, events, hackathonConstants }) => {
           profile={profile}
           events={events}
           hackathonConstants={hackathonConstants}
+          announcements={announcements}
         />
       );
     }
@@ -75,6 +89,8 @@ const Dashboard = ({ profile, events, hackathonConstants }) => {
 
 export async function getServerSideProps({ req }) {
   const profile = await getProfile(req);
+  //const houses = await getHouses(req);
+  const announcements = await getAnnouncements(req, profile);
   const hackathonConstants = await getHackathonConstants();
   const currentEvents = await getPublicEvents(req);
   const events = currentEvents ? currentEvents["events"] : [];
@@ -95,7 +111,7 @@ export async function getServerSideProps({ req }) {
     !hackathonConstants.find((constant) => constant.name === "showDash")
       ?.boolean
   ) {
-    await handleDashboardRedirect(req);
+    //await handleDashboardRedirect(req);
   }
 
   let socialPosts = {};
@@ -108,6 +124,7 @@ export async function getServerSideProps({ req }) {
       houses,
       profile,
       socialPosts,
+      announcements,
       events,
       hackathonConstants,
     },
