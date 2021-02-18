@@ -13,25 +13,16 @@ module.exports = {
         slackId: {
           type: Sequelize.STRING,
         },
-        userId: {
-          type: Sequelize.STRING,
-          references: {
-            model: "HackerProfiles",
-            key: "userId",
-          },
-        },
         devPostSubmission: {
           type: Sequelize.STRING,
         },
         checkInTime: {
           type: Sequelize.DATE,
         },
-      })
-    ])
+      }),
+    ]);
   },
   down: (queryInterface, Sequelize) => {
-    return Promise.all([
-      queryInterface.dropTable("LinkedSlacks")
-    ])
+    return Promise.all([queryInterface.dropTable("LinkedSlacks")]);
   },
 };
