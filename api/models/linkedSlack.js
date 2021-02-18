@@ -11,6 +11,9 @@ module.exports = (sequelize, DataTypes) => {
       slackId: {
         type: DataTypes.STRING,
       },
+      devPostSubmission: {
+        type: DataTypes.STRING,
+      },
     },
     {
       timestamps: false,

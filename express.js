@@ -26,6 +26,7 @@ const hackerLiveRouter = require("./api/hackerLive");
 const publicRouter = require("./api/public");
 const matchingRouter = require("./api/teamMatching");
 const linkSlackRouter = require("./api/linkSlack");
+const submitProjectRouter = require("./api/submitProject");
 const fileUpload = require("express-fileupload");
 const dotenv = require("dotenv");
 
@@ -95,6 +96,7 @@ server.use("/api/prize", prizeRouter);
 server.use("/api/public", publicRouter);
 server.use("/api/teamMatching", matchingRouter);
 server.use("/api/linkSlack", linkSlackRouter);
+server.use("/api/submitProject", submitProjectRouter);
 
 server.post("/api/scan", (req, res) => {
   console.info("Scanned: ", req.body.code);

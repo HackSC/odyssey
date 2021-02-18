@@ -141,7 +141,7 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.STRING,
         references: {
           model: "LinkedSlack",
-          key: "id",
+          key: "slackId",
         },
       },
       profilePic: DataTypes.STRING(500),

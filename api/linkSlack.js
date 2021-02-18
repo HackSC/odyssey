@@ -20,6 +20,15 @@ router.post("/", async (req, res) => {
   }
 
   if (slackId) {
+    //if link already exists, don't check in again
+    const linkExists = await models.LinkedSlack.findOne({
+      where: { slackId: slackId },
+    });
+
+    if (linkExists) {
+      return res.json({ text: "You're already checked in" });
+    }
+
     const link = await models.LinkedSlack.create({ slackId: slackId });
 
     const hacker = await models.HackerProfile.findOne({
@@ -31,7 +40,7 @@ router.post("/", async (req, res) => {
     if (hacker) {
       hacker
         .update({
-          slackProfile: link.id,
+          slackProfile: slackId,
         })
         .then((updatedHacker) => {
           console.log("hacker updated");
