@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Dash, AdminDashboard, SponsorDashboard } from "@/components/hackerDashboard";
 
 import {
@@ -12,11 +12,11 @@ import {
   getPublicEvents,
 } from "@/lib";
 
-import { getHackathonConstants } from "../lib";
+// import { getHackathonConstants } from "../lib";
 
 import { getAnnouncements } from "../lib/getAnnouncements";
 
-import { generatePosts } from "../lib/referrerCode";
+// import { generatePosts } from "../lib/referrerCode";
 
 const Dashboard = ({
   profile,
