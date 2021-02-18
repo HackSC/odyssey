@@ -29,6 +29,9 @@ declare type API = {
   name: string;
   description: string;
   major_event: boolean;
+  image_url: string;
+  slack_channel: string;
+  links: Array<ApiLink>;
 };
 
 declare type ApiLink = {
