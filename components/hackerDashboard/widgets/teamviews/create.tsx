@@ -32,8 +32,7 @@ const CreateTeamTab = ({ setView }: { setView: Function }) => {
 
           if (res.status === 200) {
             setError(null);
-            // await Router.push("/team?created");
-            window.scrollTo(0, 0);
+            window.location.reload();
           } else {
             setError(data.message);
           }

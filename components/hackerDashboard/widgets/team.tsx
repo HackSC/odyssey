@@ -4,10 +4,11 @@ import { useToasts } from "react-toast-notifications";
 import styled from "styled-components";
 import { Form, FormGroup, Flex, Button } from "../../../styles";
 
-import { CreateTeam, JoinTeam } from "./teamviews";
+import { CreateTeam, JoinTeam, CurrentTeam } from "./teamviews";
 
 type Props = {
   team: Team;
+  profile: Profile;
 };
 
 export enum TeamView {
@@ -19,21 +20,28 @@ export enum TeamView {
 }
 
 const TeamWidget = (props: Props) => {
-  const [view, setView] = useState<TeamView>(undefined);
+  const { team, profile } = props;
+  const [view, setView] = useState<TeamView>(!!team ? TeamView.Team : null);
 
   const { addToast } = useToasts();
   const onError = (e: string) => {
     addToast(e, { appearance: "error" });
   };
 
-  const { team } = props;
+  if (view === null && view != TeamView.Team) {
+    setView(TeamView.Team);
+  }
 
-  console.log(team, view);
+  if (!team && view === TeamView.Team) {
+    setView(TeamView.NoTeam);
+  }
 
   if (view === TeamView.CreateTeam) {
     return <CreateTeam setView={setView} />;
   } else if (view === TeamView.JoinTeam) {
     return <JoinTeam setView={setView} />;
+  } else if (view === TeamView.Team) {
+    return <CurrentTeam profile={profile} setView={setView} team={team} />;
   } else {
     return (
       <>

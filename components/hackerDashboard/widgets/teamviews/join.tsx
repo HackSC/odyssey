@@ -45,9 +45,7 @@ const JoinTeamForm = ({ setView }: { setView: Function }) => {
         const data = await res.json();
 
         if (res.status === 200) {
-          setError(null);
-          await Router.push("/team?joined");
-          window.scrollTo(0, 0);
+          window.location.reload();
         } else {
           setError(data.message);
         }

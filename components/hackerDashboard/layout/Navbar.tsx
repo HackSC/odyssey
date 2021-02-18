@@ -8,6 +8,7 @@ const MenuItems = [
   { title: "Team", route: "team", constant: "showTeam" },
   { title: "Maps", route: "maps", constant: "showMaps" },
   { title: "Resources", route: "resources", constant: "showAPI" },
+  { title: "Prizes", route: "prizes", constant: "showAPI" },
 ];
 
 type Item = {

@@ -12,7 +12,7 @@ const send_slack_msg = async (e) => {
   );
 };
 
-const ActionsWidget = () => {
+const ActionsWidget = ({ profile }: { profile: Profile }) => {
   return (
     <Wrapper>
       <Subheader>General</Subheader>
@@ -34,6 +34,20 @@ const ActionsWidget = () => {
         <Action id="hacker-manager-page" href="/admin/hackerManager">
           <ActionTitle> Export Hackers </ActionTitle>
         </Action>
+        {profile.role === "superadmin" ? (
+          <Action id="test-console-page" href="/admin/testconsole">
+            <ActionTitle> Experimental Console </ActionTitle>
+          </Action>
+        ) : (
+          ""
+        )}
+        {profile.role === "superadmin" ? (
+          <Action id="constants-page" href="/admin/hackathonConstantsManager">
+            <ActionTitle> Manage Constants </ActionTitle>
+          </Action>
+        ) : (
+          ""
+        )}
       </Actions>
 
       <Subheader>Before the Hackathon (ideally...)</Subheader>

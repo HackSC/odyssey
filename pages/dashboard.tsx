@@ -81,7 +81,6 @@ export async function getServerSideProps({ req }) {
   const hackathonConstants = await getHackathonConstants();
   const currentEvents = await getPublicEvents(req);
   const team = await getTeam(req);
-
   const events = currentEvents ? currentEvents["events"] : [];
 
   const houses = [];

@@ -8,7 +8,7 @@ import { Navbar, Sidebar, Footer, Header } from "./layout";
 import WidgetFrame from "./HackerWidgetFrame";
 
 // Widgets
-import { BattlepassWidget, UpdatesWidget, TeamWidget } from "./widgets";
+import { PrizesWidget } from "./widgets";
 
 type HackathonConstant = {
   id: number;
@@ -20,29 +20,30 @@ type HackathonConstant = {
 
 type Props = {
   profile: Profile;
-  events: Array<any>;
   hackathonConstants: Array<HackathonConstant>;
-  team: Team;
+  prizes: any;
 };
 
-const Dashboard = ({ profile, events, hackathonConstants, team }: Props) => {
+const Prizes = ({ profile, hackathonConstants, prizes }: Props) => {
   return (
     <Container>
       <FoxLogo />
       <Navbar
         hackathonConstants={hackathonConstants}
-        activePage="dashboard"
+        activePage="prizes"
         profile={profile}
       />
       <Header />
       <WidgetFrame
         widget="one"
-        component={<TeamWidget profile={profile} team={team} />}
+        component={
+          <>
+            <h3>HackSC Prizes</h3>
+          </>
+        }
       />
-      <WidgetFrame widget="two" component={<BattlepassWidget />} />
-      <WidgetFrame widget="three" component={<UpdatesWidget />} />
+      <WidgetFrame widget="two" component={<PrizesWidget prizes={prizes} />} />
       <Empty />
-      <Sidebar view="hacker" events={events} />
       <Footer />
     </Container>
   );
@@ -67,19 +68,18 @@ const Empty = styled.div`
 `;
 
 const Container = styled.div`
-  width: 100vw;
-  height: 100vh;
   display: grid;
   grid-template-columns: 0.6fr 1.3fr 0.9fr 0.6fr;
-  grid-template-rows: 0.4fr 1fr 1.4fr 0.6fr;
+  grid-template-rows: 0.2fr 0.1fr 1fr 0.4fr;
   gap: 0px;
   grid-template-areas:
     "FoxLogo Header Header Empty"
-    "Navbar WidgetArea1 WidgetArea2 Sidebar"
+    "Navbar WidgetArea1 WidgetArea1 Sidebar"
+    "Navbar WidgetArea2 WidgetArea2 Sidebar"
     "Navbar BigWidget BigWidget Sidebar"
     "Footer Footer Footer Footer";
   background-color: #1d2c3f;
   color: #fff;
 `;
 
-export default Dashboard;
+export default Prizes;

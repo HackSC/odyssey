@@ -1,25 +1,39 @@
 import styled from "styled-components";
 
-const ResourcesWidget = ({ resources }) => {
+const PrizesWidget = ({ prizes }) => {
   return (
     <Wrapper>
-      {resources.map((resource) => (
-        <ResourceWrapper key={resource.image_url}>
-          <ResourceImageWrapper>
-            <ResourceImage src={resource.image_url} />
-          </ResourceImageWrapper>
-          <ResourceBlurb>
-            <ResourceTitle>{resource.name}</ResourceTitle>
-            <ResourceDescription>{resource.description}</ResourceDescription>
-            {resource.links.map((link) => (
-              <Button href={link.link}>{link.name}</Button>
-            ))}
-            {resource.slack_channel && (
-              <Button href={resource.slack_channel}>Join Slack Channel</Button>
-            )}
-          </ResourceBlurb>
-        </ResourceWrapper>
-      ))}
+      {prizes &&
+        prizes.map((prize) => {
+          if (prize.sponsor.toLowerCase() === "hacksc") {
+            return (
+              <ResourceWrapper>
+                <img height={300} src={prize.image_url} />
+                <ResourceBlurb>
+                  <ResourceTitle>{prize.title}</ResourceTitle>
+                  <ResourceDescription>
+                    Provided by HackSC for all Verticals. {prize.description}
+                  </ResourceDescription>
+                </ResourceBlurb>
+              </ResourceWrapper>
+            );
+          } else {
+            return (
+              <ResourceWrapper>
+                <ResourceImageWrapper>
+                  <ResourceImage src={prize.image_url} />
+                </ResourceImageWrapper>
+                <ResourceBlurb>
+                  <ResourceTitle>{prize.name}</ResourceTitle>
+                  <ResourceDescription>{prize.description}</ResourceDescription>
+                  <Button href={prize.sponsor_url}>
+                    Visit {prize.sponsor}
+                  </Button>
+                </ResourceBlurb>
+              </ResourceWrapper>
+            );
+          }
+        })}
     </Wrapper>
   );
 };
@@ -28,11 +42,20 @@ const Wrapper = styled.div`
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  max-height: 600px;
-  overflow: auto;
+  max-height: 800px;
+  overflow-y: scroll;
+  overflow-x: auto;
 `;
 
 const ResourceWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  padding-right: 10px;
+  padding-left: 10px;
+  padding-bottom: 20px;
+`;
+
+const HackSCWrapper = styled.div`
   display: flex;
   flex-direction: column;
   padding-right: 10px;
@@ -71,7 +94,9 @@ const ResourceBlurb = styled.div`
   max-width: 320px;
   border-radius: 0px 0px 15px 15px;
   padding: 15px;
-  overflow: auto;
+  overflow-y: auto;
+  overflow-x: auto;
+  flex: 1;
 `;
 
 const ResourceTitle = styled.p`
@@ -112,4 +137,4 @@ const Button = styled.a`
   letter-spacing: 1px;
 `;
 
-export default ResourcesWidget;
+export default PrizesWidget;
