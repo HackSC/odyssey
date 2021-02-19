@@ -29,10 +29,6 @@ module.exports = {
       },
       updatedAt: {
         allowNull: false,
-        type: Sequelize.DATE,
-      },
-      zoomUrl: {
-        type: Sequelize.STRING,
       },
     });
   },
