@@ -85,10 +85,10 @@ const ActionsWidget = ({ profile }: { profile: Profile }) => {
         <Action id="checkin-page" href="/admin/checkin">
           <ActionTitle>Check In Hackers</ActionTitle>
         </Action>
+        <Action id="raffle-tickets" href="/admin/tickets">
+          <ActionTitle> Give Raffle Tickets </ActionTitle>
+        </Action>
       </Actions>
-      <Action id="raffle-tickets" href="/admin/tickets">
-        <ActionTitle> Give Raffle Tickets </ActionTitle>
-      </Action>
       <Subheader>Experimental</Subheader>
       <Actions>
         <Action id="test-console-page" href="/admin/testconsole">

@@ -388,7 +388,6 @@ router.post("/review", async (req, res) => {
 router.post("/giveTickets", async (req, res) => {
   try {
     const { email, firstName, lastName, tickets: _amount } = req.body;
-    console.log(_amount);
     if (!Number.isInteger(parseInt(_amount))) {
       return res.status(500).json({ error: "Invalid amount" });
     }

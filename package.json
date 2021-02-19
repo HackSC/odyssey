@@ -3,7 +3,7 @@
   "version": "1.2.0",
   "private": true,
   "scripts": {
-    "dev": "echo 'http://localhost:3000' && node << babel server.js",
+    "dev": "npx nodemon yarn dev",
     "build": "next build",
     "start": "node server.js",
     "watch": "babel-watch -x .next server.js",
