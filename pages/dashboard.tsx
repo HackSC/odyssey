@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react";
 import { Head } from "@/components";
 import getTeam from "../lib/api-sdk/getTeam";
@@ -19,6 +20,7 @@ import {
 } from "@/lib";
 
 import { getAnnouncements } from "../lib/getAnnouncements";
+
 const Dashboard = ({
   profile,
   houses,
@@ -29,6 +31,7 @@ const Dashboard = ({
   view,
   team,
 }) => {
+
   const getDashToRender = () => {
     if (view === "admin") {
       return (

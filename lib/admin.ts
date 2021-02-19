@@ -30,6 +30,22 @@ export async function updateProfileRole(email, role) {
   return response;
 }
 
+export async function updateProfilePoints(email, points) {
+  const fetchUrl = process.env.URL_BASE
+    ? process.env.URL_BASE + "api/admin/updatePoints"
+    : "api/admin/updatePoints";
+
+  const response = await fetch(fetchUrl, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ email: email, points: points }),
+  });
+
+  return response;
+}
+
 export async function updateProfileStatus(email, status) {
   const fetchUrl = process.env.URL_BASE
     ? process.env.URL_BASE + "api/admin/updateHackerStatus"
@@ -146,8 +162,8 @@ export async function submitReview(review) {
 
 export async function getHackerStatusStats(req) {
   const fetchUrl = process.env.URL_BASE
-  ? process.env.URL_BASE + "api/admin/hackerStatusStats"
-  : "api/admin/hackerStatusStats";
+    ? process.env.URL_BASE + "api/admin/hackerStatusStats"
+    : "api/admin/hackerStatusStats";
   const response = await fetch(
     fetchUrl,
     req
@@ -164,8 +180,8 @@ export async function getHackerStatusStats(req) {
 
 export async function batchCheckIn(input) {
   const fetchUrl = process.env.URL_BASE
-  ? process.env.URL_BASE + "api/admin/batchCheckIn"
-  : "api/admin/batchCheckIn";
+    ? process.env.URL_BASE + "api/admin/batchCheckIn"
+    : "api/admin/batchCheckIn";
   const response = await fetch(fetchUrl, {
     method: "POST",
     headers: {

@@ -67,6 +67,10 @@ function livePointFetch(qrCodeId: ResourceID, req?: NextApiRequest) {
   return APIGet(Routes.LivePoints, { req }, qrCodeId);
 }
 
+function liveEmailPointFetch(email: string, req?: NextApiRequest) {
+  return APIGet(Routes.LiveEmailPoints, { req }, email);
+}
+
 type LiveQRAssignBody = {
   qrCodeId: string;
   userId: StringID;
@@ -85,4 +89,5 @@ export {
   liveSignUpLookupFetch,
   liveHackerLookupFetch,
   livePointFetch,
+  liveEmailPointFetch,
 };

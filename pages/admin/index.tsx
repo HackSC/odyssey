@@ -95,6 +95,12 @@ const Admin = ({ profile }) => {
                 <Action id="scan-page" href="/admin/scan">
                   <ActionTitle>Scan In Hackers</ActionTitle>
                 </Action>
+                <Action
+                  id="contributions-page"
+                  href="/admin/manageContributions"
+                >
+                  <ActionTitle>Manage Contributions</ActionTitle>
+                </Action>
                 <Action id="app-review-page" href="/admin/appReview">
                   <ActionTitle>App Review</ActionTitle>
                 </Action>
