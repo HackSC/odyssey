@@ -140,10 +140,9 @@ export async function getHackerProfileForReview(req) {
 
   const profilePayload = await response.json();
 
-  // Randomly select an eligible review
   const { eligibleReviews } = profilePayload;
 
-  return eligibleReviews[Math.floor(Math.random() * eligibleReviews.length)];
+  return eligibleReviews.length > 0 ? eligibleReviews[0] : {};
 }
 
 export async function submitReview(review) {
