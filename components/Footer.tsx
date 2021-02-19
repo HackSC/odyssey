@@ -9,9 +9,9 @@ import Twitter from "../assets/twitter.svg";
 
 import { Link } from "../styles";
 
-const Footer = () => {
+const Footer = ({ dark }: { dark?: boolean }) => {
   return (
-    <Wrapper>
+    <Wrapper style={{ background: dark ? "#1D2C3F" : "#fff" }}>
       <Row>
         <SocialColumn>
           <LogoGraphic src={Logo} />
@@ -64,7 +64,6 @@ const Footer = () => {
 };
 
 const Wrapper = styled.div`
-  background: #ffffff;
   padding-top: 64px;
   padding-bottom: 64px;
 `;

@@ -29,6 +29,9 @@ declare type API = {
   name: string;
   description: string;
   major_event: boolean;
+  image_url: string;
+  slack_channel: string;
+  links: Array<ApiLink>;
 };
 
 declare type ApiLink = {
@@ -126,6 +129,10 @@ declare type Profile = {
   isBattlepassComplete?: boolean;
   lookingForTeam: boolean;
   portfolioUrl: string;
+  instagram: string;
+  bio: string;
+  profilePic: string;
+  raffleTickets: number;
 };
 
 declare type Team = {
@@ -159,6 +166,10 @@ declare type Prize = {
   title: string;
   description: string;
   id: NumberID;
+  sponsor: string;
+  image_url: string;
+  info_url: string;
+  sponsor_url: string;
 };
 
 declare type House = {
@@ -200,6 +211,13 @@ declare type BattlepassObject = {
   prizeName: string;
   unlocked: boolean;
   minimum: number;
+};
+
+declare type Announcement = {
+  img: string;
+  from: string;
+  text: string;
+  target: string;
 };
 
 interface Task {

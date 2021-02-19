@@ -165,8 +165,8 @@ const EditableCell = ({
                   "\nConstant Boolean: " +
                   currConstant.boolean +
                   "\nConstant Date: " +
-                  currConstant.date + 
-                  "\nConstant Type: " + 
+                  currConstant.date +
+                  "\nConstant Type: " +
                   currConstant.type,
                 start_and_end_date,
                 start_and_end_date
@@ -291,8 +291,8 @@ const HackathonConstantsManager = ({ profile, hackathonConstants }) => {
                       "\nConstant Boolean: " +
                       newConstant.boolean +
                       "\nConstant Date: " +
-                      newConstant.date + 
-                      "\nConstant Type: " + 
+                      newConstant.date +
+                      "\nConstant Type: " +
                       newConstant.type,
                     start_and_end_date,
                     start_and_end_date

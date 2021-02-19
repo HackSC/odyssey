@@ -1,22 +1,62 @@
 const productionServerSlackBot = async () => {
-  if (process.env.URL_BASE && process.env.URL_BASE.includes("staging")) {
-    fetch("https://cronjobs.hacksc.com/api/send_slack_message").then(
-      async (res) => {
-        if (res.status !== 200)
-          console.error(
-            "Did not receive 200 response from https://cronjobs.hacksc.com/api/send_slack_message"
-          );
+  // * Null check slackbot tokens
+  if (!process.env.SLACK_BOT_TOKEN || !process.env.SIGNING_SECRET) {
+    console.error("!!!Missing SLACK BOT TOKENS!!!");
+  } else if (
+    process.env.URL_BASE &&
+    process.env.URL_BASE.includes("dashboard")
+  ) {
+    const app = new App({
+      token: process.env.SLACK_BOT_TOKEN,
+      signingSecret: process.env.SIGNING_SECRET,
+    });
 
-        // * Try to get json object from response
-        /*
-      try {
-        let new_res = await res.json();
-      } catch (e) {
-        console.error("could not get json object from response.")
+    try {
+      await app.start(3035);
+
+      // * Fetch event schedule from odyssey API
+      fetch("https://staging.hacksc.com/api/public/events/list")
+        .then((res) => res.json())
+        .then((events) => {
+          events.events.forEach((e) => {
+            let curr_date_min_10 = Math.round(
+              new Date().setMinutes(new Date().getMinutes() - 10) /
+                (1000 * 60) -
+                new Date().getTimezoneOffset()
+            );
+            let curr_time = Math.round(
+              new Date().getTime() / (1000 * 60) -
+                new Date().getTimezoneOffset()
+            );
+
+            let event_start_time = Date.parse(e.startsAt) / (1000 * 60);
+
+            //console.log(e)
+            if (
+              event_start_time - curr_date_min_10 > -1 &&
+              event_start_time - curr_date_min_10 < 1
+            ) {
+              SendSlackMessage(e, app, "starting in 10 minutes");
+            }
+            if (
+              event_start_time - curr_time > -1 &&
+              event_start_time - curr_time < 1
+            ) {
+              SendSlackMessage(e, app, "starts now");
+            }
+          });
+        });
+    } catch (error) {
+      console.log(error);
+    }
+
+    try {
+      if (app) {
+        app.stop();
       }
-      */
-      }
-    );
+    } catch (e) {
+      console.log("Could not stop app");
+    }
   }
 };
 

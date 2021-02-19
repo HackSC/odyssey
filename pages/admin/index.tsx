@@ -95,6 +95,12 @@ const Admin = ({ profile }) => {
                 <Action id="scan-page" href="/admin/scan">
                   <ActionTitle>Scan In Hackers</ActionTitle>
                 </Action>
+                <Action
+                  id="contributions-page"
+                  href="/admin/manageContributions"
+                >
+                  <ActionTitle>Manage Contributions</ActionTitle>
+                </Action>
                 <Action id="app-review-page" href="/admin/appReview">
                   <ActionTitle>App Review</ActionTitle>
                 </Action>
@@ -148,6 +154,9 @@ const Admin = ({ profile }) => {
                   href="/admin/manageApiDirectory"
                 >
                   <ActionTitle> Manage Api Directory </ActionTitle>
+                </Action>
+                <Action id="raffle-tickets" href="/admin/tickets">
+                  <ActionTitle> Give Raffle Tickets </ActionTitle>
                 </Action>
                 <Action
                   id="metabase-page"

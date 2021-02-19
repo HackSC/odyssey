@@ -35,6 +35,7 @@ interface ILiveRoutes {
   LiveLookup: GetRoute;
   LiveAssignQR: PostRoute;
   LivePoints: GetRoute;
+  LiveEmailPoints: GetRoute;
 }
 
 const LiveRoutes: ILiveRoutes = {
@@ -42,6 +43,7 @@ const LiveRoutes: ILiveRoutes = {
   LiveLookup: "api/live/lookup" as Route,
   LiveAssignQR: "api/live/assign-qr" as Route,
   LivePoints: "api/live/hacker" as Route,
+  LiveEmailPoints: "api/live/hacker/points" as Route,
 };
 
 interface IHackerRoutes {
@@ -135,7 +137,11 @@ function setupHeaders(req: any, additionalHeaders: HeadersInit): HeadersInit {
   };
 }
 
-function computeUrlRoute(route: string, req?: any, param?: ResourceID): string {
+function computeUrlRoute(
+  route: string,
+  req?: any,
+  param?: ResourceID | string
+): string {
   const serverRoute = req
     ? /* Serverside */ process.env.URL_BASE + route
     : /* Client */ "/" + route;
@@ -152,7 +158,7 @@ async function APIGet<T>(
     queryParams?: Object; // { key: string | number };
     req?: NextApiRequest;
   },
-  param?: ResourceID
+  param?: ResourceID | string
 ): Promise<APIResponse<T>> {
   let urlRoute = computeUrlRoute(route, opts?.req, param);
   if (opts?.queryParams) {

@@ -385,6 +385,57 @@ router.post("/review", async (req, res) => {
   }
 });
 
+router.post("/giveTickets", async (req, res) => {
+  try {
+    const { email, firstName, lastName, tickets: _amount } = req.body;
+    if (!Number.isInteger(parseInt(_amount))) {
+      return res.status(500).json({ error: "Invalid amount" });
+    }
+
+    const amount = parseInt(_amount);
+    if (email) {
+      const result = await models.HackerProfile.increment(
+        {
+          raffleTickets: amount,
+        },
+        {
+          where: {
+            email: email,
+          },
+        }
+      );
+
+      if (result[0][1] !== 1) {
+        return res.status(500).json({ error: "doesnt exist/not found" });
+      }
+
+      return res.json({ success: result });
+    } else if (firstName && lastName) {
+      const result = await models.HackerProfile.increment(
+        {
+          raffleTickets: amount,
+        },
+        {
+          where: {
+            firstName: firstName,
+            lastName: lastName,
+          },
+        }
+      );
+
+      if (result[0][1] !== 1) {
+        return res.status(500).json({ error: "doesnt exist/not found" });
+      }
+
+      return res.json({ success: result });
+    } else {
+      return res.status(500).json({ error: "not enough args" });
+    }
+  } catch (e) {
+    return res.status(500).json({ error: e.message });
+  }
+});
+
 router.get("/review", async (req, res) => {
   try {
     const profilesWCount = await models.HackerProfile.findAll({
