@@ -1,0 +1,39 @@
+name: Publish Docker
+on: [push]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@master
+      - name: Publish to Registry
+        uses: elgohr/Publish-Docker-Github-Action@master
+        env:
+          AUTH0_CLIENT_ID: ${{ secrets./hacksc/AUTH0_CLIENT_ID }}
+          AUTH0_CLIENT_SECRET: ${{ secrets./hacksc/AUTH0_CLIENT_SECRET }}
+          AUTH0_DOMAIN: ${{ secrets./hacksc/AUTH0_DOMAIN }}
+          AUTH0_CALLBACK_URL: ${{ secrets./hacksc/AUTH0_CALLBACK_URL }}
+          CYPRESS_AUTH0_CLIENT_ID: ${{ secrets./hacksc/CYPRESS_AUTH0_CLIENT_ID }}
+          CYPRESS_AUTH0_CLIENT_SECRET: ${{ secrets./hacksc/CYPRESS_AUTH0_CLIENT_SECRET }}
+          CYPRESS_AUTH0_DOMAIN: ${{ secrets./hacksc/CYPRESS_AUTH0_DOMAIN }}
+          CYPRESS_AUTH0_CALLBACK_URL: ${{ secrets./hacksc/CYPRESS_AUTH0_CALLBACK_URL }}
+          CYPRESS_USER_TEST_USERNAME: ${{ secrets./hacksc/CYPRESS_USER_TEST_USERNAME }}
+          CYPRESS_USER_TEST_PASSWORD: ${{ secrets./hacksc/CYPRESS_USER_TEST_PASSWORD }}
+          CYPRESS_ADMIN_TEST_USERNAME: ${{ secrets./hacksc/CYPRESS_ADMIN_TEST_USERNAME }}
+          CYPRESS_ADMIN_TEST_PASSWORD: ${{ secrets./hacksc/CYPRESS_ADMIN_TEST_PASSWORD }}
+          CYPRESS_SPONSOR_TEST_USERNAME: ${{ secrets./hacksc/CYPRESS_SPONSOR_TEST_USERNAME }}
+          CYPRESS_SPONSOR_TEST_PASSWORD: ${{ secrets./hacksc/CYPRESS_SPONSOR_TEST_PASSWORD }}
+          CYPRESS_JUDGE_TEST_USERNAME: ${{ secrets./hacksc/CYPRESS_JUDGE_TEST_USERNAME }}
+          CYPRESS_JUDGE_TEST_PASSWORD: ${{ secrets./hacksc/CYPRESS_JUDGE_TEST_PASSWORD }}
+          CYPRESS_VOLUNTEER_TEST_USERNAME: ${{ secrets./hacksc/CYPRESS_VOLUNTEER_TEST_USERNAME }}
+          CYPRESS_VOLUNTEER_TEST_PASSWORD: ${{ secrets./hacksc/CYPRESS_VOLUNTEER_TEST_PASSWORD }}
+          PROD_DB_PORT: ${{ secrets./hacksc/PROD_DB_PORT }}
+          PROD_DB_USERNAME: ${{ secrets./hacksc/PROD_DB_USERNAME }}
+          PROD_DB_PASSWORD: ${{ secrets./hacksc/PROD_DB_PASSWORD }}
+          PROD_DB_NAME: ${{ secrets./hacksc/PROD_DB_NAME }}
+          PROD_DB_HOSTNAME: ${{ secrets./hacksc/PROD_DB_HOSTNAME }}
+          PROD_DB_DIALECT: ${{ secrets./hacksc/PROD_DB_DIALECT }}
+          NODE_ENV: ${{ secrets./hacksc/NODE_ENV }}
+          URL_BASE: ${{ secrets./hacksc/URL_BASE }}
+        with:
+          name: myDocker/repository
+          tags: "latest,main,staging"
