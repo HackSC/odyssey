@@ -47,6 +47,7 @@ const MenuItem = ({ activePage, item, hackathonConstants }: MenuItemProps) => {
     <BoxShadowWrapper key={item.route}>
       <NavbarMenuItem
         href={"/" + item.route}
+        id={item.route + "-page"}
         active={activePage === item.route || activePage === item.title}
       >
         <NavbarMenuItemLabel>{item.title}</NavbarMenuItemLabel>
