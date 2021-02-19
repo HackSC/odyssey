@@ -26,7 +26,15 @@ module.exports = (sequelize, DataTypes) => {
       type: {
         allowNull: true,
         type: DataTypes.ENUM,
+<<<<<<< HEAD
         values: ["date", "boolean", "string"],
+=======
+        values: [
+          "date",
+          "boolean",
+          "string",
+        ],
+>>>>>>> c5a8ddf901eec0df1cb4e528242e0addc4bdab6b
       },
     },
     {
