@@ -154,3 +154,17 @@ needsBus: false // _ False because HackSC 2021 is virtual :( big sad
 showTeam: false // _ False until closer to event
 showProjectTeam: false // \* False until closer to event
 appsCloseDate: new Date("12/21/20")
+
+### CircleCI Development
+
+Reference: https://circleci.com/docs/2.0/local-cli/
+
+First, download the circleci client:
+`brew install circleci`
+
+To validate the `.circleci/config.yml` file, run:
+`circleci config validate`
+
+To run CircleCI jobs locally, you must have Docker installed.
+The following command will run a circleci docker container and run the process.yml file.
+`circleci local execute`
