@@ -47,6 +47,7 @@ const HackathonEvents = ({ events }) => {
             <p>{e.description}</p>
             <p>{moment(e.startsAt).format("MMM D, h:mm a")}</p>
             <p>{moment(e.endsAt).format("MMM D, h:mm a")}</p>
+            <p></p>
           </Event>
         ))}
       </EventList>

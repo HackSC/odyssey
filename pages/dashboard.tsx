@@ -31,7 +31,7 @@ const Dashboard = ({
   socialPosts,
   hackathonConstants,
   announcements,
-  view,
+  // view,
   team,
 }) => {
   const [view, setView] = useState("hacker");
