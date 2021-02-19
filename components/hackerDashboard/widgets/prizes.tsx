@@ -24,7 +24,7 @@ const PrizesWidget = ({ prizes }) => {
                   <ResourceImage src={prize.image_url} />
                 </ResourceImageWrapper>
                 <ResourceBlurb>
-                  <ResourceTitle>{prize.name}</ResourceTitle>
+                  <ResourceTitle>{prize.title}</ResourceTitle>
                   <ResourceDescription>{prize.description}</ResourceDescription>
                   <Button href={prize.sponsor_url}>
                     Visit {prize.sponsor}
