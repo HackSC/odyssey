@@ -35,14 +35,14 @@ const HackathonEvents = ({ events }) => {
             style={
               moment(e.endsAt) > currentDate
                 ? { color: "#FFFFFF" }
-                : { color: "#7E7E7E" }
+                : { color: "#FFFFFF" }
             }
           >
             <h3
               style={
                 moment(e.endsAt) > currentDate
                   ? { color: "#FF8379" }
-                  : { color: "#7E7E7E" }
+                  : { color: "#FFFFFF" }
               }
             >
               {e.name}
