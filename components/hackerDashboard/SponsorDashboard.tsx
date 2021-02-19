@@ -17,10 +17,11 @@ type Props = {
   profile: Profile;
   events: Array<any>;
   hackathonConstants: any;
+  announcements: Announcement[];
 };
 
 const SponsorDashboard = (props: Props) => {
-  const { profile, events, hackathonConstants } = props;
+  const { profile, events, hackathonConstants, announcements } = props;
 
   return (
     <Container>
@@ -41,7 +42,12 @@ const SponsorDashboard = (props: Props) => {
         }
       />
       <WidgetFrame widget="two" component={<SponsorActionsWidget />} />
-      <WidgetFrame widget="three" component={<UpdatesWidget />} />
+      <WidgetFrame
+        widget="three"
+        component={
+          <UpdatesWidget profile={profile} announcements={announcements} />
+        }
+      />
       <Sidebar view={"sponsor"} events={events} />
       <Footer />
     </Container>

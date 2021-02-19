@@ -1,9 +1,7 @@
 import React, { useState, useCallback, useRef } from "react";
 
 import styled from "styled-components";
-import Select from "react-select";
 import { Flex, Column, Button, Form, FormGroup } from "@/styles";
-import { TeamView } from "../team";
 
 const CurrentTeam = ({
   setView,

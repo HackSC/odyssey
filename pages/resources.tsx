@@ -43,6 +43,7 @@ export async function getServerSideProps({ req }) {
   }
 
   const apis = await getAPIS(req);
+  //@ts-ignore
   const resources = apis.success;
 
   return {

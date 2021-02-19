@@ -61,6 +61,7 @@ const Dashboard = ({
           profile={profile}
           events={events}
           hackathonConstants={hackathonConstants}
+          announcements={announcements}
         />
       );
     } else {
