@@ -3,18 +3,26 @@ import styled from "styled-components";
 
 import Logo from "@/assets/hackscFox.png";
 
-const UpdatesWidget = () => {
+const UpdatesWidget = ({ profile, announcements }) => {
+  const items = [];
+  if (announcements != null) {
+    for (let i = 0; i < announcements.length; i++) {
+      const target = announcements[i].target;
+      if (target != profile.role) {
+        continue;
+      }
+      const text = announcements[i].text;
+      const from = announcements[i].from;
+      items.push(
+        <UpdateEntry img={Logo} from={from} text={text} target={target} />
+      );
+    }
+  }
   return (
     <div>
       <Header>Announcements</Header>
       <AfterHeader>from Slack</AfterHeader>
-      <UpdateList>
-        <UpdateEntry
-          img={Logo}
-          text="Welcome to the new HackSC Dashboard!"
-          from="HackSC Team"
-        />
-      </UpdateList>
+      <UpdateList>{items}</UpdateList>
     </div>
   );
 };
@@ -25,8 +33,8 @@ type UpdateProps = {
   text: string;
 };
 
-const UpdateEntry = (props: UpdateProps) => {
-  const { img, from, text } = props;
+const UpdateEntry = (props: Announcement) => {
+  const { img, from, text, target } = props;
 
   return (
     <UpdateItem>

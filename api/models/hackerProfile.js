@@ -137,6 +137,13 @@ module.exports = (sequelize, DataTypes) => {
       portfolioUrl: DataTypes.STRING(500),
       instagram: DataTypes.STRING(500),
       bio: DataTypes.STRING(1000),
+      // slackProfile: {
+      //   type: DataTypes.STRING,
+      //   references: {
+      //     model: "LinkedSlack",
+      //     key: "slackId",
+      //   },
+      // },
       profilePic: DataTypes.STRING(500),
     },
     {}

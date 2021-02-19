@@ -1,11 +1,11 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { Head } from "@/components";
+import getTeam from "../lib/api-sdk/getTeam";
 import {
   Dash,
   AdminDashboard,
   SponsorDashboard,
 } from "@/components/hackerDashboard";
-import { Head } from "@/components";
-import getTeam from "../lib/api-sdk/getTeam";
 
 import {
   handleLoginRedirect,
@@ -18,19 +18,17 @@ import {
   getPublicEvents,
 } from "@/lib";
 
-const Dashboard = ({ profile, events, hackathonConstants, team }) => {
-  const [view, setView] = useState("hacker");
-
-  const switchRole = () => {
-    if (view === "admin") {
-      setView("hacker");
-    } else if (view === "hacker") {
-      setView("sponsor");
-    } else if (view === "sponsor") {
-      setView("admin");
-    }
-  };
-
+import { getAnnouncements } from "../lib/getAnnouncements";
+const Dashboard = ({
+  profile,
+  houses,
+  events,
+  socialPosts,
+  hackathonConstants,
+  announcements,
+  view,
+  team,
+}) => {
   const getDashToRender = () => {
     if (view === "admin") {
       return (
@@ -55,37 +53,26 @@ const Dashboard = ({ profile, events, hackathonConstants, team }) => {
           profile={profile}
           events={events}
           hackathonConstants={hackathonConstants}
+          announcements={announcements}
         />
       );
     }
   };
 
-  return (
-    <>
-      {process.env.NODE_ENV === "development" ? (
-        <button
-          onClick={switchRole}
-          style={{ position: "absolute", top: 20, right: 20 }}
-        >
-          Switch role
-        </button>
-      ) : (
-        ""
-      )}
-      <Head title="HackSC Dashboard - Welcome to HackSC 2021" />
-      {getDashToRender()}
-    </>
-  );
+  return <>{getDashToRender()}</>;
 };
 
 export async function getServerSideProps({ req }) {
   const profile = await getProfile(req);
+  //const houses = await getHouses(req);
+  const announcements = await getAnnouncements(req, profile);
   const hackathonConstants = await getHackathonConstants();
   const currentEvents = await getPublicEvents(req);
   const team = await getTeam(req);
   const events = currentEvents ? currentEvents["events"] : [];
 
   const houses = [];
+  const view = profile.role;
 
   // Null profile means user is not logged in
   if (!profile) {
@@ -95,14 +82,14 @@ export async function getServerSideProps({ req }) {
   } else if (profile.role == "volunteer") {
     handleVolunteerRedirect(req);
   } else if (profile.role == "sponsor") {
-    handleSponsorRedirect(req);
+    // handleSponsorRedirect(req);
   }
 
   if (
     !hackathonConstants.find((constant) => constant.name === "showDash")
       ?.boolean
   ) {
-    await handleDashboardRedirect(req);
+    //await handleDashboardRedirect(req);
   }
 
   let socialPosts = {};
@@ -116,8 +103,10 @@ export async function getServerSideProps({ req }) {
       profile,
       socialPosts,
       team,
+      announcements,
       events,
       hackathonConstants,
+      view,
     },
   };
 }

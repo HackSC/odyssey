@@ -212,6 +212,13 @@ declare type BattlepassObject = {
   minimum: number;
 };
 
+declare type Announcement = {
+  img: string;
+  from: string;
+  text: string;
+  target: string;
+};
+
 interface Task {
   points: number;
   description: string;

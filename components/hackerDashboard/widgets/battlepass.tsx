@@ -3,7 +3,7 @@ import { useState } from "react";
 
 import styled from "styled-components";
 
-const BattlepassWidget = ({ points }) => {
+const BattlepassWidget = ({}) => {
   return (
     <>
       <h2>Battlepass</h2>

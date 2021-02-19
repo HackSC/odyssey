@@ -44,7 +44,7 @@ const MenuItem = ({ activePage, item, hackathonConstants }: MenuItemProps) => {
   });
 
   return show ? (
-    <BoxShadowWrapper>
+    <BoxShadowWrapper key={item.route}>
       <NavbarMenuItem
         href={"/" + item.route}
         active={activePage === item.route || activePage === item.title}

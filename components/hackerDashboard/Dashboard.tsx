@@ -20,12 +20,19 @@ type HackathonConstant = {
 
 type Props = {
   profile: Profile;
+  announcements: Announcement[];
   events: Array<any>;
   hackathonConstants: Array<HackathonConstant>;
   team: Team;
 };
 
-const Dashboard = ({ profile, events, hackathonConstants, team }: Props) => {
+const Dashboard = ({
+  profile,
+  announcements,
+  team,
+  events,
+  hackathonConstants,
+}: Props) => {
   return (
     <Container>
       <FoxLogo />
@@ -40,7 +47,12 @@ const Dashboard = ({ profile, events, hackathonConstants, team }: Props) => {
         component={<TeamWidget profile={profile} team={team} />}
       />
       <WidgetFrame widget="two" component={<BattlepassWidget />} />
-      <WidgetFrame widget="three" component={<UpdatesWidget />} />
+      <WidgetFrame
+        widget="three"
+        component={
+          <UpdatesWidget profile={profile} announcements={announcements} />
+        }
+      />
       <Empty />
       <Sidebar view="hacker" events={events} />
       <Footer />
