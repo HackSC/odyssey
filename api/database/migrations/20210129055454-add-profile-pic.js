@@ -4,7 +4,7 @@ module.exports = {
   up: (queryInterface, Sequelize) => {
     return Promise.all([
       queryInterface.addColumn("HackerProfiles", "profilePic", {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
       }),
     ]);
   },
@@ -13,5 +13,5 @@ module.exports = {
     return Promise.all([
       queryInterface.removeColumn("HackerProfiles", "profilePic"),
     ]);
-  }
+  },
 };

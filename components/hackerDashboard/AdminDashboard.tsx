@@ -21,7 +21,11 @@ const AdminDashboard = (props: Props) => {
 
   return (
     <Container>
-      <Navbar hackathonConstants={hackathonConstants} activePage="dashboard" profile={profile}/>
+      <Navbar
+        hackathonConstants={hackathonConstants}
+        activePage="dashboard"
+        profile={profile}
+      />
       <Header text={"Admin Dashboard"} />
       <WidgetFrame
         widget="one"
@@ -36,7 +40,10 @@ const AdminDashboard = (props: Props) => {
           </>
         }
       />
-      <WidgetFrame widget="two" component={<ActionsWidget />} />
+      <WidgetFrame
+        widget="two"
+        component={<ActionsWidget profile={profile} />}
+      />
       <Sidebar view={"admin"} events={events} />
       <Footer />
     </Container>
@@ -55,6 +62,8 @@ const Container = styled.div`
     "Footer Footer Footer Footer";
   background-color: #1d2c3f;
   color: #fff;
+  width: 100vw;
+  height: 100vh;
 `;
 
 export default AdminDashboard;

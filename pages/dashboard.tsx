@@ -1,4 +1,7 @@
-import { useState } from "react";
+
+import { useState, useEffect } from "react";
+import { Head } from "@/components";
+import getTeam from "../lib/api-sdk/getTeam";
 import {
   Dash,
   AdminDashboard,
@@ -25,18 +28,9 @@ const Dashboard = ({
   socialPosts,
   hackathonConstants,
   announcements,
+  view,
+  team,
 }) => {
-  const [view, setView] = useState("hacker");
-
-  const switchRole = () => {
-    if (view === "admin") {
-      setView("hacker");
-    } else if (view === "hacker") {
-      setView("sponsor");
-    } else if (view === "sponsor") {
-      setView("admin");
-    }
-  };
 
   const getDashToRender = () => {
     if (view === "admin") {
@@ -58,6 +52,7 @@ const Dashboard = ({
     } else {
       return (
         <Dash
+          team={team}
           profile={profile}
           events={events}
           hackathonConstants={hackathonConstants}
@@ -69,16 +64,7 @@ const Dashboard = ({
 
   return (
     <>
-      {process.env.NODE_ENV === "development" ? (
-        <button
-          onClick={switchRole}
-          style={{ position: "absolute", top: 20, right: 20 }}
-        >
-          Switch role
-        </button>
-      ) : (
-        ""
-      )}
+      <Head title="HackSC Dashboard - Welcome to HackSC 2021" />
       {getDashToRender()}
     </>
   );
@@ -90,8 +76,11 @@ export async function getServerSideProps({ req }) {
   const announcements = await getAnnouncements(req, profile);
   const hackathonConstants = await getHackathonConstants();
   const currentEvents = await getPublicEvents(req);
+  const team = await getTeam(req);
   const events = currentEvents ? currentEvents["events"] : [];
+
   const houses = [];
+  const view = profile.role;
 
   // Null profile means user is not logged in
   if (!profile) {
@@ -101,7 +90,7 @@ export async function getServerSideProps({ req }) {
   } else if (profile.role == "volunteer") {
     handleVolunteerRedirect(req);
   } else if (profile.role == "sponsor") {
-    handleSponsorRedirect(req);
+    // handleSponsorRedirect(req);
   }
 
   if (
@@ -121,9 +110,11 @@ export async function getServerSideProps({ req }) {
       houses,
       profile,
       socialPosts,
+      team,
       announcements,
       events,
       hackathonConstants,
+      view,
     },
   };
 }

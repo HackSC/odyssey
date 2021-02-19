@@ -1,24 +1,23 @@
-import { ResourcesDash } from "@/components/hackerDashboard";
-import { Head } from "@/components";
+import { PrizeDash } from "@/components/hackerDashboard";
 
 import {
   handleLoginRedirect,
   getProfile,
   handleDashboardRedirect,
   getHackathonConstants,
-  getPublicEvents,
-  getAPIS,
+  getPrizes,
 } from "@/lib";
 
-const Resources = ({ profile, events, hackathonConstants, resources }) => {
+import { Head } from "@/components";
+
+const Prizes = ({ profile, prizes, hackathonConstants }) => {
   return (
     <>
-      <Head title="HackSC Dashboard - Resources" />
-      <ResourcesDash
+      <Head title="HackSC Dashboard - Prizes" />
+      <PrizeDash
         profile={profile}
-        events={events}
         hackathonConstants={hackathonConstants}
-        resources={resources}
+        prizes={prizes}
       />
     </>
   );
@@ -27,8 +26,7 @@ const Resources = ({ profile, events, hackathonConstants, resources }) => {
 export async function getServerSideProps({ req }) {
   const profile = await getProfile(req);
   const hackathonConstants = await getHackathonConstants();
-  const currentEvents = await getPublicEvents(req);
-  const events = currentEvents ? currentEvents["events"] : [];
+  const { success: prizes } = await getPrizes(req);
 
   // Null profile means user is not logged in
   if (!profile) {
@@ -42,17 +40,13 @@ export async function getServerSideProps({ req }) {
     await handleDashboardRedirect(req);
   }
 
-  const apis = await getAPIS(req);
-  const resources = apis.success;
-
   return {
     props: {
       profile,
-      events,
       hackathonConstants,
-      resources,
+      prizes,
     },
   };
 }
 
-export default Resources;
+export default Prizes;

@@ -3,17 +3,22 @@ import moment from "moment-timezone";
 import { useEffect } from "react";
 
 const HackathonEvents = ({ events }) => {
-  const currentDate = moment.tz(moment(), 'Pacific');
+  const currentDate = moment.tz(moment(), "Pacific");
   let nextEvent;
   for (let i = 0; i < events.length; i++) {
     nextEvent = events[i].id;
-    if (moment(events[i].endsAt) > currentDate || moment(events[i].startsAt) > currentDate) {
+    if (
+      moment(events[i].endsAt) > currentDate ||
+      moment(events[i].startsAt) > currentDate
+    ) {
       break;
     }
   }
 
   useEffect(() => {
-    document.getElementById("eventList").scrollTop = document.getElementById(nextEvent).offsetTop;
+    document.getElementById("eventList").scrollTop = document.getElementById(
+      nextEvent
+    ).offsetTop;
   }, []);
 
   return (
@@ -21,18 +26,29 @@ const HackathonEvents = ({ events }) => {
       <h3>Upcoming Events</h3>
       <h4>All in Pacific Standard Time</h4>
       <EventList id="eventList">
-        {events.map((e) => 
-          <Event id={e.id} style={ moment(e.endsAt) > currentDate ? { color:"#FFFFFF" } : { color:"#7E7E7E" }}>
-            <h3 style={ moment(e.endsAt) > currentDate ? { color:"#FF8379" } : { color:"#7E7E7E" }}>{e.name}</h3>
+        {events.map((e) => (
+          <Event
+            id={e.id}
+            style={
+              moment(e.endsAt) > currentDate
+                ? { color: "#FFFFFF" }
+                : { color: "#7E7E7E" }
+            }
+          >
+            <h3
+              style={
+                moment(e.endsAt) > currentDate
+                  ? { color: "#FF8379" }
+                  : { color: "#7E7E7E" }
+              }
+            >
+              {e.name}
+            </h3>
             <p>{e.description}</p>
-            <p>
-              {moment(e.startsAt).format('MMM D, h:mm a')}
-            </p>
-            <p>
-              {moment(e.endsAt).format('MMM D, h:mm a')}
-            </p>
+            <p>{moment(e.startsAt).format("MMM D, h:mm a")}</p>
+            <p>{moment(e.endsAt).format("MMM D, h:mm a")}</p>
           </Event>
-        )}
+        ))}
       </EventList>
     </div>
   );
