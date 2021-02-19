@@ -2,7 +2,7 @@ import styled from "styled-components";
 import Image from "next/image";
 
 // Layout
-import Navbar from "./layout/SponsorNavbar";
+import Navbar from "./layout/Navbar";
 import Sidebar from "./layout/Sidebar";
 import Footer from "./layout/Footer";
 import Header from "./layout/Header";
@@ -26,7 +26,11 @@ const SponsorDashboard = (props: Props) => {
   return (
     <Container>
       <FoxLogo />
-      <Navbar hackathonConstants={hackathonConstants} activePage="dashboard" />
+      <Navbar
+        profile={profile}
+        hackathonConstants={hackathonConstants}
+        activePage="dashboard"
+      />
       <Header text={"Sponsor Dashboard"} />
       <WidgetFrame
         widget="one"
@@ -35,14 +39,18 @@ const SponsorDashboard = (props: Props) => {
             <h3>Welcome to the Sponsor Dashboard!</h3>
             <p>
               Here you can access actions and data for HackSC. If you have any
-              questions or find any errors, let the organizers know in{" "}
-              <b>#sponsors</b>
+              questions or find any errors, let an organizer know!
             </p>
           </>
         }
       />
       <WidgetFrame widget="two" component={<SponsorActionsWidget />} />
-      <WidgetFrame widget="three" component={<UpdatesWidget announcements={announcements} profile={profile} />} />
+      <WidgetFrame
+        widget="three"
+        component={
+          <UpdatesWidget announcements={announcements} profile={profile} />
+        }
+      />
       <Sidebar view={"sponsor"} events={events} />
       <Footer />
     </Container>

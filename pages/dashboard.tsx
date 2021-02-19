@@ -26,15 +26,13 @@ import { getAnnouncements } from "../lib/getAnnouncements";
 
 const Dashboard = ({
   profile,
-  houses,
   events,
-  socialPosts,
   hackathonConstants,
   announcements,
   // view,
   team,
 }) => {
-  const [view, setView] = useState("hacker");
+  const [view, setView] = useState(profile.role || "hacker");
 
   useEffect(() => {
     if (!profile.slackProfile && profile.role === "hacker") {
@@ -47,7 +45,7 @@ const Dashboard = ({
   }, []);
 
   const getDashToRender = () => {
-    if (view === "admin") {
+    if (view === "admin" || view == "superadmin") {
       return (
         <AdminDashboard
           profile={profile}
@@ -87,44 +85,21 @@ const Dashboard = ({
 
 export async function getServerSideProps({ req }) {
   const profile = await getProfile(req);
-  //const houses = await getHouses(req);
   const announcements = await getAnnouncements(req, profile);
   const hackathonConstants = await getHackathonConstants();
   const currentEvents = await getPublicEvents(req);
   const team = await getTeam(req);
   const events = currentEvents ? currentEvents["events"] : [];
 
-  const houses = [];
-  const view = profile.role;
-
+  const view = profile ? profile.role : "hacker";
   // Null profile means user is not logged in
   if (!profile) {
     handleLoginRedirect(req);
-  } else if (profile.role == "admin") {
-    // handleAdminRedirect(req);
-  } else if (profile.role == "volunteer") {
-    handleVolunteerRedirect(req);
-  } else if (profile.role == "sponsor") {
-    // handleSponsorRedirect(req);
-  }
-
-  if (
-    !hackathonConstants.find((constant) => constant.name === "showDash")
-      ?.boolean
-  ) {
-    //await handleDashboardRedirect(req);
-  }
-
-  let socialPosts = {};
-  if (profile) {
-    socialPosts = generatePosts(profile);
   }
 
   return {
     props: {
-      houses,
       profile,
-      socialPosts,
       team,
       announcements,
       events,

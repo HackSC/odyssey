@@ -52,7 +52,11 @@ const TeamWidget = (props: Props) => {
           Welcome! You aren't currently in a team. Choose one of the options
           below.
           <Flex direction="column">
-            <MarginButton onClick={() => setView(TeamView.FindTeam)}>
+            <MarginButton
+              onClick={() =>
+                window.open("https://hacksc2021.slack.com/archives/C01LNMERRF1")
+              }
+            >
               Find a team
             </MarginButton>
             <MarginButton onClick={() => setView(TeamView.JoinTeam)}>

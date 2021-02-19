@@ -156,7 +156,7 @@ export function handleApplicationRedirect(req) {
 }
 
 export function handleAdminRedirect(req) {
-  redirectToPath(req, "/admin");
+  redirectToPath(req, "/dashboard");
 }
 
 export function handleVolunteerRedirect(req) {

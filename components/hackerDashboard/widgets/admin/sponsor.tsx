@@ -17,16 +17,8 @@ const SponsorActionsWidget = () => {
     <Wrapper>
       <Subheader> Actions </Subheader>
       <Actions>
-        <Action
-          id="metabase-page"
-          href="https://metabase.hacksc.com/"
-          target="_blank"
-          onClick={(e) => send_slack_msg(e)}
-        >
-          <ActionTitle>Access Metabase</ActionTitle>
-        </Action>
         <Action id="hacker-manager-page" href="/admin/hackerManager">
-          <ActionTitle> Manage Hackers </ActionTitle>
+          <ActionTitle> Filter Hackers to CSV </ActionTitle>
         </Action>
       </Actions>
     </Wrapper>

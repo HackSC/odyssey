@@ -1,8 +1,8 @@
 import moment from "moment-timezone";
 
 export default {
-  hackathonDate: moment(1613754000000, false).tz(moment.tz.guess()),
-  hackathonEndDate: moment(1613898000000, false).tz(moment.tz.guess()),
+  hackathonDate: moment(1613791800000, false).tz(moment.tz.guess()),
+  hackathonEndDate: moment(1613923200000, false).tz(moment.tz.guess()),
 };
 
 export async function getHackathonConstants(): Promise<
