@@ -1,5 +1,9 @@
 import { useState } from "react";
-import { Dash, AdminDashboard, SponsorDashboard } from "@/components/hackerDashboard";
+import {
+  Dash,
+  AdminDashboard,
+  SponsorDashboard,
+} from "@/components/hackerDashboard";
 
 import {
   handleLoginRedirect,
@@ -12,11 +16,7 @@ import {
   getPublicEvents,
 } from "@/lib";
 
-import { getHackathonConstants } from "../lib";
-
 import { getAnnouncements } from "../lib/getAnnouncements";
-
-import { generatePosts } from "../lib/referrerCode";
 
 const Dashboard = ({
   profile,
@@ -31,11 +31,9 @@ const Dashboard = ({
   const switchRole = () => {
     if (view === "admin") {
       setView("hacker");
-    } 
-    else if (view === "hacker") {
+    } else if (view === "hacker") {
       setView("sponsor");
-    }
-    else if (view === "sponsor") {
+    } else if (view === "sponsor") {
       setView("admin");
     }
   };
@@ -49,16 +47,15 @@ const Dashboard = ({
           hackathonConstants={hackathonConstants}
         />
       );
-    } 
-    else if (view === "sponsor") {
+    } else if (view === "sponsor") {
       return (
         <SponsorDashboard
           profile={profile}
           events={events}
-          hackathonConstants={hackathonConstants} />
+          hackathonConstants={hackathonConstants}
+        />
       );
-    }
-    else {
+    } else {
       return (
         <Dash
           profile={profile}
