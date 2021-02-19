@@ -66,8 +66,6 @@ const TeamWidget = (props: Props) => {
       </>
     );
   }
-
-  return <></>;
 };
 
 const Header = styled.div``;
