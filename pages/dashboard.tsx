@@ -25,29 +25,8 @@ const Dashboard = ({
   socialPosts,
   hackathonConstants,
   announcements,
+  view,
 }) => {
-  const [view, setView] = useState("hacker");
-
-
-  useEffect(() => {
-    if(!profile.slackProfile) {
-      setTimeout(function() { 
-        alert("Welcome to HackSC 2021! Please check in by using the /checkin [your hacksc.com email login] command in any Slack channel."); 
-      }, 500);
-    }
-  }, [])
-
-  const switchRole = () => {
-    if (view === "admin") {
-      setView("hacker");
-    } 
-    else if (view === "hacker") {
-      setView("sponsor");
-    }
-    else if (view === "sponsor") {
-      setView("admin");
-    }
-  };
 
   const getDashToRender = () => {
     if (view === "admin") {
@@ -81,16 +60,6 @@ const Dashboard = ({
 
   return (
     <>
-      {process.env.NODE_ENV === "development" ? (
-        <button
-          onClick={switchRole}
-          style={{ position: "absolute", top: 20, right: 20 }}
-        >
-          Switch role
-        </button>
-      ) : (
-        ""
-      )}
       {getDashToRender()}
     </>
   );
@@ -104,6 +73,7 @@ export async function getServerSideProps({ req }) {
   const currentEvents = await getPublicEvents(req);
   const events = currentEvents ? currentEvents["events"] : [];
   const houses = [];
+  const view = profile.role;
 
   // Null profile means user is not logged in
   if (!profile) {
@@ -113,7 +83,7 @@ export async function getServerSideProps({ req }) {
   } else if (profile.role == "volunteer") {
     handleVolunteerRedirect(req);
   } else if (profile.role == "sponsor") {
-    handleSponsorRedirect(req);
+    // handleSponsorRedirect(req);
   }
 
   if (
@@ -136,6 +106,7 @@ export async function getServerSideProps({ req }) {
       announcements,
       events,
       hackathonConstants,
+      view,
     },
   };
 }
