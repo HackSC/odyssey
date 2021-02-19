@@ -3,7 +3,6 @@ import styled from "styled-components";
 
 import Logo from "@/assets/hackscFox.png";
 
-
 const UpdatesWidget = ({ profile, announcements }) => {
   const items = [];
   if (announcements != null) {

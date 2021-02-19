@@ -33,7 +33,8 @@ const SponsorDashboard = (props: Props) => {
           <>
             <h3>Welcome to the Sponsor Dashboard!</h3>
             <p>
-            Here you can access actions and data for HackSC. If you have any questions or find any errors, let the organizers know in {" "}
+              Here you can access actions and data for HackSC. If you have any
+              questions or find any errors, let the organizers know in{" "}
               <b>#sponsors</b>
             </p>
           </>
@@ -51,7 +52,7 @@ const FoxLogo = () => (
   <MenuLogo>
     <Image src={Logo} width="75%" height="75%" alt="" />
   </MenuLogo>
-);  
+);
 
 const MenuLogo = styled.div`
   display: flex;

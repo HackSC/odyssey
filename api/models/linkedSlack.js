@@ -17,6 +17,12 @@ module.exports = (sequelize, DataTypes) => {
       checkInTime: {
         type: DataTypes.DATE,
       },
+      devPostSubmission: {
+        type: DataTypes.STRING,
+      },
+      checkInTime: {
+        type: DataTypes.DATE,
+      },
     },
     {
       timestamps: false,

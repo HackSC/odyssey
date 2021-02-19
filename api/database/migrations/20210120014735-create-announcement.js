@@ -19,7 +19,7 @@ module.exports = {
       },
       target: {
         type: Sequelize.STRING,
-      }
+      },
     });
   },
   down: (queryInterface, Sequelize) => {

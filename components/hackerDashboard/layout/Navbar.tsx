@@ -8,6 +8,7 @@ const MenuItems = [
   { title: "Team", route: "team", constant: "showTeam" },
   { title: "Maps", route: "maps", constant: "showMaps" },
   { title: "Resources", route: "resources", constant: "showAPI" },
+  { title: "Prizes", route: "prizes", constant: "showAPI" },
 ];
 
 type Item = {
@@ -43,7 +44,7 @@ const MenuItem = ({ activePage, item, hackathonConstants }: MenuItemProps) => {
   });
 
   return show ? (
-    <BoxShadowWrapper>
+    <BoxShadowWrapper key={item.route}>
       <NavbarMenuItem
         href={"/" + item.route}
         active={activePage === item.route || activePage === item.title}

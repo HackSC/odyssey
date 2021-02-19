@@ -7,9 +7,9 @@ router.get("/events/list", cors(), async (req, res) => {
   try {
     const events = await models.Event.findAll({
       order: [
-        ['startsAt', 'ASC'],
-        ['endsAt', 'ASC']
-      ]
+        ["startsAt", "ASC"],
+        ["endsAt", "ASC"],
+      ],
     });
     return res.json({ events });
   } catch (e) {

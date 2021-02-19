@@ -41,7 +41,8 @@ const Sidebar = (props: Props) => {
     <HackathonEvents events={events} />,
   ];
   // TODO: Generalize
-  const widgets = (view === "admin" || view === "sponsor") ? adminWidgets : hackerWidgets;
+  const widgets =
+    view === "admin" || view === "sponsor" ? adminWidgets : hackerWidgets;
   return (
     <SidebarContainer>
       {widgets.map((e, i) => (

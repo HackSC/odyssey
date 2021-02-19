@@ -165,6 +165,10 @@ declare type Prize = {
   title: string;
   description: string;
   id: NumberID;
+  sponsor: string;
+  image_url: string;
+  info_url: string;
+  sponsor_url: string;
 };
 
 declare type House = {

@@ -25,11 +25,20 @@ type Props = {
   resources: Array<API>;
 };
 
-const Resources = ({ profile, events, hackathonConstants, resources }: Props) => {
+const Resources = ({
+  profile,
+  events,
+  hackathonConstants,
+  resources,
+}: Props) => {
   return (
     <Container>
       <FoxLogo />
-      <Navbar hackathonConstants={hackathonConstants} activePage="resources" profile={profile} />
+      <Navbar
+        hackathonConstants={hackathonConstants}
+        activePage="resources"
+        profile={profile}
+      />
       <Header />
       <WidgetFrame
         widget="one"
@@ -37,12 +46,16 @@ const Resources = ({ profile, events, hackathonConstants, resources }: Props) =>
           <>
             <h3>HackSC Resources + APIs</h3>
             <p>
-              This is a collection of resources you can use for your project provided by our sponsors!
+              This is a collection of resources you can use for your project
+              provided by our sponsors!
             </p>
           </>
         }
       />
-      <WidgetFrame widget="two" component={<ResourcesWidget resources={resources} />} />
+      <WidgetFrame
+        widget="two"
+        component={<ResourcesWidget resources={resources} />}
+      />
       <Empty />
       <Sidebar view="hacker" events={events} />
       <Footer />
@@ -81,6 +94,8 @@ const Container = styled.div`
     "Footer Footer Footer Footer";
   background-color: #1d2c3f;
   color: #fff;
+  height: 100vh;
+  width: 100vw;
 `;
 
 export default Resources;

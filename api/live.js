@@ -22,9 +22,17 @@ const actions = {
 router.post("/dispatch", async (req, res) => {
   const { qrCodeId, actionId } = { ...req.body };
 
-  const hackerProfile = await models.HackerProfile.findOne({
-    where: { qrCodeId: qrCodeId },
-  });
+  let hackerProfile;
+
+  if (qrCodeId == null) {
+    hackerProfile = await models.HackerProfile.findOne({
+      where: { email: req.body.email },
+    });
+  } else {
+    hackerProfile = await models.HackerProfile.findOne({
+      where: { qrCodeId: qrCodeId },
+    });
+  }
 
   if (hackerProfile === null) {
     return res.status(404).json({
@@ -488,6 +496,29 @@ router.get("/hacker/:qrCodeId", async (req, res) => {
   const result = await models.HackerProfile.findOne({
     where: {
       qrCodeId: qrCodeId,
+    },
+  });
+  if (!result) {
+    return res.status(404).json({ error: "Hacker not Found" });
+  }
+  const userId = result.get("userId");
+  const contributions = await models.Contribution.findAll({
+    where: {
+      personId: userId,
+    },
+    attributes: [
+      [sequelize.fn("SUM", sequelize.col("Task.points")), "totalPoints"],
+    ],
+    include: [{ model: models.Task, required: true }],
+  });
+  return res.status(200).json({ success: contributions });
+});
+
+router.get("/hacker/points/:email", async (req, res) => {
+  const email = req.params.email;
+  const result = await models.HackerProfile.findOne({
+    where: {
+      email: email,
     },
   });
   if (!result) {
