@@ -3,7 +3,9 @@ import moment from "moment-timezone";
 import { useEffect } from "react";
 
 const HackathonEvents = ({ events }) => {
-  const currentDate = moment.tz(moment(), "Pacific");
+  const currentDate = moment.tz(moment(), "UTC");
+
+  console.log(currentDate.format("MMM D, h:mm a"));
   let nextEvent;
   for (let i = 0; i < events.length; i++) {
     nextEvent = events[i].id;
@@ -19,6 +21,9 @@ const HackathonEvents = ({ events }) => {
     document.getElementById("eventList").scrollTop = document.getElementById(
       nextEvent
     ).offsetTop;
+    console.log(events);
+    console.log(moment(events[0].startsAt))
+    console.log(moment.tz(events[0].startsAt, "UTC").format("MMM D, h:mm a"))
   }, []);
 
   return (
@@ -45,8 +50,13 @@ const HackathonEvents = ({ events }) => {
               {e.name}
             </h3>
             <p>{e.description}</p>
-            <p>{moment(e.startsAt).format("MMM D, h:mm a")}</p>
-            <p>{moment(e.endsAt).format("MMM D, h:mm a")}</p>
+            <p>{moment.utc(e.startsAt).format("MMM D, h:mm a")}</p>
+            <p>{moment.utc(e.endsAt).format("MMM D, h:mm a")}</p>
+            {e.zoomUrl ?
+              <a href={e.zoomUrl}>Join Zoom Meeting</a>
+              :
+              null
+            }
           </Event>
         ))}
       </EventList>

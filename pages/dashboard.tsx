@@ -18,7 +18,11 @@ import {
   getPublicEvents,
 } from "@/lib";
 
+// import { getHackathonConstants } from "../lib";
+
 import { getAnnouncements } from "../lib/getAnnouncements";
+
+// import { generatePosts } from "../lib/referrerCode";
 
 const Dashboard = ({
   profile,
@@ -27,9 +31,21 @@ const Dashboard = ({
   socialPosts,
   hackathonConstants,
   announcements,
-  view,
+  // view,
   team,
 }) => {
+  const [view, setView] = useState("hacker");
+
+  useEffect(() => {
+    if (!profile.slackProfile) {
+      setTimeout(function () {
+        alert(
+          "Welcome to HackSC 2021! Please check in by using the /checkin [your hacksc.com email login] command in any Slack channel."
+        );
+      }, 500);
+    }
+  }, []);
+
   const getDashToRender = () => {
     if (view === "admin") {
       return (
@@ -75,8 +91,9 @@ export async function getServerSideProps({ req }) {
   const hackathonConstants = await getHackathonConstants();
   const currentEvents = await getPublicEvents(req);
   const team = await getTeam(req);
+  console.log(currentEvents);
   const events = currentEvents ? currentEvents["events"] : [];
-  console.log(profile);
+
   const houses = [];
   const view = profile.role;
 
