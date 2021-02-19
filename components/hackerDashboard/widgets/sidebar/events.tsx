@@ -51,7 +51,7 @@ const HackathonEvents = ({ events }) => {
             <p>{e.description}</p>
             <p>{moment.utc(e.startsAt).format("MMM D, h:mm a")}</p>
             <p>{moment.utc(e.endsAt).format("MMM D, h:mm a")}</p>
-            {e.zoomUrl ? <a href={e.zoomUrl}>Join Zoom Meeting</a> : null}
+            {e.zoomUrl ? <a href={e.zoomUrl}>Join Event</a> : null}
           </Event>
         ))}
       </EventList>

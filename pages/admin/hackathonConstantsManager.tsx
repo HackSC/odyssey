@@ -82,6 +82,15 @@ const EditableCell = ({
             setCurrConstant({ ...currConstant, type: e.target.value });
           }}
         />
+        <input
+          type="text"
+          placeholder="enter type"
+          value={currConstant.type}
+          style={{ width: "-webkit-fill-available" }}
+          onChange={(e) => {
+            setCurrConstant({ ...currConstant, type: e.target.value });
+          }}
+        />
       </ConstantInfo>
       {updating ? (
         <SyncLoader size={5} color={"#FF8379"} />
