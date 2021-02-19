@@ -59,7 +59,12 @@ const Dashboard = ({
     }
   };
 
-  return <>{getDashToRender()}</>;
+  return (
+    <>
+      <Head title="HackSC Dashboard - Welcome to HackSC 2021" />
+      {getDashToRender()}
+    </>
+  );
 };
 
 export async function getServerSideProps({ req }) {
