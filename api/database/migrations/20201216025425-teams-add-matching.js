@@ -1,16 +1,16 @@
-"use strict";
+'use strict';
 
 module.exports = {
   up: (queryInterface, Sequelize) => {
     return Promise.all([
       queryInterface.addColumn("Teams", "lookingForTeammates", {
         type: Sequelize.BOOLEAN,
-        defaultValue: false,
+        defaultValue: false
       }),
       queryInterface.addColumn("Teams", "description", {
         type: Sequelize.TEXT,
-        defaultValue: false,
-      }),
+        defaultValue: false
+      })
     ]);
   },
 
@@ -19,5 +19,5 @@ module.exports = {
       queryInterface.removeColumn("Teams", "lookingForTeammates"),
       queryInterface.removeColumn("Teams", "description"),
     ]);
-  },
+  }
 };

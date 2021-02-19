@@ -19,7 +19,7 @@ let sequelize = new Sequelize(
 );
 
 let model;
-model = sequelize["import"]("./action");
+model = sequelize.import("./action");
 db[model.name] = model;
 
 Object.keys(db).forEach((modelName) => {

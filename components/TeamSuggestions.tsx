@@ -1,71 +1,52 @@
 import React, { useCallback, useState } from "react";
 import styled from "styled-components";
 
-const TeamSuggestions = ({
-  type,
-  handleOnClick,
-  teamSuggestions,
-  buttonLabel,
-}) => {
+const TeamSuggestions = ({ type, handleOnClick, teamSuggestions, buttonLabel }) => {
   return (
-    <>
-      <Title>{type}</Title>
-      <Suggestions>
-        {teamSuggestions.teams.map((suggestion) => (
-          <Suggestion
-            key={type + suggestion.id}
-            type={type}
-            handleOnClick={handleOnClick}
-            suggestion={suggestion}
-            buttonLabel={buttonLabel}
-          />
-        ))}
-      </Suggestions>
-    </>
-  );
+      <>
+        <Title>{type}</Title>
+        <Suggestions>
+            {teamSuggestions.teams.map((suggestion) => (
+                <Suggestion key={type + suggestion.id} type={type} handleOnClick={handleOnClick} suggestion={suggestion} buttonLabel={buttonLabel} />
+            ))}
+        </Suggestions>
+        </>
+  )
 };
 
 const Suggestion = ({ type, handleOnClick, suggestion, buttonLabel }) => {
   const [visible, setVisible] = useState(true);
   return (
     <>
-      {visible ? (
-        <Square>
-          <Name>{suggestion.name}</Name>
-          {type !== "Your Pending Requests" ? (
-            <>
-              <Description>{suggestion.description}</Description>
-              <Menu>
-                {type === "Team Suggestions" ? (
-                  <MenuOption
-                    onClick={() => {
-                      setVisible(false);
-                      handleOnClick(suggestion.id);
-                    }}
-                  >
-                    {buttonLabel}
-                  </MenuOption>
-                ) : (
-                  <MenuOption
-                    onClick={() => {
-                      handleOnClick(suggestion.teamCode);
-                    }}
-                  >
-                    {buttonLabel}
-                  </MenuOption>
-                )}
-              </Menu>
-            </>
-          ) : (
-            <LongDescription>{suggestion.description}</LongDescription>
-          )}
-        </Square>
+    {visible ? (
+      <Square>
+      <Name>
+          {suggestion.name}
+      </Name>
+      {type !== "Your Pending Requests" ? (
+        <>
+          <Description>
+              {suggestion.description}
+          </Description>
+          <Menu>
+          {type === "Team Suggestions" ?
+              (<MenuOption onClick={() => {setVisible(false); handleOnClick(suggestion.id)}}>{buttonLabel}</MenuOption>) :
+              (<MenuOption onClick={() => {handleOnClick(suggestion.teamCode)}}>{buttonLabel}</MenuOption>)
+          }
+          </Menu>
+        </>
       ) : (
-        <div />
+        <LongDescription>
+          {suggestion.description}
+        </LongDescription>
       )}
-    </>
-  );
-};
+    </Square> 
+    ) : (
+      <div />
+    )}
+    </>   
+  )
+}
 
 const Title = styled.h2`
   padding-top: 30px;
@@ -86,9 +67,9 @@ const Square = styled.div`
   flex-direction: column;
   justify-content: space-between;
   align-items: center;
-  border: 1px solid #b7b7b7;
+  border: 1px solid #B7B7B7;
   border-radius: 20px;
-  background: #ffffff;
+  background: #FFFFFF;
 `;
 
 const Name = styled.div`

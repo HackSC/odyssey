@@ -70,7 +70,7 @@ class OdysseyApp extends App<any> {
           <UserContext.Provider value={user}>
             <>
               <GlobalStyles />
-              {isDev && <PersonSwitcher profileList={profileList} />}
+              {/* {isDev && <PersonSwitcher profileList={profileList} />} */}
               <Component {...pageProps} />
             </>
           </UserContext.Provider>

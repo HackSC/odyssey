@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import SyncLoader from "react-spinners/SyncLoader";
 import { useToasts } from "react-toast-notifications";
 import styled from "styled-components";
-import {} from "styled-components/cssprop";
 
 import { Head, Navbar, Footer } from "../../components";
 import {

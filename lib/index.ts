@@ -84,6 +84,12 @@ export {
   deleteEvent,
 } from "./live";
 
+// * public.ts
+export { getPublicEvents } from "./public";
+
+// * prizes.ts
+export { getPrizes } from "./prizes";
+
 // * referrerCode.ts
 export {
   getReferrerCode,

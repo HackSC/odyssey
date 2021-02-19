@@ -1,3 +1,10 @@
+import moment from "moment-timezone";
+
+export default {
+  hackathonDate: moment(1613754000000, false).tz(moment.tz.guess()),
+  hackathonEndDate: moment(1613898000000, false).tz(moment.tz.guess()),
+};
+
 export async function getHackathonConstants(): Promise<
   Array<HackathonConstant>
 > {
@@ -13,7 +20,13 @@ export async function getHackathonConstants(): Promise<
   return data.result;
 }
 
-export async function updateHackathonConstant({ id, name, boolean, date, type }) {
+export async function updateHackathonConstant({
+  id,
+  name,
+  boolean,
+  date,
+  type,
+}) {
   const fetchUrl = process.env.URL_BASE
     ? process.env.URL_BASE + "api/constants/update"
     : "api/constants/update";
@@ -23,7 +36,13 @@ export async function updateHackathonConstant({ id, name, boolean, date, type })
     headers: {
       "Content-Type": "application/json",
     },
-    body: JSON.stringify({ id: id, name: name, boolean: boolean, date: date, type: type }),
+    body: JSON.stringify({
+      id: id,
+      name: name,
+      boolean: boolean,
+      date: date,
+      type: type,
+    }),
   });
 
   return response;
@@ -62,7 +81,12 @@ export async function createHackathonConstant({ name, boolean, date, type }) {
     headers: {
       "Content-Type": "application/json",
     },
-    body: JSON.stringify({ name: name, boolean: boolean, date: date, type: type }),
+    body: JSON.stringify({
+      name: name,
+      boolean: boolean,
+      date: date,
+      type: type,
+    }),
   });
 
   try {

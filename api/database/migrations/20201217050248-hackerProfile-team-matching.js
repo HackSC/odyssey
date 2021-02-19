@@ -1,4 +1,4 @@
-"use strict";
+'use strict';
 
 module.exports = {
   up: (queryInterface, Sequelize) => {
@@ -8,8 +8,8 @@ module.exports = {
         defaultValue: false,
       }),
       queryInterface.addColumn("HackerProfiles", "portfolioUrl", {
-        type: Sequelize.STRING,
-      }),
+        type: Sequelize.STRING
+      })
     ]);
   },
 
@@ -18,5 +18,5 @@ module.exports = {
       queryInterface.removeColumn("HackerProfiles", "lookingForTeam"),
       queryInterface.removeColumn("HackerProfiles", "portfolioUrl"),
     ]);
-  },
+  }
 };

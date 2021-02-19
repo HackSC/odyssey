@@ -135,6 +135,20 @@ module.exports = (sequelize, DataTypes) => {
       },
       lookingForTeam: DataTypes.BOOLEAN,
       portfolioUrl: DataTypes.STRING(500),
+      instagram: DataTypes.STRING(500),
+      bio: DataTypes.STRING(1000),
+      // slackProfile: {
+      //   type: DataTypes.STRING,
+      //   references: {
+      //     model: "LinkedSlack",
+      //     key: "slackId",
+      //   },
+      // },
+      profilePic: DataTypes.STRING(500),
+      raffleTickets: {
+        type: DataTypes.INTEGER,
+        defaultValue: 0,
+      },
     },
     {}
   );

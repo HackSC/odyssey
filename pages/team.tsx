@@ -264,7 +264,6 @@ const Teams = ({
 Teams.getInitialProps = async ({ req, query }) => {
   const profile = await getProfile(req);
   const team = await getTeam(req);
-
   // Null profile means user is not logged in
   if (!profile) {
     handleLoginRedirect(req);

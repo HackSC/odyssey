@@ -3,49 +3,56 @@ export default {
     return queryInterface.createTable("HackerProfiles", {
       id: {
         allowNull: false,
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
       },
       userId: {
         primaryKey: true,
         type: Sequelize.STRING,
-        allowNull: false
+        allowNull: false,
       },
       gender: {
         type: Sequelize.ENUM,
-        values: ["male", "female", "other"]
+        values: ["male", "female", "other"],
       },
       email: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
       },
       ethnicity: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
       },
       major: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
       },
       minor: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
       },
       resume: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
       },
       skills: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
       },
       interests: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
       },
       createdAt: {
         allowNull: false,
-        type: Sequelize.DATE
+        type: Sequelize.DATE,
       },
       updatedAt: {
         allowNull: false,
-        type: Sequelize.DATE
-      }
+        type: Sequelize.DATE,
+      },
+      slackProfile: {
+        type: Sequelize.STRING,
+        references: {
+          model: "LinkedSlack",
+          key: "slackId",
+        },
+      },
     });
   },
   down: (queryInterface, Sequelize) => {
     return queryInterface.dropTable("HackerProfiles");
-  }
+  },
 };
