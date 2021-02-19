@@ -22,9 +22,10 @@ type Props = {
   profile: Profile;
   hackathonConstants: Array<HackathonConstant>;
   prizes: any;
+  events: Array<any>;
 };
 
-const Prizes = ({ profile, hackathonConstants, prizes }: Props) => {
+const Prizes = ({ profile, hackathonConstants, prizes, events }: Props) => {
   return (
     <Container>
       <FoxLogo />
@@ -44,6 +45,7 @@ const Prizes = ({ profile, hackathonConstants, prizes }: Props) => {
       />
       <WidgetFrame widget="two" component={<PrizesWidget prizes={prizes} />} />
       <Empty />
+      <Sidebar view="hacker" events={events} />
       <Footer />
     </Container>
   );

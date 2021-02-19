@@ -7,7 +7,7 @@ const PrizesWidget = ({ prizes }) => {
         prizes.map((prize) => {
           if (prize.sponsor.toLowerCase() === "hacksc") {
             return (
-              <ResourceWrapper>
+              <ResourceWrapper key={prize.title}>
                 <img height={300} src={prize.image_url} />
                 <ResourceBlurb>
                   <ResourceTitle>{prize.title}</ResourceTitle>
@@ -19,7 +19,7 @@ const PrizesWidget = ({ prizes }) => {
             );
           } else {
             return (
-              <ResourceWrapper>
+              <ResourceWrapper key={prize.title}>
                 <ResourceImageWrapper>
                   <ResourceImage src={prize.image_url} />
                 </ResourceImageWrapper>
@@ -42,7 +42,7 @@ const Wrapper = styled.div`
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  max-height: 800px;
+  max-height: 600px;
   overflow-y: scroll;
   overflow-x: auto;
 `;

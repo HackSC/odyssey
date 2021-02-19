@@ -86,7 +86,6 @@ const Container = styled.div`
   height: 100vh;
   display: grid;
   grid-template-columns: 0.6fr 1.3fr 0.9fr 0.6fr;
-  grid-template-rows: 0.4fr 1fr 1.4fr 0.6fr;
   gap: 0px;
   grid-template-areas:
     "FoxLogo Header Header Empty"

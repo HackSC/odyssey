@@ -6,11 +6,12 @@ import {
   handleDashboardRedirect,
   getHackathonConstants,
   getPrizes,
+  getPublicEvents,
 } from "@/lib";
 
 import { Head } from "@/components";
 
-const Prizes = ({ profile, prizes, hackathonConstants }) => {
+const Prizes = ({ profile, events, prizes, hackathonConstants }) => {
   return (
     <>
       <Head title="HackSC Dashboard - Prizes" />
@@ -18,6 +19,7 @@ const Prizes = ({ profile, prizes, hackathonConstants }) => {
         profile={profile}
         hackathonConstants={hackathonConstants}
         prizes={prizes}
+        events={events}
       />
     </>
   );
@@ -27,6 +29,8 @@ export async function getServerSideProps({ req }) {
   const profile = await getProfile(req);
   const hackathonConstants = await getHackathonConstants();
   const { success: prizes } = await getPrizes(req);
+  const currentEvents = await getPublicEvents(req);
+  const events = currentEvents ? currentEvents["events"] : [];
 
   // Null profile means user is not logged in
   if (!profile) {
@@ -45,6 +49,7 @@ export async function getServerSideProps({ req }) {
       profile,
       hackathonConstants,
       prizes,
+      events,
     },
   };
 }

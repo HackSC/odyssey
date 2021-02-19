@@ -31,6 +31,7 @@ const HackathonEvents = ({ events }) => {
       <EventList id="eventList">
         {events.map((e) => (
           <Event
+            key={e.id}
             id={e.id}
             style={
               moment(e.endsAt) > currentDate

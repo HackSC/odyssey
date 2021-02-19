@@ -53,24 +53,26 @@ const EditableCell = ({
             setCurrConstant({ ...currConstant, boolean: e.target.value });
           }}
         />
-        <input
-          type="datetime-local"
-          placeholder="date"
-          style={{ width: "-webkit-fill-available" }}
-          value={new Date(
-            new Date(Date.parse(currConstant.date)).setHours(
-              new Date(Date.parse(currConstant.date)).getHours() - 8
+        {Date.parse(currConstant.date) && (
+          <input
+            type="datetime-local"
+            placeholder="date"
+            style={{ width: "-webkit-fill-available" }}
+            value={new Date(
+              new Date(Date.parse(currConstant.date)).setHours(
+                new Date(Date.parse(currConstant.date)).getHours() - 8
+              )
             )
-          )
-            .toISOString()
-            .replace("Z", "")}
-          onChange={(e) => {
-            setCurrConstant({
-              ...currConstant,
-              date: e.target.value,
-            });
-          }}
-        />
+              .toISOString()
+              .replace("Z", "")}
+            onChange={(e) => {
+              setCurrConstant({
+                ...currConstant,
+                date: e.target.value,
+              });
+            }}
+          />
+        )}
         <input
           type="text"
           placeholder="enter type"
