@@ -8,9 +8,12 @@ import {
   getPrizes,
 } from "@/lib";
 
+import { Head } from "@/components";
+
 const Prizes = ({ profile, prizes, hackathonConstants }) => {
   return (
     <>
+      <Head title="HackSC Dashboard - Prizes" />
       <PrizeDash
         profile={profile}
         hackathonConstants={hackathonConstants}

@@ -1,4 +1,5 @@
 import { ResourcesDash } from "@/components/hackerDashboard";
+import { Head } from "@/components";
 
 import {
   handleLoginRedirect,
@@ -12,11 +13,12 @@ import {
 const Resources = ({ profile, events, hackathonConstants, resources }) => {
   return (
     <>
+      <Head title="HackSC Dashboard - Resources" />
       <ResourcesDash
-          profile={profile}
-          events={events}
-          hackathonConstants={hackathonConstants}
-          resources={resources}
+        profile={profile}
+        events={events}
+        hackathonConstants={hackathonConstants}
+        resources={resources}
       />
     </>
   );

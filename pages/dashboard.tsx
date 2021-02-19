@@ -4,6 +4,7 @@ import {
   AdminDashboard,
   SponsorDashboard,
 } from "@/components/hackerDashboard";
+import { Head } from "@/components";
 import getTeam from "../lib/api-sdk/getTeam";
 
 import {
@@ -71,6 +72,7 @@ const Dashboard = ({ profile, events, hackathonConstants, team }) => {
       ) : (
         ""
       )}
+      <Head title="HackSC Dashboard - Welcome to HackSC 2021" />
       {getDashToRender()}
     </>
   );
