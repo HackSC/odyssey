@@ -1,0 +1,31 @@
+name: Test Lighthouse Check with Minimum Score Enforcement
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  lighthouse-check:
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    steps:
+      - uses: actions/checkout@master
+      - run: npm install
+      - name: Run Lighthouse
+        uses: foo-software/lighthouse-check-action@master
+        id: lighthouseCheck
+        with:
+          accessToken: ${{ steps.lighthouseCheck.outputs.lighthouseCheckResults }}
+          apiToken: ${{ secrets.LIGHTHOUSE_API_TOKEN }}
+          urls: ${{ secrets.LIGHTHOUSE_URL }}
+      - name: Handle Lighthouse Check results
+        uses: foo-software/lighthouse-check-status-action@master
+        with:
+          commentUrl: "push"
+          lighthouseCheckResults: ${{ steps.lighthouseCheck.outputs.lighthouseCheckResults }}
+          minAccessibilityScore: "0"
+          minBestPracticesScore: "0"
+          minPerformanceScore: "0"
+          minProgressiveWebAppScore: "0"
+          minSeoScore: "0"
