@@ -9,14 +9,14 @@ const BattlepassWidget = ({ raffleTickets }) => {
       <Wrapper>
         <h2>Battlepass Raffle</h2>
         <p>
-          This virtual year, HackSC will be hosting a raffle for items in place
-          of our traditional Battlepass. Prizes include a $200 giftcard from
-          Appsmith, Tiles, and more!{" "}
+          This virtual year, HackSC will be hosting a raffle for itemsyar in
+          place of our traditional Battlepass. Prizes include a $200 giftcard
+          from Appsmith, swag packs from Google, and more!{" "}
         </p>
       </Wrapper>
       <p>
         Get tickets by attending workshops and other events on Zoom. Your
-        tickets will appear here shortly after the event ends!
+        tickets will appear here shortly after the event ends.
       </p>
       <Subheader>
         You have <BigNumber>{raffleTickets}</BigNumber> raffle tickets.

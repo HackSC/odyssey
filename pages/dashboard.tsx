@@ -34,7 +34,7 @@ const Dashboard = ({
   // view,
   team,
 }) => {
-  const [view, setView] = useState("hacker");
+  const [view, setView] = useState(profile.role || "hacker");
 
   useEffect(() => {
     if (!profile.slackProfile && profile.role === "hacker") {
@@ -89,7 +89,7 @@ export async function getServerSideProps({ req }) {
   const profile = await getProfile(req);
   //const houses = await getHouses(req);
   let announcements = [];
-  if(profile) {
+  if (profile) {
     announcements = await getAnnouncements(req, profile);
   }
   const hackathonConstants = await getHackathonConstants();

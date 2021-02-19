@@ -27,7 +27,7 @@ const Sidebar = (props: Props) => {
   const { view, events } = props;
 
   const hackerWidgets = [
-    <HackathonCountdown />,
+    // <HackathonCountdown />,
     // moment().diff(hackathonConstants.hackathonDate, "seconds") > 0 ? (
     <HackathonEvents events={events} />,
     // ) : (
@@ -36,7 +36,7 @@ const Sidebar = (props: Props) => {
   ];
 
   const adminWidgets = [
-    <HackathonCountdown />,
+    // <HackathonCountdown />,
     <Stats />,
     <HackathonEvents events={events} />,
   ];

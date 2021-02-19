@@ -7,7 +7,7 @@ const PrizesWidget = ({ prizes }) => {
         prizes.map((prize) => {
           if (prize.sponsor.toLowerCase() === "hacksc") {
             return (
-              <ResourceWrapper>
+              <ResourceWrapper key={prize.title.split(" ").join(",")}>
                 <img height={300} src={prize.image_url} />
                 <ResourceBlurb>
                   <ResourceTitle>{prize.title}</ResourceTitle>
@@ -19,7 +19,7 @@ const PrizesWidget = ({ prizes }) => {
             );
           } else {
             return (
-              <ResourceWrapper>
+              <ResourceWrapper key={prize.title.split(" ").join(",")}>
                 <ResourceImageWrapper>
                   <ResourceImage src={prize.image_url} />
                 </ResourceImageWrapper>
