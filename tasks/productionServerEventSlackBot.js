@@ -1,3 +1,5 @@
+import { sendSlackMessage } from "../lib";
+
 const productionServerSlackBot = async () => {
   // * Null check slackbot tokens
   if (!process.env.SLACK_BOT_TOKEN || !process.env.SIGNING_SECRET) {
@@ -6,13 +8,13 @@ const productionServerSlackBot = async () => {
     process.env.URL_BASE &&
     process.env.URL_BASE.includes("dashboard")
   ) {
-    const app = new App({
-      token: process.env.SLACK_BOT_TOKEN,
-      signingSecret: process.env.SIGNING_SECRET,
-    });
+    // const app = new App({
+    //   token: process.env.SLACK_BOT_TOKEN,
+    //   signingSecret: process.env.SIGNING_SECRET,
+    // });
 
     try {
-      await app.start(3035);
+      // await app.start(3035);
 
       // * Fetch event schedule from odyssey API
       fetch("https://staging.hacksc.com/api/public/events/list")
@@ -36,13 +38,23 @@ const productionServerSlackBot = async () => {
               event_start_time - curr_date_min_10 > -1 &&
               event_start_time - curr_date_min_10 < 1
             ) {
-              SendSlackMessage(e, app, "starting in 10 minutes");
+              sendSlackMessage(
+                e.name + " starts in 10 minutes!",
+                e.description,
+                e.startsAt,
+                e.endsAt
+              );
             }
             if (
               event_start_time - curr_time > -1 &&
               event_start_time - curr_time < 1
             ) {
-              SendSlackMessage(e, app, "starts now");
+              sendSlackMessage(
+                e.name + " starting now!",
+                e.description,
+                e.startsAt,
+                e.endsAt
+              );
             }
           });
         });
@@ -50,13 +62,13 @@ const productionServerSlackBot = async () => {
       console.log(error);
     }
 
-    try {
-      if (app) {
-        app.stop();
-      }
-    } catch (e) {
-      console.log("Could not stop app");
-    }
+    // try {
+    //   // if (app) {
+    //   //   app.stop();
+    //   // }
+    // } catch (e) {
+    //   console.log("Could not stop app");
+    // }
   }
 };
 
