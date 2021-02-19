@@ -43,12 +43,13 @@ async function updateTask(updatedTask) {
     },
     body: JSON.stringify(updatedTask),
   });
-  const jsonBody = await result.json();
+  //const jsonBody = await result.json();
   return result.status === 200;
 }
 
 async function deleteTask(task) {
   const urlRoute = "/api/points/tasks/" + task.id;
+
   const result = await fetch(urlRoute, {
     method: "DELETE",
   });
@@ -146,12 +147,21 @@ async function saveUnlockable(newUnlockable) {
   const jsonResult = await result.json();
   return result.status === 200;
 }
+
 async function updateUnlockable(updatedUnlockable) {
   const urlRoute = "/api/unlockable";
   const result = await fetch(urlRoute, {
     method: "PUT",
     headers: { "content-type": "application/json" },
     body: JSON.stringify(updatedUnlockable),
+  });
+  return result.status === 200;
+}
+
+async function deleteUnlockable(deletedUnlockable) {
+  const urlRoute = "/api/unlockable/" + deletedUnlockable.id;
+  const result = await fetch(urlRoute, {
+    method: "DELETE",
   });
   return result.status === 200;
 }
@@ -187,6 +197,7 @@ export {
   getCurrentUnlockables,
   saveUnlockable,
   updateUnlockable,
+  deleteUnlockable,
   getCurrentEvents,
   saveEvent,
   deleteEvent,

@@ -11,9 +11,9 @@ router.get("/self", async (req, res) => {
   try {
     const [person, isCreated] = await models.Person.findOrCreate({
       where: {
-        identityId: req.user.id
+        identityId: req.user.id,
       },
-      defaults: { isBattlepassComplete: false }
+      defaults: { isBattlepassComplete: false },
     });
 
     return res.json({ person });
@@ -51,6 +51,25 @@ router.put("/houses", async (req, res) => {
       { where: { id: houseId } }
     );
     return res.json({ result: result });
+  } catch (e) {
+    return res.status(400).json({ err: e.message });
+  }
+});
+
+router.delete("/houses/:id", utils.requireAdmin, async (req, res) => {
+  try {
+    const id = req.params.id;
+
+    // * Remove foreign key contraints :/
+    await models.Person.update({ houseId: null }, { where: { houseId: id } });
+
+    // * Destroy house
+    await models.House.destroy({
+      where: {
+        id: id,
+      },
+    });
+    return res.status(200).json({ result: "success" });
   } catch (e) {
     return res.status(400).json({ err: e.message });
   }

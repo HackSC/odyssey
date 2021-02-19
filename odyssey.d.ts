@@ -38,6 +38,37 @@ declare type ApiLink = {
   api_id: number;
 };
 
+declare type PendingTeammateRequests = {
+  id: number;
+  teamId: number;
+  hackerProfileId: string;
+  ownder: "team" | "hacker";
+  createdAt: Date;
+  updatedAt: Date;
+};
+
+declare type HackathonConstant = {
+  id: number;
+  name: string;
+  boolean: boolean;
+  date: Date;
+  type: "string" | "boolean" | "date";
+};
+
+declare type Judging = {
+  id: number;
+  judgeId: string;
+  teamId: number;
+  vertical: string;
+  notes: string;
+  judged: boolean;
+  score: number;
+  startsAt: Date;
+  zoomLink: string;
+  sponsor: string;
+  endsAt: Date;
+};
+
 declare type Profile = {
   id: number;
   gender: "male" | "female" | "non-binary" | "other" | "no-say";
@@ -69,7 +100,7 @@ declare type Profile = {
   questionOne: string;
   questionTwo: string;
   questionThree: string;
-  role: "hacker" | "admin" | "sponsor" | "volunteer";
+  role: "hacker" | "admin" | "sponsor" | "volunteer" | "superadmin" | "judge";
   graduationDate:
     | "spring-2020"
     | "fall-2020"
@@ -93,6 +124,8 @@ declare type Profile = {
   team: Team;
   qrCodeId: string;
   isBattlepassComplete?: boolean;
+  lookingForTeam: boolean;
+  portfolioUrl: string;
 };
 
 declare type Team = {
@@ -100,6 +133,9 @@ declare type Team = {
   teamCode: string;
   ownerId: string;
   HackerProfiles: Array<Object>;
+  lookingForTeammates: boolean;
+  description: string;
+  members: Array<Profile>;
 };
 
 declare type QueryParamValues = {
@@ -197,4 +233,8 @@ declare type Route = GetRoute & PostRoute & PutRoute & DeleteRoute;
 declare type APIResponse<T> = {
   success?: T;
   error?: string;
+};
+
+declare type TeamSuggestion = {
+  hackerProfiles: Array<Profile>;
 };

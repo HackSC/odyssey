@@ -21,7 +21,7 @@ describe("Prizes", () => {
         expect(res.body.success.length).toBe(5);
       })
       .catch((e) => {
-        console.log("Get all prizes failed: ", e);
+        console.info("Get all prizes failed: ", e);
       });
   });
 });

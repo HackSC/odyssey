@@ -1,13 +1,29 @@
 import styled from "styled-components";
 
+const renderText = (txt) => {
+  const URL_REGEX = /(http:\/\/|https:\/\/)?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)/;
+
+  return txt.split(" ").map((part) =>
+    URL_REGEX.test(part) ? (
+      <a key={part} href={part}>
+        {part}{" "}
+      </a>
+    ) : (
+      part + " "
+    )
+  );
+};
+
 const Directory = ({ apis }) => {
   return (
     <Wrapper>
       {apis && apis.success && apis.success.length > 0
         ? apis.success.map((item) => (
-            <Company key={item.id}>
-              <h2>{item.name}</h2>
-              <p>{item.description}</p>
+            <Company key={Object.entries(item).join()}>
+              <h2 style={{ wordBreak: "break-all" }}>{item.name}</h2>
+              <p style={{ wordBreak: "break-all" }}>
+                {renderText(item.description)}
+              </p>
               <br />
               {!item.links || item.links.length == 0 ? (
                 <></>
@@ -15,7 +31,7 @@ const Directory = ({ apis }) => {
                 item.links.map((link) => (
                   <div
                     style={{ display: "flex", paddingBottom: ".5rem" }}
-                    key={link.name}
+                    key={Object.entries(link).join()}
                   >
                     <Link href={link.link}>{link.name}</Link>
                   </div>
@@ -30,7 +46,7 @@ const Directory = ({ apis }) => {
 
 const Wrapper = styled.div`
   display: flex;
-  width: 93.75%;
+  width: 100%;
   max-width: 960px;
   margin-left: auto;
   margin-right: auto;

@@ -1,4 +1,4 @@
-import Live from "./live";
+import Live from "./admin/live";
 import {
   handleLoginRedirect,
   getProfile,
@@ -6,11 +6,9 @@ import {
   handleVolunteerRedirect,
   handleSponsorRedirect,
   handleDashboardRedirect,
-} from "../lib/authenticate";
-
-import constants from "../lib/hackathonConstants";
-
-import { generatePosts } from "../lib/referrerCode";
+  getHackathonConstants,
+  generatePosts,
+} from "../lib";
 
 const Dashboard = ({ profile, houses, socialPosts }) => {
   return <Live profile={profile} houses={houses} socialPosts={socialPosts} />;
@@ -18,9 +16,8 @@ const Dashboard = ({ profile, houses, socialPosts }) => {
 
 Dashboard.getInitialProps = async ({ req }) => {
   const profile = await getProfile(req);
-  //const houses = await getHouses(req);
+  const hackathonConstants = await getHackathonConstants();
   const houses = [];
-  //console.log(req);
 
   // Null profile means user is not logged in
   if (!profile) {
@@ -33,8 +30,11 @@ Dashboard.getInitialProps = async ({ req }) => {
     handleSponsorRedirect(req);
   }
 
-  if (!constants.showDash) {
-    handleDashboardRedirect(req);
+  if (
+    !hackathonConstants.find((constant) => constant.name === "showDash")
+      ?.boolean
+  ) {
+    await handleDashboardRedirect(req);
   }
 
   let socialPosts = {};
@@ -45,7 +45,7 @@ Dashboard.getInitialProps = async ({ req }) => {
   return {
     houses,
     profile,
-    socialPosts
+    socialPosts,
   };
 };
 

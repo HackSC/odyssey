@@ -1,6 +1,24 @@
 import { App, LogLevel } from "@slack/bolt";
 import dotenv from "dotenv";
 
+function runMiddleware(req, res, fn) {
+  return new Promise((resolve, reject) => {
+    fn(req, res, (result) => {
+      if (result instanceof Error) {
+        return reject(result);
+      }
+      return resolve(result);
+    });
+  });
+}
+
+const authMiddleware = function (req, res, next) {
+  if (req.user) {
+    return next();
+  }
+  res.status(400).send("Unauthorized");
+};
+
 export const config = {
   api: {
     bodyParser: false,
@@ -15,6 +33,8 @@ const app = new App({
 });
 
 export default async (req, res) => {
+  await runMiddleware(req, res, authMiddleware);
+
   if (!process.env.SLACK_BOT_TOKEN || !process.env.SIGNING_SECRET) {
     res.json({
       status: "error",
@@ -32,6 +52,9 @@ export default async (req, res) => {
   }
 
   await app.start(3032);
+  const isProd = process.env.NODE_ENV === "production";
+
+  const notProdMsg = `[notice: NODE_ENV is ${process.env.NODE_ENV}] `;
   try {
     await app.client.chat.postMessage({
       token: process.env.SLACK_BOT_TOKEN,
@@ -42,7 +65,9 @@ export default async (req, res) => {
           type: "section",
           text: {
             type: "plain_text",
-            text: `${firstName} ${lastName} has submit their application!`,
+            text: `${
+              !isProd ? notProdMsg : ""
+            }${firstName} ${lastName} has submit their application!`,
             emoji: true,
           },
         },

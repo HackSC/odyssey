@@ -3,7 +3,7 @@ const productionServerHeartbeat = async () => {
     fetch(
       "https://betteruptime.com/api/v1/heartbeat/dZxGUymyrmjcLw1gjFFuBjMu"
     ).then((res) => {
-      console.log(
+      console.info(
         "Successfully sent production heroku heartbeat to Better Uptime."
       );
     });

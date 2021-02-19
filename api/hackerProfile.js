@@ -12,22 +12,21 @@ router.use(utils.preprocessRequest);
 router.get("/", async (req, res) => {
   const [hackerProfile] = await models.HackerProfile.findOrCreate({
     where: {
-      userId: req.user.id
+      userId: req.user.id,
     },
     defaults: {
       email: req.user._json.email,
-      status: req.user._json.email_verified ? "verified" : "unverified"
+      status: req.user._json.email_verified ? "verified" : "unverified",
     },
     include: [
       {
         model: models.Team,
-        as: "team"
-      }
-    ]
+        as: "team",
+      },
+    ],
   });
 
   hackerProfile.referred = await hackerProfile.getReferred();
-
   if (hackerProfile.status === "unverified" && req.user._json.email_verified) {
     // Update hacker profile
     try {
@@ -37,7 +36,7 @@ router.get("/", async (req, res) => {
     } catch (exception) {
       return res.status(500).json({
         message: "Error trying to save profile",
-        exception
+        exception,
       });
     }
   }
@@ -48,7 +47,7 @@ router.get("/", async (req, res) => {
 router.put("/", async (req, res) => {
   // Get the users current hacker profile
   const currentHackerProfile = await models.HackerProfile.findOne({
-    where: { userId: req.user.id }
+    where: { userId: req.user.id },
   });
 
   const formInput = req.body;
@@ -56,7 +55,7 @@ router.put("/", async (req, res) => {
   // If the user is saving a profile, make sure that they have not already submitted one before
   if (currentHackerProfile.submittedAt !== null) {
     return res.status(400).json({
-      error: "You have already submitted an application"
+      error: "You have already submitted an application",
     });
   }
 
@@ -87,13 +86,13 @@ router.put("/", async (req, res) => {
     "authorize",
     "marketing",
     "submit",
-    "referrerCode"
+    "referrerCode",
   ]);
 
   for (let key of Object.keys(formInput)) {
     if (!allowedFields.has(key)) {
       return res.status(400).json({
-        error: `${key} is not a supported field`
+        error: `${key} is not a supported field`,
       });
     }
   }
@@ -101,7 +100,7 @@ router.put("/", async (req, res) => {
   // TODO: Validate inputs
 
   const updatedProfileFields = {
-    ...formInput
+    ...formInput,
   };
 
   /*
@@ -133,7 +132,7 @@ router.put("/", async (req, res) => {
         updatedProfileFields.status = "submitted";
       } else {
         return res.status(400).json({
-          error: "Not all required fields are filled out"
+          error: "Not all required fields are filled out",
         });
       }
     }
@@ -142,12 +141,12 @@ router.put("/", async (req, res) => {
   // Update, then re-retrieve the updated hacker profile
   await models.HackerProfile.update(updatedProfileFields, {
     where: {
-      userId: req.user.id
-    }
+      userId: req.user.id,
+    },
   });
 
   const updatedHackerProfile = await models.HackerProfile.findOne({
-    where: { userId: req.user.id }
+    where: { userId: req.user.id },
   });
 
   return res.json({ hackerProfile: updatedHackerProfile });
@@ -158,7 +157,7 @@ router.put("/referrerCode", async (req, res) => {
   const referrerCode = req.body.referrerCode;
 
   const currentHackerProfile = await models.HackerProfile.findOne({
-    where: { userId: req.user.id }
+    where: { userId: req.user.id },
   });
 
   const currentReferrerCode = currentHackerProfile.referrerCode;
@@ -168,12 +167,127 @@ router.put("/referrerCode", async (req, res) => {
 
     await models.HackerProfile.update(updatedFields, {
       where: {
-        userId: req.user.id
-      }
+        userId: req.user.id,
+      },
     });
   }
 
   return res.send();
+});
+
+router.get("/resume-check", utils.authMiddleware, async (req, res) => {
+  const user_id = req.query.userid;
+
+  const s3 = new AWS.S3({
+    accessKeyId: process.env.S3_ACCESS_KEY,
+    secretAccessKey: process.env.S3_SECRET,
+  });
+
+  const params = {
+    Bucket: "hacksc-odyssey",
+    Key: user_id,
+  };
+
+  await s3
+    .headObject(params)
+    .promise()
+    .then(
+      () => {
+        res.status(200).json({ message: "User has a resume." });
+      },
+      (err) => {
+        res.status(500).json({ message: "User has not uploaded a resume." });
+      }
+    );
+});
+
+router.get("/resume", utils.authMiddleware, async (req, res) => {
+  const user_id = req.query.userid;
+
+  const s3 = new AWS.S3({
+    accessKeyId: process.env.S3_ACCESS_KEY,
+    secretAccessKey: process.env.S3_SECRET,
+  });
+
+  const params = {
+    Bucket: "hacksc-odyssey",
+    Key: user_id,
+  };
+
+  await s3
+    .headObject(params)
+    .promise()
+    .then(
+      () => {
+        try {
+          res.attachment(user_id);
+          var fileStream = s3.getObject(params).createReadStream();
+          res.setHeader("Content-Type", "application/pdf");
+          res.setHeader(
+            "Content-Disposition",
+            `attachment; filename=${user_id}.pdf`
+          );
+          fileStream.pipe(res, { autoClose: true });
+        } catch (e) {
+          res.status(204).json({ message: "User has not uploaded a resume." });
+        }
+      },
+      (err) => {
+        res.status(204).json({ message: "User has not uploaded a resume." });
+      }
+    );
+});
+
+router.get("/resume-list", utils.authMiddleware, async (req, res) => {
+  const s3 = new AWS.S3({
+    accessKeyId: process.env.S3_ACCESS_KEY,
+    secretAccessKey: process.env.S3_SECRET,
+  });
+
+  let complete_object = [];
+  let error = null;
+
+  const googleParams = {
+    Bucket: "hacksc-odyssey",
+    Prefix: "google",
+    MaxKeys: 1000, // * Max is 1,000
+  };
+
+  const auth0Params = {
+    Bucket: "hacksc-odyssey",
+    Prefix: "auth0",
+    MaxKeys: 1000, // * Max is 1,000
+  };
+
+  // https://stackoverflow.com/questions/42394429/aws-sdk-s3-best-way-to-list-all-keys-with-listobjectsv2
+  const listAllKeys = (params, out = []) =>
+    new Promise((resolve, reject) => {
+      s3.listObjectsV2(params)
+        .promise()
+        .then(({ Contents, IsTruncated, NextContinuationToken }) => {
+          out.push(...Contents);
+          !IsTruncated
+            ? resolve(out)
+            : resolve(
+                listAllKeys(
+                  Object.assign(params, {
+                    ContinuationToken: NextContinuationToken,
+                  }),
+                  out
+                )
+              );
+        })
+        .catch(reject);
+    });
+
+  const googleKeys = await listAllKeys(googleParams);
+  const auth0Keys = await listAllKeys(auth0Params);
+
+  if (googleKeys && auth0Keys) {
+    res.status(200).json({ files: [...googleKeys, ...auth0Keys] });
+  } else {
+    res.status(400).json({ message: "problem fetching resumes from S3" });
+  }
 });
 
 router.post("/resume", utils.authMiddleware, async (req, res) => {
@@ -182,29 +296,31 @@ router.post("/resume", utils.authMiddleware, async (req, res) => {
     const file = req.files.file;
     const s3 = new AWS.S3({
       accessKeyId: process.env.S3_ACCESS_KEY,
-      secretAccessKey: process.env.S3_SECRET
+      secretAccessKey: process.env.S3_SECRET,
     });
 
     const params = {
       Bucket: "hacksc-odyssey",
       Key: user.id,
-      Body: file.data
+      Body: file.data,
+      ACL: "public-read",
+      ContentType: "application/pdf",
     };
 
-    s3.upload(params, function(err, data) {
+    s3.upload(params, function (err, data) {
       if (!err) {
         models.HackerProfile.update(
           { resume: data.Location },
           {
             where: {
-              userId: req.user.id
-            }
+              userId: req.user.id,
+            },
           }
         )
-          .then(updatedProfile => {
+          .then((updatedProfile) => {
             res.json({ hackerProfileUpdate: updatedProfile });
           })
-          .catch(e => {
+          .catch((e) => {
             res.status(500).json({ error: e });
           });
       } else {
@@ -282,19 +398,19 @@ router.post("/confirm", (req, res) => {
         confirmCodeOfConduct: body["codeOfConduct"] === "true" ? true : false,
         status: "confirmed",
         noBusCheck: body["noBusCheck"] === "true" ? true : false,
-        confirmedAt: new Date()
+        confirmedAt: new Date(),
       },
       {
         where: {
           userId: req.user.id,
-          status: "accepted"
-        }
+          status: "accepted",
+        },
       }
     )
-      .then(updatedProfile => {
+      .then((updatedProfile) => {
         res.json({ hackerProfileUpdate: updatedProfile });
       })
-      .catch(e => {
+      .catch((e) => {
         res.status(500).json({ error: e });
       });
     // } else {
@@ -303,7 +419,7 @@ router.post("/confirm", (req, res) => {
     //});
   } else {
     return res.json(500, {
-      message: "Failed to confirm attendance, missing fields"
+      message: "Failed to confirm attendance, missing fields",
     });
   }
 });
@@ -312,18 +428,18 @@ router.post("/decline", async (req, res) => {
   await models.HackerProfile.update(
     {
       status: "declined",
-      declinedAt: new Date()
+      declinedAt: new Date(),
     },
     {
       where: {
         userId: req.user.id,
-        status: "accepted"
-      }
+        status: "accepted",
+      },
     }
   );
 
   return res.json({
-    message: "Successfully processed request to decline HackSC 2021 acceptance"
+    message: "Successfully processed request to decline HackSC 2021 acceptance",
   });
 });
 
@@ -331,19 +447,19 @@ router.post("/undecline", async (req, res) => {
   await models.HackerProfile.update(
     {
       status: "accepted",
-      declinedAt: null
+      declinedAt: null,
     },
     {
       where: {
         userId: req.user.id,
-        status: "declined"
-      }
+        status: "declined",
+      },
     }
   );
 
   return res.json({
     message:
-      "Successfully processed request to un-decline HackSC 2021 acceptance"
+      "Successfully processed request to un-decline HackSC 2021 acceptance",
   });
 });
 
@@ -354,6 +470,40 @@ router.get("/list", utils.requireDevelopmentEnv, async (req, res) => {
   } catch (e) {
     return res.status(500).json({ error: e });
   }
+});
+
+// Change visibility
+router.put("/visibility", async (req, res) => {
+  const currentHackerProfile = await models.HackerProfile.findOne({
+    where: { userId: req.user.id },
+  });
+
+  const lookingForTeam = currentHackerProfile.lookingForTeam;
+
+  await models.HackerProfile.update(
+    { lookingForTeam: !lookingForTeam },
+    {
+      where: {
+        userId: req.user.id,
+      },
+    }
+  );
+
+  return res.send();
+});
+
+// Add portfolio url
+router.put("/portfolio", async (req, res) => {
+  await models.HackerProfile.update(
+    { portfolioUrl: req.body.portfolioUrl },
+    {
+      where: {
+        userId: req.user.id,
+      },
+    }
+  );
+
+  return res.send();
 });
 
 module.exports = router;

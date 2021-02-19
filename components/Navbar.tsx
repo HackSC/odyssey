@@ -1,12 +1,9 @@
-import React from "react";
-
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 
 import HeaderLogo from "../assets/header_logo_21_transparent.png";
-
-import { Container, Link } from "../styles";
-
-import constants from "../lib/hackathonConstants";
+import { getHackathonConstants } from "../lib";
+import { Button, Container, Link } from "../styles";
 
 type NavbarProps = {
   loggedIn?: boolean;
@@ -22,7 +19,10 @@ type NavbarProps = {
   activePage?: string;
   admin?: boolean;
   volunteer?: boolean;
+  superadmin?: boolean;
+  judge?: boolean;
   sponsor?: boolean;
+  hackathonConstants?: Array<HackathonConstant>;
 };
 
 const style = (background) => {
@@ -40,21 +40,75 @@ const style = (background) => {
 };
 
 const Navbar: React.FunctionComponent<NavbarProps> = ({
+  hackathonConstants = [],
   loggedIn,
-  showLive = constants.showLive,
-  showDash = constants.showDash,
-  showApp = constants.showApp,
-  showMaps = constants.showMaps,
-  showAPI = constants.showAPI,
-  showResults = constants.showResults,
-  showTeam = constants.showTeam,
+  showLive = false,
+  showDash = false,
+  showApp = false,
+  showMaps = false,
+  showAPI = false,
+  showResults = false,
+  showTeam = false,
   showLogout = true,
-  showProjectTeam = constants.showProjectTeam,
+  showProjectTeam = false,
   activePage,
   admin,
+  superadmin,
   volunteer,
+  judge,
   sponsor,
 }: NavbarProps) => {
+  const [checked, setChecked] = useState(false);
+  const [ShowAppplication, setShowApplication] = useState(showApp);
+  const [ShowLive, setShowLive] = useState(showLive);
+  const [ShowDash, setShowDash] = useState(showDash);
+  const [ShowMaps, setShowMaps] = useState(showMaps);
+  const [ShowAPI, setShowAPI] = useState(showAPI);
+  const [ShowResults, setShowResults] = useState(showResults);
+  const [ShowTeam, setShowTeam] = useState(showTeam);
+  const [ShowProjectTeam, setShowProjectTeam] = useState(showProjectTeam);
+
+  useEffect(() => {
+    const getConstants = async () => {
+      let hackathonConstants = await getHackathonConstants();
+
+      setShowLive(
+        hackathonConstants.find((constant) => constant.name === "showLive")
+          ?.boolean
+      );
+      setShowDash(
+        hackathonConstants.find((constant) => constant.name === "showDash")
+          ?.boolean
+      );
+      setShowApplication(
+        hackathonConstants.find((constant) => constant.name === "showApp")
+          ?.boolean
+      );
+      setShowMaps(
+        hackathonConstants.find((constant) => constant.name === "showMaps")
+          ?.boolean
+      );
+      setShowAPI(
+        hackathonConstants.find((constant) => constant.name === "showAPI")
+          ?.boolean
+      );
+      setShowResults(
+        hackathonConstants.find((constant) => constant.name === "showResults")
+          ?.boolean
+      );
+      setShowTeam(
+        hackathonConstants.find((constant) => constant.name === "showTeam")
+          ?.boolean
+      );
+      setShowProjectTeam(
+        hackathonConstants.find(
+          (constant) => constant.name === "showProjectTeam"
+        )?.boolean
+      );
+    };
+    getConstants();
+  }, []);
+
   return (
     <Wrapper>
       <NavbarContainer>
@@ -74,74 +128,127 @@ const Navbar: React.FunctionComponent<NavbarProps> = ({
                   Dashboard
                 </Link>
                   )*/}
-              {!admin && !volunteer && !sponsor && showApp && (
-                <Link
-                  href="/application"
-                  id="application-page"
-                  style={style(
-                    activePage === "application" ? "#FF8379" : "white"
+              {!superadmin &&
+                !admin &&
+                !volunteer &&
+                !sponsor &&
+                !judge &&
+                ShowAppplication && (
+                  <Link
+                    href="/application"
+                    id="application-page"
+                    style={style(
+                      activePage === "application" ? "#FF8379" : "white"
+                    )}
+                  >
+                    Application
+                  </Link>
+                )}
+              {!superadmin &&
+                !admin &&
+                !volunteer &&
+                !sponsor &&
+                !judge &&
+                ShowResults && (
+                  <Link
+                    href="/results"
+                    id="results-page"
+                    style={style(
+                      activePage === "results" ? "#FF8379" : "white"
+                    )}
+                  >
+                    Results
+                  </Link>
+                )}
+              {!superadmin &&
+                !admin &&
+                !volunteer &&
+                !sponsor &&
+                !judge &&
+                ShowTeam && (
+                  <Link
+                    href="/team"
+                    id="team-page"
+                    style={style(activePage === "team" ? "#FF8379" : "white")}
+                  >
+                    Team
+                  </Link>
+                )}
+              {!superadmin &&
+                !admin &&
+                !volunteer &&
+                !sponsor &&
+                !judge &&
+                ShowProjectTeam && (
+                  <Link
+                    href="/projectTeam"
+                    id="projectTeam-page"
+                    style={style(
+                      activePage === "projectTeam" ? "#FF8379" : "white"
+                    )}
+                  >
+                    Manage Team
+                  </Link>
+                )}
+              {!superadmin &&
+                !admin &&
+                !volunteer &&
+                !sponsor &&
+                !judge &&
+                ShowMaps && (
+                  <Link
+                    href="/maps"
+                    id="maps-page"
+                    style={style(activePage === "maps" ? "#FF8379" : "white")}
+                  >
+                    Maps
+                  </Link>
+                )}
+              {!superadmin &&
+                !admin &&
+                !volunteer &&
+                !sponsor &&
+                !judge &&
+                ShowAPI && (
+                  <Link
+                    href="/api-directory"
+                    id="api-directory-page"
+                    style={style(activePage === "api" ? "#FF8379" : "white")}
+                  >
+                    APIs
+                  </Link>
+                )}
+              {superadmin && (
+                <>
+                  <DevModeButton
+                    outline={checked ? true : false}
+                    onClick={() => setChecked(!checked)}
+                  >
+                    Dev Mode
+                  </DevModeButton>
+                  {checked ? (
+                    <style>{`
+                    * {
+                      background: #000 !important;
+                      color: #0f0 !important;
+                      outline: solid #f00 1px !important;
+                    }
+                    `}</style>
+                  ) : (
+                    ""
                   )}
-                >
-                  Application
-                </Link>
+                </>
               )}
-              {!admin && !volunteer && !sponsor && showResults && (
+              {(superadmin || admin || sponsor || volunteer || judge) && ( // * showLive - should be true always since admins, sponsors, volunteers, and judges need visibility
                 <Link
-                  href="/results"
-                  id="results-page"
-                  style={style(activePage === "results" ? "#FF8379" : "white")}
-                >
-                  Results
-                </Link>
-              )}
-              {!admin && !volunteer && !sponsor && showTeam && (
-                <Link
-                  href="/team"
-                  id="team-page"
-                  style={style(activePage === "team" ? "#FF8379" : "white")}
-                >
-                  Team
-                </Link>
-              )}
-              {!admin && !volunteer && !sponsor && showProjectTeam && (
-                <Link
-                  href="/projectTeam"
-                  id="projectTeam-page"
-                  style={style(
-                    activePage === "projectTeam" ? "#FF8379" : "white"
-                  )}
-                >
-                  Manage Team
-                </Link>
-              )}
-              {!admin && !volunteer && !sponsor && showMaps && (
-                <Link
-                  href="/maps"
-                  id="maps-page"
-                  style={style(activePage === "maps" ? "#FF8379" : "white")}
-                >
-                  Maps
-                </Link>
-              )}
-              {!admin && !volunteer && !sponsor && showAPI && (
-                <Link
-                  href="/api-directory"
-                  id="api-directory-page"
-                  style={style(activePage === "api" ? "#FF8379" : "white")}
-                >
-                  APIs
-                </Link>
-              )}
-              {(admin || sponsor || volunteer) && ( // * showLive - should be true always since admins, sponsors, volunteers, and judges need visibility
-                <Link
-                  href="/live"
+                  href="/admin/live"
                   id="live-page"
                   style={style(activePage === "live" ? "#FF8379" : "white")}
                 >
                   Live
                 </Link>
               )}
-              {(admin || sponsor || volunteer) && (
+              {(superadmin || admin || sponsor || volunteer || judge) && (
                 <Link
                   href="/admin"
                   id="admin-dashboard-page"
@@ -150,12 +257,12 @@ const Navbar: React.FunctionComponent<NavbarProps> = ({
                   Admin Dashboard
                 </Link>
               )}
-              {admin && (
+              {(superadmin || admin || sponsor) && (
                 <Link
-                  href="/admin-stats"
+                  href="/admin/admin-stats"
                   id="admin-stats-page"
                   style={style(
-                    activePage === "/admin-stats" ? "#FF8379" : "white"
+                    activePage === "admin-stats" ? "#FF8379" : "white"
                   )}
                 >
                   Statistics
@@ -197,6 +304,24 @@ const Navbar: React.FunctionComponent<NavbarProps> = ({
 
 const Wrapper = styled.div`
   padding: 30px 0;
+`;
+
+const DevModeButton = styled(Button)`
+  max-width: 120px;
+  font: inherit;
+  font-size: 14px !important;
+  margin: 10px;
+  padding: 10px;
+  color: black;
+  font-weight: 600 !important;
+  outline: none;
+  background-color: white;
+  border-radius: 4px;
+
+  &:hover {
+    background-color: #ff8379 !important;
+    color: white !important;
+  }
 `;
 
 const NavbarContainer = styled(Container)`
