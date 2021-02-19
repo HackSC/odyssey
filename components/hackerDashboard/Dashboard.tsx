@@ -46,7 +46,10 @@ const Dashboard = ({
         widget="one"
         component={<TeamWidget profile={profile} team={team} />}
       />
-      <WidgetFrame widget="two" component={<BattlepassWidget />} />
+      <WidgetFrame
+        widget="two"
+        component={<BattlepassWidget raffleTickets={profile.raffleTickets} />}
+      />
       <WidgetFrame
         widget="three"
         component={

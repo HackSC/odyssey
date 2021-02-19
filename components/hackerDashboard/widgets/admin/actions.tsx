@@ -86,6 +86,9 @@ const ActionsWidget = ({ profile }: { profile: Profile }) => {
           <ActionTitle>Check In Hackers</ActionTitle>
         </Action>
       </Actions>
+      <Action id="raffle-tickets" href="/admin/tickets">
+        <ActionTitle> Give Raffle Tickets </ActionTitle>
+      </Action>
       <Subheader>Experimental</Subheader>
       <Actions>
         <Action id="test-console-page" href="/admin/testconsole">

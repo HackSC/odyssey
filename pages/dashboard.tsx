@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { Head } from "@/components";
 import getTeam from "../lib/api-sdk/getTeam";
@@ -31,7 +30,6 @@ const Dashboard = ({
   view,
   team,
 }) => {
-
   const getDashToRender = () => {
     if (view === "admin") {
       return (
@@ -78,7 +76,7 @@ export async function getServerSideProps({ req }) {
   const currentEvents = await getPublicEvents(req);
   const team = await getTeam(req);
   const events = currentEvents ? currentEvents["events"] : [];
-
+  console.log(profile);
   const houses = [];
   const view = profile.role;
 

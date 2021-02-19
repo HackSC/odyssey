@@ -3,12 +3,24 @@ import { useState } from "react";
 
 import styled from "styled-components";
 
-const BattlepassWidget = ({}) => {
+const BattlepassWidget = ({ raffleTickets }) => {
   return (
     <>
-      <h2>Battlepass</h2>
-      <h3>Current Tier: 2</h3>
-      <Wrapper></Wrapper>
+      <Wrapper>
+        <h2>Battlepass Raffle</h2>
+        <p>
+          This virtual year, HackSC will be hosting a raffle for items in place
+          of our traditional Battlepass. Prizes include a $200 giftcard from
+          Appsmith, Tiles, and more!{" "}
+        </p>
+      </Wrapper>
+      <p>
+        Get tickets by attending workshops and other events on Zoom. Your
+        tickets will appear here shortly after the event ends!
+      </p>
+      <Subheader>
+        You have <BigNumber>{raffleTickets}</BigNumber> raffle tickets.
+      </Subheader>
     </>
   );
 };
@@ -27,9 +39,27 @@ const RewardItem = styled.li`
 
 const Wrapper = styled.div`
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   width: 100%;
-  justify-content: space-around;
+`;
+
+const Subheader = styled.h3`
+  padding: 0;
+  margin: 0 15px;
+  font-size: 18px;
+  text-transform: uppercase;
+  display: flex;
+  direction: row;
+  justify-content: center;
+`;
+
+const BigNumber = styled.p`
+  font-size: 32px;
+  margin-left: 8px;
+  margin-right: 8px;
+  ${({ theme }) => theme.media.tablet`
+    padding: 20px 0;
+  `}
 `;
 
 const GraphWrapper = styled.div`
