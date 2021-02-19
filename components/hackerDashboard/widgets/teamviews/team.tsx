@@ -126,13 +126,13 @@ const CurrentTeam = ({
           <Members>
             {team.members.map((member: Profile) => (
               <Member key={member.email}>
-                <ProfilePic
+                {/* <ProfilePic
                   src={
                     member.profilePic
                       ? member.profilePic
                       : "https://t4.ftcdn.net/jpg/00/64/67/63/360_F_64676383_LdbmhiNM6Ypzb3FM4PPuFP9rHe7ri8Ju.jpg"
                   }
-                />
+                /> */}
                 <PaddedP>
                   <b>
                     {member.firstName && member.lastName
