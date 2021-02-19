@@ -17,9 +17,11 @@ const HackathonEvents = ({ events }) => {
   }
 
   useEffect(() => {
-    document.getElementById("eventList").scrollTop = document.getElementById(
-      nextEvent
-    ).offsetTop;
+    if (nextEvent) {
+      document.getElementById("eventList").scrollTop = document.getElementById(
+        nextEvent
+      ).offsetTop;
+    }
   }, []);
 
   return (
