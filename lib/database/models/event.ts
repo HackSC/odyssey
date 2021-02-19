@@ -6,7 +6,7 @@ const event = (sequelize, DataTypes) => {
       description: DataTypes.STRING(500),
       startsAt: DataTypes.DATE,
       endsAt: DataTypes.DATE,
-      zoomLink: DataTypes.STRING(500),
+      zoomUrl: DataTypes.STRING(500),
     },
     {}
   );

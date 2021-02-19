@@ -31,7 +31,7 @@ module.exports = {
         allowNull: false,
         type: Sequelize.DATE,
       },
-      zoomLink: {
+      zoomUrl: {
         type: Sequelize.STRING,
       },
     });
