@@ -145,6 +145,10 @@ module.exports = (sequelize, DataTypes) => {
         },
       },
       profilePic: DataTypes.STRING(500),
+      raffleTickets: {
+        type: DataTypes.INTEGER,
+        defaultValue: 0,
+      },
     },
     {}
   );

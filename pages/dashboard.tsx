@@ -46,16 +46,6 @@ const Dashboard = ({
     }
   }, []);
 
-  const switchRole = () => {
-    if (view === "admin") {
-      setView("hacker");
-    } else if (view === "hacker") {
-      setView("sponsor");
-    } else if (view === "sponsor") {
-      setView("admin");
-    }
-  };
-
   const getDashToRender = () => {
     if (view === "admin") {
       return (
@@ -103,6 +93,7 @@ export async function getServerSideProps({ req }) {
   const team = await getTeam(req);
   console.log(currentEvents);
   const events = currentEvents ? currentEvents["events"] : [];
+
   const houses = [];
   const view = profile.role;
 

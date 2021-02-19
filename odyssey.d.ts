@@ -132,6 +132,7 @@ declare type Profile = {
   instagram: string;
   bio: string;
   profilePic: string;
+  raffleTickets: number;
 };
 
 declare type Team = {

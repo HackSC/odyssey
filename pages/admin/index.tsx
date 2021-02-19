@@ -155,6 +155,9 @@ const Admin = ({ profile }) => {
                 >
                   <ActionTitle> Manage Api Directory </ActionTitle>
                 </Action>
+                <Action id="raffle-tickets" href="/admin/tickets">
+                  <ActionTitle> Give Raffle Tickets </ActionTitle>
+                </Action>
                 <Action
                   id="metabase-page"
                   href="https://metabase.hacksc.com/"
