@@ -88,14 +88,17 @@ const Dashboard = ({
 export async function getServerSideProps({ req }) {
   const profile = await getProfile(req);
   //const houses = await getHouses(req);
-  const announcements = await getAnnouncements(req, profile);
+  let announcements = [];
+  if(profile) {
+    announcements = await getAnnouncements(req, profile);
+  }
   const hackathonConstants = await getHackathonConstants();
   const currentEvents = await getPublicEvents(req);
   const team = await getTeam(req);
   const events = currentEvents ? currentEvents["events"] : [];
 
   const houses = [];
-  const view = profile.role;
+  const view = profile ? profile.role : null;
 
   // Null profile means user is not logged in
   if (!profile) {
