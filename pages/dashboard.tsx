@@ -1,40 +1,117 @@
-import Live from "./admin/live";
+import { useState, useEffect } from "react";
+import { Head } from "@/components";
+import getTeam from "../lib/api-sdk/getTeam";
+import {
+  Dash,
+  AdminDashboard,
+  SponsorDashboard,
+} from "@/components/hackerDashboard";
+
 import {
   handleLoginRedirect,
   getProfile,
-  handleAdminRedirect,
   handleVolunteerRedirect,
   handleSponsorRedirect,
   handleDashboardRedirect,
   getHackathonConstants,
   generatePosts,
-} from "../lib";
+  getPublicEvents,
+} from "@/lib";
 
-const Dashboard = ({ profile, houses, socialPosts }) => {
-  return <Live profile={profile} houses={houses} socialPosts={socialPosts} />;
+// import { getHackathonConstants } from "../lib";
+
+import { getAnnouncements } from "../lib/getAnnouncements";
+
+// import { generatePosts } from "../lib/referrerCode";
+
+const Dashboard = ({
+  profile,
+  houses,
+  events,
+  socialPosts,
+  hackathonConstants,
+  announcements,
+  // view,
+  team,
+}) => {
+  const [view, setView] = useState("hacker");
+
+  useEffect(() => {
+    if (!profile.slackProfile && profile.role === "hacker") {
+      setTimeout(function () {
+        alert(
+          "Welcome to HackSC 2021! Please check in by using the /checkin [your hacksc.com email login] command in any Slack channel."
+        );
+      }, 500);
+    }
+  }, []);
+
+  const getDashToRender = () => {
+    if (view === "admin") {
+      return (
+        <AdminDashboard
+          profile={profile}
+          events={events}
+          hackathonConstants={hackathonConstants}
+        />
+      );
+    } else if (view === "sponsor") {
+      return (
+        <SponsorDashboard
+          profile={profile}
+          events={events}
+          hackathonConstants={hackathonConstants}
+        />
+      );
+    } else {
+      return (
+        <Dash
+          team={team}
+          profile={profile}
+          events={events}
+          hackathonConstants={hackathonConstants}
+          announcements={announcements}
+        />
+      );
+    }
+  };
+
+  return (
+    <>
+      <Head title="HackSC Dashboard - Welcome to HackSC 2021" />
+      {getDashToRender()}
+    </>
+  );
 };
 
-Dashboard.getInitialProps = async ({ req }) => {
+export async function getServerSideProps({ req }) {
   const profile = await getProfile(req);
+  //const houses = await getHouses(req);
+  const announcements = await getAnnouncements(req, profile);
   const hackathonConstants = await getHackathonConstants();
+  const currentEvents = await getPublicEvents(req);
+  const team = await getTeam(req);
+  const events = currentEvents ? currentEvents["events"] : [];
+
   const houses = [];
+  const view = profile.role;
 
   // Null profile means user is not logged in
   if (!profile) {
     handleLoginRedirect(req);
   } else if (profile.role == "admin") {
-    handleAdminRedirect(req);
+    // handleAdminRedirect(req);
   } else if (profile.role == "volunteer") {
     handleVolunteerRedirect(req);
   } else if (profile.role == "sponsor") {
-    handleSponsorRedirect(req);
+    // handleSponsorRedirect(req);
   }
 
   if (
     !hackathonConstants.find((constant) => constant.name === "showDash")
       ?.boolean
   ) {
-    await handleDashboardRedirect(req);
+    //await handleDashboardRedirect(req);
   }
 
   let socialPosts = {};
@@ -43,10 +120,17 @@ Dashboard.getInitialProps = async ({ req }) => {
   }
 
   return {
-    houses,
-    profile,
-    socialPosts,
+    props: {
+      houses,
+      profile,
+      socialPosts,
+      team,
+      announcements,
+      events,
+      hackathonConstants,
+      view,
+    },
   };
-};
+}
 
 export default Dashboard;
