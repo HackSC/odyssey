@@ -1,16 +1,36 @@
 import React from "react";
-
-import { handleLoginRedirect, getProfile } from "../lib/authenticate";
-import { getReferrerCode } from "../lib/referrerCode";
-
 import styled from "styled-components";
 
-import Head from "../components/Head";
-import Navbar from "../components/Navbar";
-import Footer from "../components/Footer";
+import { Head, Navbar, Footer } from "../components";
 import { Button, Background, Flex, Container } from "../styles";
+import {
+  sendSlackMessage,
+  getReferrerCode,
+  handleLoginRedirect,
+  getProfile,
+} from "../lib";
 
 const Sponsor = ({ profile }) => {
+  // * Logic to send slack message when metabase link is clicked
+  const send_slack_msg = async (e) => {
+    let firstName = profile ? profile.firstName : "";
+    let lastName = profile ? profile.lastName : "";
+    let user_email = profile ? profile.email : "";
+    let start_and_end_date =
+      new Date(new Date().getTime() - 480 * 1000 * 60).toISOString() + "";
+    let slack_result = await sendSlackMessage(
+      ":bangbang: Sponsor Metabase accessed by " +
+        firstName +
+        ", " +
+        lastName +
+        ", " +
+        user_email,
+      "",
+      start_and_end_date,
+      start_and_end_date
+    );
+  };
+
   return (
     <>
       <Head title="HackSC Odyssey - Application" />
@@ -28,19 +48,14 @@ const Sponsor = ({ profile }) => {
 
           <ActionsHeader>Actions</ActionsHeader>
           <Actions>
-            <Action id="scan-page" href="/scan">
-              <ActionTitle>Scan In Hackers</ActionTitle>
-            </Action>
-            <Action href="https://live.hacksc.com" target="_blank">
-              <ActionTitle>Live Dashboard</ActionTitle>
-            </Action>
-            <Action id="hacker-manager-page" href="/hackerManager">
+            <Action id="hacker-manager-page" href="/admin/hackerManager">
               <ActionTitle> Manage Hackers </ActionTitle>
             </Action>
             <Action
               id="metabase-page"
-              href="https://metabase-odyssey.herokuapp.com/"
+              href="https://metabase.hacksc.com/"
               target="_blank"
+              onClick={(e) => send_slack_msg(e)}
             >
               <ActionTitle>Access Metabase</ActionTitle>
             </Action>
@@ -52,13 +67,20 @@ const Sponsor = ({ profile }) => {
   );
 };
 
-Sponsor.getInitialProps = async ctx => {
+Sponsor.getInitialProps = async (ctx) => {
   const { req } = ctx;
 
   const profile = await getProfile(req);
 
   // Null profile means user is not logged in, and this is only relevant for admins
-  if (!profile || !(profile.role == "admin" || profile.role == "sponsor")) {
+  if (
+    !profile ||
+    !(
+      profile.role == "admin" ||
+      profile.role == "sponsor" ||
+      profile.role == "superadmin"
+    )
+  ) {
     handleLoginRedirect(req);
   }
   if (profile) {
@@ -67,7 +89,7 @@ Sponsor.getInitialProps = async ctx => {
   }
 
   return {
-    profile
+    profile,
   };
 };
 

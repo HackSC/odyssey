@@ -115,12 +115,16 @@ Implemented E2E tests:
   - Tests to visit each admin page on the /admin dashboard for an admin profile
 - `hacker_sanity.spec.js`
   - Tests to visit each pach in the navbar for a hacker profile
+- `volunteer_sanity.spec.js`
+  - Tests to visit each volunteer page on the /volunteer dashboard for an volunteer profile
+- `sponsor_sanity.spec.js`
+  - Tests to visit each sponsor page on the /sponsor dashboard for an sponsor profile
+- `judge_sanity.spec.js`
+  - Tests to visit each judge page on the /judge dashboard for an judge profile
 
 Need to implement:
 
-- `volunteer_sanity.spec.js`
-- `sponsor_sanity.spec.js`
-- `judge_sanity.spec.js`
+- `superadmin_sanity.spec.js`
 
 ## How To: Create Unit Tests with Jest
 
@@ -137,3 +141,16 @@ Implemented
 
 TODO
 The rest of the database and `api/` directory
+
+### Retired Hackathon Constants
+
+showLive: false // _ False until event or soon before
+showDash: false
+showApp: true // _ True until Dec. 14ish
+showMaps: false // _ False because HackSC 2021 is virtual :( big sad
+showAPI: false // _ False until event
+showResults: true
+needsBus: false // _ False because HackSC 2021 is virtual :( big sad
+showTeam: false // _ False until closer to event
+showProjectTeam: false // \* False until closer to event
+appsCloseDate: new Date("12/21/20")

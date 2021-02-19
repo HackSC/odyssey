@@ -1,6 +1,6 @@
 import Router from "next/router";
 import fetch from "isomorphic-unfetch";
-import constants from "./hackathonConstants";
+import { getHackathonConstants } from "./hackathonConstants";
 
 export async function getUser(req) {
   if (!req) {
@@ -135,10 +135,15 @@ export function handleLoginRedirect(req) {
   redirectToPath(req, "/auth/login");
 }
 
-export function handleDashboardRedirect(req) {
-  if (constants.showLive) {
-    redirectToPath(req, "/live");
-  } else if (constants.showApp) {
+export async function handleDashboardRedirect(req) {
+  const hackathonConstants = await getHackathonConstants();
+  if (
+    hackathonConstants.find((constant) => constant.name === "showLive")?.boolean
+  ) {
+    redirectToPath(req, "/admin/live");
+  } else if (
+    hackathonConstants.find((constant) => constant.name === "showApp")?.boolean
+  ) {
     redirectToPath(req, "/application");
   } else {
     // TODO: whats the state? Ideally /dash when it exists.
@@ -156,6 +161,10 @@ export function handleAdminRedirect(req) {
 
 export function handleVolunteerRedirect(req) {
   redirectToPath(req, "/volunteer");
+}
+
+export function handleJudgeRedirect(req) {
+  redirectToPath(req, "/judge");
 }
 
 export function handleSponsorRedirect(req) {

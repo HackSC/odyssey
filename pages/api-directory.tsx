@@ -18,7 +18,7 @@ import {
 const API = ({ apis, profile, houses, socialPosts }) => {
   return (
     <>
-      <Head title="HackSC Odyssey - API Directory" />
+      <Head title="HackSC Dashboard - API Directory" />
       <Navbar
         loggedIn
         showProjectTeam={profile ? profile.status === "checkedIn" : false}
@@ -51,7 +51,6 @@ API.getInitialProps = async ({ req }) => {
 
   if (profile && profile.status == "checkedIn") {
     //const houseInfo = await getHouseInfo(req, 1);
-    //console.log(houseInfo);
   }
 
   if (typeof window !== "undefined") {

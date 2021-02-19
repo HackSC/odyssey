@@ -10,7 +10,9 @@ type Option = {
 
 type SelectProps = {
   options: Array<Option>;
+  style?: Object;
   name: string;
+  placeholder?: string;
   defaultValue?: string;
   required?: boolean;
   disabled?: boolean;
@@ -20,7 +22,16 @@ type SelectProps = {
 type Ref = HTMLSelectElement;
 
 const Select = React.forwardRef<Ref, SelectProps>((props, ref) => {
-  const { options, name, defaultValue, required, disabled, onChange } = props;
+  const {
+    placeholder,
+    style,
+    options,
+    name,
+    defaultValue,
+    required,
+    disabled,
+    onChange,
+  } = props;
 
   return (
     <Wrapper>
@@ -28,16 +39,14 @@ const Select = React.forwardRef<Ref, SelectProps>((props, ref) => {
         ref={ref}
         name={name}
         required={required}
+        placeholder={placeholder}
+        defaultValue={defaultValue}
         disabled={disabled}
         onChange={onChange}
       >
         {required && <option></option>}
-        {options.map(option => (
-          <option
-            value={option.value}
-            key={option.value}
-            selected={defaultValue === option.value ? true : false}
-          >
+        {options.map((option) => (
+          <option value={option.value} key={option.value}>
             {option.label}
           </option>
         ))}

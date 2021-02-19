@@ -30,6 +30,22 @@ export async function updateProfileRole(email, role) {
   return response;
 }
 
+export async function updateProfileStatus(email, status) {
+  const fetchUrl = process.env.URL_BASE
+    ? process.env.URL_BASE + "api/admin/updateHackerStatus"
+    : "api/admin/updateHackerStatus";
+
+  const response = await fetch(fetchUrl, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ email: email, status: status }),
+  });
+
+  return response;
+}
+
 export async function getReviewHistory(req) {
   const fetchUrl = process.env.URL_BASE
     ? process.env.URL_BASE + "api/admin/reviewHistory"
@@ -66,6 +82,32 @@ export async function getTotalReviewHistory(req) {
   return payload;
 }
 
+export async function getNumberSubmittedApps(req) {
+  const fetchUrl = process.env.URL_BASE
+    ? process.env.URL_BASE + "api/admin/numberSubmittedApps"
+    : "api/admin/numberSubmittedApps";
+
+  const response = await fetch(fetchUrl, req ? { headers: req.headers } : null);
+
+  const profilePayload = await response.json();
+  const { numberSubmittedApps } = profilePayload;
+
+  return numberSubmittedApps;
+}
+
+export async function getEligibleHackerProfiles(req) {
+  const fetchUrl = process.env.URL_BASE
+    ? process.env.URL_BASE + "api/admin/eligibleProfiles"
+    : "api/admin/eligibleProfiles";
+
+  const response = await fetch(fetchUrl, req ? { headers: req.headers } : null);
+
+  const profilePayload = await response.json();
+  const { eligibleReviews } = profilePayload;
+
+  return eligibleReviews;
+}
+
 export async function getHackerProfileForReview(req) {
   const fetchUrl = process.env.URL_BASE
     ? process.env.URL_BASE + "api/admin/eligibleProfiles"
@@ -100,4 +142,39 @@ export async function submitReview(review) {
     body: JSON.stringify(review),
   });
   return response;
+}
+
+export async function getHackerStatusStats(req) {
+  const fetchUrl = process.env.URL_BASE
+    ? process.env.URL_BASE + "api/admin/hackerStatusStats"
+    : "api/admin/hackerStatusStats";
+  const response = await fetch(
+    fetchUrl,
+    req
+      ? {
+          headers: req.headers,
+        }
+      : null
+  );
+
+  const payload = await response.json();
+
+  return payload;
+}
+
+export async function batchCheckIn(input) {
+  const fetchUrl = process.env.URL_BASE
+    ? process.env.URL_BASE + "api/admin/batchCheckIn"
+    : "api/admin/batchCheckIn";
+  const response = await fetch(fetchUrl, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      qrCodes: input,
+    }),
+  });
+
+  return await response.json();
 }

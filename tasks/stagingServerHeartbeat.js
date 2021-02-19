@@ -3,7 +3,7 @@ const stagingServerHeartbeat = async () => {
     fetch(
       "https://betteruptime.com/api/v1/heartbeat/u1po3JoaJEZmCmgtcWMD6n4x"
     ).then((res) => {
-      console.log(
+      console.info(
         "Successfully sent staging heroku heartbeat to Better Uptime."
       );
     });

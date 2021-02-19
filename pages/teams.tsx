@@ -1,14 +1,14 @@
 import React from "react";
 
 import { handleLoginRedirect, getProfile } from "../lib/authenticate";
-
-import Head from "../components/Head";
-import Navbar from "../components/Navbar";
-import Footer from "../components/Footer";
-import CreateTeamForm from "../components/CreateTeamForm";
-import JoinTeamForm from "../components/JoinTeamForm";
-import Team from "../components/Team";
-
+import {
+  Head,
+  Navbar,
+  Footer,
+  CreateTeamForm,
+  JoinTeamForm,
+  Team,
+} from "../components";
 import { Background, Container, Flex, Column } from "../styles";
 
 async function getTeam(req): Promise<Team> {
@@ -64,7 +64,13 @@ const Teams = ({ profile, team }) => {
           <br />
 
           {team ? (
-            <Team team={team} profile={profile} />
+            <Team
+              team={team}
+              profile={profile}
+              teammateSuggestions={null}
+              pendingInvites={null}
+              pendingRequests={null}
+            />
           ) : (
             <Flex direction="row" tabletVertical justify="space-between">
               <Column flexBasis={48}>

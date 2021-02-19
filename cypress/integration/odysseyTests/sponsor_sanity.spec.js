@@ -90,40 +90,42 @@ describe("goLive", () => {
   });
 });
 
-Cypress.Commands.add("goToScan", (overrides = {}) => {
-  cy.login()
-    .then((resp) => {
-      return resp.body;
-    })
-    .then((body) => {
-      const { access_token, expires_in, id_token } = body;
-      const auth0State = {
-        nonce: "",
-        state: "some-random-state",
-      };
-      const mainPage = `http://localhost:3000/auth/login`;
-      cy.visit(mainPage, {
-        onBeforeLoad(win) {
-          win.document.cookie =
-            "com.auth0.auth.some-random-state=" + JSON.stringify(auth0State);
-        },
-      });
-      cy.get("#username").type(Cypress.env("SPONSOR_TEST_USERNAME"));
-      cy.get(":input[type=password]").type(
-        Cypress.env("SPONSOR_TEST_PASSWORD").replace("{", "{{}")
-      );
-      cy.get("[name=action]").click();
-      cy.get("#scan-page").click();
-      cy.location("pathname", { timeout: 10000 }).should("include", "/scan");
-    });
-});
+// TODO: Determine is sponsors should be able to scan hackers in
+// * For virtual HackSC 2021, we dont even need scanning so not required
+// Cypress.Commands.add("goToScan", (overrides = {}) => {
+//   cy.login()
+//     .then((resp) => {
+//       return resp.body;
+//     })
+//     .then((body) => {
+//       const { access_token, expires_in, id_token } = body;
+//       const auth0State = {
+//         nonce: "",
+//         state: "some-random-state",
+//       };
+//       const mainPage = `http://localhost:3000/auth/login`;
+//       cy.visit(mainPage, {
+//         onBeforeLoad(win) {
+//           win.document.cookie =
+//             "com.auth0.auth.some-random-state=" + JSON.stringify(auth0State);
+//         },
+//       });
+//       cy.get("#username").type(Cypress.env("SPONSOR_TEST_USERNAME"));
+//       cy.get(":input[type=password]").type(
+//         Cypress.env("SPONSOR_TEST_PASSWORD").replace("{", "{{}")
+//       );
+//       cy.get("[name=action]").click();
+//       cy.get("#scan-page").click();
+//       cy.location("pathname", { timeout: 10000 }).should("include", "/scan");
+//     });
+// });
 
-describe("goScan", () => {
-  it("should navigate to scan page", () => {
-    cy.goToScan();
-  });
-  // * Add in function to be able to navigate back to main /admin page
-});
+// describe("goScan", () => {
+//   it("should navigate to scan page", () => {
+//     cy.goToScan();
+//   });
+//   // * Add in function to be able to navigate back to main /admin page
+// });
 
 // * Access Metabase Page
 
