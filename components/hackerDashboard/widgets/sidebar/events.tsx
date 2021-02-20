@@ -48,8 +48,17 @@ const HackathonEvents = ({ events }) => {
               {e.name}
             </h3>
             <p>{e.description}</p>
-            <p>{moment.utc(e.startsAt).format("MMM D, h:mm a")}</p>
-            <p>{moment.utc(e.endsAt).format("MMM D, h:mm a")}</p>
+            {moment(e.startsAt).isSame(e.endsAt, "day") ? (
+              <p>
+                {moment.utc(e.startsAt).format("MMM D, h:mm")} -{" "}
+                {moment.utc(e.endsAt).format("h:mm a")}
+              </p>
+            ) : (
+              <p>
+                {moment.utc(e.startsAt).format("MMM D, h:mm a")} -{" "}
+                {moment.utc(e.endsAt).format("MMM D, h:mm a")}
+              </p>
+            )}
             {e.zoomUrl ? <a href={e.zoomUrl}>Join Zoom Meeting</a> : null}
           </Event>
         ))}
