@@ -21,6 +21,7 @@ const Tickets = ({ profile }) => {
   const [tickets, setTickets] = useState("0");
   const [error, setError] = useState("");
   const [success, setSuccess] = useState(false);
+  const [message, setMessage] = useState("");
 
   const giveTickets = async (e) => {
     e.preventDefault();
@@ -50,6 +51,16 @@ const Tickets = ({ profile }) => {
       } else {
         setError("");
         setSuccess(true);
+        setMessage(
+          (email ? email : firstName + lastName) +
+            " successfully given " +
+            tickets +
+            " tickets! :)"
+        );
+        setFirstName("");
+        setLastName("");
+        setTickets("");
+        setEmail("");
       }
       return data;
     } catch (e) {
@@ -101,8 +112,12 @@ const Tickets = ({ profile }) => {
               />
               <Button type="submit">Give tickets</Button>
             </form>
-            {error && error}
-            {success && <h3>Success!</h3>}
+            <StatusMessage
+              style={error ? { color: "#ff0000" } : { color: "#00cc00" }}
+            >
+              {error && <h3>{error}</h3>}
+              {success && <h3>{message}</h3>}
+            </StatusMessage>
           </Flex>
         </Container>
       </Background>
@@ -229,4 +244,9 @@ const Input = styled.input`
   margin-bottom: 10px;
 `;
 
+const StatusMessage = styled.div`
+  padding-top: 20px;
+  font-weight: 300;
+  font-size: 16px;
+`;
 export default Tickets;
