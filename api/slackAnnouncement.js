@@ -6,7 +6,7 @@ router.post("/", async (req, res) => {
   const slackId = req.body.user_id;
   const cmd = req.body.command;
   let announcement = {};
-  organizer_ids = [
+  let organizer_ids = [
     "U01N1S6214J",
     "U01NVG2GNJV",
     "U01NDPEMFQD",
