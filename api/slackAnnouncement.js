@@ -10,9 +10,7 @@ function validateEmail(email) {
 }
 
 router.post("/", async (req, res) => {
-  const url_route = req
-        ? process.env.URL_BASE + "api/announcements"
-        : "/api/announcements";
+  const url_route = process.env.URL_BASE + "api/announcements";
   const slackId = req.body.user_id;
   const cmd = req.body.command;
 
