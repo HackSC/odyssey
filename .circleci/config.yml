@@ -37,9 +37,9 @@ jobs:
           success_message: ":tada: A $CIRCLE_JOB job has succeeded for $CIRCLE_PROJECT_REPONAME on the $CIRCLE_BRANCH branch! Triggered by: $CIRCLE_USERNAME :rocket:"
 workflows:
   version: 2.1
-  e2e_tests:
-    jobs:
-      - E2ETest
+#   e2e_tests:
+#     jobs:
+#       - E2ETest
   build:
     jobs:
       - build
