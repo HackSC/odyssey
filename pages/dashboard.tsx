@@ -34,10 +34,14 @@ const Dashboard = ({
   // view,
   team,
 }) => {
-  const [view, setView] = useState("hacker");
+  const [view, setView] = useState(profile.role || "hacker");
 
   useEffect(() => {
-    if (!profile.slackProfile && profile.role === "hacker") {
+    if (
+      profile &&
+      profile.status.toLowerCase() !== "checkedin" &&
+      profile.role === "hacker"
+    ) {
       setTimeout(function () {
         alert(
           "Welcome to HackSC 2021! Please check in by using the /checkin [your hacksc.com email login] command in any Slack channel."
@@ -89,7 +93,7 @@ export async function getServerSideProps({ req }) {
   const profile = await getProfile(req);
   //const houses = await getHouses(req);
   let announcements = [];
-  if(profile) {
+  if (profile) {
     announcements = await getAnnouncements(req, profile);
   }
   const hackathonConstants = await getHackathonConstants();
