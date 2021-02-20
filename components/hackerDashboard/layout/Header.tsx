@@ -2,7 +2,7 @@ import styled from "styled-components";
 import Image from "next/image";
 
 // import Logo from "@/assets/header_logo_21_transparent.png";
-import Logo from "@/assets/logo.png";
+import Logo from "@/assets/hacksc-white.png";
 
 type Props = {
   text?: string;
@@ -15,7 +15,7 @@ const DashHeader = ({ text }: Props) => {
         <Title>HackSC 2021</Title>
       ) : (
         <LogoWrapper>
-          <Image src={Logo} width="220%" height="100%" alt="" />
+          <Image src={Logo} width="240%" height="85%" alt="" />
         </LogoWrapper>
       )}
     </Header>
