@@ -7,8 +7,6 @@ router.post("/", async (req, res) => {
   const cmd = req.body.command;
   let announcement = {};
 
-  console.log("Slack Id: ", slackId);
-  console.log("Command: ", cmd);
   if (slackId) {
     const target = cmd.replace("/", "").replace(" ", "");
     let roles = [
@@ -35,7 +33,6 @@ router.post("/", async (req, res) => {
             /hacker, /admin, /sponsor, /volunteer, /superadmin, /judge";
       return responseText;
     } else {
-      console.log("Command isn't valid")
       announcement["target"] = target;
       announcement["text"] = req.body.text;
       announcement["from"] = req.body.user_name;
@@ -50,12 +47,11 @@ router.post("/", async (req, res) => {
           "Content-Type": "application/json",
         },
       });
-      console.log("Successfully posted to announcements in db...");
     } catch (error) {
       console.error(error);
       return res.json({ text: "Failed to send Announcement." });
     }
-    return res.json({ text: "Thanks for checking in! You're ready to go." });
+    return res.json({ text: "Announcement sent successfully!" });
   } else {
     return res.json({ text: "Invalid Slack user." });
   }
