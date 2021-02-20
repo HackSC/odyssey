@@ -14,7 +14,6 @@ router.get("/:role", async (req, res) => {
       where: {
         target: role,
       },
-      order: [["createdAt", "DESC"]],
     });
   } else {
     announcements = await models.Announcement.findAll({});
