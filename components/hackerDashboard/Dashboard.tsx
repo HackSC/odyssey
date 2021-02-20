@@ -83,7 +83,7 @@ const Empty = styled.div`
 
 const Container = styled.div`
   width: 100vw;
-  height: 100vh;
+  height: auto;
   display: grid;
   grid-template-columns: 0.6fr 1.3fr 0.9fr 0.6fr;
   grid-template-rows: 0.4fr 1fr 1.4fr 0.6fr;
