@@ -1,19 +1,14 @@
 const express = require("express");
-const cors = require("cors");
-const models = require("./models");
 const router = express.Router();
-const sequelize = require("sequelize");
-
-function validateEmail(email) {
-  const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-  return re.test(String(email).toLowerCase());
-}
 
 router.post("/", async (req, res) => {
   const url_route = process.env.URL_BASE + "api/announcements";
   const slackId = req.body.user_id;
   const cmd = req.body.command;
+  let announcement = {};
 
+  console.log("Slack Id: ", slackId);
+  console.log("Command: ", cmd);
   if (slackId) {
     const target = cmd.replace("/", "");
     let roles = [
@@ -40,6 +35,7 @@ router.post("/", async (req, res) => {
             /hacker, /admin, /sponsor, /volunteer, /superadmin, /judge";
       return responseText;
     } else {
+      console.log("Command isn't valid")
       announcement["target"] = target;
       announcement["text"] = request.body.text;
       announcement["from"] = request.body.user_name;
@@ -54,6 +50,7 @@ router.post("/", async (req, res) => {
           "Content-Type": "application/json",
         },
       });
+      console.log("Successfully posted to announcements in db...");
     } catch (error) {
       console.error(error);
       return res.json({ text: "Failed to send Announcement." });
