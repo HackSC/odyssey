@@ -77,7 +77,8 @@ async function sendAnnouncement(req) {
 }
 
 export default async (req, res) => {
-  await app.start(3032);
+  var port = process.env.PORT || 8080;
+  await app.start(port);
   const responseText = await parseAnnouncement(req);
   await sendAnnouncement(req);
   await app.stop();
