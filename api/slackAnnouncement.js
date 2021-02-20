@@ -3,10 +3,9 @@ const router = express.Router();
 
 router.post("/", async (req, res) => {
   const url_route = process.env.URL_BASE + "api/announcements";
-  const slackId = req.body.user_id;
+  const slackId = req.body.user_id.replace(" ", "");
   const cmd = req.body.command;
   let announcement = {};
-  slackId.replace(" ", "");
   let organizer_ids = [
     "U01N1S6214J",
     "U01NVG2GNJV",
