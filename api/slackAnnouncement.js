@@ -10,7 +10,7 @@ router.post("/", async (req, res) => {
   console.log("Slack Id: ", slackId);
   console.log("Command: ", cmd);
   if (slackId) {
-    const target = cmd.replace("/", "");
+    const target = cmd.replace("/", "").replace(" ", "");
     let roles = [
       "hacker",
       "admin",
@@ -37,8 +37,8 @@ router.post("/", async (req, res) => {
     } else {
       console.log("Command isn't valid")
       announcement["target"] = target;
-      announcement["text"] = request.body.text;
-      announcement["from"] = request.body.user_name;
+      announcement["text"] = req.body.text;
+      announcement["from"] = req.body.user_name;
       announcement["img"] = "";
     }
 
