@@ -94,7 +94,7 @@ const Container = styled.div`
     "Footer Footer Footer Footer";
   background-color: #1d2c3f;
   color: #fff;
-  height: 100vh;
+  height: auto;
   width: 100vw;
 `;
 
