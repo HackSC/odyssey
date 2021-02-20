@@ -3,26 +3,26 @@ import moment from "moment-timezone";
 import { useEffect } from "react";
 
 const HackathonEvents = ({ events }) => {
-  const currentDate = moment.tz(moment(), "UTC");
+  const currentDate = moment.utc().subtract(8, "hour");
 
   let nextEvent;
   for (let i = 0; i < events.length; i++) {
     nextEvent = events[i].id;
     if (
-      moment(events[i].endsAt) > currentDate ||
-      moment(events[i].startsAt) > currentDate
+      moment.utc(events[i].endsAt) > currentDate ||
+      moment.utc(events[i].startsAt) > currentDate
     ) {
       break;
     }
   }
 
-  // useEffect(() => {
-  //   if (nextEvent) {
-  //     document.getElementById("eventList").scrollTop = document.getElementById(
-  //       nextEvent
-  //     ).offsetTop;
-  //   }
-  // }, []);
+  useEffect(() => {
+    if (nextEvent) {
+      document.getElementById("eventList").scrollTop = document.getElementById(
+        nextEvent
+      ).offsetTop;
+    }
+  }, []);
 
   return (
     <div>
