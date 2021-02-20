@@ -35,14 +35,14 @@ const HackathonEvents = ({ events }) => {
             style={
               moment(e.endsAt) > currentDate
                 ? { color: "#FFFFFF" }
-                : { color: "#FFFFFF" }
+                : { color: "#7E7E7E" }
             }
           >
             <h3
               style={
                 moment(e.endsAt) > currentDate
                   ? { color: "#FF8379" }
-                  : { color: "#FF8379" }
+                  : { color: "#7E7E7E" }
               }
             >
               {e.name}
@@ -59,7 +59,18 @@ const HackathonEvents = ({ events }) => {
                 {moment.utc(e.endsAt).format("MMM D, h:mm a")}
               </p>
             )}
-            {e.zoomUrl ? <a href={e.zoomUrl}>Join Zoom Meeting</a> : null}
+            {e.zoomUrl ? (
+              <a
+                href={e.zoomUrl}
+                style={
+                  moment(e.endsAt) > currentDate
+                    ? { color: "#FF8379" }
+                    : { color: "#7E7E7E" }
+                }
+              >
+                Join Zoom Meeting
+              </a>
+            ) : null}
           </Event>
         ))}
       </EventList>
