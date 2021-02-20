@@ -13,7 +13,7 @@ router.get("/:role", async (req, res) => {
     announcements = await models.Announcement.findAll({
       where: {
         target: role,
-      },
+      }
     });
   } else {
     announcements = await models.Announcement.findAll({});

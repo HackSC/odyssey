@@ -3,14 +3,14 @@ import moment from "moment-timezone";
 import { useEffect } from "react";
 
 const HackathonEvents = ({ events }) => {
-  const currentDate = moment.tz(moment(), "UTC");
+  const currentDate = moment.utc().subtract(8, "hour");
 
   let nextEvent;
   for (let i = 0; i < events.length; i++) {
     nextEvent = events[i].id;
     if (
-      moment(events[i].endsAt) > currentDate ||
-      moment(events[i].startsAt) > currentDate
+      moment.utc(events[i].endsAt) > currentDate ||
+      moment.utc(events[i].startsAt) > currentDate
     ) {
       break;
     }
@@ -35,30 +35,42 @@ const HackathonEvents = ({ events }) => {
             style={
               moment(e.endsAt) > currentDate
                 ? { color: "#FFFFFF" }
-<<<<<<< HEAD
                 : { color: "#7E7E7E" }
-=======
-                : { color: "#FFFFFF" }
->>>>>>> 708f9ed8be2242bf48c584c84664c4214bea90f6
             }
           >
             <h3
               style={
                 moment(e.endsAt) > currentDate
                   ? { color: "#FF8379" }
-<<<<<<< HEAD
                   : { color: "#7E7E7E" }
-=======
-                  : { color: "#FF8379" }
->>>>>>> 708f9ed8be2242bf48c584c84664c4214bea90f6
               }
             >
               {e.name}
             </h3>
             <p>{e.description}</p>
-            <p>{moment.utc(e.startsAt).format("MMM D, h:mm a")}</p>
-            <p>{moment.utc(e.endsAt).format("MMM D, h:mm a")}</p>
-            {e.zoomUrl ? <a href={e.zoomUrl}>Join Zoom Meeting</a> : null}
+            {moment(e.startsAt).isSame(e.endsAt, "day") ? (
+              <p>
+                {moment.utc(e.startsAt).format("MMM D, h:mm")} -{" "}
+                {moment.utc(e.endsAt).format("h:mm a")}
+              </p>
+            ) : (
+              <p>
+                {moment.utc(e.startsAt).format("MMM D, h:mm a")} -{" "}
+                {moment.utc(e.endsAt).format("MMM D, h:mm a")}
+              </p>
+            )}
+            {e.zoomUrl ? (
+              <a
+                href={e.zoomUrl}
+                style={
+                  moment(e.endsAt) > currentDate
+                    ? { color: "#FF8379" }
+                    : { color: "#7E7E7E" }
+                }
+              >
+                Join Zoom Meeting
+              </a>
+            ) : null}
           </Event>
         ))}
       </EventList>
