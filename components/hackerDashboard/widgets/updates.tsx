@@ -6,7 +6,7 @@ import Logo from "@/assets/hackscFox.png";
 const UpdatesWidget = ({ profile, announcements }) => {
   const items = [];
   if (announcements != null) {
-    for (let i = 0; i < announcements.length; i++) {
+    for (let i = announcements.length - 1; i >= 0; i--) {
       const target = announcements[i].target;
       if (target != profile.role) {
         continue;
