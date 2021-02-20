@@ -10,6 +10,9 @@ function validateEmail(email) {
 }
 
 router.post("/", async (req, res) => {
+  const url_route = req
+        ? process.env.URL_BASE + "api/announcements"
+        : "/api/announcements";
   const slackId = req.body.user_id;
   const cmd = req.body.command;
 
@@ -46,9 +49,6 @@ router.post("/", async (req, res) => {
     }
 
     try {
-      let url_route = req
-        ? process.env.URL_BASE + "api/announcements"
-        : "/api/announcements";
       await fetch(url_route, {
         method: "POST",
         body: JSON.stringify(announcement),
