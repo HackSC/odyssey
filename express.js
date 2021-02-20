@@ -27,6 +27,7 @@ const publicRouter = require("./api/public");
 const matchingRouter = require("./api/teamMatching");
 const announcementsRouter = require("./api/announcements");
 const linkSlackRouter = require("./api/linkSlack");
+const slackAnnouncementRouter = require("./api/slackAnnouncement");
 const submitProjectRouter = require("./api/submitProject");
 const fileUpload = require("express-fileupload");
 const dotenv = require("dotenv");
@@ -99,6 +100,7 @@ server.use("/api/teamMatching", matchingRouter);
 server.use("/api/announcements", announcementsRouter);
 server.use("/api/linkSlack", linkSlackRouter);
 server.use("/api/submitProject", submitProjectRouter);
+server.use("/api/slackAnnouncement", slackAnnouncementRouter);
 
 server.post("/api/scan", (req, res) => {
   console.info("Scanned: ", req.body.code);
@@ -124,6 +126,7 @@ server.use("/admin/api/unlockable", battlepassRouter);
 server.use("/admin/api/hacker/live", hackerLiveRouter);
 server.use("/admin/api/prize", prizeRouter);
 server.use("/admin/api/public", publicRouter);
+server.use("/admin/api/slackAnnouncement", slackAnnouncementRouter);
 
 server.post("/admin/api/scan", (req, res) => {
   console.info("Scanned: ", req.body.code);
