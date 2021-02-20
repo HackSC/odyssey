@@ -55,7 +55,7 @@ router.post("/", async (req, res) => {
       console.error(error);
       return res.json({ text: "Failed to send Announcement." });
     }
-    return res.json({ text: "Thanks for checking in! You're ready to go." });
+    return res.json({ text: "Announcement sent successfully!" });
   } else {
     return res.json({ text: "Invalid Slack user." });
   }
