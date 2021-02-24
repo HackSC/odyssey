@@ -32,6 +32,7 @@ type LiveHackerLookupParams = {
   school: string;
   year: string;
   graduationDate: string;
+  teamId: string;
 };
 
 type LiveSignUpLookupParams = {
