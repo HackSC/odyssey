@@ -122,7 +122,7 @@ const Hacker = ({ result, resumeList, resetResults }) => {
           </p>
           <p>
             <b>Team code: </b>
-            {result.team.teamCode}
+            {result.team && result.team.teamCode ? result.team.teamCode : ""}
           </p>
         </Column>
         <Column flexBasis={49} style={{ margin: "1rem 0" }}>
