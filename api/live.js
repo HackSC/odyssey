@@ -379,6 +379,7 @@ router.get("/lookup", async (req, res) => {
     school,
     year,
     graduationDate,
+    teamId,
   } = req.query;
 
   if (!!firstName) {
@@ -425,8 +426,13 @@ router.get("/lookup", async (req, res) => {
     lookupFilter["graduationDate"] = graduationDate;
   }
 
+  if (!!teamId) {
+    lookupFilter["$team.teamCode$"] = teamId;
+  }
+
   const profiles = await models.HackerProfile.findAll({
     where: lookupFilter,
+    include: [{ model: models.Team, as: "team" }],
   });
 
   return res.json({

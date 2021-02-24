@@ -120,6 +120,10 @@ const Hacker = ({ result, resumeList, resetResults }) => {
                 : `Has a QR code (${result.qrCodeId})`}
             </b>
           </p>
+          <p>
+            <b>Team code: </b>
+            {result.team.teamCode}
+          </p>
         </Column>
         <Column flexBasis={49} style={{ margin: "1rem 0" }}>
           <FullButton style={{ margin: "0 0 0.5rem 0" }} onClick={viewProfile}>
@@ -207,6 +211,7 @@ const hackerManager = ({ profile }) => {
     emailInput,
     roleInput,
     statusInput,
+    teamInput,
     genderInput,
     ethnicityInput,
     needBusInput,
@@ -214,6 +219,7 @@ const hackerManager = ({ profile }) => {
     yearInput,
     graduationDateInput,
   ] = [
+    useRef(null),
     useRef(null),
     useRef(null),
     useRef(null),
@@ -354,6 +360,7 @@ const hackerManager = ({ profile }) => {
     needBusInput.current.value = "";
     statusInput.current.value = "";
     roleInput.current.value = "";
+    teamInput.current.value = "";
     schoolInput.current.value = "";
     yearInput.current.value = "";
     graduationDateInput.current.value = "";
@@ -380,6 +387,7 @@ const hackerManager = ({ profile }) => {
     const school = schoolInput.current.value;
     const year = yearInput.current.value;
     const graduationDate = graduationDateInput.current.value;
+    const teamId = teamInput.current.value;
 
     const lookupResponse = await liveHackerLookupFetch({
       firstName,
@@ -393,6 +401,7 @@ const hackerManager = ({ profile }) => {
       school,
       year,
       graduationDate,
+      teamId,
     });
 
     const profiles = lookupResponse.success;
@@ -478,21 +487,27 @@ const hackerManager = ({ profile }) => {
                 style={{ flexWrap: "wrap" }}
                 justify="space-between"
               >
-                <Column flexBasis={49}>
+                <Column flexBasis={30}>
                   <FormGroup>
                     <label>Status</label>
                     <input type="text" ref={statusInput} />
                   </FormGroup>
                 </Column>
-                <Column flexBasis={49}>
+                <Column flexBasis={30}>
                   <FormGroup>
                     <label>Role</label>
                     <Select
-                      name="gender"
+                      name="role"
                       options={roleOptions}
-                      defaultValue="no-say"
+                      defaultValue="hacker"
                       ref={roleInput}
                     />
+                  </FormGroup>
+                </Column>
+                <Column flexBasis={30}>
+                  <FormGroup>
+                    <label>Team ID</label>
+                    <input type="text" ref={teamInput} />
                   </FormGroup>
                 </Column>
               </Flex>
