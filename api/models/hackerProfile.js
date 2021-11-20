@@ -97,6 +97,7 @@ module.exports = (sequelize, DataTypes) => {
         ],
       },
       over18: DataTypes.BOOLEAN,
+      inPerson: DataTypes.BOOLEAN,
       needBus: DataTypes.BOOLEAN,
       links: DataTypes.STRING(1000),
       codeOfConduct: DataTypes.BOOLEAN,

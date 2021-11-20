@@ -91,6 +91,7 @@
     "react-use": "^13.8.1",
     "scrapedin": "^1.0.21",
     "sequelize": "^5.21.1",
+    "sequelize-cli": "^6.3.0",
     "serverless-mysql": "^1.5.4",
     "simplex-noise": "^2.4.0",
     "start-server-and-test": "^1.10.6",

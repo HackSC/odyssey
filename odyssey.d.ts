@@ -115,6 +115,7 @@ declare type Profile = {
     | "fall-2023"
     | "other";
   over18: boolean;
+  inPerson: boolean;
   needBus: boolean;
   links: string;
   codeOfConduct: boolean;
