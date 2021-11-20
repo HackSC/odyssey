@@ -480,6 +480,23 @@ const ProfileStep: React.FunctionComponent<Props> = (props) => {
          </FormGroup>*/}
 
           <FormGroup>
+            <label>Will you be attending HackSC in person at USC?</label>
+
+            <RadioChoice>
+              <input
+                type="checkbox"
+                name="attending-in-person"
+                defaultChecked={profile.inPerson}
+                id="attending-in-person"
+                disabled={submitted}
+              />
+              <RadioChoiceLabel htmlFor="attending-in-person">
+                Yes, I will be attending in person
+              </RadioChoiceLabel>
+            </RadioChoice>
+          </FormGroup>
+
+          <FormGroup>
             <label>Resume - Must be a PDF, 10MB Maximum</label>
 
             <ResumeUploadInput

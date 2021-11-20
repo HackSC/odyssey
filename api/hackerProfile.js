@@ -78,6 +78,7 @@ router.put("/", async (req, res) => {
     "skillLevel",
     "graduationDate",
     "over18",
+    "inPerson",
     "needBus",
     "links",
     "questionOne",
