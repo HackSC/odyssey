@@ -9208,10 +9208,10 @@ text-hex@1.0.x:
   resolved "https://registry.yarnpkg.com/text-hex/-/text-hex-1.0.0.tgz#69dc9c1b17446ee79a92bf5b884bb4b9127506f5"
   integrity sha512-uuVGNWzgJ4yhRaNSiubPY7OjISw4sw4E5Uv0wbjp+OzcbmVU/rsT8ujgcXJhn9ypzsgr5vlzpPqP+MBBKcGvbg==
 
-three@0.105.0:
-  version "0.105.0"
-  resolved "https://registry.yarnpkg.com/three/-/three-0.105.0.tgz#249e8832a3f0e9a52bd8ee223e69f072435b3ebe"
-  integrity sha512-P+0nz3+JL9WqVTNXXw3fsrBnzyguYmis+ROsNkI3KDAnp3peHmr0nUNAYXzCyw+eeTwnHenV7yHdBXAV45ySUA==
+three@0.137.0:
+  version "0.137.0"
+  resolved "https://registry.yarnpkg.com/three/-/three-0.137.0.tgz#0ebd6ba66637a332c31f234bcdd35aeec071a6e3"
+  integrity sha512-rzSDhia6cU35UCy6y+zEEws6vSgytfHqFMSaBvUcySgzwvDO6vETyswtSNi/+aVqJw8WLMwyT1mlQQ1T/dxxOA==
 
 throat@^5.0.0:
   version "5.0.0"
