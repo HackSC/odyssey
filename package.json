@@ -55,7 +55,7 @@
     "jsqr": "^1.2.0",
     "jszip": "^3.2.2",
     "lint-staged": "^10.4.0",
-    "moment": "^2.24.0",
+    "moment": "^2.29.2",
     "moment-timezone": "^0.5.32",
     "mysql2": "^2.2.5",
     "next": "^10.0.3",
